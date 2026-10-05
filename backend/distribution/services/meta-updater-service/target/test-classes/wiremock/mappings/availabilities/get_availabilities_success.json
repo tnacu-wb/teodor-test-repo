@@ -1,0 +1,17 @@
+{
+  "request": {
+    "urlPathPattern": "/v1/meta-proxy/availabilities",
+    "method": "POST",
+    "bodyPatterns": [{
+      "equalToJson" : "{ \"hotelCode\": \"LONEUS\", \"startDate\": \"2023-02-04\",\"endDate\": \"2024-04-07\",\"roomTypes\": [\"DOUBLE\"]}",
+      "ignoreArrayOrder" : true
+    }]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "availabilities/get_availabilities_success_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

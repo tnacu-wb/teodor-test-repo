@@ -1,0 +1,20 @@
+@startuml
+entity "PMS Adapter Service" as PMS
+participant ListOfValuesController as Controller
+participant ListOfValuesInPort as InboundPort
+participant ListOfValuesOutPort as OutboundPort
+participant OhipListOfValuesClient as OhipClient
+entity OPERA
+
+PMS -> Controller: GET /ohip/hotels/{hotelId}/cancellationReasons
+Controller -> InboundPort: getListOfCancellationReasons
+InboundPort -> OutboundPort: getListOfCancellationReasons
+OutboundPort -> OhipClient: getListOfCancellationReasons
+OhipClient -> OPERA: GET {host}/lov/v1/listOfValues/CancellationReasons
+
+OhipClient <- OPERA: List of Cancellation Reasons
+OutboundPort <- OhipClient: List of Cancellation Reasons
+InboundPort <- OutboundPort: List of Cancellation Reasons
+Controller <- InboundPort: List of Cancellation Reasons
+PMS <- Controller: List of Cancellation Reasons
+@enduml

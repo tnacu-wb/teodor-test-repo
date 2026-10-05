@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="84" id="Ld1-vu-Utf" customClass="CiolReviewAndPayBillingAddressCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="461" height="84"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ld1-vu-Utf" id="5w7-8v-bdu">
+                <rect key="frame" x="0.0" y="0.0" width="461" height="84"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AiX-uQ-Zhc">
+                        <rect key="frame" x="16" y="0.0" width="364" height="68"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OZY-Lg-s18">
+                        <rect key="frame" x="396" y="18.666666666666671" width="51" height="31"/>
+                        <connections>
+                            <action selector="toggleAddressSwitch:" destination="Ld1-vu-Utf" eventType="valueChanged" id="VRw-Dq-S5q"/>
+                        </connections>
+                    </switch>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="OZY-Lg-s18" firstAttribute="centerY" secondItem="AiX-uQ-Zhc" secondAttribute="centerY" id="FkJ-kx-3Yp"/>
+                    <constraint firstItem="AiX-uQ-Zhc" firstAttribute="top" secondItem="5w7-8v-bdu" secondAttribute="top" id="YGN-mk-EBS"/>
+                    <constraint firstAttribute="trailing" secondItem="OZY-Lg-s18" secondAttribute="trailing" constant="16" id="YwY-mL-iTA"/>
+                    <constraint firstItem="AiX-uQ-Zhc" firstAttribute="leading" secondItem="5w7-8v-bdu" secondAttribute="leading" constant="16" id="fFU-hO-h3P"/>
+                    <constraint firstAttribute="bottom" secondItem="AiX-uQ-Zhc" secondAttribute="bottom" constant="16" id="oYe-sP-2cg"/>
+                    <constraint firstItem="OZY-Lg-s18" firstAttribute="leading" secondItem="AiX-uQ-Zhc" secondAttribute="trailing" constant="16" id="uGf-91-L4c"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="addressLabel" destination="AiX-uQ-Zhc" id="txI-Pl-1Bn"/>
+                <outlet property="billingAddressSwitch" destination="OZY-Lg-s18" id="xKf-Q7-cKD"/>
+            </connections>
+            <point key="canvasLocation" x="426.71755725190837" y="232.3943661971831"/>
+        </tableViewCell>
+    </objects>
+</document>

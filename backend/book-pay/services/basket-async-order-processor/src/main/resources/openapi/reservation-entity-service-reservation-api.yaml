@@ -1,0 +1,4145 @@
+openapi: 3.0.1
+info:
+  description: <p>TBU</p>
+  title: Sample API Documentation
+  version: 1.0.0
+servers:
+  - description: Generated server url
+    url: http://localhost:9103
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  /v1/reservations:
+    get:
+      operationId: getReservationsByBasketReference
+      parameters:
+        - in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: basketReference
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 20
+            example: null
+        - in: query
+          name: offset
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ReservationsDetailsResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Get reservations by basket reference
+      tags:
+        - hotel-reservation-controller
+    post:
+      operationId: createReservation
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/ReservationRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Create a reservation
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+                  example: null
+                example: null
+          description: OK
+      summary: Actuator root web endpoint
+      tags:
+        - Actuator
+  /v1/reservations/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+      summary: Actuator web endpoint 'health'
+      tags:
+        - Actuator
+  /v1/reservations/actuator/health/**:
+    get:
+      operationId: health-path
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+      summary: Actuator web endpoint 'health-path'
+      tags:
+        - Actuator
+  /v1/reservations/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+      summary: Actuator web endpoint 'info'
+      tags:
+        - Actuator
+  /v1/reservations/actuator/metrics:
+    get:
+      operationId: metrics
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+      summary: Actuator web endpoint 'metrics'
+      tags:
+        - Actuator
+  /v1/reservations/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metrics-requiredMetricName
+      parameters:
+        - in: path
+          name: requiredMetricName
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+        - Actuator
+  /v1/reservations/amend/addNewRoom:
+    post:
+      operationId: addNewRoomToExistingBasket
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/AddNewRoomRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Create a reservation for a new room
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/amend/cnp/{basketRef}:
+    put:
+      operationId: updateCnpReservations
+      parameters:
+        - in: path
+          name: basketRef
+          required: true
+          schema:
+            type: string
+            example: null
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/UpdateCnpReservationRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/UpdateCnpReservationResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update CNP Reservations based on basket reference
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/amend/confirmAmend:
+    put:
+      operationId: confirmAmend
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/ConfirmAmendRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ReservationByBasketRefResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Confirm amend changes
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/amend/editRoom:
+    put:
+      operationId: amendEditRoom
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/EditRoomRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update room information
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/amend/summary:
+    get:
+      operationId: getAmendSummaryDetails
+      parameters:
+        - in: query
+          name: originalBasketRef
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: copyBasketRef
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: token
+          required: false
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: bookingChannel.channel
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: bookingChannel.subchannel
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: bookingChannel.language
+          required: false
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/AmendSummaryDetailsDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieving amend summary details
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/amendDistribution/{basketReference}:
+    post:
+      operationId: amendDistribution
+      parameters:
+        - in: path
+          name: basketReference
+          required: true
+          schema:
+            type: string
+            example: null
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/AmendDistributionRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ReservationByBasketRefResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Amend Distribution
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/amendStayDates:
+    post:
+      operationId: amendStayDates
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/AmendStayDatesRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/AmendStayDatesResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Amend stay dates for an existing basket
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/ancillaries:
+    get:
+      operationId: getReservationsPackagesByIds
+      parameters:
+        - in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: basketReferenceId
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ReservationsPackagesResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Get reservations packages by reservations ids.
+      tags:
+        - hotel-reservation-controller
+    put:
+      operationId: saveReservation
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/ReservationPackagesRequestDto'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/SaveReservationResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: updateReservationPackages
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/ancillaries/reservation-id:
+    put:
+      operationId: saveReservationPackagesByReservationId
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/ReservationPackagesRequestByIdDto'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/SaveReservationResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: updateReservationPackagesByReservationId
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/basket/{basketReference}:
+    get:
+      operationId: getAllReservationsJustByBasketReference
+      parameters:
+        - in: path
+          name: basketReference
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ReservationByBasketRefResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Get all reservations just by basket reference
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/basket/{basketReference}/allowances:
+    get:
+      operationId: getBookingAllowancesByBasketReference
+      parameters:
+        - in: path
+          name: basketReference
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/BookingAllowancesResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Get booking allowances by reservation id
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/basket/{basketReference}/memos:
+    get:
+      operationId: getMemos
+      parameters:
+        - in: path
+          name: basketReference
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/MemosResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Get memos for a basket
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/basket/{bookingReference}/authenticated:
+    get:
+      operationId: getAllReservationsJustByBookingReferenceAuthenticated
+      parameters:
+        - in: path
+          name: bookingReference
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ReservationByBasketRefResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Get all reservations just by basket reference authenticated
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/booking-card:
+    get:
+      operationId: fetchBookingCardInformation
+      parameters:
+        - in: query
+          name: bookingReference
+          required: true
+          schema:
+            type: string
+            example: AWMR378632
+        - in: query
+          name: arrivalDate
+          required: true
+          schema:
+            type: string
+            example: 2023-01-23
+        - in: query
+          name: bookerLastName
+          required: true
+          schema:
+            type: string
+            example: Doe
+        - in: query
+          name: language
+          required: false
+          schema:
+            type: string
+            default: en
+            example: en
+        - in: query
+          name: country
+          required: false
+          schema:
+            type: string
+            default: gb
+            example: gb
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/BookingCardInformationRequestDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Generate booking card information for BART bookings
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/business:
+    put:
+      operationId: updateBusinessItems
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/BusinessItemsRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update business items
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/cancel:
+    get:
+      operationId: getCancelInformation
+      parameters:
+        - in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: basketReference
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: userDateTime
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: token
+          required: false
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: channel
+          required: true
+          schema:
+            type: string
+            example: PI
+        - in: query
+          name: subchannel
+          required: true
+          schema:
+            type: string
+            example: WEB
+        - in: query
+          name: language
+          required: false
+          schema:
+            type: string
+            example: EN
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/CancelInformationResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Get cancel information by reservation id.
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/cancellationPolicies:
+    get:
+      operationId: getCancellationPolicies
+      parameters:
+        - in: query
+          name: basketReference
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: ratePlanCode
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: arrivalDate
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/CancellationPoliciesResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Get cancellation policies by external reference id or rate plane
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/cancellations:
+    post:
+      operationId: cancelReservation
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/CancelReservationRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Cancel a reservation
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/cancellations/on-hold:
+    put:
+      operationId: cancelOnHoldReservation
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/CancelReservationRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Cancel an on hold reservation.
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/cancellations/rollback:
+    post:
+      operationId: rollbackReservation
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/CancelReservationRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/CancelReservationResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Rollback a reservation
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/confirm:
+    post:
+      operationId: confirmReservation
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/ConfirmReservationRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ConfirmReservationResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: confirmReservation
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/copy:
+    post:
+      operationId: copyBooking
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/CopyBookingRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/CopyBookingResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: copyBooking
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/deposits:
+    get:
+      operationId: getDepositsForReservationId
+      parameters:
+        - in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: reservationId
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/DepositsResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Get deposits information by reservation id.
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/discount:
+    put:
+      operationId: updateDiscount
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/UpdateDiscountRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update discount
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/email/{basketReference}:
+    put:
+      operationId: updateEmailReservations
+      parameters:
+        - in: path
+          name: basketReference
+          required: true
+          schema:
+            type: string
+            example: null
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/UpdateEmailReservationRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                type: string
+                example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update booker email on reservation based on basket reference
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/find:
+    get:
+      operationId: findBooking
+      parameters:
+        - in: query
+          name: resNo
+          required: true
+          schema:
+            type: string
+            example: null
+            maxLength: 10
+            minLength: 4
+            pattern: "^[a-zA-Z0-9]+$"
+        - in: query
+          name: arrivalDate
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: lastName
+          required: true
+          schema:
+            type: string
+            example: null
+            maxLength: 30
+            minLength: 0
+        - in: query
+          name: country
+          required: false
+          schema:
+            type: string
+            default: gb
+            example: null
+        - in: query
+          name: language
+          required: false
+          schema:
+            type: string
+            default: en
+            example: null
+        - in: query
+          name: channel
+          required: true
+          schema:
+            type: string
+            example: PI
+        - in: query
+          name: subchannel
+          required: true
+          schema:
+            type: string
+            example: WEB
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/FindBookingResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: "Find reservation by booking reference, surname and arrivalDate"
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/guests:
+    post:
+      operationId: createReservationGuest
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/ReservationGuestRequestDto'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Create a reservation guest
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/marketingPreferences:
+    get:
+      operationId: getMarketingPreferences
+      parameters:
+        - in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: reservationId
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/MarketingPreferencesResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Get marketing preferences information by reservation id.
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/memos:
+    post:
+      operationId: createMemo
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/CreateMemoRequestDto'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/MemosResponseDto'
+          description: Created
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Create memo for a basket
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/overrideReasons:
+    put:
+      operationId: updateReservationOverrideReasons
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/UpdateReservationOverrideReasonsRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update reservation override reasons
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/rate-code:
+    put:
+      operationId: updateReservationRatePlanCode
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/UpdateRateCodeRequestDto'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Upgrade a reservation to a different rate plan
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/reasonForStay:
+    put:
+      operationId: updateReasonForStay
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/UpdateReasonForStayRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/UpdateReasonForStayRequestDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update reason for stay
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/rooms/delete:
+    post:
+      operationId: removeRoom
+      parameters:
+        - in: query
+          name: tempBookingRef
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: reservationId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: token
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: channel
+          required: true
+          schema:
+            type: string
+            example: PI
+        - in: query
+          name: subchannel
+          required: true
+          schema:
+            type: string
+            example: WEB
+        - in: query
+          name: language
+          required: false
+          schema:
+            type: string
+            example: EN
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/TempBookingRefResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Remove a room based on basket ref and reservation id
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/search:
+    get:
+      operationId: searchBookings
+      parameters:
+        - example: LONEUS1391808
+          in: query
+          name: bookingReference
+          required: false
+          schema:
+            type: string
+            example: null
+        - example: Doe
+          in: query
+          name: bookerLastName
+          required: false
+          schema:
+            type: string
+            example: null
+        - example: Doe
+          in: query
+          name: guestLastName
+          required: false
+          schema:
+            type: string
+            example: null
+        - example: WC2N 5DU
+          in: query
+          name: bookerPostcode
+          required: false
+          schema:
+            type: string
+            example: null
+        - example: LONSTM
+          in: query
+          name: hotelId
+          required: false
+          schema:
+            type: string
+            example: null
+        - example: john.doe@email.com
+          in: query
+          name: bookerEmail
+          required: false
+          schema:
+            type: string
+            example: null
+        - example: +3905678754
+          in: query
+          name: bookerPhone
+          required: false
+          schema:
+            type: string
+            example: null
+        - example: 2022-03-05
+          in: query
+          name: arrivalDate
+          required: false
+          schema:
+            type: string
+            example: null
+        - example: 2022-03-06
+          in: query
+          name: cancellationDate
+          required: false
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: companyName
+          required: false
+          schema:
+            type: string
+            example: null
+        - example: LONEUS1391808
+          in: query
+          name: thirdPartyBookingReferenceNumber
+          required: false
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: language
+          required: false
+          schema:
+            type: string
+            default: en
+            example: null
+        - in: query
+          name: country
+          required: false
+          schema:
+            type: string
+            default: gb
+            example: null
+        - example: 0
+          in: query
+          name: offset
+          required: false
+          schema:
+            type: int
+            default: "0"
+            example: null
+        - example: 20
+          in: query
+          name: limit
+          required: false
+          schema:
+            type: int
+            default: "20"
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/SearchBookingsResponseMapper'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Search bookings
+      tags:
+        - hotel-reservation-controller
+  /v1/reservations/special-requests:
+    put:
+      operationId: updateReservationsSpecialRequests
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/SpecialRequestsDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update reservations special requests
+      tags:
+        - hotel-reservation-controller
+components:
+  schemas:
+    AddNewRoomRequestDto:
+      type: object
+      example: null
+      properties:
+        bookingChannel:
+          $ref: '#/components/schemas/BookingChannelDto'
+        leadGuest:
+          $ref: '#/components/schemas/LeadGuestDto'
+        ratePlanCode:
+          type: string
+          example: null
+        roomOccupancy:
+          $ref: '#/components/schemas/RoomOccupancyDto'
+        roomType:
+          type: string
+          example: null
+        tempBookingRef:
+          type: string
+          example: null
+        token:
+          type: string
+          example: null
+      required:
+        - leadGuest
+        - roomOccupancy
+        - roomType
+        - tempBookingRef
+    AdditionalGuestInfoDto:
+      type: object
+      example: null
+      properties:
+        purposeOfStay:
+          type: string
+          example: null
+    AddressResponseDto:
+      type: object
+      example: null
+      properties:
+        addressLine1:
+          type: string
+          example: null
+        addressLine2:
+          type: string
+          example: null
+        addressLine3:
+          type: string
+          example: null
+        addressLine4:
+          type: string
+          example: null
+        companyName:
+          type: string
+          example: null
+        country:
+          type: string
+          example: null
+        postalCode:
+          type: string
+          example: null
+    AmendDistributionGuestDto:
+      type: object
+      example: null
+      properties:
+        email:
+          type: string
+          example: null
+        givenName:
+          type: string
+          example: null
+        nameTitle:
+          type: string
+          example: null
+        surName:
+          type: string
+          example: null
+    AmendDistributionRequestDto:
+      type: object
+      example: null
+      properties:
+        bookerDetails:
+          $ref: '#/components/schemas/BookerDetailsCnpDto'
+        bookingChannel:
+          $ref: '#/components/schemas/BookingChannelDto'
+        reservations:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/AmendDistributionReservationDto'
+        sendEmailConfirmation:
+          type: boolean
+          example: null
+        sendEmailInvoice:
+          type: boolean
+          example: null
+        token:
+          type: string
+          example: null
+      required:
+        - bookingChannel
+        - token
+    AmendDistributionReservationDto:
+      type: object
+      example: null
+      properties:
+        hotelId:
+          type: string
+          example: null
+        reservationGuestList:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/AmendDistributionGuestDto'
+        reservationId:
+          type: string
+          example: null
+        reservationPackageList:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/AmendPackagesDistributionDto'
+        roomStay:
+          $ref: '#/components/schemas/RoomStayDistributionDto'
+      required:
+        - hotelId
+    AmendPackagesDistributionDto:
+      type: object
+      example: null
+      properties:
+        packageCode:
+          type: string
+          example: null
+        totalQuantity:
+          type: integer
+          format: int32
+          example: null
+    AmendStayDatesRequestDto:
+      type: object
+      example: null
+      properties:
+        bookingChannel:
+          $ref: '#/components/schemas/BookingChannelDto'
+        newEndDate:
+          type: string
+          example: null
+        newStartDate:
+          type: string
+          example: null
+        tempBookingRef:
+          type: string
+          example: null
+        token:
+          type: string
+          example: null
+      required:
+        - bookingChannel
+        - newEndDate
+        - newStartDate
+        - tempBookingRef
+    AmendStayDatesResponseDto:
+      type: object
+      example: null
+      properties:
+        tempBasket:
+          type: string
+          example: null
+    AmendSummaryDetailsDto:
+      type: object
+      example: null
+      properties:
+        balanceAuthorised:
+          type: string
+          example: null
+        balancePaid:
+          type: string
+          example: null
+        charitable:
+          type: string
+          example: null
+        nonRefundable:
+          type: string
+          example: null
+        payOnArrival:
+          type: string
+          example: null
+        paymentCardDetails:
+          $ref: '#/components/schemas/PaymentCardDetailsDto'
+        paymentOptions:
+          $ref: '#/components/schemas/PaymentOptionsDto'
+        previousTotal:
+          type: string
+          example: null
+        refund:
+          type: string
+          example: null
+        totalCost:
+          type: string
+          example: null
+    BillingResponseDto:
+      type: object
+      example: null
+      properties:
+        address:
+          $ref: '#/components/schemas/AddressResponseDto'
+        email:
+          type: string
+          example: null
+        firstName:
+          type: string
+          example: null
+        lastName:
+          type: string
+          example: null
+        telephone:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+    BookerAddressCnpDto:
+      type: object
+      example: null
+      properties:
+        addressLine1:
+          type: string
+          example: 4 Brockley Avenue
+        addressLine2:
+          type: string
+          example: London District 2
+        addressLine3:
+          type: string
+          example: Greater London - sub district 2
+        addressLine4:
+          type: string
+          example: Greater London - street 22
+        postalCode:
+          type: string
+          example: EC1A 1BB
+    BookerAddressDto:
+      type: object
+      example: null
+      properties:
+        addressLine1:
+          type: string
+          example: null
+        addressLine2:
+          type: string
+          example: null
+        addressLine3:
+          type: string
+          example: null
+        addressLine4:
+          type: string
+          example: null
+        addressType:
+          type: string
+          example: null
+        cityName:
+          type: string
+          example: null
+        companyName:
+          type: string
+          example: null
+        countryCode:
+          type: string
+          example: null
+        postalCode:
+          type: string
+          example: null
+    BookerDetailsCnpDto:
+      type: object
+      example: null
+      properties:
+        address:
+          $ref: '#/components/schemas/BookerAddressCnpDto'
+        companyName:
+          type: string
+          example: ABCD1234
+        emailAddress:
+          type: string
+          example: test@mailinator.com
+        firstName:
+          type: string
+          example: Test
+        landline:
+          type: string
+          example: +44123123
+        lastName:
+          type: string
+          example: Testerson
+        mobile:
+          type: string
+          example: +44123123
+        title:
+          type: string
+          example: Mr
+    BookerDetailsDto:
+      type: object
+      example: null
+      properties:
+        acceptFutureMailing:
+          type: boolean
+          example: null
+        address:
+          $ref: '#/components/schemas/BookerAddressDto'
+        emailAddress:
+          type: string
+          example: john.carry@email.com
+        firstName:
+          type: string
+          example: John
+        landline:
+          type: string
+          example: +3905678754
+        language:
+          type: string
+          example: en
+        lastName:
+          type: string
+          example: Carry
+        mobile:
+          type: string
+          example: +3905678754
+        title:
+          type: string
+          example: Mrs
+      required:
+        - firstName
+        - lastName
+    BookingAllowanceDto:
+      type: object
+      example: null
+      properties:
+        allowance:
+          type: string
+          example: null
+        budget:
+          type: number
+          example: null
+    BookingAllowancesResponseDto:
+      type: object
+      example: null
+      properties:
+        bookingAllowances:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/BookingAllowanceDto'
+    BookingCardInformationRequestDto:
+      type: object
+      example: null
+      properties:
+        arrivalDate:
+          type: string
+          example: 2023-01-23
+        bookerLastName:
+          type: string
+          example: Doe
+        bookingReference:
+          type: string
+          example: AWMR378632
+        country:
+          type: string
+          default: gb
+          example: gb
+        language:
+          type: string
+          default: en
+          example: en
+      required:
+        - arrivalDate
+        - bookerLastName
+        - bookingReference
+    BookingChannelDto:
+      type: object
+      example: null
+      properties:
+        channel:
+          type: string
+          example: PI
+        language:
+          type: string
+          example: EN
+        subchannel:
+          type: string
+          example: WEB
+      required:
+        - channel
+        - language
+        - subchannel
+    BusinessAccountCnpDto:
+      type: object
+      example: null
+      properties:
+        alcoholAllowed:
+          type: string
+          example: "No"
+        breakfastCodeReq:
+          type: integer
+          format: int32
+          example: 12
+        carParkingAllowed:
+          type: string
+          example: "Yes"
+        cardNotPresentAuth:
+          type: string
+          example: "Yes"
+        customerReference:
+          type: string
+          example: ab12
+        dinnerAllowance:
+          type: number
+          example: 50
+        otherChargesAllowed:
+          type: string
+          example: "No"
+        purchaseOrder:
+          type: string
+          example: abc123
+        wifiAllowed:
+          type: string
+          example: "Yes"
+    BusinessAllowanceDto:
+      type: object
+      example: null
+      properties:
+        allowance:
+          type: string
+          example: null
+        budget:
+          type: number
+          example: null
+        isAuthorised:
+          type: boolean
+          example: null
+    BusinessItemsDto:
+      type: object
+      example: null
+      properties:
+        businessAllowances:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/BusinessAllowanceDto'
+        businessNotes:
+          type: string
+          example: null
+        customReferenceNumber:
+          type: string
+          example: null
+        purchaseOrderNumber:
+          type: string
+          example: null
+    BusinessItemsRequestDto:
+      type: object
+      example: null
+      properties:
+        businessItems:
+          $ref: '#/components/schemas/BusinessItemsDto'
+        hotelId:
+          type: string
+          example: null
+        reservationIds:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+    CancelInformationResponseDto:
+      type: object
+      example: null
+      properties:
+        isAmendable:
+          type: boolean
+          example: null
+        isCancellable:
+          type: boolean
+          example: null
+        isRuleCompliant:
+          type: boolean
+          example: false
+    CancelReservationRequestDto:
+      type: object
+      example: null
+      properties:
+        basketReference:
+          type: string
+          example: null
+        hotelId:
+          type: string
+          example: LONSTM
+        paymentOption:
+          type: string
+          enum:
+            - PAY_NOW
+            - PAY_ON_ARRIVAL
+            - RESERVE_WITHOUT_CARD
+            - ACCOUNT_COMPANY
+          example: null
+        reservationIds:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        reservationOverrideReason:
+          $ref: '#/components/schemas/ReservationOverrideReasonDto'
+        token:
+          type: string
+          example: null
+      required:
+        - basketReference
+    CancelReservationResponseDto:
+      type: object
+      example: null
+      properties:
+        basketReference:
+          type: string
+          example: null
+    CancellationPoliciesResponseDto:
+      type: object
+      example: null
+      properties:
+        text:
+          type: string
+          example: null
+        time:
+          type: string
+          example: null
+    ConfirmAmendRequestDto:
+      type: object
+      example: null
+      properties:
+        bookingChannel:
+          $ref: '#/components/schemas/BookingChannelDto'
+        originalBookingRef:
+          type: string
+          example: null
+        tempBookingRef:
+          type: string
+          example: null
+        token:
+          type: string
+          example: null
+        paymentOptionSelected:
+          type: string
+          example: null
+        emailAddress:
+          type: string
+          example: null
+        ccAgentId:
+          type: string
+          example: jane.doe@wb.com
+      required:
+        - bookingChannel
+        - originalBookingRef
+        - tempBookingRef
+        - token
+    ConfirmReservationRequestDto:
+      type: object
+      example: null
+      properties:
+        hotelId:
+          type: string
+          example: null
+        paymentCard:
+          $ref: '#/components/schemas/PaymentCardDto'
+        paymentId:
+          type: string
+          example: null
+        paymentMethod:
+          type: string
+          example: null
+        paymentOption:
+          type: string
+          enum:
+            - PAY_NOW
+            - PAY_ON_ARRIVAL
+            - RESERVE_WITHOUT_CARD
+            - ACCOUNT_COMPANY
+          example: null
+        paymentType:
+          type: string
+          example: null
+        reservationId:
+          type: string
+          example: null
+        ccAgentId:
+          type: string
+          example: jane.doe@wb.com
+        threeDSIndicator:
+          type: string
+          example: 1
+      required:
+        - hotelId
+        - paymentOption
+        - reservationId
+    ConfirmReservationResponseDto:
+      type: object
+      example: null
+      properties:
+        hotelId:
+          type: string
+          example: null
+        reservationGuest:
+          $ref: '#/components/schemas/ConfirmationCustomerDto'
+        reservationIdList:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/UniqueIDTypeDto'
+        reservationStatus:
+          type: string
+          example: null
+        roomStay:
+          $ref: '#/components/schemas/ConfirmationRoomStayDto'
+    ConfirmationCustomerDto:
+      type: object
+      example: null
+      properties:
+        givenName:
+          type: string
+          example: null
+        surName:
+          type: string
+          example: null
+    ConfirmationRoomStayDto:
+      type: object
+      example: null
+      properties:
+        arrivalDate:
+          type: string
+          format: date
+          example: null
+        departureDate:
+          type: string
+          format: date
+          example: null
+    CopyBookingRequestDto:
+      type: object
+      example: null
+      properties:
+        bookingChannel:
+          $ref: '#/components/schemas/BookingChannelDto'
+        originalBasketReference:
+          type: string
+          example: null
+        token:
+          type: string
+          example: null
+      required:
+        - bookingChannel
+        - originalBasketReference
+    CopyBookingResponseDto:
+      type: object
+      example: null
+      properties:
+        copyBasketReference:
+          type: string
+          example: null
+    CreateMemoRequestDto:
+      type: object
+      example: null
+      properties:
+        basketReference:
+          type: string
+          example: null
+        bookingChannel:
+          $ref: '#/components/schemas/BookingChannelDto'
+        description:
+          type: string
+          example: null
+      required:
+        - basketReference
+        - bookingChannel
+        - description
+    CurrencyAmountTypeDto:
+      type: object
+      example: null
+      properties:
+        amount:
+          type: number
+          example: null
+        currencyCode:
+          type: string
+          example: null
+    CustomerDto:
+      type: object
+      example: null
+      properties:
+        country:
+          type: string
+          example: null
+        firstName:
+          type: string
+          example: null
+        language:
+          type: string
+          example: null
+        lastName:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+    DepositPoliciesDto:
+      type: object
+      example: null
+      properties:
+        amountDue:
+          $ref: '#/components/schemas/CurrencyAmountTypeDto'
+        amountPaid:
+          $ref: '#/components/schemas/CurrencyAmountTypeDto'
+        policyCode:
+          type: string
+          example: null
+    DepositsDto:
+      type: object
+      example: null
+      properties:
+        paymentReference:
+          type: string
+          example: null
+        postedAmount:
+          $ref: '#/components/schemas/CurrencyAmountTypeDto'
+    DepositsResponseDto:
+      type: object
+      example: null
+      properties:
+        deposits:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/DepositsDto'
+    EditRoomRequestDto:
+      type: object
+      example: null
+      properties:
+        bookingChannel:
+          $ref: '#/components/schemas/BookingChannelDto'
+        leadGuest:
+          $ref: '#/components/schemas/LeadGuestDto'
+        ratePlanCode:
+          type: string
+          example: null
+        reservationId:
+          type: string
+          example: null
+        roomOccupancy:
+          $ref: '#/components/schemas/RoomOccupancyDto'
+        roomType:
+          type: string
+          example: null
+        tempBookingRef:
+          type: string
+          example: null
+        token:
+          type: string
+          example: null
+      required:
+        - leadGuest
+        - reservationId
+        - roomOccupancy
+        - roomType
+        - tempBookingRef
+    ErrorResponse:
+      type: object
+      example: null
+      properties:
+        debugMessage:
+          type: string
+          example: null
+        details:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ValidationError'
+        errCode:
+          type: integer
+          format: int32
+          example: null
+        globalErrTextTemplate:
+          type: string
+          example: null
+    ExternalReferenceTypeDto:
+      type: object
+      example: null
+      properties:
+        id:
+          type: string
+          example: null
+        idContext:
+          type: string
+          example: null
+        idExtension:
+          type: integer
+          format: int32
+          example: null
+    FindBookingResponseDto:
+      type: object
+      example: null
+      properties:
+        basketReference:
+          type: string
+          example: null
+        cookieName:
+          type: string
+          example: null
+        minutesTillExpiry:
+          type: string
+          example: null
+        redirectBase:
+          type: string
+          example: null
+        ref:
+          type: string
+          example: null
+        sourcePms:
+          type: string
+          example: null
+        token:
+          type: string
+          example: null
+    LeadGuestDto:
+      type: object
+      example: null
+      properties:
+        emailAddress:
+          type: string
+          example: null
+        firstName:
+          type: string
+          example: null
+        lastName:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+      required:
+        - firstName
+        - lastName
+        - title
+    Link:
+      type: object
+      example: null
+      properties:
+        href:
+          type: string
+          example: null
+        templated:
+          type: boolean
+          example: null
+    ManageBookingResponseDto:
+      type: object
+      example: null
+      properties:
+        isAmendable:
+          type: boolean
+          example: null
+        isCancellable:
+          type: boolean
+          example: null
+        isRuleCompliant:
+          type: boolean
+          example: null
+    MarketingPreferencesResponseDto:
+      type: object
+      example: null
+      properties:
+        contactValue:
+          type: string
+          example: null
+        customer:
+          $ref: '#/components/schemas/CustomerDto'
+        optIn:
+          type: boolean
+          example: null
+    MemoDto:
+      type: object
+      example: null
+      properties:
+        createdBy:
+          type: string
+          example: null
+        createdOn:
+          type: string
+          example: null
+        description:
+          type: string
+          example: null
+        ids:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/MemoIdsDto'
+        modifiedBy:
+          type: string
+          example: null
+        modifiedOn:
+          type: string
+          example: null
+    MemoIdsDto:
+      type: object
+      example: null
+      properties:
+        memoIds:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        reservationId:
+          type: string
+          example: null
+    MemosResponseDto:
+      type: object
+      example: null
+      properties:
+        memos:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/MemoDto'
+    PackagesSelectionDto:
+      type: object
+      example: null
+      properties:
+        id:
+          type: string
+          example: null
+        noOfSelections:
+          type: integer
+          format: int32
+          example: null
+    PaymentCardDetailsDto:
+      type: object
+      example: null
+      properties:
+        cardHolderName:
+          type: string
+          example: null
+        cardLogoSrc:
+          type: string
+          example: null
+        cardName:
+          type: string
+          example: null
+        cardNumberLast4Digits:
+          type: string
+          example: null
+        cardNumberMasked:
+          type: string
+          example: null
+        cardType:
+          type: string
+          example: null
+        expirationDate:
+          type: string
+          format: date
+          example: null
+        token:
+          type: string
+          example: null
+    PaymentCardDto:
+      type: object
+      example: null
+      properties:
+        cardHolderName:
+          type: string
+          example: null
+        cardNumberLast4Digits:
+          type: string
+          example: null
+        cardType:
+          type: string
+          example: null
+        citId:
+          type: string
+          example: null
+        expirationDate:
+          type: string
+          example: null
+        token:
+          type: string
+          example: null
+    PaymentOptionsDto:
+      type: object
+      example: null
+      properties:
+        payNow:
+          type: boolean
+          example: null
+        payOnArrival:
+          type: boolean
+          example: null
+    RateInfoDetailsDto:
+      type: object
+      example: null
+      properties:
+        currencyCode:
+          type: string
+          example: null
+        gross:
+          type: number
+          example: null
+        net:
+          type: number
+          example: null
+        packageDetails:
+          type: number
+          example: null
+        ratePlanCode:
+          type: string
+          example: null
+        revenue:
+          type: number
+          example: null
+        summaryDate:
+          type: string
+          example: null
+        tax:
+          type: number
+          example: null
+    RateInfoDto:
+      type: object
+      example: null
+      properties:
+        summary:
+          $ref: '#/components/schemas/RateInfoSummaryDto'
+    RateInfoSummaryDto:
+      type: object
+      example: null
+      properties:
+        currencyCode:
+          type: string
+          example: null
+        deposit:
+          type: number
+          example: null
+        details:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RateInfoDetailsDto'
+        end:
+          type: string
+          example: null
+        gross:
+          type: number
+          example: null
+        guestPay:
+          type: number
+          example: null
+        hasSuppressedRate:
+          type: string
+          example: null
+        net:
+          type: number
+          example: null
+        outStandingCostOfStay:
+          type: number
+          example: null
+        routing:
+          type: number
+          example: null
+        start:
+          type: string
+          example: null
+        totalCostOfStay:
+          type: number
+          example: null
+    RatePerNightDto:
+      type: object
+      example: null
+      properties:
+        cityTaxAmountBeforeTax:
+          type: number
+          example: null
+        cityTaxPerNight:
+          type: number
+          example: null
+        cityTaxVat:
+          type: number
+          example: null
+        grossPricePerNight:
+          type: number
+          example: null
+        pricePerNight:
+          type: number
+          example: null
+        startDate:
+          type: string
+          example: null
+        vatRate:
+          type: number
+          example: null
+    ReservationBookerAddressDto:
+      type: object
+      example: null
+      properties:
+        addressLine1:
+          type: string
+          example: null
+        addressLine2:
+          type: string
+          example: null
+        addressLine3:
+          type: string
+          example: null
+        addressLine4:
+          type: string
+          example: null
+        addressType:
+          type: string
+          example: null
+        cityName:
+          type: string
+          example: null
+        companyName:
+          type: string
+          example: null
+        countryCode:
+          type: string
+          example: null
+        postalCode:
+          type: string
+          example: null
+    ReservationBookerDto:
+      type: object
+      example: null
+      properties:
+        address:
+          $ref: '#/components/schemas/ReservationBookerAddressDto'
+        email:
+          type: string
+          example: null
+        firstName:
+          type: string
+          example: null
+        landline:
+          type: string
+          example: null
+        lastName:
+          type: string
+          example: null
+        mobile:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+    ReservationByBasketRefResponseDto:
+      type: object
+      example: null
+      properties:
+        balanceOutstanding:
+          type: number
+          example: null
+        basketReference:
+          type: string
+          example: null
+        bookingReference:
+          type: string
+          example: null
+        currencyCode:
+          type: string
+          example: null
+        discount:
+          type: number
+          example: null
+        hasCityTax:
+          type: boolean
+          example: null
+        hotelId:
+          type: string
+          example: null
+        newTotal:
+          type: number
+          example: null
+        policyCode:
+          type: string
+          example: null
+        previousTotal:
+          type: number
+          example: null
+        reservationByIdList:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ReservationByIdDto'
+        totalCost:
+          type: number
+          example: null
+        totalCostWoDiscount:
+          type: number
+          example: null
+    ReservationByIdDto:
+      type: object
+      example: null
+      properties:
+        additionalGuestInfo:
+          $ref: '#/components/schemas/AdditionalGuestInfoDto'
+        balanceAmount:
+          type: number
+          example: null
+        billing:
+          $ref: '#/components/schemas/BillingResponseDto'
+        depositPolicies:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/DepositPoliciesDto'
+        gdsReferenceNumber:
+          type: string
+          example: null
+        guaranteeCode:
+          type: string
+          example: null
+        onHold:
+          type: boolean
+          example: null
+        paymentCard:
+          $ref: '#/components/schemas/ReservationPaymentCardTypeDto'
+        rateInfo:
+          $ref: '#/components/schemas/RateInfoDto'
+        reservationBooker:
+          $ref: '#/components/schemas/ReservationBookerDto'
+        reservationEmailNotifications:
+          $ref: '#/components/schemas/ReservationEmailNotificationsDto'
+        reservationGuestList:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ReservationByIdGuestsDto'
+        reservationId:
+          type: string
+          example: null
+        reservationOverridden:
+          type: boolean
+          example: null
+        reservationOverrideReasons:
+          $ref: '#/components/schemas/ReservationOverrideReasonsDto'
+        reservationPackageList:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ReservationPackagesDetailsResponseDto'
+        reservationStatus:
+          type: string
+          example: null
+        roomStay:
+          $ref: '#/components/schemas/RoomStayByIdDto'
+    ReservationByIdGuestsDto:
+      type: object
+      example: null
+      properties:
+        email:
+          type: string
+          example: null
+        givenName:
+          type: string
+          example: null
+        nameTitle:
+          type: string
+          example: null
+        surName:
+          type: string
+          example: null
+        type:
+          type: string
+          example: null
+    ReservationDto:
+      type: object
+      example: null
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+          example: 1
+          maximum: 2
+          minimum: 1
+        arrival:
+          type: string
+          format: date
+          example: 2015-10-20
+        basketReferenceId:
+          type: string
+          example: "132484"
+        bookingNotes:
+          type: string
+          example: bookingNotes
+        childrenNumber:
+          type: integer
+          format: int32
+          example: 0
+          maximum: 3
+          minimum: 0
+        cotRequired:
+          type: boolean
+          example: false
+        departure:
+          type: string
+          format: date
+          example: 2015-10-21
+        distributionIATANumber:
+          type: string
+          example: "00000000123456"
+        distributionUsername:
+          type: string
+          example: distributionUsername
+        gdsReferenceNumber:
+          type: string
+          example: gdsReferenceNumber
+        hotelId:
+          type: string
+          example: LONSTM
+        roomRates:
+          $ref: '#/components/schemas/RoomRateDto'
+      required:
+        - adultsNumber
+        - arrival
+        - departure
+        - hotelId
+        - roomRates
+    ReservationEmailNotificationsDto:
+      type: object
+      example: null
+      properties:
+        sendEmailConfirmation:
+          type: boolean
+          example: null
+        sendEmailInvoice:
+          type: boolean
+          example: null
+    ReservationGuestDto:
+      type: object
+      example: null
+      properties:
+        birthDate:
+          type: string
+          format: date
+          example: null
+        email:
+          type: string
+          example: null
+        fullName:
+          type: string
+          example: null
+        givenName:
+          type: string
+          example: null
+        guestRestricted:
+          type: boolean
+          example: null
+        id:
+          type: string
+          example: null
+        language:
+          type: string
+          example: null
+        nameTitle:
+          type: string
+          example: null
+        phoneNumber:
+          type: string
+          example: null
+        surname:
+          type: string
+          example: null
+        type:
+          type: string
+          example: null
+    ReservationGuestRequestDto:
+      type: object
+      example: null
+      properties:
+        basketReference:
+          type: string
+          example: null
+        booker:
+          $ref: '#/components/schemas/BookerDetailsDto'
+        hotelId:
+          type: string
+          example: LONSTM
+        reasonForStay:
+          type: string
+          example: LEI
+        sendEmailConfirmation:
+          type: boolean
+          example: false
+        sendEmailInvoice:
+          type: boolean
+          example: false
+        stayingGuests:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/StayingGuestDto'
+          maxItems: 2147483647
+          minItems: 1
+      required:
+        - basketReference
+        - booker
+        - hotelId
+        - reasonForStay
+        - stayingGuests
+    ReservationInfoDto:
+      type: object
+      example: null
+      properties:
+        externalReferences:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ExternalReferenceTypeDto'
+        hotelId:
+          type: string
+          example: null
+        hotelName:
+          type: string
+          example: null
+        reservationGuest:
+          $ref: '#/components/schemas/ReservationGuestDto'
+        reservationIdList:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/UniqueIDTypeDto'
+        roomStay:
+          $ref: '#/components/schemas/RoomStayDto'
+        roomStayReservation:
+          type: boolean
+          example: null
+    ReservationOverrideReasonDto:
+      type: object
+      example: null
+      properties:
+        callerName:
+          type: string
+          example: Jane Doe
+        managerName:
+          type: string
+          example: John Smith
+        reasonCode:
+          type: string
+          example: ILL
+        reasonName:
+          type: string
+          example: MA Illness
+      required:
+        - callerName
+        - reasonCode
+        - reasonName
+    ReservationOverrideReasonsDto:
+      type: object
+      example: null
+      properties:
+        callerName:
+          type: string
+          example: null
+        managerName:
+          type: string
+          example: null
+        reasonCode:
+          type: string
+          example: null
+        reasonName:
+          type: string
+          example: null
+    ReservationPackagesDetailsResponseDto:
+      type: object
+      example: null
+      properties:
+        computedPrice:
+          type: number
+          example: null
+        description:
+          type: string
+          example: null
+        grossPrice:
+          type: number
+          example: null
+        packageCode:
+          type: string
+          example: null
+        totalQuantity:
+          type: integer
+          format: int32
+          example: null
+        unitPrice:
+          type: number
+          example: null
+        vatTax:
+          type: number
+          example: null
+    ReservationPackagesRequestByIdDto:
+      type: object
+      example: null
+      properties:
+        arrivalDate:
+          type: string
+          example: 2015-10-20
+        basketReferenceId:
+          type: string
+          example: null
+        departureDate:
+          type: string
+          example: 2015-10-21
+        hotelId:
+          type: string
+          example: LONSTM
+        previousRoomsSelections:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RoomsSelectionsByReservationIdDto'
+        roomsSelections:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RoomsSelectionsByReservationIdDto'
+      required:
+        - arrivalDate
+        - basketReferenceId
+        - departureDate
+    ReservationPackagesRequestDto:
+      type: object
+      example: null
+      properties:
+        arrivalDate:
+          type: string
+          example: 2015-10-20
+        basketReferenceId:
+          type: string
+          example: null
+        departureDate:
+          type: string
+          example: 2015-10-21
+        hotelId:
+          type: string
+          example: LONSTM
+        previousRoomsSelections:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RoomsSelectionsDto'
+        roomsSelections:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RoomsSelectionsDto'
+      required:
+        - arrivalDate
+        - basketReferenceId
+        - departureDate
+    ReservationPaymentCardTypeDto:
+      type: object
+      example: null
+      properties:
+        cardHolderName:
+          type: string
+          example: null
+        cardNumberMasked:
+          type: string
+          example: null
+        cardType:
+          type: string
+          example: null
+        expirationDate:
+          type: string
+          format: date
+          example: null
+        paymentMethod:
+          type: string
+          example: null
+        token:
+          type: string
+          example: null
+    ReservationRequestDto:
+      type: object
+      example: null
+      properties:
+        bookingChannel:
+          $ref: '#/components/schemas/BookingChannelDto'
+        getReservationsByIds:
+          type: boolean
+          example: null
+        reservations:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ReservationDto'
+          maxItems: 2147483647
+          minItems: 1
+      required:
+        - bookingChannel
+        - reservations
+    ReservationsDetailsResponseDto:
+      type: object
+      example: null
+      properties:
+        reservations:
+          $ref: '#/components/schemas/ReservationsDto'
+    ReservationsDto:
+      type: object
+      example: null
+      properties:
+        hasMore:
+          type: boolean
+          example: null
+        limit:
+          type: integer
+          format: int32
+          example: null
+        offset:
+          type: integer
+          format: int32
+          example: null
+        reservationInfo:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ReservationInfoDto'
+        totalPages:
+          type: integer
+          format: int32
+          example: null
+        totalResults:
+          type: integer
+          format: int32
+          example: null
+    ReservationsPackagesResponseDto:
+      type: object
+      example: null
+      properties:
+        roomsSelections:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RoomsSelectionsDto'
+    RoomOccupancyDto:
+      type: object
+      example: null
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+          example: null
+        childrenNumber:
+          type: integer
+          format: int32
+          example: null
+        cotRequired:
+          type: boolean
+          example: null
+      required:
+        - adultsNumber
+        - childrenNumber
+    RoomRateDto:
+      type: object
+      example: null
+      properties:
+        cellCode:
+          type: string
+          example: ABC
+        endDate:
+          type: string
+          format: date
+          example: 2015-10-21
+        pmsRoomType:
+          type: string
+          example: FMTRPL
+        rateDisplaySet:
+          type: string
+          example: NEG
+        ratePlanCode:
+          type: string
+          example: FLEXRATE
+        specialRequests:
+          type: array
+          example: SNGL
+          items:
+            type: string
+            example: SNGL
+        startDate:
+          type: string
+          format: date
+          example: 2015-10-20
+      required:
+        - endDate
+        - pmsRoomType
+        - ratePlanCode
+        - startDate
+    RoomStayByIdDto:
+      type: object
+      example: null
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+          example: null
+        arrivalDate:
+          type: string
+          example: null
+        bookingChannel:
+          type: string
+          example: null
+        cellCode:
+          type: string
+          example: null
+        checkInTime:
+          type: string
+          example: null
+        checkOutTime:
+          type: string
+          example: null
+        childrenNumber:
+          type: integer
+          format: int32
+          example: null
+        cot:
+          type: boolean
+          example: null
+        departureDate:
+          type: string
+          example: null
+        ratePlanCode:
+          type: string
+          example: null
+        ratesPerNight:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RatePerNightDto'
+        roomNumber:
+          type: string
+          example: null
+        roomPrice:
+          type: number
+          example: null
+        roomType:
+          type: string
+          example: null
+    RoomStayDistributionDto:
+      type: object
+      example: null
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+          example: null
+        arrivalDate:
+          type: string
+          example: null
+        childrenNumber:
+          type: integer
+          format: int32
+          example: null
+        cot:
+          type: boolean
+          example: null
+        departureDate:
+          type: string
+          example: null
+        ratePlanCode:
+          type: string
+          example: null
+        roomType:
+          type: string
+          example: null
+      required:
+        - arrivalDate
+        - departureDate
+    RoomStayDto:
+      type: object
+      example: null
+      properties:
+        adultCount:
+          type: integer
+          format: int32
+          example: null
+        arrivalDate:
+          type: string
+          format: date
+          example: null
+        bookingChannelCode:
+          type: string
+          example: null
+        childCount:
+          type: integer
+          format: int32
+          example: null
+        departureDate:
+          type: string
+          format: date
+          example: null
+        fixedRate:
+          type: boolean
+          example: null
+        marketCode:
+          type: string
+          example: null
+        numberOfRooms:
+          type: integer
+          format: int32
+          example: null
+        pseudoRoom:
+          type: boolean
+          example: null
+        rateAmount:
+          $ref: '#/components/schemas/CurrencyAmountTypeDto'
+        ratePlanCode:
+          type: string
+          example: null
+        rateSuppressed:
+          type: boolean
+          example: null
+        roomClass:
+          type: string
+          example: null
+        roomNumberLocked:
+          type: boolean
+          example: null
+        roomType:
+          type: string
+          example: null
+        roomTypeCharged:
+          type: string
+          example: null
+        sourceCode:
+          type: string
+          example: null
+        totalAmount:
+          $ref: '#/components/schemas/CurrencyAmountTypeDto'
+    RoomsSelectionsByReservationIdDto:
+      type: object
+      example: null
+      properties:
+        packagesSelection:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/PackagesSelectionDto'
+        reservationId:
+          type: string
+          example: null
+    RoomsSelectionsDto:
+      type: object
+      example: null
+      properties:
+        packagesSelection:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/PackagesSelectionDto'
+        reservationId:
+          type: string
+          example: null
+    SaveReservationResponseDto:
+      type: object
+      example: null
+      properties:
+        basketReference:
+          type: string
+          example: null
+    SearchBookingsResponseMapper:
+      type: object
+      example: null
+    SpecialRequestsDto:
+      type: object
+      example: null
+      properties:
+        bookingNotes:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        hotelId:
+          type: string
+          example: null
+        reservationIds:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        specialRequests:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+    StayingGuestAddressDto:
+      type: object
+      example: null
+      properties:
+        addressLine1:
+          type: string
+          example: null
+        addressLine2:
+          type: string
+          example: null
+        addressLine3:
+          type: string
+          example: null
+        addressLine4:
+          type: string
+          example: null
+        addressType:
+          type: string
+          example: null
+        cityName:
+          type: string
+          example: null
+        companyName:
+          type: string
+          example: null
+        countryCode:
+          type: string
+          example: null
+        postalCode:
+          type: string
+          example: null
+    StayingGuestDetailsDto:
+      type: object
+      example: null
+      properties:
+        address:
+          $ref: '#/components/schemas/StayingGuestAddressDto'
+        emailAddress:
+          type: string
+          example: debbie.doe@whitbread.com
+        employeeAccountId:
+          type: string
+          example: null
+        firstName:
+          type: string
+          example: Debbie
+        lastName:
+          type: string
+          example: Doe
+        title:
+          type: string
+          example: Mrs
+      required:
+        - firstName
+        - lastName
+    StayingGuestDto:
+      type: object
+      example: null
+      properties:
+        reservationId:
+          type: string
+          example: "132484"
+        sameAsBooker:
+          type: boolean
+          example: null
+        stayingGuestDetails:
+          $ref: '#/components/schemas/StayingGuestDetailsDto'
+      required:
+        - sameAsBooker
+        - stayingGuestDetails
+    TempBookingRefResponseDto:
+      type: object
+      example: null
+      properties:
+        tempBookingRef:
+          type: string
+          example: null
+    UniqueIDTypeDto:
+      type: object
+      example: null
+      properties:
+        id:
+          type: string
+          example: null
+        type:
+          type: string
+          example: null
+    UpdateCnpReservationRequestDto:
+      type: object
+      example: null
+      properties:
+        booker:
+          $ref: '#/components/schemas/BookerDetailsCnpDto'
+        businessAccount:
+          $ref: '#/components/schemas/BusinessAccountCnpDto'
+        language:
+          type: string
+          example: null
+      required:
+        - businessAccount
+    UpdateCnpReservationResponseDto:
+      type: object
+      example: null
+      properties:
+        basketReference:
+          type: string
+          example: null
+    UpdateDiscountRequestDto:
+      type: object
+      example: null
+      properties:
+        currency:
+          type: string
+          example: null
+        discountAmount:
+          type: number
+          example: null
+        hotelId:
+          type: string
+          example: null
+        reservationIds:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+    UpdateEmailReservationRequestDto:
+      type: object
+      example: null
+      properties:
+        email:
+          type: string
+          example: null
+      required:
+        - email
+    UpdateRateCodeRequestDto:
+      type: object
+      example: null
+      properties:
+        adultsNumber:
+          type: array
+          example: null
+          items:
+            type: integer
+            format: int32
+            example: null
+        basketReferenceId:
+          type: string
+          example: null
+        childrenNumber:
+          type: array
+          example: null
+          items:
+            type: integer
+            format: int32
+            example: null
+        currency:
+          type: string
+          example: EUR
+        endDate:
+          type: string
+          example: 2015-10-21
+        hotelId:
+          type: string
+          example: LONSTM
+        rateCode:
+          type: string
+          example: FLEXRATE
+        roomType:
+          type: array
+          example: "DOUBLE,FMQUAD"
+          items:
+            type: string
+            example: "DOUBLE,FMQUAD"
+        startDate:
+          type: string
+          example: 2015-10-20
+      required:
+        - adultsNumber
+        - basketReferenceId
+        - endDate
+        - rateCode
+        - startDate
+    UpdateReasonForStayRequestDto:
+      type: object
+      example: null
+      properties:
+        basketReference:
+          type: string
+          example: null
+        hotelId:
+          type: string
+          example: null
+        reasonForStay:
+          type: string
+          example: LEI
+      required:
+        - basketReference
+        - hotelId
+        - reasonForStay
+    UpdateReservationOverrideReasonsRequestDto:
+      type: object
+      example: null
+      properties:
+        basketReference:
+          type: string
+          example: GBM6919649
+        callerName:
+          type: string
+          example: John Doe
+        hotelId:
+          type: string
+          example: LONEUS
+        managerName:
+          type: string
+          example: null
+        reasonCode:
+          type: string
+          example: ILL
+        reasonName:
+          type: string
+          example: Medical Appointments
+      required:
+        - basketReference
+        - callerName
+        - hotelId
+        - reasonCode
+        - reasonName
+    ValidationError:
+      type: object
+      example: null
+      properties:
+        elementId:
+          type: string
+          example: null
+        errTextTemplate:
+          type: string
+          example: null

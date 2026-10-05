@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Semibold.ttf">
+                     <string>ProximaNova-Semibold</string>
+        </array>
+        <array key="ProximaNova-Regular.ttf">
+                     <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="281" id="KGk-i7-Jjw" customClass="HotelAccessibilityInfoCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="489"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="489"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ph3-YI-na7" customClass="RoundedCornersView" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="18" y="18" width="284" height="453"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2a1-vy-HYX" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                                <rect key="frame" x="20" y="257.5" width="242" height="40"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="WMx-bX-Dff"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="16"/>
+                                <color key="tintColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Email hotel">
+                                    <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="emailButtonDidTap" destination="KGk-i7-Jjw" eventType="touchUpInside" id="jQi-c5-ctM"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="0.0"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="2"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                <color key="value" red="0.30588235289999999" green="0.61960784310000006" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconDisabled" translatesAutoresizingMaskIntoConstraints="NO" id="8KE-Ls-WtK">
+                        <rect key="frame" x="38" y="40" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="G98-xK-pNX"/>
+                            <constraint firstAttribute="height" constant="20" id="tOq-gO-h5V"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hotel accessibility" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="473-Lk-ACi">
+                        <rect key="frame" x="71" y="40" width="209" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="Ryy-wi-FVF"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="19"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are some disabled facilities at this hotel. Come and have a look; very, very nice." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V2X-dw-ioc">
+                        <rect key="frame" x="38" y="76" width="242" height="59.5"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="14"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="For more information about accessible rooms at this hotel, please call the hotel directly on.." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1tq-BY-jdv">
+                        <rect key="frame" x="38" y="151.5" width="242" height="49"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="14"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ywl-je-ReN" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="38" y="218.5" width="242" height="40"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="aiw-ea-F9B"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="16"/>
+                        <color key="tintColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <state key="normal" title="Call hotel">
+                            <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="4"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="callButtonDidTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="8xE-iP-prZ"/>
+                        </connections>
+                    </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessChevron" translatesAutoresizingMaskIntoConstraints="NO" id="vh2-tB-hzS">
+                        <rect key="frame" x="268" y="353.5" width="24" height="24"/>
+                        <color key="tintColor" red="0.33725490196078434" green="0.41568627450980389" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="24" id="06e-x6-fYo"/>
+                            <constraint firstAttribute="height" constant="24" id="OTw-As-7LC"/>
+                        </constraints>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessChevron" translatesAutoresizingMaskIntoConstraints="NO" id="x0C-IO-jE8">
+                        <rect key="frame" x="268" y="417.5" width="24" height="24"/>
+                        <color key="tintColor" red="0.33725490200000002" green="0.41568627450000001" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="24" id="6n5-2c-WUe"/>
+                            <constraint firstAttribute="height" constant="24" id="W7O-hM-QFb"/>
+                        </constraints>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T86-2e-HCl">
+                        <rect key="frame" x="40" y="345.5" width="240" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="Bj2-nf-QLr"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                        <color key="tintColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <inset key="imageEdgeInsets" minX="252" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <state key="normal" title="Our accessible rooms">
+                            <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
+                        <connections>
+                            <action selector="accessibleRoomsButtonDidTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="DBN-HS-00d"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CRJ-Ph-96v">
+                        <rect key="frame" x="40" y="409.5" width="240" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="Jpk-Iv-uq1"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="bsD-vJ-eRo"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                        <color key="tintColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <inset key="imageEdgeInsets" minX="252" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <state key="normal" title="Disabled access information">
+                            <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
+                        <connections>
+                            <action selector="disabledAccessButtonDidTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="gvD-7S-R0Q"/>
+                        </connections>
+                    </button>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cws-3q-PNV">
+                        <rect key="frame" x="40" y="399.5" width="260" height="1"/>
+                        <color key="backgroundColor" red="0.85490196078431369" green="0.88235294117647056" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="vx7-gA-wog"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x58-46-uT5">
+                        <rect key="frame" x="40" y="335.5" width="260" height="1"/>
+                        <color key="backgroundColor" red="0.85490196080000003" green="0.88235294119999996" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="Ob1-jz-6pK"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="xlg-0v-DL3"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="cws-3q-PNV" secondAttribute="trailing" constant="20" id="1wG-bh-lCE"/>
+                    <constraint firstItem="2a1-vy-HYX" firstAttribute="top" secondItem="Ywl-je-ReN" secondAttribute="bottom" constant="17" id="2Va-CO-uZE"/>
+                    <constraint firstItem="V2X-dw-ioc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="38" id="8lO-s4-cJv"/>
+                    <constraint firstAttribute="trailing" secondItem="vh2-tB-hzS" secondAttribute="trailing" constant="28" id="8mA-hh-toR"/>
+                    <constraint firstItem="vh2-tB-hzS" firstAttribute="centerY" secondItem="T86-2e-HCl" secondAttribute="centerY" id="9Sn-Jq-Pnh"/>
+                    <constraint firstAttribute="trailing" secondItem="T86-2e-HCl" secondAttribute="trailing" constant="40" id="B8a-9M-rBI"/>
+                    <constraint firstItem="x0C-IO-jE8" firstAttribute="centerY" secondItem="CRJ-Ph-96v" secondAttribute="centerY" id="BX9-A5-JKu"/>
+                    <constraint firstItem="V2X-dw-ioc" firstAttribute="top" secondItem="8KE-Ls-WtK" secondAttribute="bottom" constant="16" id="E8h-ny-3Z4"/>
+                    <constraint firstItem="2a1-vy-HYX" firstAttribute="width" secondItem="Ywl-je-ReN" secondAttribute="width" id="F1b-32-5VS"/>
+                    <constraint firstItem="Ph3-YI-na7" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="18" id="G3P-Wg-XpZ"/>
+                    <constraint firstAttribute="trailing" secondItem="V2X-dw-ioc" secondAttribute="trailing" constant="40" id="G9C-Vg-phw"/>
+                    <constraint firstItem="2a1-vy-HYX" firstAttribute="centerX" secondItem="Ywl-je-ReN" secondAttribute="centerX" id="Jpc-fo-bbi"/>
+                    <constraint firstItem="1tq-BY-jdv" firstAttribute="top" secondItem="V2X-dw-ioc" secondAttribute="bottom" constant="16" id="ON1-D5-eFr"/>
+                    <constraint firstAttribute="trailing" secondItem="CRJ-Ph-96v" secondAttribute="trailing" constant="40" id="PX1-Xx-w2T"/>
+                    <constraint firstItem="cws-3q-PNV" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="40" id="TAk-gB-bHU"/>
+                    <constraint firstAttribute="trailing" secondItem="x58-46-uT5" secondAttribute="trailing" constant="20" id="Vev-jA-e2X"/>
+                    <constraint firstItem="8KE-Ls-WtK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="40" id="VjM-Pq-YjA"/>
+                    <constraint firstItem="Ywl-je-ReN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="38" id="XaA-ay-RLd"/>
+                    <constraint firstAttribute="trailing" secondItem="473-Lk-ACi" secondAttribute="trailing" constant="40" id="Xrb-Ee-O3t"/>
+                    <constraint firstItem="T86-2e-HCl" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="40" id="YAb-Iw-k1q"/>
+                    <constraint firstItem="473-Lk-ACi" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="40" id="YNX-1t-b51"/>
+                    <constraint firstAttribute="trailing" secondItem="Ph3-YI-na7" secondAttribute="trailing" constant="18" id="Yo3-Tv-9Ns"/>
+                    <constraint firstItem="cws-3q-PNV" firstAttribute="top" secondItem="T86-2e-HCl" secondAttribute="bottom" constant="14" id="ZcU-Pe-RR0"/>
+                    <constraint firstAttribute="bottom" secondItem="CRJ-Ph-96v" secondAttribute="bottom" constant="39.5" id="aH1-H1-fRz"/>
+                    <constraint firstItem="T86-2e-HCl" firstAttribute="top" secondItem="x58-46-uT5" secondAttribute="bottom" constant="9" id="axD-eu-50J"/>
+                    <constraint firstAttribute="trailing" secondItem="Ywl-je-ReN" secondAttribute="trailing" constant="40" id="dL8-ii-vnr"/>
+                    <constraint firstAttribute="trailing" secondItem="1tq-BY-jdv" secondAttribute="trailing" constant="40" id="hKW-lM-X3q"/>
+                    <constraint firstItem="x58-46-uT5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="40" id="hmR-vC-c0W"/>
+                    <constraint firstItem="Ywl-je-ReN" firstAttribute="top" secondItem="1tq-BY-jdv" secondAttribute="bottom" constant="18" id="ipu-k1-UZt"/>
+                    <constraint firstItem="473-Lk-ACi" firstAttribute="leading" secondItem="8KE-Ls-WtK" secondAttribute="trailing" constant="13" id="isu-Ah-rsQ"/>
+                    <constraint firstItem="8KE-Ls-WtK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="38" id="mKe-tQ-qnj"/>
+                    <constraint firstItem="Ph3-YI-na7" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="18" id="mZb-7L-fKi"/>
+                    <constraint firstItem="CRJ-Ph-96v" firstAttribute="top" secondItem="cws-3q-PNV" secondAttribute="bottom" constant="9" id="nSZ-01-oKG"/>
+                    <constraint firstItem="CRJ-Ph-96v" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="40" id="pZf-di-8Nn"/>
+                    <constraint firstItem="T86-2e-HCl" firstAttribute="top" secondItem="2a1-vy-HYX" secondAttribute="bottom" constant="30" id="prp-lD-gJc"/>
+                    <constraint firstAttribute="trailing" secondItem="x0C-IO-jE8" secondAttribute="trailing" constant="28" id="sGe-4b-QNd"/>
+                    <constraint firstAttribute="bottom" secondItem="Ph3-YI-na7" secondAttribute="bottom" constant="18" id="uGL-WT-cqx"/>
+                    <constraint firstItem="1tq-BY-jdv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="38" id="vSw-Lf-8Mk"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="callButton" destination="Ywl-je-ReN" id="xMb-1p-T9e"/>
+                <outlet property="contactInfo" destination="1tq-BY-jdv" id="AAn-XX-3RK"/>
+                <outlet property="disabledAccessInfoButton" destination="CRJ-Ph-96v" id="trn-f5-0R9"/>
+                <outlet property="emailButton" destination="2a1-vy-HYX" id="uqs-bj-zsf"/>
+                <outlet property="hotelAccessibilityTitle" destination="473-Lk-ACi" id="yOV-ix-YhP"/>
+                <outlet property="hotelInfo" destination="V2X-dw-ioc" id="Bcp-55-S0D"/>
+                <outlet property="ourAccessibleRoomsButton" destination="T86-2e-HCl" id="wwX-tu-lBU"/>
+            </connections>
+            <point key="canvasLocation" x="134.40000000000001" y="257.72113943028489"/>
+        </tableViewCell>
+    </objects>
+    <designables>
+        <designable name="2a1-vy-HYX">
+            <size key="intrinsicContentSize" width="79" height="31"/>
+        </designable>
+        <designable name="Ywl-je-ReN">
+            <size key="intrinsicContentSize" width="67" height="31"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="accessChevron" width="24" height="24"/>
+        <image name="iconDisabled" width="35" height="38"/>
+    </resources>
+</document>

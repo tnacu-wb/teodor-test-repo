@@ -1,0 +1,20 @@
+{
+  "id" : "ed6c9a78-633c-4833-9980-34f95e903486",
+  "request" : {
+    "urlPath" : "/v1/baskets/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/preAuthCharges",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['preAuthCharges'] == 'preAuthCharges')]"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "ed6c9a78-633c-4833-9980-34f95e903486"
+}

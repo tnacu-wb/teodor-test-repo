@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/amend_dates_card"
+    style="@style/CardView.CardContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:contentPaddingBottom="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/amend_dates_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Header2"
+            android:text="@string/dates" />
+
+        <TextView
+            android:id="@+id/amend_dates_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            style="@style/Body"
+            tools:text="Wed 13 Jul - Fri 15 Jul, 2019 (2 nights)" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/shape_divider_grey" />
+
+        <com.whitbread.premierinn.account.view.ListButton
+            android:id="@+id/edit_dates"
+            style="@style/ListButton.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:text="@string/amend_change_dates"
+            app:textColor="?colorPrimary" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

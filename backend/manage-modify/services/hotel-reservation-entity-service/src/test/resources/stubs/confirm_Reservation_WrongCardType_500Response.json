@@ -1,0 +1,21 @@
+{
+  "request": {
+    "urlPath": "/v1/reservations/confirm",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$..hotelId",
+          "contains": "LONEUS"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 500,
+    "bodyFileName": "confirm_Reservation_WrongCardType_500Response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

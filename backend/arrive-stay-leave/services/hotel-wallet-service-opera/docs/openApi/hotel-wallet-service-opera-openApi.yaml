@@ -1,0 +1,330 @@
+openapi: 3.1.0
+info:
+  description: <p>Wallet Pass Generator API</p>
+  title: Wallet API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9131
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /v1/hotel-wallet:
+    get:
+      operationId: getHotelWallet
+      parameters:
+      - in: query
+        name: reservationNumber
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: arrivalDate
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: lastName
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: language
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: country
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: channel
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: excludeBarcode
+        required: false
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: byte
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Generate hotel wallet logic
+      tags:
+      - wallet-controller
+  /v1/hotel-wallet/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/hotel-wallet/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/hotel-wallet/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/hotel-wallet/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /v1/hotel-wallet/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /v1/hotel-wallet/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string

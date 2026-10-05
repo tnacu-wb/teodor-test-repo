@@ -1,0 +1,614 @@
+openapi: 3.1.0
+info:
+  contact:
+    email: book-pay@whitbread.co.uk
+    name: Book & Pay Squad
+  description: Unified payment orchestration API. Web (Secure Fields) and mobile (Mobile
+    SDK v4) payments are initialized through a single polymorphic POST /api/payments/init
+    endpoint discriminated by paymentMethod. Authorization is synchronous and Datatrans
+    callbacks arrive on the gateway-scoped POST /api/payments/webhooks/datatrans endpoint.
+  title: Payment Orchestration Service API
+  version: 2.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9200
+tags:
+- description: Datatrans webhook callback endpoints (gateway-scoped)
+  name: Webhooks
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+- description: Unified payment orchestration endpoints
+  name: Payments
+paths:
+  /api/payments/authorize:
+    post:
+      description: Finalizes the payment authorization post-3DS for web Secure Fields
+        flow. Returns synchronous result from the workflow update method.
+      operationId: authorizePayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorizePaymentRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthorizeResult"
+          description: Authorization result returned
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthorizeResult"
+          description: "Authorization accepted and still processing (AUTHORIZATION_PENDING)\
+            \ — the payment may still succeed. Poll GET /api/payments/{basketId}/status\
+            \ for the outcome; do not retry this call"
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: Invalid request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: "Basket not found (BASKET_NOT_FOUND), or no payment workflow\
+            \ exists for the basket — authorize called before init, or the workflow\
+            \ already closed (TRANSACTION_NOT_FOUND)"
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: "Conflict — authorization already in progress, transaction\
+            \ already authorized, or payment not in a state that allows authorization\
+            \ (AUTHORIZATION_IN_PROGRESS, TRANSACTION_ALREADY_AUTHORIZED, INVALID_TRANSACTION_STATE)"
+        "410":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: Transaction expired (TRANSACTION_EXPIRED)
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: "Payment gateway error (GATEWAY_ERROR), or the gateway rejected\
+            \ this service's merchant credentials (GATEWAY_AUTHENTICATION_FAILED)\
+            \ — not a card problem"
+      summary: Authorize payment
+      tags:
+      - Payments
+  /api/payments/init:
+    post:
+      description: "Creates a payment session using the specified payment method (NEW_CARD_WEB\
+        \ for Secure Fields, NEW_CARD_MOBILE for Mobile SDK). Accepts a polymorphic\
+        \ request discriminated by paymentMethod. For NEW_CARD_WEB, the returnUrl\
+        \ must use HTTPS and its host must be in the configured allowlist (payment.security.allowed-return-url-hosts)."
+      operationId: initPayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentInitRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentInitResponse"
+          description: Payment session created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: "Invalid request (validation failed, returnUrl not HTTPS, or\
+            \ returnUrl host not in allowlist)"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: Basket not found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: "Conflict (authorization in progress, transaction already authorized,\
+            \ or invalid state for re-initialization)"
+        "410":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: "Payment session expired (EXPIRED, TRANSACTION_EXPIRED)"
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: Card payment not available for this hotel (PAYMENT_METHOD_NOT_AVAILABLE)
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: "Unexpected internal error (INTERNAL_ERROR) — a fault in this\
+            \ service, not a transient one; retrying is unlikely to help"
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: "Payment gateway error (GATEWAY_ERROR), or the gateway rejected\
+            \ this service's merchant credentials (GATEWAY_AUTHENTICATION_FAILED)\
+            \ — not a card problem"
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: A downstream dependency is unreachable (SERVICE_UNAVAILABLE)
+            — retry the request
+      summary: Initialize payment session
+      tags:
+      - Payments
+  /api/payments/webhooks/datatrans:
+    post:
+      description: "Server-to-server callback from Datatrans after a payment event\
+        \ (web Secure Fields or Mobile SDK). The Datatrans-Signature HMAC is verified\
+        \ against the raw request body, then the payment workflow correlated by the\
+        \ basketId query parameter is signalled asynchronously. Acknowledged with\
+        \ 200 even when the webhook is a duplicate or cannot be correlated to a payment,\
+        \ because Datatrans does not retry on non-2xx."
+      operationId: handleDatatransWebhook
+      parameters:
+      - description: Basket identifier correlating this webhook to a running payment
+          workflow
+        in: query
+        name: basketId
+        required: false
+        schema:
+          type: string
+      - description: HMAC signature Datatrans computed over the raw request body
+        in: header
+        name: Datatrans-Signature
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              format: byte
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                status: received
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+          description: Webhook accepted for processing (also returned for duplicate
+            webhooks and webhooks that cannot be correlated to a payment)
+        "400":
+          content:
+            application/json:
+              example:
+                status: invalid
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+          description: "Request body is missing, is not valid JSON, or omits transactionId/status"
+        "401":
+          content:
+            application/json:
+              example:
+                status: unauthorized
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+          description: Datatrans-Signature header is missing or the signature is invalid
+      summary: Datatrans webhook
+      tags:
+      - Webhooks
+  /api/payments/{basketId}/status:
+    get:
+      description: "Returns the workflow's current payment status, plus the authorization\
+        \ result once one exists. Poll this after a 202 from /api/payments/authorize."
+      operationId: getPaymentStatus
+      parameters:
+      - in: path
+        name: basketId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentStatusResponse"
+          description: Current payment status
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalErrorResponse"
+          description: No payment found for this basket (BASKET_NOT_FOUND)
+      summary: Get payment status
+      tags:
+      - Payments
+  /payment-orchestrator/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /payment-orchestrator/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /payment-orchestrator/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /payment-orchestrator/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /payment-orchestrator/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "404":
+          description: Not Found
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /payment-orchestrator/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+components:
+  schemas:
+    AuthorizePaymentRequest:
+      type: object
+      description: Request to finalize payment authorization after 3-D Secure
+      properties:
+        basketId:
+          type: string
+          description: The basket/reservation identifier
+          example: AQN-147756bb-bb71-4842-959a-2efe87e378ed
+          minLength: 1
+          pattern: "^[A-Z]{3}-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      required:
+      - basketId
+    AuthorizeResult:
+      type: object
+      description: Result returned synchronously from the workflow authorize update
+      properties:
+        errorCode:
+          type: string
+          description: "Machine-readable error code, null on success"
+          enum:
+          - BASKET_NOT_FOUND
+          - PAYMENT_METHOD_NOT_AVAILABLE
+          - TRANSACTION_ALREADY_AUTHORIZED
+          - BOOKING_ALREADY_PAID
+          - GATEWAY_ERROR
+          - GATEWAY_AUTHENTICATION_FAILED
+          - VALIDATION_FAILED
+          - INVALID_AMOUNT
+          - AUTHORIZATION_IN_PROGRESS
+          - AUTHORIZATION_PENDING
+          - TRANSACTION_EXPIRED
+          - TRANSACTION_NOT_FOUND
+          - INVALID_TRANSACTION_STATE
+          - TRANSACTION_MISMATCH
+          - EXPIRED
+        errorMessage:
+          type: string
+          description: "Human-readable error description, null on success"
+        success:
+          type: boolean
+          description: Whether the authorization succeeded
+          example: true
+    ErrorDetail:
+      type: object
+      description: Error detail
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code
+          example: INVALID_REQUEST
+        message:
+          type: string
+          description: Human-readable error message
+          example: basketId is required
+    GlobalErrorResponse:
+      type: object
+      description: Standard error response wrapper
+      properties:
+        error:
+          $ref: "#/components/schemas/ErrorDetail"
+          description: Error details
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    NewCardMobileInitRequest:
+      allOf:
+      - $ref: "#/components/schemas/PaymentInitRequest"
+      - type: object
+        properties:
+          basketId:
+            type: string
+            description: The basket/reservation identifier
+            example: AQN-147756bb-bb71-4842-959a-2efe87e378ed
+            minLength: 1
+          clientChannel:
+            type: string
+            description: Client channel
+            example: APPS_IOS
+            minLength: 1
+          country:
+            type: string
+            description: Country code
+            example: gb
+            minLength: 1
+          language:
+            type: string
+            description: Language code
+            example: en
+            minLength: 1
+          userType:
+            type: string
+            description: User type
+            example: LEISURE
+            minLength: 1
+      description: Request to initialize a Mobile SDK payment session for native apps
+      required:
+      - basketId
+      - clientChannel
+      - country
+      - language
+      - userType
+    NewCardWebInitRequest:
+      allOf:
+      - $ref: "#/components/schemas/PaymentInitRequest"
+      - type: object
+        properties:
+          basketId:
+            type: string
+            description: The basket/reservation identifier
+            example: AQN-147756bb-bb71-4842-959a-2efe87e378ed
+            minLength: 1
+          clientChannel:
+            type: string
+            description: Client channel
+            example: PI
+            minLength: 1
+          country:
+            type: string
+            description: Country code
+            example: gb
+            minLength: 1
+          language:
+            type: string
+            description: Language code
+            example: en
+            minLength: 1
+          returnUrl:
+            type: string
+            description: 3-D Secure return URL for redirect after authentication (HTTPS
+              only)
+            example: https://www.premierinn.com/payments/3ds-return
+            minLength: 1
+          userType:
+            type: string
+            description: User type
+            example: LEISURE
+            minLength: 1
+      description: Request to initialize a Secure Fields payment session for web clients
+      required:
+      - basketId
+      - clientChannel
+      - country
+      - language
+      - returnUrl
+      - userType
+    PaymentInitRequest:
+      description: "Discriminated payment initialization request. The paymentMethod\
+        \ field selects the subtype: NEW_CARD_WEB carries a returnUrl (HTTPS, host\
+        \ must be in the payment.security.allowed-return-url-hosts allowlist); NEW_CARD_MOBILE\
+        \ does not."
+      discriminator:
+        mapping:
+          NEW_CARD_MOBILE: "#/components/schemas/NewCardMobileInitRequest"
+          NEW_CARD_WEB: "#/components/schemas/NewCardWebInitRequest"
+        propertyName: paymentMethod
+      oneOf:
+      - $ref: "#/components/schemas/NewCardWebInitRequest"
+      - $ref: "#/components/schemas/NewCardMobileInitRequest"
+      properties:
+        paymentMethod:
+          type: string
+      required:
+      - paymentMethod
+    PaymentInitResponse:
+      type: object
+      description: Response after successful payment initialization
+      properties:
+        paymentMethod:
+          type: string
+          description: The Datatrans integration type
+          enum:
+          - NEW_CARD_WEB
+          - NEW_CARD_MOBILE
+          example: NEW_CARD_WEB
+        transactionId:
+          type: string
+          description: The Datatrans transaction identifier
+          example: "190410112056083383"
+    PaymentStatusResponse:
+      type: object
+      description: "Current payment status, plus the authorization outcome when available"
+      properties:
+        authorizeResult:
+          $ref: "#/components/schemas/AuthorizeResult"
+          description: "The most recent authorization outcome, null while still processing"
+        paymentStatus:
+          type: string
+          description: The workflow's current payment status
+          enum:
+          - INITIALIZED
+          - AUTHORIZED
+          - SETTLEMENT_PENDING
+          - SETTLED
+          - SETTLEMENT_FAILED
+          - BOOKING_PENDING_TIMEOUT
+          - FAILED
+          - CANCELLED
+          - EXPIRED
+          example: INITIALIZED

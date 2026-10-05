@@ -1,0 +1,10 @@
+mutation initiatePayment ($basketReference: String!, $createPaymentCriteria: CreatePaymentCriteria!) {
+    initiatePayment (basketReference: $basketReference, createPaymentCriteria: $createPaymentCriteria) {
+        status
+        paymentRequiredDetails {
+            paymentRedirect
+            sessionId
+            providerUrl
+        }
+    }
+}

@@ -1,0 +1,13 @@
+@startuml
+actor Client
+box "Subscribe new customer"
+    boundary "Subscribe" as S
+end box
+entity BART
+
+Client -> S: FE sends new customer info
+S -> S: Checks customerId or email and populates email
+S -> BART: Sends data to ws.ElectronicMagazine.ElectronicMagazineService2015.cls
+BART -> S: Returns confirmation.
+Client <- S: Marketing Service returns confirmation
+@enduml

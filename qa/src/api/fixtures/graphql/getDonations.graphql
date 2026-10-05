@@ -1,0 +1,21 @@
+query getDonations($hotelId: String!, $language: String!, $country: String!, $rateCode: String!, $bookingChannel: String) {
+    donations(
+        bookingFlowCriteria: {
+            hotelId: $hotelId
+            language: $language
+            country: $country
+            rateCode: $rateCode
+            bookingChannel: $bookingChannel
+        }
+    ) {
+        donationPackages {
+            code
+            currency
+            unitPrice
+        }
+        name
+        imageSrc
+        description
+        informationBox
+    }
+}

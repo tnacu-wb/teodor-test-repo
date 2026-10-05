@@ -1,0 +1,88 @@
+server:
+  port: 9133
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+auth:
+  token:
+    providers:
+      - domain: http://localhost
+        host: http://localhost:${wiremock.server.port:1}
+        # The slash here seems to be required to match auth generated token
+        issuer: http://localhost/
+      - domain: http://localhost
+        host: http://localhost:${wiremock.server.port:1}
+        # The slash here seems to be required to match auth generated token
+        issuer: http://localhost/
+
+config:
+  service:
+    company:
+      host: http://localhost:${wiremock.server.port:0}
+      getCompanyDetailsEndpoint: "/company/{companyId}"
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: /oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: http://localhost:${wiremock.server.port:1}
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: dummy-key
+
+threadpool:
+  worldline:
+    coreSize: ${WORLDLINE_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${WORLDLINE_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${WORLDLINE_EXECUTOR_QUEUE_SIZE:50}
+
+worldline:
+  rest:
+    gb:
+      culture-code: en-GB
+      username: test
+      password: test
+    de:
+      culture-code: de-DE
+      username: test
+      password: test
+    url: https://test/PIRestAPI
+    appInit-endpoint: "/api/v1/app/init"
+    application-details-endpoint: "/api/v1/app/{applicationGUID}/details"
+    appContactDetails-endpoint: "/api/v1/app/contactDetails/{applicationGUID}"
+    appCompanyDetails-endpoint: "/api/v1/app/companyDetails/{applicationGUID}"
+    appCancel-endpoint: "/api/v1/app/cancel/{applicationGUID}"
+    appLookup-endpoint: "/api/v1/app/lookup/{lookupName}"
+    appCard-delete-endpoint: "/api/v1/app/{applicationGuid}/card/{cardGuid}"
+    appCard: "/api/v1/app/{applicationGUID}/card"
+    appCardList-endpoint: "/api/v1/app/{applicationGuid}/cards"
+    appSubmit-endpoint: "/api/v1/app/submit"
+    appPreCheck-endpoint: "/api/v1/app/preCheck"
+    hostedPageAppInit-endpoint: "/api/v1/app/{applicationGUID}/hostedPage/init"
+    bankDetailsStatus-endpoint: "/api/v1/app/BankDetailsStatus/{hostedPageGuid}"
+    default-ip-address: "1.1.1.1"
+
+wiremock:
+  server:
+    httpsPort: -1 # Fix for M1 macs as described here https://stackoverflow.com/questions/60074168/java-lang-illegalstateexception-no-server-alpnprocessors-wiremock
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+email:
+  topics:
+    notifications: "notifications"

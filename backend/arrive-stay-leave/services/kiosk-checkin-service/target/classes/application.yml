@@ -1,0 +1,125 @@
+server:
+  port: "9120"
+  shutdown: graceful
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "kiosk-checkin-service"
+    description: "Kiosk CheckIn Service"
+    version: "1.0.0"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+  swagger-ui:
+    path: /swagger-ui-custom.html
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  tracing:
+    propagation:
+      type: aws
+
+management:
+  endpoints:
+    web:
+      base-path: /v1/kiosk/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+
+logging:
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - hotelCode
+        - hotelName
+
+
+
+config:
+  service:
+    ohip:
+      host: http://${OHIP_HOST:localhost:9100}/ohip
+      getVacantRoomsEndpoint: "/v1/rooms/getVacant"
+      allocateRoomEndpoint: "/v1/rooms/allocate"
+      createProfileEndpoint: "/v1/profile/createProfile"
+      checkInEndpoint: "/v1/kiosk/checkIn"
+      housekeepingStatusEndpoint: "/v1/rooms/fetchHouseKeepingStatus"
+      reservationPreferences: "/v1/rooms/fetchReservationWithPreferences"
+      updateCommentsEndpoint: "/v1/kiosk/updateComments"
+      updateProfileEndpoint: "/v1/profile/updateProfile"
+      reservationAmountsEndpoint: "/v1/reservations/amounts"
+    reservation:
+      host: http://${RESERVATION_HOST:localhost:9103}
+      confirmReservation: "/v1/reservations/confirm"
+
+
+payment:
+  type:
+    VS: KVA
+    MC: KMC
+    AX: KAX
+    DN: KDI
+    MA: KMG
+    PI: KBU
+    BD: KBD
+    BI: KBI
+
+preference:
+  condition:
+    TWIN: "ST"
+    TWINCOTR: "TC"
+    TW2S: "ST"
+    TW2SCOTR: "TC"
+    TWDS: "ST"
+    TWDSCOTR: "TC"
+    SING: "SS"
+    SINGCOTR: "SC"
+    DBLE: "SD"
+    DBLECOTR: "DC"
+    TRIP: "SE"
+    TRIPCOTR: "EC"
+    QUAD: "SF"
+    QUADCOTR: "FC"
+
+comment:
+  type:
+    CarRegistration: "CARREG"
+
+#spring:
+#  sleuth:
+#    propagation:
+#      type: aws
+##TODO:: specific values to come as k8s secrets/config-map and config server
+auth:
+  tenants:
+    - name: "Distribution Tenant"
+      audience: ${DISTR_TENANT_AUDIENCE}
+      namespace: ${DISTR_TENANT_NAMESPACE}
+      issuer: ${DISTR_TENANT_ISSUER}
+      jwkUri: ${DISTR_TENANT_JWK_URI:https://dist-whitbread-digital.eu.auth0.com/.well-known/jwks.json}

@@ -1,0 +1,78 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+package uk.co.whitbread.availabilitycacheservice.domain.model {
+class Price
+}
+
+package uk.co.whitbread.availabilitycacheservice.domain.model.availabilities {
+class Hotel
+class RatePlan
+class Room
+}
+
+package uk.co.whitbread.availabilitycacheservice.domain.model.hotel.price {
+class HotelLocation
+class LowestLocationPrice
+class LowestRoomPrice
+}
+
+class Hotel {
+- String hotelCode
+- String hotelName
+- String hotelBrand
+- Double distance
+- Boolean available
+- Boolean limitedAvailability
+- Boolean arrivalDateToday
+- String unit
+- List<RatePlan> rate
+- LowestRoomPrice lowestRoomPrice
+}
+
+class RatePlan {
+- String code
+- String description
+- String name
+- String classification
+- List<Room> rooms
+- Price totalPrice
+}
+class Price {
+- BigDecimal amount
+- String currency
+}
+class Room {
+- String type
+- Boolean substitutedType
+- Integer adults
+- Integer children
+- Boolean cotRequired
+}
+
+class LowestRoomPrice {
+- String roomType
+- Price price
+}
+
+class HotelLocation {
+- String locationPlaceId
+- List<String> hotelCodes
+- LowestLocationPrice lowestPrice
+}
+
+class LowestLocationPrice {
+- String leastPricedHotelCode
+- String locationPlaceId
+- Price price
+}
+
+Hotel --> RatePlan
+Hotel --> LowestRoomPrice
+RatePlan --> Room
+RatePlan --> Price
+LowestRoomPrice -> Price
+HotelLocation -> LowestLocationPrice
+LowestLocationPrice -> Price
+
+@enduml

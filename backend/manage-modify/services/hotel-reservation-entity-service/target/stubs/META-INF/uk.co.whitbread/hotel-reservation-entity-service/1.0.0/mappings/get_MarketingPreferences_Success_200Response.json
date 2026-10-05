@@ -1,0 +1,29 @@
+{
+  "id" : "3785bf94-9d14-4994-b491-011eda87716b",
+  "request" : {
+    "urlPath" : "/v1/reservations/marketingPreferences",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "queryParameters" : {
+      "hotelId" : {
+        "equalTo" : "MANOLD"
+      },
+      "reservationId" : {
+        "equalTo" : "853004"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"optIn\":true,\"customer\":{\"title\":\"Mr\",\"firstName\":\"test\",\"lastName\":\"james\",\"country\":\"GB\",\"language\":null},\"contactValue\":\"test@mail.com\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "3785bf94-9d14-4994-b491-011eda87716b"
+}

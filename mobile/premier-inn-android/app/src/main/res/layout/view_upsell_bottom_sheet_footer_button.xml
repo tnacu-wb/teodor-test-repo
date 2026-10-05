@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/generic_padding_16"
+    android:paddingBottom="@dimen/generic_padding_24">
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/continueButton"
+        style="@style/Button1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minWidth="156dp"
+        android:minHeight="54dp"
+        android:paddingHorizontal="@dimen/generic_margin_15"
+        app:cab_spinner_color="@color/white"
+        app:cab_text_color="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Add" />
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/removeButton"
+        style="@style/Button1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:background="@drawable/call_to_action_button_secondary_background"
+        android:minWidth="156dp"
+        android:minHeight="54dp"
+        android:paddingHorizontal="@dimen/generic_margin_15"
+        android:visibility="visible"
+        app:cab_is_secondary="true"
+        app:cab_text_color="@color/premier_inn_purple_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/continueButton"
+        tools:text="Remove all" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

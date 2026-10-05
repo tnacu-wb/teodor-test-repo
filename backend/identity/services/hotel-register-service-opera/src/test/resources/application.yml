@@ -1,0 +1,115 @@
+swagger:
+  api:
+    version: "1.10.0"
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:none}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+logging:
+  level:
+    uk.co.whitbread: debug
+    org.apache.http: debug
+
+register:
+  secretKey: "dummy-value"
+  salt: "dummy-value"
+  staticIV: "dummy-iv-16-char"
+
+captcha:
+  secret: 'dummy-value'
+
+passwords:
+  configs:
+    register:
+      minLength: 8
+      maxLength: 50
+      illegalChars: ":~"
+    registerAuth0:
+      minLength: 8
+      regExps:
+        - (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])|(?=.*[a-z])(?=.*[A-Z])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[a-z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[A-Z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])
+      staticErrorMessage: "Password must be at least 8 characters long and meet three of the following criteria: at least one lower case letter, at least one upper case letter, at least one digit and at least one special character."
+
+
+# Application used for the tests is https://manage.auth0.com/dashboard/eu/wbmigrationtest/applications/u9FzYjYAwd7yCzIhgMc9gpDVNI5WcHw8/settings
+# API Explorer Application
+auth:
+  management:
+    domain: http://localhost:${wiremock.server.port:1}
+    clientId: clientId_test
+    clientSecret: clientSecret_test
+    audience: http://mock-audience/api/v2/
+    connection: Connection-Test
+    b2bConnection: test connection
+    b2cConnection: test connection
+  encryption:
+    key: dummy-value
+
+azure:
+  pti-email-service:
+    host: http://localhost:${wiremock.server.port:1}/pti
+    username: username
+    password: password
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: subscription_key
+
+cdh:
+  oauth-client:
+    host: http://localhost:${wiremock.server.port:0}
+    token-url: "/oauth2/v2.0/token"
+    client-id: "client-id"
+    client-secret: "client-secret"
+    scope: http://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: http://localhost:${wiremock.server.port:0}
+    is-oauth: true
+    oauth:
+      subscription-key: "subscription-key"
+      customer-account-url: ${cdh.api.host}/CustomerAccount
+
+feign:
+  hotelcountries:
+    name: hotelcountries
+    url: http://localhost:9027
+  hotel-reservation-entity-service-host:
+    name: hotel-reservation-entity-service-host
+    url: https://restapi.dit.premierinn.digital
+  marketing-service-opera:
+    name: marketing-service-opera
+    url: http://localhost:9033
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'default:production.unleash-insecure-api-token'
+
+feature-flags:
+  company-name-validation:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false
+  cdh-api-deprecation:
+    key: "release_pi_cdh_api_deprecation"
+    fallback: false

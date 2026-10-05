@@ -1,0 +1,25 @@
+{
+  "id" : "71aaa7f2-a9e8-4c4b-9972-7d9ba566da7c",
+  "request" : {
+    "urlPath" : "/v1/baskets",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'LONEUS')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['userId'] == 'user id test')]"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "71aaa7f2-a9e8-4c4b-9972-7d9ba566da7c"
+}

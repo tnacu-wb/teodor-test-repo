@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Semibold.ttf">
+            <string>ProximaNova-Semibold</string>
+        </array>
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NewsletterView" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="email" destination="moq-gJ-bzr" id="cBf-dG-I3T"/>
+                <outlet property="heading" destination="Zyc-Yo-SH8" id="9Ke-2Q-4gq"/>
+                <outlet property="message" destination="5PT-vl-4lm" id="bbj-75-iK2"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sRL-85-F1a">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zyc-Yo-SH8">
+                    <rect key="frame" x="20" y="60" width="46.5" height="22"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="kI4-ES-at2"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="18"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5PT-vl-4lm">
+                    <rect key="frame" x="20" y="112" width="335" height="19.5"/>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="moq-gJ-bzr">
+                    <rect key="frame" x="20" y="161.5" width="335" height="19.5"/>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="16"/>
+                    <color key="textColor" red="0.23529411764705882" green="0.52549019607843139" blue="0.54509803921568623" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zq3-sg-fBh">
+                    <rect key="frame" x="0.0" y="211" width="375" height="1"/>
+                    <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="kDv-US-IXZ"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.95294117647058818" green="0.94901960784313721" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="zq3-sg-fBh" firstAttribute="top" secondItem="sRL-85-F1a" secondAttribute="bottom" id="0qr-1q-d0D"/>
+                <constraint firstItem="5PT-vl-4lm" firstAttribute="top" secondItem="Zyc-Yo-SH8" secondAttribute="bottom" constant="30" id="1qb-gt-mGu"/>
+                <constraint firstItem="sRL-85-F1a" firstAttribute="bottom" secondItem="moq-gJ-bzr" secondAttribute="bottom" constant="30" id="CsP-32-mZ6"/>
+                <constraint firstItem="5PT-vl-4lm" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="Fo4-CQ-RTk"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="moq-gJ-bzr" secondAttribute="trailing" constant="20" id="Frb-oh-30c"/>
+                <constraint firstItem="sRL-85-F1a" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="JUi-pP-gXF"/>
+                <constraint firstItem="Zyc-Yo-SH8" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="40" id="N3E-gI-RQm"/>
+                <constraint firstItem="sRL-85-F1a" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="RKr-OJ-q5t"/>
+                <constraint firstItem="moq-gJ-bzr" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="SRO-Hs-YWm"/>
+                <constraint firstItem="sRL-85-F1a" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="ZRp-xV-oXE"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="5PT-vl-4lm" secondAttribute="trailing" constant="20" id="dp8-Ch-zka"/>
+                <constraint firstItem="zq3-sg-fBh" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="kkd-Er-shz"/>
+                <constraint firstItem="Zyc-Yo-SH8" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="nhA-pz-gSb"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="zq3-sg-fBh" secondAttribute="trailing" id="oz7-kl-oep"/>
+                <constraint firstItem="moq-gJ-bzr" firstAttribute="top" secondItem="5PT-vl-4lm" secondAttribute="bottom" constant="30" id="rNR-7t-TCx"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+        </view>
+    </objects>
+</document>

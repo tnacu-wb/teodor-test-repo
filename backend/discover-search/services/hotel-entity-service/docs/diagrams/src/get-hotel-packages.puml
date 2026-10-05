@@ -1,0 +1,24 @@
+@startuml
+entity "Experience Service" as ES
+participant PackagesController as Controller
+participant PackagesInPort as InboundPort
+participant PackagesOutPort as OutboundPort
+participant OhipClient
+
+entity "OHIP Adapter Service" as OHIP
+
+ES -> Controller: GET /hotels/{{hotelid}}/packages?\nstartDate={{startDate}}\n&endDate={{endDate}}\n&adults={{adults}}\n&children={{children}}\n&nrNights={{nrNights}}
+Controller -> Controller: adaptToDomainRequest
+Controller -> InboundPort: getPackages
+InboundPort -> OutboundPort: getPackages
+OutboundPort -> OhipClient: getPackages
+OhipClient -> OHIP: GET /hotels/{{hotelid}}/packages?\nstartDate={{startDate}}\n&endDate={{endDate}}\n&adults={{adults}}\n&children={{children}}\n&nrNights={{nrNights}}
+
+OhipClient <- OHIP: OHIP Packages Info
+OutboundPort <- OhipClient: OHIP Packages Info
+OutboundPort ->  OutboundPort: adaptToDomainResponse
+InboundPort <- OutboundPort: Packages Info
+Controller <- InboundPort: Packages Info
+Controller -> Controller: adaptToControllerResponse
+ES <- Controller: Packages Info
+@enduml

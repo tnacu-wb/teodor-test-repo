@@ -1,0 +1,37 @@
+@startuml
+entity "Front-End" as A
+participant CcuiPaymentController as Controller
+participant CcuiPaymentInPort as CcuiInPort
+participant CcuiPaymentOutPort as CcuiOutPort
+participant BasketOutboundPort as BskOutPort
+participant HotelReservationOutPort as ResOutPort
+participant ReservationClient as ResClient
+entity "Dynamo DB/SQL DB" as DB
+entity "Reservation Entity Service" as ResEntity
+
+A -> Controller: PUT /v1/baskets/ccui/discount
+Controller -> CcuiInPort: updateDiscount(discountReference)
+CcuiInPort -> BskOutPort: getBasketByReference(referenceNumber)
+
+BskOutPort -> DB: getBasketByReference(referenceNumber)
+BskOutPort <- DB: Basket
+CcuiInPort <- BskOutPort: Basket
+
+CcuiInPort -> ResOutPort: getReservationsByBasketReference(hotelId, basketReference)
+ResOutPort -> ResClient: getReservationsByBasketReference(hotelId, basketReference)
+ResClient -> ResEntity: getReservationsByBasketReference(hotelId, basketReference)
+
+ResEntity -> ResClient : ReservationsDetailsResponseDto
+ResClient -> ResOutPort: ReservationsDetailsResponse
+ResOutPort -> CcuiInPort: ReservationsDetailsResponse
+
+CcuiInPort -> ResOutPort: updateDiscount(basketReference,resNo,hotelId,currencyCode)
+ResOutPort -> ResClient: sendPutUpdateDiscount(updateDiscountRequestDto)
+ResClient -> ResEntity: sendPutUpdateDiscount(updateDiscountRequestDto)
+
+ResEntity -> ResClient: UpdateDiscountResponseDto
+ResClient -> ResOutPort: DiscountResponse
+ResOutPort -> CcuiInPort: DiscountResponse
+CcuiInPort -> Controller: DiscountResponse
+Controller -> A: UpdateDiscountResponseDto
+@enduml

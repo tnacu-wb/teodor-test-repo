@@ -1,0 +1,21 @@
+{
+  "request": {
+    "urlPath": "/v1/reservations/confirm",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$..hotelId",
+          "contains": "TKINPT"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "confirm_Reservation_Success_200Response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+mutation AuthorizeCard(
+  $requestId: String!
+  $environment: String!
+  $language: String!
+  $country: String!
+) {
+  authorizeCard(
+    initiateAuthorizeScaRequest: {
+      requestId: $requestId
+      environment: $environment
+      language: $language
+      country: $country
+    }
+  ) {
+    paymentRedirect
+    template
+    sessionId
+    providerUrl
+  }
+}

@@ -1,0 +1,142 @@
+<xs:element name="customerAccountViewTransactions">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Request" type="data:CustomerAccountViewTransactionsRequestType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="customerAccountViewTransactionsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Response" type="data:CustomerAccountViewTransactionsResponseType"/>
+			</xs:sequence>
+		</xs:complexType>
+</xs:element>
+
+
+---data ---
+
+xs:complexType name="CustomerAccountViewTransactionsRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="SchemeCustomerId" type="xs:int"/>
+			<xs:element name="SearchCriteria" type="tns:CustomerAccountViewTransactionsCriteriaType"/>
+			<xs:element name="PagingRequest" type="tns:PagingRequestWithoutSortType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CustomerAccountViewTransactionsResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="Transactions" type="tns:CustomerAccountCardTransactionType" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="PagingResult" type="tns:PagingResultType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CustomerAccountCardTransactionType">
+		<xs:sequence>
+			<xs:element name="InvoiceDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="InvoiceNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransactionDate" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Includes time element</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NetAmount" type="tns:CurrencyType" minOccurs="0"/>
+			<xs:element name="TaxAmount" type="tns:CurrencyType" minOccurs="0"/>
+			<xs:element name="GrossAmount" type="tns:CurrencyType"/>
+			<xs:element name="Location">
+				<xs:annotation>
+					<xs:documentation>Merchant location (derived from Merchant Id)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PAN">
+				<xs:annotation>
+					<xs:documentation>Masked</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="tns:CardNumberMaskedType">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+						<xs:maxLength value="19"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CardName">
+				<xs:annotation>
+					<xs:documentation>Derived from card number</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PurchaseOrderReference" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>AKA PurchaseRef</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomerOwnRef" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SalesOrderNumber" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>AKA ReservationNumber</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="LineItems" type="tns:CustomerAccountCardTransactionDetailType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="CustomerAccountCardTransactionDetailType">
+		<xs:sequence>
+			<xs:element name="Description">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Quantity" type="xs:int" minOccurs="0"/>
+			<xs:element name="NetAmount" type="tns:CurrencyType"/>
+			<xs:element name="TaxAmount" type="tns:CurrencyType"/>
+			<xs:element name="GrossAmount" type="tns:CurrencyType"/>
+			<xs:element name="GuestName" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="InvoiceLineItem" type="xs:int" minOccurs="0"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+</xs:complexType>

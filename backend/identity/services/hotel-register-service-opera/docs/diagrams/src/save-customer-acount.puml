@@ -1,0 +1,15 @@
+@startuml
+actor User
+participant "Register Page" as RP
+participant "Hotel Register Microservice" as MS
+User -> RP: Register
+RP -> MS: Register request
+MS -> BART: Register SOAP request
+MS <- BART: User details
+MS -> MS: Encrypt guest history number
+MS -> Auth0: Save user (if not already present)
+MS <- Auth0: User saved
+MS -> CDH: Save customer (async)
+RP <- MS: sessionId
+User <- RP: Registration successful
+@enduml

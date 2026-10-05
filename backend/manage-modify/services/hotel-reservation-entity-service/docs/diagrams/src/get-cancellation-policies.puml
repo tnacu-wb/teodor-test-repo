@@ -1,0 +1,20 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as Webclient
+
+
+A -> Controller: GET /adp/v1/reservations/cancellationPolicies?basketReference={{basketReference}}?hotelId={{hotelId}}?ratePlanCode={{ratePlanCode}}?arrivalDate={{arrivalDate}}
+Controller -> InboundPort: getCancellationPolicies
+InboundPort -> OutboundPort: getCancellationPolicies
+OutboundPort -> Webclient: getCancellationPolicies
+Webclient -> OHIPAdapter: GET /ohip/v1/reservations/cancellationPolicies?basketReference={{basketReference}}?hotelId={{hotelId}}?ratePlanCode={{ratePlanCode}}?arrivalDate={{arrivalDate}}
+
+Webclient <- OHIPAdapter: CancellationPoliciesResponse
+OutboundPort <- Webclient: CancellationPoliciesResponse
+InboundPort <- OutboundPort: CancellationPoliciesResponse
+Controller <- InboundPort: CancellationPoliciesResponse
+A <- Controller: CancellationPoliciesResponseDto
+@enduml

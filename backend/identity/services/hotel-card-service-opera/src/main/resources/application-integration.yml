@@ -1,0 +1,92 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+swagger:
+  api:
+    version: 2.8.0
+    path: https://api.swaggerhub.com/apis/whitbread/Card-API/${swagger.api.version}/swagger.yaml
+    token: 59bd4a7e-8590-40fe-8d40-eedf206070c5
+
+auth0:
+  host: http://localhost:${wiremock.server.port:0}
+  # The slash here seems to be required to match auth0 generated token
+  issuer: http://localhost/
+
+feign:
+  hotelaccount:
+    name: hotelaccount
+    url: http://localhost:9020
+
+auth:
+  token:
+    providers:
+      - domain: http://localhost
+        host: http://localhost:${wiremock.server.port:1}
+        # The slash here seems to be required to match auth generated token
+        issuer: http://localhost/
+      - domain: http://localhost
+        host: http://localhost:${wiremock.server.port:1}
+        # The slash here seems to be required to match auth generated token
+        issuer: http://localhost/
+  tenants:
+    - name: "PI BB Tenant"
+      audience: http://localhost/api/v2/
+      namespace: http://localhost
+      issuer: http://localhost/
+      jwkUri: http://localhost/.well-known/jwks.json
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: http://localhost/oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: https://localhost/AccountServices/V1
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: 88134dec7f304a
+
+spring:
+  cache:
+    type: none
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    uk.co.whitbread: debug
+    feign: debug
+
+worldline:
+  clientMessageId: '{a6173aca-ea66-48e6-8ce2-4e04f1d4b628}'
+  cultureCode: en-GB
+  host: http://localhost:${wiremock.server.port:0}
+  piba:
+    username: gbtest
+    password: gbtest
+    service:
+      url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+  gb:
+    clientMessageId: '{gb-client-message-id}}'
+    cultureCode: en-GB
+    username: gbtest
+    password: gbtest
+    url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+  de:
+    clientMessageId: '{de-client-message-id}'
+    cultureCode: de-DE
+    username: detest
+    password: detest
+    url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+  tetheringPlus:
+    enabled: true

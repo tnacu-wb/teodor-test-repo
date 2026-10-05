@@ -1,0 +1,24 @@
+@startuml
+entity "Experience Service" as ES
+participant ListOfValuesController as Controller
+participant ListOfValuesInboundPort as InboundPort
+participant ListOfValuesOutboundPort as OutboundPort
+participant OhipClient
+
+
+entity "OHIP Adapter Service" as OHIP
+
+ES -> Controller: GET /hotels/{hotelId}/cancellationReasons
+Controller -> InboundPort: getCancellationReasons
+InboundPort -> OutboundPort: getCancellationReasons
+OutboundPort -> OhipClient: getCancellationReasons
+OhipClient -> OHIP: GET /hotels/{hotelId}/cancellationReasons
+
+OhipClient <- OHIP: List of Cancellation Reasons
+OutboundPort <- OhipClient: List of Cancellation Reasons
+OutboundPort ->  OutboundPort: adaptToDomainResponse
+InboundPort <- OutboundPort: List of Cancellation Reasons
+Controller <- InboundPort: List of Cancellation Reasons
+Controller -> Controller: adaptToControllerResponse
+ES <- Controller: Hotel Inventory
+@enduml

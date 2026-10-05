@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/metallic_pearl"
+    android:orientation="vertical"
+    tools:context="com.whitbread.premierinn.amend.amendAndPay.AmendAndPayActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:fitsSystemWindows="true"
+        app:contentInsetStartWithNavigation="0dp">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="@dimen/toolbar_progress_bar_width"
+            android:layout_height="@dimen/toolbar_progress_bar_height"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/generic_margin_8"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/metallic_pearl_seventy_percent"
+        android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/amend_and_pay_payment_type"
+        style="@style/Header3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/generic_padding_16"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:paddingBottom="@dimen/generic_padding_18"
+        android:text="@string/payment_type"/>
+
+    <TextView
+        android:id="@+id/amend_and_pay_payment_type_info_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:paddingBottom="@dimen/generic_padding_18"
+        android:text="@string/review_booking_pay_now_info_message" />
+
+    <LinearLayout
+        android:id="@+id/amend_and_pay_payment_type_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:background="@drawable/rectangular_grey_all_bordered_background"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/amend_and_pay_saved_card_holder"
+                android:visibility="visible"
+                layout="@layout/view_saved_card_option" />
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/amend_and_pay_radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:checked="true"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:duplicateParentState="true"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:visibility="visible"
+                app:buttonTint="@color/grey_dark"
+                tools:visibility="visible" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/amend_and_pay_billing_address_header"
+        style="@style/Header3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/generic_padding_20"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:paddingBottom="@dimen/generic_padding_18"
+        android:text="@string/billing_address"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/amend_and_pay_payment_billing_address_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:paddingBottom="@dimen/generic_padding_18"
+        android:text="120 HOLBORN , EC1N 2TD" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/amend_and_pay_terms_and_condition_text"
+        style="@style/ReviewAmendTermsAndConditionStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="By confirming your booking you are agreeing to our terms and conditions" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:layout_marginBottom="@dimen/generic_padding_16"
+        android:orientation="horizontal">
+    <TextView
+        style="@style/Header3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/review_booking_total_cost" />
+
+    <TextView
+        android:id="@+id/amend_and_pay_price_label"
+        style="@style/Header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:paddingTop="@dimen/generic_padding_6"
+        android:text="£180.00"
+        tools:text="£180.00" />
+
+        <TextView
+            android:id="@+id/amend_and_pay_taxes_and_fees"
+            style="@style/BodySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/amend_and_pay_price_label"
+            android:layout_alignParentEnd="true"
+            android:gravity="end"
+            android:paddingTop="@dimen/generic_padding_2"
+            android:text="@string/review_booking_taxes_and_fees_message" />
+
+    </RelativeLayout>
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/amend_and_pay_confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cta_button_height"
+        android:layout_marginTop="@dimen/default_medium_margin"
+        android:paddingEnd="@dimen/generic_padding_12"
+        android:paddingStart="@dimen/generic_padding_12"
+        android:layout_marginLeft="@dimen/action1_text_size_16"
+        android:layout_marginRight="@dimen/action1_text_size_16"
+        android:text="@string/review_booking_enter_card_details"
+        app:cab_padlock="true"
+        android:visibility="visible"
+        app:cab_padlock_color="@color/white"
+        app:cab_spinner_color="@color/white"
+        app:cab_text_color="@color/white" />
+
+    <TextView
+        android:id="@+id/amend_and_pay_privacy_policy_label"
+        style="@style/BodySmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        tools:text = "You can find our privacy policy here"
+        android:gravity="center" />
+
+
+</LinearLayout>

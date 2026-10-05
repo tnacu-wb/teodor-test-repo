@@ -1,0 +1,21 @@
+{
+  "id" : "746496fa-dc84-44b6-b0fd-5e58ad4c7e68",
+  "request" : {
+    "urlPath" : "/v1/addresses",
+    "method" : "GET",
+    "queryParameters" : {
+      "countryCode" : {
+        "equalTo" : "gb"
+      }
+    }
+  },
+  "response" : {
+    "status" : 422,
+    "body" : "{\"errCode\":\"401\",\"globalErrTextTemplate\":\"validation.error.form\",\"details\":[{\"elementId\":\"searchTerm\",\"errTextTemplate\":\"must not be blank\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "746496fa-dc84-44b6-b0fd-5e58ad4c7e68"
+}

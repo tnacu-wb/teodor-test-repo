@@ -1,0 +1,38 @@
+@startuml
+entity "Experience Service" as ES
+participant PaymentMethodsController as Controller
+participant PaymentCcuiMethodsPort as InboundPort
+
+participant ReservationsPort as ReservationsOutboundPort
+participant ReservationsClient
+
+participant HotelInfoPort as HotelOutboundPort
+participant ContentDetailsClient
+
+
+
+entity "Hotel Reservation Entity Service (Opera)" as RSV
+entity "Content Entity Service (AEM)" as CONTENT
+
+
+ES -> Controller: GET /v1/payment-methods/ccui?\nbasketReference={basketReference}&\ncountry={country}&\nlanguage={language}&\nuserId={userId}&\nuserType={userType}
+Controller -> InboundPort: getCcuiPaymentMethods
+
+InboundPort -> ReservationsOutboundPort: findReservations
+ReservationsOutboundPort -> ReservationsClient: findReservations
+ReservationsClient -> RSV: GET /reservations/basket/{basketReference}
+ReservationsClient <- RSV
+ReservationsOutboundPort <- ReservationsClient
+InboundPort <- ReservationsOutboundPort
+
+InboundPort -> HotelOutboundPort: findHotelPaymentDetails
+HotelOutboundPort -> ContentDetailsClient: findHotelInfoDetails
+ContentDetailsClient -> CONTENT: GET /hotels/{hotelId}/information?\nhotelId={hotelId}&\nlanguage={language}&\ncountry={country}
+ContentDetailsClient <- CONTENT
+HotelOutboundPort <- ContentDetailsClient
+InboundPort <- HotelOutboundPort
+
+
+Controller <- InboundPort
+ES <- Controller
+@endum

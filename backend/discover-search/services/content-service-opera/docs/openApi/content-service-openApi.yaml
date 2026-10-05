@@ -1,0 +1,772 @@
+openapi: 3.1.0
+info:
+  title: Content API for Room Types
+  description: <p>This API gives information about different room types</p>
+  version: 1.2.2-DNRQ-15000
+servers:
+- url: http://localhost:9058
+  description: Generated server url
+tags:
+- name: Actuator
+  description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+paths:
+  /content/roomtypes:
+    get:
+      tags:
+      - Room Types
+      summary: Gets the information for different room types.
+      operationId: getRoomTypes
+      parameters:
+      - name: country
+        in: query
+        description: The country code to use for content retrieval.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: gb
+              enum:
+              - "gb,de"
+      - name: language
+        in: query
+        description: The language code to use for content retrieval.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: en
+              enum:
+              - "en,de"
+      - name: brand
+        in: query
+        description: The Brand of the hotel.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: pi
+              enum:
+              - "pi,hub,zip,pid"
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Invalid or missing request data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomTypesResponse"
+  /content/roomtypes/{roomTypeCode}:
+    get:
+      tags:
+      - Room Types
+      summary: Gets the information for different room types.
+      operationId: getRoomTypesForCode
+      parameters:
+      - name: country
+        in: query
+        description: The country code to use for content retrieval.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: gb
+              enum:
+              - "gb,de"
+      - name: language
+        in: query
+        description: The language code to use for content retrieval.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: en
+              enum:
+              - "en,de"
+      - name: brand
+        in: query
+        description: The Brand of the hotel.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: pi
+              enum:
+              - "pi,hub,zip,pid"
+      - name: roomTypeCode
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Invalid or missing request data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomTypesResponse"
+  /content/rateclassifications:
+    get:
+      tags:
+      - Rate Classification
+      summary: Gets the information for different rates.
+      operationId: getAllRateClassifications
+      parameters:
+      - name: hotelCode
+        in: query
+        description: Hotel Code for specific overrides.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+      - name: language
+        in: query
+        description: The language code to use for content retrieval.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: en
+              enum:
+              - "en,de"
+      - name: brand
+        in: query
+        description: The Brand of the hotel.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: pi
+              enum:
+              - "pi,hub,zip,pid"
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Invalid or missing request data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateClassificationResponse"
+  /content/rateclassifications/{rateClassification}:
+    get:
+      tags:
+      - Rate Classification
+      summary: Gets the information for different rates.
+      operationId: getRateClassificationForRate
+      parameters:
+      - name: hotelCode
+        in: query
+        description: Optional hotel code for rate override
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              enum:
+              - ""
+      - name: language
+        in: query
+        description: The language code to use for content retrieval.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: en
+              enum:
+              - "en,de"
+      - name: brand
+        in: query
+        description: The Brand of the hotel.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: pi
+              enum:
+              - "pi,hub,zip,pid"
+      - name: rateClassification
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Invalid or missing request data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateClassificationResponse"
+  /content/cookiepolicies:
+    get:
+      tags:
+      - Cookie Policies
+      summary: "Gets cookie policies based on language, brand, and subBrand"
+      operationId: getCookiePolicies
+      parameters:
+      - name: language
+        in: query
+        description: The language code to use for content retrieval.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: en
+              enum:
+              - "en,de"
+      - name: brand
+        in: query
+        description: The Brand of the privacy policies.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: pi
+              enum:
+              - "pi,restaurant,businessbooker"
+      - name: subBrand
+        in: query
+        description: The subBrand of a brand.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: none
+              enum:
+              - "none,beefeater,tabletable,brewersfayre,cookhouseandpub,barandblock,whitbreadinns"
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Invalid or missing request data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CookiePoliciesResponse"
+  /content/bookinginfomessages:
+    get:
+      tags:
+      - Booking Notifications
+      summary: Gets the booking notifications.
+      operationId: getBookingNotifications
+      parameters:
+      - name: country
+        in: query
+        description: The country code to use for content retrieval.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: gb
+              enum:
+              - "gb,de"
+      - name: language
+        in: query
+        description: The language code to use for content retrieval.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: en
+              enum:
+              - "en,de"
+      - name: brand
+        in: query
+        description: The Brand of the hotel.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              default: pi
+              enum:
+              - "pi,hub,zip,pid"
+      - name: rate
+        in: query
+        description: The Rate code.
+        required: false
+        content:
+          '*/*':
+            schema:
+              type: string
+              enum:
+              - "a,f,p,q,r,s,h,g,e"
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Invalid or missing request data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingNotificationsResponse"
+  /content-service/actuator:
+    get:
+      tags:
+      - Actuator
+      summary: Actuator root web endpoint
+      operationId: links
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+  /content-service/actuator/prometheus:
+    get:
+      tags:
+      - Actuator
+      summary: Actuator web endpoint 'prometheus'
+      operationId: scrape
+      parameters:
+      - name: format
+        in: query
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - name: includedNames
+        in: query
+        schema:
+          type: string
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+  /content-service/actuator/metrics:
+    get:
+      tags:
+      - Actuator
+      summary: Actuator web endpoint 'metrics'
+      operationId: listNames
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/json:
+              schema:
+                type: object
+  /content-service/actuator/metrics/{requiredMetricName}:
+    get:
+      tags:
+      - Actuator
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      operationId: metric
+      parameters:
+      - name: requiredMetricName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tag
+        in: query
+        schema:
+          type: string
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: Not Found
+  /content-service/actuator/info:
+    get:
+      tags:
+      - Actuator
+      summary: Actuator web endpoint 'info'
+      operationId: info
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/json:
+              schema:
+                type: object
+  /content-service/actuator/health:
+    get:
+      tags:
+      - Actuator
+      summary: Actuator web endpoint 'health'
+      operationId: health
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "001"
+          minLength: 1
+        details:
+          type: array
+          example:
+          - Error message
+          items:
+            type: string
+      required:
+      - code
+      - details
+    Facility:
+      type: object
+      properties:
+        facilityTitle:
+          type: string
+        facilityDescription:
+          type: string
+    RoomType:
+      type: object
+      properties:
+        roomTypeCode:
+          type: string
+        roomCategory:
+          type: string
+        roomLabel:
+          type: string
+        roomDescription:
+          type: string
+        roomInfoLabel:
+          type: string
+        roomInfo:
+          type: string
+        gridImage:
+          type: string
+        roomImage:
+          type: string
+        facilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/Facility"
+    RoomTypesResponse:
+      type: object
+      properties:
+        roomTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomType"
+    RateClassification:
+      type: object
+      properties:
+        rateClassification:
+          type: string
+        rateOrder:
+          type: string
+        rateName:
+          type: string
+        rateDescription:
+          type: string
+        rateLongDescription:
+          type: string
+        rateNotes:
+          type: string
+    RateClassificationResponse:
+      type: object
+      properties:
+        rateClassifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/RateClassification"
+    CookieDurationConfig:
+      type: object
+      properties:
+        cookieOptInExpiryDays:
+          type: integer
+          format: int32
+        cookieOptOutExpiryDays:
+          type: integer
+          format: int32
+    CookieGroup:
+      type: object
+      properties:
+        cookieName:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        isAlwaysActive:
+          type: boolean
+        toggleLabel:
+          type: string
+    CookiePolicies:
+      type: object
+      properties:
+        version:
+          type: string
+        brand:
+          type: string
+        config:
+          $ref: "#/components/schemas/CookieDurationConfig"
+        introView:
+          $ref: "#/components/schemas/IntroView"
+        manageView:
+          $ref: "#/components/schemas/ManageView"
+    CookiePoliciesResponse:
+      type: object
+      properties:
+        cookiePolicies:
+          $ref: "#/components/schemas/CookiePolicies"
+    IntroView:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        manageButtonText:
+          type: string
+        acceptAllButtonText:
+          type: string
+        necessaryOnlyButtonText:
+          type: string
+    ManageView:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        saveSettingsButtonText:
+          type: string
+        alwaysActiveText:
+          type: string
+        cookieGroup:
+          type: array
+          items:
+            $ref: "#/components/schemas/CookieGroup"
+    BookingNotifications:
+      type: object
+      properties:
+        bookingInfoMessage:
+          type: string
+    BookingNotificationsResponse:
+      type: object
+      properties:
+        bookingNotifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingNotifications"
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean

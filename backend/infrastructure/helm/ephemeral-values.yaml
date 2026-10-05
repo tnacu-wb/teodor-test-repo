@@ -1,0 +1,184 @@
+# Stack-level defaults for EPHEMERAL (per-PR) backend deploys.
+#
+# ci-matrix-deploy-eph.yaml passes this file to `helm upgrade` BEFORE the
+# service's own values file, so the layering is:
+#
+#   opera-app-chart/values.yaml  <  THIS FILE  <  <service>/infrastructure/helm/
+#                                                 ephemeral-values.yaml  <  --set
+#
+# Everything here is a default a service may override; nothing here is
+# authoritative. It exists so a new service's ephemeral-values.yaml only has to
+# state what is genuinely service-specific — ports, probe paths, environment,
+# heap sizing — instead of re-deriving the same set of ephemeral switches.
+#
+# ── What must NOT live in this file ──────────────────────────────────────────
+#
+# Helm merges MAPS key by key but replaces LISTS wholesale. So any list set
+# here is silently discarded the moment a service sets the same key, and a
+# half-inherited list is worse than no default at all. That rules out:
+#
+#   deployment.containerEnvs   every service sets it, so a default would never
+#                              apply — SPRING_PROFILES_ACTIVE=opera-dev has to
+#                              be repeated in each service file
+#   deployment.containerPorts  per-service container port
+#   service.ports             ditto, plus the targetPort must match
+#
+# imagePullSecrets is the exception: it is a list, but it is `[{name: regcred}]`
+# for every service and identical to the chart default, so a service that omits
+# it inherits the right value and one that sets it sets the same thing.
+#
+# Also absent: `image.repository`. It is per-service and the workflow --sets it
+# on every deploy, so a placeholder here would only ever be wrong.
+
+# ── Ephemeral switches ───────────────────────────────────────────────────────
+#
+# The chart already defaults all of these to false. They are restated because
+# this file is the one place a reviewer can see the full set of things a PR
+# release deliberately does without, and because branch 2 of the workflow
+# layers this file on top of a service's PRODUCTION values.yaml, where each of
+# them is turned on.
+
+# Gates the Flagger Canary out of the chart; canary.yaml reads this value
+# directly. Once a Canary exists Flagger claims ownership of the Service's
+# .spec.selector and .spec.ports[].name and of the VirtualService's .spec.http,
+# and Helm's server-side apply then fails on the next upgrade of the same
+# release with:
+#   conflicts with "flagger" using v1: .spec.selector
+# A canary analysis also cannot finish inside the lifetime of a PR release.
+# The workflow --sets this too; it is here so `helm template` with just this
+# file renders an ephemeral-shaped manifest.
+ephemeral: true
+
+canary:
+  create: false
+# An HPA competing with a redeploy on every push is churn and cost, no benefit.
+# It is also what pins a PR release to one pod: with autoscaling off,
+# deployment.yaml emits `replicas: deployment.replicaCount`.
+autoscaling:
+  create: false
+# Nothing should auto-bump a PR release's image; the pipeline sets the tag on
+# every deploy. Also --set by the workflow.
+imageAutomation:
+  create: false
+# A disruption budget over a single short-lived replica just blocks node drains.
+pdb:
+  create: false
+# Keeps the spring.prometheus/scrape annotations off the pod. Short-lived PR
+# pods appearing and vanishing in the shared Prometheus are noise, and they
+# would land in the same metric series as production.
+prometheusSpring:
+  create: false
+# Outlier ejection and connection pooling tuned for production traffic have
+# nothing to act on at one replica and no traffic.
+circuitBreaker:
+  create: false
+
+# No VirtualService for any ephemeral backend release. This is not tidiness:
+# virtualservice.yaml renders on the shared `opera-api` gateway using the
+# service's production host/path match, and the chart does NOT gate it on
+# `ephemeral` — only the Canary. Every open PR would publish a route matching
+# the same host and path as production, and Istio resolves that collision by
+# picking one, so production traffic can land in a PR pod.
+#
+# Ephemeral backend releases are addressed in-cluster by service name instead:
+#   <release-name>.opera-be.svc.cluster.local
+# which is the service-host the workflow's prepare job prints.
+istio:
+  create: false
+
+# ── Identity ─────────────────────────────────────────────────────────────────
+#
+# applicationName and service.name are --set to the PR release name on every
+# deploy, so they are left to the service files (which keep them only so
+# `helm template` renders standalone). The namespace is the same for every
+# backend release and is --set as well.
+
+namespace: opera-be
+
+image:
+  # Ephemeral images come from ECR and are rebuilt per commit under a tag the
+  # workflow --sets, so a cached layer for a reused tag must never win.
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: regcred
+
+# ── Workload ─────────────────────────────────────────────────────────────────
+
+deployment:
+  # The chart defaults this to false, which renders no Deployment at all.
+  create: true
+  # One pod per PR release. See autoscaling above for why this is what applies.
+  replicaCount: 1
+
+  # The chart defaults to a 20s preStop sleep and a 90s grace period, which
+  # production keeps for draining traffic behind Istio but which adds ~2 minutes
+  # to every push here — and with no VirtualService there is no gateway traffic
+  # to drain. `null` removes the chart's default rather than merging with it; an
+  # empty map would leave the default in place.
+  lifecycle: null
+  terminationGracePeriodSeconds: 15
+
+  dns:
+    ndots: 3
+
+  # Probe TIMINGS only — `httpGet` is deliberately absent because the path and
+  # port are per-service, and these numbers are useless without it. A service
+  # that supplies only `httpGet` inherits the budget below; one that needs a
+  # different budget overrides the individual keys (maps merge).
+  #
+  # A service whose probe block omits httpGet renders a probe with no handler
+  # and is rejected at apply time, which is the loud failure we want.
+  #
+  # Readiness starts checking sooner than production so `helm --wait` returns as
+  # soon as the pod is actually serving; the high failureThreshold keeps the
+  # overall startup budget generous at 20s + 24x5s = 140s. It has to fit inside
+  # the workflow's `--timeout 10m`.
+  readinessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 24
+
+  # Liveness stays late and lenient. Its initialDelaySeconds MUST outlast the
+  # readiness budget above, or liveness starts failing a JVM that is still
+  # booting and turns a slow deploy into a crash loop. A service that widens the
+  # readiness budget must push this out to match.
+  livenessProbe:
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+
+  # Requests are what reserve node capacity, so they are cut hard to let many
+  # concurrent PR environments pack onto the same nodes.
+  #
+  # There is NO cpu limit, here or in production: CPU is compressible, and
+  # throttling only makes a slow JVM start slower.
+  #
+  # A service sizing its heap off the memory LIMIT (`-XX:MaxRAMPercentage`)
+  # must raise requests.memory to match the limit in its own file — a heap sized
+  # against a limit the pod never reserved is evictable under node pressure, and
+  # evicting a service that takes minutes to start costs more than the packing
+  # density is worth.
+  resources:
+    requests:
+      cpu: 50m
+      memory: 512Mi
+    limits:
+      memory: 1024Mi
+
+  # No securityContext block: the chart already runs as non-root 9001:9001 with
+  # the RuntimeDefault seccomp profile, and a PR release has no reason to differ
+  # from production here. A service needing more (an fsGroup for a mounted
+  # volume) adds just that key in its own file, which merges over the chart's.
+
+# ── Networking ───────────────────────────────────────────────────────────────
+
+service:
+  # The chart defaults this to false. `ports` is per-service (and a list, so it
+  # cannot be defaulted) — see the header.
+  create: true
+  type: ClusterIP

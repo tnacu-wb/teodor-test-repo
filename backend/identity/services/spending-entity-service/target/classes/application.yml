@@ -1,0 +1,249 @@
+server:
+  port: "9132"
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "spending-entity-service"
+    description: "Whitbread Spending Entity Microservice"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      key-prefix: "Spending-Entity-Service"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  cloud:
+    #needed for Feign fallback
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    config:
+      enabled: false
+
+# Resilience4j Circuit Breaker and TimeLimiter configuration
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 30s  # Increase timeout for external API calls through proxy
+
+
+cdh:
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT_TYPE}
+    enabled: ${CDH_OAUTH_IS_ENABLED}
+  api:
+    host: ${CDH_API_HOST}
+    is-oauth: ${CDH_API_IS_OAUTH}
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: ${INN_BUSINESS_OAUTH_SUBSCRIPTION_KEY}
+
+worldline:
+  rest:
+    name: worldline
+    gb:
+      culture-code: en-GB
+      username: ${WORLDLINE_USERNAME_GB}
+      password: ${WORLDLINE_PASSWORD_GB}
+      companyNumber: ${WORLDLINE_COMPANY_NUMBER_GB:35}
+    de:
+      culture-code: de-DE
+      username: ${WORLDLINE_USERNAME_DE}
+      password: ${WORLDLINE_PASSWORD_DE}
+      companyNumber: ${WORLDLINE_COMPANY_NUMBER_DE:91}
+    url: ${WORLDLINE_HOST}/PIRestAPI
+    account-info-endpoint: "/api/v1/account/info"
+    default-ip-address: "1.1.1.1"
+    payment-info-endpoint: "/api/v1/account/paymentInfo"
+
+config:
+  service:
+    piba-account-service:
+      name: pibaaccountserviceclient
+      host: ${PIBA_ACCOUNT_SERVICE_URL}
+      tetheredUserDetailsEndpoint: "/piba/account/tethereduserdetail/{tetheredUserGuid}/{scheme}"
+      accountsEndpoint: "/piba/account/customers"
+    cdh-adapter-service:
+      name: cdhadapterserviceclient
+      host: ${CDH_ADAPTER_SERVICE_URL}
+      employeeSpendEndpoint: "/v1/cdh/companies/{companyAccountId}/employees/{employeeAccountId}/reports/employee-spend"
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+    export:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+  endpoints:
+    web:
+      base-path: /v1/spending/actuator
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+logging:
+  level:
+    brave: WARN
+    io.micrometer.observation.contextpropagation.ObservationThreadLocalAccessor: ERROR
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - hotelCode
+        - hotelName
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri:  ${PI_BB_TENANT_JWK_URI}
+---
+spring.config.activate.on-profile: local
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: /oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: http://localhost:${wiremock.server.port:1}
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: 88134dec7f304a
+
+worldline:
+  rest:
+    url: https://test-premierinn.worldline.global/PIRestAPI
+
+config:
+  service:
+    piba-account-service:
+      name: pibaaccountserviceclient
+      host: http://localhost:9064
+      tetheredUserDetailsEndpoint: "/piba/account/tethereduserdetail/{tetheredUserGuid}/{scheme}"
+      accountsEndpoint: "/piba/account/customers"
+    cdh-adapter-service:
+      name: cdhadapterserviceclient
+      host: http://localhost:9119
+      employeeSpendEndpoint: "/v1/cdh/companies/{companyAccountId}/employees/{employeeAccountId}/reports/employee-spend"
+
+logging:
+  configuration:
+    logger: default
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - phoneNumber
+        - cardNumber
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: https://wbodetest.eu.auth0.com/api/v2/
+      namespace: https://premierinn.com
+      issuer: https://auth0.premierinn.digital/
+      jwkUri: https://auth0.premierinn.digital/.well-known/jwks.json
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+
+---
+spring:
+  config.activate.on-profile: opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+

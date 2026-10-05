@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/upcoming_booking_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/view_frequent_booking_background">
+
+    <com.whitbread.premierinn.common.view.ShapeableNetworkImageView
+        android:id="@+id/frequentlyBookedHotelImage"
+        android:layout_width="@dimen/frequently_booked_hotel_image_dimension"
+        android:layout_height="@dimen/frequently_booked_hotel_image_dimension"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/landing_page_background" />
+
+    <TextView
+        android:id="@+id/frequentlyBookedHotelName"
+        style="@style/BodySemiBold"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingStart="0dp"
+        android:paddingEnd="@dimen/generic_padding_8"
+        android:textColor="@color/grey_dark"
+        app:layout_constraintBottom_toTopOf="@+id/frequentlyBookedDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/frequentlyBookedHotelImage"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Premier Inn Hotel" />
+
+    <View
+        android:id="@+id/frequentlyBookedDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:background="@color/light_grey_3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/frequentlyBookedHotelImage"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/frequentlyBookedSelectDate"
+        style="@style/Body"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingStart="0dp"
+        android:paddingEnd="@dimen/generic_padding_8"
+        android:text="@string/frequently_booked_select_date"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/frequentlyBookedHotelImage"
+        app:layout_constraintTop_toBottomOf="@id/frequentlyBookedDivider" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

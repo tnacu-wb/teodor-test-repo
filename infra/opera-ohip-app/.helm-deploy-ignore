@@ -1,0 +1,13 @@
+# Presence of this file tells the generic "Helm Deploy" workflow
+# (.github/workflows/helm-deploy.yml, via infra/scripts/detect-charts.sh) to
+# NOT treat this directory as an independently deployable chart.
+#
+# opera-ohip-app is an internal tool with its OWN dedicated pipeline
+# (.github/workflows/ci-opera-ohip-app.yaml), which builds its image and
+# deploys the chart to the ce-tooling cluster with values/tooling.yaml.
+#
+# Without this file the generic helm-deploy push path would also pick the chart
+# up on any infra/** change and deploy it to dev — with a blank virtualService
+# host and no synced credentials (tooling.yaml is not applied there) — creating
+# an unintended, misconfigured release. Excluding it here leaves the dedicated
+# tooling workflow as the single deploy path.

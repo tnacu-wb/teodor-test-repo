@@ -1,0 +1,36 @@
+# Hash-pinned dependencies for security-advisory-check.py.
+#
+# This workflow runs on a schedule with a GitHub App installation token and the
+# Teams webhook secret in the environment, then imports these packages. A plain
+# `pip install requests` would resolve the latest release and transitive deps on
+# every run, so a single compromised upstream release could run with those
+# secrets in scope. Pinning exact versions with sha256 hashes and installing
+# with --require-hashes means pip refuses anything whose artifact doesn't match,
+# so upgrades only happen through a reviewed change to this file.
+#
+# Scope: requests plus its full transitive tree (certifi, charset-normalizer,
+# idna, urllib3). Each entry lists the pure-python wheel (or the cp311
+# manylinux x86_64 wheel for charset-normalizer, which the ubuntu-latest /
+# Python 3.11 runner selects) and the sdist as a fallback.
+#
+# To update: bump the version, then regenerate the hashes, e.g.
+#   pip download --no-deps --require-hashes ... , or
+#   pip hash <downloaded artifact>
+# and confirm each sha256 against https://pypi.org/pypi/<pkg>/<ver>/json.
+
+requests==2.34.2 \
+    --hash=sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0 \
+    --hash=sha256:f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed
+certifi==2025.8.3 \
+    --hash=sha256:f6c12493cfb1b06ba2ff328595af9350c65d6644968e5d3a2ffd78699af217a5 \
+    --hash=sha256:e564105f78ded564e3ae7c923924435e1daa7463faeab5bb932bc53ffae63407
+charset-normalizer==3.4.4 \
+    --hash=sha256:840c25fb618a231545cbab0564a799f101b63b9901f2569faecd6b222ac72381 \
+    --hash=sha256:7a32c560861a02ff789ad905a2fe94e3f840803362c84fecf1851cb4cf3dc37f \
+    --hash=sha256:94537985111c35f28720e43603b8e7b43a6ecfb2ce1d3058bbe955b73404e21a
+idna==3.11 \
+    --hash=sha256:771a87f49d9defaf64091e6e6fe9c18d4833f140bd19464795bc32d966ca37ea \
+    --hash=sha256:795dafcc9c04ed0c1fb032c2aa73654d8e8c5023a7df64a53f39190ada629902
+urllib3==2.5.0 \
+    --hash=sha256:e6b01673c0fa6a13e374b50871808eb3bf7046c4b125b216f6bf1cc604cff0dc \
+    --hash=sha256:3fc47733c7e419d4bc3f6b3dc2b4f890bb743906a30d56ba4a5bfa4bbff92760

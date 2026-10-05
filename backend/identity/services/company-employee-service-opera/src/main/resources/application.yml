@@ -1,0 +1,227 @@
+server:
+  port: 9039
+  shutdown: graceful
+
+swagger:
+  api:
+    version: @project.version@
+
+info:
+  build:
+    groupId: '@project.groupId@'
+    artifact: '@project.artifactId@'
+    description: '@project.description@'
+    version: '@project.version@'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+feature-flags:
+  cdh-api-deprecation:
+    key: "release_pi_cdh_api_deprecation"
+    fallback: false
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+encrypt:
+  failOnError: false
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:redis}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+feign:
+  hotelaccount:
+    name: hotelaccount
+    url: http://${HOTEL_ACCOUNT_URL:localhost:9020}
+  marketing-service-opera:
+    name: marketing-service-opera
+    url: http://${MARKETING_SERVICE_OPERA_URL:localhost:9033}
+
+cdh:
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT_TYPE}
+    enabled: ${CDH_OAUTH_IS_ENABLED}
+  api:
+    host: ${CDH_API_HOST}
+    is-oauth: ${CDH_API_IS_OAUTH}
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: ${ACCOUNT_SERVICES_OAUTH_SUBSCRIPTION_KEY}
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /company-employee-service/actuator
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    redis:
+      enabled: false
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+  management:
+    domain: ${AUTH_MNGMT_DOMAIN}
+    clientId: ${AUTH0_CLIENT_ID}
+    clientSecret: ${AUTH0_CLIENT_SECRET}
+    audience: ${AUTH_MNGMT_AUDIENCE}
+    connection: ${AUTH_MNGMT_B2B_CONNECTION}
+    lazyMigrationEnabled: true
+  encryption:
+    key: ${AUTH0_ENCRYPTION_KEY}
+
+azure:
+  generic-email-service:
+    host: ${AZURE_GENERIC_EMAIL_HOST}
+    username: ${AZURE_GENERIC_EMAIL_SERVICE_USERNAME}
+    password: ${AZURE_GENERIC_EMAIL_SERVICE_PASSWORD}
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: ${AZURE_GENERIC_EMAIL_SERVICE_SUBSCRIPTION_KEY}
+
+email:
+  employeeActivationUrl: ${EMAIL_EMP_ACTIVATION_URL}
+  employeeActivationUrlDe: ${EMAIL_EMP_ACTIVATION_URL_DE}
+  loginUrl: ${EMAIL_LOGIN_URL}
+  loginUrlDe: ${EMAIL_LOGIN_URL_DE}
+  innbCompanyActivationUrl: ${INNB_COMPANY_ACTIVATION_URL}
+  innbCompanyActivationUrlDe: ${INNB_COMPANY_ACTIVATION_URL_DE}
+  innbEmployeeActivationUrl: ${INNB_EMPLOYEE_ACTIVATION_URL}
+  innbEmployeeActivationUrlDe: ${INNB_EMPLOYEE_ACTIVATION_URL_DE}
+
+logging:
+  level:
+    brave: WARN
+    io:
+      getunleash: TRACE
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - opera-uat
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
+logging:
+  level:
+    uk.co.whitbread: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+logging:
+  level:
+    uk.co.whitbread: debug
+    org.apache.http.client.protocol: error
+    org.apache.http.wire: debug
+    org.springframework.cloud.openfeign: debug
+    org.springframework.ws.client.MessageTracing: trace
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - disable-caching
+  cache:
+    type: none
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration

@@ -1,0 +1,56 @@
+
+
+<xs:complexType name="CustomerAccountInvoiceListRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType">
+				<xs:annotation>
+					<xs:documentation>The Guid associated with the tethered user.  Reminder: the Guid is associated with a user and NOT a card</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SchemeCustomerId" type="xs:int" nillable="false"/>
+			<xs:element name="SearchCriteria" type="tns:CustomerAccountInvoiceListSearchCriteriaType" minOccurs="0"/>
+			<xs:element name="PagingRequestDetails" type="tns:PagingRequestWithoutSortType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+</xs:complexType>
+
+
+<xs:complexType name="CustomerAccountInvoiceListResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="CustomerAccountInvoiceItem" type="tns:CustomerAccountInvoiceItemType" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="PagingResult" type="tns:PagingResultType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+</xs:complexType>
+
+
+<xs:complexType name="CustomerAccountInvoiceItemType">
+		<xs:sequence>
+			<xs:element name="StatementDate">
+				<xs:simpleType>
+					<xs:restriction base="xs:date">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="InvoiceNo">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="BroughtForward" type="tns:CurrencyType"/>
+			<xs:element name="PaymentsReceived" type="tns:CurrencyType"/>
+			<xs:element name="OverdueBalance" type="tns:CurrencyType"/>
+			<xs:element name="InvoiceValue" type="tns:CurrencyType"/>
+			<xs:element name="StatementBalance" type="tns:CurrencyType"/>
+			<xs:element name="FileAutoID" type="xs:int" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+

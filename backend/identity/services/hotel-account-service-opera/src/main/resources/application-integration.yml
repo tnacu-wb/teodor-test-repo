@@ -1,0 +1,180 @@
+spring:
+  cache:
+    type: none
+
+management:
+  health:
+    redis:
+      enabled: false
+
+swagger:
+  api:
+    version: "2.18.0"
+    path: https://api.swaggerhub.com/apis/whitbread/Account-API/${swagger.api.version}/swagger.yaml
+    token: test-swagger-token
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:1}
+    token-url: /oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  lazyMigrationEnabled: true
+  api:
+    host: https://localhost
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: test-subscription-key
+      booking-subscription-key: test-booking-subscription-key
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    uk.co.whitbread: debug
+    feign: debug
+
+hotel:
+  account:
+    forgotPassword:
+      url: https://testpi/en/mypremierinn/resetPassword.action?token=
+
+countries-requiring-postal-codes:
+  countryCodeList:
+    - GB
+    - DE
+
+passwords:
+  configs:
+    account:
+      minLength: 8
+      maxLength: 50
+      illegalChars: ":~"
+      allowNull: true
+    accountAuth0:
+      minLength: 8
+      regExps:
+        - (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])|(?=.*[a-z])(?=.*[A-Z])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[a-z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[A-Z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])
+      allowNull: true
+      staticErrorMessage: "Password must be at least 8 characters long and meet three of the following criteria: at least one lower case letter, at least one upper case letter, at least one digit and at least one special character."
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: http://localhost/api/v2/
+      namespace: http://localhost
+      issuer: http://localhost/
+      jwkUri: http://localhost/.well-known/jwks.json
+  management:
+    domain: http://localhost:${wiremock.server.port:1}
+    clientId: clientId_test
+    clientSecret: clientSecret_test
+    audience: http://mock-audience/api/v2/
+    b2cConnection: ms-test
+    b2bConnection: ms-test-bb
+    connection: auth0-users
+    lazyMigrationEnabled: true
+    resetPasswordTokenTtlSec: 3600
+    customDomain: auth0.premierinn.digital
+
+azure:
+  pti-email-service:
+    host: http://localhost:${wiremock.server.port}/internal/PTIEmailService/v1
+    username: username-test
+    password: password-test
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: subscription-key-test
+  generic-email-service:
+    host: http://localhost:${wiremock.server.port}/internal/EmailService/v1
+    username: username-test
+    password: password-test
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: subscription-key-test
+
+email:
+  piResetPasswordUrl: https://localhost/pi-reset?token=
+  innBusinessResetPasswordUrl: https://localhost/business-reset?key=
+  innBusinessResetPasswordUrlDe: https://localhost/de/business-reset?key=
+
+feign:
+  hotelcountries:
+    name: hotelcountries
+    url: http://localhost:1
+  pibaguid:
+    name: pibaguid
+    url: http://localhost:1
+  threecPayment:
+    name: threecPayment
+    url: http://localhost:1
+  cdh:
+    name: cdhAdapterService
+    url: http://localhost:1
+  worldline:
+    name: worldlineService
+    url: http://localhost:1/PIRestAPI
+    account-info-endpoint: /api/v1/account/info
+    user-contact-details-endpoint: /api/v1/user/contactdetails/{UserTetheredUserGuidToUpdateTheContactDetails}
+  pibaaccount:
+    name: pibaaccount
+    url: http://localhost:1
+    get-piba-accounts-endpoint: /piba/account/customers
+
+worldline:
+  tetheringPlus:
+    enabled: false
+  rest:
+    default-ip-address: 127.0.0.1
+    gb:
+      culture-code: en-GB
+      username: integration-user
+      password: integration-password
+      company-number: 35
+    de:
+      culture-code: de-DE
+      username: integration-user
+      password: integration-password
+      company-number: 91
+
+url:
+  whitelist:
+      regex:
+          - .*\.premierinn\.com
+          - .*\.premierinn\.de
+          - .*\.nativ-systems\.com
+          - .*\.whitbread\.digital
+threadpool:
+  cdh:
+    coreSize: ${CDH_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${CDH_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${CDH_EXECUTOR_QUEUE_SIZE:50}
+
+io:
+  getunleash:
+    app-name: hotel-account-service-opera
+    instance-id: integration
+    environment: integration
+    api-url: http://localhost:1/api
+    api-token: integration-placeholder
+    disable-metrics: true
+
+universal-login:
+  login-domain-url: http://localhost
+
+config:
+  httpClient:
+    proxy:
+      host: ""
+      port: 0
+
+---
+spring:
+  config:
+    activate:
+      on-profile: disable-caching
+  cache:
+    type: none
+

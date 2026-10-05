@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package uk.co.whitbread.availabilitycacheservice.infrastructure.rest.response {
+class LeastRoomPricedHotelsDto
+class HotelDto
+class PriceDto
+}
+
+class LeastRoomPricedHotelsDto {
+- Integer total
+- Integer page
+- Integer pageSize
+- List<HotelDto> leastRoomPricedHotels
+}
+
+class HotelDto {
+- String hotelCode
+- String hotelName
+- String hotelBrand
+- PriceDto leastRoomPrice
+}
+
+class PriceDto {
+- BigDecimal amount
+- String currency
+}
+
+LeastRoomPricedHotelsDto -> HotelDto
+HotelDto -> PriceDto
+
+@enduml

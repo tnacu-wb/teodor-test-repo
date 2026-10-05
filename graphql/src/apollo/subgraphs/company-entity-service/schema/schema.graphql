@@ -1,0 +1,71 @@
+schema {
+    query: Query
+}
+
+type Query {
+    searchCompanies(searchCompaniesCriteria: SearchCompaniesCriteria): SearchCompanies
+    companyProfile(companyId: String!): Company
+    companyProfileById(id: String!): OptionalCompany
+}
+
+input SearchCompaniesCriteria {
+    companyName: String
+    hotelId: String
+    negotiatedRateCompanies: Boolean
+    arNumber: String
+    offset: Int
+    limit: Int
+    continuationToken: String
+}
+
+type SearchCompanies {
+    companies: [Company]
+    offset: Int!
+    limit: Int!
+    hasMore: Boolean!
+    totalResults: Int!
+    continuationToken: String
+}
+
+type Company {
+    name: String!
+    address: Address!
+    telephoneNumber: String!
+    profileType: String!
+    corpId: String
+    companyId: String
+    language: String!
+    active: Boolean!
+    arNumber: String
+    negotiatedRateEnabled: Boolean!
+    restricted: Boolean!
+    restrictedReason: String
+}
+
+type Address {
+    addressType: String
+    companyName: String
+    addressLine1: String!
+    addressLine2: String!
+    addressLine3: String!
+    addressLine4: String
+    cityName: String
+    countryCode: String
+    country: String!
+    postalCode: String!
+}
+
+type OptionalCompany {
+    name: String
+    address: Address
+    telephoneNumber: String
+    profileType: String
+    corpId: String
+    companyId: String
+    language: String
+    active: Boolean
+    arNumber: String
+    negotiatedRateEnabled: Boolean
+    restricted: Boolean
+    restrictedReason: String
+}

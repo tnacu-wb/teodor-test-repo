@@ -1,0 +1,675 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API Documentation",
+        "version": "1.0.0-SNAPSHOT",
+        "title": "Hotel account Microservice API Documentation"
+    },
+    "host": "localhost:9020",
+    "basePath": "/",
+    "tags": [{
+        "name": "hotel-auth-controller",
+        "description": "Hotel Authentication operations"
+    }, {
+        "name": "hotel-accounts-controller",
+        "description": "Hotel Customer operations"
+    }],
+    "paths": {
+        "/auth/hotels/forgot-password": {
+            "post": {
+                "tags": ["hotel-auth-controller"],
+                "summary": "Maps the ForgotPassword operation as a resource",
+                "description": "Triggers the forget password process",
+                "operationId": "forgotPassword",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "forgottenPasswordRequest",
+                    "description": "forgottenPasswordRequest",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/ForgottenPasswordRequest"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "All Good!",
+                        "schema": {
+                            "$ref": "#/definitions/ForgottenPasswordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Error Occurred: You did something wrong check your input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error: Our bad something went wrong on our side",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/hotels/{customer-id}": {
+            "put": {
+                "tags": ["hotel-accounts-controller"],
+                "summary": "Update Customer",
+                "description": "This endpoint provides the functionality to update an existing customer resource",
+                "operationId": "updateCustomer",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "name": "customer-id",
+                    "in": "path",
+                    "description": "customer-id",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "session-id",
+                    "in": "header",
+                    "description": "session-id",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "in": "body",
+                    "name": "payload",
+                    "description": "The Customer JSON payload",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "All Good!",
+                        "schema": {
+                            "$ref": "#/definitions/CustomerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Error Occurred: You did something wrong check your input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error: Our bad something went wrong on our side",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/hotels/{customer-id}/password": {
+            "put": {
+                "tags": ["hotel-accounts-controller"],
+                "summary": "Customer Password Change",
+                "description": "This endpoint provides the functionality to update the password for an existing customer resource",
+                "operationId": "changePassword",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "name": "customer-id",
+                    "in": "path",
+                    "description": "customer-id",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "password-token",
+                    "in": "header",
+                    "description": "password-token",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "in": "body",
+                    "name": "payload",
+                    "description": "The Customer JSON payload",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/ChangePasswordRequest"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "All Good!",
+                        "schema": {
+                            "$ref": "#/definitions/ChangePasswordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Error Occurred: You did something wrong check your input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error: Our bad something went wrong on our side",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/hotels/{customer-id}/stays": {
+            "get": {
+                "tags": ["hotel-accounts-controller"],
+                "summary": "Customer Future Stays",
+                "description": "This endpoint provides the functionality to retrieve all the future stays of an existing customer resource",
+                "operationId": "accountStays",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "name": "customer-id",
+                    "in": "path",
+                    "description": "customer-id",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "session-id",
+                    "in": "header",
+                    "description": "session-id",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "All Good!",
+                        "schema": {
+                            "$ref": "#/definitions/FutureStaysResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Error Occurred: You did something wrong check your input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error: Our bad something went wrong on our side",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "FutureStay": {
+            "type": "object",
+            "properties": {
+                "arrivalDate": {
+                    "type": "string"
+                },
+                "cancelled": {
+                    "type": "boolean"
+                },
+                "carDataRequired": {
+                    "type": "boolean"
+                },
+                "cellCodeLegend": {
+                    "type": "string"
+                },
+                "checkInDate": {
+                    "type": "string"
+                },
+                "checkInOnline": {
+                    "type": "boolean"
+                },
+                "checkedIn": {
+                    "type": "boolean"
+                },
+                "confirmationNumber": {
+                    "type": "string"
+                },
+                "customerReference": {
+                    "type": "string"
+                },
+                "departureDate": {
+                    "type": "string"
+                },
+                "historyRecordNumber": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "hotelCode": {
+                    "type": "string"
+                },
+                "hotelName": {
+                    "type": "string"
+                },
+                "leadGuest": {
+                    "type": "string"
+                },
+                "noOfRooms": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "paymentStatus": {
+                    "type": "string"
+                },
+                "prePaidAmount": {
+                    "$ref": "#/definitions/Price"
+                },
+                "promotionText": {
+                    "type": "string"
+                },
+                "purchaseOrder": {
+                    "type": "string"
+                },
+                "rateClass": {
+                    "type": "string"
+                },
+                "roomTypes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RoomTypes"
+                    }
+                },
+                "totalCost": {
+                    "$ref": "#/definitions/Price"
+                }
+            }
+        },
+        "RoomTypes": {
+            "type": "object",
+            "properties": {
+                "bookingStatus": {
+                    "type": "string"
+                },
+                "carDataPresent": {
+                    "type": "boolean"
+                },
+                "roomType": {
+                    "type": "string"
+                }
+            }
+        },
+        "Address": {
+            "type": "object",
+            "properties": {
+                "companyName": {
+                    "type": "string",
+                    "example": "Whitbread"
+                },
+                "countryCode": {
+                    "type": "string",
+                    "example": "GB"
+                },
+                "line1": {
+                    "type": "string",
+                    "example": "120 Holborn"
+                },
+                "line2": {
+                    "type": "string"
+                },
+                "line3": {
+                    "type": "string"
+                },
+                "line4": {
+                    "type": "string"
+                },
+                "line5": {
+                    "type": "string"
+                },
+                "postCode": {
+                    "type": "string",
+                    "example": "EC1N 2TD"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "BUSINESS",
+                    "enum": ["HOME", "BUSISNESS"]
+                }
+            }
+        },
+        "Customer": {
+            "type": "object",
+            "properties": {
+                "acceptFutureMailing": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "additionalGuests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ContactDetail"
+                    }
+                },
+                "bookingPreference": {
+                    "$ref": "#/definitions/BookingPreference"
+                },
+                "companyId": {
+                    "type": "string"
+                },
+                "companyName": {
+                    "type": "string"
+                },
+                "contactDetail": {
+                    "$ref": "#/definitions/ContactDetail"
+                },
+                "guestHistoryNumber": {
+                    "type": "string"
+                },
+                "guestId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "loyalties": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Loyalty"
+                    }
+                },
+                "marketingPreference": {
+                    "$ref": "#/definitions/MarketingPreference"
+                },
+                "nextDestination": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "5v%B%1Y9yN576QhY"
+                },
+                "paymentPreference": {
+                    "$ref": "#/definitions/PaymentPreference"
+                },
+                "roomId": {
+                    "type": "string"
+                },
+                "roomNumber": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "PaymentCard": {
+            "type": "object",
+            "properties": {
+                "cardHolderName": {
+                    "type": "string"
+                },
+                "cardNumber": {
+                    "type": "string"
+                },
+                "cardType": {
+                    "type": "string"
+                },
+                "expiryDate": {
+                    "type": "string"
+                },
+                "issueNumber": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "useExistingCard": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "ForgottenPasswordRequest": {
+            "type": "object",
+            "properties": {
+                "loginMethod": {
+                    "type": "string",
+                    "example": "EMAIL",
+                    "enum": ["EMAIL", "TELEPHONE"]
+                },
+                "url": {
+                    "type": "string",
+                    "example": "https://secure.url/resetPassword?token="
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorResponse": {
+            "type": "object",
+            "required": ["code", "details"],
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "001"
+                },
+                "details": {
+                    "type": "array",
+                    "example": "['Error message']",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "ChangePasswordRequest": {
+            "type": "object",
+            "required": ["newPassword"],
+            "properties": {
+                "newPassword": {
+                    "type": "string",
+                    "example": "password123"
+                }
+            }
+        },
+        "ContactDetail": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/Address"
+                },
+                "carRegistration": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "jdoe@example.com"
+                },
+                "firstName": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "lastName": {
+                    "type": "string",
+                    "example": "Doe"
+                },
+                "mobile": {
+                    "type": "string",
+                    "example": "+420123456789"
+                },
+                "nationality": {
+                    "type": "string"
+                },
+                "passport": {
+                    "$ref": "#/definitions/Passport"
+                },
+                "telephone": {
+                    "type": "string",
+                    "example": "+420123456789"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Mr"
+                }
+            }
+        },
+        "Passport": {
+            "type": "object",
+            "properties": {
+                "number": {
+                    "type": "string"
+                },
+                "placeOfIssue": {
+                    "type": "string"
+                }
+            }
+        },
+        "BookingPreference": {
+            "type": "object",
+            "properties": {
+                "foodPreference": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "reason": {
+                    "type": "string",
+                    "enum": ["LEISURE", "BUSINESS"]
+                },
+                "roomRequirements": {
+                    "$ref": "#/definitions/RoomCriteria"
+                },
+                "wantSmsConfirmations": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "ForgottenPasswordResponse": {
+            "type": "object",
+            "required": ["success"],
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "Price": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "currency": {
+                    "type": "string"
+                }
+            }
+        },
+        "PaymentPreference": {
+            "type": "object",
+            "properties": {
+                "electronicInvoiceRequired": {
+                    "type": "boolean"
+                },
+                "paymentCard": {
+                    "$ref": "#/definitions/PaymentCard"
+                },
+                "prepaymentRequired": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "MarketingPreference": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "jdoe@example.com"
+                },
+                "regionPreferences": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "wantRestaurantNews": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "RoomCriteria": {
+            "type": "object",
+            "properties": {
+                "adults": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "children": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "cotRequired": {
+                    "type": "boolean"
+                },
+                "hotelBrand": {
+                    "type": "string"
+                },
+                "lettingType": {
+                    "type": "string"
+                },
+                "roomNumber": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "smoking": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["FAM", "DB", "TWIN", "DIS", "SB"]
+                }
+            }
+        },
+        "FutureStaysResponse": {
+            "type": "object",
+            "properties": {
+                "futureStays": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FutureStay"
+                    }
+                },
+                "sessionId": {
+                    "type": "string"
+                }
+            }
+        },
+        "ChangePasswordResponse": {
+            "type": "object",
+            "required": ["passwordChanged"],
+            "properties": {
+                "passwordChanged": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "Loyalty": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "dateEnrolled": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "CustomerResponse": {
+            "type": "object",
+            "required": ["sessionId", "success"],
+            "properties": {
+                "customerId": {
+                    "type": "string"
+                },
+                "sessionId": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        }
+    }
+}

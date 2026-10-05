@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet author="rajesh.nadella" id="tag_update-max-arrival-date-rule">
+    <tagDatabase tag="version_update-max-arrival-date-rule" />
+  </changeSet>
+  <changeSet author="rajesh.nadella" id="update-max-arrival-date-rule-pp">
+    <update schemaName="rules_engine"
+      tableName="max_arrival_date_rule">
+      <column name="max_arrival_date" value="364"/>
+      <where>channel_id='PI'</where>
+    </update>
+    <rollback>
+      <update schemaName="rules_engine"
+              tableName="max_arrival_date_rule">
+        <column name="max_arrival_date" value="365"/>
+        <where>channel_id='PI'</where>
+      </update>
+    </rollback>
+  </changeSet>
+  <changeSet author="rajesh.nadella" id="update-max-arrival-date-rule-bb">
+    <update schemaName="rules_engine"
+      tableName="max_arrival_date_rule">
+      <column name="max_arrival_date" value="364"/>
+      <where>channel_id='BB'</where>
+    </update>
+    <rollback>
+      <update schemaName="rules_engine"
+              tableName="max_arrival_date_rule">
+        <column name="max_arrival_date" value="365"/>
+        <where>channel_id='BB'</where>
+      </update>
+    </rollback>
+  </changeSet>
+  <changeSet author="rajesh.nadella" id="update-max-arrival-date-rule-ccui">
+    <update schemaName="rules_engine"
+            tableName="max_arrival_date_rule">
+      <column name="max_arrival_date" value="364"/>
+      <where>channel_id='CCUI'</where>
+    </update>
+    <rollback>
+      <update schemaName="rules_engine"
+              tableName="max_arrival_date_rule">
+        <column name="max_arrival_date" value="365"/>
+        <where>channel_id='CCUI'</where>
+      </update>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>

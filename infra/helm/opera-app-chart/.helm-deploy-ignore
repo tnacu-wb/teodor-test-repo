@@ -1,0 +1,10 @@
+# Presence of this file tells the "Helm Deploy" workflow
+# (.github/workflows/helm-deploy.yml, via infra/scripts/detect-charts.sh) to
+# NOT treat this directory as an independently deployable chart.
+#
+# opera-app-chart is a shared BASE chart for Opera microservices: its default
+# templates disable the deployment/service resources, and owning applications
+# deploy it with their own release name, values and --set overrides via
+# .github/frontend/scripts/deploy/helm-deploy.sh. Deploying it standalone would
+# create a no-op/misconfigured release, so it is excluded from detection and
+# from the workflow_dispatch chart input.

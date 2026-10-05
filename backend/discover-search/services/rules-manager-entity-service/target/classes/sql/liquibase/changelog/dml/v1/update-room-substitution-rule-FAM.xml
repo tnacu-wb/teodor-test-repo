@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="mircea.caraiman" id="update-FAM-FMTRPL-FMQUAD-substitution-rules">
+    <loadUpdateData tableName="room_substitution_rule"
+      file="sql/liquibase/data/room_substitution_rules_update_FAM_FMTRPL_FMQUAD.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="alina.codrea" id="update-FAM-1a2c-special-request-from-TRIP-to-QUAD">
+    <loadUpdateData tableName="room_substitution_rule"
+                    file="sql/liquibase/data/room_substitution_rule_special_request_FAM_1a_2c.csv"
+                    primaryKey="rule_id"/>
+  </changeSet>
+</databaseChangeLog>

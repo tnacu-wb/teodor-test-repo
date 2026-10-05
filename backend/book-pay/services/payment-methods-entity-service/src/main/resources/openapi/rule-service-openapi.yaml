@@ -1,0 +1,56 @@
+openapi: 3.0.1
+info:
+  title: Account Services REST API
+  version: 1.0.0
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  v1/rule/paypal:
+    get:
+      operationId: getPaypalRule
+      parameters:
+        - in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+            example: PI
+        - in: query
+          name: countryCode
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: countryCode
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaypalRuleResponseDto'
+        "404":
+          description: Resource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "400":
+          description: 'Error Occurred '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'

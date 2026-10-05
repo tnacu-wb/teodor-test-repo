@@ -1,0 +1,19 @@
+package uk.co.whitbread.ondemandrefreshservice.infrastructure.model.migrationstatus;
+
+import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
+public class OperaHotelDetailsValues implements Serializable {
+  private String hotelDetailValues;
+}

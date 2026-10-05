@@ -1,0 +1,40 @@
+query getPaymentMethodsAndBookingConfirmation ($paymentMethodsCriteria: PaymentMethodsCriteria!, $basketReference: String!, $country: String!, $language: String!, $bookingChannel: String) {
+    paymentMethods (paymentMethodsCriteria: $paymentMethodsCriteria) {
+        clientToken
+        name
+        type
+        subType
+        order
+        logoSrc
+        enabled
+        acceptedCardTypes {
+            type
+            name
+            logoSrc
+        }
+        card {
+            token
+            expiryMonth
+            expiryYear
+            type
+            logoSrc
+            cardHolderName
+            cardType
+            cnpRequired
+        }
+        paymentOptions {
+            type
+            order
+            enabled
+        }
+        cnpPreSelected
+        cnpOptionAvailable
+        reasons
+    }
+
+    bookingConfirmation(basketReference: $basketReference, country: $country, language: $language, bookingChannel: $bookingChannel) {
+          currencyCode
+          totalCost
+          bookingReference
+    }
+}

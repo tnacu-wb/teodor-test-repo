@@ -1,0 +1,430 @@
+
+package uk.co.whitbread.shared.azureemail.api;
+
+import java.io.Serializable;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
+
+
+/**
+ * <p>Java class for ContentPremierGuestCCC complex type</p>.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.</p>
+ * 
+ * <pre>{@code
+ * <complexType name="ContentPremierGuestCCC">
+ *   <complexContent>
+ *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       <sequence>
+ *         <element name="address1" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="address2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="address3" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="country" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="emailAddress" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="guestForename" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="guestSurname" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="guestTitle" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="infName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="languageCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="postCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="telephone" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="userName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *       </sequence>
+ *     </restriction>
+ *   </complexContent>
+ * </complexType>
+ * }</pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "ContentPremierGuestCCC", propOrder = {
+    "address1",
+    "address2",
+    "address3",
+    "country",
+    "emailAddress",
+    "guestForename",
+    "guestSurname",
+    "guestTitle",
+    "infName",
+    "languageCode",
+    "password",
+    "postCode",
+    "telephone",
+    "userName"
+})
+public class ContentPremierGuestCCC
+    implements Serializable
+{
+
+    private static final long serialVersionUID = 1L;
+    @XmlElement(nillable = true)
+    protected String address1;
+    @XmlElement(nillable = true)
+    protected String address2;
+    @XmlElement(nillable = true)
+    protected String address3;
+    @XmlElement(nillable = true)
+    protected String country;
+    @XmlElement(nillable = true)
+    protected String emailAddress;
+    @XmlElement(nillable = true)
+    protected String guestForename;
+    @XmlElement(nillable = true)
+    protected String guestSurname;
+    @XmlElement(nillable = true)
+    protected String guestTitle;
+    @XmlElement(nillable = true)
+    protected String infName;
+    @XmlElement(nillable = true)
+    protected String languageCode;
+    @XmlElement(nillable = true)
+    protected String password;
+    @XmlElement(nillable = true)
+    protected String postCode;
+    @XmlElement(nillable = true)
+    protected String telephone;
+    @XmlElement(nillable = true)
+    protected String userName;
+
+    /**
+     * Gets the value of the address1 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAddress1() {
+        return address1;
+    }
+
+    /**
+     * Sets the value of the address1 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAddress1(String value) {
+        this.address1 = value;
+    }
+
+    /**
+     * Gets the value of the address2 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAddress2() {
+        return address2;
+    }
+
+    /**
+     * Sets the value of the address2 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAddress2(String value) {
+        this.address2 = value;
+    }
+
+    /**
+     * Gets the value of the address3 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAddress3() {
+        return address3;
+    }
+
+    /**
+     * Sets the value of the address3 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAddress3(String value) {
+        this.address3 = value;
+    }
+
+    /**
+     * Gets the value of the country property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCountry() {
+        return country;
+    }
+
+    /**
+     * Sets the value of the country property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCountry(String value) {
+        this.country = value;
+    }
+
+    /**
+     * Gets the value of the emailAddress property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    /**
+     * Sets the value of the emailAddress property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setEmailAddress(String value) {
+        this.emailAddress = value;
+    }
+
+    /**
+     * Gets the value of the guestForename property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getGuestForename() {
+        return guestForename;
+    }
+
+    /**
+     * Sets the value of the guestForename property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setGuestForename(String value) {
+        this.guestForename = value;
+    }
+
+    /**
+     * Gets the value of the guestSurname property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getGuestSurname() {
+        return guestSurname;
+    }
+
+    /**
+     * Sets the value of the guestSurname property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setGuestSurname(String value) {
+        this.guestSurname = value;
+    }
+
+    /**
+     * Gets the value of the guestTitle property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getGuestTitle() {
+        return guestTitle;
+    }
+
+    /**
+     * Sets the value of the guestTitle property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setGuestTitle(String value) {
+        this.guestTitle = value;
+    }
+
+    /**
+     * Gets the value of the infName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getInfName() {
+        return infName;
+    }
+
+    /**
+     * Sets the value of the infName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setInfName(String value) {
+        this.infName = value;
+    }
+
+    /**
+     * Gets the value of the languageCode property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    /**
+     * Sets the value of the languageCode property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setLanguageCode(String value) {
+        this.languageCode = value;
+    }
+
+    /**
+     * Gets the value of the password property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Sets the value of the password property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPassword(String value) {
+        this.password = value;
+    }
+
+    /**
+     * Gets the value of the postCode property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPostCode() {
+        return postCode;
+    }
+
+    /**
+     * Sets the value of the postCode property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPostCode(String value) {
+        this.postCode = value;
+    }
+
+    /**
+     * Gets the value of the telephone property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTelephone() {
+        return telephone;
+    }
+
+    /**
+     * Sets the value of the telephone property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTelephone(String value) {
+        this.telephone = value;
+    }
+
+    /**
+     * Gets the value of the userName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * Sets the value of the userName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUserName(String value) {
+        this.userName = value;
+    }
+
+}

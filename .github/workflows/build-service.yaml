@@ -1,0 +1,568 @@
+name: Build Service
+
+on:
+  workflow_call:
+    inputs:
+      service-name:
+        description: 'Name of the service to build (e.g. basket-async-order-processor)'
+        required: true
+        type: string
+      semantic-version:
+        description: >-
+          Repo-wide X.Y.Z image tag for a production main deployment build (the
+          version ci-main-versioning.yaml tagged on this commit).
+          Empty preserves existing tag and deployment behavior for every other caller.
+        required: false
+        type: string
+        default: ''
+      pr-number:
+        description: >-
+          Pull request number. Required when called from a PR event so the
+          ephemeral deploy names the Helm release correctly
+          (<service>-pr-<number>). Omit on main-line builds.
+        required: false
+        type: string
+        default: ''
+      branch-name:
+        description: >-
+          Source branch for ephemeral deployment metadata. Only needed when
+          called outside a PR event (e.g. deploy-eph-manual), where
+          github.head_ref is empty. Falls back to github.ref_name.
+        required: false
+        type: string
+        default: ''
+      deploy-eph:
+        description: >-
+          Ephemeral Helm deploy switch. Off by default.
+          PR builds only tag + push the image. 
+          deploy-eph-manual sets this true to deploy on demand. 
+          Deliberately separate from pr-number
+          so it can always flow for image tagging/release naming.
+        required: false
+        type: boolean
+        default: false
+      checkout-ref:
+        description: >-
+          Immutable commit SHA to build (PR head SHA). Needed when caller
+          runs outside PR context - e.g. issue_comment ("Ephemeral UP")
+          trigger runs from default branch, so github.sha is main rather than PR's code. 
+          Empty (default) keeps existing behaviour: github.sha (PR merge commit on pull_request, 
+          pushed commit on push). When set, it MUST be a 40-char commit SHA (validated in build job)
+          - never a branch/tag - so exact reviewed commit is what builds.
+        required: false
+        type: string
+        default: ''
+      verify-pr-open:
+        description: >-
+          Passed through to the ephemeral deploy: when true it re-checks the PR is still
+          open just before the Helm release is written, so a PR that closed mid-deploy is
+          not recreated. Auto callers (ci-be build-services-pr, comment trigger) set it;
+          the manual path leaves it off. See ci-matrix-deploy-eph.yaml.
+        required: false
+        type: boolean
+        default: false
+      changed:
+        description: >-
+          Whether service was changed by the PR. Defaults to true so every existing
+          caller keeps full validation. Set false for a built only service so the
+          "deploy all deployable" path can (re)deploy the whole stack.
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      SONAR_TOKEN:
+        required: true
+      PIPELINE_APP_PRIVATE_KEY:
+        required: false
+      PRISMA_ACCESS_KEY_ID:
+        required: false
+      PRISMA_SECRET_KEY:
+        required: false
+  # `secrets:` is only valid under workflow_call — a manual run reads repository
+  # and organisation secrets directly.
+  workflow_dispatch:
+    inputs:
+      service-name:
+        description: 'Name of the service to build (e.g. basket-async-order-processor)'
+        required: true
+        type: string
+      changed:
+        description: 'Run full validation (tests/CodeQL/Prisma). Leave true for manual runs.'
+        required: false
+        type: boolean
+        default: true
+
+
+# Shared environments remain Flux-driven; this workflow builds, publishes and verifies images.
+
+jobs:
+  build:
+    name: Build ${{ inputs.service-name }}
+    runs-on: tooling-default-runner-scale-set
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    outputs:
+      # Owning squad, derived from the service's location on disk rather than
+      # passed in, so callers never have to know it and it cannot go stale.
+      squad: ${{ steps.resolve-path.outputs.squad }}
+      service-path: ${{ steps.resolve-path.outputs.service-path }}
+
+    env:
+      SERVICE_NAME: ${{ inputs.service-name }}
+
+    steps:
+      - name: Validate main production deployment inputs
+        if: inputs.semantic-version != ''
+        env:
+          SEMANTIC_VERSION: ${{ inputs.semantic-version }}
+          CHECKOUT_REF: ${{ inputs.checkout-ref }}
+          EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF_VALUE: ${{ github.ref }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$SEMANTIC_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::semantic-version must use X.Y.Z format (got '$SEMANTIC_VERSION')."
+            exit 1
+          fi
+          if [[ "$EVENT_NAME" != "push" || "$GITHUB_REF_VALUE" != "refs/heads/main" ]]; then
+            echo "::error::semantic-version is reserved for main deployment builds."
+            exit 1
+          fi
+          if [[ ! "$CHECKOUT_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::A 40-character checkout-ref is required for a semantic-version production deployment build."
+            exit 1
+          fi
+
+      - name: Validate checkout-ref is an immutable commit SHA
+        if: inputs.checkout-ref != ''
+        env:
+          CHECKOUT_REF: ${{ inputs.checkout-ref }}
+        run: |
+          if [[ ! "$CHECKOUT_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::checkout-ref must be a 40-char commit SHA (got '$CHECKOUT_REF'); pass the PR head SHA, not a branch/tag."
+            exit 1
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          ref: ${{ inputs.checkout-ref || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      # CodeQL - initialize before build so it can observe compilation.
+      #
+      # build-mode: manual means CodeQL watches the `mvn verify` below rather than
+      # running its own build. codeql.yml deliberately excludes java-kotlin and
+      # defers to this job, so if this step is disabled backend Java is not
+      # scanned at all.
+      - name: Initialize CodeQL
+        # Skipped for unchanged services - no code change.
+        if: inputs.changed
+        uses: github/codeql-action/init@v4
+        with:
+          languages: java-kotlin
+          build-mode: manual
+          queries: security-extended
+
+      # Resolve the squad-based service path dynamically.
+      #
+      # Layout is <stack>/<squad>/services/<service-name>, e.g.
+      #   backend/arrive-stay-leave/services/hotel-wallet-service-opera
+      # so the squad is the segment between the stack and "services".
+      - name: Resolve service path
+        id: resolve-path
+        run: |
+          shopt -s nullglob
+          matches=(backend/*/services/$SERVICE_NAME)
+          shopt -u nullglob
+          if [[ ${#matches[@]} -eq 0 || ! -d "${matches[0]}" ]]; then
+            echo "::error::Service directory not found: backend/*/services/$SERVICE_NAME"
+            exit 1
+          fi
+          if [[ ${#matches[@]} -gt 1 ]]; then
+            echo "::error::Ambiguous match for $SERVICE_NAME: ${matches[*]}"
+            exit 1
+          fi
+          service_path="${matches[0]}"
+
+          # Strip up to and including "backend/", then take the leading segment.
+          # Written this way so it also holds if the repo is ever checked out
+          # under a prefix, e.g. digital-monorepo/backend/<squad>/services/<name>.
+          rel="${service_path#*backend/}"
+          squad="${rel%%/*}"
+          if [[ -z "$squad" || "$squad" == "services" ]]; then
+            echo "::error::Could not determine squad from path '$service_path'"
+            exit 1
+          fi
+
+          echo "Service path: $service_path"
+          echo "Squad:        $squad"
+
+          {
+            echo "service-path=$service_path"
+            echo "module-path=${service_path#backend/}"
+            echo "squad=$squad"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Detect Java version
+        id: java-ver
+        run: |
+          SVC_PATH="${{ steps.resolve-path.outputs.service-path }}"
+          if [[ -f "$SVC_PATH/.java-version" ]]; then
+            echo "version=$(cat "$SVC_PATH/.java-version" | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=25" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up JDK
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5
+        with:
+          distribution: 'temurin'
+          java-version: '${{ steps.java-ver.outputs.version }}'
+
+      - name: Write settings.xml
+        env:
+          SETTINGS_XML: ${{ vars.SETTINGS_XML }}
+        run: echo "$SETTINGS_XML" | base64 -d > backend/settings.xml
+
+      # Caches
+      - name: Cache SonarCloud packages
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      # One shared Maven repository for the whole reactor, NOT one per service.
+      #
+      # Keying on the service name gave every service its own full ~/.m2. Because the
+      # last restore-key fell back to any other service's cache, each entry became
+      # "some other service's complete repository plus my extras" — 30 near-identical
+      # copies of 250-450MB, which pushed the repo past the 10GB Actions cache ceiling
+      # and left GitHub evicting entries as fast as they were written.
+      #
+      # All 49 services inherit backend/parents/service-parent/pom.xml, so the shared
+      # dependency set dominates: a single cache serves every module.
+      #
+      # Hashing every pom (rather than just this service's and the parent's) also
+      # closes a correctness gap — the build runs with `-am`, so a dependency bump in
+      # backend/*/libs/* affects the compile but previously did not invalidate the key.
+      #
+      # RESTORE ONLY — deliberately no save. These jobs run as a parallel matrix, so
+      # whichever finished first would write a cache holding only its own dependencies
+      # and every other job would be refused (actions/cache never overwrites a key).
+      # That partial cache would then persist until the next pom change. The
+      # seed-maven-cache job in ci-be.yaml resolves the whole reactor and owns the write.
+      #
+      # Key and path MUST stay byte-identical to the seed-maven-cache job in
+      # ci-be.yaml. actions/cache extracts to the path given at restore time, so
+      # a `~/.m2` here against a `~/.m2/repository` there silently misplaces the
+      # whole repository and every build re-downloads from scratch.
+      - name: Restore Maven packages
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('backend/**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2-
+
+      # Build & Test using Maven
+      #
+      # The download counter measures how complete the seeded cache actually is.
+      # `dependency:go-offline` resolves every module's declared dependencies and
+      # plugin dependencies, but not artifacts a plugin fetches at execution time,
+      # so a small tail is expected. A large tail here is the signal to switch the
+      # seed job's resolve step to `mvn verify -DskipTests`, which executes the
+      # plugins and therefore resolves everything they reach for.
+      - name: Maven build
+        env:
+          MAVEN_CLI_OPTS: ${{ vars.MAVEN_CLI_OPTS }}
+        working-directory: backend/
+        run: |
+          set -o pipefail
+          # Maven build cache, shared across jobs and PRs on the EFS volume the
+          # runner pods mount at /mnt/efs (see backend/.mvn/maven-build-cache-config.xml).
+          # `clean` is required: the config sets mandatoryClean=true, and without the
+          # clean lifecycle the extension restores but never saves. Free on a fresh
+          # checkout — there is nothing to clean.
+          # For an unchanged service skip test execution.
+          mvn $MAVEN_CLI_OPTS \
+            -Dmaven.build.cache.location=/mnt/efs/maven-build-cache \
+            -Dmaven.build.cache.maxLocalBuildsCached=7 \
+            clean verify ${{ !inputs.changed && '-DskipTests' || '' }} -pl "${{ steps.resolve-path.outputs.module-path }}" -am \
+            2>&1 | tee /tmp/mvn.log
+
+      - name: Report cache effectiveness
+        if: always()
+        run: |
+          # grep -c prints the count AND exits 1 when it is zero, so `|| echo 0`
+          # would append a second line and break the arithmetic below.
+          downloads=$(grep -c "^Downloaded from" /tmp/mvn.log 2>/dev/null || true)
+          downloads=${downloads:-0}
+          bytes=$(du -sm ~/.m2/repository 2>/dev/null | cut -f1 || true)
+          bytes=${bytes:-0}
+          # Build cache stats: restores/saves from this build's log, plus the live
+          # size and entry count of the shared cache on the EFS volume.
+          restores=$(grep -c "Found cached build, restoring" /tmp/mvn.log 2>/dev/null || true)
+          restores=${restores:-0}
+          saves=$(grep -c "Saved Build to local file" /tmp/mvn.log 2>/dev/null || true)
+          saves=${saves:-0}
+          cache_mb=$(du -sm /mnt/efs/maven-build-cache 2>/dev/null | cut -f1 || true)
+          cache_mb=${cache_mb:-0}
+          cache_entries=$(find /mnt/efs/maven-build-cache -name buildinfo.xml 2>/dev/null | wc -l | tr -d ' ')
+          echo "artifacts downloaded during this build: $downloads"
+          echo "local repository size after build: ${bytes}MB"
+          echo "build cache: $restores module(s) restored, $saves saved; EFS cache ${cache_mb}MB across ${cache_entries} entries"
+          {
+            echo "### Maven cache — ${{ inputs.service-name }}"
+            echo ""
+            echo "| metric | value |"
+            echo "|---|---|"
+            echo "| artifacts downloaded | $downloads |"
+            echo "| repository size | ${bytes}MB |"
+            echo "| modules restored from build cache | $restores |"
+            echo "| modules saved to build cache | $saves |"
+            echo "| EFS build cache size | ${cache_mb}MB |"
+            echo "| EFS build cache entries | $cache_entries |"
+            echo ""
+            if [[ "$downloads" -eq 0 ]]; then
+              echo "Seeded cache was complete for this service."
+            else
+              echo "Residual tail: $downloads artifact(s) the seed job did not resolve."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # CodeQL analysis — runs on the manual build from `mvn verify` above.
+      - name: Perform CodeQL Analysis
+        # Paired with gated Initialize CodeQL - both run only for changed services.
+        if: inputs.changed
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:java-kotlin/service:${{ inputs.service-name }}
+
+      - name: Sonar scan
+        if: inputs.changed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          MAVEN_CLI_OPTS: ${{ vars.MAVEN_CLI_OPTS }}
+        working-directory: backend/
+        run: |
+          mvn $MAVEN_CLI_OPTS sonar:sonar \
+            -pl ":digital-monorepo,${{ steps.resolve-path.outputs.module-path }}" -am \
+            -Dsonar.exclusions=*/libs/** \
+            -Dsonar.projectKey="whitbread-eos_digital-monorepo_$SERVICE_NAME" \
+            -Dsonar.projectName="digital-monorepo :: $SERVICE_NAME" \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.organization=whitbread-eos
+
+      - name: Upload jar files as artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.service-name }}-maven-artifact
+          path: ${{ steps.resolve-path.outputs.service-path }}/target/${{ inputs.service-name }}-*.jar
+
+  docker-build:
+    name: Docker Build ${{ inputs.service-name }}
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      id-token: write
+      pull-requests: write
+      issues: write
+    outputs:
+      image-tag: ${{ steps.image-tag.outputs.tag }}
+      image-repository: ${{ steps.ecr.outputs.repository }}
+    env:
+      SERVICE_NAME: ${{ inputs.service-name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          ref: ${{ inputs.checkout-ref || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download jar file artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ inputs.service-name }}-maven-artifact
+
+      - name: Configure AWS credentials  
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::327347623470:role/GitHubActionsECRPushRole 
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: eu-west-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Move jar file and build docker image
+        run: |
+          set -euo pipefail
+          mv "${SERVICE_NAME}-1.0.0.jar" "backend/infrastructure/images/${SERVICE_NAME}-1.0.0.jar"
+          cd backend/infrastructure/images
+          docker build -t "whitbreaddigital/${SERVICE_NAME}:prototype" -f Dockerfile.backend --build-arg "APP_NAME=${SERVICE_NAME}" --build-arg APP_VERSION=1.0.0 .
+          ls
+
+      - name: Generate token for PR comment
+        id: generate-token
+        if: github.event_name == 'pull_request'
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.PIPELINE_APP_ID }}
+          private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Run Prisma scan for ${{ inputs.service-name }}
+        # Skipped for unchanged services.
+        if: github.event_name == 'pull_request' && inputs.changed
+        uses: ./.github/actions/prisma-image-scan
+        with:
+          image-name: whitbreaddigital/${{ inputs.service-name }}:prototype
+          prisma-user: ${{ secrets.PRISMA_ACCESS_KEY_ID }}
+          prisma-password: ${{ secrets.PRISMA_SECRET_KEY }}
+          github-token: ${{ steps.generate-token.outputs.token }}
+          post-pr-comment: 'true'
+          continue-on-error: 'false'
+
+      # Pull request builds use github.sha, which points to GitHub's test merge commit.
+      # This merge commit represents what the code would look like if the PR were
+      # merged into the current tip of the target branch right now. This ensures the
+      # ephemeral environment tests the actual merge result, not a stale base.
+      # Format: pr-<number>-<merge-sha7>
+      #
+      # Main-line builds use the frontend tagging pattern for consistency across the monorepo.
+      # Format: <app-version>-<branch>-<full-sha>-<timestamp>
+      # Example: 1.0.0-main-abc1234567890abcdef1234567890abcdef1234-1709567890
+      - name: Resolve image tag
+        id: image-tag
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ inputs.pr-number || github.event.pull_request.number }}
+          COMMIT_SHA: ${{ inputs.checkout-ref || github.sha }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          APP_VERSION: "1.0.0"
+          SEMANTIC_VERSION: ${{ inputs.semantic-version }}
+        run: |
+          bash .github/workflows/scripts/resolve-image-tag.sh
+
+      - name: Push to ECR
+        id: ecr
+        run: |
+          set -euo pipefail
+          ECR_REPOSITORY="${{ steps.login-ecr.outputs.registry }}/whitbreaddigital/${SERVICE_NAME}"
+          ECR_TAG="${ECR_REPOSITORY}:${{ steps.image-tag.outputs.tag }}"
+          docker tag "whitbreaddigital/${SERVICE_NAME}:prototype" "${ECR_TAG}"
+          docker push "${ECR_TAG}"
+          echo "repository=${ECR_REPOSITORY}" >> "$GITHUB_OUTPUT"
+
+  deployment-check:
+    name: Deployment check ${{ inputs.service-name }}
+    if: |
+      github.event_name == 'push' &&
+      (github.ref_name == 'main' ||
+       startsWith(github.ref, 'refs/heads/release/') ||
+       startsWith(github.ref, 'refs/heads/hotfix/release'))
+    needs: docker-build
+    runs-on: >-
+      ${{ format('{0}-default-runner-scale-set',
+      github.ref_name == 'main' && 'dev' ||
+      startsWith(github.ref, 'refs/heads/release/') && 'uat' ||
+      startsWith(github.ref, 'refs/heads/hotfix/release') && 'demo') }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Verify deployment
+        uses: ./.github/actions/release-check
+        with:
+          app-name: ${{ inputs.service-name }}
+          image-tag: ${{ needs.docker-build.outputs.image-tag }}
+          namespace: opera-be
+          check-timeout: "600"
+
+      - name: Prepare DIT deployment metadata
+        if: github.ref_name == 'main'
+        env:
+          SERVICE_NAME: ${{ inputs.service-name }}
+          IMAGE_TAG: ${{ needs.docker-build.outputs.image-tag }}
+          SOURCE_SHA: ${{ github.sha }}
+          OUTPUT_DIR: deployment-metadata
+        run: bash .github/workflows/scripts/write-be-deployment-metadata.sh
+
+      - name: Upload DIT deployment metadata
+        if: github.ref_name == 'main'
+        uses: actions/upload-artifact@v7
+        with:
+          name: be-dit-deployment-${{ inputs.service-name }}
+          path: deployment-metadata/${{ inputs.service-name }}.json
+          retention-days: 1
+          if-no-files-found: error
+
+  # Uses helm-deploy when pr is sucessfully merged into main, uses helm-deploy-eph for commits to an open pull request.
+
+  # `== 'push'` rather than `!= 'pull_request'`. This workflow also has a
+  # workflow_dispatch trigger, and the negative form would let a manual single-service
+  # rebuild deploy straight into the shared opera-be namespace. Deploys now happen
+  # only on a real push — merges to main, plus release/* and hotfix/* branches.
+  # helm-deploy:
+  #   name: Helm Deploy ${{ inputs.service-name }}
+  #   if: github.event_name == 'push'
+  #   needs: docker-build
+  #   permissions:
+  #     actions: read
+  #     contents: read
+  #     security-events: write
+  #     id-token: write
+  #   uses: ./.github/workflows/ci-matrix-deploy.yaml
+  #   with:
+  #     service-name: ${{ inputs.service-name }}
+  #     image-tag: ${{ needs.docker-build.outputs.image-tag }}
+  #     image-repository: ${{ needs.docker-build.outputs.image-repository }}
+  #   secrets: inherit
+
+  ###
+  # TEMP (CTECH-13286):
+  #
+  # Ephemeral auto-deploy on PR is turned off to relieve dev cluster capacity.
+  # The deploy is gated on `deploy-eph` input (default: false), separate from pr-number.
+  # ci-be.yaml's build-services-pr still passes pr-number for image tagging/release naming.
+  #
+  # Deploys happen on demand via deploy-eph-manual.yaml which calls this workflow with deploy-eph: true.
+  #
+  # To re-enable auto on PR: set `deploy-eph: true` in ci-be.yaml's build-services-pr.
+  helm-deploy-eph:
+    name: Ephemeral Deploy ${{ inputs.service-name }}
+    if: inputs.deploy-eph
+    needs: docker-build
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      id-token: write
+      pull-requests: read
+      issues: read
+    uses: ./.github/workflows/ci-matrix-deploy-eph.yaml
+    with:
+      service-name: ${{ inputs.service-name }}
+      image-tag: ${{ needs.docker-build.outputs.image-tag }}
+      image-repository: ${{ needs.docker-build.outputs.image-repository }}
+      branch-name: ${{ github.head_ref || inputs.branch-name || github.ref_name }}
+      pr-number: ${{ inputs.pr-number || github.event.pull_request.number }}
+      checkout-ref: ${{ inputs.checkout-ref }}
+      verify-pr-open: ${{ inputs.verify-pr-open }}
+    secrets: inherit

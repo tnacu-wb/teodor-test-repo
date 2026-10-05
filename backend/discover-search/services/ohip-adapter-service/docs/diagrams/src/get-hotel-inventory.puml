@@ -1,0 +1,20 @@
+@startuml
+entity "PMS Adapter Service" as PMS
+participant HotelAvailabilityController as Controller
+participant HotelAvailabilityInPort as InboundPort
+participant HotelAvailabilityOutPort as OutboundPort
+participant OhipAvailabilityClient as OhipClient
+entity OPERA
+
+PMS -> Controller: GET /ohip/hotels/{hotelId}/hotelInventory\n?dateRangeStart={{dateRangeStart}}\n&dateRangeEnd={{dateRangeEnd}}
+Controller -> InboundPort: getHotelRoomsInventory
+InboundPort -> OutboundPort: getHotelRoomsInventory
+OutboundPort -> OhipClient: getHotelRoomsInventory
+OhipClient -> OPERA: GET {host}/inv/v1/hotels/{hotelId}/hotelInventory\n?dateRangeStart={{dateRangeStart}}\n&dateRangeEnd={{dateRangeEnd}}\n&roomCountRequested={{roomCountRequested}}\n&dailyInventory=false\nhouseLevel=true
+
+OhipClient <- OPERA: Hotel Inventory
+OutboundPort <- OhipClient: Hotel Inventory
+InboundPort <- OutboundPort: Hotel Inventory
+Controller <- InboundPort: Hotel Inventory
+PMS <- Controller: Hotel Inventory
+@enduml

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_hotel_details_distance"
+        style="@style/BodySmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:textColor="@color/grey_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1.02 miles from your search" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/premierMessageContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/hotel_details_premier_hotel"
+            style="@style/SubtextBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/generic_margin_4"
+            android:background="@drawable/rounded_corner_100dp_teal"
+            android:paddingHorizontal="@dimen/generic_padding_8"
+            android:paddingVertical="@dimen/generic_padding_2"
+            android:text="@string/premier_plus_hotel"
+            android:textColor="@color/teal_dark"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/hotel_details_color_message"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/hotel_details_color_message"
+            style="@style/SubtextBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner_100dp_primary"
+            android:paddingHorizontal="@dimen/generic_padding_8"
+            android:paddingVertical="@dimen/generic_padding_2"
+            android:text="@string/search_results_item_new_hotel"
+            android:textColor="@color/premier_inn_purple"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.whitbread.premierinn.common.view.TripAdvisorView
+        android:id="@+id/hotel_details_trip_advisor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_20"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/facilitiesContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/generic_padding_4" />
+
+    <TextView
+        android:id="@+id/hotel_details_last_few_rooms"
+        style="@style/BodySmallBold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:text="@string/search_results_item_last_few_rooms"
+        android:textColor="@color/alert_orange"
+        android:visibility="gone"
+        tools:visibility="visible" />
+</LinearLayout>

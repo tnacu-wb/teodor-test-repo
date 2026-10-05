@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:s="http://www.w3.org/2001/XMLSchema"
+			 xmlns:s0="http://bartws.micros.com/1.13" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			 targetNamespace="http://bartws.micros.com/1.13">
+	<types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://bartws.micros.com/1.13">
+			<s:complexType name="ErrorDetailsPastStays">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="errorMessage" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="PastStaysRequest2">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="PastStaysRequest2" type="s0:PastStaysRequest2"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="PastStaysRequest2">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="PastStaysRequest2Response">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="PastStaysRequest2Result" type="s0:PastStaysResponse2"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="PastStaysResponse2">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="pastStays" type="s0:ArrayOfPastStayPastStays2"/>
+					<s:element minOccurs="0" name="pastStaysError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="USER_NOT_LOGGED_IN"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetailsPastStays"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfPastStayPastStays2">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="PastStay" nillable="true"
+							   type="s0:PastStays2"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="PastStays2">
+				<s:sequence>
+					<s:element name="historyRecordNumber" type="s:long"/>
+					<s:element name="reservationNumber" type="s:string"/>
+					<s:element name="hotelCode" type="s:string"/>
+					<s:element name="arrivalDate" type="s:date"/>
+					<s:element name="departureDate" type="s:date"/>
+					<s:element name="guestName" type="s:string"/>
+					<s:element name="guestSurname" type="s:string"/>
+					<s:element name="roomNumber" type="s:string"/>
+					<s:element minOccurs="0" name="adults" type="s:long"/>
+					<s:element minOccurs="0" name="children" type="s:long"/>
+					<s:element minOccurs="0" name="invoiceValue" type="s0:Price4"/>
+					<s:element minOccurs="0" name="purchaseOrder" type="s:string"/>
+					<s:element minOccurs="0" name="customerReference" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Price4">
+				<s:sequence>
+					<s:element name="total" type="s:decimal"/>
+					<s:element name="currency" type="s:string"/>
+					<s:element name="roomCost" type="s:decimal"/>
+					<s:element name="extrasCost" type="s:decimal"/>
+				</s:sequence>
+			</s:complexType>
+		</s:schema>
+	</types>
+	<message name="PastStaysRequest2SoapIn">
+		<part name="parameters" element="s0:PastStaysRequest2"/>
+	</message>
+	<message name="PastStaysRequest2SoapOut">
+		<part name="parameters" element="s0:PastStaysRequest2Response"/>
+	</message>
+	<portType name="RegisteredGuestSoap">
+		<operation name="PastStaysRequest2">
+			<input message="s0:PastStaysRequest2SoapIn"/>
+			<output message="s0:PastStaysRequest2SoapOut"/>
+		</operation>
+	</portType>
+	<binding name="RegisteredGuestSoap" type="s0:RegisteredGuestSoap">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+		<operation name="PastStaysRequest2">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.PastStaysService.PastStaysRequest2"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="RegisteredGuest">
+		<port name="RegisteredGuestSoap" binding="s0:RegisteredGuestSoap">
+			<soap:address
+					location="https://alpha2.bookings.premierinn.com:443/csp/sql/ws.RegisteredGuest.PastStaysService.cls"/>
+		</port>
+	</service>
+</definitions>

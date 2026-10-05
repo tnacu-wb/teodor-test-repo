@@ -1,0 +1,28 @@
+query bookingHistory(
+$bookingChannel: BookingChannelCriteria
+$business: Boolean
+$pageIndex: Int
+$pageSize: Int
+$sortOrder: String
+$filterType: String
+$filterValue: String
+) {
+bookingHistory(
+bookingHistoryRequest: {
+bookingChannel: $bookingChannel
+business: $business
+pageIndex: $pageIndex
+pageSize: $pageSize
+sortOrder: $sortOrder
+filterType: $filterType
+filterValue: $filterValue
+}
+) {
+totals {
+upcoming
+cancelled
+checkedIn
+past
+}
+}
+}

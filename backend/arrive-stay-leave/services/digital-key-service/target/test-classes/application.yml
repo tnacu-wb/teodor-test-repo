@@ -1,0 +1,72 @@
+server:
+  port: 9024
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1
+
+management:
+  tracing:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /v1/digital-key/actuator
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+config:
+  service:
+    host: http://localhost:${wiremock.server.port:0}
+    prefix: "/adp"
+    allocate:
+      getVacantRoomsEndpoint: "/v1/rooms/getVacant"
+      allocateRoomEndpoint: "/v1/rooms/allocate"
+    checkIn:
+      createProfileEndpoint: "/v1/profile/createProfile"
+      checkInEndpoint: "/v1/kiosk/checkIn"
+    makeDeposit: "/v1/reservations/confirm"
+    ohip:
+      host: http://localhost:9100/ohip
+      allocateRoomEndpoint: "/v1/rooms/allocate"
+      checkInEndpoint: "/v1/kiosk/checkIn"
+      reservationsByBasketReservationIds: "/v1/reservations/basket"
+      connectionTimeoutMillis: 5000
+      responseTimeoutMillis: 10000
+      externalReservationEndpoint: "/v1/reservations/external"
+      updateUdfc20Endpoint: "/reservations/characterudfs"
+    kiosk:
+      host: http://localhost:9200
+      kioskAllocate: "/v1/kiosk/allocate"
+    axp:
+      host: http://localhost:9300
+      apiKey: test-api-key
+      brandId: test-brand-id
+      generateOtpEndPoint: /open_api/v1/brands/{brand_id}/otp/generate
+      passProvisioningWithOtp: /open_api/v1/brands/{brand_id}/mobile_key/prepare_pass_provisioning_with_otp
+      registerMobileDeviceEndpoint: /open_api/v1/brands/{brand_id}/mobile_devices
+      googleWalletProvisioningWithOtp: /open_api/v1/brands/{brand_id}/mobile_key/prepare_google_wallet_pass_provisioning_with_otp
+
+auth:
+  tenants:
+    - name: "Test Tenant"
+      audience: test-audience
+      namespace: test-namespace
+      issuer: https://test-issuer.example.com/
+      jwkUri: https://test-issuer.example.com/.well-known/jwks.json

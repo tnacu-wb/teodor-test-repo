@@ -1,0 +1,25 @@
+{
+  "id" : "526ba12d-ce9c-4f9e-a218-47b8e39af314",
+  "request" : {
+    "urlPath" : "/v1/rules/multi-occupancy-supplement",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$.['hotelIds'][*][?(@.['hotelId'] == 'FRAMTI')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"dictionary\":{\"FRAMTI\":9.99}}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "526ba12d-ce9c-4f9e-a218-47b8e39af314",
+  "priority" : 1
+}

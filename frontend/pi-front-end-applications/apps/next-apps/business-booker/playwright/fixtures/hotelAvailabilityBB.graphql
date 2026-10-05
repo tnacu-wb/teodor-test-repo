@@ -1,0 +1,52 @@
+
+  query hotelAvailabilityBB(
+    $hotelId: String!
+    $arrival: String!
+    $departure: String!
+    $rooms: [RoomSearch!]!
+    $companyId: String
+    $bookingChannel: BookingChannelCriteria!
+  ) {
+    hotelAvailability(
+      availabilitySearchCriteria: {
+        arrival: $arrival
+        departure: $departure
+        rooms: $rooms
+        hotel: { identifier: $hotelId }
+        bookingChannel: $bookingChannel
+        companyId: $companyId
+      }
+    ) {
+      hotelId
+      startDate
+      endDate
+      available
+      limitedAvailability
+      roomRates {
+        ratePlanCode
+        roomTypes {
+          roomType
+          adults
+          children
+          cotRequested
+          rooms {
+            pmsRoomType
+            silentSubstitution
+            cotAvailable
+            roomClass
+            specialRequests
+            roomPriceBreakdown {
+              totalNetAmount
+              currencyCode
+              packageCode
+              packageAmount
+              dailyPrices {
+                date
+                netPrice
+              }
+            }
+          }
+        }
+      }
+    }
+  }

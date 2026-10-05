@@ -1,0 +1,141 @@
+{
+  "name": "@whitbread-eos/utils",
+  "version": "1.0.0",
+  "description": "PremierInn utilities package",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "private": true,
+  "sideEffects": false,
+  "scripts": {
+    "watch": "babel --watch --config-file ./babel.config.js src --out-dir ./dist --extensions \".tsx,.ts,.js,.jsx\"",
+    "build": "rm -rf dist && tsc --emitDeclarationOnly --declarationDir './dist' && babel --config-file ./babel.config.js src --out-dir ./dist --extensions \".tsx,.ts,.js,.jsx\"",
+    "build:dev": "babel --config-file ./babel.config.js src --out-dir ./dist --extensions \".tsx,.ts,.js,.jsx\"",
+    "lint": "eslint src -f table --color --quiet",
+    "lint:fix": "eslint src -f table --color --fix --quiet",
+    "test": "jest --verbose --passWithNoTests",
+    "test:ci": "NODE_OPTIONS='--max-old-space-size=4096' jest --ci --silent --coverage --bail --maxWorkers=50%",
+    "test:watch": "jest --watch --passWithNoTests",
+    "test:coverage": "jest --coverage --passWithNoTests",
+    "test:coverage:open": "open coverage/lcov-report/index.html",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.17.5",
+    "@chakra-ui/icons": "2.1.1",
+    "@chakra-ui/react": "2.8.2",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11.11.0",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "15.0.7",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@types/jest": "^28.1.6",
+    "@types/jest-axe": "^3.5.4",
+    "@types/react": "19.0.8",
+    "@types/sanitize-html": "^2.16.0",
+    "classnames": "^2.3.1",
+    "date-fns": "^4.1.0",
+    "framer-motion": "6.2.8",
+    "graphql": "^16.11.0",
+    "graphql-request": "^6.1.0",
+    "i18next-http-backend": "^3.0.5",
+    "jest": "29.7.0",
+    "jest-axe": "^6.0.0",
+    "jest-dom": "^4.0.0",
+    "jest-environment-jsdom": "29.7.0",
+    "next": "15.5.24",
+    "next-i18next": "^10.2.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "^7.49.2",
+    "typescript": "5.5.3",
+    "webpack": "5.104.1",
+    "webpack-cli": "~4.9.2"
+  },
+  "peerDependencies": {
+    "@chakra-ui/icons": "2.1.1",
+    "@chakra-ui/react": "2.8.2",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11.11.0",
+    "classnames": "^2.3.1",
+    "date-fns": "^4.1.0",
+    "graphql": "^16.11.0",
+    "graphql-request": "^6.1.0",
+    "i18next-http-backend": "^3.0.5",
+    "next": "15.5.24",
+    "next-i18next": "^10.2.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "^7.49.2"
+  },
+  "dependencies": {
+    "@auth0/nextjs-auth0": "^4.18.0",
+    "@babel/runtime": "7.28.4",
+    "@paypal/react-paypal-js": "^8.1.3",
+    "@types/braintree-web": "^3.96.17",
+    "@whitbread-eos/api": "^1.0.0",
+    "axios": "^1.18.0",
+    "braintree-web": "^3.128.0",
+    "clsx": "^2.1.1",
+    "cookies-next": "^2.1.1",
+    "html-react-parser": "^5.1.12",
+    "i18next": "^23.11.5",
+    "isomorphic-dompurify": "2.14.0",
+    "jwt-decode": "^3.1.2",
+    "nanoid": "^6.0.1",
+    "pino": "^8.14.1",
+    "pluralize": "^8.0.0",
+    "sanitize-html": "2.17.7",
+    "tailwind-merge": "^2.3.0",
+    "undici": "^6.28.0",
+    "use-immer": "^0.7.0",
+    "dset": "^3.1.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "default": "./dist/server/index.js"
+    },
+    "./instrumentation": {
+      "types": "./dist/instrumentation.d.ts",
+      "default": "./dist/instrumentation.js"
+    },
+    "./server/edge": {
+      "types": "./dist/server/edge.d.ts",
+      "default": "./dist/server/edge.js"
+    },
+    "./restaurants": {
+      "types": "./dist/restaurants/index.d.ts",
+      "default": "./dist/restaurants/index.js"
+    },
+    "./auth/login-defaults": {
+      "types": "./dist/auth/loginDefaults.d.ts",
+      "default": "./dist/auth/loginDefaults.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "server": [
+        "./dist/server/index.d.ts"
+      ],
+      "instrumentation": [
+        "./dist/instrumentation.d.ts"
+      ],
+      "server/edge": [
+        "./dist/server/edge.d.ts"
+      ],
+      "restaurants": [
+        "./dist/restaurants/index.d.ts"
+      ],
+      "auth/login-defaults": [
+        "./dist/auth/loginDefaults.d.ts"
+      ]
+    }
+  }
+}

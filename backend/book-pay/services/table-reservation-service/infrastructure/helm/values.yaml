@@ -1,0 +1,238 @@
+# Values for table-reservation-service.
+#
+# Shaped for the shared `opera-app-chart` (whitbread-eos/helm-central-charts), which is
+# what .github/workflows/ci-matrix-deploy.yaml installs. The chart reads the pod spec
+# from `deployment.*` and gates optional resources on a `create` flag — keys outside
+# those names are silently ignored, so an unset `deployment.containerEnvs` renders
+# `env: null` and the pod starts with no environment at all.
+#
+# This file REPLACES an earlier values.yaml written for the standalone
+# `table-reservation-service-chart` (top-level replicaCount / ingress / podSecurityContext
+# and so on). None of those keys exist in opera-app-chart, so the old file rendered an
+# empty release through this pipeline. The per-environment siblings in this directory
+# (values.dev.yaml, values.uat.yaml, …) still belong to that old chart and are not read
+# by anything in .github/workflows.
+#
+# Derived from microservices-gitops/opera-dev/apps/table-reservation-service.yaml. Not
+# carried over: `imageAutomation` — the pipeline --sets it false and pins the tag it just
+# built. (That release declares no canary, so there is nothing to drop here.)
+#
+# ── Namespace mismatch, unresolved ───────────────────────────────────────────
+#
+# GitOps runs this service in `restaurant-be`, not `opera-be` — it is the one book-pay
+# service that does. Both ci-matrix-deploy.yaml and ci-matrix-deploy-eph.yaml hardcode
+# `--namespace opera-be` and `--set namespace=opera-be`, so a deploy from this repo lands
+# in opera-be whatever this file says, and the secrets it needs (restaurant-zonal-secrets,
+# aem-credentials) live in restaurant-be. `opera-be` is stated below to match what the
+# pipeline will actually do; making this service deployable from the monorepo needs the
+# workflows to take the namespace as an input, or the secrets mirrored into opera-be.
+
+applicationName: table-reservation-service
+namespace: opera-be
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/table-reservation-service
+  pullPolicy: Always
+  tag: "develop"
+
+imagePullSecrets:
+  - name: regcred
+
+deployment:
+  create: true
+  replicaCount: 1
+
+  containerPorts:
+    - containerPort: 9121
+      protocol: TCP
+      name: http
+
+  containerEnvFrom:
+    - configMapRef:
+        name: table-reservation-service-configmap
+
+  containerEnvs:
+    # No opera-* profile block exists in this service's application.yml, so the profile
+    # is inert here — unlike every other book-pay service — and is left unset.
+    - name: JAVA_OPTS
+      value: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # ── Zonal (the restaurant booking provider) ──────────────────────────────
+    # Lowercase names are what application.yml reads; Spring's relaxed binding is doing
+    # the work. Neither has a default, so a missing key fails startup.
+    - name: username
+      valueFrom:
+        secretKeyRef:
+          name: restaurant-zonal-secrets
+          key: username
+    - name: Password
+      valueFrom:
+        secretKeyRef:
+          name: restaurant-zonal-secrets
+          key: Password
+    - name: ZONAL_URL
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: zonal_url
+
+    # ── AEM (restaurant content and labels) ──────────────────────────────────
+    - name: AEM_CREDENTIALS_ENV_USER
+      valueFrom:
+        secretKeyRef:
+          name: aem-credentials
+          key: user
+    - name: AEM_CREDENTIALS_ENV_PASS
+      valueFrom:
+        secretKeyRef:
+          name: aem-credentials
+          key: password
+    - name: AEM_URL
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: aem_url
+    - name: UNBRANDED_AEM_URL
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: unbranded_aem_url
+    - name: LABEL_URL
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: label_url
+
+    # ── Auth tenant ──────────────────────────────────────────────────────────
+    # Only the CCUI tenant: this service is not exposed to the Premier Inn / Business
+    # Booker issuer.
+    - name: CCUI_TENANT_AUDIENCE
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: ccui_tenant_audience
+    - name: CCUI_TENANT_NAMESPACE
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: ccui_tenant_namespace
+    - name: CCUI_TENANT_ISSUER
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: ccui_tenant_issuer
+    - name: CCUI_TENANT_JWK_URI
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: ccui_tenant_jwk_uri
+
+    # ── HTTP client and cache ────────────────────────────────────────────────
+    - name: HTTP_CONNECTION_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: httpConnectionTimeout
+    - name: HTTP_RESPONSE_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: httpResponseTimeout
+    - name: CACHE_TYPE
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: cacheType
+    - name: REDIS_ENDPOINT
+      valueFrom:
+        configMapKeyRef:
+          name: table-reservation-service-configmap
+          key: redisEndpoint
+
+  dns:
+    ndots: 3
+
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - sh
+          - -c
+          - sleep 20
+  terminationGracePeriodSeconds: 90
+
+  # `/v1/sample` is the actuator base-path this service actually ships with
+  # (management.endpoints.web.base-path in application.yml) — a leftover from the service
+  # template that has never been renamed. Changing it here without changing application.yml
+  # breaks every probe, so the two have to move together.
+  livenessProbe:
+    httpGet:
+      path: /v1/sample/actuator/health/liveness
+      port: 9121
+    initialDelaySeconds: 90
+    periodSeconds: 30
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
+
+  readinessProbe:
+    httpGet:
+      path: /v1/sample/actuator/health/readiness
+      port: 9121
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
+
+  # The only book-pay service with a CPU limit. CPU is compressible, so the limit only
+  # throttles — carried over as-is from the GitOps release rather than silently retuned.
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+service:
+  create: true
+  name: table-reservation-service
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 9121
+      protocol: TCP
+      name: port9121
+
+autoscaling:
+  create: true
+  minReplicas: 2
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 60
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 180
+
+configMap:
+  create: true
+  data:
+    aem_url: https://restaurantname.dev.premierinn.digital/en-gb
+    unbranded_aem_url: https://www.dev.premierinn.digital/gb/en/restaurants.locations.json
+    label_url: https://www.dev.premierinn.digital/etc/designs/global/dictionaries/restaurants/i18n.jsondict.en
+    zonal_url: https://api-staging.liveres.co.uk
+    ccui_tenant_audience: https://api.dev.whitbread.digital
+    ccui_tenant_issuer: https://dev-whitbread-digital.eu.auth0.com/
+    ccui_tenant_jwk_uri: https://dev-whitbread-digital.eu.auth0.com/.well-known/jwks.json
+    ccui_tenant_namespace: https://ccui.opera.whitbread.digital
+    httpConnectionTimeout: '10000'
+    httpResponseTimeout: '30'
+    cacheType: redis
+    redisEndpoint: clustercfg.opera-dev.jynzd4.memorydb.eu-west-1.amazonaws.com:6379
+
+# A different gateway from every other book-pay service: this one is published on the
+# restaurants estate, and it takes the whole root prefix there.
+istio:
+  create: true
+  auth: false
+  gateway: restaurant-api
+  prefix: /

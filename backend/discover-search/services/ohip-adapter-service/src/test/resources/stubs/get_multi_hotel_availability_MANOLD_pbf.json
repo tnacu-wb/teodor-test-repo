@@ -1,0 +1,33 @@
+{
+  "request": {
+    "urlPathPattern": "/par/v1/hotels/MANOLD/availability",
+    "method": "GET",
+    "queryParameters": {
+      "roomStayStartDate": {
+        "equalTo": "2023-04-24"
+      },
+      "roomStayEndDate": {
+        "equalTo": "2023-04-27"
+      },
+      "roomType": {
+        "equalTo": "DOUBLE,ZPLDBL,FMTHRE,FMTRPL,TWINRM,EXTDBL,EXDZPL,PPLDBL,PDBZPL,PFAMIL,BIGWIN,BIGNWD,BIGZPL,EXDLOW,EXDWET,PPDLOW,PPDWET"
+      },
+      "roomStayQuantity": {
+        "equalTo": "1",
+        "limit": {
+          "equalTo": "20"
+        },
+        "reservationGuestIdType": {
+          "equalTo": "Profile"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "get_multi_hotel_availability_pbn_success_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

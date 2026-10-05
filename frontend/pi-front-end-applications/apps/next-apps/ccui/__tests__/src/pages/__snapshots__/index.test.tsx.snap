@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home page should handle no session 1`] = `
+{
+  "redirect": {
+    "destination": "/auth/login?returnTo=%2F%3Flanguage%3Den",
+    "permanent": false,
+  },
+}
+`;
+
+exports[`Home page should match the snapshot 1`] = `
+<div>
+  <div
+    data-testid="SearchPage"
+  />
+</div>
+`;
+
+exports[`Home page should match the snapshot layout 1`] = `
+<div>
+  <div
+    data-testid="DefaultLayout"
+  >
+    <div
+      data-testid="SearchPage"
+    />
+  </div>
+</div>
+`;
+
+exports[`Home page should match the snapshot with user details  business undefined 1`] = `
+<div>
+  <div
+    data-testid="SearchPage"
+  />
+</div>
+`;
+
+exports[`Home page should match the snapshot with user details undefined 1`] = `
+<div>
+  <div
+    data-testid="SearchPage"
+  />
+</div>
+`;
+
+exports[`Home page should not redirect if locale and selectedLocale match 1`] = `
+{
+  "props": {
+    "featureToggles": {
+      "testFeature": true,
+    },
+    "roles": [
+      "role1",
+      "role2",
+    ],
+    "user": {
+      "https://ccui.opera.whitbread.digital/role": [
+        "role1",
+        "role2",
+      ],
+      "wb_account_locale": "en",
+    },
+  },
+}
+`;
+
+exports[`Home page should redirect to the correct locale if necessary 1`] = `
+{
+  "props": {
+    "featureToggles": {
+      "testFeature": true,
+    },
+    "roles": [
+      "role1",
+      "role2",
+    ],
+    "user": {
+      "https://ccui.opera.whitbread.digital/role": [
+        "role1",
+        "role2",
+      ],
+      "wb_account_locale": "en",
+    },
+  },
+  "redirect": {
+    "destination": "/de/de",
+    "permanent": false,
+  },
+}
+`;

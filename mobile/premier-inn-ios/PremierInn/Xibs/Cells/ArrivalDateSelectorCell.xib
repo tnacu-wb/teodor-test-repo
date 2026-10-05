@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ArrivalDateSelectorCell" rowHeight="68" id="hKs-Fc-3ko" customClass="ArrivalDateSelectorCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="68"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hKs-Fc-3ko" id="fhr-1h-iGf">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="67.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[Tonights date]" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Chk-E5-1BN">
+                        <rect key="frame" x="20" y="22" width="131" height="24"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="20"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uhf-xt-NYr" customClass="SeparatedStepperButton" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="260" y="14" width="40" height="40"/>
+                        <accessibility key="accessibilityConfiguration" identifier="calendarButtonAcc">
+                            <bool key="isElement" value="NO"/>
+                        </accessibility>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="uhf-xt-NYr" secondAttribute="height" multiplier="1:1" id="OWg-3T-Xpe"/>
+                            <constraint firstAttribute="width" constant="40" id="yYY-L1-a2b"/>
+                        </constraints>
+                        <color key="tintColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <state key="normal" image="calendar"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </button>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GcQ-Ju-ZKx" userLabel="Separator Line">
+                        <rect key="frame" x="20" y="66.5" width="280" height="1"/>
+                        <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="32E-60-mqY"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Chk-E5-1BN" firstAttribute="leading" secondItem="fhr-1h-iGf" secondAttribute="leading" constant="20" id="6wf-1I-MPj"/>
+                    <constraint firstAttribute="bottom" secondItem="uhf-xt-NYr" secondAttribute="bottom" priority="999" constant="14" id="Eob-cC-WBZ"/>
+                    <constraint firstAttribute="trailing" secondItem="uhf-xt-NYr" secondAttribute="trailing" constant="20" id="F1I-Cn-xtQ"/>
+                    <constraint firstItem="GcQ-Ju-ZKx" firstAttribute="leading" secondItem="Chk-E5-1BN" secondAttribute="leading" id="Fiq-db-cuI"/>
+                    <constraint firstItem="uhf-xt-NYr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Chk-E5-1BN" secondAttribute="trailing" constant="20" id="I7a-nP-Msi"/>
+                    <constraint firstItem="uhf-xt-NYr" firstAttribute="top" secondItem="fhr-1h-iGf" secondAttribute="top" constant="14" id="MRA-5r-FSZ"/>
+                    <constraint firstAttribute="bottom" secondItem="GcQ-Ju-ZKx" secondAttribute="bottom" id="gP3-yw-05l"/>
+                    <constraint firstItem="GcQ-Ju-ZKx" firstAttribute="trailing" secondItem="uhf-xt-NYr" secondAttribute="trailing" id="oq5-Tt-GoM"/>
+                    <constraint firstItem="Chk-E5-1BN" firstAttribute="centerY" secondItem="uhf-xt-NYr" secondAttribute="centerY" id="pHN-ZD-A9k"/>
+                </constraints>
+            </tableViewCellContentView>
+            <accessibility key="accessibilityConfiguration" identifier="arrivalDateSelectorCellAcc">
+                <bool key="isElement" value="NO"/>
+            </accessibility>
+            <connections>
+                <outlet property="arrivalDateLabel" destination="Chk-E5-1BN" id="gCS-ZG-jkM"/>
+                <outlet property="calendarButton" destination="uhf-xt-NYr" id="Zuv-ND-YaL"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="calendar" width="44" height="44"/>
+    </resources>
+</document>

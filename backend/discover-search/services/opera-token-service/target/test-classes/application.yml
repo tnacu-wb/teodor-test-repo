@@ -1,0 +1,33 @@
+server:
+  port: 9136
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+opera:
+  enterprise-id: testEnterpriseId
+  app-key: testAppKey
+  host: http://localhost
+  authEndpoint: /dummy/token
+
+app:
+  token:
+    refreshAheadMinutes: ${REFRESH_AHEAD_MINUTES:5m}
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          opera:
+            client-id: test-client
+            client-secret: test-secret
+            authorization-grant-type: client_credentials
+        provider:
+          opera:
+            token-uri: http://localhost/dummy/token

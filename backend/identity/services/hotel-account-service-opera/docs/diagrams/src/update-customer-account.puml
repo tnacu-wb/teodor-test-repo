@@ -1,0 +1,16 @@
+@startuml
+actor User
+participant "Update Account Page" as UP
+participant "Hotel Account Microservice" as MS
+User -> UP: Update account details
+UP -> MS: Update account request
+opt Only when email/password is updated
+  MS -> Auth0: Update email/password
+  MS <- Auth0: Email/password updated
+end
+MS -> BART: Update account SOAP request
+MS <- BART: Account updated
+MS -> CDH: Update account request (async)
+UP <- MS: Account updated
+User <- UP: Account updated successful
+@enduml

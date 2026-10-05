@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_extra_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_meals_legend"
+        style="@style/Header3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_20"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        app:layout_constraintEnd_toStartOf="@+id/btn_adults_decrement"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Unlimited Premier Inn Breakfast" />
+
+    <TextView
+        android:id="@+id/tv_meals_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_meals_legend"
+        android:layout_marginTop="@dimen/generic_margin_6"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_below="@id/tv_meals_legend"
+        style="@style/Header4"
+        tools:text="£10.00"/>
+
+    <TextView
+        android:id="@+id/tv_promo_price_for_nights"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_meals_price"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_below="@id/tv_meals_legend"
+        style="@style/Header4"
+        android:visibility="gone"
+        tools:text="(£0.00 for 2 nights)"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/generic_margin_22"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/generic_margin_16"
+        android:paddingEnd="@dimen/generic_margin_20"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_promo_price_for_nights">
+
+        <TextView
+            android:id="@+id/tv_meals_description"
+            style="@style/BodySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/generic_margin_10"
+            tools:text="Wake up to all your cooked and continental favourites with our delicious unlimited breakfast." />
+
+        <TextView
+            android:id="@+id/tvOfferTag"
+            style="@style/BodySmallBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_blue_tint"
+            android:textColor="@color/teal_dark"
+            android:layout_marginTop="@dimen/generic_padding_8"
+            android:paddingTop="@dimen/generic_padding_4"
+            android:paddingBottom="@dimen/generic_padding_4"
+            android:paddingStart="@dimen/generic_padding_8"
+            android:paddingEnd="@dimen/generic_padding_8"
+            android:drawablePadding="@dimen/generic_padding_4"
+            android:visibility="gone"
+            tools:text="@string/discount_tag"
+            app:drawableStartCompat="@drawable/ic_tag" />
+
+        <TextView
+            android:id="@+id/tv_meals_kids_eat_free"
+            style="@style/SubtextSmallSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/generic_margin_5"
+            android:visibility="gone"
+            tools:text="Kids eat breakfast free with this meal" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_adults_increment"
+        android:layout_width="@dimen/room_minus_button_width"
+        android:layout_height="@dimen/room_plus_button_height"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_meals_legend"
+        android:layout_marginEnd="@dimen/generic_margin_24"
+        android:src="@drawable/criteria_plus" />
+
+    <TextView
+        android:id="@+id/tv_adults_number"
+        style="@style/Header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        app:layout_constraintTop_toTopOf="@+id/tv_meals_legend"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_adults_increment"
+        app:layout_constraintEnd_toStartOf="@+id/btn_adults_increment"
+        app:layout_constraintStart_toEndOf="@+id/btn_adults_decrement"
+        tools:text="1" />
+
+    <ImageButton
+        android:id="@+id/btn_adults_decrement"
+        android:layout_width="@dimen/room_minus_button_width"
+        android:layout_height="@dimen/room_plus_button_height"
+        android:layout_marginEnd="@dimen/generic_margin_44"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintEnd_toStartOf="@+id/btn_adults_increment"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintTop_toTopOf="@+id/btn_adults_increment"
+        app:srcCompat="@drawable/criteria_minus" />
+
+    <TextView
+        android:id="@+id/tv_adults_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/tv_adults_number"
+        app:layout_constraintEnd_toEndOf="@id/tv_adults_number"
+        app:layout_constraintTop_toBottomOf="@id/tv_adults_number"
+        android:layout_below="@id/tv_meals_legend"
+        android:layout_marginTop="@dimen/generic_margin_6"
+        android:text="@string/adults"
+        style="@style/Header4" />
+
+    <View
+        android:id="@+id/itemDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/line_divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

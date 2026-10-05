@@ -1,0 +1,41 @@
+{
+  "id" : "51601893-64bd-4ef4-b423-a9da63c85d0f",
+  "request" : {
+    "urlPath" : "/v1/reservations/confirm",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['paymentOption'] == 'PAY_ON_ARRIVAL')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['reservationId'] == '36116')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'TKINPT')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['operaPaymentMethod'] == 'DAT')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentCard'][?(@.['cardType'] == 'AT')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentCard'][?(@.['token'] == '4111111111111111')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentCard'][?(@.['expirationDate'] == '2025-03-31')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentCard'][?(@.['cardHolderName'] == 'Charlie')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentCard'][?(@.['cardNumberLast4Digits'] == '1234')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"reservationIdList\":[{\"id\":\"36116\",\"type\":\"Reservation\"},{\"id\":\"468853\",\"type\":\"Confirmation\"}],\"roomStay\":{\"arrivalDate\":\"2022-07-06\",\"departureDate\":\"2022-07-08\"},\"reservationGuest\":{\"givenName\":\"Tester\",\"surName\":\"Testerson\"},\"hotelId\":\"TKINPT\",\"reservationStatus\":\"RESERVED\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "51601893-64bd-4ef4-b423-a9da63c85d0f",
+  "priority" : 1
+}

@@ -1,0 +1,245 @@
+# Values for payment-methods-entity-service.
+#
+# Shaped for the shared `opera-app-chart` (whitbread-eos/helm-central-charts), which is
+# what .github/workflows/ci-matrix-deploy.yaml installs. The chart reads the pod spec
+# from `deployment.*` and gates optional resources on a `create` flag — keys outside
+# those names are silently ignored, so an unset `deployment.containerEnvs` renders
+# `env: null` and the pod starts with no environment at all.
+#
+# Derived from microservices-gitops/opera-dev/apps/payment-methods-entity-service.yaml.
+# Not carried over: `imageAutomation` (the pipeline --sets it false and pins the tag it
+# just built) and `canary` (a Flagger Canary takes ownership of the Service's
+# .spec.selector / .spec.ports[].name and the VirtualService's .spec.http, which then
+# collides with Helm's server-side apply on the next upgrade of the same release).
+#
+# Overridden per-deploy by ci-matrix-deploy.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create
+
+applicationName: payment-methods-entity-service
+namespace: opera-be
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/payment-methods-entity-service
+  pullPolicy: Always
+  tag: "develop"
+
+imagePullSecrets:
+  - name: regcred
+
+deployment:
+  create: true
+  replicaCount: 1
+
+  containerPorts:
+    - containerPort: 9107
+      protocol: TCP
+      name: http
+
+  containerEnvFrom:
+    - configMapRef:
+        name: payment-methods-entity-service-configmap
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=80 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # ── Downstream services ──────────────────────────────────────────────────
+    # Bare hostnames: every one of these publishes port 80 on its Service.
+    - name: RESERVATION_HOST
+      value: hotel-reservation-entity-service
+    - name: CONTENT_HOST
+      value: content-entity-service
+    - name: HOTEL_ACCOUNT_HOST
+      value: hotel-account-service-opera
+    - name: COMPANY_SERVICE_HOST
+      value: company-service-opera
+    - name: HOTEL_CARD_HOST
+      value: hotel-card-service-opera
+    - name: RULES_AGENT_HOST
+      value: rules-agent-entity-service
+    - name: BASKET_SERVICE_HOST
+      value: basket-service
+    - name: HOTEL_ENTITY_HOST
+      value: hotel-entity-service
+    # 3C is reached through the ConfigMap rather than a literal because it is the one
+    # downstream whose address differs between environments.
+    - name: CONFIG_MAP_THREEC_URL
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: threec_url
+
+    # ── Auth tenants ─────────────────────────────────────────────────────────
+    # None of these have defaults in application.yml, so a missing key is a startup
+    # failure — which is correct for authentication config.
+    - name: CCUI_TENANT_AUDIENCE
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: ccui_tenant_audience
+    - name: CCUI_TENANT_NAMESPACE
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: ccui_tenant_namespace
+    - name: CCUI_TENANT_ISSUER
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: ccui_tenant_issuer
+    - name: CCUI_TENANT_JWK_URI
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: ccui_tenant_jwk_uri
+    - name: PI_BB_TENANT_AUDIENCE
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: pi_bb_tenant_audience
+    - name: PI_BB_TENANT_NAMESPACE
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: pi_bb_tenant_namespace
+    - name: PI_BB_TENANT_ISSUER
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: pi_bb_tenant_issuer
+    - name: PI_BB_TENANT_JWK_URI
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: pi_bb_tenant_jwk_uri
+
+    # ── Behaviour flags and cache ────────────────────────────────────────────
+    - name: PIBA_EURO_FLAG
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: piba_euro_flag
+    - name: UNLEASH_ENVIRONMENT
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: unleashEnvironment
+    - name: UNLEASH_URL
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: unleashUrl
+    - name: UNLEASH_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: unleash-enterprise-secrets
+          key: token
+    - name: CACHE_TYPE
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: cacheType
+    - name: REDIS_ENDPOINT
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: redisEndpoint
+    # Which payment options are withheld while Datatrans is not yet live for them.
+    - name: DATATRANS_NOT_SUPPORTED_CARD_OPTIONS
+      valueFrom:
+        configMapKeyRef:
+          name: payment-methods-entity-service-configmap
+          key: datatransNotSupportedCardOptions
+
+  dns:
+    ndots: 3
+
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - sh
+          - -c
+          - sleep 20
+  terminationGracePeriodSeconds: 90
+
+  livenessProbe:
+    httpGet:
+      path: /v1/payment-methods/actuator/health/liveness
+      port: 9107
+    initialDelaySeconds: 90
+    periodSeconds: 30
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
+
+  readinessProbe:
+    httpGet:
+      path: /v1/payment-methods/actuator/health/readiness
+      port: 9107
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
+
+  # requests.memory tracks limits.memory because the heap is sized off the memory LIMIT
+  # (-XX:MaxRAMPercentage above).
+  resources:
+    requests:
+      cpu: 400m
+      memory: 1000Mi
+    limits:
+      memory: 1000Mi
+
+service:
+  create: true
+  name: payment-methods-entity-service
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 9107
+      protocol: TCP
+      name: port9107
+
+autoscaling:
+  create: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 120
+
+configMap:
+  create: true
+  data:
+    ccui_tenant_audience: https://api.dev.whitbread.digital
+    ccui_tenant_issuer: https://dev-whitbread-digital.eu.auth0.com/
+    ccui_tenant_jwk_uri: https://dev-whitbread-digital.eu.auth0.com/.well-known/jwks.json
+    ccui_tenant_namespace: https://ccui.opera.whitbread.digital
+    pi_bb_tenant_audience: https://wbodetest.eu.auth0.com/api/v2/
+    pi_bb_tenant_issuer: https://auth0.premierinn.digital/
+    pi_bb_tenant_jwk_uri: https://auth0.premierinn.digital/.well-known/jwks.json
+    pi_bb_tenant_namespace: https://premierinn.com
+    piba_euro_flag: 'true'
+    threec_url: threec-payment-service-opera
+    unleashEnvironment: dev
+    unleashUrl: https://whitbread.edge.getunleash.io/api
+    cacheType: redis
+    redisEndpoint: clustercfg.opera-dev.jynzd4.memorydb.eu-west-1.amazonaws.com:6379
+    datatransNotSupportedCardOptions: SAVED_CARD,NEW_PIBA,AP,GP,RESERVE_WITHOUT_CARD,ACCOUNT_COMPANY,PAYPAL
+
+istio:
+  create: true
+  auth: false
+  gateway: opera-api
+  regex:
+    enabled: true
+    pattern: ^\/v\d+\/payment-methods.*
+
+prometheusSpring:
+  create: true
+  path: /v1/payment-methods/actuator/prometheus

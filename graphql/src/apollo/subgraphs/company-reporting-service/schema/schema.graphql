@@ -1,0 +1,20 @@
+schema {
+    query: Query
+}
+
+type Query {
+    managementInformationReport(fromDate: String!, toDate: String!, showQnAcolumns: Boolean!, language: String!): ManagementInformationResponse
+    emergencyReport(language: String!): EmergencyReportResponse
+}
+
+type ManagementInformationResponse {
+    reportName: String!
+    fileName: String!
+    downloadUrl: String!
+}
+
+type EmergencyReportResponse {
+    reportName: String!
+    fileName: String!
+    downloadUrl: String!
+}

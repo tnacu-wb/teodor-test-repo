@@ -1,0 +1,116 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+swagger:
+  api:
+    version: 2.8.0
+    path: https://api.swaggerhub.com/apis/whitbread/Card-API/${swagger.api.version}/swagger.yaml
+
+auth0:
+  host: http://localhost:${wiremock.server.port:0}
+  # The slash here seems to be required to match auth0 generated token
+  issuer: http://localhost/
+
+feign:
+  hotelaccount:
+    name: hotelaccount
+    url: http://localhost:9020
+  threecPayment:
+    name: threecPayment
+    url: http://localhost:9022
+  worldline:
+    name: worldline
+    url: ${WORLDLINE_HOST:localhost:9002}/PIRestAPI
+  pibaaccount:
+    name: pibaaccount
+    url: ${PIBA_ACCOUNT_URL:localhost:9003}
+
+auth:
+  token:
+    providers:
+      - domain: http://localhost
+        host: http://localhost:${wiremock.server.port:1}
+        # The slash here seems to be required to match auth generated token
+        issuer: http://localhost/
+      - domain: http://localhost
+        host: http://localhost:${wiremock.server.port:1}
+        # The slash here seems to be required to match auth generated token
+        issuer: http://localhost/
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: /oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: http://localhost
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: dummy-key
+
+spring:
+  cache:
+    type: none
+
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    uk.co.whitbread: debug
+    feign: debug
+  configuration:
+    logger: default
+
+worldline:
+  clientMessageId: '{a6173aca-ea66-48e6-8ce2-4e04f1d4b628}'
+  cultureCode: en-GB
+  host: http://localhost:${wiremock.server.port:0}
+  piba:
+    username: gbtest
+    password: gbtest
+    service:
+      url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+  gb:
+    clientMessageId: '{gb-client-message-id}}'
+    cultureCode: en-GB
+    username: gbtest
+    password: gbtest
+    url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+  de:
+    clientMessageId: '{de-client-message-id}'
+    cultureCode: de-DE
+    username: detest
+    password: detest
+    url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+  tetheringPlus:
+    enabled: true
+
+feature-flags:
+  cdh-delay:
+    key: "test_pi_ccui_bb_web1_cdh_delay"
+    fallback: false
+  company-name-validation:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false
+  cdh-api-deprecation:
+    key: "release_pi_cdh_api_deprecation"
+    fallback: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'

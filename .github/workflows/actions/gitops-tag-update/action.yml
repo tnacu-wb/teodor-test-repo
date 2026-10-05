@@ -1,0 +1,49 @@
+name: Update GitOps image tag
+description: Update an application image tag in the deployment-state repository.
+
+inputs:
+  app-name:
+    description: Application key in releases.yaml.
+    required: true
+  image-tag:
+    description: Image tag to write into GitOps state.
+    required: true
+  github-app-id:
+    description: GitHub App ID with access to the GitOps repository.
+    required: true
+  github-app-private-key:
+    description: GitHub App private key with access to the GitOps repository.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Generate GitHub App token
+      id: token
+      uses: actions/create-github-app-token@v3
+      with:
+        client-id: ${{ inputs.github-app-id }}
+        private-key: ${{ inputs.github-app-private-key }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: write
+
+    - name: Check out deployment state
+      uses: actions/checkout@v7
+      with:
+        repository: whitbread-eos/microservices-gitops
+        ref: releases-opera-dev
+        token: ${{ steps.token.outputs.token }}
+        fetch-depth: 0
+        path: gitops
+
+    - name: Update image tag
+      uses: mikefarah/yq@1b9b4ac5187171d2e5e3129be0cfa827c7f9d53d # v4.53.3
+      with:
+        cmd: tag="${{ inputs.image-tag }}" yq -i ".${{ inputs.app-name }}.tag = env(tag)" gitops/release-opera-dev/releases.yaml
+
+    - name: Commit deployment-state update
+      uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
+      with:
+        repository: gitops
+        commit_message: "chore(bot): Update releases.yaml"
+        branch: releases-opera-dev

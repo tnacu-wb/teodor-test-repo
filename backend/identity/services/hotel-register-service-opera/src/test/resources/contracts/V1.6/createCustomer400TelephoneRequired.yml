@@ -1,0 +1,88 @@
+description: Creating a new business customer with Telephone omitted should result in 400 error.
+request:
+  method: POST
+  url: /customers/hotels
+  headers:
+    Content-Type: application/json
+  queryParameters: {
+      "business": "true"
+  }
+  body:
+      {
+       "paymentPreference": {
+         "paymentCard": {
+           "expiryDate": "01/21",
+           "cardHolderName": "R Johnson",
+           "useExistingCard": "true",
+           "issueNumber": "1",
+           "cardType": "VI",
+           "additionalProperties": {
+
+           },
+           "cardNumber": "4444333322221111",
+           "startDate": "01/15"
+         }
+       },
+       "password": "Hello123",
+       "contactDetail": {
+         "firstName": "Rachel",
+         "lastName": "Johnson",
+         "address": {
+           "line5": "Reading",
+           "line4": "READING",
+           "countryCode": "GB",
+           "companyName": "WhitBread94360856Ltd",
+
+           "postCode": "HA1 6QQ",
+           "type": "BUSINESS",
+           "line1": "9",
+           "line3": "New Street"
+         },
+         "mobile": "7770123456",
+         "title": "Mr",
+         "email": "Rachel.Johnson22818484@amadeus.com",
+         "nationality": "GB",
+         "carRegistration": "EY07PXT",
+         "dialingCode": "001",
+         "passport": {
+           "number": "3139653",
+           "countryOfIssue": "GB"
+         }
+       },
+       "bookingPreference": {
+         "foodPreference": "0",
+         "roomRequirements": {
+           "cotRequired": "false",
+           "hotelBrand": "PI",
+           "roomNumber": "101",
+           "children": "2",
+           "lettingType": "string",
+           "adults": "2",
+           "smoking": "false",
+           "additionalProperties": {
+
+           },
+           "type": "FAM"
+         },
+         "reason": "LEISURE",
+         "wantSmsConfirmations": "false",
+         "additionalProperties": {
+
+         }
+       },
+       "approxAnnualUKHotelSpend": "5",
+       "companyName": "WhitBread94360856Ltd",
+       "alternativeName": "company"
+     }
+response:
+  status: 400
+  headers:
+    Content-Type: application/json
+  body:
+      {
+        "code": "053",
+        "details": [
+          "telephone may not be empty",
+        ]
+      }
+

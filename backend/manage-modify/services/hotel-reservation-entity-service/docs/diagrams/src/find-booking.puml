@@ -1,0 +1,61 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant BasketOutPort as BasketOutPort
+participant HotelReservationOutPort as HotelReservationOutPort
+participant OhipOutPort as OhipOutPort
+participant ContentOutPort as ContentOutPort
+participant ContentClient as ContentClient
+participant BasketWebClient as BasketWebclient
+participant OhipAdapterClient as OhipAdapterClient
+participant HotelReservationWebClient as HotelReservationWebclient
+entity "Basket Service" as BSK
+entity "OHIP Adapter Service" as OHIPAdapter
+entity "Ohip Adapter Service" as OhipAdapter
+entity "Content Service" as ContentService
+entity "Opera" as Opera
+
+A -> Controller: POST /v1/reservations/find\n?resNo={{resNo}}\n&&arrivalDate={{arrivalDate}}\n&&lastName={{lastName}}
+Controller -> InboundPort: findBooking
+
+alt resNo is basket reference case
+    InboundPort -> BasketOutPort: getBasketByReference
+    BasketOutPort -> BasketWebclient: getBasketByReference
+    BasketWebclient -> BSK: GET /v1/baskets/{resNo}
+    BasketWebclient <- BSK: Basket with resNo, hotelId
+    BasketOutPort <- BasketWebclient: Basket with resNo, hotelId
+    InboundPort <- BasketOutPort: Basket with resNo, hotelId
+    InboundPort -> OhipOutPort: getReservationsByIds
+    OhipOutPort -> OHIPAdapter: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+    OHIPAdapter -> OhipAdapter
+    OhipAdapter -> Opera
+    OhipAdapter <- Opera
+    OHIPAdapter <- OhipAdapter
+    OhipOutPort <- OHIPAdapter: ReservationByBasketRefResponseDto
+    InboundPort -> OhipOutPort: ReservationByBasketRefResponse
+    alt reservationStatus = CANCELLED_STATUS & BasketStatus = CANCELLED
+        InboundPort -> BasketOutPort: cancelBasket
+        BasketOutPort -> BasketWebclient: cancelBasket
+        BasketWebclient -> BSK: PUT /v1/baskets/{basket-reference}/cancel
+    end
+    alt requestMatchesOperaResDetails
+    InboundPort -> ContentOutPort: getIndexHeaderData
+    ContentOutPort -> ContentClient: getIndexHeaderData
+    ContentClient -> ContentService: /v1/content/header/data
+    ContentClient <- ContentService: IndexHeaderDataDto
+    ContentOutPort <- ContentClient: IndexHeaderDataDto
+    InboundPort <- ContentOutPort: IndexHeaderData:dashboardRedirect
+    end
+else resNo is opera id
+    InboundPort ->  HotelReservationOutPort : getReservationsByExternalId
+    HotelReservationOutPort -> OhipAdapterClient: sendGetReservationsByExternalReferenceId
+    OhipAdapterClient -> OHIPAdapter: GET /v1/reservations/external?externalId=={resNo}
+    OhipAdapterClient <- OHIPAdapter: ReservationsDetailsResponse with reservationId
+    HotelReservationOutPort <- OhipAdapterClient: Opera Reservation with resNo
+    InboundPort <- HotelReservationOutPort: Reservation details response with resNo
+end
+
+Controller <- InboundPort: FindBookingResponse
+A <- Controller: FindBookingResponseDto
+@enduml

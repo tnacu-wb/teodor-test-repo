@@ -1,0 +1,20 @@
+@startuml
+entity "PMS Adapter Service" as PMS
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant HotelReservationOutPort as OutboundPort
+participant OhipReservationClient as OhipClient
+entity OPERA
+
+PMS -> Controller: GET adp/v1/reservations/external?externalReferenceId={{externalReferenceId}}
+Controller -> InboundPort: getReservationsByExternalId
+InboundPort -> OutboundPort: getReservationsByExternalId
+OutboundPort -> OhipClient: getReservationsByExternalId
+OhipClient -> OPERA: GET {host}/rsv/v1/reservations?externalReferenceIds={{externalReferenceIds}}&fetchInstructions=Reservation
+
+OhipClient <- OPERA: Reservations Details
+OutboundPort <- OhipClient: Reservations Details
+InboundPort <- OutboundPort: Reservations Details
+Controller <- InboundPort: Reservations Details
+PMS <- Controller: Reservations Details
+@enduml

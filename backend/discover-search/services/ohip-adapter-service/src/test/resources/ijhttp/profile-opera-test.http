@@ -1,0 +1,39 @@
+POST http://localhost:8080/oauth/v1/tokens
+
+> {%
+
+  client.test("OAuth Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+
+  client.test("OAuth Response content-type is json", function() {
+    var type = response.contentType.mimeType;
+    client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+  });
+
+%}
+
+###
+GET http://localhost:9100/ohip/v1/profile/companies?hotelId=HEAPTI&limit=10
+
+> {%
+  client.test("Companies Profile Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+
+  client.test("Companies Profile Response content-type is json", function() {
+    var type = response.contentType.mimeType;
+    client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+  });
+
+  client.test("Companies Profile contains GICON-Großmann Ingenieur Consult GmbH", function() {
+    client.assert(response.body.companies[0].name === "GICON-Großmann Ingenieur Consult GmbH");
+  });
+
+%}
+
+
+
+
+
+

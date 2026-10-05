@@ -1,0 +1,95 @@
+server:
+  port: 9137
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+spring:
+  datasource:
+    username: sa
+    password: sa
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;INIT=create schema IF NOT EXISTS PROMOTIONS;
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      platform: h2
+      mode: always
+  liquibase:
+    change-log: classpath:sql/liquibase/db.changelog-master.xml
+    enabled: false
+    default-schema: promotions
+    liquibase-schema: promotions
+
+copy-datasource:
+  enabled: true
+  username: sa
+  password: sa
+  url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;INIT=create schema IF NOT EXISTS PROMOTIONS;
+
+app:
+  batch-recovery:
+    enabled: true
+
+promo:
+  canary:
+    log:
+      errorRate: 0
+      warnRate: 0
+    delay:
+      p50: 0
+      p95: 0
+      p99: 0
+    successRate: 1
+
+config:
+  httpClient:
+    connectionTimeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+    responseTimeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  service:
+    ohip:
+      host: http://${OHIP_HOST:localhost:9100}/ohip
+      promotionsEndpoint: "/promotions"
+
+promo-config:
+  prefix-length: 3
+  min-code-suffix-length: 3
+  max-code-suffix-length: 8
+  max-batch-size: 100
+
+irsa:
+  enabled: true
+
+aws:
+  s3:
+    maxRetry: ${AWS_S3_MAX_RETRY:2}
+    validForMinutes: ${AWS_S3_VALID_FOR_MINUTES:5}
+    promoBucketName: ${AWS_S3_PROMO_BUCKET_NAME:promotion-code-dev}
+    region: ${AWS_REGION:eu-west-1}
+
+main:
+  allow-bean-definition-overriding: true
+
+promo-service:
+  batch:
+    # daily at 1 am
+    refresh: "0 0 1 * * ?"
+  scheduler:
+    enabled: true
+
+feature-flags:
+  batch-eligibility-check:
+    key: "release_batch_eligibility_check"
+    fallback: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    api-url: 'http://localhost:4242/api'
+    api-token: 'test-token'
+    environment: unit-test

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/hotel_details_rate_room_label"
+            style="@style/Header2Bold"
+            android:maxLines="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/hotel_details_room_find_out_more"
+            android:textColor="@color/black"
+            tools:text="@string/hotel_details_standard_rooms_heading" />
+
+        <TextView
+            android:id="@+id/hotel_details_room_find_out_more"
+            style="@style/Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/hotel_details_rate_room_label"
+            android:layout_alignParentEnd="true"
+            android:background="?selectableItemBackground"
+            android:lineSpacingExtra="0sp"
+            android:padding="@dimen/generic_padding_4"
+            android:text="@string/hotel_details_room_find_out_more"
+            android:textColor="@color/premier_inn_purple" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/hotel_details_price_box_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/price_box_layout" />
+</LinearLayout>

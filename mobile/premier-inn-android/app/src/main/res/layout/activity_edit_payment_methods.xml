@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/tv_about_version_name"
+            style="@style/Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:textColor="@android:color/white" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/generic_margin_16"
+                android:background="@color/white"
+                android:elevation="@dimen/generic_elevation_1"
+                android:orientation="vertical">
+
+                <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                    android:id="@+id/edit_payment_methods_gdpr_top_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/generic_margin_16"
+                    android:background="@drawable/shape_grey_stroke_white_background"
+                    android:minLines="3"
+                    android:padding="@dimen/generic_padding_16"
+                    android:src="@drawable/ic_lock_outline_white"
+                    app:iconTintColor="@color/teal" />
+
+                <com.whitbread.premierinn.common.view.InfoBannerView
+                    android:id="@+id/edit_payment_methods_none_stored_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_payment_methods_none_stored_banner_text"
+                    android:visibility="gone" />
+
+                <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                    android:id="@+id/edit_payment_methods_add_new_card_synch_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/generic_padding_16"
+                    android:layout_margin="@dimen/generic_margin_16"
+                    android:background="@drawable/information_notification_background"
+                    android:src="@drawable/ic_info"
+                    android:text="@string/add_new_card_synch_info_message"
+                    tools:text="@string/add_new_card_synch_info_message"
+                    app:iconTintColor="@color/teal"/>
+            </LinearLayout>
+
+
+            <com.whitbread.premierinn.common.view.CardHolderAddressComponentView
+                android:id="@+id/edit_payment_methods_cardholder_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <com.whitbread.premierinn.paymentmethods.MyAccountAddNewCardPaymentComponentsView
+                android:id="@+id/add_new_card_payment_component"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/generic_margin_16"
+                android:layout_marginBottom="@dimen/generic_margin_16"
+                android:visibility="gone" />
+
+
+            <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                android:id="@+id/edit_payment_methods_cta"
+                style="@style/Button1"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginStart="@dimen/generic_margin_24"
+                android:layout_marginTop="@dimen/generic_margin_40"
+                android:layout_marginEnd="@dimen/generic_margin_24"
+                android:layout_marginBottom="@dimen/generic_margin_24"
+                android:text="@string/save_changes_label"
+                app:cab_background_color="?attr/colorPrimary"
+                app:cab_spinner_color="@color/white"
+                app:cab_text_color="@android:color/white" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

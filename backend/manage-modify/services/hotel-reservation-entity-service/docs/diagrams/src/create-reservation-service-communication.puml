@@ -1,0 +1,10 @@
+@startuml
+entity "Reservation Entity Service" as A
+entity "OHIP Adapter Service" as OHIP
+entity "OHIP Adapter Service" as OHIP
+
+A -> OHIP: POST adp/v1/reservations
+OHIP -> OHIP: POST ohip/v1/reservations
+OHIP <- OHIP: ReservationResponse
+A <- OHIP: ReservationResponse
+@enduml

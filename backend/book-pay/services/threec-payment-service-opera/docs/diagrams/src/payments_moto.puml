@@ -1,0 +1,24 @@
+@startuml
+actor "GDS/Contact Centre" as GDS
+entity BART
+
+box "3C Payment MS"
+    boundary "Create Payment" as PE
+end box
+
+entity 3C
+
+GDS -> BART
+BART -> PE: Create Payment request
+group if booking.type=PAY_NOW
+    PE -> 3C: Transaction request - **serviceAction: payrequestnocardread**
+end group
+group if booking.type=PAY_ON_ARRIVAL
+    PE -> 3C: Transaction request - **serviceAction: authoriserequestnocardread**
+end group
+3C -> PE: Transaction response
+
+PE -> BART: Create Payment response
+BART -> GDS
+
+@enduml

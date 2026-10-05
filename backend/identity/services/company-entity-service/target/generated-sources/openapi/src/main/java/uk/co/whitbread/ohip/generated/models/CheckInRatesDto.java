@@ -1,0 +1,97 @@
+package uk.co.whitbread.ohip.generated.models;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.lang.Nullable;
+import uk.co.whitbread.ohip.generated.models.CheckInRateDto;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * CheckInRatesDto
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-08-25T07:50:12.143180+03:00[Europe/Bucharest]", comments = "Generator version: 7.12.0")
+public class CheckInRatesDto {
+
+  @Valid
+  private List<@Valid CheckInRateDto> rate = new ArrayList<>();
+
+  public CheckInRatesDto rate(List<@Valid CheckInRateDto> rate) {
+    this.rate = rate;
+    return this;
+  }
+
+  public CheckInRatesDto addRateItem(CheckInRateDto rateItem) {
+    if (this.rate == null) {
+      this.rate = new ArrayList<>();
+    }
+    this.rate.add(rateItem);
+    return this;
+  }
+
+  /**
+   * Get rate
+   * @return rate
+   */
+  @Valid 
+  @Schema(name = "rate", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("rate")
+  public List<@Valid CheckInRateDto> getRate() {
+    return rate;
+  }
+
+  public void setRate(List<@Valid CheckInRateDto> rate) {
+    this.rate = rate;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    CheckInRatesDto checkInRatesDto = (CheckInRatesDto) o;
+    return Objects.equals(this.rate, checkInRatesDto.rate);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(rate);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class CheckInRatesDto {\n");
+    sb.append("    rate: ").append(toIndentedString(rate)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+

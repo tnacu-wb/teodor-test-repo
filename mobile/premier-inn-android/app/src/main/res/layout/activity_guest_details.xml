@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_guest_details_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:id="@+id/sv_guest_details_form_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/ll_guest_details_booker_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/generic_margin_16"
+                    android:background="@android:color/white"
+                    android:elevation="@dimen/generic_elevation_2"
+                    android:paddingBottom="@dimen/generic_padding_10">
+
+                    <com.whitbread.premierinn.guestdetails.view.GuestDetailsFormView
+                        android:id="@+id/gdfv_guest_details_form_booker_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/guest_details_gdpr_top_info"
+                        android:layout_marginStart="@dimen/generic_margin_16"
+                        android:layout_marginEnd="@dimen/generic_margin_16"
+                        android:layout_marginBottom="@dimen/generic_margin_8"
+                        android:descendantFocusability="beforeDescendants"
+                        android:focusableInTouchMode="true"
+                        app:gdfv_show_contact_number="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/white"
+                            android:elevation="@dimen/generic_elevation_2"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/Header3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/generic_margin_44"
+                                android:text="@string/guest_details_address_section_title"
+                                android:textColor="?attr/colorPrimary" />
+
+                            <com.whitbread.premierinn.common.view.ToggleButtonView
+                                android:id="@+id/tbv_guest_details_address_home_work"
+                                style="@style/BodySmall"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/generic_margin_20"
+                                app:tbv_start_selected="true"
+                                app:tbv_text_left="@string/guest_details_address_toggle_button_home"
+                                app:tbv_text_right="@string/guest_details_address_toggle_button_work" />
+
+                            <com.whitbread.premierinn.common.view.AddressFormView
+                                android:id="@+id/afv_guest_details_address_form"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/generic_margin_8" />
+
+                        </LinearLayout>
+                    </com.whitbread.premierinn.guestdetails.view.GuestDetailsFormView>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_guest_details_lead_guest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:elevation="@dimen/generic_elevation_2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Header3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/generic_margin_16"
+                        android:layout_marginTop="@dimen/generic_margin_16"
+                        android:layout_marginEnd="@dimen/generic_margin_16"
+                        android:text="@string/lead_guest_details"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/generic_margin_12"
+                        android:layout_marginBottom="@dimen/generic_margin_24">
+
+                        <TextView
+                            android:id="@+id/premierInnSansTextView"
+                            style="@style/BodySmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="@dimen/generic_margin_16"
+                            android:layout_marginEnd="@dimen/generic_margin_16"
+                            android:text="@string/guest_details_lead_guest_not_staying" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sc_guest_details_booking_not_staying"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginLeft="@dimen/generic_margin_16"
+                            android:layout_marginRight="@dimen/generic_margin_16"
+                            app:showText="false"
+                            app:switchMinWidth="60dp" />
+
+                        <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                            android:id="@+id/guest_details_gdpr_sharing_guest_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/sc_guest_details_booking_not_staying"
+                            android:layout_marginStart="@dimen/generic_margin_16"
+                            android:layout_marginTop="@dimen/generic_margin_8"
+                            android:layout_marginEnd="@dimen/generic_margin_16"
+                            android:background="@drawable/shape_grey_stroke_white_background"
+                            android:padding="@dimen/generic_margin_16"
+                            android:paddingBottom="@dimen/generic_padding_18"
+                            android:src="@drawable/ic_lock_outline_white"
+                            android:visibility="gone"
+                            app:iconTintColor="@color/teal" />
+                    </RelativeLayout>
+
+                    <com.whitbread.premierinn.guestdetails.adapter.RoomGuestDetailsView
+                        android:id="@+id/rgdv_guest_details_room"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/generic_margin_16"
+                        android:layout_marginEnd="@dimen/generic_margin_16" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_guest_details_leisure_business_choice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:elevation="@dimen/generic_elevation_2"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/generic_margin_8"
+                    android:layout_marginBottom="@dimen/generic_margin_16"
+                    android:paddingBottom="@dimen/generic_padding_12">
+
+                    <TextView
+                        style="@style/Header3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/generic_margin_16"
+                        android:text="@string/guest_details_trip_type_label"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <com.whitbread.premierinn.common.view.GuestDetailsTripTypeView
+                        android:id="@+id/trip_type_section_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/generic_margin_16"
+                        android:layout_marginEnd="@dimen/generic_margin_16"
+                        android:layout_marginBottom="@dimen/generic_margin_8"/>
+
+                    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                        android:id="@+id/guest_details_city_tax_permanent_banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        android:paddingTop="@dimen/generic_margin_12"
+                        android:paddingBottom="@dimen/generic_margin_12"
+                        android:paddingStart="@dimen/generic_margin_16"
+                        android:paddingEnd="@dimen/generic_margin_16"
+                        android:layout_marginStart="@dimen/generic_margin_16"
+                        android:layout_marginTop="@dimen/generic_margin_8"
+                        android:layout_marginEnd="@dimen/generic_margin_16"
+                        android:background="@drawable/alert_notification_background"
+                        android:src="@drawable/notifications_alert"
+                        tools:text="@string/guest_details_work_exempt_message"/>
+
+                    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                        android:id="@+id/guest_details_city_tax_toggle_banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:paddingTop="@dimen/generic_margin_12"
+                        android:paddingBottom="@dimen/generic_margin_12"
+                        android:paddingStart="@dimen/generic_margin_16"
+                        android:paddingEnd="@dimen/generic_margin_16"
+                        android:layout_marginStart="@dimen/generic_margin_16"
+                        android:layout_marginTop="@dimen/generic_margin_8"
+                        android:layout_marginEnd="@dimen/generic_margin_16"
+                        android:background="@drawable/information_notification_background"
+                        android:src="@drawable/ic_info"
+                        tools:text="@string/guest_details_business_trip_without_city_tax_info"
+                        app:iconTintColor="@color/teal" />
+                </LinearLayout>
+
+                <com.whitbread.premierinn.reviewbooking.view.CreateAccountView
+                    android:id="@+id/guest_details_create_account_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/generic_margin_8"
+                    android:layout_marginBottom="@dimen/generic_margin_8"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/ll_guest_details_email_marketing"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/generic_margin_16"
+                    android:layout_marginBottom="@dimen/generic_margin_16"
+                    android:background="@android:color/white"
+                    android:elevation="@dimen/generic_elevation_2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Header3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/generic_margin_16"
+                        android:layout_marginTop="@dimen/generic_margin_24"
+                        android:text="@string/create_account_email_marketing_label"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/BodySmall"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:layout_marginStart="@dimen/generic_margin_16"
+                            android:layout_marginBottom="@dimen/generic_margin_24"
+                            android:text="@string/create_account_email_marketing_message" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sb_guest_details_marketing_details"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="@dimen/generic_margin_16"
+                            android:layout_marginBottom="@dimen/generic_margin_16"
+                            app:showText="false"
+                            app:switchMinWidth="60dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                    android:id="@+id/cta_guest_details_continue"
+                    style="@style/Button1"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="@dimen/generic_margin_18"
+                    android:layout_marginTop="@dimen/generic_margin_28"
+                    android:layout_marginEnd="@dimen/generic_margin_18"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/generic_padding_12"
+                    android:paddingEnd="@dimen/generic_padding_12"
+                    app:cab_spinner_color="@color/white"
+                    android:text="@string/continue_to_payment" />
+
+                <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                    android:id="@+id/guest_details_gdpr_bottom_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/generic_margin_16"
+                    app:alignTextCenter="true" />
+            </LinearLayout>
+
+        </ScrollView>
+
+        <FrameLayout
+            android:id="@+id/fl_progress_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ProgressBar
+                android:id="@+id/pb_address_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

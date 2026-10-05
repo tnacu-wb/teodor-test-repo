@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        style="@style/NavTitle1"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/default_medium_margin">
+
+            <com.whitbread.premierinn.common.view.roomtype.RoomTypeView
+                android:id="@+id/option_double"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:backgroundDrawable="@drawable/accessible_room_option_bg"
+                app:description="@string/room_dialog_activity_double_description"
+                app:foregroundColor="@color/grey_dark"
+                app:icon="@drawable/ic_double_room"
+                app:name="@string/room_dialog_activity_double" />
+
+            <com.whitbread.premierinn.common.view.roomtype.RoomTypeView
+                android:id="@+id/option_single"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_medium_margin"
+                app:backgroundDrawable="@drawable/accessible_room_option_bg"
+                app:description="@string/room_dialog_activity_single_description"
+                app:foregroundColor="@color/grey_dark"
+                app:icon="@drawable/ic_single_room"
+                app:name="@string/room_dialog_activity_single" />
+
+            <com.whitbread.premierinn.common.view.roomtype.RoomTypeView
+                android:id="@+id/option_twin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_medium_margin"
+                app:backgroundDrawable="@drawable/accessible_room_option_bg"
+                app:description="@string/room_dialog_activity_twin_description"
+                app:foregroundColor="@color/grey_dark"
+                app:icon="@drawable/ic_twin_room"
+                app:name="@string/room_dialog_activity_twin" />
+
+            <com.whitbread.premierinn.common.view.roomtype.RoomTypeView
+                android:id="@+id/option_family"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_medium_margin"
+                app:backgroundDrawable="@drawable/accessible_room_option_bg"
+                app:description="@string/room_dialog_activity_family_description"
+                app:foregroundColor="@color/grey_dark"
+                app:icon="@drawable/ic_family_room"
+                app:name="@string/room_dialog_activity_family" />
+
+            <com.whitbread.premierinn.common.view.roomtype.RoomTypeView
+                android:id="@+id/option_accessible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_medium_margin"
+                app:backgroundDrawable="@drawable/accessible_room_option_bg"
+                app:description="@string/room_dialog_activity_accessible_description"
+                app:foregroundColor="@color/grey_dark"
+                app:icon="@drawable/ic_accessible_room"
+                app:name="@string/room_dialog_activity_accessible" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

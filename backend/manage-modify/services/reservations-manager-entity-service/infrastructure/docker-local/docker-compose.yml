@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:4.14.0
+    environment:
+      - DEBUG=1
+      - USE_SSL=0
+      - AWS_CBOR_DISABLE=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOSTNAME=localstack
+      - SERVICES=s3
+      - AWS_DEFAULT_REGION=eu-west-1
+      - AWS_ACCESS_KEY_ID=foo
+      - AWS_SECRET_ACCESS_KEY=bar
+    ports:
+      - '4566-4583:4566-4583'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+
+  redis:
+    image: "redis:alpine"
+    command: redis-server
+    ports:
+      - "6379:6379"
+    #volumes:
+    #  - $PWD/redis-data:/var/lib/redis
+    #  - $PWD/redis.conf:/usr/local/etc/redis/redis.conf # - create your file

@@ -1,0 +1,26 @@
+{
+  "id" : "3e2a64bc-c8dd-4dc0-906c-a6ed4d160a4d",
+  "request" : {
+    "urlPath" : "/v1/reservations/preferences",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'TestId')]"
+    }, {
+      "matchesJsonPath" : "$.['reservationsIds'][?(@ == '12345')]"
+    }, {
+      "matchesJsonPath" : "$.['preferencesCollections'][*][?(@.['preferenceType'] == 'EVENTS')]"
+    }, {
+      "matchesJsonPath" : "$.['preferencesCollections'][*].['preferences'][?(@ == 'BDAY')]"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "3e2a64bc-c8dd-4dc0-906c-a6ed4d160a4d"
+}

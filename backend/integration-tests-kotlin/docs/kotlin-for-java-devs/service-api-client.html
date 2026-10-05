@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inside ServiceApiClient</title>
+<style>
+  :root {
+    --paper: #FFF0E5;
+    --surface: #FFFFFF;
+    --surface-2: #F6E5D5;
+    --ink: #10162F;
+    --ink-soft: #585E74;
+    --line: #E8D5C3;
+    --border: #10162F;
+    --accent: #3A10E5;
+    --accent-soft: #FFFAE5;
+    --java: #6E4A00;
+    --java-soft: #FFD300;
+    --code-bg: #10162F;
+    --code-ink: #EDEFFB;
+    --code-kw: #FFD300;
+    --code-str: #6FE0B2;
+    --code-type: #A8C3FF;
+    --code-cmt: #7E86A5;
+    --on-accent: #FFFFFF;
+    --good: #2E6B3E;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #10162F;
+      --surface: #1A2141;
+      --surface-2: #262E55;
+      --ink: #EFF1FB;
+      --ink-soft: #9AA1C0;
+      --line: #2A3158;
+      --border: #4A528F;
+      --accent: #A09CFF;
+      --accent-soft: #2B2508;
+      --java: #E8C05A;
+      --java-soft: #5C4D00;
+      --code-bg: #0A0E24;
+      --code-ink: #E8EBF8;
+      --on-accent: #10162F;
+      --good: #7FBE8F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0C102A;
+    --surface: #151A3A;
+    --surface-2: #232A56;
+    --ink: #EFF1FB;
+    --ink-soft: #9AA1C0;
+    --line: #262D58;
+    --border: #454E8F;
+    --accent: #8D9CFF;
+    --accent-soft: #232B63;
+    --java: #E8C05A;
+    --java-soft: #3A3113;
+    --code-bg: #0A0E24;
+    --code-ink: #E8EBF8;
+    --good: #7FBE8F;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  .sans { font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  code, pre {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.86em;
+  }
+  p > code, li > code, td > code, h2 > code, h3 > code, dt > code {
+    background: var(--surface-2);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .wrap {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 46rem);
+    gap: 3rem;
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+  @media (max-width: 58rem) {
+    .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    nav.toc { display: none; }
+  }
+
+  header.masthead {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 2.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  h1 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    text-wrap: balance;
+    margin-top: 0.5rem;
+  }
+  .standfirst {
+    margin-top: 0.9rem;
+    max-width: 46rem;
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    padding-top: 2.5rem;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.85rem;
+  }
+  nav.toc .toc-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.6rem;
+  }
+  nav.toc ol { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+  nav.toc a {
+    display: block;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 0.22rem 0.6rem;
+    border-left: 2px solid var(--line);
+  }
+  nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-left-color: var(--accent); }
+  nav.toc ol ol a { padding-left: 1.4rem; font-size: 0.8rem; }
+
+  main { padding-top: 2.5rem; min-width: 0; }
+  main > section + section { margin-top: 3.5rem; }
+  h2 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    padding-top: 0.5rem;
+  }
+  h2 .index {
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    margin-right: 0.4rem;
+  }
+  h3 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+  section > p, section > ul, section > ol { margin-top: 0.9rem; }
+  section li + li { margin-top: 0.35rem; }
+  a { color: var(--accent); }
+
+  /* code panels */
+  .panel {
+    margin-top: 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--code-bg);
+  }
+  .panel-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.4rem 0.6rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .panel-bar .file {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    margin-left: auto;
+    padding-left: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tab {
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    background: none;
+    color: var(--ink-soft);
+    padding: 0.28rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .tab[aria-selected="true"].kt { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .tab[aria-selected="true"].jv { background: var(--java-soft); color: var(--ink); border-color: var(--border); border-radius: 999px; }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .panel pre {
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    color: var(--code-ink);
+    line-height: 1.55;
+  }
+  .panel pre[hidden] { display: none; }
+  .k { color: var(--code-kw); font-weight: 600; }
+  .s { color: var(--code-str); }
+  .t { color: var(--code-type); }
+  .c { color: var(--code-cmt); font-style: italic; }
+  .hl { background: rgba(255, 211, 0, 0.10); display: inline-block; width: 100%; }
+
+  /* feature cards */
+  article.feature {
+    margin-top: 2.2rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--line);
+  }
+  .feature-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem; }
+  .kw-chip {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--java-soft);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+  }
+  .java-analogy {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+  .java-analogy::before { content: "Java nearest thing: "; font-weight: 600; }
+  article.feature > p { margin-top: 0.8rem; }
+
+  details.without {
+    margin-top: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  details.without > summary {
+    cursor: pointer;
+    padding: 0.6rem 0.9rem;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    list-style: none;
+  }
+  details.without > summary::-webkit-details-marker { display: none; }
+  details.without > summary::before { content: "▸ "; color: var(--ink-soft); }
+  details.without[open] > summary::before { content: "▾ "; }
+  details.without > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  details.without .inner { padding: 0 0.9rem 0.9rem; }
+  details.without .inner p { margin-top: 0.5rem; }
+  details.without .panel { margin-top: 0.6rem; }
+
+  /* frame diagram */
+  .frame {
+    margin-top: 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.82rem;
+  }
+  .frame-row { display: flex; align-items: center; gap: 0.8rem; padding: 0.55rem 0.9rem; }
+  .frame-row + .frame-row { border-top: 1px solid var(--line); }
+  .frame-row.supplied { background: var(--accent-soft); }
+  .frame-row.yours { background: var(--surface); }
+  .frame-row .who {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex: 0 0 6.5rem;
+  }
+  .frame-row.supplied .who { color: var(--java); }
+  .frame-row.yours .who { color: var(--ink-soft); }
+  .frame-row .what { min-width: 0; overflow-x: auto; white-space: nowrap; }
+
+  table {
+    margin-top: 1rem;
+    border-collapse: collapse;
+    width: 100%;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.88rem;
+  }
+  th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+  .table-scroll { overflow-x: auto; }
+
+  .callout {
+    margin-top: 1.1rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--java-soft);
+    background: var(--surface);
+    border-radius: 8px;
+  }
+  .callout.warn { border-left-color: var(--java-soft); }
+  .callout p + p { margin-top: 0.5rem; }
+
+  footer.colophon {
+    margin-top: 4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="eyebrow">integration-tests-kotlin · docs for Java developers</p>
+  <h1>Inside ServiceApiClient</h1>
+  <p class="standfirst">
+    Why every typed client sends requests through one class, how to write a new client in
+    five lines per endpoint, and a plain-Java explanation of each Kotlin keyword that makes
+    it work. No Kotlin experience assumed.
+  </p>
+</header>
+
+<div class="wrap">
+
+<nav class="toc sans" aria-label="Contents">
+  <p class="toc-title">Contents</p>
+  <ol>
+    <li><a href="#why">Why this class exists</a></li>
+    <li><a href="#writing">Writing a client</a></li>
+    <li><a href="#rules">The rules that protect it</a></li>
+    <li><a href="#kotlin">Kotlin, feature by feature</a>
+      <ol>
+        <li><a href="#f-ctor">Constructor properties</a></li>
+        <li><a href="#f-default">Default arguments</a></li>
+        <li><a href="#f-expr">Expression bodies</a></li>
+        <li><a href="#f-lambda">Lambdas with receiver</a></li>
+        <li><a href="#f-suspend">suspend</a></li>
+        <li><a href="#f-reified">inline + reified</a></li>
+        <li><a href="#f-crossinline">crossinline</a></li>
+        <li><a href="#f-published">@PublishedApi internal</a></li>
+        <li><a href="#f-null">?. and let</a></li>
+      </ol>
+    </li>
+    <li><a href="#cheatsheet">Cheat sheet</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section id="why">
+  <h2><span class="index">1</span>Why this class exists</h2>
+  <p>
+    Every integration test calls a real service. Each call must do three things the same
+    way, every time:
+  </p>
+  <ul>
+    <li>Send the <code>baggage</code> header with the scenario's <code>wb-test-id</code>.
+        WireMock stubs match on this member. A request without it misses every stub that
+        belongs to your test — or worse, silently consumes another running test's stub.</li>
+    <li>Send and accept JSON.</li>
+    <li>Decode the response into <code>ApiResult&lt;T&gt;</code>, which keeps the raw
+        response, the raw body text, the decoded success body, and the decoded error body
+        together.</li>
+  </ul>
+  <p>
+    We used to repeat those steps by hand in every client method — about six lines of
+    ceremony, thirty times over. Forgetting one line compiled fine and failed at runtime,
+    confusingly. <code>ServiceApiClient</code> ends that: it is the <em>only</em> way a
+    client sends a request, and it supplies the whole frame itself.
+  </p>
+
+  <div class="frame" role="img" aria-label="Diagram: ServiceApiClient supplies the request frame, your method supplies only the endpoint specifics">
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">GET {baseUrl}/ohip/ratePlans</span></div>
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">Accept: application/json</span></div>
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">baggage: wb-test-id=&lt;testId&gt;[, wb-feature-overrides=…]</span></div>
+    <div class="frame-row yours"><span class="who sans">you write</span><span class="what">parameter("hotelId", hotelId)   ← only the endpoint-specific part</span></div>
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">response → ApiResult&lt;RatePlansResponse&gt;</span></div>
+  </div>
+
+  <p>
+    The design goal was stronger than "less duplication": the two historical mistakes are
+    now <strong>impossible to write</strong>. You cannot forget <code>testId</code>,
+    because it is a required parameter of every request verb. You cannot forget
+    <code>ApiResult</code>, because it is the verbs' return type.
+  </p>
+</section>
+
+<section id="writing">
+  <h2><span class="index">2</span>Writing a client</h2>
+  <p>
+    A client class holds one <code>ServiceApiClient</code> and one method per endpoint.
+    The constructor default calls <code>IntegrationTestConfig.serviceApiClient(baseUrl)</code>,
+    which wires the shared evidence-capturing HTTP client, so journeys just write
+    <code>OhipApi()</code>.
+  </p>
+
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">What it replaces</button>
+      <span class="file">clients/ohip/OhipApi.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">class</span> <span class="t">OhipApi</span>(
+    <span class="k">private val</span> http: <span class="t">ServiceApiClient</span> =
+        <span class="t">IntegrationTestConfig</span>.serviceApiClient(<span class="t">IntegrationTestConfig</span>.config.ohipInterfaceBaseUrl),
+) {
+    <span class="k">suspend fun</span> getRatePlans(
+        hotelId: <span class="t">String</span>,
+        testId: <span class="t">String</span>,
+    ): <span class="t">ApiResult</span>&lt;<span class="t">RatePlansResponse</span>&gt; =
+        http.get(<span class="s">"/ohip/ratePlans"</span>, testId) {
+            parameter(<span class="s">"hotelId"</span>, hotelId)
+        }
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="c">// The pre-refactor version of the same method. Every client method</span>
+<span class="c">// repeated this frame; each line was forgettable.</span>
+<span class="k">suspend fun</span> getRatePlans(hotelId: <span class="t">String</span>, testId: <span class="t">String</span>): <span class="t">ApiResult</span>&lt;<span class="t">RatePlansResponse</span>&gt; {
+    <span class="k">val</span> response =
+        client.get(<span class="s">"$baseUrl/ohip/ratePlans"</span>) {
+            accept(<span class="t">ContentType</span>.Application.Json)      <span class="c">// forgettable</span>
+            parameter(<span class="s">"hotelId"</span>, hotelId)
+            headers.append(<span class="t">BAGGAGE_HEADER</span>, scenarioBaggage(testId))  <span class="c">// forgettable, breaks stub matching</span>
+        }
+    <span class="k">return</span> response.toApiResult(json)               <span class="c">// forgettable</span>
+}</code></pre>
+  </div>
+
+  <p>The four verbs cover every current endpoint shape:</p>
+  <div class="table-scroll"><table>
+    <tr><th>Verb</th><th>Use for</th><th>Example</th></tr>
+    <tr><td><code>get</code></td><td>JSON GET</td><td><code>http.get("/v1/companies/$id", testId)</code></td></tr>
+    <tr><td><code>post</code></td><td>JSON POST with a body</td><td><code>http.post("/v1/reservations", request, testId)</code></td></tr>
+    <tr><td><code>put</code></td><td>JSON PUT with a body</td><td><code>http.put("/v1/reservations/ancillaries", request, testId)</code></td></tr>
+    <tr><td><code>getText</code></td><td>Success body kept as raw text</td><td><code>http.getText("/v1/companies/id/$id", testId)</code></td></tr>
+  </table></div>
+  <p>
+    All verbs take an optional <code>featureFlagOverrides</code> map (encoded into the
+    baggage header) and an optional trailing block for endpoint specifics: query
+    parameters via <code>parameter(...)</code>, extra headers via <code>header(...)</code>.
+    <code>SpendingApi</code> uses the block for its <code>WB-Authorization</code> header,
+    for example.
+  </p>
+</section>
+
+<section id="rules">
+  <h2><span class="index">3</span>The rules that protect it</h2>
+  <p>
+    Two hermetic architecture tests in <code>LayerDependencyRulesTest</code> run on every
+    <code>./gradlew&nbsp;test</code>, no Docker needed:
+  </p>
+  <ul>
+    <li><strong>Every public client method takes <code>testId</code>.</strong> A method
+        without it fails the build by name. The check is a substring match on methods that
+        declare an explicit return type.</li>
+    <li><strong>Clients import only from an allowlist.</strong> The allowed Ktor imports
+        are <code>parameter</code> and <code>header</code>. Everything else a client needs
+        — <code>ServiceApiClient</code>, <code>ApiResult</code>,
+        <code>IntegrationTestConfig</code>, models — is named in that same list. A new
+        import prefix fails the build, naming the file and the import. That is how a raw
+        request verb, <code>setBody</code>, or <code>ContentType</code> is kept out: they
+        are not on the list.</li>
+  </ul>
+  <div class="callout warn">
+    <p>
+      <strong>Known limit:</strong> the rules read <em>import statements</em> as text. A
+      fully qualified inline call would slip past them. That is a declared limitation of
+      the whole rule family, not a loophole to use.
+    </p>
+  </div>
+</section>
+
+<section id="kotlin">
+  <h2><span class="index">4</span>Kotlin, feature by feature</h2>
+  <p>
+    <code>ServiceApiClient</code> is about 120 lines but uses most of Kotlin's
+    function-level keywords. Each card below explains one feature: what it is, the nearest Java concept,
+    and — expand the panel — what the code would look like without it. Toggle any code
+    panel between Kotlin and the Java equivalent.
+  </p>
+
+  <article class="feature" id="f-ctor">
+    <div class="feature-head">
+      <h3><span class="kw-chip">val</span> constructor properties</h3>
+      <span class="java-analogy sans">a record, or final fields + constructor + getters</span>
+    </div>
+    <p>
+      Kotlin merges field, constructor parameter, assignment, and getter into one
+      declaration in the class header. <code>val</code> means final; <code>var</code> would
+      mean mutable. There is no separate constructor body to write.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">class</span> <span class="t">ServiceApiClient</span>(
+    @<span class="t">PublishedApi</span> <span class="k">internal val</span> baseUrl: <span class="t">String</span>,
+    @<span class="t">PublishedApi</span> <span class="k">internal val</span> client: <span class="t">HttpClient</span>,
+)</code></pre>
+      <pre data-lang="jv" hidden><code><span class="k">public final class</span> <span class="t">ServiceApiClient</span> {
+    <span class="k">private final</span> <span class="t">String</span> baseUrl;
+    <span class="k">private final</span> <span class="t">HttpClient</span> client;
+
+    <span class="k">public</span> <span class="t">ServiceApiClient</span>(<span class="t">String</span> baseUrl, <span class="t">HttpClient</span> client) {
+        <span class="k">this</span>.baseUrl = baseUrl;
+        <span class="k">this</span>.client = client;
+    }
+    <span class="c">// + two getters</span>
+}</code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-default">
+    <div class="feature-head">
+      <h3><span class="kw-chip">= default</span> default arguments</h3>
+      <span class="java-analogy sans">telescoping constructors, or a builder</span>
+    </div>
+    <p>
+      A parameter can declare its own default value. Callers omit it; there is no overload
+      explosion. This is why journeys can write <code>OhipApi()</code> — the typed client's
+      constructor defaults its <code>ServiceApiClient</code> through the factory — while a
+      unit test can still inject a mock-engine transport, and why every verb call can skip
+      <code>featureFlagOverrides</code> and the trailing block when it has none.
+      Decoding is not a constructor default: every verb calls
+      <code>toApiResult(ServiceJson)</code> (or <code>toTextApiResult(ServiceJson)</code>)
+      so encode and decode cannot silently diverge.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">class</span> <span class="t">OhipApi</span>(
+    <span class="k">private val</span> http: <span class="t">ServiceApiClient</span> =
+        <span class="t">IntegrationTestConfig</span>.serviceApiClient(…),
+)
+
+<span class="k">suspend inline fun</span> &lt;<span class="k">reified</span> <span class="t">T</span> : <span class="t">Any</span>&gt; get(
+    path: <span class="t">String</span>,
+    testId: <span class="t">String</span>,
+    featureFlagOverrides: <span class="t">Map</span>&lt;<span class="k">out</span> <span class="t">BaggageFlag</span>, <span class="t">Boolean</span>&gt; = emptyMap(),
+    <span class="k">crossinline</span> block: <span class="t">HttpRequestBuilder</span>.() -&gt; <span class="t">Unit</span> = {},
+): <span class="t">ApiResult</span>&lt;<span class="t">T</span>&gt;
+
+<span class="c">// call sites — all valid:</span>
+<span class="t">OhipApi</span>()                                      <span class="c">// journeys</span>
+<span class="t">OhipApi</span>(<span class="t">ServiceApiClient</span>(url, mockEngineClient))  <span class="c">// a unit test's transport</span>
+http.get(<span class="s">"/ohip/ratePlans"</span>, testId)            <span class="c">// skip flags and block</span></code></pre>
+      <pre data-lang="jv" hidden><code><span class="c">// Java needs one constructor per shape, delegating down:</span>
+<span class="k">public</span> <span class="t">OhipApi</span>() {
+    <span class="k">this</span>(<span class="t">IntegrationTestConfig</span>.serviceApiClient(<span class="t">IntegrationTestConfig</span>.config.ohipInterfaceBaseUrl));
+}
+<span class="k">public</span> <span class="t">OhipApi</span>(<span class="t">ServiceApiClient</span> http) { … }</code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-expr">
+    <div class="feature-head">
+      <h3><span class="kw-chip">= body</span> expression bodies &amp; string templates</h3>
+      <span class="java-analogy sans">arrow-like shorthand Java methods don't have; String.format / +</span>
+    </div>
+    <p>
+      When a function is one expression, <code>fun f(...): T = expression</code> replaces
+      the <code>{ return ...; }</code> block. Every migrated client method uses this — the
+      whole method is a single call to a verb. Inside strings, <code>"$baseUrl$path"</code>
+      and <code>"${request.hotelId}"</code> splice values directly: Kotlin's version of
+      concatenation, checked by the compiler.
+    </p>
+  </article>
+
+  <article class="feature" id="f-lambda">
+    <div class="feature-head">
+      <h3><span class="kw-chip">T.() -&gt; Unit</span> lambdas with receiver &amp; trailing lambdas</h3>
+      <span class="java-analogy sans">Consumer&lt;T&gt;, but this becomes the T inside</span>
+    </div>
+    <p>
+      The verbs' last parameter is <code>block: HttpRequestBuilder.() -&gt; Unit</code>.
+      Read the type as: "a function that runs <em>as if it were a method of</em>
+      <code>HttpRequestBuilder</code>". Inside the lambda, <code>this</code> is the request
+      builder, so you write <code>parameter("hotelId", hotelId)</code> bare — no
+      <code>b&nbsp;-&gt;&nbsp;b.</code> prefix. And when a lambda is the last argument,
+      Kotlin lets it move outside the parentheses, which is why a call reads like a
+      configuration block.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="c">// these two calls are identical; the second is the idiomatic form</span>
+http.get(<span class="s">"/ohip/ratePlans"</span>, testId, emptyMap(), { parameter(<span class="s">"hotelId"</span>, hotelId) })
+
+http.get(<span class="s">"/ohip/ratePlans"</span>, testId) {
+    parameter(<span class="s">"hotelId"</span>, hotelId)      <span class="c">// 'this' is the HttpRequestBuilder</span>
+}</code></pre>
+      <pre data-lang="jv" hidden><code><span class="c">// Java's closest shape — note the explicit receiver variable:</span>
+http.get(<span class="s">"/ohip/ratePlans"</span>, testId, <span class="t">Map</span>.of(), builder -&gt; {
+    builder.parameter(<span class="s">"hotelId"</span>, hotelId);
+});</code></pre>
+    </div>
+    <details class="without">
+      <summary>Why do we need it here?</summary>
+      <div class="inner">
+        <p>
+          It is the escape hatch that keeps <code>ServiceApiClient</code> from needing a
+          parameter for every possible request feature. The verbs own the invariant part
+          (baggage, JSON, decoding); the block hands you the builder for the variable part
+          (query parameters, the odd extra header). Without it, every new endpoint quirk
+          would grow the verb signatures.
+        </p>
+      </div>
+    </details>
+  </article>
+
+  <article class="feature" id="f-suspend">
+    <div class="feature-head">
+      <h3><span class="kw-chip">suspend</span> coroutines</h3>
+      <span class="java-analogy sans">CompletableFuture / virtual threads, with blocking-style syntax</span>
+    </div>
+    <p>
+      <code>suspend</code> marks a function that can pause at I/O — here, the HTTP call —
+      without blocking a thread. The code still reads top to bottom like blocking code; the
+      compiler does the continuation plumbing that Java expresses with
+      <code>thenCompose</code> chains. One rule matters day to day: a <code>suspend</code>
+      function can only be called from another <code>suspend</code> function (or a
+      coroutine builder). Kotest test bodies are already suspend, so journeys just call
+      client methods directly.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">suspend fun</span> getRatePlans(hotelId: <span class="t">String</span>, testId: <span class="t">String</span>): <span class="t">ApiResult</span>&lt;<span class="t">RatePlansResponse</span>&gt; =
+    http.get(<span class="s">"/ohip/ratePlans"</span>, testId) { parameter(<span class="s">"hotelId"</span>, hotelId) }
+
+<span class="c">// caller (a journey): looks fully synchronous</span>
+<span class="k">val</span> result = <span class="t">OhipApi</span>().getRatePlans(hotelId, testId)</code></pre>
+      <pre data-lang="jv" hidden><code><span class="c">// the async-Java shape this replaces:</span>
+<span class="t">CompletableFuture</span>&lt;<span class="t">ApiResult</span>&lt;<span class="t">RatePlansResponse</span>&gt;&gt; getRatePlans(<span class="t">String</span> hotelId, <span class="t">String</span> testId) {
+    <span class="k">return</span> client.getAsync(url)
+        .thenCompose(response -&gt; decode(response));
+}
+<span class="c">// caller must join() or keep chaining</span></code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-reified">
+    <div class="feature-head">
+      <h3><span class="kw-chip">inline</span> + <span class="kw-chip">reified T</span></h3>
+      <span class="java-analogy sans">what removes Jackson's readValue(json, MyDto.class) token</span>
+    </div>
+    <p>
+      Java generics are erased: inside a method you cannot ask "what is T?", which is why
+      Java JSON APIs make you pass a <code>Class&lt;T&gt;</code>. Kotlin has the same
+      erasure — <em>unless</em> the function is <code>inline</code>. Then the compiler
+      copies the function body into each call site, where the concrete type is known, and
+      <code>reified&nbsp;T</code> lets the body use it. Best of all, T is inferred from the
+      client method's declared return type. This single feature is why client methods can
+      be one expression with no class tokens anywhere.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">suspend inline fun</span> &lt;<span class="k">reified</span> <span class="t">T</span> : <span class="t">Any</span>&gt; get(path: <span class="t">String</span>, testId: <span class="t">String</span>, …): <span class="t">ApiResult</span>&lt;<span class="t">T</span>&gt;
+
+<span class="c">// caller — T = RatePlansResponse is inferred from the return type:</span>
+<span class="k">suspend fun</span> getRatePlans(…): <span class="t">ApiResult</span>&lt;<span class="t">RatePlansResponse</span>&gt; =
+    http.get(<span class="s">"/ohip/ratePlans"</span>, testId) { … }</code></pre>
+      <pre data-lang="jv" hidden><code><span class="c">// erased generics force an explicit token, Jackson-style:</span>
+<span class="k">public</span> &lt;<span class="t">T</span>&gt; <span class="t">ApiResult</span>&lt;<span class="t">T</span>&gt; get(<span class="t">String</span> path, <span class="t">String</span> testId, <span class="t">Class</span>&lt;<span class="t">T</span>&gt; type) { … }
+
+<span class="c">// every caller repeats the type twice:</span>
+<span class="t">ApiResult</span>&lt;<span class="t">RatePlansResponse</span>&gt; result =
+    http.get(<span class="s">"/ohip/ratePlans"</span>, testId, <span class="t">RatePlansResponse</span>.<span class="k">class</span>);</code></pre>
+    </div>
+    <details class="without">
+      <summary>What would the code look like without it?</summary>
+      <div class="inner">
+        <p>
+          Every one of the ~30 client methods would pass a class token (or a serializer)
+          explicitly, exactly like the Java tab above. Compare <code>getText</code> in the
+          real file: its type is fixed at <code>ApiResult&lt;String&gt;</code>, so it needs
+          none of this — no <code>inline</code>, no <code>reified</code>. Reading
+          <code>get</code> and <code>getText</code> side by side shows that the whole
+          keyword pile-up exists to serve <code>reified</code>.
+        </p>
+      </div>
+    </details>
+  </article>
+
+  <article class="feature" id="f-crossinline">
+    <div class="feature-head">
+      <h3><span class="kw-chip">crossinline</span></h3>
+      <span class="java-analogy sans">no equivalent — a compiler-demanded restriction</span>
+    </div>
+    <p>
+      A consequence of <code>inline</code>, not a choice. Inlined lambdas normally allow a
+      bare <code>return</code> that exits the <em>calling</em> function. Our
+      <code>block</code> is not called directly — it is passed <em>into</em> Ktor's own
+      builder lambda — and from that nested context such a return would be meaningless.
+      <code>crossinline</code> declares "this lambda is called from a nested context;
+      forbid non-local returns in it". You never plan for it; the compiler error tells you
+      when it is required.
+    </p>
+  </article>
+
+  <article class="feature" id="f-published">
+    <div class="feature-head">
+      <h3><span class="kw-chip">@PublishedApi</span> <span class="kw-chip">internal</span></h3>
+      <span class="java-analogy sans">module-wide package-private, made visible to inlined code</span>
+    </div>
+    <p>
+      Two things at once. <code>internal</code> is a visibility Java lacks: visible
+      anywhere in this compiled module, invisible outside it — package-private, but for the
+      whole module. Then the wrinkle: an <code>inline</code> function's body is copied into
+      <em>callers'</em> classes, so everything it touches must be visible from there — a
+      public inline function may not read <code>private</code> fields.
+      <code>@PublishedApi internal</code> is the sanctioned middle ground: hidden from
+      humans outside the class, but reachable by inlined code.
+    </p>
+    <details class="without">
+      <summary>What breaks without it?</summary>
+      <div class="inner">
+        <p>
+          Mark <code>client</code> or <code>baseUrl</code> as <code>private</code> and the
+          file stops compiling: "public-API inline function cannot access non-public-API
+          property". The same rule applies to <code>scenarioDefaults</code>, which the
+          verbs call and which is therefore also <code>@PublishedApi internal</code>.
+          Mark them plain <code>public</code> and it compiles, but the class grows public
+          surface that invites <code>http.client.get(...)</code> bypasses. The annotation
+          keeps the narrow waist narrow.
+        </p>
+      </div>
+    </details>
+  </article>
+
+  <article class="feature" id="f-null">
+    <div class="feature-head">
+      <h3><span class="kw-chip">?.</span> <span class="kw-chip">let</span> null-safe calls</h3>
+      <span class="java-analogy sans">if (x != null) { … }, checked by the compiler</span>
+    </div>
+    <p>
+      Not in <code>ServiceApiClient</code> itself, but all over its callers.
+      <code>String?</code> is a type that admits null; plain <code>String</code> does not,
+      and the compiler enforces the difference. <code>x?.let { ... }</code> means "if x is
+      not null, run the block with it". Clients use it for optional query parameters:
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code>country?.let { parameter(<span class="s">"country"</span>, it) }   <span class="c">// 'it' is the unwrapped non-null value</span></code></pre>
+      <pre data-lang="jv" hidden><code><span class="k">if</span> (country != <span class="k">null</span>) {
+    builder.parameter(<span class="s">"country"</span>, country);
+}</code></pre>
+    </div>
+  </article>
+</section>
+
+<section id="cheatsheet">
+  <h2><span class="index">5</span>Cheat sheet</h2>
+  <div class="table-scroll"><table>
+    <tr><th>Kotlin</th><th>One-line meaning</th><th>Java nearest thing</th></tr>
+    <tr><td><code>val x: T</code></td><td>final field/variable</td><td><code>final T x</code></td></tr>
+    <tr><td><code>class C(val x: T)</code></td><td>constructor + field + getter in one</td><td>record / POJO boilerplate</td></tr>
+    <tr><td><code>fun f(x: T = default)</code></td><td>caller may omit x</td><td>telescoping overloads</td></tr>
+    <tr><td><code>fun f(): T = expr</code></td><td>single-expression body</td><td><code>{ return expr; }</code></td></tr>
+    <tr><td><code>"$a$b"</code></td><td>string interpolation</td><td><code>a + b</code></td></tr>
+    <tr><td><code>internal</code></td><td>visible in this module only</td><td>package-private, module-wide</td></tr>
+    <tr><td><code>suspend</code></td><td>can pause at I/O, non-blocking</td><td>CompletableFuture / virtual threads</td></tr>
+    <tr><td><code>inline</code></td><td>body copied into call sites</td><td>—</td></tr>
+    <tr><td><code>reified T</code></td><td>T survives erasure (needs inline)</td><td><code>Class&lt;T&gt;</code> token parameter</td></tr>
+    <tr><td><code>crossinline</code></td><td>lambda called from nested context; no non-local return</td><td>—</td></tr>
+    <tr><td><code>@PublishedApi</code></td><td>internal member usable by public inline code</td><td>—</td></tr>
+    <tr><td><code>T.() -&gt; Unit</code></td><td>lambda where <code>this</code> is a T</td><td><code>Consumer&lt;T&gt;</code></td></tr>
+    <tr><td><code>x?.let { }</code></td><td>run block only if x non-null</td><td><code>if (x != null)</code></td></tr>
+  </table></div>
+
+  <div class="callout">
+    <p>
+      <strong>Where to read next:</strong> the real code is short —
+      <code>src/main/.../framework/http/ServiceApiClient.kt</code>,
+      <code>ApiResult.kt</code>, and <code>ServiceJson.kt</code> in the same package. The
+      request contract is pinned by
+      <code>src/test/.../framework/http/ServiceApiClientTest.kt</code>; for the rules, see
+      <code>src/test/.../architecture/LayerDependencyRulesTest.kt</code>; for the prose
+      contract, <code>docs/TEST_FRAMEWORK_GUIDE.md</code> §"HTTP Clients And Evidence" and
+      the <code>framework-journey-authoring</code> spec.
+    </p>
+  </div>
+</section>
+
+<footer class="colophon">
+  <p>integration-tests-kotlin · docs/kotlin-for-java-devs · self-contained page, no external assets. Update it when the client contract changes.</p>
+</footer>
+
+</main>
+</div>
+
+<script>
+  document.querySelectorAll('.panel').forEach(panel => {
+    const tabs = panel.querySelectorAll('.tab');
+    const pres = panel.querySelectorAll('pre[data-lang]');
+    if (tabs.length < 2) return;
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+        tab.setAttribute('aria-selected', 'true');
+        const lang = tab.classList.contains('kt') ? 'kt' : 'jv';
+        pres.forEach(pre => { pre.hidden = pre.dataset.lang !== lang; });
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

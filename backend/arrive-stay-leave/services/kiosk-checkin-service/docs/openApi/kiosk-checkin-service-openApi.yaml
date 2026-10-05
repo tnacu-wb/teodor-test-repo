@@ -1,0 +1,525 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- description: Generated server url
+  url: http://localhost:9120
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /v1/kiosk/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/kiosk/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/kiosk/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/kiosk/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /v1/kiosk/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /v1/kiosk/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /v1/kiosk/allocate:
+    post:
+      operationId: allocateController
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomAllocationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AllocationResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - kiosk-controller
+  /v1/kiosk/checkIn:
+    post:
+      operationId: checkInController
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckInRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckInResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - kiosk-controller
+components:
+  schemas:
+    AllocationResponseDto:
+      type: object
+      properties:
+        roomId:
+          type: string
+        status:
+          type: string
+    CardRequestDto:
+      type: object
+      properties:
+        cardSchemeId:
+          type: string
+          minLength: 1
+        cardSchemeName:
+          type: string
+        cardType:
+          type: string
+          minLength: 1
+        cardholderName:
+          type: string
+          minLength: 1
+        cnpRequired:
+          type: boolean
+        expiryMonth:
+          type: string
+          minLength: 1
+        expiryYear:
+          type: string
+          minLength: 1
+        logoUrl:
+          type: string
+        token:
+          type: string
+          minLength: 1
+        type:
+          type: string
+      required:
+      - cardSchemeId
+      - cardType
+      - cardholderName
+      - expiryMonth
+      - expiryYear
+      - token
+    CheckInRequestDto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+        paymentDetails:
+          $ref: "#/components/schemas/PaymentDetailsDto"
+        reservationComments:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReservationCommentsDto"
+        reservationNumber:
+          type: string
+        roomId:
+          type: string
+        roomType:
+          type: string
+        stayingGuestDetails:
+          type: array
+          items:
+            $ref: "#/components/schemas/StayingGuestDetailsDto"
+    CheckInResponseDto:
+      type: object
+      properties:
+        aid:
+          type: string
+        amountPaid:
+          type: number
+        auth:
+          type: string
+        cardExpiry:
+          type: string
+        cardNumber:
+          type: string
+        cardStart:
+          type: string
+        cardType:
+          type: string
+        cvm:
+          type: string
+        entryType:
+          type: string
+        merchantID:
+          type: string
+        numberOfKeys:
+          type: integer
+          format: int32
+        panSeqNum:
+          type: string
+        roomNumber:
+          type: string
+        status:
+          type: string
+        terminalID:
+          type: string
+        transaction:
+          type: string
+        transactionDate:
+          type: string
+        transactionReferenceNumber:
+          type: string
+        transactionTime:
+          type: string
+        vat:
+          $ref: "#/components/schemas/VatDto"
+        wifiAccessCode:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "001"
+          minLength: 1
+        details:
+          type: array
+          example:
+          - Error message
+          items:
+            type: string
+      required:
+      - code
+      - details
+    GuestAddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressType:
+          type: string
+        cityName:
+          type: string
+        companyName:
+          type: string
+        countryCode:
+          type: string
+        emailAddress:
+          type: string
+        mobileNumber:
+          type: string
+        postalCode:
+          type: string
+        telephoneNumber:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    PaymentDetailsDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        card:
+          $ref: "#/components/schemas/CardRequestDto"
+        offline:
+          type: boolean
+        provider:
+          type: string
+    ReservationCommentsDto:
+      type: object
+      properties:
+        comment:
+          type: string
+        commentType:
+          type: string
+    RoomAllocationRequestDto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+        reservationId:
+          type: string
+        roomId:
+          type: string
+        roomType:
+          type: string
+    StayingGuestDetailsDto:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/GuestAddressDto"
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        nationality:
+          type: string
+        nextDestination:
+          type: string
+        passport:
+          type: string
+        placeOfIssue:
+          type: string
+        title:
+          type: string
+      required:
+      - firstName
+      - lastName
+    VatDto:
+      type: object
+      properties:
+        gross:
+          type: number
+        net:
+          type: number
+        vatMessage:
+          type: string
+        vatNumber:
+          type: string
+        vatRate:
+          type: string

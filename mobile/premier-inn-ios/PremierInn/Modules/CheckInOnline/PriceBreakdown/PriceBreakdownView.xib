@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="PremierInnSans-Regular.ttf">
+            <string>PremierInnSans</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PriceBreakdownView" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="558" height="202"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Evg-IY-1WX">
+                    <rect key="frame" x="16" y="16" width="526" height="136"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I5M-Sa-O28">
+                            <rect key="frame" x="0.0" y="0.0" width="526" height="136"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vui-sD-1Uh">
+                                    <rect key="frame" x="16" y="0.0" width="346" height="24"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="24" id="yCo-Gp-wdw"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="18"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" title="totalValue">
+                                        <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="totalPriceDidTap:" destination="iN0-l3-epB" eventType="touchUpInside" id="mmj-tA-tgR"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PEc-lP-Kkg">
+                                    <rect key="frame" x="0.0" y="28" width="362" height="24"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="24" id="0ba-56-msg"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="14"/>
+                                    <state key="normal" title="Price Breakdown">
+                                        <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="priceBreakdownDidTap:" destination="iN0-l3-epB" eventType="touchUpInside" id="QT5-mu-D8u"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vxe-YI-ngH" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                                    <rect key="frame" x="370" y="0.0" width="156" height="54"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="54" id="4Jn-nF-WJN"/>
+                                        <constraint firstAttribute="width" constant="156" id="tXy-hr-QBH"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" title="Button"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                            <real key="value" value="4"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="continueButtonDidTap:" destination="iN0-l3-epB" eventType="touchUpInside" id="ITK-5r-5Y8"/>
+                                    </connections>
+                                </button>
+                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="geu-L4-y1Q">
+                                    <rect key="frame" x="438" y="17" width="20" height="20"/>
+                                </activityIndicatorView>
+                                <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="roundedDownArrow" translatesAutoresizingMaskIntoConstraints="NO" id="e6t-PI-76v">
+                                    <rect key="frame" x="0.0" y="6" width="12" height="12"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="12" id="KEW-Mb-szf"/>
+                                        <constraint firstAttribute="width" constant="12" id="dUx-SN-8K4"/>
+                                    </constraints>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="Vui-sD-1Uh" firstAttribute="top" secondItem="I5M-Sa-O28" secondAttribute="top" id="0jS-O3-1qG"/>
+                                <constraint firstItem="e6t-PI-76v" firstAttribute="leading" secondItem="I5M-Sa-O28" secondAttribute="leading" id="4Xc-0n-iP4"/>
+                                <constraint firstItem="Vui-sD-1Uh" firstAttribute="leading" secondItem="e6t-PI-76v" secondAttribute="trailing" constant="4" id="A6W-ay-Vac"/>
+                                <constraint firstItem="Vxe-YI-ngH" firstAttribute="leading" secondItem="PEc-lP-Kkg" secondAttribute="trailing" constant="8" id="ASk-kJ-9Lx"/>
+                                <constraint firstAttribute="trailing" secondItem="Vxe-YI-ngH" secondAttribute="trailing" id="Btc-Ba-4AC"/>
+                                <constraint firstItem="PEc-lP-Kkg" firstAttribute="top" secondItem="Vui-sD-1Uh" secondAttribute="bottom" constant="4" id="C5U-wY-nxH"/>
+                                <constraint firstAttribute="bottom" secondItem="Vxe-YI-ngH" secondAttribute="bottom" id="LDP-i3-ETV"/>
+                                <constraint firstItem="Vxe-YI-ngH" firstAttribute="centerX" secondItem="geu-L4-y1Q" secondAttribute="centerX" id="cLZ-vA-cR2"/>
+                                <constraint firstItem="e6t-PI-76v" firstAttribute="centerY" secondItem="Vui-sD-1Uh" secondAttribute="centerY" id="okv-cJ-MuF"/>
+                                <constraint firstItem="Vxe-YI-ngH" firstAttribute="centerY" secondItem="geu-L4-y1Q" secondAttribute="centerY" id="p0S-C9-9D2"/>
+                                <constraint firstItem="Vxe-YI-ngH" firstAttribute="top" secondItem="I5M-Sa-O28" secondAttribute="top" id="pZS-gW-fwV"/>
+                                <constraint firstItem="Vxe-YI-ngH" firstAttribute="leading" secondItem="Vui-sD-1Uh" secondAttribute="trailing" constant="8" id="xYF-z2-54s"/>
+                                <constraint firstItem="PEc-lP-Kkg" firstAttribute="leading" secondItem="I5M-Sa-O28" secondAttribute="leading" id="zum-Fd-cWC"/>
+                            </constraints>
+                        </view>
+                        <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="9yY-gt-ZPD">
+                            <rect key="frame" x="0.0" y="0.0" width="526" height="1"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qL3-9S-7pw">
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="1"/>
+                                    <color key="backgroundColor" name="TintL1"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="Ee8-bp-UIV"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" name="TintL5"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Evg-IY-1WX" secondAttribute="bottom" constant="16" id="E4D-bk-AzT"/>
+                <constraint firstAttribute="trailing" secondItem="Evg-IY-1WX" secondAttribute="trailing" constant="16" id="I8e-mM-Jta"/>
+                <constraint firstItem="Evg-IY-1WX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="Q2t-sI-K1F"/>
+                <constraint firstItem="Evg-IY-1WX" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="cJp-Kh-IWQ"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="activityIndicator" destination="geu-L4-y1Q" id="tCc-UD-65g"/>
+                <outlet property="continueButton" destination="Vxe-YI-ngH" id="zob-I9-VlV"/>
+                <outlet property="imageView" destination="e6t-PI-76v" id="gcw-eV-sBJ"/>
+                <outlet property="priceBreakdownButton" destination="PEc-lP-Kkg" id="BKz-Ry-xor"/>
+                <outlet property="separatorView" destination="qL3-9S-7pw" id="exb-MN-Jqz"/>
+                <outlet property="stackView" destination="9yY-gt-ZPD" id="7id-xn-WLL"/>
+                <outlet property="totalButton" destination="Vui-sD-1Uh" id="k9K-Nm-oWR"/>
+            </connections>
+            <point key="canvasLocation" x="262.59541984732823" y="254.22535211267606"/>
+        </view>
+    </objects>
+    <designables>
+        <designable name="Vxe-YI-ngH">
+            <size key="intrinsicContentSize" width="54" height="34"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="roundedDownArrow" width="12" height="7"/>
+        <namedColor name="TintL1">
+            <color red="0.59215686274509804" green="0.59215686274509804" blue="0.59215686274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TintL5">
+            <color red="0.97254901960784312" green="0.97254901960784312" blue="0.97254901960784312" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

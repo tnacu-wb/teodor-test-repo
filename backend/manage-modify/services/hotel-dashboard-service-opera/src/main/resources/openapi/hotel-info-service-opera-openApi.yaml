@@ -1,0 +1,562 @@
+openapi: 3.0.1
+info:
+  description: <p>This Microservice acts mainly as a proxy to AEM.<br/> Please refer
+    to the <a href="https://whitbreadis.atlassian.net/wiki/display/DSA/AEM+endpoints/">AEM
+    documentation</a> for more information about the schema(s)</p>
+  title: Hotel Info API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9018
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /hotel-info-service/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /hotel-info-service/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /hotel-info-service/actuator/health/**:
+    get:
+      operationId: health-path
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health-path'
+      tags:
+      - Actuator
+  /hotel-info-service/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /hotel-info-service/actuator/metrics:
+    get:
+      operationId: metrics
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /hotel-info-service/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metrics-requiredMetricName
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /hotels:
+    get:
+      operationId: getHotelInfo
+      parameters:
+      - in: query
+        name: request
+        required: true
+        schema:
+          $ref: '#/components/schemas/MultiHotelInfoRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiHotelInfoResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      tags:
+      - Hotel Info Controller
+  /hotels/key:
+    get:
+      operationId: getHotelKeyData_1
+      parameters:
+      - in: query
+        name: request
+        required: true
+        schema:
+          $ref: '#/components/schemas/MultiHotelKeyDataRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiHotelKeyDataResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      tags:
+      - Hotel Info Controller
+  /hotels/{hotel-code}:
+    get:
+      operationId: getHotelInfo_1
+      parameters:
+      - in: path
+        name: hotel-code
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: request
+        required: true
+        schema:
+          $ref: '#/components/schemas/HotelInfoRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      tags:
+      - Hotel Info Controller
+  /hotels/{hotel-code}/key:
+    get:
+      operationId: getHotelKeyData
+      parameters:
+      - in: path
+        name: hotel-code
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: request
+        required: true
+        schema:
+          $ref: '#/components/schemas/HotelKeyDataRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelKeyData'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      tags:
+      - Hotel Info Controller
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+      required:
+      - code
+      - details
+    Field:
+      type: object
+      properties:
+        labelKey:
+          type: string
+        name:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+        required:
+          type: boolean
+        type:
+          type: string
+    HotelInfoRequest:
+      type: object
+      properties:
+        country:
+          type: string
+          enum:
+          - GB
+          - DE
+        format:
+          type: string
+          enum:
+          - SHORT
+          - LONG
+        language:
+          type: string
+          enum:
+          - EN
+          - DE
+    HotelKeyData:
+      type: object
+      properties:
+        brand:
+          type: string
+          enum:
+          - HUB
+          - PI
+          - PID
+          - ZIP
+        code:
+          type: string
+        name:
+          type: string
+    HotelKeyDataRequest:
+      type: object
+      properties:
+        language:
+          type: string
+          enum:
+          - EN
+          - DE
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    MultiHotelInfoRequest:
+      type: object
+      properties:
+        country:
+          type: string
+          enum:
+          - GB
+          - DE
+        format:
+          type: string
+          enum:
+          - SHORT
+          - LONG
+        hotelCodes:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+        language:
+          type: string
+          enum:
+          - EN
+          - DE
+    MultiHotelInfoResponse:
+      type: object
+      properties:
+        hotels:
+          type: array
+          items:
+            type: string
+        total:
+          type: integer
+          format: int32
+    MultiHotelKeyDataRequest:
+      type: object
+      properties:
+        hotelCodes:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 1
+        language:
+          type: string
+          enum:
+          - EN
+          - DE
+      required:
+      - hotelCodes
+    MultiHotelKeyDataResponse:
+      type: object
+      properties:
+        keyData:
+          type: array
+          items:
+            $ref: '#/components/schemas/HotelKeyData'
+    Option:
+      type: object
+      properties:
+        labelKey:
+          type: string
+        value:
+          type: string
+    Section:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+        labelKey:
+          type: string
+        name:
+          type: string

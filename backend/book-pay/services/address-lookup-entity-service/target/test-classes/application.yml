@@ -1,0 +1,24 @@
+server:
+  port: 9020
+
+swagger:
+  api:
+    version: 1.0.0
+
+address:
+  lookup:
+    qas:
+      url: ${address.lookup.qas.host}/ProOnDemand/V3/ProOnDemandService.asmx
+      host: http://localhost:${wiremock.server.port:0}
+      authtoken: test
+      country-leisure-data-set-id: GB_LEIS_TEST
+      country-business-data-set-id: GB_BUS_TEST
+      layout-leisure: QADefault_LEIS_TEST
+      layout-business: QADefault_BUS_TEST
+      connection-manager:
+        max-total: 200
+        default-max-per-route: 200
+      connection-manager-timeout: 5000
+      connection-timeout: 5000
+      socket-timeout: 10000
+      defaultKeepAlive: 30

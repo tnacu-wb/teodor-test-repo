@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>piba-account-service-opera</artifactId>
+
+    <parent>
+        <groupId>uk.co.whitbread</groupId>
+        <artifactId>digital-monorepo-service-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../../parents/service-parent/pom.xml</relativePath>
+    </parent>
+
+    <properties>
+        <sonar.coverage.exclusions>
+            **/model/**,
+            **/properties/**,
+            **/util/**,
+            **/PibaAccountServiceApplication*,
+            **/PibaAccountRedisConfig*
+        </sonar.coverage.exclusions>
+    </properties>
+
+    <name>piba-account-service-opera</name>
+    <description>Whitbread Piba User account Micro-Service</description>
+
+    <dependencies>
+        <!-- Whitbread -->
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.co.whitbread.shared</groupId>
+            <artifactId>commons-cdh-lib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+        </dependency>
+
+        <!-- Spring/SpringBoot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Swagger dependency-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+
+        <!-- Other dependencies -->
+        <dependency>
+            <groupId>uk.co.whitbread.shared</groupId>
+            <artifactId>worldline-ba-api-lib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.co.whitbread.shared</groupId>
+            <artifactId>common-auth0</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Test dependencies-->
+        <dependency>
+            <groupId>io.github.benas</groupId>
+            <artifactId>random-beans</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/uk/co/whitbread/piba/account/model/**</exclude>
+                        <exclude>**/uk/co/whitbread/piba/api/properties/**</exclude>
+                        <exclude>**/uk/co/whitbread/piba/account/PibaAccountServiceApplication*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <baseClassForTests>uk.co.whitbread.piba.account.controller.ContractVerifierBaseTest
+                    </baseClassForTests>
+                    <nameSuffixForTests>IT</nameSuffixForTests>
+                    <testFramework>JUNIT5</testFramework>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <configuration>
+                    <excludedClasses>
+                        <param>uk.co.whitbread.piba.account.PibaAccountServiceApplication</param>
+                        <param>uk.co.whitbread.piba.account.config.PibaAccountRedisConfig</param>
+                    </excludedClasses>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

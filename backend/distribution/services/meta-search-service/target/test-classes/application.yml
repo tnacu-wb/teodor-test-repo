@@ -1,0 +1,40 @@
+server:
+  port: 9099
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1  #added to make wiremock local server runs on Apple M1
+
+amazon:
+  dynamodb:
+    tableName: availabilities
+    endpoint: http://localhost:8000
+    accessKey: dummyKey
+    secretKey: secret
+    region: eu-west-1
+    maxRetry: 2
+    irsa: false
+
+hotel:
+  codes: ABETIR,ABECOC
+  roomTypes: DOUBLE,SINGLE,FAMILY
+  maxNights: 9
+
+security:
+  xWhitKeyValue: meta-key
+  xWhitKey: X-WHIT-API-KEY
+  xWhitKeyWBValue: wb-key
+
+config:
+  service:
+    content:
+      host: http://localhost:${wiremock.server.port:0}
+      hotelInformationEndpoint: "/v1/content/hotels/{hotelId}/information"

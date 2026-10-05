@@ -1,0 +1,48 @@
+export const mockedAuthenticationLabels = {
+  accountDescription: 'Your account',
+  loginButton: 'Log in',
+  logoutButton: 'Log out',
+  login: {
+    passwordPlaceholder: 'Password',
+    forgotPassword: 'Forgotten password?',
+    signupMessage: "Don't have an account yet?",
+    signupLink: 'Sign up here',
+    badCredentialsError: 'Your email address or password is incorrect.',
+    invalidEmail: 'Please enter a valid e-mail address.',
+    leisure: {
+      loginButton: 'Log in',
+      formLabel: 'Log into your Premier Inn account',
+      emailPlaceholder: 'Email address',
+    },
+    business: {
+      loginButton: 'Log in',
+      formLabel: 'Log in to Business Booker',
+      emailPlaceholder: 'Business email address',
+      bookingLoginRequiredText: 'Please fill in this field.',
+      bookingsInvalidEmailMsg: 'Please enter a valid email address',
+      bookingEmailMaxLengthMsg: 'Maximum length for e-mail is 50 characters',
+      loginInfoNotification: 'Please login in order to have access to Business Booker flex rates',
+      companyActivateFailBody: '<span>There was an error activating your company account</span>',
+    },
+  },
+  forgottenPassword: {
+    leisure: {
+      formLabel: 'We will send you an email with instructions to reset your password',
+      emailPlaceholder: 'Email address',
+      formTitle: 'Reset your password',
+      submitButton: 'Submit',
+    },
+    business: {
+      formLabel: 'We will send you an email with instructions to reset your password',
+      emailPlaceholder: 'Business email address',
+      formTitle: 'Reset your password',
+      submitButton: 'Submit',
+    },
+    emailSentHeader: 'Email sent',
+    emailSentMessage: "We've sent you an email with instructions to reset your password",
+    cancel: 'Cancel',
+    backToLogin: 'Back to Login',
+    backToYourDetails: 'Back to Your Details',
+    genericError: 'Looks like something went wrong, please try again later',
+  },
+};

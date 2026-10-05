@@ -1,0 +1,25 @@
+apply plugin: 'findbugs'
+
+task findbugs(type: FindBugs) {
+    ignoreFailures = true
+    effort = "max"
+    reportLevel = "high"
+    excludeFilter = rootProject.file("app/config/findbugs/findbugs-exclude.xml")
+    classes = files("build/intermediates/classes/")
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml {
+            destination "${rootProject.rootDir}/reports/findbugs/findbugs.xml"
+            xml.withMessages true
+        }
+        html {
+            destination "${rootProject.rootDir}/reports/findbugs/findbugs.html"
+        }
+    }
+
+    classpath = files()
+}

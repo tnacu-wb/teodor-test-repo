@@ -1,0 +1,82 @@
+swagger:
+  api:
+    version: 2.21
+    path: https://api.swaggerhub.com/apis/whitbread/Company-API/${swagger.api.version}/swagger.yaml
+    token: eaaab7b2-ab2e-4471-b01f-ed3d901c144f
+
+upsellItemsAllowances:
+  premierBreakfast: 11,15
+  continentalBreakfast: 12
+  mealDeal: 17,15
+  wiFi: 135,136,137
+  hubBreakfast: 18
+
+hotelaccount:
+  ribbon:
+    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+    listOfServers: localhost:${wiremock.server.port:0}
+
+feign:
+  hotelaccount:
+    name: hotelaccount
+    url: http://localhost
+  client:
+    config:
+      hotelaccount:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+hystrix:
+  command:
+    hotelaccount:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 15000
+
+cache:
+  default:
+    ttl: 0
+
+hotel:
+  company:
+    cache:
+      hotelCompany:
+        name: hotelCompany
+        ttl: 0
+
+auth:
+  management:
+    domain: http://localhost:${wiremock.server.port:1}
+    clientId: clientId_test
+    clientSecret: clientSecret_test
+    audience: http://mock-audience/api/v2/
+    connection: Connection-Test
+    lazyMigrationEnabled: true
+  tenants:
+    - name: "PI BB Tenant"
+      audience: http://localhost/api/v2/
+      namespace: http://localhost
+      issuer: http://localhost/
+      jwkUri: http://localhost/.well-known/jwks.json
+
+cdh:
+  oauth-client:
+    enabled: true
+    host: https://login.microsoftonline.com
+  api:
+    host: https://whitbread-uat.azure-api.net
+    is-oauth: true
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+feature-flags:
+  company-name-validation:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false

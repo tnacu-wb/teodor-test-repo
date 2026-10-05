@@ -1,0 +1,142 @@
+server:
+  port: "9169"
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "digital-key-service"
+    description: "Handles integration with digital key providers"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui-custom.html
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+  endpoints:
+    web:
+      base-path: /v1/digital-key/actuator
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+logging:
+  level:
+    brave: WARN
+    io.micrometer.observation.contextpropagation.ObservationThreadLocalAccessor: ERROR
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - password
+        - site_zuid
+        - x-api-key
+        - Authorization
+        - device_zuid
+        - key_group_id
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default.
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+sample:
+  canary:
+    log:
+      errorRate: 0.01
+      warnRate: 0.05
+    delay:
+      p50: 200
+      p95: 500
+      p99: 1000
+    successRate: 0.95
+config:
+  service:
+    ohip:
+      host: http://${OHIP_HOST:localhost:9100}/ohip
+      allocateRoomEndpoint: "/v1/rooms/allocate"
+      checkInEndpoint: "/v1/kiosk/checkIn"
+      reservationsByBasketReservationIds: "/v1/reservations/basket"
+      connectionTimeoutMillis: 5000
+      responseTimeoutMillis: 10000
+      externalReservationEndpoint: "/v1/reservations/external"
+      updateUdfc20Endpoint: "/reservations/characterudfs"
+    reservation:
+      host: http://${RESERVATION_HOST:localhost:9103}
+      confirmReservation: "/v1/reservations/confirm"
+    kiosk:
+      host: http://kiosk-checkin-service
+      kioskAllocate: "/v1/kiosk/allocate"
+    axp:
+      host: ${AXP_HOST}
+      apiKey: ${AXP_API_KEY}
+      brandId: ${AXP_BRAND_ID}
+      generateOtpEndPoint: /open_api/v1/brands/{brand_id}/otp/generate
+      passProvisioningWithOtp: /open_api/v1/brands/{brand_id}/mobile_key/prepare_pass_provisioning_with_otp
+      registerMobileDeviceEndpoint: /open_api/v1/brands/{brand_id}/mobile_devices
+      googleWalletProvisioningWithOtp: /open_api/v1/brands/{brand_id}/mobile_key/prepare_google_wallet_pass_provisioning_with_otp
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience:  ${PI_BB_TENANT_AUDIENCE}
+      namespace:  ${PI_BB_TENANT_NAMESPACE}
+      issuer:  ${PI_BB_TENANT_ISSUER}
+      jwkUri:  ${PI_BB_TENANT_JWK_URI}
+
+---
+spring.config.activate.on-profile: local
+
+
+auth:
+  tenants:
+    - name: "Distribution Tenant"
+      audience: dummy
+      namespace: dummy
+      issuer: dummy
+      jwkUri: https://dummy/.well-known/jwks.json

@@ -1,0 +1,1 @@
+export { HotelBreadcrumb } from './HotelBreadcrumb';

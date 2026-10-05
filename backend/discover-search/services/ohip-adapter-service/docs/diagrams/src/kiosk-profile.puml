@@ -1,0 +1,18 @@
+@startuml
+entity "AppSync" as A
+entity "Kiosk CheckIn Service" as RES
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OHIP
+entity "OPERA" as OPERA
+
+A -> RES: profile request
+RES -> PMS: POST /v1/profile/createProfile
+PMS -> OHIP: POST /v1/profile/createProfile
+OHIP -> OPERA: POST /crm/v1/profiles
+OHIP <- OPERA: OK 200
+OHIP -> OPERA: POST /rsv/v0/hotels/{HotelId}/reservations/{ReservationId}
+OHIP <- OPERA: OK 200
+PMS <- OHIP: OK 200
+RES <- PMS: OK 200
+A <- RES: OK 200
+@enduml

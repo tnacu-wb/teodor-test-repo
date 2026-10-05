@@ -1,0 +1,164 @@
+server:
+  port: 9131
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "@project.version@"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+  endpoints:
+    web:
+      base-path: /v1/hotel-wallet/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - hotelCode
+        - hotelName
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+config:
+  httpClient:
+    connectionTimeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+    responseTimeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  service:
+    reservation:
+      host: http://${RESERVATION_HOST:localhost:9103}
+      basketReferenceEndpoint: "/v1/reservations/find"
+      reservationEndpoint: "/v1/reservations/basket/"
+    content:
+      host: http://${CONTENT_SERVICE_HOST:localhost:9106}
+      hotelInformationEndpoint: "/v1/content/hotels/{hotelId}/information"
+
+wallet:
+  cert:
+    p12S3Path: certs/PassTypeCertificate.p12
+    wwdrcaS3Path: certs/AppleWWDRCA.cer
+    p12LocalPath: /tmp/certs/PassTypeCertificate.p12
+    wwdrcaLocalPath: /tmp/certs/AppleWWDRCA.cer
+    password: ${HOTEL_WALLET_CERT_PASSWORD}
+  passJson: pass.json
+  templateDir: template
+  contactCentre:
+    flex: 0333 003 8101
+    nonFlex: 0333 003 0025
+  premierInnLink: https://www.premierinn.com/gb/en/hotels
+  pi:
+    foregroundColor: rgba(255, 255, 255, 1)
+    backgroundColor: rgba(81, 30, 98, 1)
+    labelColor: rgba(204, 204, 204, 1)
+  bb:
+    foregroundColor: rgba(255, 255, 255, 1)
+    backgroundColor: rgba(81, 30, 98, 1)
+    labelColor: rgba(204, 204, 204, 1)
+  hub:
+    foregroundColor: rgba(255, 255, 255, 1)
+    backgroundColor: rgba(54, 54, 54, 1)
+    labelColor: rgba(190, 214, 0, 1)
+  zip:
+    foregroundColor: rgba(255, 255, 255, 1)
+    backgroundColor: rgba(252, 15, 66, 1)
+    labelColor: rgba(224, 224, 224, 1)
+
+  earlyCheckInTime: "11:00"
+
+spring:
+  application:
+    name: hotel-wallet-service-opera
+  jackson:
+    default-property-inclusion:
+      - non-null
+      - non-empty
+    serialization:
+      WRITE_EMPTY_JSON_ARRAYS: true
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+
+irsa:
+  enabled: true
+
+aws:
+  s3:
+    maxRetry: 2
+    bucket:
+      name: ${HOTEL_WALLET_BUCKET_NAME}
+
+---
+spring.config.activate.on-profile: local
+
+auth:
+  rulesEngineHost: http://localhost:9108
+
+logging:
+  configuration:
+    logger: default
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - phoneNumber
+        - cardNumber

@@ -1,0 +1,183 @@
+name: ECR Create Repos
+
+# Ensures ECR repositories exist before service images are pushed/deployed.
+#
+# Appends every requested service to ECR repositories list in a SINGLE PR,
+# verifies the terragrunt plan, merges it, and waits for `terragrunt apply`.
+# Batches all new services into one PR - avoids repositories.yaml append conflicts
+# of concurrent per-service PRs.
+#
+# Names already declared are filtered out; if nothing is left there is no PR.
+# On a failed apply the whole batch is reverted so IaC never drifts from AWS ECR.
+# Called once per push by ci-be.yaml with the set of newly-added service folders.
+#
+# Shell script lives in .github/workflows/scripts/helper-scripts/ecr-request-repos.sh.
+# Each step below is a wrapper that invokes a subcommand in said script.
+
+on:
+  workflow_call:
+    inputs:
+      repo-names:
+        description: 'JSON array of service names, e.g. ["basket-service","sample-service"]'
+        required: true
+        type: string
+      terraform-repo:
+        description: 'ECR IaC repo'
+        required: false
+        type: string
+        default: 'whitbread-eos/devops-terraform'
+      terraform-repo-name:
+        description: 'Short name of IaC repo for GH App token'
+        required: false
+        type: string
+        default: 'devops-terraform'
+      base-branch:
+        description: 'Base branch of IaC repo to target'
+        required: false
+        type: string
+        default: 'main'
+      repos-list:
+        description: 'IaC repo ECR YAML repos list path'
+        required: false
+        type: string
+        default: 'nonprod/aws/327347623470-shared-services/eu-west-1/ecr/repositories.yaml'
+      per-repo-add:
+        description: 'Terraform resources per repo (3 resources per repo)'
+        required: false
+        type: number
+        default: 3
+      plan-timeout-seconds:
+        description: 'Max seconds to wait for terragrunt plan PR comment'
+        required: false
+        type: number
+        default: 300
+      apply-timeout-seconds:
+        description: 'Max seconds to wait for terragrunt apply run after merge'
+        required: false
+        type: number
+        default: 600
+      apply-workflow:
+        description: 'Apply workflow name in IaC repo'
+        required: false
+        type: string
+        default: 'apply'
+    outputs:
+      repository-names:
+        description: 'JSON array of repos to append'
+        value: ${{ jobs.request-ecr-repos.outputs.repository-names }}
+      status:
+        description: 'Outcome: already-declared | pr-opened.'
+        value: ${{ jobs.request-ecr-repos.outputs.status }}
+      pr-url:
+        description: 'PR URL'
+        value: ${{ jobs.request-ecr-repos.outputs.pr-url }}
+      pr-number:
+        description: 'PR number'
+        value: ${{ jobs.request-ecr-repos.outputs.pr-number }}
+      merge-sha:
+        description: 'Squash-merge commit SHA on the IaC base branch'
+        value: ${{ jobs.request-ecr-repos.outputs.merge-sha }}
+
+jobs:
+  request-ecr-repos:
+    if: |
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'workflow_call' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    outputs:
+      repository-names: ${{ steps.request.outputs.repository-names }}
+      status: ${{ steps.request.outputs.status }}
+      pr-url: ${{ steps.request.outputs.pr-url }}
+      pr-number: ${{ steps.request.outputs.pr-number }}
+      expected-add: ${{ steps.request.outputs.expected-add }}
+      merge-sha: ${{ steps.merge.outputs.merge-sha }}
+    steps:
+      - name: Generate token for the IaC repo
+        id: generate-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.PIPELINE_APP_ID }}
+          private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ inputs.terraform-repo-name }}
+
+      - name: Checkout IaC repo  ### see monorepo/IaC checkout logic
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          repository: ${{ inputs.terraform-repo }}
+          ref: ${{ inputs.base-branch }}
+          token: ${{ steps.generate-token.outputs.token }}
+          fetch-depth: 0
+
+      - name: Checkout helper scripts
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          path: digital-monorepo
+          sparse-checkout: .github/workflows/scripts/helper-scripts
+
+      - name: Install yq
+        run: bash digital-monorepo/.github/workflows/scripts/helper-scripts/ecr-request-repos.sh setup-yq
+
+      - name: Request ECR repos via a single PR
+        id: request
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          TERRAFORM_REPO: ${{ inputs.terraform-repo }}
+          REPO_NAMES: ${{ inputs.repo-names }}
+          REPOS_LIST: ${{ inputs.repos-list }}
+          BASE_BRANCH: ${{ inputs.base-branch }}
+          PER_REPO_ADD: ${{ inputs.per-repo-add }}
+          SOURCE_REPO: ${{ github.repository }}
+          SOURCE_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          HEAD_COMMIT_MSG: ${{ github.event.head_commit.message }}
+          SOURCE_BRANCH: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref_name }}
+        run: bash digital-monorepo/.github/workflows/scripts/helper-scripts/ecr-request-repos.sh request
+
+      - name: Verify terragrunt plan
+        id: verify-plan
+        if: success() && steps.request.outputs.status == 'pr-opened'
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          TERRAFORM_REPO: ${{ inputs.terraform-repo }}
+          PR_NUMBER: ${{ steps.request.outputs.pr-number }}
+          EXPECTED_ADD: ${{ steps.request.outputs.expected-add }}
+          PLAN_TIMEOUT: ${{ inputs.plan-timeout-seconds }}
+        run: bash digital-monorepo/.github/workflows/scripts/helper-scripts/ecr-request-repos.sh verify-plan
+
+      - name: Merge request PR
+        id: merge
+        if: success() && steps.request.outputs.status == 'pr-opened'
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          TERRAFORM_REPO: ${{ inputs.terraform-repo }}
+          PR_NUMBER: ${{ steps.request.outputs.pr-number }}
+        run: bash digital-monorepo/.github/workflows/scripts/helper-scripts/ecr-request-repos.sh merge
+
+      - name: Wait for terragrunt apply to succeed
+        id: apply-wait
+        if: success() && steps.request.outputs.status == 'pr-opened'
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          TERRAFORM_REPO: ${{ inputs.terraform-repo }}
+          MERGE_SHA: ${{ steps.merge.outputs.merge-sha }}
+          APPLY_WORKFLOW: ${{ inputs.apply-workflow }}
+          APPLY_TIMEOUT: ${{ inputs.apply-timeout-seconds }}
+        run: bash digital-monorepo/.github/workflows/scripts/helper-scripts/ecr-request-repos.sh wait-apply
+
+      - name: Revert repo creation on failed terragrunt apply
+        if: always() && steps.merge.outcome == 'success' && steps.apply-wait.outputs.apply-result == 'failure'
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          TERRAFORM_REPO: ${{ inputs.terraform-repo }}
+          BASE_BRANCH: ${{ inputs.base-branch }}
+          REPOS_LIST: ${{ inputs.repos-list }}
+          MERGE_SHA: ${{ steps.merge.outputs.merge-sha }}
+          SOURCE_REPO: ${{ github.repository }}
+        run: bash digital-monorepo/.github/workflows/scripts/helper-scripts/ecr-request-repos.sh revert

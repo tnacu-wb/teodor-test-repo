@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor "end user" as Actor
+participant "UI/IoS/Android" as Client
+participant "Business Tether Service" as BusinessTetherService
+participant "WORLDLINE" as worldline
+
+Actor -> Client : Manage Accounts - Account Dashboard
+Client -> BusinessTetherService : POST - business/tether/login
+alt criteria.worldlinesession !=null
+BusinessTetherService -> worldline : Soap Call  with RefreshSessionRequestType - request
+else Called BusinessTetherLoginService.login. guid
+BusinessTetherService -> worldline : Soap Call with loginTetheredUser - request
+end
+BusinessTetherService -> Client : 201 response back
+Client -> WORLDLINE : Worldline MMA account dashboard
+WORLDLINE -> Actor : Back to account dashboard
+@enduml

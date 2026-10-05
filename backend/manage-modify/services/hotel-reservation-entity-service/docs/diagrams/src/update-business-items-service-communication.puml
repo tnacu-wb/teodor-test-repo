@@ -1,0 +1,20 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant HotelReservationOutPort as OutboundPort
+participant OhipWebClient as OhipWebclient
+entity "OHIP Adapter Service" as OHIPAdapter
+
+A -> Controller: PUT v1/reservations/business
+Controller -> InboundPort: updateBusinessItems
+InboundPort -> OutboundPort: updateBusinessItems
+OutboundPort -> OhipWebclient: sendUpdateBusinessItemsRequest
+OhipWebclient -> OHIPAdapter: PUT /adp/v1/reservations/business
+OHIPAdapter --> OhipWebclient: Response
+OhipWebclient --> OutboundPort: Response
+OutboundPort --> InboundPort: Response
+InboundPort --> Controller: Response
+Controller --> A: Response
+
+@enduml

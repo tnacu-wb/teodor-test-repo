@@ -1,0 +1,120 @@
+# Values for payment-orchestration-service.
+#
+# Shaped for the shared `opera-app-chart` (whitbread-eos/helm-central-charts), which is
+# what both .github/workflows/ci-matrix-deploy.yaml and ci-matrix-deploy-eph.yaml install.
+# That chart reads the pod spec from `deployment.*` and gates optional resources on a
+# `create` flag. Keys outside those names are silently ignored — an unset
+# `deployment.containerEnvs` renders `env: null` and the pod starts with no environment
+# at all, so the application falls back to its localhost defaults.
+
+applicationName: "payment-orchestration-service"
+namespace: opera-be
+
+image:
+  repository: whitbreaddigital/payment-orchestration-service
+  pullPolicy: Always
+  tag: "ephemeral-test"
+
+imagePullSecrets:
+  - name: regcred
+
+deployment:
+  create: true
+  checksumValues: r1
+  replicaCount: 1
+
+  containerPorts:
+    - containerPort: 9200
+      protocol: TCP
+      name: http
+
+  containerEnvs:
+    - name: TEMPORAL_HOST
+      value: temporal-frontend.temporal.svc.cluster.local
+    - name: TEMPORAL_PORT
+      value: "7233"
+    # TEMPORAL_NAMESPACE is deliberately NOT set here: normal deployments use
+    # the application.yml fallback `default`, which every Temporal install
+    # creates in its post-deploy hook, so no environment needs a manual
+    # namespace-create before this service can start. Only ephemeral PR
+    # releases set it (see ephemeral-values.yaml) to keep their workers out of
+    # this environment's task queues.
+    - name: DATATRANS_BASE_URL
+      value: https://api.sandbox.datatrans.com
+    - name: DATATRANS_MERCHANT_ID
+      valueFrom:
+        secretKeyRef:
+          name: payment-orchestration-datatrans
+          key: merchant-id
+    - name: DATATRANS_MERCHANT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: payment-orchestration-datatrans
+          key: merchant-password
+    - name: RESERVATION_HOST
+      value: http://hotel-reservation-entity-service
+    - name: OPERA_BASE_URL
+      value: http://opera-adapter:8080
+
+  livenessProbe:
+    failureThreshold: 6
+    httpGet:
+      path: /payment-orchestrator/actuator/health/liveness
+      port: 9200
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+
+  readinessProbe:
+    failureThreshold: 6
+    httpGet:
+      path: /payment-orchestrator/actuator/health/readiness
+      port: 9200
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1000Mi
+    limits:
+      cpu: 1000m
+      memory: 4000Mi
+
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 9001
+    runAsGroup: 9001
+    fsGroup: 9001
+    seccompProfile:
+      type: RuntimeDefault
+
+  dns:
+    ndots: 3
+
+service:
+  create: true
+  name: payment-orchestration-service
+  type: ClusterIP
+  ports:
+    - port: 9200
+      targetPort: 9200
+      protocol: TCP
+      name: http
+
+autoscaling:
+  create: true
+  minReplicas: 1
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 80
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 180
+
+istio:
+  create: true
+  auth: false
+  gateway: opera-api
+  prefix: /

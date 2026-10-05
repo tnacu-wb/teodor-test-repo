@@ -1,0 +1,53 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'com.dynatrace.instrumentation'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url "https://jitpack.io" }
+    }
+
+    dependencies {
+        classpath Plugins.gradle
+        classpath Plugins.dexcount
+        classpath Plugins.kotlin
+        classpath Plugins.compose_versions
+        classpath Plugins.firebase_crashlytics
+        classpath Plugins.firebase_performance
+        classpath Plugins.google_services
+        classpath Plugins.gradle_versions
+        classpath Plugins.dynatrace_versions
+        classpath Plugins.hilt_android
+    }
+}
+
+dynatrace {
+    configurations {
+        stage {
+            variantFilter "[dD]ebug"
+            autoStart {
+                applicationId '3237429e-0fab-41b4-ae9a-43a456b3ae7a'
+                beaconUrl 'https://bf33584hsx.bf.dynatrace.com/mbeacon'
+            }
+            userOptIn false
+            agentBehavior.startupLoadBalancing true
+            sessionReplay.enabled false
+        }
+        production {
+            variantFilter "[rR]elease"
+            autoStart {
+                applicationId 'eab7d529-c482-4265-8c77-4cbd4175b6c2'
+                beaconUrl 'https://bf71615ufy.bf.dynatrace.com/mbeacon'
+            }
+            userOptIn false
+            agentBehavior.startupLoadBalancing true
+            sessionReplay.enabled false
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

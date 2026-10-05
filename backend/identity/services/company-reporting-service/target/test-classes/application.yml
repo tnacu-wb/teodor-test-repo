@@ -1,0 +1,32 @@
+server:
+  port: 9099
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+config:
+  reports:
+    allowed-record-count: ${MI_REPORT_ALLOWED_RECORD_COUNT:50000}
+    statusItems: # list of status to show in file.
+      - "Reserved"
+      - "CheckedIn"
+    emergencyStatusItems: ${EMERGENCY_REPORT_STATUS_ITEMS:${reports.statusItems}}
+    managementInformationStatusItems: NoShow,CheckedOut
+irsa:
+  enabled: false
+
+aws:
+  s3:
+    maxRetry: ${AWS_S3_MAX_RETRY:2}
+    endpoint: http://localhost.localstack.cloud:4566
+    validForMinutes: ${AWS_S3_VALID_FOR_MINUTES:5}
+    bucket:
+      miReportName: ${AWS_S3_MI_BUCKET_NAME:business-booker-tm-mi-report-dev}
+      emergencyReportName: ${AWS_S3_EMERGENCY_BUCKET_NAME:business-booker-tm-emergency-report-dev}
+      region: ${AWS_REGION:eu-west-1}
+      accessKey: foo
+      secretAccessKey: bar

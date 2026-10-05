@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+header piba-account-service
+title Account Dashboard
+autonumber
+actor User #red
+participant "Account Dashboard" as Client
+participant "PibaAccountController" as PAC
+participant "PibaAccountService" as PAS
+participant "TokenService" as TS
+participant "PibaGuidServiceClient" as PGSC
+participant "WorldlineTransformer" as WLT
+participant "worldlineWebServiceTemplate" as WWST
+participant "WorldLineAccountResponseValidator" as WLARV
+
+User -> Client : Clicks on "'Account Dashboard' link"
+Client -> PAC : Calls API Current Account Balance (/piba/account/balance)
+PAC -> PAS : viewCurrentBalance
+PAS -> TS : Retrieve Employee Details
+TS -> PAS : Return Employee Details
+PAS -> PAS : Validate Employee Details
+PAS -> PGSC : getTetheredGuids
+PGSC -> PAS : Return getTetheredGuids
+loop number of customerTetheredGuids
+PAS -> WLT : toCustomerAccountCurrentBalancesRequest
+PAS -> WWST : marshalSendAndReceive
+PAS -> WLARV : Validate
+PAS -> WLT : toCustomerAccountCurrentBalancesResponse
+WLT -> PAS : returns CustomerAccountCurrentBalancesResponse
+PAS -> PAS : Add to Current Balance
+end
+PAS -> PAC : Return CustomerAccountCurrentBalancesResponse
+PAC -> Client : Return CustomerAccountCurrentBalancesResponse
+Client -> User : Shows Account Dashboard
+@enduml

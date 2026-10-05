@@ -1,0 +1,165 @@
+# Ephemeral (per-PR) values for promo-service.
+#
+# ci-matrix-deploy-eph.yaml layers this file OVER the backend stack defaults at
+# backend/infrastructure/helm/ephemeral-values.yaml:
+#
+#   opera-app-chart/values.yaml  <  stack ephemeral defaults  <  THIS FILE  <  --set
+#
+# Everything generic to a PR release — canary/autoscaling/pdb/istio/prometheus off,
+# replicaCount 1, the trimmed lifecycle and grace period, ndots, probe TIMINGS,
+# imagePullSecrets, namespace — is inherited and is not repeated here.
+#
+# Overridden per-deploy by ci-matrix-deploy-eph.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create, ephemeral
+#
+# ── READ THIS BEFORE DEPLOYING A SCHEMA CHANGE ───────────────────────────────
+#
+# A PR release connects to the SHARED dev Postgres — no per-PR database is provisioned —
+# and application.yml has `spring.liquibase.enabled: true` with `contexts: non-prod`. So
+# a PR release carrying a new changeset MIGRATES THE DEV DATABASE on startup, for
+# everyone, and the migration outlives the PR environment. Before deploying a PR that
+# touches src/main/resources/sql/liquibase, make sure the change is additive and
+# backwards-compatible with the dev deployment, or expect to repair dev by hand.
+#
+# The rest of the environment is inlined rather than read from `promo-service-configmap`:
+# the chart names its ConfigMap `{{ applicationName }}-configmap` and applicationName is
+# the PR release name here, so a hard-coded configMapKeyRef could never resolve.
+
+applicationName: promo-service
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/promo-service
+
+deployment:
+  # IRSA for the promotion-code S3 bucket. The ServiceAccount is cluster-scoped and
+  # name-stable, so a PR release can use it directly; without it every S3 call is denied.
+  serviceAccount: opera-promotion-code-account
+
+  containerPorts:
+    - containerPort: 9137
+      protocol: TCP
+      name: http
+    # Not published through the Service — reach it with
+    # `kubectl port-forward -n opera-be deploy/<release> 5005:5005`.
+    - containerPort: 5005
+      protocol: TCP
+      name: debug
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=70 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # ── Postgres ─────────────────────────────────────────────────────────────
+    # These are the only refs in this file WITHOUT `optional: true`, and deliberately so.
+    # promo-service assembles its JDBC URL out of them and has no defaults, so without
+    # the secret it cannot start at all — there is no degraded mode to preserve. A hard
+    # ref surfaces the cause as a CreateContainerConfigError in `kubectl describe pod`
+    # (and a `helm --wait` timeout) rather than as a placeholder-resolution stack trace
+    # in a crash loop.
+    - name: Cluster_Read_End_Point
+      valueFrom:
+        secretKeyRef:
+          name: promo-service-postgres-credentials
+          key: read_endpoint
+    - name: Cluster_Write_End_Point
+      valueFrom:
+        secretKeyRef:
+          name: promo-service-postgres-credentials
+          key: write_endpoint
+    - name: Database_Name
+      valueFrom:
+        secretKeyRef:
+          name: promo-service-postgres-credentials
+          key: database_name
+    - name: Database_User_Name
+      valueFrom:
+        secretKeyRef:
+          name: promo-service-postgres-credentials
+          key: database_username
+    - name: Database_Password
+      valueFrom:
+        secretKeyRef:
+          name: promo-service-postgres-credentials
+          key: database_password
+
+    # ── Auth tenants ─────────────────────────────────────────────────────────
+    # No defaults in application.yml, so leaving these out would fail startup outright.
+    - name: CCUI_TENANT_AUDIENCE
+      value: https://api.dev.whitbread.digital
+    - name: CCUI_TENANT_ISSUER
+      value: https://dev-whitbread-digital.eu.auth0.com/
+    - name: CCUI_TENANT_JWK_URI
+      value: https://dev-whitbread-digital.eu.auth0.com/.well-known/jwks.json
+    - name: CCUI_TENANT_NAMESPACE
+      value: https://ccui.opera.whitbread.digital
+    - name: PI_BB_TENANT_AUDIENCE
+      value: https://wbodetest.eu.auth0.com/api/v2/
+    - name: PI_BB_TENANT_ISSUER
+      value: https://auth0.premierinn.digital/
+    - name: PI_BB_TENANT_JWK_URI
+      value: https://auth0.premierinn.digital/.well-known/jwks.json
+    - name: PI_BB_TENANT_NAMESPACE
+      value: https://premierinn.com
+
+    # ── S3 (promotion code uploads) ──────────────────────────────────────────
+    # The dev bucket, shared with the dev deployment. All four match application.yml's
+    # defaults; they are stated so the bucket a PR release writes to is explicit.
+    - name: AWS_S3_PROMO_BUCKET_NAME
+      value: promotion-code-dev
+    - name: AWS_REGION
+      value: eu-west-1
+    - name: AWS_S3_MAX_RETRY
+      value: '2'
+    - name: AWS_S3_VALID_FOR_MINUTES
+      value: '5'
+
+    # ── Downstream and feature flags ─────────────────────────────────────────
+    # Shared dev instance, addressed by bare hostname (its Service publishes port 80).
+    - name: OHIP_HOST
+      value: ohip-adapter-service
+    - name: UNLEASH_ENVIRONMENT
+      value: dev
+    - name: UNLEASH_URL
+      value: https://whitbread.edge.getunleash.io/api
+    # `optional: true` keeps a missing secret a degraded environment rather than a broken
+    # one — unlike the database, flag evaluation falls back to defaults.
+    - name: UNLEASH_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: unleash-enterprise-secrets
+          key: token
+          optional: true
+
+    # The COPY_DATASOURCE_HIKARI_* pool tuning the GitOps release sets is omitted here:
+    # every one of those values is identical to application.yml's default, and a PR
+    # release has no bulk-copy load to tune for.
+
+  readinessProbe:
+    httpGet:
+      path: /v1/promo/actuator/health/readiness
+      port: 9137
+
+  livenessProbe:
+    httpGet:
+      path: /v1/promo/actuator/health/liveness
+      port: 9137
+
+  # Only memory is stated; requests.cpu (50m) merges through from the stack defaults.
+  # requests.memory is pinned to limits.memory because the heap is sized off the limit.
+  # Slightly above the stack default: Liquibase plus two datasources on startup.
+  resources:
+    requests:
+      memory: 1280Mi
+    limits:
+      memory: 1280Mi
+
+service:
+  name: promo-service
+  ports:
+    - port: 80
+      targetPort: 9137
+      protocol: TCP
+      name: port9137

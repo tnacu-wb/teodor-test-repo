@@ -1,0 +1,32 @@
+{
+  "id" : "cddc5d9e-ff86-40d8-b64f-83242bd8c5bb",
+  "request" : {
+    "url" : "/marketing/hotels/newsletter/get",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['requestId'] == 'fsytdfxusdgcilugasld')]"
+    }, {
+      "matchesJsonPath" : "$.['contactChannel'][?(@.['contactChannelType'] == 'Email')]"
+    }, {
+      "matchesJsonPath" : "$.['contactChannel'][?(@.['contactChannelValue'] == 'test@gmail.com')]"
+    }, {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'WINN')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"contactChannelId\":\"CHNL12047_bjghsdu_dahbj_dsjhbj\",\"contactChannelValue\":\"email@email.com\",\"brandPermissions\":[{\"brandCode\":\"PINN\",\"brand\":\"Premier Inn\",\"optIn\":true,\"2ndOptInReq\":false,\"2ndOptIn\":false,\"contentPermission\":{\"2ndParty\":true,\"3rdParty\":true},\"lastOptInDate\":\"2019-11-20T18:08:15.323\",\"lastSourceBusinessKey\":\"ACE_EditPermissions_business_key\",\"lastModifiedBy\":\"name.surname\"}],\"shared\":false,\"valid\":true,\"loyaltyAccounts\":[{\"loyaltyBrand\":\"Brewers Fayre\",\"loyaltySystemId\":\"987293\"}],\"modified\":\"2019-12-03T09:50:54.0633726Z\",\"deleted\":false}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "cddc5d9e-ff86-40d8-b64f-83242bd8c5bb"
+}

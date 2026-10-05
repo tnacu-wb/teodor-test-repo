@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AddRoomView" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="confirmButton" destination="02N-xi-jVb" id="16i-NM-LgL"/>
+                <outlet property="table" destination="orY-Yo-0al" id="t4E-p5-ndZ"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="KCP-qd-6l4"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="none" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="orY-Yo-0al">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="706"/>
+                    <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                    <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AuZ-VR-0q3">
+                    <rect key="frame" x="0.0" y="706" width="375" height="106"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="02N-xi-jVb" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                            <rect key="frame" x="20" y="10" width="335" height="52"/>
+                            <color key="backgroundColor" red="0.42352941176470588" green="0.18823529411764706" blue="0.44705882352941173" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="52" id="UXQ-4D-RKj"/>
+                            </constraints>
+                            <state key="normal" title="Done (1 adult)">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="4"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="checkAvailabilityButtonDidTap:" destination="-1" eventType="touchUpInside" id="3Fx-W2-aoT"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="02N-xi-jVb" firstAttribute="top" secondItem="AuZ-VR-0q3" secondAttribute="top" constant="10" id="Nto-AG-IOO"/>
+                        <constraint firstAttribute="trailing" secondItem="02N-xi-jVb" secondAttribute="trailing" constant="20" id="Sa9-7v-TTq"/>
+                        <constraint firstItem="02N-xi-jVb" firstAttribute="leading" secondItem="AuZ-VR-0q3" secondAttribute="leading" constant="20" id="VB9-jm-xjQ"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="iXP-Gb-NBV"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="orY-Yo-0al" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="1B6-Ao-pDB"/>
+                <constraint firstAttribute="trailing" secondItem="orY-Yo-0al" secondAttribute="trailing" id="EJR-ES-EKZ"/>
+                <constraint firstItem="AuZ-VR-0q3" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="K2N-Uz-Cha"/>
+                <constraint firstItem="AuZ-VR-0q3" firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="bottom" id="KhN-oV-F7F"/>
+                <constraint firstAttribute="trailing" secondItem="AuZ-VR-0q3" secondAttribute="trailing" id="LK2-0Q-mZF"/>
+                <constraint firstItem="orY-Yo-0al" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="LxQ-vf-y2b"/>
+                <constraint firstItem="AuZ-VR-0q3" firstAttribute="top" secondItem="orY-Yo-0al" secondAttribute="bottom" id="W7t-Ll-WXW"/>
+                <constraint firstItem="iXP-Gb-NBV" firstAttribute="bottom" secondItem="02N-xi-jVb" secondAttribute="bottom" constant="10" id="YYs-pr-qLy"/>
+            </constraints>
+            <point key="canvasLocation" x="-79" y="-13"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

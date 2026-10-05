@@ -1,0 +1,32 @@
+{
+  "id" : "334c36c6-a35e-4a1d-879c-04d580e40f11",
+  "request" : {
+    "urlPath" : "/v1/reservations/search",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "queryParameters" : {
+      "bookingReference" : {
+        "equalTo" : "GAA8056793"
+      },
+      "bookerLastName" : {
+        "equalTo" : "Pop"
+      },
+      "arrivalDate" : {
+        "equalTo" : "3023-01-23"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"bookings\":[],\"totalPages\":0,\"offset\":0,\"limit\":20,\"hasMore\":false,\"totalResults\":0}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "334c36c6-a35e-4a1d-879c-04d580e40f11"
+}

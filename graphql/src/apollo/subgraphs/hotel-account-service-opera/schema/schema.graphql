@@ -1,0 +1,381 @@
+schema {
+    query: Query,
+    mutation: Mutation
+}
+
+type Query {
+    getProfileDetails(customerId: String!, business: Boolean, innBusiness: Boolean): Customer
+    getProfileDetailsV2(customerId: String!, business: Boolean, innBusiness: Boolean): CustomerV2
+    getProfileDetailsV3(customerId: String!, business: Boolean, innBusiness: Boolean): CustomerV3
+    getNotifications(tetheredUserId: String, scheme: Scheme!): NotificationsResponse
+    getNotificationsV2: NotificationsResponseV2
+    getAccountInfo(tetheredUserId: String!, scheme: Scheme!): AccountInfoResponse
+}
+
+type Mutation {
+    updateProfileDetails(customerId: String!, business: Boolean, innBusiness: Boolean, payload: CustomerRequest!): CustomerResponse!
+    resetPassword(payload: ResetPasswordRequest!): ChangePasswordResponse!
+    forgotPassword(language: String, innBusiness: Boolean, forgottenPasswordRequest: ForgottenPasswordRequest!): ForgottenPasswordResponse
+    validateResetKey(validateResetKeyRequest: ValidateResetKeyRequest!): ValidateResetKeyResponse
+}
+
+input ValidateResetKeyRequest {
+    resetKey: String!
+}
+
+type ValidateResetKeyResponse {
+    valid: Boolean
+    emailAddress: String
+}
+
+type Customer {
+    customerAccountId: String
+    contactDetail: ContactDetailResponse
+    paymentPreference: PaymentPreference
+    additionalGuests: [BaseContact]
+    bookingPreference: BookingPreference
+    companyId: String
+    businessUse: Boolean
+    business: BusinessResponse
+    guestHistoryCreation: String
+    totalStays: Int
+}
+
+type BaseContact {
+    title: String!
+    firstName: String!
+    lastName: String!
+    email: String!
+    telephone: String
+    nationality: String
+    passport: Passport
+    carRegistration: String
+}
+
+type ContactDetailResponse {
+    title: String!
+    firstName: String!
+    lastName: String!
+    email: String!
+    telephone: String
+    mobile: String
+    nationality: String
+    passport: Passport
+    carRegistration: String
+    address: CustomerAddress!
+}
+
+type Passport {
+    number: String
+    countryOfIssue: String
+}
+
+type CustomerAddress {
+    line1: String!
+    line2: String
+    line3: String
+    line4: String
+    line5: String
+    postCode: String
+    countryCode: String!
+    countryCodeISO: String
+    type: AddressType
+    companyName: String
+}
+
+enum AddressType {
+    HOME
+    BUSINESS
+}
+
+type PaymentPreference {
+    electronicInvoiceRequired: Boolean
+    paymentCard: PaymentCardResponse
+}
+
+type PaymentCardResponse {
+    cardId: String
+    cardLabel: String
+    cardType: String
+    cardNumber: String
+    startDate: String
+    expiryDate: String
+    issueNumber: String
+    cardHolderName: String
+    cardToken: String
+    billingAddress: CustomerAddress
+    cnpRequired: Boolean
+    cnpBusinessAccountUsername: String
+    cnpBusinessAccountPassword: String
+}
+
+type BookingPreference {
+    roomRequirements: RoomCriteria
+    reason: BookingType
+    foodPreference: Int
+    wantSmsConfirmations: Boolean
+    preselectWifi: Boolean
+}
+
+type RoomCriteria {
+    type: String
+    lettingType: String
+    adults: Int
+    children: Int
+    cotRequired: Boolean
+    hotelBrand: String
+}
+
+type BusinessResponse {
+    accessLevel: AccessLevel
+    purchaseOrderAnswer: String
+    customerReferenceAnswer: String
+    centralCard: String
+    myPILink: String
+    dismissMPILink: Boolean
+    miSetupRequired: Boolean
+    awaitingApproval: Int
+    employeeId: String
+    tethered: Boolean
+}
+
+enum AccessLevel {
+    STAYER
+    SELF
+    BOOKER
+    SUPER
+    BUSINESS_PAY_MANAGER
+    BUSINESS_PAY_USER
+}
+
+input CustomerRequest {
+    password: String
+    newPassword: String
+    contactDetail: ContactDetailInput!
+    paymentPreference: PaymentPreferenceInput!
+    additionalGuests: [BaseContactInput]
+    bookingPreference: BookingPreferenceInput!
+    marketingPreference: MarketingPreferenceInput
+    guestId: Int
+    companyId: String
+    guestHistoryNumber: String
+}
+
+type CustomerResponse {
+    success: Boolean!
+    customerId: String
+}
+
+input ContactDetailInput {
+    title: String!
+    firstName: String!
+    lastName: String!
+    email: String!
+    telephone: String
+    mobile: String
+    nationality: String
+    passport: PassportInput
+    carRegistration: String
+    address: CustomerAddressInput!
+}
+
+input PassportInput {
+    number: String
+    countryOfIssue: String
+}
+
+input PaymentPreferenceInput {
+    electronicInvoiceRequired: Boolean
+    paymentCard: PaymentCardInput
+}
+
+input PaymentCardInput {
+    cardId: String
+    cardLabel: String
+    cardType: String
+    cardNumber: String
+    startDate: String
+    expiryDate: String
+    issueNumber: String
+    cardHolderName: String
+    cardToken: String
+    billingAddress: CustomerAddressInput
+    cnpRequired: Boolean
+    cnpBusinessAccountUsername: String
+    cnpBusinessAccountPassword: String
+}
+
+input CustomerAddressInput {
+    line1: String!
+    line2: String
+    line3: String
+    line4: String
+    line5: String
+    postCode: String
+    countryCode: String!
+    countryCodeISO: String
+    type: AddressType
+    companyName: String
+}
+
+input BaseContactInput {
+    title: String!
+    firstName: String!
+    lastName: String!
+    email: String!
+    telephone: String
+    mobile: String
+    nationality: String
+    passport: PassportInput
+    carRegistration: String
+}
+
+input BookingPreferenceInput {
+    roomRequirements: RoomCriteriaInput
+    reason: BookingType
+    foodPreference: Int
+    wantSmsConfirmations: Boolean
+    preselectWifi: Boolean
+}
+
+input RoomCriteriaInput {
+    type: String!
+    lettingType: String
+    adults: Int!
+    children: Int!
+    cotRequired: Boolean!
+    hotelBrand: String
+}
+
+enum BookingType {
+    LEISURE,
+    BUSINESS
+}
+
+input MarketingPreferenceInput {
+    wantRestaurantNews: Boolean
+    regionPreferences: [String]
+}
+
+type NotificationsResponse {
+    status: String
+    usersAwaitingApproval: Boolean
+    profileUpdateRequired: Boolean
+}
+
+type NotificationsResponseV2 {
+    usersAwaitingApproval: Boolean @deprecated
+    profileUpdateRequired: Boolean
+}
+
+enum Scheme {
+    GB
+    DE
+}
+
+input ResetPasswordRequest {
+    customerId: String!
+    newPassword: String!
+}
+
+type ChangePasswordResponse {
+    passwordChanged: Boolean!
+}
+
+input ForgottenPasswordRequest {
+    username: String!
+}
+
+type ForgottenPasswordResponse {
+    success: Boolean
+}
+
+type AccountInfoResponse {
+   billingFrequency: String
+   daysToPay: Int
+   status: String
+   statementValue: AccountValueResponse
+   outStandingBalance: AccountValueResponse
+ }
+
+type AccountValueResponse {
+    value: Float
+    currencyCode: String
+}
+
+type CustomerV2 {
+    customerAccountId: String
+    contactDetail: ContactDetailResponseV2
+    paymentPreference: PaymentPreference
+    additionalGuests: [BaseContactV2]
+    bookingPreference: BookingPreference
+    companyId: String
+    businessUse: Boolean
+    business: BusinessResponse
+    guestHistoryCreation: String
+    totalStays: Int
+}
+
+type ContactDetailResponseV2 {
+    title: String
+    firstName: String
+    lastName: String
+    email: String
+    telephone: String
+    mobile: String
+    nationality: String
+    passport: Passport
+    carRegistration: String
+    address: CustomerAddress!
+}
+
+type BaseContactV2 {
+    title: String
+    firstName: String
+    lastName: String
+    email: String
+    telephone: String
+    nationality: String
+    passport: Passport
+    carRegistration: String
+}
+
+type CustomerV3 {
+    customerAccountId: String
+    contactDetail: ContactDetailResponseV3
+    paymentPreference: PaymentPreference
+    additionalGuests: [BaseContactV2]
+    bookingPreference: BookingPreference
+    companyId: String
+    businessUse: Boolean
+    business: BusinessResponse
+    guestHistoryCreation: String
+    totalStays: Int
+}
+
+type ContactDetailResponseV3 {
+    title: String
+    firstName: String
+    lastName: String
+    email: String
+    telephone: String
+    mobile: String
+    nationality: String
+    passport: Passport
+    carRegistration: String
+    address: CustomerAddressV2
+}
+
+type CustomerAddressV2 {
+    line1: String
+    line2: String
+    line3: String
+    line4: String
+    line5: String
+    postCode: String
+    countryCode: String
+    countryCodeISO: String
+    type: AddressType
+    companyName: String
+}
+

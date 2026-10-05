@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina3_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Semibold.ttf">
+            <string>ProximaNova-Semibold</string>
+        </array>
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MapViewController" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="activityIndicator" destination="iob-PY-bB6" id="3ND-Po-HWB"/>
+                <outlet property="distanceLabel" destination="YQr-lr-Ln8" id="DOW-5S-4xx"/>
+                <outlet property="footerView" destination="bqC-eR-cBF" id="ceq-KV-SdT"/>
+                <outlet property="footerViewHeightConstraint" destination="iDu-9Z-cRE" id="Aan-Bg-821"/>
+                <outlet property="hotelCompass" destination="i89-yS-Ext" id="I4x-lw-CaT"/>
+                <outlet property="hotelCompassXConstraint" destination="7OV-37-Xml" id="vVi-4F-mjv"/>
+                <outlet property="hotelCompassYConstraint" destination="WTa-Io-GWL" id="kcf-rk-SjA"/>
+                <outlet property="referenceCenterXConstraint" destination="uj7-PF-uZy" id="bD0-PT-XJy"/>
+                <outlet property="referenceCenterYConstraint" destination="902-0j-gJA" id="DXy-AP-fXg"/>
+                <outlet property="referenceCompass" destination="kJc-qN-3d4" id="hRf-sP-gG3"/>
+                <outlet property="referenceCompassHeightConstraint" destination="oqx-5l-gxN" id="rSQ-4T-XIH"/>
+                <outlet property="referenceCompassWidthConstraint" destination="u5s-yA-0jb" id="0Tl-En-skB"/>
+                <outlet property="resetButton" destination="NIk-ZW-HkC" id="7i2-3z-90f"/>
+                <outlet property="resetButtonBottomConstraint" destination="hxi-BI-JrZ" id="60y-gL-lDE"/>
+                <outlet property="resetButtonTopConstraint" destination="7wO-aj-7c6" id="Y2K-wO-uAL"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="kJc-qN-3d4" customClass="MapAnnotationView" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="10" y="10" width="100" height="30"/>
+                    <gestureRecognizers/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="oqx-5l-gxN"/>
+                        <constraint firstAttribute="width" constant="100" id="u5s-yA-0jb"/>
+                    </constraints>
+                    <connections>
+                        <outletCollection property="gestureRecognizers" destination="rKs-ku-k64" appends="YES" id="Uid-Sr-ROa"/>
+                    </connections>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i89-yS-Ext" customClass="Compass" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="10" y="10" width="60" height="68"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="compass" translatesAutoresizingMaskIntoConstraints="NO" id="0gf-x4-CSs">
+                            <rect key="frame" x="0.0" y="0.0" width="60" height="68"/>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m4x-Ky-9tl">
+                            <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="m4x-Ky-9tl" secondAttribute="height" multiplier="1:1" id="8UM-Vd-QQS"/>
+                            </constraints>
+                            <inset key="imageEdgeInsets" minX="3" minY="8" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" image="piLogo"/>
+                            <connections>
+                                <action selector="backToHotelButtonDidTap:" destination="-1" eventType="touchUpInside" id="QLz-4q-XR1"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="m4x-Ky-9tl" firstAttribute="centerX" secondItem="0gf-x4-CSs" secondAttribute="centerX" id="Ap7-Ik-Hrt"/>
+                        <constraint firstItem="m4x-Ky-9tl" firstAttribute="width" secondItem="i89-yS-Ext" secondAttribute="width" id="C3r-rg-i0c"/>
+                        <constraint firstItem="0gf-x4-CSs" firstAttribute="leading" secondItem="i89-yS-Ext" secondAttribute="leading" id="Cbb-uA-LsO"/>
+                        <constraint firstAttribute="height" constant="68" id="Fgu-Vi-fTV"/>
+                        <constraint firstAttribute="trailing" secondItem="0gf-x4-CSs" secondAttribute="trailing" id="TKM-Tt-ddQ"/>
+                        <constraint firstItem="0gf-x4-CSs" firstAttribute="top" secondItem="i89-yS-Ext" secondAttribute="top" id="W28-9K-4qU"/>
+                        <constraint firstItem="m4x-Ky-9tl" firstAttribute="top" secondItem="0gf-x4-CSs" secondAttribute="top" id="hPQ-dT-zZw"/>
+                        <constraint firstAttribute="bottom" secondItem="0gf-x4-CSs" secondAttribute="bottom" id="nSJ-dX-Njy"/>
+                        <constraint firstAttribute="width" constant="60" id="oYN-N7-zj6"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="backgroundImageView" destination="0gf-x4-CSs" id="nrL-J6-TJm"/>
+                        <outlet property="button" destination="m4x-Ky-9tl" id="WN6-Ri-8q2"/>
+                    </connections>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NIk-ZW-HkC" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="230" y="15" width="70" height="30"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="Sro-Ly-WEg"/>
+                        <constraint firstAttribute="height" constant="30" id="bcR-EQ-PNc"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="16"/>
+                    <state key="normal" title="Reset">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="3"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="resetButtonDidTap:" destination="-1" eventType="touchUpInside" id="c3k-kW-dWM"/>
+                    </connections>
+                </button>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bqC-eR-cBF">
+                    <rect key="frame" x="0.0" y="425" width="320" height="55"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YQr-lr-Ln8">
+                            <rect key="frame" x="139" y="18" width="42" height="20"/>
+                            <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="17"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="YQr-lr-Ln8" firstAttribute="centerY" secondItem="bqC-eR-cBF" secondAttribute="centerY" id="7xp-ij-gxZ"/>
+                        <constraint firstAttribute="height" constant="55" id="iDu-9Z-cRE"/>
+                        <constraint firstItem="YQr-lr-Ln8" firstAttribute="centerX" secondItem="bqC-eR-cBF" secondAttribute="centerX" id="loo-ET-7Rj"/>
+                        <constraint firstItem="YQr-lr-Ln8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="bqC-eR-cBF" secondAttribute="leading" constant="15" id="mtI-mB-tL2"/>
+                    </constraints>
+                </view>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="iob-PY-bB6">
+                    <rect key="frame" x="142" y="222" width="37" height="37"/>
+                    <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                </activityIndicatorView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="i89-yS-Ext" firstAttribute="top" relation="greaterThanOrEqual" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="10" id="0zz-QZ-Pwk"/>
+                <constraint firstItem="i89-yS-Ext" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="5kC-wl-1Kk"/>
+                <constraint firstItem="i89-yS-Ext" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="leading" priority="999" id="7OV-37-Xml"/>
+                <constraint firstItem="NIk-ZW-HkC" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="15" id="7wO-aj-7c6"/>
+                <constraint firstItem="kJc-qN-3d4" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="top" priority="999" id="902-0j-gJA"/>
+                <constraint firstItem="iob-PY-bB6" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="NaK-65-XNQ"/>
+                <constraint firstItem="kJc-qN-3d4" firstAttribute="top" relation="greaterThanOrEqual" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="10" id="P5M-sd-mzX"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kJc-qN-3d4" secondAttribute="trailing" constant="10" id="UBm-uM-fKc"/>
+                <constraint firstAttribute="trailing" secondItem="bqC-eR-cBF" secondAttribute="trailing" id="UL2-eB-Twj"/>
+                <constraint firstAttribute="trailing" secondItem="NIk-ZW-HkC" secondAttribute="trailing" constant="20" id="WMz-3i-wcp"/>
+                <constraint firstItem="i89-yS-Ext" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="top" priority="999" id="WTa-Io-GWL"/>
+                <constraint firstItem="iob-PY-bB6" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Za1-ue-r39"/>
+                <constraint firstItem="kJc-qN-3d4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="bon-XI-PzM"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="i89-yS-Ext" secondAttribute="trailing" constant="10" id="dUS-Ax-Z8a"/>
+                <constraint firstItem="bqC-eR-cBF" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="hHx-av-6Xy"/>
+                <constraint firstItem="bqC-eR-cBF" firstAttribute="top" secondItem="NIk-ZW-HkC" secondAttribute="bottom" constant="20" id="hxi-BI-JrZ"/>
+                <constraint firstAttribute="bottom" secondItem="bqC-eR-cBF" secondAttribute="bottom" id="iZn-V0-YZ6"/>
+                <constraint firstItem="bqC-eR-cBF" firstAttribute="top" relation="greaterThanOrEqual" secondItem="i89-yS-Ext" secondAttribute="bottom" constant="10" id="j4M-fB-Ibo"/>
+                <constraint firstItem="bqC-eR-cBF" firstAttribute="top" relation="greaterThanOrEqual" secondItem="kJc-qN-3d4" secondAttribute="bottom" constant="10" id="mII-wA-aQQ"/>
+                <constraint firstItem="kJc-qN-3d4" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="leading" priority="999" id="uj7-PF-uZy"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="hxi-BI-JrZ"/>
+                </mask>
+            </variation>
+        </view>
+        <tapGestureRecognizer id="rKs-ku-k64">
+            <connections>
+                <action selector="backToReferenceDidTap:" destination="-1" id="NUl-ta-vbq"/>
+            </connections>
+        </tapGestureRecognizer>
+    </objects>
+    <resources>
+        <image name="compass" width="60" height="68"/>
+        <image name="piLogo" width="44" height="46"/>
+    </resources>
+</document>

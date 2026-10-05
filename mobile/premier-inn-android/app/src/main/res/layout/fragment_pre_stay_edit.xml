@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/titleLayout"
+        style="@style/PreStayTextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:visibility="gone"
+        app:endIconDrawable="@drawable/ic_chevron_down_dropdown"
+        app:endIconMode="custom"
+        app:errorEnabled="true"
+        app:errorIconDrawable="@null"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/titleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:inputType="none"
+            android:textColor="@color/grey_dark" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/firstNameLayout"
+        style="@style/PreStayTextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        app:errorEnabled="true"
+        app:errorIconDrawable="@null"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/firstNameView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_dark" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lastNameLayout"
+        style="@style/PreStayTextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:visibility="gone"
+        app:errorEnabled="true"
+        app:errorIconDrawable="@null"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/lastNameView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_dark" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nationalityLayout"
+        style="@style/PreStayTextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:visibility="gone"
+        app:endIconDrawable="@drawable/ic_chevron_down_dropdown"
+        app:endIconMode="custom"
+        app:errorEnabled="true"
+        app:errorIconDrawable="@null"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nationalityEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:inputType="none"
+            android:textColor="@color/grey_dark" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/identificationTypeLayout"
+        style="@style/PreStayDropDownLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:visibility="gone"
+        android:clickable="false"
+        app:endIconDrawable="@drawable/ic_chevron_down_dropdown"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        tools:visibility="visible">
+
+        <AutoCompleteTextView
+            android:id="@+id/identificationTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/identificationNumberLayout"
+        style="@style/PreStayTextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:visibility="gone"
+        app:endIconMode="custom"
+        app:errorEnabled="true"
+        app:errorIconDrawable="@null"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/idNumberEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:textColor="@color/grey_dark" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

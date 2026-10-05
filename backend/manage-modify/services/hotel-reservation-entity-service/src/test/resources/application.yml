@@ -1,0 +1,229 @@
+server:
+  port: 9020
+
+spring:
+  application:
+    name: hotel-reservation-entity-service
+  cache:
+    type: none
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1  #added to make wiremock local server runs on Apple M1
+
+distribution:
+  meals:
+    11: PREMIER_BREAKFAST
+    12: CONTINENTAL_BREAKFAST
+    17: MEAL_DEAL
+    18: BOXED_BREAKFAST
+  fixedRateAuthority: "SCOPE_RATE_PRICE::WRITE"
+
+config:
+  service:
+    ohip:
+      host: http://localhost:${wiremock.server.port:0}
+      connectionTimeoutMillis: 5000
+      responseTimeoutMillis: 10000
+      reservationEndpoint: "/v1/reservations"
+      reservationsPackagesEndpoint: "/v1/reservations/ancillaries"
+      confirmReservationEndpoint: "/v1/reservations/confirm"
+      updateReservationPackagesEndpoint: "/v1/reservations/ancillaries"
+      reservationGuestEndpoint: "/v1/reservations/guests"
+      externalReservationEndpoint: "/v1/reservations/external"
+      reservationIdEndpoint: "/v1/reservation/reservationId"
+      cancelEndpoint: "/v1/reservations/cancel"
+      cancelReservationEndpoint: "/v1/reservations/cancellations"
+      cancelOnHoldReservationEndpoint: "/v1/reservations/cancellations/on-hold"
+      updateDiscountEndpoint: "/v1/reservations/discount"
+      updateCompanyQuestionAndAnswerRequestEndpoint: "/v1/reservations/questions-and-answers"
+      updateBusinessItemsEndpoint: "/v1/reservations/business"
+      hotelInfoEndpoint: "/hotels/{hotelId}/info"
+      searchBookingsEndpoint: "/v1/reservations/search"
+      updateReasonForStayEndpoint: "/v1/reservations/reasonForStay"
+      updateReservationOverrideReasonsEndpoint: "/v1/reservations/overrideReasons"
+      bookingAllowancesEndpoint: "/v1/reservations/bookingAllowances"
+      copyReservationsEndpoint: "/v1/reservations/copy"
+      depositsEndpoint: "/v1/reservations/deposits"
+      cancelPoliciesEndpoint: "/v1/reservations/cancellationPolicies"
+      marketingPreferencesEndpoint: "/v1/reservations/marketingPreferences"
+      amendSummaryDetails: "/v1/amend/getDetailsForAmend"
+      confirmAmend: "/v1/reservations/confirmAmend"
+      ratePlansEndpoint: "/ratePlans"
+      charityPackagesDetailsEndpoint: "/hotels/{hotelId}/packages/donations"
+      reservationsByBasketReservationIds: "/v1/reservations/basket"
+      moveReservationPaymentEndpoint: "/v1/reservations/movePaymentDetails"
+      routingInstructionsEndpoint: "/v1/reservations/routingInstructions"
+      updateEmailReservationEndpoint: "/v1/reservations/email"
+      memosEndpoint: "/v1/reservations/memos"
+      attachProfileToReservationsEndpoint: "/v1/reservations/profiles"
+      packagesEndpoint: "/hotels/{hotelId}/packages"
+      changeLogEndpoint: "/v1/hotels/{hotelId}/reservations/changeLog"
+      fileAttachmentEndpoint: "/v1/reservations/attachments"
+      preCheckInStatus: "/v1/reservations/pre-checkin"
+      updateExternalReferenceEndpoint: "/v1/reservations/externalRef"
+      reservationsPackagesScheduledEndpoint: "/v1/reservations/ancillaries/scheduled"
+      reservationsPreferencesEndpoint: "/v1/reservations/preferences"
+    basket:
+      host: http://localhost:${wiremock.server.port:0}/bsk
+      basketEndpoint: "/v1/baskets/{basket-reference}"
+      basketByReferenceEndpoint: "/v1/baskets/"
+      cancelEndpoint: "/v1/baskets/{basket-reference}/cancel"
+      erroredBookingEndpoint: "/v1/baskets/{basket-reference}/erroredBooking"
+      preAuthChargesEndpoint: "/v1/baskets/{basket-reference}/preAuthCharges"
+      createEndpoint: "/v1/baskets"
+      addItemEndpoint: "/v1/baskets/{basket-reference}/items"
+      refundEndpoint: "/v1/baskets/{basketReference}/refund"
+      removeItemEndpoint: "/v1/baskets/{basket-reference}/items/{itemId}"
+      linkAmendReservations: "/v1/baskets/{basket-reference}/linkAmendReservations"
+      getChargesEndpoint: "/v1/baskets/deposit-folios/{reservationId}"
+      emailConfirmationEndpoint: "v1/baskets/email"
+      initiatePaymentEndpoint: "/v1/baskets/{basketReference}/pay"
+      initiateCcuiPaymentProcess: "/v1/baskets/ccui/{basketReference}/pay"
+      updateAllowancesEndpoint: "/v1/baskets/{basketReference}/allowances"
+      changeIdContextEndpoint: "/v1/baskets/{bookingRef}/changeIdContext"
+    rules:
+      host: http://localhost:${wiremock.server.port:0}
+      amendmentRulesEndpoint: "/v1/rules/amendments"
+      maxRoomRulesEndpoint: "/v1/rules/max-rooms"
+      maxNightsRulesEndpoint: "/v1/rules/max-nights"
+      maxRoomOccupancyEndpoint: "/v1/rules/max-room-occupancy"
+      channelBasedOnSourceIdEndpoint: "/v1/rules/source-info"
+      vatCodesEndpoint: "/v1/rules/vat-codes"
+      businessAllowanceEndpoint: "/allowances"
+      singleOccupancySupplementEndpoint: "/v1/rules/occupancy-supplement"
+      wbRoomTypes:
+        - "DB"
+        - "SB"
+        - "FAM"
+        - "DIS"
+        - "TWIN"
+    content:
+      host: http://localhost:${wiremock.server.port:0}
+      contentIndexHeaderEndpoint: "/v1/content/header/data"
+      businessNotesEndpoint: "/v1/content/businessNotes"
+      hotelPaymentInformation: "/v1/content/hotels/{HotelId}/payment-information"
+      hotelInformationEndpoint: "/v1/content/hotels/{hotelId}/information"
+      hotelRateInformationEndpoint: "/v1/content/booking/hotelRateInformation"
+      searchRulesEndpoint: "/v1/content/searchrules"
+    hotel-account:
+      host: http://localhost:${wiremock.server.port:0}
+      updateCustomerEndpoint: "/customers/hotels/{customer-id}"
+    promotion:
+      host: http://localhost:${wiremock.server.port:0}
+      promoKindEndpoint: "/v1/promo/batches/promo-kind"
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    api-url: 'http://localhost:4242/api'
+    api-token: 'dummy-value'
+    environment: unit-test
+
+opera:
+  confirmation:
+    config:
+      bic:
+        enabled: false
+
+feature-flags:
+  ccui-amend-piba:
+    key: "release_ccui_cyan_amend-piba-uk"
+    fallback: true
+  save-allowances-in-basket:
+    key: "release_pi_bb_ccui_distr_web4_save-allowances-in-basket"
+    fallback: true
+  use-basket-allowances:
+    key: "release_pi_bb_ccui_distr_web4_use-basket-allowances"
+    fallback: true
+  enable-amend-pay-now:
+    key: "enable_amend_pay_now"
+    fallback: true
+  apply-occupancy-supplement:
+    key: "release_pi_ccui_distr_web3_occupancy_supplement"
+    fallback: false
+  aem-search-rules:
+    key: "release_pi_bb_ccui_aem_search_rules"
+    fallback: true
+  max-rooms-amend:
+    key: "release_pi_bb_ccui_maxrooms_amend"
+    fallback: false
+  release_pi_bb_mobile_de_reg_card:
+    key: "release_pi_bb_mobile_de_reg_card"
+    fallback: false
+  release_pi_bb_mobile_check_out:
+    key: "release_pi_bb_mobile_check_out"
+    fallback: false
+  company-name-feature-flag:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: true
+  mobile_ciol_piba:
+    key: "mobile_ciol_piba"
+    fallback: false
+  mobile_ciol_piba_cnp:
+    key: "mobile_ciol_piba_cnp"
+    fallback: false
+  release-pi-ccui-city-tax-uk:
+    key: "release_pi_ccui_city_tax_uk"
+    fallback: false
+  mobile_digital_key:
+    key: "mobile_digital_key"
+    fallback: false
+  mobile_accepts_ota_booking:
+    key: "mobile_accepts_ota_booking"
+    fallback: true
+  pi_search_by_opera_confirmation:
+    key: "release_pi_search_opera_conf_number"
+    fallback: true
+  mobile-preRegistered-repurpose:
+    key: "mobile_preRegistered_repurpose"
+    fallback: false
+  mobile_ciol_prepaid_3rdparty:
+    key: "mobile_ciol_prepaid_3rdparty"
+    fallback: false
+  set-cnpBooking-alerts:
+    key: "release_set_cnp_booking_alerts"
+    fallback: false
+
+logging:
+  configuration:
+    logger: default
+
+promotion:
+  promotionalPackage: PROMO_PACKAGE
+
+thirdpartybooking:
+  subchannel: PI.MOBILE, BB.MOBILE, KIOSK.WEB
+  providersExcluded:
+
+  ciol:
+    rules:
+      maxRooms: 1
+      daysWithinArrival: 1
+      ciolRatesExcluded: $
+      ciolHotels: FRAMTI
+      ciolCountryCodes: GB, DE
+      ciolEmails:
+      deRegCardRooms: 1
+      deRegCardHotels: FRAWES
+
+qrcode:
+  inputCharset: ISO-8859-1
+  width: 394
+  height: 394
+  filename: qr.png
+
+digitalkey:
+  rules:
+    maxRooms: ${DK_MAX_ROOMS:1}
+    dkHotels: ${DK_HOTELS:LINMIL,FRAMTI}
+    reservationStatues: ${DK_RESERVATION_STATUES:RESERVED,INHOUSE}
+
+package:
+  groups:
+    MDP: ${MDP_PACKAGES:MDBFST,MDBEVA,MD2DIN}

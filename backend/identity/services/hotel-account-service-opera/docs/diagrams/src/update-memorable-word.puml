@@ -1,0 +1,27 @@
+@startuml
+actor FE
+box "Microservices"
+    control "/customers/hotels/username" as GC
+    control "/business/tether/login" as TL
+    control "/auth/hotels/memorable-word/reset" as MW
+end box
+entity BART
+entity "Worldline" as WL
+
+FE -> GC: bart sessionId, email
+GC -> BART: bart sessionId, email
+GC <-- BART: tetheredGuid
+FE <-- GC: tetheredGuid
+FE -> TL: tetheredGuid
+TL -> WL: tetheredGuid
+TL <-- WL: sessionId (wordline session), sharedSecret
+FE <-- TL: sessionId (wordline session), sharedSecret
+FE -> MW: secret, worldlineSession, new memorable word
+MW -> BART: secret, worldlineSession, new memorable word
+BART -> BART: updates memorable word
+BART -> WL: updates business account password
+
+MW <-- BART: success flag
+FE <-- MW: success flag
+
+@enduml

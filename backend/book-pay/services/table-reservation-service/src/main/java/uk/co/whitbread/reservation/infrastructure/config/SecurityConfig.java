@@ -1,0 +1,16 @@
+package uk.co.whitbread.reservation.infrastructure.config;
+
+import org.springframework.context.annotation.Bean;
+import uk.co.whitbread.shared.auth.EnableAuth;
+import uk.co.whitbread.shared.auth.builder.ApplicationEndpointConfigurer;
+
+@EnableAuth
+public class SecurityConfig {
+
+  @Bean
+  public ApplicationEndpointConfigurer applicationEndpoint() {
+    return auth -> auth
+        .anyRequest()
+        .permitAll();
+  }
+}

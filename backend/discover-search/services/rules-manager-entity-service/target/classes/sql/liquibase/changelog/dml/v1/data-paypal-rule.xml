@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="paypal_delete_table" author="joshua.mathew" runAlways="true">
+        <delete tableName="paypal_rule"/>
+    </changeSet>
+    <changeSet id="paypal_update_column_type" author="joshua.mathew" runAlways="true">
+        <modifyDataType tableName="paypal_rule" columnName="hotel_id_list" newDataType="varchar(500)"/>
+    </changeSet>
+    <changeSet author="joshua.mathew" id="init_data_paypal_rule" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="paypal_rule"/>
+
+                <sqlCheck expectedResult="0">select count(*) from rules_engine.paypal_rule</sqlCheck>
+            </and>
+        </preConditions>
+    </changeSet>
+
+    <changeSet author="joshua.mathew" id="paypal_rule_load-non-prod" runAlways="true" context="non-prod">
+        <loadData tableName="paypal_rule"
+          file="sql/liquibase/data/paypal_rule_data.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="joshua.mathew" id="paypal_rule_load-prod" runAlways="true" context="prod">
+        <loadData tableName="paypal_rule"
+                  file="sql/liquibase/data/paypal_rule_data_v2.csv"
+                  primaryKey="rule_id"/>
+    </changeSet>
+
+</databaseChangeLog>

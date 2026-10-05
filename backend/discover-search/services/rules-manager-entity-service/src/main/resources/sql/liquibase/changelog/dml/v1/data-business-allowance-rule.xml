@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet author="marian.gradea" id="init_data_business_allowance_rule" runOnChange="true">
+    <preConditions onFail="MARK_RAN">
+      <and>
+        <tableExists tableName="business_allowance_rule"/>
+
+        <sqlCheck expectedResult="0">select count(*) from rules_engine.business_allowance_rule
+        </sqlCheck>
+      </and>
+    </preConditions>
+
+    <loadData tableName="business_allowance_rule" file="sql/liquibase/data/business_allowance_data.csv"/>
+  </changeSet>
+
+  <changeSet author="oana.rachiteanu" id="add_boxed_breakfast_rule">
+    <loadData tableName="business_allowance_rule" file="sql/liquibase/data/business_allowance_boxed_breakfast.csv"/>
+  </changeSet>
+
+  <changeSet author="alin.bucea" id="add-meal-package-allowances">
+    <loadData tableName="business_allowance_rule" file="sql/liquibase/data/business_allowances_meal_packages_data.csv"/>
+  </changeSet>
+
+  <changeSet author="alin.bucea" id="add-accommodation-allowance">
+    <loadData tableName="business_allowance_rule" file="sql/liquibase/data/business_allowance_accommodation_data.csv"/>
+  </changeSet>
+
+  <changeSet author="alin.bucea" id="add-meal-deal-breakdown">
+    <loadData tableName="business_allowance_rule" file="sql/liquibase/data/business_allowance_meal_deal_breakdown_data.csv"/>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="add-ultimate-wifi-package">
+    <loadData tableName="business_allowance_rule" file="sql/liquibase/data/business_allowances_ultimate_wifi_package_data.csv"/>
+  </changeSet>
+
+  <changeSet author="gabriel.simon" id="add-breakfast-bundles">
+    <loadData tableName="business_allowance_rule" file="sql/liquibase/data/business_allowance_breakfast_bundles_data.csv" />
+  </changeSet>
+
+</databaseChangeLog>

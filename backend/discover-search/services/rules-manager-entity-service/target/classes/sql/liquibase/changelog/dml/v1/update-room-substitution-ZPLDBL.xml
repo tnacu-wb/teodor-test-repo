@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="cristina.dodu" id="tag_update-room-substitution-ZPLDBL-DB">
+    <tagDatabase tag="version_update-room-substitution-ZPLDBL-DB" />
+  </changeSet>
+
+  <changeSet author="cristina.dodu" id="update-room-substitution-ZPLDBL-DB">
+    <update schemaName="rules_engine"
+      tableName="room_substitution_rule">
+      <column name="offer_order" value="10"/>
+      <where>pms_room_type='ZPLDBL' and room_type='DB'</where>
+    </update>
+
+    <rollback>
+      <update schemaName="rules_engine"
+        tableName="room_substitution_rule">
+        <column name="offer_order" value="7"/>
+        <where>pms_room_type='ZPLDBL' and room_type='DB'</where>
+      </update>
+
+    </rollback>
+  </changeSet>
+
+  <changeSet author="cristina.dodu" id="tag_update-room-substitution-ZPLDBL-SB">
+    <tagDatabase tag="version_update-room-substitution-ZPLDBL-SB" />
+  </changeSet>
+
+  <changeSet author="cristina.dodu" id="update-room-substitution-ZPLDBL-SB">
+    <update schemaName="rules_engine"
+      tableName="room_substitution_rule">
+      <column name="offer_order" value="12"/>
+      <where>pms_room_type='ZPLDBL' and room_type='SB'</where>
+    </update>
+    <rollback>
+      <update schemaName="rules_engine"
+        tableName="room_substitution_rule">
+        <column name="offer_order" value="9"/>
+        <where>pms_room_type='ZPLDBL' and room_type='SB'</where>
+      </update>
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>

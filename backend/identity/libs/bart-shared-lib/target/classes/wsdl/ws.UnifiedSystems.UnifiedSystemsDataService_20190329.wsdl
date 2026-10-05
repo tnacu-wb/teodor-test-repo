@@ -1,0 +1,623 @@
+<definitions targetNamespace="http://bartws.micros.com/1.17" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://bartws.micros.com/1.17" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://bartws.micros.com/1.17">
+			<s:element name="HotelDataRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="hotelDataRequest" type="s0:HotelDataRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="HotelDataRequest">
+				<s:sequence>
+					<s:element name="HotelCode" type="s0:ArrayOfHotelCodeItemString"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfHotelCodeItemString">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="HotelCodeItem" nillable="true" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="HotelDataRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="HotelDataRequestResult" type="s0:HotelDataResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="HotelDataResponse">
+				<s:sequence>
+					<s:element name="hotels" type="s0:ArrayOfHotelHotels"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfHotelHotels">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Hotel" nillable="true" type="s0:Hotels"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Hotels">
+				<s:sequence>
+					<s:element name="hotelCode" type="s:string"/>
+					<s:element name="hotelName" type="s:string"/>
+					<s:element name="hotelDescription" type="s:string"/>
+					<s:element name="hotelBusinessDesc" type="s:string"/>
+					<s:element name="hotelAddress" type="s0:HotelAddress"/>
+					<s:element name="hotelPhone" type="s:string"/>
+					<s:element name="hotelFax" type="s:string"/>
+					<s:element name="restaurantName" type="s:string"/>
+					<s:element name="brand" type="s0:Brand"/>
+					<s:element minOccurs="0" name="hotelBrand" type="s0:HotelBrands"/>
+					<s:element name="primaryArea" type="s:string"/>
+					<s:element name="secondaryArea" type="s:string"/>
+					<s:element minOccurs="0" name="midWeekRates" type="s0:ArrayOfClassificationRateClass"/>
+					<s:element minOccurs="0" name="weekendRates" type="s0:ArrayOfClassificationRateClass"/>
+					<s:element name="directions" type="s:string"/>
+					<s:element name="internetBookingsAllowed" type="s:boolean"/>
+					<s:element name="creditCardsAccepted" type="s0:ArrayOfAcceptedCreditCardAcceptedCreditCards"/>
+					<s:element name="maxRoomsBookable" type="s:long"/>
+					<s:element name="maxRoomsAmendable" type="s:long"/>
+					<s:element name="checkinKiosk" type="s:boolean"/>
+					<s:element name="checkinTime" type="s0:Time"/>
+					<s:element name="checkoutTime" type="s0:Time"/>
+					<s:element name="hotelDinner" type="s0:HotelDinner"/>
+					<s:element name="lastUpdatedDate" type="s:date"/>
+					<s:element name="lastUpdatedTime" type="s0:Time"/>
+					<s:element name="hotelBreakfasts" type="s0:ArrayOfHotelBreakfastHotelBreakfasts"/>
+					<s:element minOccurs="0" name="hotelUpsellItems" type="s0:ArrayOfUpsellItemUpsellItem"/>
+					<s:element name="hotelFacilities" type="s0:ArrayOfHotelFacilityHotelFacilities"/>
+					<s:element minOccurs="0" name="restaurantOpeningTimes" type="s0:ArrayOfRestaurantTimeRestaurantOpeningTimes"/>
+					<s:element minOccurs="0" name="checkInEnabled" type="s:boolean"/>
+					<s:element minOccurs="0" name="hotelsError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_HOTEL_CODE"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="hotelDataError" type="s0:ErrorDetails"/>
+					<s:element minOccurs="0" name="openingDate" type="s:date"/>
+					<s:element minOccurs="0" name="bookingWindows" type="s0:ArrayOfBookingWindowBookingWindows"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="HotelAddress">
+				<s:sequence>
+					<s:element name="addressLine1" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine2" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine3" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine4" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine5" type="s:string"/>
+					<s:element name="postCode" type="s:string"/>
+					<s:element name="country" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Brand">
+				<s:sequence>
+					<s:element name="brandCode" type="s:string"/>
+					<s:element name="brandLegend" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="HotelBrands">
+				<s:sequence>
+					<s:element name="hotelBrandCode" type="s:string"/>
+					<s:element name="hotelBrandLegend" type="s:string"/>
+					<s:element name="titles" type="s0:ArrayOftitlesItemString"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOftitlesItemString">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="titlesItem" nillable="true" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfClassificationRateClass">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Classification" nillable="true" type="s0:RateClass"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RateClass">
+				<s:sequence>
+					<s:element minOccurs="0" name="class" type="s:string"/>
+					<s:element minOccurs="0" name="price" type="s0:Price"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Price">
+				<s:sequence>
+					<s:element name="amount" type="s:decimal"/>
+					<s:element name="currency" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfAcceptedCreditCardAcceptedCreditCards">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="AcceptedCreditCard" nillable="true" type="s0:AcceptedCreditCards"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="AcceptedCreditCards">
+				<s:sequence>
+					<s:element name="creditCardCode" type="s:string"/>
+					<s:element name="creditCardName" type="s:string"/>
+					<s:element minOccurs="0" name="cardFee" type="s0:Price"/>
+					<s:element name="paymentOnly" type="s:boolean"/>
+					<s:element name="listOrder" type="s:long"/>
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="Time">
+				<s:restriction base="s:time"/>
+			</s:simpleType>
+			<s:complexType name="HotelDinner">
+				<s:sequence>
+					<s:element name="dinnerAvailable" type="s:boolean"/>
+					<s:element minOccurs="0" name="dinnerCode" type="s:string"/>
+					<s:element minOccurs="0" name="description" type="s:string"/>
+					<s:element minOccurs="0" name="dinnerStartTime" type="s0:Time"/>
+					<s:element minOccurs="0" name="dinnerEndTime" type="s0:Time"/>
+					<s:element minOccurs="0" name="maxCovers" type="s:long"/>
+					<s:element minOccurs="0" name="dinnerInterval" type="s:long"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfHotelBreakfastHotelBreakfasts">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="HotelBreakfast" nillable="true" type="s0:HotelBreakfasts"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="HotelBreakfasts">
+				<s:sequence>
+					<s:element name="breakfastCode" type="s:string"/>
+					<s:element name="breakfastLegend" type="s:string"/>
+					<s:element name="breakfastPrice" type="s0:Price"/>
+					<s:element name="breakfastCodeType">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="Adult"/>
+								<s:enumeration value="Child"/>
+								<s:enumeration value="Both"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="dependentCode" type="s:string"/>
+					<s:element minOccurs="0" name="freeRatio" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfUpsellItemUpsellItem">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="UpsellItem" nillable="true" type="s0:UpsellItem"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="UpsellItem">
+				<s:sequence>
+					<s:element minOccurs="0" name="code" type="s:long"/>
+					<s:element minOccurs="0" name="description" type="s:string"/>
+					<s:element minOccurs="0" name="price" type="s0:Price"/>
+					<s:element minOccurs="0" name="detail" type="s:string"/>
+					<s:element minOccurs="0" name="duration" type="s:string"/>
+					<s:element minOccurs="0" name="category" type="s0:CategoryList"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CategoryList">
+				<s:sequence>
+					<s:element minOccurs="0" name="categoryCode" type="s:string"/>
+					<s:element minOccurs="0" name="categoryLegend" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfHotelFacilityHotelFacilities">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="HotelFacility" nillable="true" type="s0:HotelFacilities"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="HotelFacilities">
+				<s:sequence>
+					<s:element minOccurs="0" name="facilityCode" type="s:string"/>
+					<s:element minOccurs="0" name="facilityDescription" type="s:string"/>
+					<s:element minOccurs="0" name="facilityLegend" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfRestaurantTimeRestaurantOpeningTimes">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="RestaurantTime" nillable="true" type="s0:RestaurantOpeningTimes"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RestaurantOpeningTimes">
+				<s:sequence>
+					<s:element minOccurs="0" name="type" type="s:string"/>
+					<s:element minOccurs="0" name="restaurantDay" type="s:string"/>
+					<s:element minOccurs="0" name="startTime" type="s0:Time"/>
+					<s:element minOccurs="0" name="endTime" type="s0:Time"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ErrorDetails">
+				<s:sequence>
+					<s:element minOccurs="0" name="errorMessage" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfBookingWindowBookingWindows">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="BookingWindow" nillable="true" type="s0:BookingWindows"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="BookingWindows">
+				<s:sequence>
+					<s:element name="daysAhead" type="s:long"/>
+					<s:element name="bookingChannel" type="s0:BookingChannel"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="BookingChannel">
+				<s:sequence>
+					<s:element name="bookingChannelCode" type="s:string"/>
+					<s:element name="bookingChannelDescription" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="HotelListRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="hotelListRequest" type="s0:HotelListRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="HotelListRequest">
+				<s:sequence>
+					<s:element minOccurs="0" name="fromDate" type="s:date"/>
+					<s:element minOccurs="0" name="fromTime" type="s0:Time"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="HotelListRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="HotelListRequestResult" type="s0:HotelListResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="HotelListResponse">
+				<s:sequence>
+					<s:element name="hotelSummaries" type="s0:ArrayOfHotelSummaryHotelSummaries"/>
+					<s:element minOccurs="0" name="hotelListError" type="s0:ErrorDetails"/>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfHotelSummaryHotelSummaries">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="HotelSummary" nillable="true" type="s0:HotelSummaries"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="HotelSummaries">
+				<s:sequence>
+					<s:element name="hotelCode" type="s:string"/>
+					<s:element name="lastUpdatedDate" type="s:date"/>
+					<s:element name="lastUpdatedTime" type="s0:Time"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="SharedDataRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="sharedDataRequest" type="s0:SharedDataRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="SharedDataRequest"/>
+			<s:element name="SharedDataRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="SharedDataRequestResult" type="s0:SharedDataResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="SharedDataResponse">
+				<s:sequence>
+					<s:element name="donations" type="s0:ArrayOfCharityDonations"/>
+					<s:element name="bookingWindows" type="s0:ArrayOfBookingWindowBookingWindows"/>
+					<s:element name="countries" type="s0:ArrayOfCountryCountryCodes"/>
+					<s:element name="titles" type="s0:ArrayOftitlesItemString"/>
+					<s:element minOccurs="0" name="regions" type="s0:ArrayOfRegionRegion"/>
+					<s:element minOccurs="0" name="breakfasts" type="s0:ArrayOfbreakfastBreakfast"/>
+					<s:element minOccurs="0" name="upsellCategories" type="s0:ArrayOfUpsellCategoryCategoryList"/>
+					<s:element minOccurs="0" name="upsellItems" type="s0:ArrayOfUpsellItemUpsellItem"/>
+					<s:element name="internetPrepaymentAllowed" type="s:boolean"/>
+					<s:element name="internetBookingAvailable" type="s:boolean"/>
+					<s:element name="brands" type="s0:ArrayOfBrandBrands"/>
+					<s:element name="hotelBrands" type="s0:ArrayOfHotelBrandHotelBrands"/>
+					<s:element name="lettingTypes" type="s0:ArrayOfLettingTypeLettingTypes"/>
+					<s:element name="facilities" type="s0:ArrayOfFacilitySummaryFacilitySummaries"/>
+					<s:element name="rateClassifications" type="s0:ArrayOfRateClassificationRateClassifications"/>
+					<s:element minOccurs="0" name="loyaltyPrograms" type="s0:ArrayOfLoyaltyProgramLoyaltyProgram"/>
+					<s:element name="creditCardsAccepted" type="s0:ArrayOfAcceptedCreditCardAcceptedCreditCards"/>
+					<s:element minOccurs="0" name="carParkOperators" type="s0:ArrayOfCarParkOperatorsCarParkOperators"/>
+					<s:element minOccurs="0" name="businessTypes" type="s0:ArrayOfListItemListItem"/>
+					<s:element minOccurs="0" name="employeeNumbers" type="s0:ArrayOfListItemListItem"/>
+					<s:element minOccurs="0" name="ukHotelSpend" type="s0:ArrayOfListItemListItem"/>
+					<s:element minOccurs="0" name="restrictedRates" type="s0:ArrayOfListItemListItem"/>
+					<s:element minOccurs="0" name="corpUpsellItems" type="s0:ArrayOfListItemListItem"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfCharityDonations">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Charity" nillable="true" type="s0:Donations"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Donations">
+				<s:sequence>
+					<s:element name="donationAllowed" type="s:boolean"/>
+					<s:element minOccurs="0" name="code" type="s:long"/>
+					<s:element minOccurs="0" name="charityName" type="s:string"/>
+					<s:element minOccurs="0" name="donationAmounts" type="s0:ArrayOfPricePrice"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfPricePrice">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Price" nillable="true" type="s0:Price"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfCountryCountryCodes">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Country" nillable="true" type="s0:CountryCodes"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CountryCodes">
+				<s:sequence>
+					<s:element name="countryCode" type="s:string"/>
+					<s:element name="countryLegend" type="s:string"/>
+					<s:element minOccurs="0" name="passportRequired" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfRegionRegion">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Region" nillable="true" type="s0:Region"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Region">
+				<s:sequence>
+					<s:element minOccurs="0" name="regionID" type="s:string"/>
+					<s:element minOccurs="0" name="regionDescription" type="s:string"/>
+					<s:element minOccurs="0" name="active" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfbreakfastBreakfast">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="breakfast" nillable="true" type="s0:Breakfast"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Breakfast">
+				<s:sequence>
+					<s:element name="breakfastCode" type="s:string"/>
+					<s:element name="breakfastLegend" type="s:string"/>
+					<s:element name="breakfastPrice" type="s0:Price"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfUpsellCategoryCategoryList">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="UpsellCategory" nillable="true" type="s0:CategoryList"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfBrandBrands">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Brand" nillable="true" type="s0:Brands"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Brands">
+				<s:sequence>
+					<s:element name="brandCode" type="s:string"/>
+					<s:element name="brandLegend" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfHotelBrandHotelBrands">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="HotelBrand" nillable="true" type="s0:HotelBrands"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfLettingTypeLettingTypes">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="LettingType" nillable="true" type="s0:LettingTypes"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="LettingTypes">
+				<s:sequence>
+					<s:element name="code" type="s:string"/>
+					<s:element name="description" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfFacilitySummaryFacilitySummaries">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="FacilitySummary" nillable="true" type="s0:FacilitySummaries"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="FacilitySummaries">
+				<s:sequence>
+					<s:element minOccurs="0" name="facilityCode" type="s:string"/>
+					<s:element minOccurs="0" name="facilityLegend" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfRateClassificationRateClassifications">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="RateClassification" nillable="true" type="s0:RateClassifications"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RateClassifications">
+				<s:sequence>
+					<s:element name="classificationCode" type="s:string"/>
+					<s:element name="classificationLegend" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfLoyaltyProgramLoyaltyProgram">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="LoyaltyProgram" nillable="true" type="s0:LoyaltyProgram"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="LoyaltyProgram">
+				<s:sequence>
+					<s:element minOccurs="0" name="programCode">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="10"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="programDescription">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="30"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfCarParkOperatorsCarParkOperators">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="CarParkOperators" nillable="true" type="s0:CarParkOperators"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CarParkOperators">
+				<s:sequence>
+					<s:element name="operatorCode">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="10"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="operatorName">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="30"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="earliestTime" type="s0:Time"/>
+					<s:element minOccurs="0" name="latestTime" type="s0:Time"/>
+					<s:element minOccurs="0" name="terminals" type="s0:ArrayOfterminalCarParkTerminals"/>
+					<s:element minOccurs="0" name="inputFields" type="s0:ArrayOfinputFieldCarParkInputFields"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfterminalCarParkTerminals">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="terminal" nillable="true" type="s0:CarParkTerminals"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CarParkTerminals">
+				<s:sequence>
+					<s:element name="code">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="5"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="description">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="30"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfinputFieldCarParkInputFields">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="inputField" nillable="true" type="s0:CarParkInputFields"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CarParkInputFields">
+				<s:sequence>
+					<s:element name="field">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="30"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="label">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="30"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="request" type="s:boolean"/>
+					<s:element name="required" type="s:boolean"/>
+					<s:element name="length">
+						<s:simpleType>
+							<s:restriction base="s:long">
+								<s:maxInclusive value="50"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfListItemListItem">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="ListItem" nillable="true" type="s0:ListItem"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ListItem">
+				<s:sequence>
+					<s:element name="code" type="s:string"/>
+					<s:element name="description" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+		</s:schema>
+	</types>
+	<message name="HotelDataRequestSoapIn">
+		<part element="s0:HotelDataRequest" name="parameters"/>
+	</message>
+	<message name="HotelDataRequestSoapOut">
+		<part element="s0:HotelDataRequestResponse" name="parameters"/>
+	</message>
+	<message name="HotelListRequestSoapIn">
+		<part element="s0:HotelListRequest" name="parameters"/>
+	</message>
+	<message name="HotelListRequestSoapOut">
+		<part element="s0:HotelListRequestResponse" name="parameters"/>
+	</message>
+	<message name="SharedDataRequestSoapIn">
+		<part element="s0:SharedDataRequest" name="parameters"/>
+	</message>
+	<message name="SharedDataRequestSoapOut">
+		<part element="s0:SharedDataRequestResponse" name="parameters"/>
+	</message>
+	<portType name="UnifiedSystemsSoap">
+		<operation name="HotelDataRequest">
+			<input message="s0:HotelDataRequestSoapIn"/>
+			<output message="s0:HotelDataRequestSoapOut"/>
+		</operation>
+		<operation name="HotelListRequest">
+			<input message="s0:HotelListRequestSoapIn"/>
+			<output message="s0:HotelListRequestSoapOut"/>
+		</operation>
+		<operation name="SharedDataRequest">
+			<input message="s0:SharedDataRequestSoapIn"/>
+			<output message="s0:SharedDataRequestSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="UnifiedSystemsSoap" type="s0:UnifiedSystemsSoap">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="HotelDataRequest">
+			<soap:operation soapAction="http://bartws.micros.com/1.17/ws.UnifiedSystems.UnifiedSystemsDataService.HotelDataRequest" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="HotelListRequest">
+			<soap:operation soapAction="http://bartws.micros.com/1.17/ws.UnifiedSystems.UnifiedSystemsDataService.HotelListRequest" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="SharedDataRequest">
+			<soap:operation soapAction="http://bartws.micros.com/1.17/ws.UnifiedSystems.UnifiedSystemsDataService.SharedDataRequest" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="UnifiedSystems">
+		<port binding="s0:UnifiedSystemsSoap" name="UnifiedSystemsSoap">
+			<soap:address location="https://bookings.premierinn.com:443/csp/sql/ws.UnifiedSystems.UnifiedSystemsDataService.cls"/>
+		</port>
+	</service>
+</definitions>

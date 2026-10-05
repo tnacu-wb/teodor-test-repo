@@ -1,0 +1,56 @@
+{{/*
+Two routing modes, selected by whether `istio.host` is set.
+
+  istio.host unset (the default, and what every long-lived release uses)
+    hosts: ["*"] and the request is matched on its path — `istio.prefix`, or
+    `istio.regex.pattern` when `istio.regex.enabled` is true. The gateway owns
+    the hostname; the path picks the service out from behind it.
+
+  istio.host set (per-PR releases)
+    The release is addressed by its own hostname, so the path cannot identify
+    it — several releases of the same app share one path. Matching on
+    :authority instead keeps each PR release routable at
+    <release>.<app>.dev.premierinn.digital while the long-lived "*" release
+    keeps serving every other hostname on the same gateway. Istio prefers the
+    more specific host, so the two coexist without the PR release having to
+    claim a path prefix of its own.
+*/}}
+{{- $host := (.Values.istio).host | default "" -}}
+{{- if and .Values.service .Values.istio (ne (.Values.istio).create false) }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.applicationName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    helm.sh/chart: {{ .Chart.Version }}
+spec:
+  gateways:
+    - {{ .Values.istio.gateway }}
+  hosts:
+    - {{ $host | default "*" | quote }}
+  http:
+    - match:
+        {{- if $host }}
+        - headers:
+            ":authority":
+              exact: {{ $host }}
+        {{- else }}
+        - uri:
+            {{- if eq ((.Values.istio).regex).enabled true }}
+            regex: {{ .Values.istio.regex.pattern }}
+            {{- else if (.Values.istio).prefix }}
+            prefix: {{ .Values.istio.prefix }}
+            {{- end }}
+        {{- end }}
+      route:
+        - destination:
+            host: {{ .Values.service.name }}
+          weight: 100
+      {{- if eq .Values.istio.auth true }}
+      headers:
+        request:
+          remove:
+            - authorization
+      {{- end }}
+{{- end -}}

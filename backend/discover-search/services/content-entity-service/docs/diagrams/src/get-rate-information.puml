@@ -1,0 +1,18 @@
+@startuml
+entity GraphQL_endpoint
+title Retrieve Rate Information from AEM
+
+entity "content-entity-service" as CES
+entity "ohip-adapter" as OHIP
+entity "ohip-adapter" as OHIP
+entity AEM
+
+GraphQL_endpoint-> CES  ++: GET /v1/booking/rateInformation?language={language}&country={country}&brand={brand}
+CES -> AEM: GET /{country}/{language}/content-service.rates.detail/brand/{brand}.json
+AEM -> CES: rateInformation
+CES -> OHIP: GET /ratePlans?ratePlanCodes={rateCodeList}
+OHIP -> OHIP: GET /ratePlans?ratePlanCodes={rateCodeList}
+OHIP -> OHIP: ratePlansInfo
+OHIP -> CES: ratePlansInfo
+GraphQL_endpoint<- CES -- : filtered rate information
+@enduml

@@ -1,0 +1,45 @@
+import { gql } from 'graphql-request';
+
+export const getAccountBalanceSummaryV2 = () => gql`
+  query GetAccountBalanceSummaryV2($scheme: Scheme, $tetheredUserGuid: String) {
+    getAccountBalanceSummaryV2(scheme: $scheme, tetheredUserGuid: $tetheredUserGuid) {
+      accountName
+      tetheredGuid
+      schemeCustomerId
+      accountNumber
+      available {
+        amount
+        currencyCode
+        currencySymbol
+      }
+      creditLimit {
+        amount
+        currencyCode
+        currencySymbol
+      }
+      currentBalance {
+        amount
+        currencyCode
+        currencySymbol
+      }
+      scheme
+      registrationRoles
+      outstanding {
+        amount
+        currencyCode
+        currencySymbol
+      }
+      errorCode
+      newTransactions {
+        amount
+        currencyCode
+        currencySymbol
+      }
+      interimPayments {
+        amount
+        currencyCode
+        currencySymbol
+      }
+    }
+  }
+`;

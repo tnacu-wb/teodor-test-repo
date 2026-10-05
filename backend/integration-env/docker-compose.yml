@@ -1,0 +1,882 @@
+x-otel-env: &otel-env
+  JAVA_TOOL_OPTIONS: "-javaagent:/otel/opentelemetry-javaagent.jar"
+  OTEL_TRACES_EXPORTER: "otlp"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4318"
+  OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
+  OTEL_METRICS_EXPORTER: "none"
+  OTEL_LOGS_EXPORTER: "none"
+  OTEL_PROPAGATORS: "xray,tracecontext,baggage"
+  OTEL_TRACES_SAMPLER: "always_on"
+  OTEL_RESOURCE_ATTRIBUTES: "deployment.environment=local,service.namespace=digital-monorepo"
+
+services:
+  jaeger:
+    image: cr.jaegertracing.io/jaegertracing/jaeger:2.19.0
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - integration-net
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.146.0
+    command: ["--config=/etc/otelcol-contrib/config.yml"]
+    volumes:
+      - ./otel-collector-config.yml:/etc/otelcol-contrib/config.yml:ro
+    depends_on:
+      jaeger:
+        condition: service_started
+    networks:
+      - integration-net
+
+  hotel-entity-service:
+    image: hotel-entity-service:local
+    mem_limit: 896m
+    build:
+      context: ../../backend/discover-search/services/hotel-entity-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/hotel-entity-service.Dockerfile
+    ports:
+      - "9102:9102"
+      - "5015:5015"
+    env_file:
+      - ./env/hotel-entity-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "hotel-entity-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      ohip-adapter-service:
+        condition: service_healthy
+      content-entity-service:
+        condition: service_healthy
+      rules-agent-entity-service:
+        condition: service_healthy
+      cdh-adapter-service:
+        condition: service_healthy
+      company-entity-service:
+        condition: service_healthy
+      company-service-opera:
+        condition: service_healthy
+      unleash:
+        condition: service_healthy
+      wiremock-cdh-auth0:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9102/v1/hotels/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  basket-service:
+    image: basket-service:local
+    mem_limit: 1024m
+    build:
+      context: ../../backend/book-pay/services/basket-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/basket-service.Dockerfile
+    ports:
+      - "9104:9104"
+      - "5012:5012"
+    env_file:
+      - ./env/basket-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "basket-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      dynamodb-init:
+        condition: service_completed_successfully
+      kafka-init:
+        condition: service_completed_successfully
+      hotel-entity-service:
+        condition: service_healthy
+      content-entity-service:
+        condition: service_healthy
+      ohip-adapter-service:
+        condition: service_healthy
+      rules-agent-entity-service:
+        condition: service_healthy
+      cdh-adapter-service:
+        condition: service_healthy
+      unleash:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9104/v1/baskets/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  hotel-reservation-entity-service:
+    image: hotel-reservation-entity-service:local
+    mem_limit: 1024m
+    build:
+      context: ../../backend/manage-modify/services/hotel-reservation-entity-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/hotel-reservation-entity-service.Dockerfile
+    ports:
+      - "9103:9103"
+      - "5013:5013"
+    env_file:
+      - ./env/hotel-reservation-entity-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "hotel-reservation-entity-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      basket-service:
+        condition: service_healthy
+      ohip-adapter-service:
+        condition: service_healthy
+      content-entity-service:
+        condition: service_healthy
+      cdh-adapter-service:
+        condition: service_healthy
+      rules-agent-entity-service:
+        condition: service_healthy
+      unleash:
+        condition: service_healthy
+      wiremock-cdh-auth0:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9103/v1/reservations/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 60s
+    networks:
+      - integration-net
+
+  hotel-countries-service-opera:
+    image: hotel-countries-service-opera:local
+    mem_limit: 512m
+    build:
+      context: ../../backend/identity/services/hotel-countries-service-opera/target
+      dockerfile: ../../../../integration-env/dockerfiles/hotel-countries-service-opera.Dockerfile
+    ports:
+      - "9031:9031"
+      - "5019:5019"
+    env_file:
+      - ./env/hotel-countries-service-opera.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "hotel-countries-service-opera"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      wiremock-aem:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9031/hotel-countries-service/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  threec-payment-service-opera:
+    image: threec-payment-service-opera:local
+    mem_limit: 1024m
+    build:
+      context: ../../backend/book-pay/services/threec-payment-service-opera/target
+      dockerfile: ../../../../integration-env/dockerfiles/threec-payment-service-opera.Dockerfile
+    ports:
+      - "9001:9001"
+      - "5020:5020"
+    env_file:
+      - ./env/threec-payment-service-opera.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "threec-payment-service-opera"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      dynamodb-init:
+        condition: service_completed_successfully
+      basket-service:
+        condition: service_healthy
+      unleash:
+        condition: service_healthy
+      wiremock-worldline-datatrans:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9001/threec-payment-service/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  hotel-account-service-opera:
+    image: hotel-account-service-opera:local
+    mem_limit: 1024m
+    build:
+      context: ../../backend/identity/services/hotel-account-service-opera/target
+      dockerfile: ../../../../integration-env/dockerfiles/hotel-account-service-opera.Dockerfile
+    ports:
+      - "9020:9020"
+      - "5018:5018"
+    env_file:
+      - ./env/hotel-account-service-opera.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "hotel-account-service-opera"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      hotel-countries-service-opera:
+        condition: service_healthy
+      threec-payment-service-opera:
+        condition: service_healthy
+      cdh-adapter-service:
+        condition: service_healthy
+      piba-account-service-opera:
+        condition: service_healthy
+      unleash:
+        condition: service_healthy
+      wiremock-cdh-auth0:
+        condition: service_healthy
+      wiremock-worldline-datatrans:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9020/hotel-account-service/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  company-service-opera:
+    image: company-service-opera:local
+    mem_limit: 768m
+    build:
+      context: ../../backend/identity/services/company-service-opera/target
+      dockerfile: ../../../../integration-env/dockerfiles/company-service-opera.Dockerfile
+    ports:
+      - "9022:9022"
+      - "5021:5021"
+    env_file:
+      - ./env/company-service-opera.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "company-service-opera"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      unleash:
+        condition: service_healthy
+      wiremock-cdh-auth0:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9022/company-service/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  payment-methods-entity-service:
+    image: payment-methods-entity-service:local
+    mem_limit: 768m
+    build:
+      context: ../../backend/book-pay/services/payment-methods-entity-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/payment-methods-entity-service.Dockerfile
+    ports:
+      - "9107:9107"
+      - "5017:5017"
+    env_file:
+      - ./env/payment-methods-entity-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "payment-methods-entity-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      hotel-reservation-entity-service:
+        condition: service_healthy
+      content-entity-service:
+        condition: service_healthy
+      basket-service:
+        condition: service_healthy
+      hotel-entity-service:
+        condition: service_healthy
+      hotel-account-service-opera:
+        condition: service_healthy
+      threec-payment-service-opera:
+        condition: service_healthy
+      company-service-opera:
+        condition: service_healthy
+      unleash:
+        condition: service_healthy
+      wiremock-cdh-auth0:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9107/v1/payment-methods/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  ohip-adapter-service:
+    image: ohip-adapter-service:local
+    mem_limit: 1408m
+    build:
+      context: ../../backend/discover-search/services/ohip-adapter-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/ohip-adapter-service.Dockerfile
+    ports:
+      - "9100:9100"
+      - "5005:5005"
+    env_file:
+      - ./env/ohip-adapter-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "ohip-adapter-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      wiremock-opera:
+        condition: service_healthy
+      unleash:
+        condition: service_healthy
+      rules-agent-entity-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9100/ohip/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  content-entity-service:
+    image: content-entity-service:local
+    mem_limit: 1216m
+    build:
+      context: ../../backend/discover-search/services/content-entity-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/content-entity-service.Dockerfile
+    ports:
+      - "9106:9106"
+      - "5006:5006"
+    env_file:
+      - ./env/content-entity-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "content-entity-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      wiremock-aem:
+        condition: service_healthy
+      wiremock-opera:
+        condition: service_healthy
+      ohip-adapter-service:
+        condition: service_healthy
+      unleash:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9106/v1/content/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  rules-manager-entity-service:
+    image: rules-manager-entity-service:local
+    mem_limit: 1408m
+    build:
+      context: ../../backend/discover-search/services/rules-manager-entity-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/rules-manager-entity-service.Dockerfile
+    ports:
+      - "9105:9105"
+      - "5010:5010"
+    env_file:
+      - ./env/rules-manager-entity-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "rules-manager-entity-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      unleash-postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9105/rmg/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  rules-agent-entity-service:
+    image: rules-agent-entity-service:local
+    mem_limit: 1280m
+    build:
+      context: ../../backend/discover-search/services/rules-agent-entity-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/rules-agent-entity-service.Dockerfile
+    ports:
+      - "9108:9108"
+      - "5014:5014"
+    env_file:
+      - ./env/rules-agent-entity-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "rules-agent-entity-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      rules-manager-entity-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9108/v1/rules/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  cdh-adapter-service:
+    image: cdh-adapter-service:local
+    mem_limit: 1216m
+    build:
+      context: ../../backend/identity/services/cdh-adapter-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/cdh-adapter-service.Dockerfile
+    ports:
+      - "9119:9119"
+      - "5007:5007"
+    env_file:
+      - ./env/cdh-adapter-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "cdh-adapter-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      wiremock-cdh-auth0:
+        condition: service_healthy
+      unleash:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9119/v1/cdh/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  company-entity-service:
+    image: company-entity-service:local
+    mem_limit: 1024m
+    build:
+      context: ../../backend/identity/services/company-entity-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/company-entity-service.Dockerfile
+    ports:
+      - "9118:9118"
+      - "5011:5011"
+    env_file:
+      - ./env/company-entity-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "company-entity-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      ohip-adapter-service:
+        condition: service_healthy
+      cdh-adapter-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9118/v1/companies/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  # Serves the Auth0 JWKS and the CDH OAuth token. Both are stack-lifetime authentication
+  # plumbing rather than test data: the callers that hit them (the services' JWT decoder and
+  # OAuth client) do not propagate the integration suite's scenario baggage header, so a
+  # scenario could never scope or reclaim them. Loading them from disk at startup means they
+  # exist before any service boots and no test installs them. See ./wiremock/README.
+  wiremock-cdh-auth0:
+    image: wiremock/wiremock:3.12.1
+    mem_limit: 750m
+    command: ["--verbose"]
+    ports:
+      - "8445:8080"
+    volumes:
+      - ./wiremock/cdh-auth0/mappings:/home/wiremock/mappings:ro
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/__admin/mappings"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - integration-net
+
+  wiremock-aem:
+    image: wiremock/wiremock:3.12.1
+    mem_limit: 750m
+    command: ["--verbose"]
+    ports:
+      - "18084:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/__admin/mappings"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - integration-net
+
+  # Serves the Opera OAuth token; see the wiremock-cdh-auth0 comment for why it is baked in
+  # rather than installed per scenario. Every other Opera mapping is installed by the test.
+  wiremock-opera:
+    image: wiremock/wiremock:3.12.1
+    mem_limit: 750m
+    command: ["--verbose"]
+    ports:
+      - "8443:8080"
+    volumes:
+      - ./wiremock/opera/mappings:/home/wiremock/mappings:ro
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/__admin/mappings"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - integration-net
+
+  # Shared Postgres instance: backs Unleash and both rules services. Rules Manager owns
+  # migrations; Rules Agent reads the same dedicated 'rulesmanager' database.
+  unleash-postgres:
+    image: postgres:15-alpine
+    mem_limit: 512m
+    ports:
+      - "5438:5432"   # host 5438 -> container 5432 (matches the service local-profile convention; no overlap with other published ports)
+    environment:
+      POSTGRES_DB: unleash
+      POSTGRES_USER: unleash
+      POSTGRES_PASSWORD: unleash
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # Gate dependents on the real (post-init) TCP server being up AND the rulesmanager
+      # database existing. During init the temp server listens on the unix socket only
+      # (listen_addresses=''), so this loopback TCP probe stays red until the init scripts
+      # that create rulesmanager have run. pg_isready alone would not verify the DB exists.
+      # No password needed: pg_hba trusts loopback (127.0.0.1) connections.
+      test: ["CMD-SHELL", "psql -h 127.0.0.1 -U unleash -d rulesmanager -c 'SELECT 1' >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  unleash:
+    image: unleashorg/unleash-server:latest
+    mem_limit: 750m
+    ports:
+      - "4242:4242"
+    environment:
+      DATABASE_URL: postgres://unleash:unleash@unleash-postgres:5432/unleash
+      DATABASE_SSL: "false"
+      AUTH_TYPE: none
+      LOG_LEVEL: warn
+      INIT_BACKEND_API_TOKENS: "default:development.mock-unleash-token"
+      IMPORT_FILE: /unleash/import/client-features.import.json
+      IMPORT_PROJECT: default
+      IMPORT_ENVIRONMENT: development
+    volumes:
+      - ./unleash/import:/unleash/import:ro
+    depends_on:
+      unleash-postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4242/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - integration-net
+
+  piba-account-service-opera:
+    image: piba-account-service-opera:local
+    mem_limit: 1408m
+    build:
+      context: ../../backend/identity/services/piba-account-service-opera/target
+      dockerfile: ../../../../integration-env/dockerfiles/piba-account-service-opera.Dockerfile
+    ports:
+      - "9064:9064"
+      - "5008:5008"
+    env_file:
+      - ./env/piba-account-service-opera.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "piba-account-service-opera"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      wiremock-cdh-auth0:
+        condition: service_healthy
+      wiremock-worldline-datatrans:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9064/piba-account-service/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  spending-entity-service:
+    image: spending-entity-service:local
+    mem_limit: 1280m
+    build:
+      context: ../../backend/identity/services/spending-entity-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/spending-entity-service.Dockerfile
+    ports:
+      - "9132:9132"
+      - "5009:5009"
+    env_file:
+      - ./env/spending-entity-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "spending-entity-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      cdh-adapter-service:
+        condition: service_healthy
+      piba-account-service-opera:
+        condition: service_healthy
+      wiremock-cdh-auth0:
+        condition: service_healthy
+      wiremock-worldline-datatrans:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9132/v1/spending/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+  # Shared WireMock: mocks Worldline/PIBA GUID (for piba/spending) and, reusing the same
+  # instance, the Datatrans payment gateway (for payment-orchestration-service). Stub
+  # mappings for all of these are installed at runtime by the integration-testing framework.
+  wiremock-worldline-datatrans:
+    image: wiremock/wiremock:3.12.1
+    mem_limit: 750m
+    command: ["--verbose", "--disable-http2-plain"]
+    ports:
+      - "8446:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/__admin/mappings"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - integration-net
+
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "./data"]
+    user: root
+    working_dir: /home/dynamodblocal
+    ports:
+      - "8000:8000"
+    volumes:
+      - dynamodb-data:/home/dynamodblocal/data
+    networks:
+      - integration-net
+
+  dynamodb-init:
+    image: amazon/aws-cli:latest
+    entrypoint: ["/bin/sh", "/init/create-tables.sh"]
+    environment:
+      AWS_ACCESS_KEY_ID: key
+      AWS_SECRET_ACCESS_KEY: secret
+      AWS_DEFAULT_REGION: eu-west-1
+    volumes:
+      - ./dynamodb/init/create-tables.sh:/init/create-tables.sh:ro
+    depends_on:
+      dynamodb-local:
+        condition: service_started
+    networks:
+      - integration-net
+
+  kafka:
+    image: quay.io/strimzi/kafka:latest-kafka-3.4.0
+    command:
+      - sh
+      - -c
+      - >-
+        bin/kafka-storage.sh format --ignore-formatted -t $${KAFKA_CLUSTER_ID} -c config/kraft/server.properties &&
+        exec bin/kafka-server-start.sh config/kraft/server.properties
+        --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS}
+        --override listener.security.protocol.map=$${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP}
+        --override listeners=$${KAFKA_LISTENERS}
+    ports:
+      - "9092:9092"
+    environment:
+      LOG_DIR: /tmp/logs
+      KAFKA_CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://:29092,PLAINTEXT_HOST://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+    healthcheck:
+      test: ["CMD-SHELL", "bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      - integration-net
+
+  kafka-init:
+    image: quay.io/strimzi/kafka:latest-kafka-3.4.0
+    command:
+      - sh
+      - -c
+      - |
+        set -eu
+        bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic orders --partitions 1 --replication-factor 1
+        bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic refunds --partitions 1 --replication-factor 1
+        bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic notifications --partitions 1 --replication-factor 1
+        bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic payment-authorised --partitions 1 --replication-factor 1
+        bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic booking-completed --partitions 1 --replication-factor 1
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - integration-net
+
+  # Temporal workflow engine for payment-orchestration-service. The auto-setup image
+  # creates its own 'temporal' and 'temporal_visibility' databases on the shared
+  # unleash-postgres (connecting as the superuser 'unleash'); these names do not clash
+  # with 'unleash'/'rulesmanager'. Because unleash-postgres has no persistent volume,
+  # auto-setup re-runs and recreates the Temporal schema on every startup.
+  temporal:
+    image: temporalio/auto-setup:1.29.7
+    mem_limit: 750m
+    ports:
+      - "7233:7233"
+    environment:
+      DB: postgres12
+      DB_PORT: "5432"
+      POSTGRES_USER: unleash
+      POSTGRES_PWD: unleash
+      POSTGRES_SEEDS: unleash-postgres
+    depends_on:
+      unleash-postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "tctl", "--address", "temporal:7233", "cluster", "health"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 40s
+    networks:
+      - integration-net
+
+  payment-orchestration-service:
+    image: payment-orchestration-service:local
+    mem_limit: 768m
+    build:
+      context: ../../backend/book-pay/services/payment-orchestration-service/target
+      dockerfile: ../../../../integration-env/dockerfiles/payment-orchestration-service.Dockerfile
+    ports:
+      - "9200:9200"
+      - "5016:5016"
+    env_file:
+      - ./env/payment-orchestration-service.env
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: "payment-orchestration-service"
+    volumes:
+      - ./otel:/otel:ro
+    depends_on:
+      otel-collector:
+        condition: service_started
+      temporal:
+        condition: service_healthy
+      hotel-reservation-entity-service:
+        condition: service_healthy
+      payment-methods-entity-service:
+        condition: service_healthy
+      basket-service:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+      wiremock-worldline-datatrans:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9200/payment-orchestrator/actuator/health"]
+      interval: 10s
+      timeout: 30s
+      retries: 6
+      start_period: 30s
+    networks:
+      - integration-net
+
+networks:
+  integration-net:
+    driver: bridge
+
+volumes:
+  dynamodb-data:

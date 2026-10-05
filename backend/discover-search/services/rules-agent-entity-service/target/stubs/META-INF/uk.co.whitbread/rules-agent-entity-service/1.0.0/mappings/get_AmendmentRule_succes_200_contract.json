@@ -1,0 +1,31 @@
+{
+  "id" : "43235678-fcc9-4ea2-a240-bdf3ea5d09bc",
+  "request" : {
+    "urlPath" : "/v1/rules/amendments",
+    "method" : "GET",
+    "queryParameters" : {
+      "rateType" : {
+        "equalTo" : "Flex"
+      },
+      "arrivalDate" : {
+        "equalTo" : "20220401"
+      },
+      "hotelLocalDateTime" : {
+        "equalTo" : "20220208T080910"
+      },
+      "hotelCountryCode" : {
+        "equalTo" : "GB"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"isAmendable\":true,\"requestDetails\":{\"rateType\":\"Flex\",\"arrivalDate\":\"20220401\",\"hotelLocalDateTime\":\"20220208T080910\",\"hotelCountryCode\":\"GB\"}}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "43235678-fcc9-4ea2-a240-bdf3ea5d09bc",
+  "priority" : 1
+}

@@ -1,0 +1,45 @@
+{
+  "id" : "59e888f8-9254-43ab-8037-800a5c480018",
+  "request" : {
+    "urlPath" : "/v1/baskets/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/items",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "If-Match" : {
+        "equalTo" : "1684426938941"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['reference'] == 'LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['lockingTime'] == null)]"
+    }, {
+      "matchesJsonPath" : "$.['itemTypes'][*][?(@.['type'] == 'STAY')]"
+    }, {
+      "matchesJsonPath" : "$.['itemTypes'][*].['confirmationData'][?(@ == 'sourceId')]"
+    }, {
+      "matchesJsonPath" : "$.['itemTypes'][*].['confirmationData'][?(@ == 'hotelId')]"
+    }, {
+      "matchesJsonPath" : "$.['itemTypes'][*].['confirmationData'][?(@ == 'paymentID')]"
+    }, {
+      "matchesJsonPath" : "$.['items'][*][?(@.['type'] == 'STAY')]"
+    }, {
+      "matchesJsonPath" : "$.['items'][*][?(@.['sourceId'] == '1234')]"
+    }, {
+      "matchesJsonPath" : "$.['items'][*][?(@.['details'] == null)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['channel'] == 'PI')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"hotelId\":\"LONEUS\",\"bookingReference\":\"LONHOL5778172\",\"reference\":\"LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7\",\"userId\":null,\"originalBasketId\":null,\"linkAmendReservations\":null,\"status\":\"OPEN\",\"paymentStatus\":null,\"sendMail\":null,\"paymentID\":\"33661084018D\",\"paymentOption\":null,\"itemTypes\":[\"STAY\"],\"items\":[{\"type\":\"STAY\",\"sourceId\":\"1234\",\"details\":null}],\"ccuiExtraItems\":null}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "59e888f8-9254-43ab-8037-800a5c480018"
+}

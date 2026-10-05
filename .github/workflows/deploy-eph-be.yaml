@@ -1,0 +1,26 @@
+name: Ephemeral Deploy BE
+
+on:
+  workflow_dispatch:
+    inputs:
+      app-name:
+        description: Backend app name to deploy
+        required: true
+        type: string
+      image-tag:
+        description: Docker image tag to deploy
+        required: true
+        type: string
+      branch-name:
+        description: Pull request source branch name
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    uses: whitbread-eos/wbd-workflows-templates/.github/workflows/ci-deploy-be.yaml@feat/SRE-320
+    secrets: inherit
+    with:
+      app-name: ${{ inputs.app-name }}
+      image-tag: ${{ inputs.image-tag }}
+      branch-name: ${{ inputs.branch-name }}

@@ -1,0 +1,29 @@
+{
+  "id" : "95ac31b9-2a0d-48d2-bfe2-cea423ae8a6c",
+  "request" : {
+    "urlPath" : "/v1/bookings/cancel",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "WB-Authorization" : {
+        "equalTo" : "Bearer test=="
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'DASDAD')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['bookingReference'] == 'bookingReference')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['arrivalDate'] == '2023-03-10')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['sourceSystem'] == 'BART')]"
+    } ]
+  },
+  "response" : {
+    "status" : 500,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "95ac31b9-2a0d-48d2-bfe2-cea423ae8a6c"
+}

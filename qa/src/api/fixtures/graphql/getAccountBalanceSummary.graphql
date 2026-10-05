@@ -1,0 +1,44 @@
+query getAccountBalanceSummary($viewAll: Boolean) {
+    getAccountBalanceSummary(viewAll: $viewAll) {
+        currentBalances {
+            schemeCustomerId
+	        tetheredGuid
+	        accountName
+	        accountNumber
+	        registrationRoles
+	        errorCode
+	        scheme
+	        outstanding {
+                currencySymbol
+                currencyCode
+                amount
+            }
+	        newTransactions {
+                currencySymbol
+                currencyCode
+                amount
+            }
+	        available {
+                currencySymbol
+                currencyCode
+                amount
+            }
+	        creditLimit {
+                currencySymbol
+                currencyCode
+                amount
+            }
+	        currentBalance {
+                currencySymbol
+                currencyCode
+                amount
+            }
+	        interimPayments {
+                currencySymbol
+                currencyCode
+                amount
+            }
+        }
+       totalRecordCount
+    }
+}

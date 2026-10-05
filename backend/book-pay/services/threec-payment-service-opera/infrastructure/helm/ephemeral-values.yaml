@@ -1,0 +1,268 @@
+# Ephemeral (per-PR) values for threec-payment-service-opera.
+#
+# ci-matrix-deploy-eph.yaml layers this file OVER the backend stack defaults at
+# backend/infrastructure/helm/ephemeral-values.yaml:
+#
+#   opera-app-chart/values.yaml  <  stack ephemeral defaults  <  THIS FILE  <  --set
+#
+# Everything generic to a PR release — canary/autoscaling/pdb/istio/prometheus off,
+# replicaCount 1, the trimmed lifecycle and grace period, ndots, imagePullSecrets,
+# namespace — is inherited and is not repeated here. The probe TIMINGS are the
+# exception: see below.
+#
+# Overridden per-deploy by ci-matrix-deploy-eph.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create, ephemeral
+#
+# Environment is inlined rather than read from `threec-payment-service-opera-configmap`:
+# the chart names its ConfigMap `{{ applicationName }}-configmap` and applicationName is
+# the PR release name here, so a hard-coded configMapKeyRef could never resolve.
+#
+# ── What a PR release of this service can and cannot do ──────────────────────
+#
+# It shares the dev DynamoDB table (`opera-threec-payment-dev`) with the dev deployment —
+# no per-PR table is provisioned — so a change to the persisted token shape has to stay
+# readable by dev.
+#
+# Inbound callbacks do NOT reach it. WEBHOOK_ENVIRONMENT and REDIRECT_ENVIRONMENT are
+# externally reachable base URLs, and a PR release has no VirtualService and no public
+# hostname, so anything 3C or PayPal posts back lands on the shared dev deployment
+# instead. Drive callbacks from tests against the release's in-cluster address:
+#   <release-name>.opera-be.svc.cluster.local
+# Everything up to the redirect — tokenisation, the iPage call, refunds, reconcile —
+# does work.
+#
+# AppDynamics is left off entirely: short-lived PR pods appearing and vanishing in the
+# shared APM account are noise, and they would land in the dev deployment's own series.
+
+applicationName: threec-payment-service-opera
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/threec-payment-service-opera
+
+deployment:
+  # IRSA for the DynamoDB payment table (THREEC_DYNAMODB_IS_IRSA below). The
+  # ServiceAccount is cluster-scoped and name-stable, so a PR release can use it
+  # directly; without it every DynamoDB call is denied.
+  serviceAccount: threec-payment-service
+
+  containerPorts:
+    - containerPort: 9001
+      protocol: TCP
+      name: http
+    # Not published through the Service — reach it with
+    # `kubectl port-forward -n opera-be deploy/<release> 5005:5005`.
+    - containerPort: 5005
+      protocol: TCP
+      name: debug
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=70 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # ── Credentials ──────────────────────────────────────────────────────────
+    # `optional: true` throughout: nothing in .github/workflows creates these secrets,
+    # and a hard secretKeyRef to one absent from opera-be leaves the pod in
+    # CreateContainerConfigError forever while `helm --wait` times out. Optional, the
+    # affected provider rejects every call and the rest of the service stays testable.
+    - name: THREEC_PAYMENT_SERVICE_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: threec-payment-secrets
+          key: threec_payment_service_api_key
+          optional: true
+    - name: THREEC_PAYMENT_SERVICE_VALIDATION_CODE
+      valueFrom:
+        secretKeyRef:
+          name: threec-payment-secrets
+          key: threec_payment_service_validation_code
+          optional: true
+    - name: BART_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: bart-credentials
+          key: bart_username
+          optional: true
+    - name: BART_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: bart-credentials
+          key: bart_password
+          optional: true
+    - name: ECKOH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: eckoh-client-id
+          key: eckoh_client_id
+          optional: true
+    - name: THREEC_PAYMENT_SERVICE_PAYPAL_MERCHANT_ID
+      valueFrom:
+        secretKeyRef:
+          name: threec-paypal-credentials
+          key: threec_payment_service_paypal_merchant_id
+          optional: true
+    - name: THREEC_PAYMENT_SERVICE_PAYPAL_PUBLIC_KEY
+      valueFrom:
+        secretKeyRef:
+          name: threec-paypal-credentials
+          key: threec_payment_service_paypal_public_key
+          optional: true
+    - name: THREEC_PAYMENT_SERVICE_PAYPAL_PRIVATE_KEY
+      valueFrom:
+        secretKeyRef:
+          name: threec-paypal-credentials
+          key: threec_payment_service_paypal_private_key
+          optional: true
+
+    # ── Downstream services ──────────────────────────────────────────────────
+    # Shared dev instances, addressed by bare hostname (both publish port 80). To wire
+    # this release to a PR release of one of them, change the value on the branch to
+    # <service>-pr-<n>.
+    - name: BASKET_SERVICE_HOST
+      value: basket-service
+    - name: HOTEL_CARD_HOST
+      value: hotel-card-service-opera
+
+    # ── 3C / iPage (UAT) ─────────────────────────────────────────────────────
+    - name: THREEC_SERVER
+      value: https://web2payuat.3cint.com
+    - name: THREEC_IPAGE_IS_STUB_MODE
+      value: 'false'
+    - name: THREEC_USERNAME_DEFAULT
+      value: DEFAULT
+    - name: THREEC_USERNAME_TOKENISATION
+      value: eWB-TOKEN
+    - name: THREEC_USERNAME_TOKENISATION_DE
+      value: eWB-TOKEN
+
+    # ── Booking and callback hosts ───────────────────────────────────────────
+    # See the header: the two *_ENVIRONMENT values point at the shared dev ingress, so
+    # callbacks land on the dev deployment rather than on this release.
+    - name: BART_HOST
+      value: https://alpha2.digitalbookings.premierinn.com
+    - name: HOTEL_MAKE_BOOKING_HOST
+      value: https://api.uat.eks.whitbread.digital
+    - name: BASKET_BOOKING_SECURITY_VALUE
+      value: "b246acfc-2271-4c0d-ac39-02554040b499"
+    - name: WEBHOOK_ENVIRONMENT
+      value: https://restapi.dev.premierinn.digital
+    - name: REDIRECT_ENVIRONMENT
+      value: https://restapi.dev.premierinn.digital
+    - name: REDIRECT_DEFAULT_URL
+      value: https://secure2.beta.premierinn.digital/
+
+    # ── Revised-solution rollout ─────────────────────────────────────────────
+    # Same staging as dev. HOTEL_CODES_LIST is long but has no default in
+    # application.yml, so it cannot be dropped without failing startup.
+    - name: REVISED_SOLUTION_IS_FEATURE_ENABLED
+      value: 'true'
+    - name: REVISED_SOLUTION_IS_MOBILE_APP_ENABLED
+      value: 'false'
+    - name: REVISED_SOLUTION_IS_ANDROID_APP_ENABLED
+      value: 'true'
+    - name: REVISED_SOLUTION_IS_IOS_APP_ENABLED
+      value: 'false'
+    - name: REVISED_SOLUTION_IS_MOTO_BOOKING_ENABLED
+      value: 'false'
+    - name: REVISED_SOLUTION_HOTEL_LIST
+      value: DRECIT,BIRTOB,LKEBAR,HAMHOF,LONTOL
+    - name: HOTEL_CODES_LIST
+      value: WARPTI,HAMKLT,LONCAN,MANBAR,GLAORI,BOUCLF,YEOTOC,BERALX,DRECIT,HAMHOF,LEIOST,WUPCIT,ABEPTI,ABEGAV,ANDBRE,AYLHOR,BARISL,BASSPR,BELFAS,BIRPTI,BLABUR,BRAWEA,BRIPAN,BRICOL,BRIEME,BURSTA,CAECED,GILVIC,CHRSOM,COBFAI,NANPEA,CREBRO,DOVDUK,DUMSOL,DURBAR,EDIWAV,EDIPAR,EDIOLD,FALPTI,FALBEE,FARMAN,FAVSHM,GATPLI,GLABEL,GLACIT,GLABLA,GLEBAN,GLOLON,GREYAR,HAGBAD,HALBRO,HARBRE,HATAIR,HIGCEN,HORSTA,HULBAR,INVSOU,SANSEA,KSWICK,KETTEL,KINPLI,LICFRA,LINMIL,LINBRO,LIVPLI,LONSHE,LONCAM,LONOLD,LONCOU,LONEDM,LONELT,LONSMI,HARTRA,LONLEI,LONCUT,LONSOU,LONUXB,LOWFOX,MAILON,NEWROM,WASCOL,NEWPLI,NEWQUI,NOTPLI,PETPAU,PETBRE,POOHOL,PORBAG,PRECEN,RAMSMU,RHYSEA,SALBIS,SALMIL,SLOPTI,SOUSTR,SOUESP,SWABRE,SWIKEM,THUCHA,THURSO,TORHAR,TROSTS,WESRID,LONWAB,WORTHR,YEOAIR,YORMIL
+
+    # ── DynamoDB ─────────────────────────────────────────────────────────────
+    # The dev table, shared with the dev deployment — see the header.
+    - name: THREEC_DYNAMODB_TABLE_NAME
+      value: opera-threec-payment-dev
+    - name: THREEC_DYNAMODB_IS_IRSA
+      value: 'true'
+    - name: THREEC_INITIAL_TTL
+      value: '7200'
+    - name: THREEC_FINAL_TTL
+      value: '2592000'
+
+    # ── PayPal / Braintree (sandbox) ─────────────────────────────────────────
+    - name: PAYPAL_ENVIRONMENT
+      value: "sandbox"
+    - name: PAYPAL_TRANSACTIONS_URL
+      value: https://forwarding.sandbox.braintreegateway.com
+    - name: ENABLE_PAYPAL_CONFIG_DATA
+      value: 'true'
+    - name: PAYPAL_CONFIG_DATA_NAME
+      value: "whitbread_planet_payfast_uat"
+    - name: PAYPAL_CONFIG_DATA_URL
+      value: "^https://web2payuat.3cint.com/mxg/Service/_2017_02_v5_2_0/transactions/$"
+    - name: PAYPAL_URL
+      value: "https://web2payuat.3cint.com/mxg/Service/_2017_02_v5_2_0/transactions/"
+    - name: ENABLE_PAYPAL_TEST_CARD
+      value: 'true'
+    - name: PAYPAL_ACCOUNT_NAMES_VALUE_GB
+      value: "whitbreadGB"
+    - name: PAYPAL_ACCOUNT_NAMES_VALUE_DE
+      value: "whitbreadDE"
+    - name: PAYPAL_MIT_COF_INDICATOR
+      value: 'C'
+
+    # ── Eckoh, actuator security, feature flags ──────────────────────────────
+    - name: ECKOH_ENABLED
+      value: 'true'
+    # Left off, as in dev — the probes below hit /threec-payment-service/actuator
+    # unauthenticated.
+    - name: IS_MANAGEMENT_SECURITY_ENABLED
+      value: 'false'
+    - name: UNLEASH_ENVIRONMENT
+      value: dev
+    - name: UNLEASH_URL
+      value: https://whitbread.edge.getunleash.io/api
+    - name: UNLEASH_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: unleash-enterprise-secrets
+          key: token
+          optional: true
+
+  # The slowest starter in the stack — dev holds liveness off for 7 minutes. The stack
+  # default readiness budget (20s + 24x5s = 140s) is far too tight for it, so the whole
+  # budget is restated: readiness gets 45s + 45x10s = 495s, and liveness is pushed out
+  # past that so a JVM still booting is never restarted mid-start. 495s still fits inside
+  # the workflow's `helm --wait --timeout 10m`, but not by much: if this service gets
+  # slower, that timeout has to move too.
+  readinessProbe:
+    httpGet:
+      path: /threec-payment-service/actuator/health/readiness
+      port: 9001
+    initialDelaySeconds: 45
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 45
+
+  livenessProbe:
+    httpGet:
+      path: /threec-payment-service/actuator/health/liveness
+      port: 9001
+    initialDelaySeconds: 540
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
+
+  # The largest allocation of any PR release: dev runs this service at a 2.5Gi limit and
+  # it is the one that will actually use it. Only memory is stated; requests.cpu (50m)
+  # merges through. requests.memory is pinned to limits.memory because the heap is sized
+  # off the limit — and evicting a service that takes eight minutes to start is far more
+  # expensive than the packing density is worth.
+  resources:
+    requests:
+      memory: 2048Mi
+    limits:
+      memory: 2048Mi
+
+service:
+  name: threec-payment-service-opera
+  ports:
+    - port: 80
+      targetPort: 9001
+      protocol: TCP
+      name: port9001

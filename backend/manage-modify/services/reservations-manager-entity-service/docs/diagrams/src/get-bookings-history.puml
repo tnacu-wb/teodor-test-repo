@@ -1,0 +1,27 @@
+@startuml
+entity "Reservations Manager Entity Service (Opera)" as ES
+participant BookingController as Controller
+participant BookingInPort as BookingInPort
+
+participant BookingOutPort as BookingOutPort
+participant BookingClient as BookingClient
+participant MigrationStatusOutPort as MigrationStatusOutPort
+participant MigrationStatusClient as MigrationStatusClient
+
+ES -> Controller: GET /v1/bookings/history?\nbusiness={business}&\ncompanyId={companyId}&\nemployeeId={employeeId}&\ntypeOfBooking={typeOfBooking}&\nsortOrder={sortOrder}&\nfilterType={filterType}&\nfilterValue={filterValue}&\nincludeCheckInBookings=false&\ncontinuationToken={continuationToken}
+Controller -> BookingInPort: getBookings
+
+BookingInPort -> BookingOutPort: getBookings
+BookingOutPort -> BookingClient: getCustomerBookings
+BookingClient -> AccountServices: GET /customers/hotels/{customerId}/stays
+BookingClient <- AccountServices
+BookingOutPort <- BookingClient
+BookingInPort <- BookingOutPort
+BookingInPort -> MigrationStatusOutPort
+MigrationStatusOutPort -> MigrationStatusClient
+MigrationStatusOutPort <- MigrationStatusClient: BART or OPERA
+BookingInPort <- MigrationStatusOutPort
+
+Controller <- BookingInPort
+ES <- Controller
+@enduml

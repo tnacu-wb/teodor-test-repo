@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>uk.co.whitbread</groupId>
+    <artifactId>digital-monorepo-service-parent</artifactId>
+    <version>${revision}</version>
+    <relativePath>../../../parents/service-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>opera-token-service</artifactId>
+  <packaging>jar</packaging>
+
+  <name>opera-token-service</name>
+  <description>Opera Token Microservice</description>
+
+  <properties>
+    <application.port>9136</application.port>
+    <sonar.coverage.exclusions>
+      **/model/**,
+      **/properties/**,
+      **/config/**,
+      **/mapper/**,
+      **/exception/**,
+      **/exceptions/**,
+      **/properties/**,
+      **/generated/**,
+      **SampleServiceApplication*
+    </sonar.coverage.exclusions>
+  </properties>
+
+  <dependencies>
+
+    <!-- Whitbread -->
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-exceptions</artifactId>
+    </dependency>
+
+    <!-- Spring/SpringBoot -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web-services</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webclient</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-json</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-client</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>common-auth0</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>uk.co.whitbread.shared</groupId>
+          <artifactId>commons-entity-exceptions</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.nimbusds</groupId>
+          <artifactId>nimbus-jose-jwt</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-common</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-client</artifactId>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>io.gatling.highcharts</groupId>
+      <artifactId>gatling-charts-highcharts</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+        </configuration>
+        <executions>
+          <execution>
+            <id>pre-integration-test</id>
+            <goals>
+              <goal>start</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>post-integration-test</id>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>io.gatling</groupId>
+        <artifactId>gatling-maven-plugin</artifactId>
+        <version>4.6.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <apiDocsUrl>http://localhost:${application.port}/v3/api-docs.yaml</apiDocsUrl>
+          <outputFileName>${project.name}-openApi.yaml</outputFileName>
+          <outputDir>${basedir}/docs/openApi</outputDir>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/uk/co/whitbread/sample/SampleServiceApplication*</exclude>
+            <exclude>**/uk/co/whitbread/**/model/**</exclude>
+            <exclude>**/uk/co/whitbread/**/config/**</exclude>
+            <exclude>**/uk/co/whitbread/**/mapper/**</exclude>
+            <exclude>**/uk/co/whitbread/**/exception/**</exclude>
+            <exclude>**/uk/co/whitbread/**/exceptions/**</exclude>
+            <exclude>**/uk/co/whitbread/**/properties/**</exclude>
+            <exclude>**/uk/co/whitbread/**/generated/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <baseClassForTests>uk.co.whitbread.token.ContractVerifierBaseTest
+          </baseClassForTests>
+          <basePackageForTests>uk.co.whitbread.token</basePackageForTests>
+          <nameSuffixForTests>IT</nameSuffixForTests>
+          <testFramework>JUNIT5</testFramework>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

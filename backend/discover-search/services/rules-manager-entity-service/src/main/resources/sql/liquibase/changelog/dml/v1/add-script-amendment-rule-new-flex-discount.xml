@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="Naveen" id="tag_amendment_rule_new_flex_discount_data">
+    <tagDatabase tag="version_amendment_rule_new_flex_discount_data"/>
+  </changeSet>
+
+  <changeSet author="Naveen" id="amendment_rule_new_flex_discount_data">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amendment_rule_add_flex_discount_FLXDIS10.csv"/>
+    <rollback>
+      <delete schemaName="rules_engine" tableName="amendment_rule">
+        <where>rate_type = 'FLXDIS10'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,28 @@
+{
+  "id" : "499754d6-99bc-4a19-bac9-4b78c31e5f1b",
+  "request" : {
+    "urlPath" : "/v1/reservations/discount",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$.['reservationIds'][?(@ == '12345')]"
+    }, {
+      "matchesJsonPath" : "$.['reservationIds'][?(@ == '123457')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['discountAmount'] == '10')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['currency'] == 'EUR')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'HOTELTEST')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "499754d6-99bc-4a19-bac9-4b78c31e5f1b"
+}

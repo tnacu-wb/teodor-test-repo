@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.whitbread.premierinn.amend.NonAmendableReservationActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:fitsSystemWindows="true"
+        app:contentInsetStartWithNavigation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="@dimen/toolbar_progress_bar_width"
+            android:layout_height="@dimen/toolbar_progress_bar_height"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/generic_margin_8"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/hotel_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/Header1"
+            tools:text="London Kings Cross"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/amend_cancel_view_card"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/amend_cancel_view_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            app:contentPaddingBottom="0dp"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintTop_toBottomOf="@id/hotel_name"
+            style="@style/CardView.CardContainer">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/cancel_booking_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/Body"
+                    android:layout_marginBottom="@dimen/generic_margin_16"
+                    android:text="@string/non_amendable_reservation_cancelable_description"
+                    app:layout_constraintBottom_toTopOf="@id/cancel_btn"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"/>
+
+                <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                    android:id="@+id/cancel_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/cta_button_height"
+                    style="@style/Button1"
+                    android:layout_marginTop="@dimen/default_small_margin"
+                    android:gravity="center"
+                    android:padding="@dimen/generic_padding_12"
+                    app:layout_goneMarginTop="@dimen/generic_margin_16"
+                    android:layout_marginBottom="@dimen/generic_margin_16"
+                    android:text="@string/manage_booking_cancel_booking"
+                    android:visibility="visible"
+                    app:cab_text_color="@color/amend_red"
+                    app:cab_is_secondary="true"
+                    app:cab_spinner_color="@color/amend_red"
+                    android:backgroundTint="@color/amend_red"
+                    tools:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/cancel_booking_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/generic_margin_16" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/generic_margin_16" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -1,0 +1,71 @@
+log.info("Called POST /reset/memorableword with TetheredUserGuid:{}", request.getTetheredUserGuid());
+
+----------------------------------------------------------------------------------------------
+Fetches  worldLineLoginTetheredUser for the passed in String guid, Scheme scheme)
+<xs:complexType name="LoginTetheredUserRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+</xs:complexType>
+<xs:complexType name="LoginTetheredUserResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="NewSession" type="tns:NewSessionType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Newly created session details</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+</xs:complexType>
+
+<xs:element name="updateMemorableWord">
+		<xs:annotation>
+			<xs:documentation>Update the memorable word for the current user session</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Request" type="data:UpdateMemorableWordRequestType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="updateMemorableWordResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Response" type="data:UpdateMemorableWordResponseType"/>
+			</xs:sequence>
+		</xs:complexType>
+</xs:element>
+--------------------------------------------------------------------------------------------------------------
+
+-- Data --
+
+<xs:complexType name="UpdateMemorableWordRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="SessionToken" type="tns:SessionTokenType"/>
+			<xs:element name="NewMemorableWord">
+				<xs:annotation>
+					<xs:documentation>Note: Premier Inn should validate the current memorable word before allowing a new one to be specified</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+						<xs:minLength value="7"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UpdateMemorableWordResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType"/>
+		</xs:complexContent>
+</xs:complexType>

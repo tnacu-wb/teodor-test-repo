@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".amend.amendcalendar.AmendCalendarActivity">
+
+    <LinearLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_dark"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/teal_deep_dark"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/ToolbarThemeOverlay">
+
+            <ProgressBar
+                android:id="@+id/amend_calendar_progress"
+                android:layout_width="@dimen/toolbar_progress_bar_width"
+                android:layout_height="@dimen/toolbar_progress_bar_height"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/generic_margin_8"
+                android:visibility="invisible"
+                tools:visibility="visible" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <include
+            android:id="@+id/calendar_header"
+            layout="@layout/calendar_header" />
+
+        <com.whitbread.premierinn.common.view.calendar.DateRangeSelectionView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/change_dates_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:visibility="invisible"
+        android:background="@color/white"
+        android:clickable="true"
+        android:elevation="@dimen/amend_calendar_btn_elevation"
+        android:focusable="true"
+        tools:visibility="visible">
+
+        <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+            android:id="@+id/change_dates_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            style="@style/Button2"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/generic_margin_24"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:layout_marginEnd="@dimen/generic_margin_24"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            android:text="@string/update_button"
+            app:cab_background_color="@color/premier_inn_purple_light"
+            app:cab_spinner_color="@color/white"
+            tools:visibility="visible"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/continue_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:visibility="invisible"
+        android:background="@color/white"
+        android:clickable="true"
+        android:elevation="@dimen/amend_calendar_btn_elevation"
+        android:focusable="true"
+        tools:visibility="gone">
+
+        <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+            android:id="@+id/continue_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            style="@style/Button2"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginStart="@dimen/generic_margin_24"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:layout_marginEnd="@dimen/generic_margin_24"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            android:text="@string/update_button"
+            app:cab_background_color="@color/premier_inn_purple_light"
+            app:cab_spinner_color="@color/white"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/amend_price_difference_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/Body"
+            android:layout_marginStart="@dimen/generic_margin_24"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:layout_marginEnd="@dimen/generic_margin_24"
+            android:layout_marginBottom="@dimen/amend_calendar_price_difference_margin_button"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="Price difference: +£41.11" />
+
+    </FrameLayout>
+
+</FrameLayout>

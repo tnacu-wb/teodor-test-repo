@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/s_address_form_countries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/CountySpinnerStyle"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_address_form_postcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/s_address_form_countries"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:layout_toStartOf="@+id/cab_address_form_find_address"
+        android:labelFor="@+id/et_address_form_postcode"
+        android:hint="@string/address_form_postcode"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText">
+        <EditText
+            android:id="@+id/et_address_form_postcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Body"
+            android:imeOptions="actionNext"
+            android:inputType="textCapCharacters"
+            android:autofillHints="postalCode" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/cab_address_form_find_address"
+        android:layout_width="134dp"
+        android:layout_height="44dp"
+        style="@style/Button1"
+        android:layout_below="@id/s_address_form_countries"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:layout_marginStart="@dimen/generic_margin_30"
+        android:text="@string/postcode_finder_find_address_label"
+        app:cab_background_color="@color/premier_inn_purple_light"
+        app:cab_text_color="@android:color/white"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_address_form_company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/til_address_form_postcode"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:labelFor="@+id/et_address_form_company"
+        android:hint="@string/address_form_company"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText">
+        <EditText
+            android:id="@+id/et_address_form_company"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Body"
+            android:imeOptions="actionNext"
+            android:inputType="textCapSentences"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_address_form_manual_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/BodySmall"
+        android:layout_marginTop="@dimen/generic_margin_18"
+        android:textColor="?attr/colorPrimary"
+        android:layout_below="@id/til_address_form_company"
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/address_form_enter_address_manual" />
+
+    <RelativeLayout
+        android:id="@+id/rl_manual_address_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/til_address_form_company"
+        android:layout_marginTop="@dimen/generic_margin_10">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_address_form_address_line1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/et_address_form_address_line1"
+            android:hint="@string/address_form_address_line1"
+            app:hintTextAppearance="@style/TextInputLayout.HintText"
+            app:errorTextAppearance="@style/TextInputLayout.ErrorText">
+
+            <EditText
+                android:id="@+id/et_address_form_address_line1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Body"
+                android:imeOptions="actionNext"
+                android:inputType="textCapSentences"
+                android:autofillHints="streetAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_address_form_address_line2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/til_address_form_address_line1"
+            android:layout_marginTop="@dimen/generic_margin_10"
+            android:labelFor="@+id/et_address_form_address_line2"
+            android:hint="@string/address_form_address_line2"
+            app:hintTextAppearance="@style/TextInputLayout.HintText"
+            app:errorTextAppearance="@style/TextInputLayout.ErrorText">
+            <EditText
+                android:id="@+id/et_address_form_address_line2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Body"
+                android:imeOptions="actionNext"
+                android:inputType="textCapSentences"
+                android:autofillHints="extendedAddress"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_address_form_address_line3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/til_address_form_address_line2"
+            android:layout_marginTop="@dimen/generic_margin_10"
+            android:labelFor="@+id/et_address_form_address_line3"
+            android:hint="@string/address_form_address_line3"
+            app:hintTextAppearance="@style/TextInputLayout.HintText"
+            app:errorTextAppearance="@style/TextInputLayout.ErrorText">
+            <EditText
+                android:id="@+id/et_address_form_address_line3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Body"
+                android:imeOptions="actionDone"
+                android:inputType="textCapSentences"
+                android:autofillHints="addressLocality" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </RelativeLayout>
+
+</merge>

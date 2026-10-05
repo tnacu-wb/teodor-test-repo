@@ -1,0 +1,63 @@
+server:
+  port: 9099
+
+logging:
+  level:
+    io:
+      getunleash: OFF
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+meta-updater:
+  scheduler:
+    enabled: true
+    availabilities:
+      refresh: "30 * * * * *"
+      full-sync: "0 0 2 * * *"
+      delta-sync: "0 0 * * * *"
+
+wiremock:
+  server:
+    httpsPort: -1 # Fix for M1 macs as described here https://stackoverflow.com/questions/60074168/java-lang-illegalstateexception-no-server-alpnprocessors-wiremock
+
+config:
+  rules:
+    host: http://localhost:${wiremock.server.port:0}
+    roomSubstitutionEndpoint: "/v1/rules/room-substitutions"
+    cache: "room-substitution"
+    expiry: "0 0 2 * * *"
+  availability:
+    host: http://localhost:${wiremock.server.port:0}
+    path: "/v1/meta-proxy/availabilities"
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-local
+    endpoint: http://localhost:8000
+    accessKey: key
+    secretKey: secret
+    region: eu-west-1
+    maxRetry: 2
+    irsa: false
+
+hotel:
+  codes: ABETIR,ABECOC
+  roomTypes: DOUBLE,TWIN
+  maxNights: 9
+  hotelProcessingThreads: 1
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-api-token'
+
+feature-flags:
+  availabilities-from-postgres:
+    key: "release_availabilities_from_postgres"
+    fallback: false

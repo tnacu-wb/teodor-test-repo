@@ -1,0 +1,19 @@
+@startuml
+entity GraphQL_endpoint
+title Retrieve Booking Information from AEM
+
+entity "content-entity-service" as CES
+entity "ohip-adapter" as OHIP
+entity "ohip-adapter" as OHIP
+entity AEM
+
+GraphQL_endpoint-> CES  ++: GET /v1/content/booking
+CES -> AEM: GET /{country}/{language}/content-service.booking-flow.detail/bookingId/{bookingFlowId}.json
+AEM -> CES: bookingInfo
+CES -> OHIP: GET /ratePlans?ratePlanCodes={rateCodeList}
+OHIP -> OHIP: GET /ratePlans?ratePlanCodes={rateCodeList}
+OHIP -> OHIP: ratePlansInfo
+OHIP -> CES: ratePlansInfo
+GraphQL_endpoint<- CES -- : filtered booking information
+
+@enduml

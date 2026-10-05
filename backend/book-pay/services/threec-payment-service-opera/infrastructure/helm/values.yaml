@@ -1,0 +1,436 @@
+# Values for threec-payment-service-opera.
+#
+# Shaped for the shared `opera-app-chart` (whitbread-eos/helm-central-charts), which is
+# what .github/workflows/ci-matrix-deploy.yaml installs. The chart reads the pod spec
+# from `deployment.*` and gates optional resources on a `create` flag — keys outside
+# those names are silently ignored, so an unset `deployment.containerEnvs` renders
+# `env: null` and the pod starts with no environment at all.
+#
+# NOTE: this directory is `infrastructure/helm`, spelled correctly. The service also has
+# an `infrastucture/docker-local` directory with the typo; both workflows glob for
+# `*/<service>/infrastructure/helm`, so the typo'd one is invisible to them.
+#
+# Derived from microservices-gitops/opera-dev/apps/threec-payment-service-opera.yaml.
+# Not carried over: `imageAutomation` (the pipeline --sets it false and pins the tag it
+# just built) and `canary` (a Flagger Canary takes ownership of the Service's
+# .spec.selector / .spec.ports[].name and the VirtualService's .spec.http, which then
+# collides with Helm's server-side apply on the next upgrade of the same release).
+#
+# Overridden per-deploy by ci-matrix-deploy.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create
+
+applicationName: threec-payment-service-opera
+namespace: opera-be
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/threec-payment-service-opera
+  pullPolicy: Always
+  tag: "develop"
+
+imagePullSecrets:
+  - name: regcred
+
+deployment:
+  create: true
+  # Bumping this string is the manual way to force a rollout when nothing else in the
+  # values changed; the chart folds it into the pod template's checksum/values label.
+  checksumValues: r3
+  replicaCount: 1
+
+  # IRSA: the DynamoDB payment table is reached with the role annotated on this
+  # ServiceAccount (THREEC_DYNAMODB_IS_IRSA below), not with static credentials.
+  serviceAccount: threec-payment-service
+
+  containerPorts:
+    - containerPort: 9001
+      protocol: TCP
+      name: http
+
+  containerEnvFrom:
+    - configMapRef:
+        name: threec-payment-service-opera-configmap
+    # AppDynamics agent configuration, provisioned cluster-side.
+    - configMapRef:
+        name: appd-app-agent-envs
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=80 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # ── Credentials ──────────────────────────────────────────────────────────
+    # None of these have defaults in application.yml: this service holds card data, and
+    # a missing key should stop it starting rather than let it run half-authenticated.
+    - name: BART_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: bart-credentials
+          key: bart_username
+    - name: BART_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: bart-credentials
+          key: bart_password
+    - name: ECKOH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: eckoh-client-id
+          key: eckoh_client_id
+    - name: THREEC_PAYMENT_SERVICE_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: threec-payment-secrets
+          key: threec_payment_service_api_key
+    - name: THREEC_PAYMENT_SERVICE_VALIDATION_CODE
+      valueFrom:
+        secretKeyRef:
+          name: threec-payment-secrets
+          key: threec_payment_service_validation_code
+    - name: THREEC_PAYMENT_SERVICE_PAYPAL_MERCHANT_ID
+      valueFrom:
+        secretKeyRef:
+          name: threec-paypal-credentials
+          key: threec_payment_service_paypal_merchant_id
+    - name: THREEC_PAYMENT_SERVICE_PAYPAL_PUBLIC_KEY
+      valueFrom:
+        secretKeyRef:
+          name: threec-paypal-credentials
+          key: threec_payment_service_paypal_public_key
+    - name: THREEC_PAYMENT_SERVICE_PAYPAL_PRIVATE_KEY
+      valueFrom:
+        secretKeyRef:
+          name: threec-paypal-credentials
+          key: threec_payment_service_paypal_private_key
+    - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: appd-app-agent-envs-secret
+          key: app_dynamics_dev_key
+
+    # ── Downstream services ──────────────────────────────────────────────────
+    # Bare hostnames: both publish port 80 on their Service.
+    - name: BASKET_SERVICE_HOST
+      value: basket-service
+    - name: HOTEL_CARD_HOST
+      value: hotel-card-service-opera
+
+    # ── 3C / iPage ───────────────────────────────────────────────────────────
+    - name: THREEC_SERVER
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: threec_server
+    - name: THREEC_IPAGE_IS_STUB_MODE
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: threec_ipage_is_stub_mode
+    - name: THREEC_USERNAME_DEFAULT
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: threec_username_default
+    - name: THREEC_USERNAME_TOKENISATION
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: threec_username_tokenisation
+    - name: THREEC_USERNAME_TOKENISATION_DE
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: threec_username_tokenisation_de
+
+    # ── Booking and callback hosts ───────────────────────────────────────────
+    - name: BART_HOST
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: bart_host
+    - name: HOTEL_MAKE_BOOKING_HOST
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: hotel_make_booking_host
+    - name: BASKET_BOOKING_SECURITY_VALUE
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: basket_booking_security_value
+    # The externally reachable base URLs 3C posts webhooks to and redirects browsers
+    # back to — they must be addresses outside the cluster, not service names.
+    - name: WEBHOOK_ENVIRONMENT
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: webhook_environment
+    - name: REDIRECT_ENVIRONMENT
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: redirect_environment
+    - name: REDIRECT_DEFAULT_URL
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: redirect_default_url
+
+    # ── Revised-solution rollout ─────────────────────────────────────────────
+    # The per-channel switches and hotel allow-lists that stage the new payment flow.
+    - name: REVISED_SOLUTION_IS_FEATURE_ENABLED
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: revised_solution_is_feature_enabled
+    - name: REVISED_SOLUTION_IS_MOBILE_APP_ENABLED
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: revised_solution_is_mobile_app_enabled
+    - name: REVISED_SOLUTION_IS_ANDROID_APP_ENABLED
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: revised_solution_is_android_app_enabled
+    - name: REVISED_SOLUTION_IS_IOS_APP_ENABLED
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: revised_solution_is_ios_app_enabled
+    - name: REVISED_SOLUTION_IS_MOTO_BOOKING_ENABLED
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: revised_solution_is_moto_booking_enabled
+    - name: REVISED_SOLUTION_HOTEL_LIST
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: revised_solution_hotel_list
+    - name: HOTEL_CODES_LIST
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: hotel_codes_list
+
+    # ── DynamoDB ─────────────────────────────────────────────────────────────
+    - name: THREEC_DYNAMODB_TABLE_NAME
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: threec_dynamodb_table_name
+    - name: THREEC_DYNAMODB_IS_IRSA
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: threec_dynamodb_is_irsa
+    # How long a token row survives: 2h before the booking completes, 30d after.
+    - name: THREEC_INITIAL_TTL
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: threec_initial_ttl
+    - name: THREEC_FINAL_TTL
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: threec_final_ttl
+
+    # ── PayPal / Braintree ───────────────────────────────────────────────────
+    - name: PAYPAL_ENVIRONMENT
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: paypal_environment
+    - name: PAYPAL_TRANSACTIONS_URL
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: paypal_transactions_url
+    - name: ENABLE_PAYPAL_CONFIG_DATA
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: enable_paypal_config_data
+    - name: PAYPAL_CONFIG_DATA_NAME
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: paypal_config_data_name
+    - name: PAYPAL_CONFIG_DATA_URL
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: paypal_config_data_url
+    - name: PAYPAL_URL
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: paypal_url
+    - name: ENABLE_PAYPAL_TEST_CARD
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: enable_paypal_test_card
+    - name: PAYPAL_ACCOUNT_NAMES_VALUE_GB
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: paypal_account_names_value_gb
+    - name: PAYPAL_ACCOUNT_NAMES_VALUE_DE
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: paypal_account_names_value_de
+    - name: PAYPAL_MIT_COF_INDICATOR
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: paypal_mit_cof_indicator
+
+    # ── Eckoh, actuator security, feature flags ──────────────────────────────
+    - name: ECKOH_ENABLED
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: eckoh_enabled
+    - name: IS_MANAGEMENT_SECURITY_ENABLED
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: is_management_security_enabled
+    - name: UNLEASH_ENVIRONMENT
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: unleashEnvironment
+    - name: UNLEASH_URL
+      valueFrom:
+        configMapKeyRef:
+          name: threec-payment-service-opera-configmap
+          key: unleashUrl
+    - name: UNLEASH_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: unleash-enterprise-secrets
+          key: token
+
+  dns:
+    ndots: 3
+
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - sh
+          - -c
+          - sleep 20
+  terminationGracePeriodSeconds: 90
+
+  # The slowest starter in the stack: liveness is held off for 7 minutes so a JVM still
+  # booting is never restarted mid-start, while readiness begins at 60s and is allowed
+  # 24 failures at 10s.
+  livenessProbe:
+    httpGet:
+      path: /threec-payment-service/actuator/health/liveness
+      port: 9001
+    initialDelaySeconds: 420
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
+
+  readinessProbe:
+    httpGet:
+      path: /threec-payment-service/actuator/health/readiness
+      port: 9001
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 24
+
+  # NOTE: requests.memory is BELOW limits.memory while the heap is sized off the LIMIT
+  # (-XX:MaxRAMPercentage=80 above), so a fully-grown heap occupies 1Gi the pod never
+  # reserved and the pod is evictable under node pressure — costly for a service that
+  # takes minutes to start. Carried over as-is from the GitOps release rather than
+  # silently retuned; raising requests to 2.5Gi is the fix if evictions show up.
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1536Mi
+    limits:
+      memory: 2560Mi
+
+service:
+  create: true
+  name: threec-payment-service-opera
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 9001
+      protocol: TCP
+      name: port9001
+
+# A lower CPU target than its peers: this service must scale out before it saturates,
+# because a new replica takes minutes to become ready.
+autoscaling:
+  create: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 50
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 180
+
+configMap:
+  create: true
+  data:
+    bart_host: https://alpha2.digitalbookings.premierinn.com
+    threec_ipage_is_stub_mode: 'false'
+    threec_username_default: DEFAULT
+    threec_username_tokenisation: eWB-TOKEN
+    threec_username_tokenisation_de: eWB-TOKEN
+    threec_dynamodb_table_name: opera-threec-payment-dev
+    threec_dynamodb_is_irsa: 'true'
+    threec_server: https://web2payuat.3cint.com
+    hotel_make_booking_host: https://api.uat.eks.whitbread.digital
+    basket_booking_security_value: "b246acfc-2271-4c0d-ac39-02554040b499"
+    webhook_environment: https://restapi.dev.premierinn.digital
+    redirect_environment: https://restapi.dev.premierinn.digital
+    redirect_default_url: https://secure2.beta.premierinn.digital/
+    revised_solution_is_feature_enabled: 'true'
+    revised_solution_is_mobile_app_enabled: 'false'
+    revised_solution_is_android_app_enabled: 'true'
+    revised_solution_is_ios_app_enabled: 'false'
+    revised_solution_is_moto_booking_enabled: 'false'
+    revised_solution_hotel_list: DRECIT,BIRTOB,LKEBAR,HAMHOF,LONTOL
+    hotel_codes_list: WARPTI,HAMKLT,LONCAN,MANBAR,GLAORI,BOUCLF,YEOTOC,BERALX,DRECIT,HAMHOF,LEIOST,WUPCIT,ABEPTI,ABEGAV,ANDBRE,AYLHOR,BARISL,BASSPR,BELFAS,BIRPTI,BLABUR,BRAWEA,BRIPAN,BRICOL,BRIEME,BURSTA,CAECED,GILVIC,CHRSOM,COBFAI,NANPEA,CREBRO,DOVDUK,DUMSOL,DURBAR,EDIWAV,EDIPAR,EDIOLD,FALPTI,FALBEE,FARMAN,FAVSHM,GATPLI,GLABEL,GLACIT,GLABLA,GLEBAN,GLOLON,GREYAR,HAGBAD,HALBRO,HARBRE,HATAIR,HIGCEN,HORSTA,HULBAR,INVSOU,SANSEA,KSWICK,KETTEL,KINPLI,LICFRA,LINMIL,LINBRO,LIVPLI,LONSHE,LONCAM,LONOLD,LONCOU,LONEDM,LONELT,LONSMI,HARTRA,LONLEI,LONCUT,LONSOU,LONUXB,LOWFOX,MAILON,NEWROM,WASCOL,NEWPLI,NEWQUI,NOTPLI,PETPAU,PETBRE,POOHOL,PORBAG,PRECEN,RAMSMU,RHYSEA,SALBIS,SALMIL,SLOPTI,SOUSTR,SOUESP,SWABRE,SWIKEM,THUCHA,THURSO,TORHAR,TROSTS,WESRID,LONWAB,WORTHR,YEOAIR,YORMIL
+    eckoh_enabled: 'true'
+    is_management_security_enabled: 'false'
+    paypal_environment: "sandbox"
+    paypal_transactions_url: https://forwarding.sandbox.braintreegateway.com
+    enable_paypal_config_data: 'true'
+    paypal_config_data_name: "whitbread_planet_payfast_uat"
+    paypal_config_data_url: "^https://web2payuat.3cint.com/mxg/Service/_2017_02_v5_2_0/transactions/$"
+    paypal_url: "https://web2payuat.3cint.com/mxg/Service/_2017_02_v5_2_0/transactions/"
+    paypal_mit_cof_indicator: 'C'
+    enable_paypal_test_card: 'true'
+    paypal_account_names_value_gb: "whitbreadGB"
+    paypal_account_names_value_de: "whitbreadDE"
+    threec_initial_ttl: '7200'
+    threec_final_ttl: '2592000'
+    unleashEnvironment: dev
+    unleashUrl: https://whitbread.edge.getunleash.io/api
+
+# Six top-level route families rather than one versioned prefix — this service predates
+# the /v{n}/ convention the entity services use. The actuator alternation is there
+# because the smoke tests address it through the gateway.
+istio:
+  create: true
+  auth: false
+  gateway: opera-api
+  regex:
+    enabled: true
+    pattern: \/payments.*|\/tokenise.*|\/tokens.*|\/reconcile.*|\/refunds.*|\/cards.*|\/threec-payment-service\/actuator\/.*

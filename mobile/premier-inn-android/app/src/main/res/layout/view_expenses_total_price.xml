@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.whitbread.premierinn.common.view.SummaryExpensesView
+        android:id="@+id/expenses_expense_hotel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/review_booking_meals_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/expenses_expense_hotel"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <com.whitbread.premierinn.common.view.SummaryExpensesView
+        android:id="@+id/expenses_expense_breakfast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/review_booking_meals_container"
+        android:layout_marginTop="@dimen/generic_margin_20"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <com.whitbread.premierinn.common.view.SummaryExpensesView
+        android:id="@+id/expenses_expense_children_breakfast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_20"
+        android:layout_below="@id/expenses_expense_breakfast"
+        app:defaultTitle="@string/kids_breakfast_label"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <LinearLayout
+        android:id="@+id/review_booking_extras_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/expenses_expense_children_breakfast"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <com.whitbread.premierinn.common.view.SummaryExpensesView
+        android:id="@+id/expenses_credit_card_fee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/review_booking_extras_container"
+        android:layout_marginTop="@dimen/generic_margin_20"
+        android:visibility="gone"
+        app:defaultTitle="@string/review_booking_card_fee"
+        tools:visibility="visible"/>
+
+    <com.whitbread.premierinn.common.view.SummaryExpensesView
+        android:id="@+id/expenses_donation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_20"
+        android:layout_below="@id/expenses_credit_card_fee"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <com.whitbread.premierinn.common.view.TotalPriceView
+        android:id="@+id/expenses_total_price_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/expenses_donation"/>
+
+</merge>

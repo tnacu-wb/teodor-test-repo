@@ -1,0 +1,33 @@
+import { gql } from 'graphql-request';
+
+export const getUpcomingBookingsQuery = () => gql`
+  query getUpcomingBookings(
+    $country: String!
+    $language: String!
+    $channel: String!
+    $subchannel: String!
+  ) {
+    getUpcomingBookings(
+      upcomingBookingsRequest: {
+        country: $country
+        language: $language
+        channel: $channel
+        subchannel: $subchannel
+      }
+    ) {
+      arrivalDate
+      arrivalTime
+      bookingReference
+      bookings
+      brand
+      departureDate
+      departureTime
+      galleryImages {
+        alt
+        imageSrc
+      }
+      hotelName
+      stays
+    }
+  }
+`;

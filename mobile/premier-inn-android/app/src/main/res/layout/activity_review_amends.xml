@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/metallic_pearl_seventy_percent"
+    android:orientation="vertical"
+    tools:context="com.whitbread.premierinn.amend.amendreview.ReviewAmendsActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:fitsSystemWindows="true"
+        app:contentInsetStartWithNavigation="0dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="@dimen/toolbar_progress_bar_width"
+            android:layout_height="@dimen/toolbar_progress_bar_height"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/generic_margin_8"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
+
+        <FrameLayout
+            android:id="@+id/amend_review_error_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            android:paddingStart="@dimen/generic_padding_16"
+            android:paddingTop="@dimen/generic_padding_12"
+            android:paddingEnd="@dimen/generic_padding_16"
+            android:paddingBottom="@dimen/generic_padding_12"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/amend_review_error_message"
+                style="@style/BodySmallSemiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/generic_margin_12"
+                android:gravity="center"
+                android:textColor="@color/white"
+                tools:text="No more Family Rooms available at this hotel" />
+        </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/review_amend_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <include
+            android:id="@+id/translucent_loading_amend"
+            layout="@layout/translucent_loading"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+    </FrameLayout>
+</LinearLayout>

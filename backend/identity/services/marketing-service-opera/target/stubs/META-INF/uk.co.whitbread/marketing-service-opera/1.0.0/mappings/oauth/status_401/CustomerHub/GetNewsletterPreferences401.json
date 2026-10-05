@@ -1,0 +1,32 @@
+{
+  "id" : "65591742-2105-491f-ba28-d4fc6f1f4849",
+  "request" : {
+    "url" : "/marketing/hotels/newsletter/get",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['requestId'] == 'fsytdfxusdgcilugasld')]"
+    }, {
+      "matchesJsonPath" : "$.['contactChannel'][?(@.['contactChannelType'] == 'Email')]"
+    }, {
+      "matchesJsonPath" : "$.['contactChannel'][?(@.['contactChannelValue'] == 'unauthorized@gmail.com')]"
+    }, {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'WINN')]"
+    } ]
+  },
+  "response" : {
+    "status" : 401,
+    "body" : "{\"code\":\"3001\",\"details\":[\"You do not have permission to view this directory or page.\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "65591742-2105-491f-ba28-d4fc6f1f4849"
+}

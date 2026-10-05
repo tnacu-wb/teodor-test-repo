@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white">
+
+    <ScrollView
+        android:id="@+id/payAndCheckInScrollableContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/footerContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                android:id="@+id/reg_card_info_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_26"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:background="@drawable/information_notification_background"
+                android:paddingStart="@dimen/generic_margin_16"
+                android:paddingTop="@dimen/generic_margin_12"
+                android:paddingEnd="@dimen/generic_margin_16"
+                android:paddingBottom="@dimen/generic_margin_12"
+                android:src="@drawable/ic_info"
+                android:text="@string/reg_card_pay_and_check_in_info_text"
+                android:visibility="gone"
+                app:iconTintColor="@color/teal"/>
+
+            <include
+                android:id="@+id/headerContainer"
+                layout="@layout/view_pre_stay_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/paymentMethodsLoading"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/generic_margin_8" />
+
+            <TextView
+                android:id="@+id/paymentTypeHeaderTextView"
+                style="@style/Header2ExtraBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_8"
+                android:text="@string/payment_type" />
+
+            <LinearLayout
+                android:id="@+id/paymentMethodsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_16"
+                android:orientation="vertical" />
+
+            <include
+                android:id="@+id/billingAddressContainer"
+                layout="@layout/item_pay_and_check_in_billing_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/generic_margin_16" />
+
+            <com.whitbread.premierinn.common.view.AddressFormView
+                android:id="@+id/billingAddressFormView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_8"
+                android:layout_marginBottom="@dimen/generic_margin_16"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/footerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_gravity="bottom" />
+
+    <include
+        android:id="@+id/paymentTranslucentLoading"
+        layout="@layout/translucent_loading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        tools:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

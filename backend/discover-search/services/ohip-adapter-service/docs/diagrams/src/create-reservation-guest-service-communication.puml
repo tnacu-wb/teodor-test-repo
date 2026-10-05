@@ -1,0 +1,23 @@
+@startuml
+entity "AppSync" as A
+entity "Reservation Entity Service" as RES
+entity "Basket Service" as BSK
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OHIP
+entity "OPERA" as OPERA
+
+A -> RES: graphql create reservation guest
+RES -> BSK: GET /v1/baskets/{basketReference}
+RES <- BSK: DTO with reservationIds, hotelId
+RES -> PMS: POST /v1/reservations/guests
+PMS -> OHIP: POST /v1/reservations/guests
+OHIP -> OPERA: POST /crm/v1/profiles
+OPERA -> OHIP: create booker contact profile response
+loop for each reservationId
+  OHIP -> OPERA: PUT /rsv/v1/hotels/{hotelId}/reservations/{internalReservationId}
+  OPERA -> OHIP: OK 200 - put reservation guest and contact profile response
+end
+PMS <- OHIP: OK 201
+RES <- PMS: OK 201
+A <- RES: basketReference 201
+@enduml

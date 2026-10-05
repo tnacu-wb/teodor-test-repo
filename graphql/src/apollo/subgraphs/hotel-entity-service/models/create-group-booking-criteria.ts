@@ -1,0 +1,67 @@
+export class CreateGroupBookingCriteria {
+  title: string;
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  phoneNumber: string;
+  bookerType: string;
+  purposeOfStay: string;
+  isSchoolOrYouth: boolean;
+  reasonForVisit: string;
+  reasonForVisitOther?: string;
+  companyName: string;
+  isPackageTypeBf: boolean;
+  isPackageTypeMealDeal: boolean;
+  hotelName?: string;
+  hotelBrand?: string;
+  arrivalDate: string;
+  departureDate: string;
+  singleOccupancy?: number;
+  doubleOccupancy?: number;
+  twinRooms?: number;
+  isTravellingWithChild?: boolean;
+  isAccessibleRoom?: boolean;
+  familyOf21A1C?: number;
+  familyOf32A1C?: number;
+  familyOf31A2C?: number;
+  familyOf42A2C?: number;
+  accessibleSingle?: number;
+  accessibleDouble?: number;
+  accessibleTwin?: number;
+  additionalInformation?: string;
+  language?: string;
+
+  constructor(data: any) {
+    this.title = data.title;
+    this.firstName = data.firstName;
+    this.lastName = data.lastName;
+    this.emailAddress = data.emailAddress;
+    this.phoneNumber = data.phoneNumber;
+    this.bookerType = data.bookerType;
+    this.purposeOfStay = data.purposeOfStay;
+    this.isSchoolOrYouth = data.isSchoolOrYouth;
+    this.reasonForVisit = data.reasonForVisit;
+    this.reasonForVisitOther = data.reasonForVisitOther;
+    this.companyName = data.companyName;
+    this.isPackageTypeBf = data.isPackageTypeBf;
+    this.isPackageTypeMealDeal = data.isPackageTypeMealDeal;
+    this.hotelName = data.hotelName;
+    this.hotelBrand = data.hotelBrand;
+    this.arrivalDate = data.arrivalDate;
+    this.departureDate = data.departureDate;
+    this.singleOccupancy = data.singleOccupancy;
+    this.doubleOccupancy = data.doubleOccupancy;
+    this.twinRooms = data.twinRooms;
+    this.isTravellingWithChild = data.isTravellingWithChild;
+    this.isAccessibleRoom = data.isAccessibleRoom;
+    this.familyOf21A1C = data.familyOf21A1C;
+    this.familyOf32A1C = data.familyOf32A1C;
+    this.familyOf31A2C = data.familyOf31A2C;
+    this.familyOf42A2C = data.familyOf42A2C;
+    this.accessibleSingle = data.accessibleSingle;
+    this.accessibleDouble = data.accessibleDouble;
+    this.accessibleTwin = data.accessibleTwin;
+    this.additionalInformation = data.additionalInformation;
+    this.language = data.language;
+  }
+}

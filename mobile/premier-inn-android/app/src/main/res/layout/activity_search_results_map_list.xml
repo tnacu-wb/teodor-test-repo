@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:elevation="@dimen/toolbar_elevation"
+            android:minHeight="?attr/actionBarSize"
+            app:contentInsetStartWithNavigation="0dp"
+            app:subtitleTextAppearance="@style/Toolbar.SubTitleSmallWhite"
+            app:titleTextAppearance="@style/Toolbar.TitleWhite" />
+
+
+        <include
+            android:id="@+id/infoBannerContainer"
+            android:visibility="gone"
+            layout="@layout/view_notification_layout" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/listBtnContainer"
+                layout="@layout/view_search_results_list_view_button_container" />
+
+            <include
+                android:id="@+id/mapBtnContainer"
+                layout="@layout/view_search_results_sort_button_container" />
+
+        </FrameLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/search_results_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include android:id="@+id/loadingContainer"
+            android:visibility="gone"
+            layout="@layout/translucent_loading"/>
+
+    </FrameLayout>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?android:attr/actionBarSize">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/hotelsRecyclerViewParent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/hotelsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:clipToPadding="false"
+                android:padding="@dimen/generic_padding_16"
+                app:layout_constrainedHeight="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/first_time_incentive_banner"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/first_time_incentive_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/premier_inn_purple"
+                android:paddingTop="@dimen/generic_margin_20"
+                android:paddingStart="@dimen/generic_margin_20"
+                android:paddingBottom="@dimen/generic_margin_18"
+                android:paddingEnd="@dimen/generic_margin_25"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                    android:id="@+id/brand_logo"
+                    android:layout_width="39dp"
+                    android:layout_height="39dp"
+                    android:src="@drawable/ic_pi"
+                    android:layout_marginTop="@dimen/generic_padding_5"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/first_time_offer_title"
+                    style="@style/Header2ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/generic_margin_15"
+                    android:textSize="@dimen/header1_text_size_23"
+                    android:textColor="@color/moon_yellow"
+                    android:includeFontPadding="false"
+                    android:text="@string/srp_first_time_offer_banner_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/brand_logo"
+                    app:layout_constraintHorizontal_bias="0"/>
+
+                <TextView
+                    android:id="@+id/first_time_offer_subtitle"
+                    style="@style/Header2Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constrainedWidth="true"
+                    android:textSize="@dimen/subtext_text_size_13"
+                    android:textColor="@color/white"
+                    android:text="@string/srp_first_time_offer_banner_subtitle"
+                    app:layout_constraintTop_toBottomOf="@id/first_time_offer_title"
+                    app:layout_constraintStart_toStartOf="@id/first_time_offer_title"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include
+                android:id="@+id/coronavirusSearchResultLayout"
+                layout="@layout/view_coronavirus_layout"
+                android:layout_width="match_parent"
+                android:layout_height="172dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

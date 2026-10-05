@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="tudor.codrea" id="create_table_amendment_rule" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="amendment_rule"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="amendment_rule">
+            <column name="rule_id" autoIncrement="true" remarks="rule_id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="amendment_rule_pkey"/>
+            </column>
+
+            <column name="ref_rule_id" type="integer">
+                <constraints nullable="true" foreignKeyName="amendment_rule_ref_rule_id_fkey"
+                    references="amendment_rule(rule_id)"/>
+            </column>
+
+            <column name="status" type="VARCHAR(20)" defaultValue="NEW">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_modified_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="enable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
+            </column>
+            <column name="disable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
+            </column>
+
+            <column name="rate_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="channel_id" type="VARCHAR(255)">
+            </column>
+
+            <column name="arrival_date_limit" type="integer">
+            </column>
+
+            <column name="user_category" type="VARCHAR(50)">
+            </column>
+
+            <column name="original_booking_time_limit" type="integer">
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

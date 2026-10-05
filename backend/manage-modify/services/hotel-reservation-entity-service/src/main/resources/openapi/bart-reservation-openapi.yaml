@@ -1,0 +1,1597 @@
+swagger: '2.0'
+info:
+  description: <p>Endpoints for managing existing reservations.</p>
+  version: 2.4.0-30
+  title: Hotel Reservation Microservice API Documentation
+host: api.uat.eks.whitbread.digital
+basePath: /hotelreservation
+tags:
+  - name: Hotel Reservation
+    description: Amend Reservation Controller
+  - name: Notification Controller
+    description: Notification Controller
+  - name: QR Code Generation
+    description: Qr Code Controller
+paths:
+  /notification/booking/confirmation:
+    post:
+      tags:
+        - Notification Controller
+      summary: Send a confirmation
+      description: Send via email a booking confirmation
+      operationId: resendConfirmationUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/ResendConfirmationRequest'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ResendConfirmationResponse'
+        '400':
+          description: Error Occurred
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /notification/booking/invoice:
+    post:
+      tags:
+        - Notification Controller
+      summary: Send an invoice
+      description: Send a reservation invoice via email
+      operationId: sendInvoiceUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: bookingChannel
+          in: header
+          description: bookingChannel
+          required: false
+          type: string
+          default: WEB
+          enum:
+            - MOBILE
+            - WEB
+            - WEB_DE
+            - CBT
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/ResendInvoiceRequest'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ResendInvoiceResponse'
+        '400':
+          description: Error Occurred
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /qrcode/{code}:
+    get:
+      tags:
+        - QR Code Generation
+      summary: Generates a QR code image
+      description: Generate a QR code image displayed in the confirmation email a customer receives when making a reservation
+      operationId: generateReservationQrCodeUsingGET
+      produces:
+        - image/png
+      parameters:
+        - name: code
+          in: path
+          description: code
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: string
+        '500':
+          description: Internal Server Error
+          schema:
+            type: string
+      deprecated: false
+  /reservation/hotels/invoice/resend:
+    post:
+      tags:
+        - Hotel Reservation
+      summary: resendInvoice
+      description: resend a reservations invoice
+      operationId: resendInvoiceUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: bookingChannel
+          in: header
+          description: bookingChannel
+          required: false
+          type: string
+          default: WEB
+          enum:
+            - MOBILE
+            - WEB
+            - WEB_DE
+            - CBT
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/ResendInvoiceRequest'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ResendInvoiceResponse'
+        '400':
+          description: 'Error Occurred '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /reservation/hotels/pending-amend/{pending-amend-id}:
+    put:
+      tags:
+        - Hotel Reservation
+      summary: Complete the amend of a Booking
+      description: Complete the amend of a hotel reservation
+      operationId: completePendingAmendUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: completePendingAmendRequest
+          description: completePendingAmendRequest
+          required: true
+          schema:
+            $ref: '#/definitions/CompletePendingAmendRequest'
+        - name: country
+          in: header
+          description: country
+          required: false
+          type: string
+          default: GB
+        - name: language
+          in: header
+          description: language
+          required: false
+          type: string
+          default: en
+        - name: pending-amend-id
+          in: path
+          description: pending-amend-id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/AmendReservationResponse'
+        '400':
+          description: 'Error Occurred '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Pending Amend Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /reservation/hotels/{reservation-id}:
+    get:
+      tags:
+        - Hotel Reservation
+      summary: Retrieve a Booking
+      description: Retrieves the booking information
+      operationId: retrieveBookingUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: arrival
+          in: query
+          required: false
+          type: string
+        - name: bookingChannel
+          in: header
+          description: bookingChannel
+          required: false
+          type: string
+          default: WEB
+          enum:
+            - MOBILE
+            - WEB
+            - WEB_DE
+            - CBT
+        - name: brand
+          in: query
+          description: brand
+          required: false
+          type: string
+          default: PI
+          enum:
+            - HUB
+            - PI
+            - PID
+            - CBT
+            - ZIP
+        - name: country
+          in: header
+          description: country
+          required: false
+          type: string
+          default: GB
+        - name: guestHistoryNumber
+          in: query
+          required: false
+          type: string
+        - name: language
+          in: header
+          description: language
+          required: false
+          type: string
+          default: en
+        - name: reservation-id
+          in: path
+          description: reservation-id
+          required: true
+          type: string
+        - name: surname
+          in: query
+          required: false
+          type: string
+        - name: version
+          in: header
+          description: version
+          required: false
+          type: integer
+          default: 1
+          format: int32
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ReservationInfoResponse'
+        '400':
+          description: 'Error Occurred '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+    put:
+      tags:
+        - Hotel Reservation
+      summary: Amend a Booking
+      description: Amends a hotel reservation
+      operationId: amendBookingUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: amendReservationRequest
+          description: amendReservationRequest
+          required: true
+          schema:
+            $ref: '#/definitions/AmendReservationRequest'
+        - name: arrival
+          in: query
+          description: arrival
+          required: true
+          type: string
+        - name: bookingChannel
+          in: header
+          description: bookingChannel
+          required: false
+          type: string
+          enum:
+            - MOBILE
+            - WEB
+            - WEB_DE
+            - CBT
+        - name: brand
+          in: query
+          description: brand
+          required: false
+          type: string
+          default: PI
+          enum:
+            - HUB
+            - PI
+            - PID
+            - CBT
+            - ZIP
+        - name: business
+          in: query
+          description: business
+          required: false
+          type: boolean
+          default: false
+        - name: companyId
+          in: query
+          description: companyId
+          required: false
+          type: string
+        - name: country
+          in: header
+          description: country
+          required: false
+          type: string
+          default: GB
+        - name: employeeId
+          in: query
+          description: employeeId
+          required: false
+          type: string
+        - name: language
+          in: header
+          description: language
+          required: false
+          type: string
+          default: en
+        - name: reservation-id
+          in: path
+          description: reservation-id
+          required: true
+          type: string
+        - name: sessionId
+          in: query
+          description: sessionId
+          required: true
+          type: string
+        - name: source
+          in: header
+          description: source
+          required: false
+          type: string
+          enum:
+            - MOBILE
+            - WEB
+            - WEB_DE
+            - CBT
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/AmendReservationResponse'
+        '400':
+          description: 'Error Occurred '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+    delete:
+      tags:
+        - Hotel Reservation
+      summary: Cancel a Booking
+      description: Cancels the booking for a hotel
+      operationId: cancelBookingUsingDELETE
+      produces:
+        - application/json
+      parameters:
+        - name: arrival
+          in: query
+          description: arrival
+          required: true
+          type: string
+        - name: bookingChannel
+          in: header
+          description: bookingChannel
+          required: false
+          type: string
+          default: WEB
+          enum:
+            - MOBILE
+            - WEB
+            - WEB_DE
+            - CBT
+        - name: brand
+          in: query
+          description: brand
+          required: false
+          type: string
+          default: PI
+          enum:
+            - HUB
+            - PI
+            - PID
+            - CBT
+            - ZIP
+        - name: country
+          in: header
+          description: country
+          required: false
+          type: string
+          default: GB
+        - name: email
+          in: query
+          description: email
+          required: false
+          type: boolean
+          default: true
+        - name: language
+          in: header
+          description: language
+          required: false
+          type: string
+          default: en
+        - name: reservation-id
+          in: path
+          description: reservation-id
+          required: true
+          type: string
+        - name: sms
+          in: query
+          description: sms
+          required: false
+          type: boolean
+          default: false
+        - name: surname
+          in: query
+          description: surname
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/CancelReservationResponse'
+        '400':
+          description: 'Error Occurred '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /reservation/hotels/{reservation-id}/amend:
+    post:
+      tags:
+        - Hotel Reservation
+      summary: Trigger Amend Booking Process
+      description: Triggers amend booking
+      operationId: triggerAmendProcessUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: false
+          type: string
+          default: application/json
+        - name: arrival
+          in: query
+          description: arrival
+          required: true
+          type: string
+        - name: bookingChannel
+          in: header
+          description: bookingChannel
+          required: false
+          type: string
+          default: WEB
+          enum:
+            - MOBILE
+            - WEB
+            - WEB_DE
+            - CBT
+        - name: brand
+          in: query
+          description: brand
+          required: false
+          type: string
+          default: PI
+          enum:
+            - HUB
+            - PI
+            - PID
+            - CBT
+            - ZIP
+        - name: country
+          in: header
+          description: country
+          required: false
+          type: string
+          default: GB
+        - name: language
+          in: header
+          description: language
+          required: false
+          type: string
+          default: en
+        - name: reservation-id
+          in: path
+          description: reservation-id
+          required: true
+          type: string
+        - name: sessionId
+          in: query
+          description: sessionId
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ReservationInfoResponse'
+        '400':
+          description: 'Error Occurred '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /reservation/hotels/{reservation-id}/car:
+    put:
+      tags:
+        - Hotel Reservation
+      summary: Update car details
+      description: Updates car details for sleep park fly booking
+      operationId: updateCarDetailsUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateCarDetailsRequest'
+        - name: reservation-id
+          in: path
+          description: reservation-id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/UpdateCarDetailsResponse'
+        '400':
+          description: 'Error Occurred '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /reservation/hotels/{reservationId}:
+    get:
+      tags:
+        - Hotel Reservation
+      summary: Retrieve a secured Booking
+      description: Retrieves the secured booking information
+      operationId: retrieveBookingSecuredUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: Authorization
+          required: true
+          type: string
+        - name: arrival
+          in: query
+          required: false
+          type: string
+        - name: bookingChannel
+          in: header
+          description: bookingChannel
+          required: false
+          type: string
+          default: WEB
+          enum:
+            - MOBILE
+            - WEB
+            - WEB_DE
+            - CBT
+        - name: brand
+          in: query
+          description: brand
+          required: false
+          type: string
+          default: PI
+          enum:
+            - HUB
+            - PI
+            - PID
+            - CBT
+            - ZIP
+        - name: country
+          in: header
+          description: country
+          required: false
+          type: string
+          default: GB
+        - name: guestHistoryNumber
+          in: query
+          required: false
+          type: string
+        - name: language
+          in: header
+          description: language
+          required: false
+          type: string
+          default: en
+        - name: reservationId
+          in: path
+          description: reservationId
+          required: true
+          type: string
+        - name: surname
+          in: query
+          required: false
+          type: string
+        - name: version
+          in: header
+          description: version
+          required: false
+          type: integer
+          default: 1
+          format: int32
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ReservationInfoResponse'
+        '400':
+          description: 'Error Occurred '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+definitions:
+  AdditionalGuest:
+    type: object
+    properties:
+      carRegistration:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      title:
+        type: string
+    title: AdditionalGuest
+  Address:
+    type: object
+    required:
+      - line1
+    properties:
+      companyName:
+        type: string
+      countryCode:
+        type: string
+      line1:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      line2:
+        type: string
+      line3:
+        type: string
+      line4:
+        type: string
+      line5:
+        type: string
+      postcode:
+        type: string
+    title: Address
+  AmendReservationRequest:
+    type: object
+    required:
+      - arrival
+      - departure
+      - roomRequests
+      - rooms
+    properties:
+      arrival:
+        type: string
+      breakfasts:
+        type: array
+        items:
+          $ref: '#/definitions/Breakfast'
+      businessAccountExtras:
+        $ref: '#/definitions/BusinessAccountExtras'
+      cnpMemorableWord:
+        type: string
+      departure:
+        type: string
+      donation:
+        $ref: '#/definitions/Price'
+      guests:
+        type: array
+        items:
+          $ref: '#/definitions/Guest'
+      hotelCode:
+        type: string
+      paymentCard:
+        $ref: '#/definitions/PaymentCard'
+      roomRequests:
+        type: array
+        items:
+          $ref: '#/definitions/RoomRequest'
+      rooms:
+        type: integer
+        format: int32
+      upsellFormat:
+        type: string
+        enum:
+          - 'NO'
+          - BA
+          - PH
+      upsells:
+        type: array
+        items:
+          $ref: '#/definitions/UpsellItem'
+    title: AmendReservationRequest
+  AmendReservationResponse:
+    type: object
+    properties:
+      carData:
+        $ref: '#/definitions/CarData'
+      checkInOnline:
+        type: boolean
+      cityTax:
+        $ref: '#/definitions/Price'
+      confirmationNumber:
+        type: string
+      payOnArrivalSuccess:
+        type: boolean
+      paymentResponse:
+        $ref: '#/definitions/PaymentResponse'
+      pendingAmendId:
+        type: string
+      prepaymentSuccess:
+        type: boolean
+      prepaymentText:
+        type: string
+      sessionId:
+        type: string
+      totalCost:
+        $ref: '#/definitions/Price'
+      vatRate:
+        type: number
+    title: AmendReservationResponse
+  AmendRestrictions:
+    type: object
+    properties:
+      guestNames:
+        type: boolean
+      nights:
+        type: boolean
+      restricted:
+        type: boolean
+      rooms:
+        type: boolean
+      upsell:
+        type: boolean
+    title: AmendRestrictions
+  Attachment:
+    type: object
+    properties:
+      label:
+        type: string
+      path:
+        type: string
+    title: Attachment
+  Booker:
+    type: object
+    required:
+      - address
+      - emailAddress
+      - firstName
+      - lastName
+      - title
+    properties:
+      acceptFutureMailing:
+        type: boolean
+      address:
+        $ref: '#/definitions/Address'
+      companyId:
+        type: string
+      companyName:
+        type: string
+      emailAddress:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      employeeId:
+        type: string
+      firstName:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      guestHistoryNumber:
+        type: string
+      lastName:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      mobileNumber:
+        type: string
+      telephoneNumber:
+        type: string
+      title:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+    title: Booker
+  Breakfast:
+    type: object
+    required:
+      - adults
+      - children
+      - code
+      - roomNumber
+    properties:
+      adults:
+        type: integer
+        format: int32
+      children:
+        type: integer
+        format: int32
+      code:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      roomNumber:
+        type: integer
+        format: int32
+    title: Breakfast
+  BreakfastUpsell:
+    type: object
+    required:
+      - adults
+      - children
+      - code
+      - legend
+      - roomId
+    properties:
+      adults:
+        type: integer
+        format: int32
+      children:
+        type: integer
+        format: int32
+      code:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      legend:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      roomId:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      subtotal:
+        $ref: '#/definitions/Price'
+      unitCost:
+        $ref: '#/definitions/Price'
+    title: BreakfastUpsell
+  BusinessAccount:
+    type: object
+    properties:
+      alcoholAllowed:
+        type: boolean
+      atosPassword:
+        type: string
+      atosUsername:
+        type: string
+      breakfastCode:
+        type: string
+      carParkingAllowed:
+        type: boolean
+      cardNotPresentAuth:
+        type: boolean
+      customerReference:
+        type: string
+      dinnerAllowance:
+        $ref: '#/definitions/Price'
+      otherChargesAllowed:
+        type: boolean
+      purchaseOrder:
+        type: string
+      wifiAccessAllowed:
+        type: boolean
+    title: BusinessAccount
+  BusinessAccountExtras:
+    type: object
+    properties:
+      alcoholAllowed:
+        type: boolean
+      carParkingAllowed:
+        type: boolean
+      cardNotPresentAuth:
+        type: boolean
+      dinnerAllowance:
+        $ref: '#/definitions/Price'
+      otherChargesAllowed:
+        type: boolean
+      wifiAccessAllowed:
+        type: boolean
+    title: BusinessAccountExtras
+  CancelReservationResponse:
+    type: object
+    properties:
+      cancellationId:
+        type: string
+      sessionId:
+        type: string
+    title: CancelReservationResponse
+  CarData:
+    type: object
+    properties:
+      carParkOperator:
+        type: string
+      hotelCode:
+        type: string
+      required:
+        type: boolean
+      stayLength:
+        type: integer
+        format: int32
+    title: CarData
+  CarDetails:
+    type: object
+    properties:
+      colour:
+        type: string
+      make:
+        type: string
+      model:
+        type: string
+      numberPassengers:
+        type: integer
+        format: int32
+      registration:
+        type: string
+    title: CarDetails
+  CheckInGuest:
+    type: object
+    properties:
+      additionalGuests:
+        type: array
+        items:
+          $ref: '#/definitions/AdditionalGuest'
+      address:
+        $ref: '#/definitions/Address'
+      carRegistration:
+        type: string
+      emailAddress:
+        type: string
+      firstName:
+        type: string
+      guestHistoryNumber:
+        type: string
+      guestId:
+        type: integer
+        format: int64
+      lastName:
+        type: string
+      mobileNumber:
+        type: string
+      nationality:
+        type: string
+      nextDestination:
+        type: string
+      passportNumber:
+        type: string
+      placeOfIssue:
+        type: string
+      roomId:
+        type: string
+      roomNumber:
+        type: integer
+        format: int32
+      telephoneNumber:
+        type: string
+      title:
+        type: string
+    title: CheckInGuest
+  CompletePendingAmendRequest:
+    type: object
+    required:
+      - paymentAuthenticationResponse
+    properties:
+      paymentAuthenticationResponse:
+        type: string
+    title: CompletePendingAmendRequest
+  DinnerUpsell:
+    type: object
+    properties:
+      dinnerDate:
+        type: string
+      dinnerDiners:
+        type: integer
+        format: int64
+      dinnerTime:
+        type: string
+    title: DinnerUpsell
+  ErrorResponse:
+    type: object
+    required:
+      - code
+      - details
+    properties:
+      code:
+        type: string
+        example: '001'
+        minLength: 1
+        maxLength: 2147483647
+      details:
+        type: array
+        example:
+          - Error message
+        items:
+          type: string
+    title: ErrorResponse
+  Flight:
+    type: object
+    properties:
+      arrival:
+        $ref: '#/definitions/FlightDetails'
+      departure:
+        $ref: '#/definitions/FlightDetails'
+    title: Flight
+  FlightDetails:
+    type: object
+    properties:
+      date:
+        type: string
+      number:
+        type: string
+      terminal:
+        type: string
+      time:
+        type: string
+    title: FlightDetails
+  Guest:
+    type: object
+    required:
+      - firstName
+      - lastName
+      - roomNumber
+      - title
+    properties:
+      firstName:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      guestHistoryNumber:
+        type: string
+      guestId:
+        type: integer
+        format: int64
+      lastName:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      roomNumber:
+        type: integer
+        format: int32
+      title:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+    title: Guest
+  PackageItem:
+    type: object
+    properties:
+      elementDescription:
+        type: string
+      elementNights:
+        type: string
+    title: PackageItem
+  PaymentCard:
+    type: object
+    required:
+      - prepaymentRequired
+    properties:
+      billingAddress:
+        $ref: '#/definitions/Address'
+      businessAccount:
+        $ref: '#/definitions/BusinessAccount'
+      cardNumber:
+        type: string
+      cardSecurityCode:
+        type: string
+      cardType:
+        type: string
+      cardholderName:
+        type: string
+      cbtCentralCardId:
+        type: string
+      cbtEmployeeCardId:
+        type: string
+      expiryDate:
+        type: string
+      issueNumber:
+        type: string
+      paymentAuthenticationResponse:
+        type: string
+      prepaymentRequired:
+        type: boolean
+      startDate:
+        type: string
+      useExistingCard:
+        type: boolean
+    title: PaymentCard
+  PaymentResponse:
+    type: object
+    properties:
+      authenticationToken:
+        type: string
+      prepaymentNotRequired:
+        type: boolean
+      redirectHtml:
+        type: string
+      redirectURL:
+        type: string
+      sessionId:
+        type: string
+      threeDSecureRequired:
+        type: boolean
+    title: PaymentResponse
+  Price:
+    type: object
+    required:
+      - amount
+      - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+    title: Price
+  ResendConfirmationRequest:
+    type: object
+    required:
+      - destination
+      - sessionId
+      - type
+    properties:
+      destination:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      sessionId:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      type:
+        type: string
+        enum:
+          - EMAIL
+          - SMS
+    title: ResendConfirmationRequest
+  ResendConfirmationResponse:
+    type: object
+    required:
+      - success
+    properties:
+      success:
+        type: boolean
+    title: ResendConfirmationResponse
+  ResendInvoiceRequest:
+    type: object
+    required:
+      - emailAddress
+      - guestHistoryNumber
+      - invoiceRecordNumber
+      - sessionId
+    properties:
+      companyId:
+        type: string
+      emailAddress:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      employeeId:
+        type: string
+      guestHistoryNumber:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      invoiceRecordNumber:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      sessionId:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+    title: ResendInvoiceRequest
+  ResendInvoiceResponse:
+    type: object
+    required:
+      - emailAddress
+    properties:
+      emailAddress:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      success:
+        type: boolean
+    title: ResendInvoiceResponse
+  ReservationDetails:
+    type: object
+    properties:
+      address:
+        $ref: '#/definitions/Address'
+      amendOnline:
+        type: boolean
+      amendOnlineText:
+        type: string
+      amendRestrictions:
+        $ref: '#/definitions/AmendRestrictions'
+      amendable:
+        type: boolean
+      amendableText:
+        type: string
+      arrivalDate:
+        type: string
+      arrivalTime:
+        type: integer
+        format: int64
+      booker:
+        $ref: '#/definitions/Booker'
+      bookingType:
+        type: string
+      breakfasts:
+        type: array
+        items:
+          $ref: '#/definitions/BreakfastUpsell'
+      business:
+        type: boolean
+      businessTrip:
+        type: boolean
+      cancelable:
+        type: boolean
+      cancelableText:
+        type: string
+      carData:
+        $ref: '#/definitions/CarData'
+      cardFeeApplies:
+        type: boolean
+      cellCode:
+        type: string
+      cellCodeLegend:
+        type: string
+      changeCard:
+        type: boolean
+      checkInDate:
+        type: string
+      checkInOnline:
+        type: boolean
+      checkInText:
+        type: string
+      checkedIn:
+        type: boolean
+      cityTax:
+        $ref: '#/definitions/Price'
+      confirmationNumber:
+        type: string
+      departureDate:
+        type: string
+      dinnerUpsell:
+        type: array
+        items:
+          $ref: '#/definitions/DinnerUpsell'
+      electronicInvoiceRequired:
+        type: boolean
+      emailConfirmationSent:
+        type: boolean
+      hotelCode:
+        type: string
+      nights:
+        type: integer
+        format: int32
+      package:
+        type: boolean
+      packageItems:
+        type: array
+        items:
+          $ref: '#/definitions/PackageItem'
+      payment:
+        $ref: '#/definitions/PaymentCard'
+      paymentProvider:
+        type: string
+      prepaid:
+        type: boolean
+      prepaidAmount:
+        $ref: '#/definitions/Price'
+      prepayTopup:
+        type: boolean
+      promotionText:
+        type: string
+      rateClass:
+        type: string
+      rateDescription:
+        type: string
+      ratePlan:
+        type: string
+      rateText:
+        type: string
+      roomBreakdown:
+        type: array
+        items:
+          $ref: '#/definitions/RoomBreakdown'
+      rooms:
+        type: array
+        items:
+          $ref: '#/definitions/Room'
+      smsConfirmationRequired:
+        type: boolean
+      totalCost:
+        $ref: '#/definitions/Price'
+      upsellBreakdown:
+        $ref: '#/definitions/UpsellBreakdown'
+      wifiRecommend:
+        type: array
+        items:
+          $ref: '#/definitions/WifiRecommend'
+    title: ReservationDetails
+  ReservationInfoResponse:
+    type: object
+    properties:
+      checkInTime:
+        type: string
+      checkOutTime:
+        type: string
+      reservationDetails:
+        $ref: '#/definitions/ReservationDetails'
+      sessionId:
+        type: string
+      upsellItemsAvailable:
+        type: array
+        items:
+          $ref: '#/definitions/UpsellItemAvailable'
+    title: ReservationInfoResponse
+  Room:
+    type: object
+    properties:
+      adults:
+        type: integer
+        format: int32
+      bookingStatus:
+        type: string
+      carDetails:
+        $ref: '#/definitions/CarDetails'
+      checkInGuest:
+        $ref: '#/definitions/CheckInGuest'
+      children:
+        type: integer
+        format: int32
+      cot:
+        type: boolean
+      food:
+        type: array
+        items:
+          $ref: '#/definitions/UpsellItem'
+      guest:
+        $ref: '#/definitions/Guest'
+      lettingType:
+        type: string
+      nonWindow:
+        type: boolean
+      roomAndFoodCost:
+        $ref: '#/definitions/Price'
+      roomCost:
+        $ref: '#/definitions/Price'
+      roomId:
+        type: string
+      roomNumber:
+        type: integer
+        format: int32
+      roomType:
+        type: string
+    title: Room
+  RoomBreakdown:
+    type: object
+    properties:
+      cityTax:
+        $ref: '#/definitions/Price'
+      roomId:
+        type: string
+      totalRoomCost:
+        $ref: '#/definitions/Price'
+    title: RoomBreakdown
+  RoomRequest:
+    type: object
+    required:
+      - adults
+      - children
+      - cot
+      - roomType
+    properties:
+      adults:
+        type: integer
+        format: int32
+      children:
+        type: integer
+        format: int32
+      cot:
+        type: boolean
+      roomId:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      roomType:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+    title: RoomRequest
+  UpdateCarDetailsRequest:
+    type: object
+    required:
+      - roomId
+      - sessionId
+    properties:
+      car:
+        $ref: '#/definitions/CarDetails'
+      emailAddress:
+        type: string
+      flight:
+        $ref: '#/definitions/Flight'
+      mobileNumber:
+        type: string
+      roomId:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      sessionId:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      telephoneNumber:
+        type: string
+    title: UpdateCarDetailsRequest
+  UpdateCarDetailsResponse:
+    type: object
+    properties:
+      carUpdateSuccessful:
+        type: boolean
+      sessionId:
+        type: string
+    title: UpdateCarDetailsResponse
+  UpsellBreakdown:
+    type: object
+    properties:
+      totalCost:
+        $ref: '#/definitions/Price'
+      upsellItems:
+        type: array
+        items:
+          $ref: '#/definitions/UpsellItem'
+    title: UpsellBreakdown
+  UpsellItem:
+    type: object
+    required:
+      - code
+      - postingDate
+      - quantity
+      - roomId
+      - roomNumber
+    properties:
+      category:
+        type: string
+      code:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      legend:
+        type: string
+      postingDate:
+        type: string
+      quantity:
+        type: integer
+        format: int32
+      roomId:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      roomNumber:
+        type: string
+        minLength: 1
+        maxLength: 2147483647
+      subtotal:
+        $ref: '#/definitions/Price'
+      unitCost:
+        $ref: '#/definitions/Price'
+    title: UpsellItem
+  UpsellItemAvailable:
+    type: object
+    properties:
+      additionalInfo:
+        type: string
+      attachments:
+        type: array
+        items:
+          $ref: '#/definitions/Attachment'
+      availableForChildren:
+        type: boolean
+      code:
+        type: string
+      description:
+        type: string
+      foodUpsell:
+        type: boolean
+      freeBreakfastCode:
+        type: string
+      freeBreakfastOption:
+        type: boolean
+      freeBreakfastTrigger:
+        type: boolean
+      images:
+        type: array
+        items:
+          type: string
+      legend:
+        type: string
+      shortDescription:
+        type: string
+      unitCost:
+        $ref: '#/definitions/Price'
+    title: UpsellItemAvailable
+  WifiRecommend:
+    type: object
+    properties:
+      code:
+        type: string
+      quantity:
+        type: integer
+        format: int32
+    title: WifiRecommend

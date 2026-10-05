@@ -1,0 +1,22 @@
+@startuml
+title Confirm Double OptIn
+
+entity ACE_Email_System
+actor Client
+actor Permission_Centre
+box "Hotel Marketing Service"
+    boundary "POST marketing/newsletter/channel/{contactChannelId}" as CONFIRM
+end box
+entity Permission_Management_API
+
+
+
+ACE_Email_System -> Client: Send confirm Double opt in email
+Client -> Client: Clicks on confirm double opt in link
+Client -> Permission_Centre: Link opens in permissions centre
+Permission_Centre -> CONFIRM: Send double opt in request
+CONFIRM -> Permission_Management_API: ConfirmDoubleOptIn
+Permission_Management_API -> CONFIRM: 202 accepted
+CONFIRM -> Permission_Centre: 204 no content
+Permission_Centre -> Client: Confirmation of double opt in
+@enduml

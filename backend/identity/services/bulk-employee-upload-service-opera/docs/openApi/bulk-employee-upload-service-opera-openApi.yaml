@@ -1,0 +1,321 @@
+openapi: 3.1.0
+info:
+  description: API Documentation
+  title: Bulk Employee Upload API Documentation
+  version: "1.3"
+servers:
+- description: Generated server url
+  url: http://localhost:9048
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /bulk-employee-upload-service/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /bulk-employee-upload-service/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /bulk-employee-upload-service/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /companies/{company-id}/employees/bulk:
+    get:
+      description: Get employees list
+      operationId: getEmployeesList
+      parameters:
+      - in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: company-id
+        required: true
+        schema:
+          type: string
+      - content:
+          '*/*':
+            schema:
+              type: boolean
+              default: "false"
+        description: fullListMarker
+        in: query
+        name: fullListMarker
+      - content:
+          '*/*':
+            schema:
+              type: integer
+              default: "10"
+        description: Maximum number of results to return per page. Should return this
+          many unless on last page.
+        in: query
+        name: recordsPerPage
+      - content:
+          '*/*':
+            schema:
+              type: integer
+              default: "1"
+        description: Required page number.
+        in: query
+        name: pageRequired
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: CBT
+              enum:
+              - CBT
+              - MOBILE
+              - WEB
+              - WEB_DE
+        description: The Booking-Channel to use.
+        in: header
+        name: bookingChannel
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+                format: byte
+            text/csv:
+              schema:
+                type: string
+                format: byte
+          description: All Good.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+            text/csv:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Please check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+            text/csv:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: getEmployeesList
+      tags:
+      - Bulk Upload Employees operations
+    post:
+      description: Bulk add employees
+      operationId: bulkAddEmployees
+      parameters:
+      - in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+          default: gb
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+      - in: path
+        name: company-id
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - description: Indicates if the request comes from InnBusiness
+        in: query
+        name: innBusiness
+        required: false
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                upFile:
+                  type: string
+                  format: binary
+                  description: The Employees Excel file payload
+              required:
+              - upFile
+      responses:
+        "201":
+          description: Created.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Please check your input"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: requested entity not found"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: bulkAddEmployees
+      tags:
+      - Bulk Upload Employees operations
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "001"
+          minLength: 1
+        details:
+          type: array
+          example:
+          - Error message
+          items:
+            type: string
+      required:
+      - code
+      - details
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean

@@ -1,0 +1,40 @@
+{
+  "id" : "25ccb02f-e552-4219-9892-9d67a80dffe5",
+  "request" : {
+    "urlPath" : "/v1/reservations/ancillaries/reservation-id",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['basketReferenceId'] == 'TestId1234567')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['arrivalDate'] == '2023-10-10')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['departureDate'] == '2023-10-12')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'HOTELCODE')]"
+    }, {
+      "matchesJsonPath" : "$.['previousRoomsSelections'][*][?(@.['reservationId'] == '3514830')]"
+    }, {
+      "matchesJsonPath" : "$.['roomsSelections'][*][?(@.['reservationId'] == '3514830')]"
+    }, {
+      "matchesJsonPath" : "$.['roomsSelections'][*].['packagesSelection'][*][?(@.['id'] == 'BFADBF')]"
+    }, {
+      "matchesJsonPath" : "$.['roomsSelections'][*].['packagesSelection'][*][?(@.['noOfSelections'] == 1)]"
+    }, {
+      "matchesJsonPath" : "$.['roomsSelections'][*].['packagesSelection'][*][?(@.['id'] == 'CITYTAX')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"basketReference\":\"TestId1234567\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "25ccb02f-e552-4219-9892-9d67a80dffe5"
+}

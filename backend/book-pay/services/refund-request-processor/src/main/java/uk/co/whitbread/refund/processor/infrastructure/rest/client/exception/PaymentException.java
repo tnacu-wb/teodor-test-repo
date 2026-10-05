@@ -1,0 +1,9 @@
+package uk.co.whitbread.refund.processor.infrastructure.rest.client.exception;
+
+import uk.co.whitbread.commons.exceptions.exception.generic.AbstractInternalException;
+
+public class PaymentException extends AbstractInternalException {
+  public PaymentException(ErrorCode errorCode, String debugMessage) {
+    super(errorCode.getMessage(), debugMessage, errorCode.getCode());
+  }
+}

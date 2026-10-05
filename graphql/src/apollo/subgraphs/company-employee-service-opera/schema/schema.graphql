@@ -1,0 +1,358 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    getEmployees(companyId: String!, searchCriteria: String, bookingChannel: String,
+        awaitingApproval: Boolean, size: Int!, page: Int, pageToken: String): SearchEmployeeResponse
+    getEmployeesV2(companyId: String!, searchCriteria: String, bookingChannel: String,
+        awaitingApproval: Boolean, size: Int!, page: Int, pageToken: String): SearchEmployeeResponseV2
+    getEmployeeDetails(companyId: String!, employeeId: String!, activationKey: String): MainEmployee
+    getEmployeeDetailsV2(companyId: String!, employeeId: String!, activationKey: String): MainEmployeeV2
+    getEmployeeDetailsV3(companyId: String!, employeeId: String!, activationKey: String): MainEmployeeV3
+    getActivationDetails(activationKey: String!): MainEmployee
+    getInnBusinessActivationDetails(activationKey: String!): InnBusinessEmployeeActivation
+    getInnBusinessActivationDetailsV2(activationKey: String!): InnBusinessEmployeeActivationV2
+    getEmployeesWithFilteringOptions(companyId: String!, searchCriteria: String, bookingChannel: String,
+        awaitingApproval: Boolean, size: Int!, page: Int, pageToken: String, shouldFilterEmployees: Boolean): InnBusinesssEmployeeResponse
+    getEmployeesWithFilteringOptionsV2(companyId: String!, searchCriteria: String, bookingChannel: String,
+        awaitingApproval: Boolean, size: Int!, page: Int, pageToken: String, shouldFilterEmployees: Boolean): InnBusinesssEmployeeResponseV2
+}
+
+type Mutation {
+    sendActivationEmail(companyId: String!, languageCode: String, sendActivationEmailCriteria: SendActivationEmailCriteria!): String
+    addEmployee(companyId: String!, languageCode: String, employee: EmployeeCriteria): String
+    updateEmployee(companyId: String!, employeeId: String!, languageCode: String, activationKey: String, updateEmployeeCriteria: EmployeeCriteria!): String
+    resendActivationEmail(sendActivationRequest: SendActivationRequest!): String
+    approveRejectEmployee(approveRejectRequest: ApproveRejectRequest!): String
+}
+
+input SendActivationEmailCriteria {
+    emailAddress: String!
+    centralCardId: String
+    innBusiness: Boolean
+}
+
+type SearchEmployeeResponse {
+    success: Boolean
+    employees: [EmployeeDetails]
+    pageToken: String
+}
+
+type EmployeeDetails {
+    id: String
+    employeeId: String
+    title: String!
+    firstName: String!
+    lastName: String!
+    emailAddress: String!
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+}
+
+input AddressInfoInput {
+    addressLine1: String!
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    addressLine5: String
+    postCode: String!
+    country: String!
+}
+
+enum AccessLevel {
+    STAYER
+    SELF
+    BOOKER
+    SUPER
+    BUSINESS_PAY_MANAGER
+    BUSINESS_PAY_USER
+}
+
+enum EmployeeStatus {
+    ACTIVE
+    INACTIVE
+    SUSPENDED
+    DEACTIVATED
+    PURGED
+}
+
+type EmployeeAnswers {
+    customerReferenceAnswer: String
+    purchaseOrderAnswer: String
+    userDefinedAnswers: [UserDefinedAnswer]
+}
+
+type UserDefinedAnswer {
+    miID: String
+    miAnswer: String
+}
+
+input EmployeeCriteria {
+    id: String
+    ghNumber: String
+    emailAddress: String!
+    position: String
+    phoneNumber: String
+    mobileNumber: String
+    textConfirmation: Boolean
+    title: String
+    firstName: String!
+    lastName: String!
+    centralCardId: String
+    address: AddressInfoInput
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+    dialingCode: String
+    employeeAnswers: EmployeeAnswersInput
+    guestHistoryNumber: String
+    lockedForEditing: Boolean
+    password: String
+    innBusiness: Boolean
+    updatePreferencesRequest: UpdatePreferencesRequest
+}
+
+input UpdatePreferencesRequest {
+    contactType: String
+    optIn: Boolean
+    doubleOptIn: Boolean
+    secondPartyOptIn: Boolean
+    thirdPartyVendorsOptIn: Boolean
+    brandCodes: [String]
+    customer: MarketingCustomer
+    contactSubType: ContactSubType
+    sourceDetails: SourceDetails
+    contactValue: String
+}
+
+input MarketingCustomer {
+    title: String
+    firstName: String
+    lastName: String
+    nationality: String
+    userId: String
+    countryOfResidence: String
+    customerId: String
+    language: String
+}
+
+enum ContactSubType {
+    mobile
+    landline
+}
+
+input SourceDetails {
+    channel: String
+    journey: String
+    locale: String
+}
+
+input EmployeeAnswersInput {
+    customerReferenceAnswer: String
+    purchaseOrderAnswer: String
+    userDefinedAnswers: [UserDefinedAnswerInput]
+}
+
+input UserDefinedAnswerInput {
+    miID: String
+    miAnswer: String
+}
+
+type MainEmployee {
+    id: String
+    ghNumber: String
+    emailAddress: String!
+    position: String
+    phoneNumber: String
+    mobileNumber: String
+    textConfirmation: Boolean
+    title: String
+    firstName: String!
+    lastName: String!
+    centralCardId: String
+    address: AddressInfo
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+    dialingCode: String
+    employeeAnswers: EmployeeAnswers
+    guestHistoryNumber: String
+    lockedForEditing: Boolean
+    password: String
+}
+
+type AddressInfo {
+    addressLine1: String!
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    addressLine5: String
+    postCode: String!
+    country: String!
+}
+
+input SendActivationRequest {
+    email: String!
+    companyName: String!
+    language: String!
+}
+
+input ApproveRejectRequest {
+    email: String!
+    accessLevel: AccessLevel!
+    approved: Boolean!
+    language: String!
+}
+
+type InnBusinessEmployeeActivation {
+    id: String
+    ghNumber: String
+    emailAddress: String!
+    position: String
+    phoneNumber: String
+    mobileNumber: String
+    textConfirmation: Boolean
+    title: String
+    firstName: String!
+    lastName: String!
+    centralCardId: String
+    address: AddressInfo
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+    dialingCode: String
+    employeeAnswers: EmployeeAnswers
+    guestHistoryNumber: String
+    lockedForEditing: Boolean
+    password: String
+    companyId: String
+    companyName: String
+}
+
+type InnBusinessEmployeeActivationV2 {
+    id: String
+    ghNumber: String
+    emailAddress: String
+    position: String
+    phoneNumber: String
+    mobileNumber: String
+    textConfirmation: Boolean
+    title: String
+    firstName: String
+    lastName: String
+    centralCardId: String
+    address: AddressInfoV2
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+    dialingCode: String
+    employeeAnswers: EmployeeAnswers
+    guestHistoryNumber: String
+    lockedForEditing: Boolean
+    password: String
+    companyId: String
+    companyName: String
+}
+
+type AddressInfoV2 {
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    addressLine5: String
+    postCode: String
+    country: String
+}
+
+type InnBusinesssEmployeeResponse {
+    success: Boolean
+    employees: [InnBusinessEmployeeDetails]
+    pageToken: String
+}
+
+type InnBusinessEmployeeDetails {
+    id: String
+    employeeId: String
+    title: String
+    firstName: String
+    lastName: String
+    emailAddress: String!
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+}
+
+type SearchEmployeeResponseV2 {
+    success: Boolean
+    employees: [EmployeeDetailsV2]
+    pageToken: String
+}
+
+type EmployeeDetailsV2 {
+    id: String
+    employeeId: String
+    title: String
+    firstName: String
+    lastName: String
+    emailAddress: String
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+}
+
+type MainEmployeeV2 {
+    id: String
+    ghNumber: String
+    emailAddress: String
+    position: String
+    phoneNumber: String
+    mobileNumber: String
+    textConfirmation: Boolean
+    title: String
+    firstName: String
+    lastName: String
+    centralCardId: String
+    address: AddressInfo
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+    dialingCode: String
+    employeeAnswers: EmployeeAnswers
+    guestHistoryNumber: String
+    lockedForEditing: Boolean
+    password: String
+}
+
+type MainEmployeeV3 {
+    id: String
+    ghNumber: String
+    emailAddress: String
+    position: String
+    phoneNumber: String
+    mobileNumber: String
+    textConfirmation: Boolean
+    title: String
+    firstName: String
+    lastName: String
+    centralCardId: String
+    address: AddressInfoV2
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+    dialingCode: String
+    employeeAnswers: EmployeeAnswers
+    guestHistoryNumber: String
+    lockedForEditing: Boolean
+    password: String
+}
+
+type InnBusinesssEmployeeResponseV2 {
+    success: Boolean
+    employees: [InnBusinessEmployeeDetailsV2]
+    pageToken: String
+}
+
+type InnBusinessEmployeeDetailsV2 {
+    id: String
+    employeeId: String
+    title: String
+    firstName: String
+    lastName: String
+    emailAddress: String
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+}

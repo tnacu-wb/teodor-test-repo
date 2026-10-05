@@ -1,0 +1,33 @@
+{{- if and .Values.imageAutomation .Values.imageAutomation.create }}
+{{- $p := required "imageAutomation.pattern is required" .Values.imageAutomation.pattern }}
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: {{ .Values.applicationName | quote }}
+  namespace: flux-apps
+spec:
+  image: {{ .Values.image.repository | quote }}
+  interval: 30s
+  {{- if contains "dkr.ecr" .Values.image.repository }}
+  provider: aws
+  {{- else }}
+  secretRef:
+    name: regcred
+  {{- end }}
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: {{ .Values.applicationName | quote }}
+  namespace: flux-apps
+spec:
+  imageRepositoryRef:
+    name: {{ .Values.applicationName | quote }}
+  filterTags:
+    pattern: {{ printf ".+\\d+-%s-[a-fA-F0-9]{40}-(?P<ts>\\d{10})" $p | quote }}
+    extract: "$ts"
+  policy:
+    numerical:
+      order: asc
+{{- end }}

@@ -1,0 +1,114 @@
+name: Helm Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+  workflow_dispatch:
+    inputs:
+      chart:
+        description: 'Chart path under infra/ to deploy (e.g. temporal). Base charts are rejected.'
+        required: true
+        type: string
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - dit
+          - sit
+          - uat
+          - perf
+          - tooling
+          - hulk
+          - wanda
+        default: dev
+      namespace:
+        description: 'Kubernetes namespace (defaults to the chart directory name)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+# NOTE: For production environments (hulk/wanda), configure GitHub Environment
+# protection rules requiring manual approval before deploy runs.
+# Settings → Environments → hulk/wanda → Required reviewers
+
+env:
+  HELM_VERSION: '3.12.0'
+
+jobs:
+  # Decide which chart(s) to deploy. On dispatch it's the (validated) input; on a
+  # push it's the charts whose files changed. All logic lives in a script that
+  # takes its inputs via env (never interpolated into shell), so the
+  # user-controlled dispatch input and git-derived paths can't inject commands.
+  # See infra/scripts/detect-charts.sh.
+  detect-charts:
+    name: Detect changed charts
+    # Intentionally always on the dev runner regardless of target env: this job
+    # only does git operations (no cluster access), so it doesn't need to run on
+    # the target environment's runner. Don't "fix" it to follow inputs.environment.
+    runs-on: dev-default-runner-scale-set
+    outputs:
+      charts: ${{ steps.detect.outputs.charts }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          # Full history so the push range base commit is always resolvable.
+          fetch-depth: 0
+
+      - name: Detect charts
+        id: detect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_CHART: ${{ inputs.chart }}
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+        run: ./infra/scripts/detect-charts.sh
+
+  deploy:
+    # Contract: workflow_dispatch deploys the chosen environment; a push to main
+    # always targets dev (inputs.environment is empty on push -> 'dev'). Prod
+    # (hulk/wanda) is dispatch-only and gated by GitHub environment protection.
+    name: Deploy ${{ matrix.chart }} to ${{ inputs.environment || 'dev' }}
+    needs: detect-charts
+    if: needs.detect-charts.outputs.charts != '[]'
+    runs-on: ${{ inputs.environment || 'dev' }}-default-runner-scale-set
+    environment: ${{ inputs.environment || 'dev' }}
+    # Serialize deploys of the same chart to the same environment so two runs
+    # (e.g. back-to-back pushes) can't race in release preparation/rollback and
+    # leave the release pending/failed. Do NOT cancel an in-flight deploy —
+    # interrupting a live helm upgrade is exactly the kind of half-applied state
+    # we want to avoid.
+    concurrency:
+      group: helm-deploy-${{ inputs.environment || 'dev' }}-${{ matrix.chart }}
+      cancel-in-progress: false
+    strategy:
+      fail-fast: false
+      matrix:
+        # Chart paths relative to infra/ (e.g. "temporal").
+        chart: ${{ fromJSON(needs.detect-charts.outputs.charts) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Setup Helm
+        uses: ./.github/actions/setup-helm
+        with:
+          chart-path: infra/${{ matrix.chart }}
+          install-aws-cli: 'false'
+          helm-version: ${{ env.HELM_VERSION }}
+
+      - name: Deploy chart
+        env:
+          # All values consumed as quoted env vars inside the script — nothing is
+          # interpolated into a shell body here.
+          CHART_PATH: ${{ matrix.chart }}
+          ENVIRONMENT: ${{ inputs.environment || 'dev' }}
+          INPUT_NAMESPACE: ${{ inputs.namespace }}
+        run: ./infra/scripts/deploy-chart.sh

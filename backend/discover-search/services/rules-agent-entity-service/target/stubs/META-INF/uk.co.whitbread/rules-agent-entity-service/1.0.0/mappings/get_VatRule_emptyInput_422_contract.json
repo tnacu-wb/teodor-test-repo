@@ -1,0 +1,25 @@
+{
+  "id" : "5929890e-45a6-4047-b7db-02dfcd129035",
+  "request" : {
+    "urlPath" : "/v1/rules/vat-codes",
+    "method" : "GET",
+    "queryParameters" : {
+      "vatRegion" : {
+        "equalTo" : "UK"
+      },
+      "pkgCodeArr" : {
+        "equalTo" : ""
+      }
+    }
+  },
+  "response" : {
+    "status" : 422,
+    "body" : "{\"errCode\":401,\"globalErrTextTemplate\":\"validation.error.form\",\"details\":[{\"elementId\":\"pkgCodeArr\",\"errTextTemplate\":\"must not be empty\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "5929890e-45a6-4047-b7db-02dfcd129035",
+  "priority" : 1
+}

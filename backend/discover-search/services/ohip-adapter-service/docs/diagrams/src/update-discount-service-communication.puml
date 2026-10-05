@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+entity "AppSync" as A
+entity "BASKET" as BSK
+entity "Reservation Entity Service" as R
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OAD
+entity "OPERA" as OPERA
+
+A -> BSK: GraphQL Update Discount
+
+BSK -> R: PUT /v1/reservation/discount
+R -> PMS: PUT /v1/reservation/discount
+PMS -> OAD: PUT /v1/reservation/discount
+loop for each reservationId
+  OAD -> OPERA: PUT /rsv/v1/hotels/{{hotelId}}/reservations/{{reservationId}}
+  OAD <-- OPERA: Reservation
+end
+OPERA --> OAD: OK 200
+OAD --> PMS: {{reservationIds}} - OK 200
+PMS --> R: {{reservationIds}} - OK 200
+R --> BSK: {{reservationIds}} - OK 200
+BSK --> A: {{reservationIds}} - OK 200
+@enduml

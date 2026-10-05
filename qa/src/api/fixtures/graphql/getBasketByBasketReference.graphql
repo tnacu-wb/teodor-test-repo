@@ -1,0 +1,33 @@
+query basket($basketReference: String) {
+    basket(basketReference: $basketReference) {
+        bookingReference
+        createdAt
+        hotelId
+        itemTypes
+        items {
+            details
+            sourceId
+            type
+        }
+        lastModifiedAt
+        lockingTime
+        paymentID
+        paymentOption
+        paymentStatus
+        reference
+        status
+        userId
+        sendMail
+        basketError {
+            code
+            description
+            type
+        }
+        isErroredBooking
+        bookingAllowances {
+            allowance
+            budget
+        }
+        isCheckInOnlinePay
+    }
+}

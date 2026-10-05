@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="PremierInnSans-Bold.ttf">
+            <string>PremierInnSans-Bold</string>
+        </array>
+        <array key="PremierInnSans-Regular.ttf">
+            <string>PremierInnSans</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BARTDowntimeModal" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="body" destination="fEt-cQ-aE7" id="9xy-cX-i3o"/>
+                <outlet property="closeButton" destination="zgs-6h-Ej5" id="Yaq-zA-Gs4"/>
+                <outlet property="existingBookingLabel" destination="0eU-F3-Tin" id="Rgw-h4-qfY"/>
+                <outlet property="header" destination="rQ9-0N-Bhi" id="732-g6-f3D"/>
+                <outlet property="makeBookingLabel" destination="Qu9-jM-fMY" id="ZPh-Zb-kaJ"/>
+                <outlet property="view" destination="KHW-pM-ZQc" id="j9f-24-N8k"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="KHW-pM-ZQc">
+            <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Maintenance" translatesAutoresizingMaskIntoConstraints="NO" id="Oos-eR-7Qz">
+                    <rect key="frame" x="10" y="24" width="1004" height="1322"/>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="252" text="Be right back" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rQ9-0N-Bhi">
+                    <rect key="frame" x="446.5" y="823.5" width="131.5" height="26"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="ALo-h9-RH2"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="22"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fEt-cQ-aE7">
+                    <rect key="frame" x="324" y="864.5" width="376" height="52.5"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="380" id="ClK-dC-aOt"/>
+                    </constraints>
+                    <string key="text">Sorry - looks like you've caught us in the middle of some maitenance work.  We'll have everything back up and running soon, so bear with us. In the meantime call:</string>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03330113206 if you want to make a booking" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qu9-jM-fMY">
+                    <rect key="frame" x="354" y="947" width="316" height="17.5"/>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03330038101 if you have an existing booking " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0eU-F3-Tin">
+                    <rect key="frame" x="354" y="979.5" width="316" height="17.5"/>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zgs-6h-Ej5" customClass="FadeOnHighlightButton" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="345.5" y="1282" width="333" height="44"/>
+                    <color key="backgroundColor" red="0.97647058819999999" green="0.78823529410000004" blue="0.25098039220000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="333" id="WTd-h4-9eu"/>
+                        <constraint firstAttribute="height" constant="44" id="a0k-6c-u6x"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="iju-Ob-KJr"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="18"/>
+                    <state key="normal" title="Log in">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="close" destination="-1" eventType="touchUpInside" id="yh1-qJ-2yl"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="YDg-Kk-fgP"/>
+            <color key="backgroundColor" name="TintL2"/>
+            <constraints>
+                <constraint firstItem="rQ9-0N-Bhi" firstAttribute="centerX" secondItem="KHW-pM-ZQc" secondAttribute="centerX" id="38K-TO-fMb"/>
+                <constraint firstItem="fEt-cQ-aE7" firstAttribute="top" secondItem="rQ9-0N-Bhi" secondAttribute="bottom" constant="15" id="8Vf-0O-p6L"/>
+                <constraint firstItem="0eU-F3-Tin" firstAttribute="top" secondItem="Qu9-jM-fMY" secondAttribute="bottom" constant="15" id="9kY-xp-v77"/>
+                <constraint firstItem="YDg-Kk-fgP" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="zgs-6h-Ej5" secondAttribute="trailing" priority="999" constant="30" id="AX9-yb-xiw"/>
+                <constraint firstItem="fEt-cQ-aE7" firstAttribute="centerY" secondItem="YDg-Kk-fgP" secondAttribute="centerY" multiplier="1.3" id="H1X-7x-7JB"/>
+                <constraint firstItem="zgs-6h-Ej5" firstAttribute="centerX" secondItem="KHW-pM-ZQc" secondAttribute="centerX" id="H81-Gh-8Xa"/>
+                <constraint firstItem="Qu9-jM-fMY" firstAttribute="centerX" secondItem="fEt-cQ-aE7" secondAttribute="centerX" id="Hom-9C-Ohs"/>
+                <constraint firstItem="fEt-cQ-aE7" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="YDg-Kk-fgP" secondAttribute="leading" constant="20" id="OuZ-4B-r8P"/>
+                <constraint firstItem="0eU-F3-Tin" firstAttribute="width" secondItem="Qu9-jM-fMY" secondAttribute="width" id="QXN-bA-X3y"/>
+                <constraint firstItem="Oos-eR-7Qz" firstAttribute="centerX" secondItem="KHW-pM-ZQc" secondAttribute="centerX" id="RMS-96-oIG"/>
+                <constraint firstItem="YDg-Kk-fgP" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fEt-cQ-aE7" secondAttribute="trailing" constant="20" id="X2i-3H-KHB"/>
+                <constraint firstAttribute="trailing" secondItem="Oos-eR-7Qz" secondAttribute="trailing" constant="10" id="dto-pe-V0e"/>
+                <constraint firstItem="Oos-eR-7Qz" firstAttribute="leading" secondItem="KHW-pM-ZQc" secondAttribute="leading" constant="10" id="exT-5Q-AgA"/>
+                <constraint firstItem="fEt-cQ-aE7" firstAttribute="centerX" secondItem="KHW-pM-ZQc" secondAttribute="centerX" id="hk9-b3-gI9"/>
+                <constraint firstItem="YDg-Kk-fgP" firstAttribute="bottom" secondItem="zgs-6h-Ej5" secondAttribute="bottom" constant="20" id="hl4-qY-OTK"/>
+                <constraint firstItem="Oos-eR-7Qz" firstAttribute="bottom" secondItem="YDg-Kk-fgP" secondAttribute="bottom" id="iPV-au-PBT"/>
+                <constraint firstItem="Qu9-jM-fMY" firstAttribute="top" secondItem="fEt-cQ-aE7" secondAttribute="bottom" constant="30" id="nHu-zH-qvS"/>
+                <constraint firstItem="zgs-6h-Ej5" firstAttribute="leading" relation="lessThanOrEqual" secondItem="YDg-Kk-fgP" secondAttribute="leading" priority="999" constant="30" id="o1E-zX-34d"/>
+                <constraint firstItem="Qu9-jM-fMY" firstAttribute="width" secondItem="fEt-cQ-aE7" secondAttribute="width" constant="-60" id="o6W-Ae-CF9"/>
+                <constraint firstItem="Oos-eR-7Qz" firstAttribute="top" secondItem="YDg-Kk-fgP" secondAttribute="top" id="sh5-I6-Pk0"/>
+                <constraint firstItem="0eU-F3-Tin" firstAttribute="centerX" secondItem="Qu9-jM-fMY" secondAttribute="centerX" id="vGg-bF-px7"/>
+            </constraints>
+            <point key="canvasLocation" x="37.404580152671755" y="32.394366197183103"/>
+        </view>
+    </objects>
+    <designables>
+        <designable name="zgs-6h-Ej5">
+            <size key="intrinsicContentSize" width="50" height="33"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="Maintenance" width="477.33334350585938" height="986.66668701171875"/>
+        <namedColor name="TintL2">
+            <color red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

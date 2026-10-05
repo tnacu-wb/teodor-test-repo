@@ -1,0 +1,14 @@
+@startuml
+entity GraphQL_endpoint
+title Retrieve Hotel Information from AEM
+
+entity "content-entity-service" as CES
+entity AEM
+entity OHIP
+
+GraphQL_endpoint-> CES  ++: GET /hotels/{hotel-id}}/information?language=en&country=gb
+CES -> AEM: GET /{country}/{language}/hoteldirectory/{hotelDirectory}/{hotelId}.complete.data
+CES -> OHIP: GET /hotels/{hotelId}/info
+GraphQL_endpoint<- CES -- : return content labels
+
+@enduml

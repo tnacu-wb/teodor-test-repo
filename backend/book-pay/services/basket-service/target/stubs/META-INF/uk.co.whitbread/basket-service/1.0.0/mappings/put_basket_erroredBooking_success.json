@@ -1,0 +1,20 @@
+{
+  "id" : "9d66a4c8-68bf-42c4-af57-e7e2fc2e7aed",
+  "request" : {
+    "urlPath" : "/v1/baskets/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/erroredBooking",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['isErroredBooking'] == true)]"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "9d66a4c8-68bf-42c4-af57-e7e2fc2e7aed"
+}

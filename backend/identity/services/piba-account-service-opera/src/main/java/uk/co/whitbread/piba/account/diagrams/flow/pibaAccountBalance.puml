@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+header piba-account-service
+title Account Dashboard
+autonumber
+actor User #red
+participant "Account Dashboard" as Client #green
+participant "PibaAccountController" as PAC
+participant "PibaAccountService" as PAS
+participant "TokenService" as TS #CC3333
+participant "piba-guid-service" as PGSC #FFF444
+participant "WorldLine" as WLT #grey
+database "DynamoDB" as DB #blue
+
+User -> Client : Clicks on "'Account Dashboard' link"
+Client -> PAC : Calls API Current Account Balance (/piba/account/balance)
+activate PAC
+PAC -> PAS : viewCurrentBalance
+PAS -> TS : Retrieve Employee Details
+TS -> PAS : Return Employee Details
+PAS -> PAS : Validate Employee Details
+PAS -> PGSC : Calls getMultiTetheredGuids
+note left : Step No 7 to 10 will be changed, getMultiTetheredGuids \n will be called in place of getTetheredGuids
+activate PGSC
+PGSC -> DB : Fetch List of TetheredGuids
+DB -> PGSC : Return List of TetheredGuids
+PGSC -> PAS : Return List of TetheredGuids
+deactivate PGSC
+loop number of customerTetheredGuids
+PAS -> WLT : Prepares toTetheredUserDetailsRequest from userId and Authorization
+WLT -> PAS : Gets TetheredUserDetailsResponse from TetheredUserDetailsGetResponse
+alt userDetailsResponse.getTetheredUserOverview().getUserRole() != AccountCardHolder
+PAS -> WLT : Prepares toCustomerAccountCurrentBalancesRequest
+WLT -> PAS : returns CustomerAccountCurrentBalancesResponse
+PAS -> PAS : Add to Current Balance
+else userDetailsResponse.getTetheredUserOverview().getUserRole() == AccountCardHolder
+PAS -> PAS : Do nothing
+end
+end
+PAS -> PAC : Return CustomerAccountCurrentBalancesResponse
+PAC -> Client : Return CustomerAccountCurrentBalancesResponse
+deactivate PAC
+Client -> User : Shows Account Dashboard
+@enduml

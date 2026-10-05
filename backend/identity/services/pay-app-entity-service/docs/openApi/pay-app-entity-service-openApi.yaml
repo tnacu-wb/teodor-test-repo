@@ -1,0 +1,1738 @@
+openapi: 3.1.0
+info:
+  description: <p>TBU</p>
+  title: Pay App Entity API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9133
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /v1/pay-app/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/pay-app/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/pay-app/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/pay-app/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /v1/pay-app/application/card:
+    post:
+      operationId: addApplicationCard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddApplicationCardRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddApplicationCardResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Add a card to an InnBusiness application for the logged-in user
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/cards:
+    get:
+      operationId: getApplicationCards
+      parameters:
+      - in: query
+        name: applicationGuid
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: scheme
+        required: true
+        schema:
+          type: string
+          enum:
+          - DE
+          - GB
+      - in: query
+        name: page
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - in: query
+        name: maxDisplayRows
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetAppCardsResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Fetch details about the cards associated with an InnBusiness application
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/companyDetails:
+    post:
+      operationId: updateAppCompanyDetails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAppCompanyDetailsRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateAppCompanyDetailsResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update company details of an InnBusiness application associated with
+        the logged-in user
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/companyDetailsLookup:
+    get:
+      operationId: lookupCompanyDetails
+      parameters:
+      - in: query
+        name: appCompanyDetailsRequestDto
+        required: true
+        schema:
+          $ref: "#/components/schemas/AppCompanyDetailsRequestDto"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppCompanyDetailsResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Lookup company details
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/contactDetails:
+    post:
+      operationId: updateAppContactDetails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAppContactDetailsRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateAppContactDetailsResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update contact details of an InnBusiness application associated with
+        the logged-in user
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/ddSepaFormStatus:
+    get:
+      operationId: getDdSepaFormStatus
+      parameters:
+      - in: query
+        name: hostedPageGuid
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: scheme
+        required: true
+        schema:
+          type: string
+          enum:
+          - DE
+          - GB
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetDdSepaFormStatusResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get the bank details status associated with an InnBusiness application
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/delete:
+    post:
+      operationId: deleteApplication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeletePayApplicationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeletePayApplicationResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Triggers the deletion of an InnBusiness Pay application
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/delete-card:
+    post:
+      operationId: deleteApplicationCard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteCardRequestDto"
+        required: true
+      responses:
+        "204":
+          description: No Content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Error Occurred
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Deletes a specified card for an application
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/details:
+    get:
+      operationId: getApplicationDetails
+      parameters:
+      - in: query
+        name: applicationId
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: applicationGuid
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: scheme
+        required: false
+        schema:
+          type: string
+          enum:
+          - DE
+          - GB
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationDetailsResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Fetch details about InnBusiness application for the logged-in user
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/directDebit:
+    post:
+      operationId: directDebit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DirectDebitRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DirectDebitResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Direct debit option for an InnBusiness application
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/initialize:
+    post:
+      operationId: initializeApplication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InitializeApplicationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InitializeApplicationResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Initializes an InnBusiness Pay application
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/lookup:
+    get:
+      operationId: getAppLookup
+      parameters:
+      - in: query
+        name: lookupNames
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - TITLE
+            - TRADING_STYLE
+            - ESTIMATED_MONTHLY_SPEND
+            - HOTEL_BRAND_POLICIES
+            - HOTEL_BOOKING_ROLES
+            - ISO_COUNTRY_CODES
+            - TIME_TRADING
+            - INDUSTRY_SECTOR
+            - REGISTRATION_QUESTIONS
+            - NUMBER_OF_EMPLOYEES
+            - CANCELLATION_REASON
+      - in: query
+        name: scheme
+        required: false
+        schema:
+          type: string
+          enum:
+          - DE
+          - GB
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves static application related lookup data
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/pre-check:
+    get:
+      operationId: appPreCheck
+      parameters:
+      - in: query
+        name: scheme
+        required: true
+        schema:
+          type: string
+          enum:
+          - DE
+          - GB
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppPreCheckResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Checks if the user's e-mail address is associated with an existing
+        Account Holder User
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/removeParticipant:
+    post:
+      operationId: removeParticipant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RemoveParticipantRequestDto"
+        required: true
+      responses:
+        "204":
+          description: No Content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Error Occurred
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Removes a specified participant from an application
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/share:
+    post:
+      operationId: shareApp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShareAppRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShareAppResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Share an InnBusiness application with the specified user
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/submit:
+    post:
+      operationId: submitApplication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitApplicationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitApplicationResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Submits an InnBusiness application for the logged-in user
+      tags:
+      - pay-app-controller
+  /v1/pay-app/application/updateResumeUrl:
+    post:
+      operationId: updateResumeUrl
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateResumeUrlRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateResumeUrlResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Error Occurred
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Updates the resume URL for an InnBusiness application
+      tags:
+      - pay-app-controller
+  /v1/pay-app/applications:
+    get:
+      operationId: fetchPayApplications
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FetchApplicationsResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves information about InnBusiness applications associated with
+        the logged-in user
+      tags:
+      - pay-app-controller
+  /v1/pay-app/user/preferences:
+    get:
+      operationId: getUserPreferences
+      parameters:
+      - in: query
+        name: tetheredUserGuids
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetUserPreferencesResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: "Fetches InnBusiness application user preferences for the logged-in\
+        \ user, based on their tetheredUserGuid"
+      tags:
+      - pay-app-controller
+components:
+  schemas:
+    AddApplicationCardDetailsDto:
+      type: object
+      properties:
+        cardLimit:
+          type: integer
+          format: int32
+        cardName:
+          type: string
+        emailAddress:
+          type: string
+        endDate:
+          type: string
+          format: date-time
+        foreName:
+          type: string
+        lastName:
+          type: string
+        myCard:
+          type: boolean
+        restrictCardUsage:
+          type: boolean
+        startDate:
+          type: string
+          format: date-time
+        title:
+          type: string
+    AddApplicationCardRequestDto:
+      type: object
+      properties:
+        applicationGuid:
+          type: string
+          minLength: 1
+        applicationId:
+          type: string
+          minLength: 1
+        cardDetails:
+          $ref: "#/components/schemas/AddApplicationCardDetailsDto"
+        employeeId:
+          type: integer
+          format: int32
+        scheme:
+          type: string
+          enum:
+          - DE
+          - GB
+      required:
+      - applicationGuid
+      - applicationId
+    AddApplicationCardResponseDto:
+      type: object
+      properties:
+        cardGuid:
+          type: string
+    Address:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        countryCode:
+          type: string
+        postcode:
+          type: string
+    AddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        countryCode:
+          type: string
+        postcode:
+          type: string
+    AppCompanyDetailsDto:
+      type: object
+      properties:
+        charityNumber:
+          type: string
+        companyName:
+          type: string
+          minLength: 1
+        companyNameOnCard:
+          type: string
+        companyRegNum:
+          type: string
+        companyType:
+          type: string
+          minLength: 1
+        correspondenceAddress:
+          $ref: "#/components/schemas/AddressDto"
+        correspondenceContactInfo:
+          $ref: "#/components/schemas/ContactInfoDto"
+        estMonthlySpend:
+          type: string
+          minLength: 1
+        hotelBrandPolicy:
+          type: string
+        industrySector:
+          type: string
+        numberOfEmployees:
+          type: string
+        parentCompanyName:
+          type: string
+        partnerDetails:
+          $ref: "#/components/schemas/PartnerDetailsDto"
+        registrationAddress:
+          $ref: "#/components/schemas/AddressDto"
+        timeTradingId:
+          type: string
+        vatRegistrationNumber:
+          type: string
+      required:
+      - companyName
+      - companyType
+      - estMonthlySpend
+    AppCompanyDetailsRequestDto:
+      type: object
+      properties:
+        companyRegistrationNumber:
+          type: string
+          minLength: 1
+        scheme:
+          type: string
+          enum:
+          - DE
+          - GB
+      required:
+      - companyRegistrationNumber
+    AppCompanyDetailsResponseDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompanyDetailsDto"
+    AppPreCheckResponseDto:
+      type: object
+      properties:
+        applicationGuid:
+          type: string
+        isTetheredUser:
+          type: boolean
+    ApplicationDetailsDto:
+      type: object
+      properties:
+        accountName:
+          type: string
+        applicationGuid:
+          type: string
+        applicationId:
+          type: string
+        resumeUrl:
+          type: string
+        scheme:
+          type: string
+        status:
+          type: string
+    ApplicationDetailsResponseDto:
+      type: object
+      properties:
+        accountName:
+          type: string
+        activatedDate:
+          type: string
+        applicationGuid:
+          type: string
+        applicationId:
+          type: string
+        applicationNumber:
+          type: string
+        campaignCode:
+          type: string
+        cardDetails:
+          type: array
+          items:
+            $ref: "#/components/schemas/CardDetails"
+        cardHolders:
+          type: array
+          items:
+            $ref: "#/components/schemas/CardHolder"
+        companyDetails:
+          $ref: "#/components/schemas/CompanyDetailsData"
+        companyId:
+          type: integer
+          format: int32
+        contactDetails:
+          $ref: "#/components/schemas/ContactDetails"
+        created:
+          type: string
+        directDebitOption:
+          type: string
+          enum:
+          - DIRECT
+          - BY_POST
+        hostedPageGuid:
+          type: string
+        incentiveCode:
+          type: string
+        incentiveId:
+          type: integer
+          format: int32
+        modified:
+          type: string
+        participants:
+          type: array
+          items:
+            $ref: "#/components/schemas/ApplicationParticipant"
+        registrationAnswer:
+          type: string
+        registrationQuestion:
+          type: string
+        resumeUrl:
+          type: string
+        scheme:
+          type: string
+        startedDate:
+          type: string
+        status:
+          type: string
+        submittedDate:
+          type: string
+        termsAndConditionsAccepted:
+          type: string
+        updateDate:
+          type: string
+    ApplicationParticipant:
+      type: object
+      properties:
+        delegated:
+          type: boolean
+        directDebit:
+          type: boolean
+        email:
+          type: string
+        initiator:
+          type: boolean
+        name:
+          type: string
+        participantId:
+          type: integer
+          format: int32
+        shared:
+          type: string
+        terms:
+          type: boolean
+    CardDetails:
+      type: object
+      properties:
+        cardGuid:
+          type: string
+        cardName:
+          type: string
+        cardOwnerName:
+          type: string
+        creditLimit:
+          $ref: "#/components/schemas/CreditLimit"
+        emailAddress:
+          type: string
+        myCard:
+          type: boolean
+    CardDetailsDto:
+      type: object
+      properties:
+        cardGUID:
+          type: string
+        cardName:
+          type: string
+        cardOwnerName:
+          type: string
+        creditLimit:
+          $ref: "#/components/schemas/CreditLimitDto"
+        emailAddress:
+          type: string
+        myCard:
+          type: boolean
+    CardHolder:
+      type: object
+      properties:
+        employeeId:
+          type: integer
+          format: int32
+        userGuid:
+          type: string
+    CompanyDetailsData:
+      type: object
+      properties:
+        charityNumber:
+          type: string
+        companyNameOnCard:
+          type: string
+        companyRegNum:
+          type: string
+        companyType:
+          type: string
+        correspondenceAddress:
+          $ref: "#/components/schemas/Address"
+        correspondenceContactInfo:
+          $ref: "#/components/schemas/ContactDetails"
+        estMonthlySpend:
+          type: string
+        hotelBrandPolicy:
+          type: string
+        industrySector:
+          type: string
+        numberOfEmployees:
+          type: string
+        parentCompanyName:
+          type: string
+        partnerDetails:
+          $ref: "#/components/schemas/PartnerDetails"
+        registrationAddress:
+          $ref: "#/components/schemas/Address"
+        timeTradingId:
+          type: string
+        vatRegistrationNumber:
+          type: string
+    CompanyDetailsDto:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/AddressDto"
+        companyName:
+          type: string
+        creditAgencyReference:
+          type: string
+    ContactDetails:
+      type: object
+      properties:
+        email:
+          type: string
+        foreName:
+          type: string
+        lastName:
+          type: string
+        mobile:
+          type: string
+        position:
+          type: string
+        telephone:
+          type: string
+        title:
+          type: string
+    ContactInfoDto:
+      type: object
+      properties:
+        email:
+          type: string
+          minLength: 1
+        foreName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        mobile:
+          type: string
+        position:
+          type: string
+        telephone:
+          type: string
+        title:
+          type: string
+          minLength: 1
+      required:
+      - email
+      - foreName
+      - lastName
+      - title
+    CreditLimit:
+      type: object
+      properties:
+        currencyCode:
+          type: string
+        value:
+          type: integer
+          format: int32
+    CreditLimitDto:
+      type: object
+      properties:
+        currencyCode:
+          type: string
+        value:
+          type: integer
+          format: int32
+    DeleteCardRequestDto:
+      type: object
+      properties:
+        applicationGuid:
+          type: string
+          minLength: 1
+        applicationId:
+          type: string
+          minLength: 1
+        cardGuid:
+          type: string
+          minLength: 1
+      required:
+      - applicationGuid
+      - applicationId
+      - cardGuid
+    DeletePayApplicationRequestDto:
+      type: object
+      properties:
+        applicationGuid:
+          type: string
+          minLength: 1
+        applicationId:
+          type: string
+          minLength: 1
+        scheme:
+          type: string
+          enum:
+          - DE
+          - GB
+      required:
+      - applicationGuid
+      - applicationId
+    DeletePayApplicationResponseDto:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    DirectDebitRequestDto:
+      type: object
+      properties:
+        applicationGuid:
+          type: string
+          minLength: 1
+        applicationId:
+          type: string
+          minLength: 1
+        directDebitOption:
+          type: string
+          enum:
+          - DIRECT
+          - BY_POST
+        resumeUrl:
+          type: string
+          minLength: 1
+      required:
+      - applicationGuid
+      - applicationId
+      - directDebitOption
+      - resumeUrl
+    DirectDebitResponseDto:
+      type: object
+      properties:
+        hostedPageGuid:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    FetchApplicationsResponseDto:
+      type: object
+      properties:
+        applications:
+          type: array
+          items:
+            $ref: "#/components/schemas/ApplicationDetailsDto"
+    GetAppCardsResponseDto:
+      type: object
+      properties:
+        appCards:
+          type: array
+          items:
+            $ref: "#/components/schemas/CardDetailsDto"
+    GetDdSepaFormStatusResponseDto:
+      type: object
+      properties:
+        status:
+          type: string
+    GetUserPreferencesResponseDto:
+      type: object
+      properties:
+        details:
+          $ref: "#/components/schemas/UserPreferenceDetails"
+        settings:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserPreferenceSettingsItem"
+        tetheredUserGuid:
+          type: string
+    InitializeApplicationRequestDto:
+      type: object
+      properties:
+        campaignCode:
+          type: string
+        email:
+          type: string
+          minLength: 1
+        incentiveCode:
+          type: string
+        scheme:
+          type: string
+          enum:
+          - DE
+          - GB
+      required:
+      - email
+    InitializeApplicationResponseDto:
+      type: object
+      properties:
+        applicationGUID:
+          type: string
+        applicationId:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    PartnerDetails:
+      type: object
+      properties:
+        dateOfBirth:
+          type: string
+          format: date-time
+        foreName:
+          type: string
+        lastName:
+          type: string
+        numberOfPartners:
+          type: integer
+          format: int32
+        title:
+          type: string
+    PartnerDetailsDto:
+      type: object
+      properties:
+        dateOfBirth:
+          type: string
+          minLength: 1
+        foreName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        numberOfPartners:
+          type: integer
+          format: int32
+        title:
+          type: string
+          minLength: 1
+      required:
+      - dateOfBirth
+      - foreName
+      - lastName
+      - numberOfPartners
+      - title
+    RemoveParticipantRequestDto:
+      type: object
+      properties:
+        applicationGuid:
+          type: string
+          minLength: 1
+        applicationId:
+          type: string
+          minLength: 1
+        employeeId:
+          type: integer
+          format: int32
+      required:
+      - applicationGuid
+      - applicationId
+      - employeeId
+    ShareAppRequestDto:
+      type: object
+      properties:
+        applicationGuid:
+          type: string
+          minLength: 1
+        applicationId:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          minLength: 1
+        employeeId:
+          type: integer
+          format: int32
+        fullName:
+          type: string
+          minLength: 1
+      required:
+      - applicationGuid
+      - applicationId
+      - email
+      - employeeId
+      - fullName
+    ShareAppResponseDto:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    SubmitApplicationRequestDto:
+      type: object
+      properties:
+        applicationGuid:
+          type: string
+          minLength: 1
+        applicationId:
+          type: string
+          minLength: 1
+        hostedPageGuid:
+          type: string
+        isDirectDebit:
+          type: boolean
+        registrationAnswer:
+          type: string
+          minLength: 1
+        registrationQuestion:
+          type: string
+          minLength: 1
+        scheme:
+          type: string
+          enum:
+          - DE
+          - GB
+        termsAndConditionAccepted:
+          type: string
+          minLength: 1
+      required:
+      - applicationGuid
+      - applicationId
+      - registrationAnswer
+      - registrationQuestion
+      - termsAndConditionAccepted
+    SubmitApplicationResponseDto:
+      type: object
+      properties:
+        message:
+          type: string
+    UpdateAppCompanyDetailsRequestDto:
+      type: object
+      properties:
+        appCompanyDetailsDto:
+          $ref: "#/components/schemas/AppCompanyDetailsDto"
+        applicationGuid:
+          type: string
+          minLength: 1
+        applicationId:
+          type: string
+          minLength: 1
+        resumeUrl:
+          type: string
+          minLength: 1
+        scheme:
+          type: string
+          enum:
+          - DE
+          - GB
+      required:
+      - applicationGuid
+      - applicationId
+      - resumeUrl
+    UpdateAppCompanyDetailsResponseDto:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    UpdateAppContactDetailsRequestDto:
+      type: object
+      properties:
+        applicationGuid:
+          type: string
+          minLength: 1
+        applicationId:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          minLength: 1
+        foreName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        mobile:
+          type: string
+        position:
+          type: string
+          minLength: 1
+        resumeUrl:
+          type: string
+          minLength: 1
+        scheme:
+          type: string
+          enum:
+          - DE
+          - GB
+        telephone:
+          type: string
+        title:
+          type: string
+          minLength: 1
+      required:
+      - applicationGuid
+      - applicationId
+      - email
+      - foreName
+      - lastName
+      - position
+      - resumeUrl
+      - title
+    UpdateAppContactDetailsResponseDto:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    UpdateResumeUrlRequestDto:
+      type: object
+      properties:
+        applicationGuid:
+          type: string
+          minLength: 1
+        applicationId:
+          type: string
+          minLength: 1
+        resumeUrl:
+          type: string
+          minLength: 1
+      required:
+      - applicationGuid
+      - applicationId
+      - resumeUrl
+    UpdateResumeUrlResponseDto:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    UserPreferenceDetails:
+      type: object
+      properties:
+        accountName:
+          type: string
+        accountNumber:
+          type: integer
+          format: int32
+        roleDescription:
+          type: string
+        roleId:
+          type: integer
+          format: int32
+        sendCardsToCardholder:
+          type: boolean
+        showSmsStopsToCardholder:
+          type: boolean
+    UserPreferenceSettingsItem:
+      type: object
+      properties:
+        isSmsSelected:
+          type: boolean
+        smsType:
+          type: string
+        smsTypeDescription:
+          type: string
+        smsTypeId:
+          type: integer
+          format: int32
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string

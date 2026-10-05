@@ -1,0 +1,193 @@
+server:
+  port: 9018
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+  shutdown: graceful
+
+swagger:
+  api:
+    version: @project.version@
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: |
+          @git.commit.message.short@
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /hotel-info-service/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+spring:
+  aop:
+    proxyTargetClass: true
+  cache:
+    type: ${CACHE_TYPE:redis}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+executor:
+  poolSize:
+    aem: 150
+
+aem:
+  authentication:
+    enabled: ${AEM_AUTH_ENABLED}
+    username: ${AEM_USERNAME}
+    password: ${AEM_PASSWORD}
+  url: https://{host}/{country}/{language}/hoteldirectory/{hotelBrandCode}/{hotelCodeInitial}/{hotelCode}.{hotelInfoFormat}.data
+  allHotelsUrl: https://{host}/{country}/{language}/hoteldirectory/list.hotels.data
+  connection-manager:
+    max-total: 200
+    default-max-per-route: 200
+  connection-request-timeout: 5000
+  socket-timeout: 5000
+  defaultKeepAlive: 30
+  hostMapping:
+    default: ${AEM_HOST_MAP_DEFAULT}
+    gb-en: ${AEM_HOST_MAP_GB}
+    de-de: ${AEM_HOST_MAP_DE}
+
+hotel:
+  info:
+    data:
+      cache:
+        name: hotelInfo
+        ttl: 3600
+    allHotels:
+      cache:
+        name: allHotels
+        ttl: 3600
+    keys:
+      cache:
+        name: hotelKeyData
+        ttl: 86400
+    configuration:
+      hubHotelCodes:
+        - LONKIN
+        - LONSPI
+        - LONTOL
+        - LONSTM
+        - LONGOO
+        - LONWES
+        - LONWAB
+        - EDICAR
+        - EDIROS
+        - EDIHAY
+        - LONBAN
+        - LONSOH
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - opera-uat
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    uk.co.whitbread: debug
+    feign: debug
+    org.springframework.security.web: DEBUG
+
+aem:
+  authentication:
+    enabled: true
+    username: someTestUser
+    password: testPassword
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - disable-caching
+  cache:
+    type: none
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration

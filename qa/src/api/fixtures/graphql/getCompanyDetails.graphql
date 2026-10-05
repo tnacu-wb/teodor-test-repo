@@ -1,0 +1,192 @@
+query companyDetails($companyId: String!) {
+  companyDetailsV2(companyId: $companyId) {
+    requestedCompany {
+      companyDetails {
+        companyName
+        alternateCompanyName
+        numberOfEmployees
+        companyAddress {
+          addressLine1
+          addressLine2
+          addressLine3
+          addressLine4
+          addressLine5
+          postCode
+          country
+        }
+        mainEmployee {
+          id
+          ghNumber
+          emailAddress
+          position
+          phoneNumber
+          mobileNumber
+          textConfirmation
+          title
+          firstName
+          lastName
+          centralCardId
+          address {
+            addressLine1
+            addressLine2
+            addressLine3
+            addressLine4
+            addressLine5
+            postCode
+            country
+          }
+          accessLevel
+          employeeStatus
+          dialingCode
+          employeeAnswers {
+            customerReferenceAnswer
+            purchaseOrderAnswer
+            userDefinedAnswers {
+              miID
+              miAnswer
+            }
+          }
+          guestHistoryNumber
+          lockedForEditing
+          password
+        }
+      }
+      paymentDetails {
+        profileLocked
+        allowIndividualCards
+        paymentCards {
+          cardId
+          cardLabel
+          cardType
+          nameOnCard
+          cardNumber
+          startDate
+          expiryDate
+          issueNumber
+          cardToken
+          billingAddress {
+            addressLine1
+            addressLine2
+            addressLine3
+            addressLine4
+            addressLine5
+            postCode
+            country
+          }
+          cardNotPresentRequired
+        }
+      }
+      bookingAllowances {
+        maxDinnerBudgets {
+          uKWide {
+            amount
+            currency
+          }
+          greaterLondon {
+            amount
+            currency
+          }
+          ireland {
+            amount
+            currency
+          }
+        }
+        extrasCodes
+        upsellItemsAllowed
+        allowAlcohol
+        allowCarParking
+        allowAdditionalCosts
+        allowPremierSaverRates
+        allowIndividualCards
+        maxNumberOfNights
+      }
+      bookingAlerts {
+        rateCaps {
+          uKWide {
+            amount
+            currency
+          }
+          greaterLondon {
+            amount
+            currency
+          }
+          ireland {
+            amount
+            currency
+          }
+        }
+        bookingAlertHotels
+        recipientEmailAddresses
+        dayOfArrival
+        weekendArrival
+        passThroughWeekend
+        frequency
+      }
+      companyManagementDetails {
+        purchaseOrderManagement {
+          questionId
+          label
+          mandatory
+          managementHeader
+          active
+          location
+          managementInformationAnswer {
+            answerType
+            answers
+          }
+          type
+          positionId
+        }
+        customerReferenceManagement {
+          questionId
+          label
+          mandatory
+          managementHeader
+          active
+          location
+          type
+          positionId
+          managementInformationAnswer {
+            answerType
+            answers
+          }
+        }
+        userDefinedManagement {
+          questionId
+          label
+          mandatory
+          managementHeader
+          active
+          location
+          type
+          positionId
+          managementInformationAnswer {
+            answerType
+            answers
+          }
+        }
+      }
+      restrictedRatePlans {
+        code
+      }
+      restrictedHotelCodes {
+        code
+      }
+      companyStatus {
+        status
+      }
+      companyCellCodes {
+        type
+        description
+      }
+    }
+    companyCellCodes {
+      type
+      description
+    }
+    allowCentralCreditCard
+    marketingAllowed
+    companyLockedForEditing
+    success
+  }
+}

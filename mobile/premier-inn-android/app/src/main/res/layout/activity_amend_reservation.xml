@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/metallic_pearl_seventy_percent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:fitsSystemWindows="true"
+        app:contentInsetStartWithNavigation="0dp">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="@dimen/toolbar_progress_bar_width"
+            android:layout_height="@dimen/toolbar_progress_bar_height"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/generic_margin_8"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/amend_edit_error_banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingTop="@dimen/generic_padding_12"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:paddingBottom="@dimen/generic_padding_12"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/amend_error_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/BodySmallSemiBold"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/generic_margin_12"
+            android:gravity="center"
+            android:textColor="@color/white"
+            tools:text="No more Family Rooms available at this hotel" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/amend_price_difference_button_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical"
+                    android:padding="@dimen/generic_padding_16">
+
+                    <!-- Amend Max Room Warning InfoMessageBoxView -->
+                    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                        android:id="@+id/max_room_warning_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/generic_margin_16"
+                        android:background="@drawable/alert_notification_background"
+                        android:padding="@dimen/generic_padding_16"
+                        android:src="@drawable/notifications_alert"
+                        android:text="@string/amend_max_rooms_message"
+                        android:visibility="gone"
+                        app:alignTextCenter="false"
+                        app:iconTintColor="@color/gamboge" />
+
+                    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                        android:id="@+id/promo_amend_info_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/generic_margin_16"
+                        android:background="@drawable/information_notification_background"
+                        android:padding="@dimen/generic_padding_16"
+                        android:src="@drawable/ic_info"
+                        tools:text="This is a test info message box for amend reservation screen."
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        app:alignTextCenter="false"
+                        app:iconTintColor="@color/teal" />
+
+                    <TextView
+                        android:id="@+id/amend_hotel_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/generic_margin_16"
+                        style="@style/Header1"
+                        tools:text="London Kings Cross" />
+
+                    <!-- Amend Dates Layout -->
+                    <include
+                        android:id="@+id/amend_dates_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        layout="@layout/view_amend_reservation_dates" />
+
+                    <!-- Amend Meals and Extra Layout -->
+                    <include
+                        android:id="@+id/amend_upsells_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        layout="@layout/view_amend_reservation_meals"
+                        android:layout_marginTop="@dimen/generic_margin_16"
+                        />
+
+                    <!-- Room Container Layout -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/room_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/generic_margin_16"
+                        android:layout_marginBottom="@dimen/generic_margin_16"
+                        android:nestedScrollingEnabled="false"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="1"
+                        tools:listitem="@layout/view_amend_room_item" />
+
+                    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                        android:id="@+id/add_room_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Button1"
+                        android:gravity="center"
+                        android:padding="@dimen/generic_padding_12"
+                        android:text="@string/criteria_add_room"
+                        android:visibility="gone"
+                        app:cab_is_secondary="true"
+                        app:cab_text_color="?attr/colorPrimary"
+                        tools:visibility="visible" />
+
+                    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                        android:id="@+id/cancel_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/cta_button_height"
+                        style="@style/Button1"
+                        android:layout_marginTop="@dimen/generic_margin_8"
+                        android:backgroundTint="@color/amend_red"
+                        android:gravity="center"
+                        android:padding="@dimen/generic_padding_12"
+                        android:text="@string/manage_booking_cancel_booking"
+                        android:visibility="gone"
+                        app:cab_is_secondary="true"
+                        app:cab_spinner_color="@color/amend_red"
+                        app:cab_text_color="@color/amend_red"
+                        tools:visibility="visible" />
+
+                    <View
+                        android:id="@+id/amend_reservation_space_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="96dp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
+
+        <include
+            android:id="@+id/price_difference_layout"
+            layout="@layout/view_amend_price_difference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
+
+        <include
+            android:id="@+id/translucent_loading_amend"
+            layout="@layout/translucent_loading"
+            android:visibility="gone"
+            tools:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

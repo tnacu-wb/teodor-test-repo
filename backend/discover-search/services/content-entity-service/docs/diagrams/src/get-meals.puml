@@ -1,0 +1,12 @@
+@startuml
+title Retrieve Meals Information from AEM
+
+entity GraphQL_endpoint
+entity "content-entity-service" as CES
+entity AEM
+
+GraphQL_endpoint-> CES  ++: GET /content/meals?language={language}&country={country}&hotelId={hotelId}
+CES -> AEM: GET {host}/{country}/{language}/hoteldirectory/{hotelInitial}/{hotelId}.upsellitems.data
+GraphQL_endpoint<- CES -- : return meals
+
+@enduml

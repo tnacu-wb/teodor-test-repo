@@ -1,0 +1,150 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:s="http://www.w3.org/2001/XMLSchema"
+			 xmlns:s0="http://bartws.micros.com/1.13" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			 targetNamespace="http://bartws.micros.com/1.13">
+	<types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://bartws.micros.com/1.13">
+			<s:include schemaLocation="../xsd/bart-common-price-113.xsd"/>
+			<s:include schemaLocation="../xsd/bart-common-error-113.xsd"/>
+			<s:element name="FutureStaysRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="FutureStaysDetails" type="s0:FutureStaysRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="FutureStaysRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="emailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="telephoneNumber" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="FutureStaysRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="FutureStaysRequestResult" type="s0:FutureStaysResponse2"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="FutureStaysResponse2">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="futureStays" type="s0:ArrayOfFutureStayFutureStays2"/>
+					<s:element minOccurs="0" name="futureStaysError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="USER_NOT_LOGGED_IN"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfFutureStayFutureStays2">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="FutureStay" nillable="true"
+							   type="s0:FutureStays2"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="FutureStays2">
+				<s:sequence>
+					<s:element name="hotelCode" type="s:string"/>
+					<s:element name="arrivalDate" type="s:date"/>
+					<s:element name="departureDate" type="s:date"/>
+					<s:element name="totalCost" type="s0:Price3"/>
+					<s:element name="roomTypes" type="s0:ArrayOfRoomTypeRoomTypes"/>
+					<s:element name="leadGuest" type="s:string"/>
+					<s:element minOccurs="0" name="leadGuestSurname" type="s:string"/>
+					<s:element minOccurs="0" name="noOfRooms" type="s:long"/>
+					<s:element minOccurs="0" name="purchaseOrder" type="s:string"/>
+					<s:element name="customerReference" type="s:string"/>
+					<s:element name="historyRecordNumber" type="s:long"/>
+					<s:element minOccurs="0" name="confirmationNumber" type="s:string"/>
+					<s:element minOccurs="0" name="prePaidAmount" type="s0:Price"/>
+					<s:element minOccurs="0" name="paymentStatus" type="s:string"/>
+					<s:element minOccurs="0" name="isCancelled" type="s:boolean"/>
+					<s:element minOccurs="0" name="checkInOnline" type="s:boolean"/>
+					<s:element minOccurs="0" name="isCheckedIn" type="s:boolean"/>
+					<s:element minOccurs="0" name="rateClass" type="s:string"/>
+					<s:element minOccurs="0" name="checkInDate" type="s:date"/>
+					<s:element minOccurs="0" name="promotionText" type="s:string"/>
+					<s:element minOccurs="0" name="cellCodeLegend" type="s:string"/>
+					<s:element minOccurs="0" name="carDataRequired" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Price3">
+				<s:sequence>
+					<s:element name="amount" type="s:decimal"/>
+					<s:element name="cityTax" type="s:decimal"/>
+					<s:element name="currency" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfRoomTypeRoomTypes">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="RoomType" nillable="true" type="s0:RoomTypes"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RoomTypes">
+				<s:sequence>
+					<s:element name="roomType">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="FAM"/>
+								<s:enumeration value="DB"/>
+								<s:enumeration value="TWIN"/>
+								<s:enumeration value="DIS"/>
+								<s:enumeration value="SB"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="bookingStatus">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="BOOKED"/>
+								<s:enumeration value="CANCELLED"/>
+								<s:enumeration value="RELEASED"/>
+								<s:enumeration value="PREPAID"/>
+								<s:enumeration value="ARRIVED"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="carDataPresent" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+		</s:schema>
+	</types>
+	<message name="FutureStaysRequestSoapIn">
+		<part name="parameters" element="s0:FutureStaysRequest"/>
+	</message>
+	<message name="FutureStaysRequestSoapOut">
+		<part name="parameters" element="s0:FutureStaysRequestResponse"/>
+	</message>
+	<portType name="FutureStaysSoap">
+		<operation name="FutureStaysRequest">
+			<input message="s0:FutureStaysRequestSoapIn"/>
+			<output message="s0:FutureStaysRequestSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="FutureStaysSoap" type="s0:FutureStaysSoap">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+		<operation name="FutureStaysRequest">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.FutureStaysService.FutureStaysRequest"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="FutureStays">
+		<port name="FutureStaysSoap" binding="s0:FutureStaysSoap">
+			<soap:address
+					location="https://alpha2.bookings.premierinn.com:443/csp/sql/ws.RegisteredGuest.FutureStaysService.cls"/>
+		</port>
+	</service>
+</definitions>

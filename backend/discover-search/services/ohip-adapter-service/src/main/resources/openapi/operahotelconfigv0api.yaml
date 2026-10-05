@@ -1,0 +1,584 @@
+swagger: '2.0'
+info:
+  title: OPERA Cloud Reservation Master Data Management API
+  description: >-
+    APIs to cater for Reservation Configuration in OPERA Cloud. In this module
+    you can retrieve, create, modify or delete configuration related to
+    Reservations, Blocks and Leisure Management.<br /><br /> Compatible with
+    OPERA Cloud release 22.3.<br /><br /><p> This document and all content
+    within is available under the Universal Permissive License v 1.0
+    (https://oss.oracle.com/licenses/upl). Copyright (c) 2020, 2023 Oracle
+    and/or its affiliates.</p>
+  version: '22.3'
+  termsOfService: 'https://www.oracle.com/legal/terms.html'
+  contact:
+    email: hospitality_apis_ww_grp@oracle.com
+  license:
+    name: UPL
+    url: 'https://opensource.org/licenses/upl'
+schemes:
+  - https
+basePath: /rsv/config/v0
+paths:
+  /cancelpolicies:
+    get:
+      summary: Get Cancellation policies in hotel level
+      description: >-
+        Use this API to get cancellation policies in hotel level.
+        <p><strong>OperationId:</strong>getCancellationPolicies</p>
+      operationId: getCancellationPolicies
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Indicates maximum number of records a Web Service should return.
+          type: integer
+        - name: pageNumber
+          in: query
+          required: false
+          description: >-
+            Index or initial index of the set(page) being requested. If the
+            index goes out of the bounds of the total set count then no data
+            will be returned.
+          type: integer
+        - name: hotelIds
+          in: query
+          type: array
+          collectionFormat: multi
+          description: Hotel code.
+          items:
+            type: string
+            maxItems: 4000
+          required: false
+        - name: policyCodeListCodes
+          in: query
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+            maxItems: 4000
+          required: false
+        - name: includeInactive
+          in: query
+          required: false
+          description: Indicator that tells whether to include inactive in search results.
+          type: boolean
+        - $ref: '#/parameters/authKey'
+        - $ref: '#/parameters/x-app-key'
+        - $ref: '#/parameters/x-hotelid'
+        - $ref: '#/parameters/x-externalsystem'
+        - $ref: '#/parameters/Accept-Language'
+      responses:
+        '200':
+          headers:
+            Content-Language:
+              type: string
+              description: Audience language
+              pattern: '[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*'
+              x-example: en-GB
+          description: Response for fetch Cancellation Policy Details in hotel level.
+          schema:
+            $ref: '#/definitions/cancellationPolicyDetails'
+          examples:
+            application/json: {}
+        '204':
+          description: CancellationPolicyDetails not found.
+          examples:
+            application/json: {}
+      tags:
+        - HotelConfig
+  /hotels/{hotelId}/policyschedules:
+    get:
+      summary: Get policy schedules in hotel level
+      description: >-
+        Use this API to get policy schedules in hotel level.
+        <p><strong>OperationId:</strong>getPolicySchedules</p>
+      operationId: getPolicySchedules
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Indicates maximum number of records a Web Service should return.
+          type: integer
+        - name: pageNumber
+          in: query
+          required: false
+          description: >-
+            Index or initial index of the set(page) being requested. If the
+            index goes out of the bounds of the total set count then no data
+            will be returned.
+          type: integer
+        - name: hotelId
+          in: path
+          type: array
+          collectionFormat: multi
+          description: Hotel code.
+          items:
+            type: string
+            maxItems: 4000
+          required: false
+        - name: policyCodes
+          in: query
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+            maxItems: 4000
+          required: false
+        - name: policyType
+          in: query
+          type: array
+          collectionFormat: multi
+          description: Allowed values for the policy type.
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+              - Deposit
+              - Cancellation
+        - name: ratePlanCodes
+          in: query
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+            maxItems: 4000
+          required: true
+        - name: startDate
+          in: query
+          required: false
+          description: The starting value of the date range.
+          type: string
+          format: date
+        - name: endDate
+          in: query
+          required: false
+          description: The ending value of the date range.
+          type: string
+          format: date
+        - name: includeInactive
+          in: query
+          required: false
+          description: Indicator that tells whether to include inactive in search results.
+          type: boolean
+        - $ref: '#/parameters/authKey'
+        - $ref: '#/parameters/x-app-key'
+        - $ref: '#/parameters/x-hotelid'
+        - $ref: '#/parameters/x-externalsystem'
+        - $ref: '#/parameters/Accept-Language'
+      responses:
+        '200':
+          headers:
+            Content-Language:
+              type: string
+              description: Audience language
+              pattern: '[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*'
+              x-example: en-GB
+          description: Response for fetch Policy Schedules Details Details in hotel level.
+          schema:
+            $ref: '#/definitions/policySchedulesDetails'
+          examples:
+            application/json: {}
+        '204':
+          description: PolicySchedulesDetails not found.
+          examples:
+            application/json: {}
+      tags:
+        - HotelConfig
+definitions:
+  cancellationPolicyDetails:
+    type: object
+    description: Response for fetch Cancellation Policies.
+    properties:
+      cancelPenalties:
+        description: Collection of Cancellation Policies grouped by hotel.
+        type: object
+        properties:
+          cancelPenalties:
+            description: Collection of Cancellation Policies grouped by hotel.
+            type: array
+            items:
+              $ref: '#/definitions/hotelConfigCancelPenaltiesType'
+          totalPages:
+            description: Evaluated total page count based on the requested max fetch count.
+            type: integer
+          offset:
+            description: Index or initial index of the set(page) being requested. If the index goes out of the bounds of the total set count then no data will be returned.
+            type: integer
+          limit:
+            description: Indicates maximum number of records a Web Service should return.
+            type: integer
+          hasMore:
+            description: Indicates whether all the records are included in the response or not. Absence of the attribute values should be consider as all rows fetched in the response.
+            type: boolean
+          totalResults:
+            description: Total number of rows queried
+            type: integer
+          count:
+            description: Total number of rows returned
+            type: integer
+      links:
+        $ref: '#/definitions/links'
+      warnings:
+        $ref: '#/definitions/warningsType'
+  warningsType:
+    type: array
+    description: Used in conjunction with the Success element to define a business error.
+    maxItems: 4000
+    items:
+      $ref: '#/definitions/warningType'
+  links:
+    type: array
+    items:
+      $ref: '#/definitions/instanceLink'
+  instanceLink:
+    type: object
+    description: Metadata describing link description objects that MAY appear in the JSON instance representation.
+    properties:
+      href:
+        description: URI [RFC3986] or URI Template [RFC6570]. If the value is set to URI Template, then the "templated" property must be set to true.
+        type: string
+      rel:
+        description: Name of the link relation that, in addition to the type property, can be used to retrieve link details. For example, href or profile.
+        type: string
+      templated:
+        description: Boolean flag that specifies that "href" property is a URI or URI Template. If the property is a URI template, set this value to true. By default, this value is false.
+        type: boolean
+        default: false
+      method:
+        description: HTTP method for requesting the target of the link.
+        type: string
+        enum:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          - OPTIONS
+          - HEAD
+      targetSchema:
+        description: Link to the metadata of the resource, such as JSON-schema, that describes the resource expected when dereferencing the target resource..
+        type: string
+      operationId:
+        description: The operationId of the path you can call to follow this link.  This allows you to look up not only the path and method, but the description of that path and any parameters you need to supply.
+        type: string
+      title:
+        description: Exact copy of the "summary" field on the linked operation.
+        type: string
+    required:
+      - href
+      - rel
+      - method
+      - operationId
+  hotelConfigCancelPenaltiesType:
+    type: object
+    description: The CancelPenalty Configuration class defines configuration of a cancellation policy of the hotel facility.
+    properties:
+      cancelPenaltyConfig:
+        description: Collection of template Cancel Penalty configurations.
+        type: array
+        maxItems: 4000
+        items:
+          $ref: '#/definitions/configCancelPenaltyType'
+      hotelId:
+        description: Hotel code of the collection of template Cancel Penalty configurations.
+        type: string
+        minLength: 0
+        maxLength: 20
+  configCancelPenaltyType:
+    type: object
+    description: The CancelPenalty class defines the cancellation policy of the hotel facility.
+    properties:
+      deadline:
+        $ref: '#/definitions/policyDeadlineType'
+      amountPercent:
+        $ref: '#/definitions/policyAmountPercentType'
+      penaltyDescription:
+        description: Text description of the Penalty in a given language.
+        type: string
+        minLength: 0
+        maxLength: 2000
+      offsetUnit:
+        $ref: '#/definitions/offsetUnitType'
+      formattedRule:
+        description: Formatted Text Rule of the Cancellation Penalty.
+        type: string
+        minLength: 0
+        maxLength: 2000
+      policyCode:
+        description: Policy Code.
+        type: string
+        minLength: 0
+        maxLength: 20
+      manual:
+        description: Flag to indicate if the cancellation policy is manual.
+        type: boolean
+      nonRefundable:
+        description: Indicates if the amount is refundable if booking is canceled.
+        type: boolean
+      sequence:
+        description: The sequence number that determines the position of this rule in the Deposit or Cancellation rules LOV.
+        type: integer
+      inactive:
+        description: Inactive rules are no longer available for attachment to rate codes, reservation types or reservations; however, they are still recorded in the database for historical purposes.
+        type: boolean
+  offsetUnitType:
+    type: string
+    description: Indicates deadline offset unit type.
+    enum:
+      - Year
+      - Month
+      - Day
+      - Hour
+  policyAmountPercentType:
+    type: object
+    description: Defines the percentage basis for calculating the fee amount or the amount.
+    properties:
+      basisType:
+        $ref: '#/definitions/policyBasisTypeType'
+      nights:
+        description: The number of nights of the hotel stay that are used to calculate the fee amount.
+        type: integer
+      percent:
+        description: The percentage used to calculate the amount.
+        type: number
+        minimum: 0
+        maximum: 100
+      amount:
+        description: A monetary amount.
+        type: number
+      currencyCode:
+        description: Provides a currency code to reflect the currency in which an amount may be expressed.
+        type: string
+        minLength: 3
+        maxLength: 3
+  policyBasisTypeType:
+    type: string
+    description: Full Amount.
+    enum:
+      - FlatAmount
+      - Percentage
+      - Nights
+      - NightPercentage
+      - FullAmount
+  policyDeadlineType:
+    type: object
+    description: Cancellation deadline, absolute or relative.
+    properties:
+      absoluteDeadline:
+        description: Defines the absolute deadline. Either this or the offset attributes may be used.
+        type: string
+        format: date-time
+      offsetFromArrival:
+        description: The number of days before arrival that allows cancellation without penalties.
+        type: integer
+      offsetDropTime:
+        description: Time on offset day the cancellation penalties applies.
+        type: string
+        format: date-time
+      offsetFromBookingDate:
+        description: The number of days after booking deposit must be paid.
+        type: integer
+  policySchedulesDetails:
+    type: object
+    description: Return response for fetch policy schedules based on request.
+    properties:
+      policySchedules:
+        $ref: '#/definitions/policySchedulesType'
+      totalPages:
+        description: Evaluated total page count based on the requested max fetch count.
+        type: integer
+      offset:
+        description: Index or initial index of the set(page) being requested. If the index goes out of the bounds of the total set count then no data will be returned.
+        type: integer
+      limit:
+        description: Indicates maximum number of records a Web Service should return.
+        type: integer
+      hasMore:
+        description: Indicates whether all the records are included in the response or not. Absence of the attribute values should be consider as all rows fetched in the response.
+        type: boolean
+      totalResults:
+        description: Total number of rows queried
+        type: integer
+      count:
+        description: Total number of rows returned
+        type: integer
+      links:
+        $ref: '#/definitions/links'
+      warnings:
+        $ref: '#/definitions/warningsType'
+  warningType:
+    type: object
+    description: Used when a message has been successfully processed to report any warnings or business errors that occurred.
+    properties:
+      value:
+        type: string
+        description: Property Value
+      shortText:
+        description: An abbreviated version of the error in textual format.
+        type: string
+        maxLength: 2000
+      code:
+        description: If present, this refers to a table of coded values exchanged between applications to identify errors or warnings.
+        type: string
+        minLength: 0
+        maxLength: 20
+      docURL:
+        description: If present, this URL refers to an online description of the error that occurred.
+        type: string
+        maxLength: 2000
+      status:
+        description: If present, recommended values are those enumerated in the ErrorRS, (NotProcessed Incomplete Complete Unknown) however, the data type is designated as string data, recognizing that trading partners may identify additional status conditions not included in the enumeration.
+        type: string
+        maxLength: 2000
+      tag:
+        description: If present, this attribute may identify an unknown or misspelled tag that caused an error in processing. It is recommended that the Tag attribute use XPath notation to identify the location of a tag in the event that more than one tag of the same name is present in the document. Alternatively, the tag name alone can be used to identify missing data [Type=ReqFieldMissing].
+        type: string
+        maxLength: 2000
+      recordId:
+        description: If present, this attribute allows for batch processing and the identification of the record that failed amongst a group of records. This value may contain a concatenation of a unique failed transaction ID with specific record(s) associated with that transaction.
+        type: string
+        maxLength: 2000
+      type:
+        description: The Warning element MUST contain the Type attribute that uses a recommended set of values to indicate the warning type. The validating XSD can expect to accept values that it has NOT been explicitly coded for and process them by using Type ="Unknown".
+        type: string
+        minLength: 0
+        maxLength: 20
+      language:
+        description: Language identification.
+        type: string
+        pattern: '[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*'
+      rph:
+        description: Reference Place Holder used as an index for this warning.
+        type: string
+        minLength: 1
+        maxLength: 8
+  policySchedulesType:
+    type: array
+    description: Unique Identifer for the policy schedule.
+    maxItems: 4000
+    items:
+      $ref: '#/definitions/policyScheduleType'
+  policyScheduleType:
+    type: object
+    description: The Policy Schedule Type.
+    properties:
+      scheduleId:
+        $ref: '#/definitions/uniqueID_Type'
+      scheduleDetail:
+        $ref: '#/definitions/policyScheduleDetailType'
+      hotelId:
+        description: Hotel code for the Policy Schedules.
+        type: string
+        minLength: 0
+        maxLength: 20
+      policyType:
+        $ref: '#/definitions/policyTypeType'
+  policyTypeType:
+    type: string
+    description: Simple type for Policy type.
+    enum:
+      - Deposit
+      - Cancellation
+  policyScheduleDetailType:
+    type: object
+    description: The Policy Schedule detail Type.
+    properties:
+      timeSpan:
+        $ref: '#/definitions/timeSpanType'
+      policy:
+        $ref: '#/definitions/codeDescriptionType'
+      applicableCodes:
+        $ref: '#/definitions/policyApplicableCodesType'
+      sequence:
+        description: Sequence for the schedule.
+        type: number
+      override:
+        description: override the schedule?
+        type: boolean
+      inactive:
+        description: schedule Inactive?
+        type: boolean
+  policyApplicableCodesType:
+    type: object
+    description: The object contains usage of the Policy Schedule detail Type.
+    properties:
+      hotelId:
+        description: Schedule is used by this Hotel code.
+        type: string
+        minLength: 0
+        maxLength: 20
+      ratePlanCodes:
+        $ref: '#/definitions/codeListType'
+      guaranteeCodes:
+        $ref: '#/definitions/codeListType'
+      blockIds:
+        $ref: '#/definitions/uniqueIDListType'
+      blockCode:
+        description: Schedule is used by this Block code.
+        type: string
+        minLength: 0
+        maxLength: 20
+      creditRatings:
+        $ref: '#/definitions/codeListType'
+      seasonCode:
+        description: Schedule is used by this Season Code.
+        type: string
+        minLength: 0
+        maxLength: 20
+  codeListType:
+    type: array
+    maxItems: 4000
+    items:
+      type: string
+      minLength: 0
+      maxLength: 20
+  uniqueIDListType:
+    type: array
+    description: Unique Id that references an object uniquely in the system.
+    maxItems: 4000
+    items:
+      $ref: '#/definitions/uniqueID_Type'
+  uniqueID_Type:
+    type: object
+    description: An identifier used to uniquely reference an object in a system (e.g. an airline reservation reference, customer profile reference, booking confirmation number, or a reference to a previous availability quote).
+    properties:
+      id:
+        description: A unique identifying value assigned by the creating system. The ID attribute may be used to reference a primary-key value within a database or in a particular implementation.
+        type: string
+        minLength: 0
+        maxLength: 80
+      type:
+        description: A reference to the type of object defined by the UniqueID element.
+        type: string
+        minLength: 0
+        maxLength: 40
+  codeDescriptionType:
+    type: object
+    description: This contains a generic code and description information.
+    properties:
+      code:
+        description: Code.
+        type: string
+        minLength: 0
+        maxLength: 20
+      description:
+        description: description.
+        type: string
+        minLength: 0
+        maxLength: 2000
+  timeSpanType:
+    type: object
+    description: Allows for a choice in description of the amount of time spanned by this type. EndDate specifies a specific date, while Duration provides a measure of time to add to the StartDate to yield end date.
+    properties:
+      startDate:
+        type: string
+        format: date
+        maxLength: 8
+      endDate:
+        type: string
+        format: date
+        maxLength: 8
+      duration:
+        type: string
+

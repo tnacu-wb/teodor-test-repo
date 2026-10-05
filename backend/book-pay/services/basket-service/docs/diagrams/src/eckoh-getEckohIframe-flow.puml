@@ -1,0 +1,35 @@
+@startuml
+entity "Front-End" as A
+
+participant CcuiEckohController as Controller
+participant CcuiEckohInPort as CcuiInPort
+participant CcuiEckohOutboundPort as CcuiOutPort
+participant PaymentOutPort as PayOutPort
+
+entity "Dynamo DB/SQL DB" as DB
+entity "WB Payments Service" as WBPayment
+
+A -> Controller: POST /v1/baskets/ccui/{basketReference}/eckoh
+Controller -> CcuiInPort: getEckohIframe(basketReference,EckohIframeRequestDto)
+CcuiInPort -> BskOutPort: getBasketByReference(basketReference)
+
+BskOutPort -> DB: getBasketByReference(referenceNumber)
+BskOutPort <- DB: Basket
+BskOutPort -> CcuiInPort: Basket
+
+CcuiInPort -> CcuiOutPort: createPaymentRequest(eckohIframeRequest)
+CcuiOutPort -> CcuiInPort : PaymentRequest
+
+CcuiInPort -> PayOutPort: createPayment(paymentRequest)
+PayOutPort -> PayClient: createPayment(paymentRequest)
+PayClient -> WBPayment: createPayment(paymentRequest)
+PayClient <- WBPayment: PaymentResponse
+PayOutPort <- PayClient: PaymentResponse
+PayOutPort -> CcuiInPort: PaymentResponse
+
+CcuiInPort -> BskOutPort: updateBasket(basket)
+BskOutPort ->DB: updateBasket
+
+Controller <- CcuiInPort: PaymentResponse
+A <- Controller: EckohIframeResponse
+@enduml

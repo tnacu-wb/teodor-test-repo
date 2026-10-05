@@ -1,0 +1,291 @@
+
+package uk.co.whitbread.azure.genericEmail.api;
+
+import java.io.Serializable;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
+
+
+/**
+ * &lt;p&gt;Java class for SendSummary complex type&lt;/p&gt;.
+ * 
+ * &lt;p&gt;The following schema fragment specifies the expected content contained within this class.&lt;/p&gt;
+ * 
+ * &lt;pre&gt;{&#064;code
+ * &lt;complexType name="SendSummary"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;extension base="{https://transact.comms.int.wtbapi.com/wsdl/emailAPI}APIObject"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="AccountID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="AccountName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="AccountEmail" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="IsTestAccount" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
+ *         &lt;element name="SendID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="DeliveredTime" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="TotalSent" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="Transactional" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *         &lt;element name="NonTransactional" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/extension&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
+ * }&lt;/pre&gt;
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "SendSummary", propOrder = {
+    "accountID",
+    "accountName",
+    "accountEmail",
+    "isTestAccount",
+    "sendID",
+    "deliveredTime",
+    "totalSent",
+    "transactional",
+    "nonTransactional"
+})
+public class SendSummary
+    extends APIObject
+    implements Serializable
+{
+
+    private static final long serialVersionUID = 1L;
+    @XmlElement(name = "AccountID")
+    protected Integer accountID;
+    @XmlElement(name = "AccountName")
+    protected String accountName;
+    @XmlElement(name = "AccountEmail")
+    protected String accountEmail;
+    @XmlElement(name = "IsTestAccount")
+    protected Boolean isTestAccount;
+    @XmlElement(name = "SendID")
+    protected Integer sendID;
+    @XmlElement(name = "DeliveredTime")
+    protected String deliveredTime;
+    @XmlElement(name = "TotalSent")
+    protected Integer totalSent;
+    @XmlElement(name = "Transactional")
+    protected Integer transactional;
+    @XmlElement(name = "NonTransactional")
+    protected Integer nonTransactional;
+
+    /**
+     * Gets the value of the accountID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getAccountID() {
+        return accountID;
+    }
+
+    /**
+     * Sets the value of the accountID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setAccountID(Integer value) {
+        this.accountID = value;
+    }
+
+    /**
+     * Gets the value of the accountName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAccountName() {
+        return accountName;
+    }
+
+    /**
+     * Sets the value of the accountName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAccountName(String value) {
+        this.accountName = value;
+    }
+
+    /**
+     * Gets the value of the accountEmail property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAccountEmail() {
+        return accountEmail;
+    }
+
+    /**
+     * Sets the value of the accountEmail property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAccountEmail(String value) {
+        this.accountEmail = value;
+    }
+
+    /**
+     * Gets the value of the isTestAccount property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsTestAccount() {
+        return isTestAccount;
+    }
+
+    /**
+     * Sets the value of the isTestAccount property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsTestAccount(Boolean value) {
+        this.isTestAccount = value;
+    }
+
+    /**
+     * Gets the value of the sendID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getSendID() {
+        return sendID;
+    }
+
+    /**
+     * Sets the value of the sendID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setSendID(Integer value) {
+        this.sendID = value;
+    }
+
+    /**
+     * Gets the value of the deliveredTime property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDeliveredTime() {
+        return deliveredTime;
+    }
+
+    /**
+     * Sets the value of the deliveredTime property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDeliveredTime(String value) {
+        this.deliveredTime = value;
+    }
+
+    /**
+     * Gets the value of the totalSent property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getTotalSent() {
+        return totalSent;
+    }
+
+    /**
+     * Sets the value of the totalSent property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setTotalSent(Integer value) {
+        this.totalSent = value;
+    }
+
+    /**
+     * Gets the value of the transactional property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getTransactional() {
+        return transactional;
+    }
+
+    /**
+     * Sets the value of the transactional property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setTransactional(Integer value) {
+        this.transactional = value;
+    }
+
+    /**
+     * Gets the value of the nonTransactional property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getNonTransactional() {
+        return nonTransactional;
+    }
+
+    /**
+     * Sets the value of the nonTransactional property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setNonTransactional(Integer value) {
+        this.nonTransactional = value;
+    }
+
+}

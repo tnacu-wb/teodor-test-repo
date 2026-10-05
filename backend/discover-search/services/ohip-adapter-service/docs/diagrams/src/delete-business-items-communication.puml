@@ -1,0 +1,30 @@
+@startuml
+entity "PMS Adapter Service" as PMS
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as Webclient
+entity Opera as opera
+
+PMS -> Controller: DELETE /ohip/v1/reservations/routingInstructions
+Controller -> InboundPort: deleteRoutingInstruction
+InboundPort -> OutboundPort: deleteRoutingInstruction
+
+loop for each reservationId
+    OutboundPort -> Webclient: getReservationWithRoutingInstructions(String hotelId, reservationId)
+
+    loop for each reservationDay
+        OutboundPort -> Webclient:deleteRoutingInstruction(String hotelId, String reservationId, MultiValueMap<String, String> routingParams)
+        Webclient -> opera: DELETE /csh/v0/hotels/{{HotelId}}/reservations/{{ReservationId}}/routingInstructions/folio
+        Webclient <- opera: 204 OK
+    end
+    OutboundPort -> Webclient: sendChangeReservationRequest(String hotelId, String reservationId, ChangeReservation changeReservation)
+    Webclient -> opera: PUT /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}} (to delete business notes)
+    Webclient <- opera: ChangeReservationDetails
+    OutboundPort <- Webclient:200 OK
+end
+
+InboundPort <- OutboundPort: 204 OK
+Controller <- InboundPort: 204 OK
+PMS <- Controller: 204 OK
+@enduml

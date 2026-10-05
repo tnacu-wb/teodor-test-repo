@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://corporate.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             targetNamespace="http://corporate.micros.com/1.0">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://corporate.micros.com/1.0">
+            <s:include schemaLocation="../xsd/bart-business-10.xsd"/>
+            <s:element name="CompanyRegister">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:CompanyRegisterRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="CompanyRegisterRequest">
+                <s:sequence>
+                    <s:element name="company" type="s0:Company"/>
+                    <s:element name="address" type="s0:Address"/>
+                    <s:element name="administrator" type="s0:Administrator"/>
+                    <s:element minOccurs="0" name="password" type="s:string"/>
+                    <s:element minOccurs="0" name="autoEnrolment" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Company">
+                <s:sequence>
+                    <s:element name="companyName">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="40"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="typeOfBusiness" type="s:string"/>
+                    <s:element minOccurs="0" name="companyRegistrationNumber">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="15"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="numberOfEmployees" type="s:string"/>
+                    <s:element name="approxAnnualUKHotelSpend" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CompanyRegisterResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="CompanyRegisterResult" type="s0:CompanyRegisterResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="CompanyRegisterResponse">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element minOccurs="0" name="activationKey" type="s:string"/>
+                    <s:element minOccurs="0" name="password" type="s:string"/>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </types>
+    <message name="CompanyRegisterSoapIn">
+        <part name="parameters" element="s0:CompanyRegister"/>
+    </message>
+    <message name="CompanyRegisterSoapOut">
+        <part name="parameters" element="s0:CompanyRegisterResponse"/>
+    </message>
+    <portType name="RegistrationSoap">
+        <operation name="CompanyRegister">
+            <input message="s0:CompanyRegisterSoapIn"/>
+            <output message="s0:CompanyRegisterSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="RegistrationSoap" type="s0:RegistrationSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="CompanyRegister">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.RegistrationService.CompanyRegister" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="Registration">
+        <port name="RegistrationSoap" binding="s0:RegistrationSoap">
+            <soap:address location="https://inntouch.slough.microsdc.com:443/csp/sql/ws.Corporate.RegistrationService.cls"/>
+        </port>
+    </service>
+</definitions>

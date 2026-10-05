@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/generic_margin_8"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/generic_padding_24">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Header2"
+        android:text="@string/amend_add_lead_guest_details" />
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/add_room_lead_guest_titles"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:padding="@dimen/generic_padding_16"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <EditText
+        android:id="@+id/add_room_lead_guest_first_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        style="@style/Body"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:background="@drawable/shape_light_grey_stroke_white_background"
+        android:padding="@dimen/generic_padding_16"
+        android:autofillHints="@string/guest_details_form_first_name"
+        android:hint="@string/guest_details_form_first_name"
+        android:imeOptions="actionNext"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:inputType="textCapWords|textNoSuggestions" />
+
+    <EditText
+        android:id="@+id/add_room_lead_guest_last_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        style="@style/Body"
+        android:background="@drawable/shape_light_grey_stroke_white_background"
+        android:autofillHints="@string/guest_details_form_last_name"
+        android:padding="@dimen/generic_padding_16"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:hint="@string/guest_details_form_last_name"
+        android:imeOptions="actionDone"
+        android:inputType="textCapWords|textNoSuggestions" />
+</LinearLayout>

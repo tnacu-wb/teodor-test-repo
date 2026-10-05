@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="PremierInnSans-Regular.ttf">
+            <string>PremierInnSans</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="X4x-wn-eQ8" userLabel="BannerView" customClass="BannerView" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="importantInfo" translatesAutoresizingMaskIntoConstraints="NO" id="NNv-A7-LdR">
+                    <rect key="frame" x="12" y="10" width="20" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="iTk-Fm-FNh"/>
+                        <constraint firstAttribute="width" secondItem="NNv-A7-LdR" secondAttribute="height" multiplier="1:1" id="ldX-wR-lSZ"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ne4-9p-60j">
+                    <rect key="frame" x="44" y="10" width="333" height="798"/>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="UGq-as-ZrZ"/>
+            <color key="backgroundColor" red="0.94117647059999998" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="NNv-A7-LdR" firstAttribute="top" secondItem="Ne4-9p-60j" secondAttribute="top" id="1Eg-ie-S7A"/>
+                <constraint firstItem="NNv-A7-LdR" firstAttribute="leading" secondItem="X4x-wn-eQ8" secondAttribute="leading" constant="12" id="Gsn-Zu-7SR"/>
+                <constraint firstItem="UGq-as-ZrZ" firstAttribute="bottom" secondItem="Ne4-9p-60j" secondAttribute="bottom" constant="10" id="MdM-6x-SO6"/>
+                <constraint firstItem="Ne4-9p-60j" firstAttribute="leading" secondItem="NNv-A7-LdR" secondAttribute="trailing" constant="12" id="VKy-aw-Pck"/>
+                <constraint firstAttribute="trailing" secondItem="Ne4-9p-60j" secondAttribute="trailing" constant="16" id="p9i-nG-9aR"/>
+                <constraint firstItem="Ne4-9p-60j" firstAttribute="top" secondItem="X4x-wn-eQ8" secondAttribute="top" constant="10" id="woY-GE-fk6"/>
+            </constraints>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                    <real key="value" value="1"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                    <color key="value" red="0.8862745098" green="0.90196078430000004" blue="0.8980392157" alpha="1" colorSpace="calibratedRGB"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="image" destination="NNv-A7-LdR" id="Zph-S9-pGr"/>
+                <outlet property="label" destination="Ne4-9p-60j" id="iwn-Dc-qof"/>
+            </connections>
+            <point key="canvasLocation" x="-401" y="-1"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="importantInfo" width="26" height="26"/>
+    </resources>
+</document>

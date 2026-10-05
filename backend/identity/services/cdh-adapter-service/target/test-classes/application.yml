@@ -1,0 +1,48 @@
+server:
+  port: 9019
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+cdh:
+  oauth-client:
+    host: https://localhost:${wiremock.server.port:0}
+    token-url: test12312/oauth2/v2.0/token
+    client-id: testClientId
+    client-secret: testClientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+  api:
+    host: https://wbch-uat-apim.azure-api.net
+    request-header-name: X-Azure-FDID
+    request-header-value: dummy_fdid
+    getCompaniesEndpoint: /AccountServices/V2/GetcompaniesV2
+    getCompanyEmployeeEndpoint: /AccountServices/V1/companies/{companyAccountId}/employees
+    getEmployeeEndpoint: /AccountServices/V1/companies/{companyAccountId}/employees/{employeeAccountId}
+    getManagementInformationEndpoint: /AccountServices/V1/Companies/{companyId}/Reports/ManagementInformation
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      booking-subscription-key: dummy_key
+      account-subscription-key: other-dummy_key
+
+feature-flags:
+  cdh-api-deprecation:
+    key: "release_pi_cdh_api_deprecation"
+    fallback: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    api-url: 'http://localhost:4242/api'
+    api-token: 'dummy-value'
+    environment: unit-test
+
+webclient:
+  codec:
+    size: 1

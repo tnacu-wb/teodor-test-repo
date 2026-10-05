@@ -1,0 +1,45 @@
+swagger:
+  api:
+    version: "2.18.0"
+    path: https://api.swaggerhub.com/apis/whitbread/Info-API/${swagger.api.version}/swagger.yaml
+    token: eaaab7b2-ab2e-4471-b01f-ed3d901c144f
+
+
+spring:
+  cache:
+    type: simple
+
+executor:
+  poolSize:
+    aem: 50
+aem:
+  authentication:
+    enabled: false
+    username: user
+    password: pwd
+  url: http://{host}/{country}/{language}/hoteldirectory/{hotelBrandCode}/{hotelCodeInitial}/{hotelCode}.{hotelInfoFormat}.data
+  allHotelsUrl: http://{host}/{country}/{language}/hoteldirectory/list.hotels.data
+  connection-manager:
+    max-total: 200
+    default-max-per-route: 200
+  connection-request-timeout: 5000
+  socket-timeout: 5000
+  hostMapping:
+    default: localhost:8888
+
+hotel:
+  info:
+    configuration:
+      hubHotelCodes:
+      - LONKIN
+      - LONSPI
+      - LONTOL
+      - LONSTM
+      - LONGOO
+      - LONWES
+      - LONWAB
+      - EDICAR
+      - EDIROS
+      - EDIHAY
+      - LONBAN
+      - LONSOH

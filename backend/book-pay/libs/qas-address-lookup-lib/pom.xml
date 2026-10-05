@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>uk.co.whitbread</groupId>
+    <artifactId>digital-monorepo-library-parent</artifactId>
+    <version>${revision}</version>
+    <relativePath>../../../parents/library-parent/pom.xml</relativePath>
+  </parent>
+
+  <groupId>uk.co.whitbread.shared</groupId>
+  <artifactId>qas-address-lookup-lib</artifactId>
+  <version>${revision}</version>
+  <packaging>jar</packaging>
+
+  <name>qas-address-lookup-lib</name>
+  <description>QAS Address Lookup Library - WSDL-based SOAP client for QAS Pro On Demand</description>
+
+  <properties>
+    <wsdl.dir>${basedir}/src/main/resources/wsdl</wsdl.dir>
+    <cxf-codegen-plugin.version>4.2.0</cxf-codegen-plugin.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>jakarta.jws</groupId>
+      <artifactId>jakarta.jws-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.xml.ws</groupId>
+      <artifactId>jakarta.xml.ws-api</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!--Generating classes from WSDL-->
+      <plugin>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-codegen-plugin</artifactId>
+        <version>${cxf-codegen-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <sourceRoot>${basedir}/target/generated-sources/cxf</sourceRoot>
+              <wsdlOptions>
+                <wsdlOption>
+                  <wsdl>${wsdl.dir}/ws.QASProOnDemandService.wsdl</wsdl>
+                  <extraargs>
+                    <extraarg>-verbose</extraarg>
+                    <extraarg>-autoNameResolution</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>uk.co.whitbread.qas.addresslookup.api</extraarg>
+                  </extraargs>
+                </wsdlOption>
+              </wsdlOptions>
+            </configuration>
+            <goals>
+              <goal>wsdl2java</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,12 @@
+@startuml
+entity GraphQL_endpoint
+title Retrieve content labels from AEM
+
+entity "content-entity-service" as CES
+entity AEM
+
+GraphQL_endpoint-> CES  ++: GET /content/labels?language={language}&country={country}
+CES -> AEM: GET /etc/designs/global/dictionaries/labels/i18n.jsondict.{language}
+GraphQL_endpoint<- CES -- : return content labels
+
+@enduml

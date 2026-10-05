@@ -1,0 +1,96 @@
+description: Should throw http 400 - Postcode required for GB
+request:
+  method: POST
+  url: /customers/hotels?business=false
+  headers:
+    Content-Type: application/json
+  body:
+    {
+        "acceptFutureMailing": false,
+        "alternativeName": "string",
+        "approxAnnualUKHotelSpend": "1",
+        "bookingPreference": {
+          "foodPreference": 0,
+          "reason": "LEISURE",
+          "roomRequirements": {
+            "adults": 1,
+            "children": 0,
+            "cotRequired": false,
+            "hotelBrand": "PI",
+            "lettingType": "string",
+            "roomNumber": 0,
+            "smoking": false,
+            "type": "DB"
+          },
+          "wantSmsConfirmations": false
+        },
+        "companyId": "string",
+        "companyName": "string",
+        "contactDetail": {
+          "dialingCode": "52",
+          "address": {
+            "companyName": "Whitbread",
+            "countryCode": "GB",
+            "line1": "9 New Bright Street",
+            "line2": "Testing",
+            "line3": "Testing777777",
+            "line4": "Reading",
+            "type": "HOME"
+          },
+          "carRegistration": "string",
+          "email": "stub_create_success@amadeus.com",
+          "firstName": "Bob",
+          "lastName": "Smith",
+          "mobile": "7777777777",
+          "nationality": "UK",
+          "passport": {
+            "number": "ABCDEFGHI",
+            "countryOfIssue": "BR"
+          },
+          "telephone": "07789776665",
+          "mobile": "07770123456",
+          "title": "Mr"
+        },
+        "guestHistoryNumber": "string",
+        "guestId": 0,
+        "loyalties": [
+          {
+            "code": "string",
+            "dateEnrolled": "2015-01-01",
+            "status": true
+          }
+        ],
+        "marketingPreference": {
+          "email": "jdoe@example.com",
+          "regionPreferences": [
+            "1","2","3","4","5"
+          ],
+          "wantRestaurantNews": true
+        },
+        "nextDestination": "string",
+        "password": "abcd",
+        "paymentPreference": {
+          "electronicInvoiceRequired": false,
+          "paymentCard": {
+            "cardHolderName": "string",
+            "cardNumber": "string",
+            "cardType": "string",
+            "expiryDate": "string",
+            "issueNumber": "string",
+            "startDate": "string"
+          }
+        },
+        "roomId": "string",
+        "roomNumber": 0
+      }
+response:
+  status: 400
+  headers:
+    Content-Type: application/json
+  body:
+       {
+           "code":"001",
+           "details":[
+              "contactDetail.address postcode is required for UK and Germany"
+           ]
+        }

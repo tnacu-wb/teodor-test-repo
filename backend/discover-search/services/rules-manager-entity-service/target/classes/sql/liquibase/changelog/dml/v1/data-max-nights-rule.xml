@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="tudor.codrea" id="init_data_max_nights_rule" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="max_nights_rule"/>
+
+                <sqlCheck expectedResult="0">select count(*) from rules_engine.max_nights_rule</sqlCheck>
+            </and>
+        </preConditions>
+
+        <loadData tableName="max_nights_rule" file="sql/liquibase/data/max_nights_rule_data.csv"/>
+    </changeSet>
+
+   <!-- <changeSet author="claudiu.abrudan" id="max_nights_rule_distribution">
+        <loadData tableName="max_nights_rule"
+          file="sql/liquibase/data/max_nights_rule_data_distr.csv"
+          primaryKey="rule_id"/>
+    </changeSet>-->
+
+    <changeSet author="jilani.shaik" id="max_nights_rule_distribution_1">
+        <loadData tableName="max_nights_rule"
+          file="sql/liquibase/data/max_nights_rule_data_distr_1.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+</databaseChangeLog>

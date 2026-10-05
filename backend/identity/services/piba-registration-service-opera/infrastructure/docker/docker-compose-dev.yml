@@ -1,0 +1,22 @@
+discovery:
+  image: 228079755329.dkr.ecr.eu-west-1.amazonaws.com/whitbread/discovery-service:latest
+  environment:
+    spring.profiles.active: local
+  ports:
+    - "8761:8761"
+
+pibaregistration:
+  image: whitbread/piba-registration-service
+  environment:
+    _JAVA_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5068"
+    spring.profiles.active: local
+  ports:
+   - "9051:9051"
+  links:
+    - discovery
+gateway:
+  image: 228079755329.dkr.ecr.eu-west-1.amazonaws.com/whitbread/gateway-service:latest
+  ports:
+   - "10000:10000"
+  links:
+    - piba-registration-service

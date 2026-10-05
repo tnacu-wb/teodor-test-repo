@@ -1,0 +1,38 @@
+{
+  "id" : "3becc0fa-2353-4ec4-9803-6009a8dadf9c",
+  "request" : {
+    "url" : "/marketing/hotels/newsletter/edit",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['userId'] == 'name.surname')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*][?(@.['contactChannelType'] == 'Email')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*][?(@.['contactChannelValue'] == 'email500@housemark.co.uk')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*][?(@.['contactChannelPermission'] == 'false')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['brandCodes'][?(@ == 'WINN')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['contentPermission'][?(@.['secondParty'] == true)]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['contentPermission'][?(@.['thirdParty'] == true)]"
+    } ]
+  },
+  "response" : {
+    "status" : 500,
+    "body" : "{\"code\":\"3001\",\"details\":[\"Unknown error.\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "3becc0fa-2353-4ec4-9803-6009a8dadf9c"
+}

@@ -1,0 +1,103 @@
+# Ephemeral (per-PR) values for address-lookup-entity-service.
+#
+# ci-matrix-deploy-eph.yaml layers this file OVER the backend stack defaults at
+# backend/infrastructure/helm/ephemeral-values.yaml:
+#
+#   opera-app-chart/values.yaml  <  stack ephemeral defaults  <  THIS FILE  <  --set
+#
+# So everything generic to a PR release — canary/autoscaling/pdb/istio/prometheus all
+# off, replicaCount 1, the trimmed lifecycle and grace period, ndots, probe TIMINGS,
+# imagePullSecrets, namespace — is inherited and must NOT be repeated here. What is
+# left is what is genuinely service-specific: ports, probe paths, environment, memory.
+#
+# Overridden per-deploy by ci-matrix-deploy-eph.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create, ephemeral
+#
+# ── Why the environment is inlined ───────────────────────────────────────────
+#
+# The chart names its ConfigMap `{{ applicationName }}-configmap`, and applicationName
+# is the PR release name here — so `configMap.create: true` would produce
+# `address-lookup-entity-service-pr-N-configmap` while the env refs below still name the
+# fixed `address-lookup-entity-service-configmap`. Rather than depend on the shared
+# Flux-managed ConfigMap, the non-secret values are inlined as literals: the release is
+# then self-contained and cannot be broken by a GitOps change landing mid-PR.
+# Secrets stay as refs — nothing in .github/workflows creates them.
+
+# ── Identity ─────────────────────────────────────────────────────────────────
+# Replaced with the PR release name at deploy time; kept so `helm template` renders
+# standalone for local inspection.
+applicationName: address-lookup-entity-service
+
+image:
+  # Ephemeral images come from ECR. Repository and tag are both --set by the workflow;
+  # the value here only documents the shape.
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/address-lookup-entity-service
+
+deployment:
+  containerPorts:
+    - containerPort: 9111
+      protocol: TCP
+      name: http
+    # Not published through the Service — reach it with
+    # `kubectl port-forward -n opera-be deploy/<release> 5005:5005`.
+    - containerPort: 5005
+      protocol: TCP
+      name: debug
+
+  containerEnvs:
+    # A PR environment exists to be debugged: opera-dev turns on DEBUG logging for
+    # uk.co.whitbread and exposes the metrics/prometheus actuator endpoints.
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    # MaxRAMPercentage is sized against the memory LIMIT, which is why requests.memory
+    # below is raised to match it.
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=70 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # QAS (Experian address lookup) — the sandbox endpoint dev uses.
+    - name: QAS_URL
+      value: https://ws.ondemand.qas.com
+    # `optional: true` is what keeps a missing secret a degraded environment rather than
+    # a broken one: a hard secretKeyRef to a secret that is not in opera-be leaves the
+    # pod in CreateContainerConfigError forever and `helm --wait` just times out. With
+    # the token absent every QAS call fails and the rest of the service stays testable.
+    - name: QAS_AUTH_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: qas-secrets
+          key: qas_auth_token
+          optional: true
+
+  readinessProbe:
+    httpGet:
+      path: /v1/addresses/actuator/health/readiness
+      port: 9111
+
+  livenessProbe:
+    httpGet:
+      path: /v1/addresses/actuator/health/liveness
+      port: 9111
+
+  # Only memory is stated: `resources` is a map, so requests.cpu (50m) and the rest of
+  # the stack default merge through. requests.memory is pinned to limits.memory because
+  # the heap is sized off the limit — see JAVA_OPTS above.
+  resources:
+    requests:
+      memory: 1024Mi
+    limits:
+      memory: 1024Mi
+
+service:
+  # Replaced with the release name at deploy time. The chart names the Service after
+  # applicationName but points anything routing at service.name, so leaving this pinned
+  # to the production name would send traffic at production.
+  name: address-lookup-entity-service
+  # Port 80 matches how every other service addresses this one (bare hostname, no port),
+  # so a second PR release pointed at this one needs no special-casing. Reach it at
+  #   <release-name>.opera-be.svc.cluster.local
+  ports:
+    - port: 80
+      targetPort: 9111
+      protocol: TCP
+      name: port9111

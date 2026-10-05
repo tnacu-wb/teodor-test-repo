@@ -1,0 +1,23 @@
+description: Tether By Card Request Failure
+request:
+    method: POST
+    url: /business/tether
+    body:
+        {
+          "linkCode": "mtr-36s-unk",
+          "linkId": 3089500110017600027,
+          "memorableWord": "word"
+        }
+    headers:
+        Content-Type: application/json;charset=UTF-8
+        Authorization: Bearer dummy_value
+
+
+response :
+    status: 500
+    body :
+        {
+            "code":"ValidationError",
+            "details": ["TetherFailCardNotCorrectAccount"]
+        }
+

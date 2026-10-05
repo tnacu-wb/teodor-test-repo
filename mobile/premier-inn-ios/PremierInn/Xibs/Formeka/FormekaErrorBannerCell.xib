@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="FPs-5t-ILP" customClass="FormekaErrorBannerCell" customModule="Formeka">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="57"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FPs-5t-ILP" id="x0S-Ec-coo">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="56.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7gV-Qu-qXb">
+                        <rect key="frame" x="20" y="17" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="F9n-19-bAX"/>
+                            <constraint firstAttribute="width" secondItem="7gV-Qu-qXb" secondAttribute="height" multiplier="1:1" id="Uh3-Rx-aXe"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XQB-I2-GKp">
+                        <rect key="frame" x="50" y="15" width="305" height="26.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="7gV-Qu-qXb" firstAttribute="leading" secondItem="x0S-Ec-coo" secondAttribute="leading" constant="20" id="05d-Qp-cRh"/>
+                    <constraint firstItem="XQB-I2-GKp" firstAttribute="top" secondItem="x0S-Ec-coo" secondAttribute="top" constant="15" id="6kW-kC-JNE"/>
+                    <constraint firstAttribute="trailing" secondItem="XQB-I2-GKp" secondAttribute="trailing" constant="20" id="DFx-b5-6oR"/>
+                    <constraint firstAttribute="bottom" secondItem="XQB-I2-GKp" secondAttribute="bottom" priority="750" constant="15" id="M34-1v-m0u"/>
+                    <constraint firstItem="XQB-I2-GKp" firstAttribute="leading" secondItem="7gV-Qu-qXb" secondAttribute="trailing" constant="10" id="Qqv-yg-XzC"/>
+                    <constraint firstItem="7gV-Qu-qXb" firstAttribute="top" secondItem="x0S-Ec-coo" secondAttribute="top" constant="17" id="ZBs-yY-d3n"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="icon" destination="7gV-Qu-qXb" id="HMl-aX-mdE"/>
+                <outlet property="message" destination="XQB-I2-GKp" id="EDi-WJ-zYC"/>
+            </connections>
+            <point key="canvasLocation" x="-324.5" y="-301"/>
+        </tableViewCell>
+    </objects>
+</document>

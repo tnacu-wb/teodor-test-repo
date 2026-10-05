@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="teodora.verdes2" id="tag_delete-room-substitution-rule-FMFOUR-FMTHRE">
+        <tagDatabase tag="version_delete-room-substitution-rule-FMFOUR-FMTHRE" />
+    </changeSet>
+
+    <changeSet author="teodora.verdes2" id="delete-room-substitution-rule-FMFOUR-FMTHRE">
+        <delete schemaName="rules_engine" tableName="room_substitution_rule">
+            <where>rule_id=2008</where>
+        </delete>
+
+        <delete schemaName="rules_engine" tableName="room_substitution_rule">
+            <where>rule_id=2009</where>
+        </delete>
+
+        <delete schemaName="rules_engine" tableName="room_substitution_rule">
+            <where>rule_id=2010</where>
+        </delete>
+    </changeSet>
+
+</databaseChangeLog>

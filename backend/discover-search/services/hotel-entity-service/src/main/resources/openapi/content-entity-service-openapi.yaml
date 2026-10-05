@@ -1,0 +1,4757 @@
+openapi: 3.0.1
+info:
+  description: <p>TBU</p>
+  title: Content Entity Service API Documentation
+  version: 2.0.0-SNAPSHOT
+servers:
+  - description: Generated server url
+    url: http://localhost:9106
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  /v1/content/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+      summary: Actuator root web endpoint
+      tags:
+        - Actuator
+  /v1/content/actuator/caches:
+    delete:
+      operationId: clearCaches
+      responses:
+        "204":
+          description: No Content
+      summary: Actuator web endpoint 'caches'
+      tags:
+        - Actuator
+    get:
+      operationId: caches
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'caches'
+      tags:
+        - Actuator
+  /v1/content/actuator/caches/{cache}:
+    delete:
+      operationId: clearCache
+      parameters:
+        - in: path
+          name: cache
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: cacheManager
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+      summary: Actuator web endpoint 'caches-cache'
+      tags:
+        - Actuator
+    get:
+      operationId: cache
+      parameters:
+        - in: path
+          name: cache
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: cacheManager
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "404":
+          description: Not Found
+      summary: Actuator web endpoint 'caches-cache'
+      tags:
+        - Actuator
+  /v1/content/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'health'
+      tags:
+        - Actuator
+  /v1/content/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'info'
+      tags:
+        - Actuator
+  /v1/content/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'metrics'
+      tags:
+        - Actuator
+  /v1/content/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+        - in: path
+          name: requiredMetricName
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: tag
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "404":
+          description: Not Found
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+        - Actuator
+  /v1/content/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+        - in: query
+          name: format
+          schema:
+            type: string
+            enum:
+              - CONTENT_TYPE_004
+              - CONTENT_TYPE_OPENMETRICS_100
+              - CONTENT_TYPE_PROTOBUF
+        - in: query
+          name: includedNames
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+        - Actuator
+  /v1/content/allhotels:
+    get:
+      operationId: getAllHotelsShortInformation
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/HotelShortInformationDto"
+          description: OK
+      summary: Retrieves All Hotels Short Information
+      tags:
+        - hotel-information-controller
+  /v1/content/booking:
+    get:
+      operationId: getBookingInformation
+      parameters:
+        - in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: bookingFlowId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: ratePlanCodes
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: reservationRatePlanCode
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingInformationDto"
+          description: OK
+      summary: Retrieves Booking Information
+      tags:
+        - booking-information-controller
+  /v1/content/booking/hotelRateInformation:
+    get:
+      operationId: getHotelRateInformation
+      parameters:
+        - in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: ratePlans
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: channel
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateInformationDto"
+          description: OK
+      summary: Retrieves Hotel Rate Information from AEM
+      tags:
+        - booking-information-controller
+  /v1/content/booking/rateInformation:
+    get:
+      operationId: getRateInformation
+      parameters:
+        - in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: ratePlans
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: channel
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateInformationDto"
+          description: OK
+      summary: Retrieves Rate Information
+      tags:
+        - booking-information-controller
+  /v1/content/businessNotes:
+    get:
+      operationId: getBusinessNotes
+      parameters:
+        - example: en
+          in: query
+          name: lang
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessNotesResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves texts for business notes
+      tags:
+        - business-note-controller
+  /v1/content/cookie-policies:
+    get:
+      operationId: getCookiePolicies
+      parameters:
+        - in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CookiePoliciesInformationDto"
+          description: OK
+      summary: 'Retrieves Cookie Policies '
+      tags:
+        - cookie-policies-controller
+  /v1/content/countries:
+    get:
+      operationId: getCountries
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - example: leisure
+          in: query
+          name: site
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CountriesDto"
+          description: OK
+      summary: Retrieves Countries Info
+      tags:
+        - countries-controller
+  /v1/content/dlp-information:
+    get:
+      operationId: getDlpInformation
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: false
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: false
+          schema:
+            type: string
+        - example: /england/bedfordshire/luton
+          in: query
+          name: dlpPath
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DlpInformationDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves the DLP information for a specified county or town
+      tags:
+        - dlp-information-controller
+  /v1/content/footer:
+    get:
+      operationId: getFooter
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - example: leisure
+          in: query
+          name: site
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FooterResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Footer Info
+      tags:
+        - footer-controller
+  /v1/content/global-config:
+    get:
+      operationId: getGlobalConfig
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: false
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: false
+          schema:
+            type: string
+        - example: DISTR
+          in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+        - example: PI
+          in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalConfigDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves global config from AEM
+      tags:
+        - global-config-controller
+  /v1/content/header/data:
+    get:
+      operationId: getIndexHeaderData
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - example: true
+          in: query
+          name: businessBooker
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndexHeaderDataDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Index Header Data
+      tags:
+        - index-header-data-controller
+  /v1/content/homepage:
+    get:
+      operationId: getHomepageApps
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - example: PI
+          in: query
+          name: channel
+          required: true
+          schema:
+            type: string
+        - example: WEB
+          in: query
+          name: subchannel
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DlpInformationDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves homepage's elements from AEM
+      tags:
+        - apps-homepage-controller
+  /v1/content/hotels:
+    get:
+      operationId: getHotelInformationBySlug
+      parameters:
+        - example: england/greater-london/london/london-kings-cross
+          in: query
+          name: slug
+          required: true
+          schema:
+            type: string
+        - example: BB
+          in: query
+          name: channel
+          required: false
+          schema:
+            type: string
+        - example: WEB
+          in: query
+          name: subchannel
+          required: false
+          schema:
+            type: string
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelInformationDto"
+          description: OK
+      summary: Retrieves Hotel Information by Slug
+      tags:
+        - hotel-information-controller
+  /v1/content/hotels/facilities/updater/trigger:
+    get:
+      operationId: triggerUpdateHotelsFacilitiesCache
+      responses:
+        "200":
+          description: OK
+      summary: Trigger Hotel Facilities Cache Update
+      tags:
+        - hotel-information-controller
+  /v1/content/hotels/information:
+    get:
+      operationId: getHotelsInformation
+      parameters:
+        - in: query
+          name: hotelIds
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: latitudeRef
+          required: false
+          schema:
+            type: number
+            format: double
+        - in: query
+          name: longitudeRef
+          required: false
+          schema:
+            type: number
+            format: double
+        - in: query
+          name: tripAdvisorDataRequired
+          required: false
+          schema:
+            type: boolean
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/HotelInformationDto"
+          description: OK
+      summary: Retrieves Hotels Information by list of HotelIds
+      tags:
+        - hotel-information-controller
+  /v1/content/hotels/opening-soon/updater/trigger:
+    get:
+      operationId: triggerUpdateHotelsOpeningSoonCache
+      responses:
+        "200":
+          description: OK
+      summary: Trigger Hotel Opening Soon Cache Update
+      tags:
+        - hotel-information-controller
+  /v1/content/hotels/{hotelId}/information:
+    get:
+      operationId: getHotelInformation
+      parameters:
+        - in: path
+          name: hotelId
+          required: true
+          schema:
+            type: string
+        - example: BB
+          in: query
+          name: channel
+          required: false
+          schema:
+            type: string
+        - example: WEB
+          in: query
+          name: subchannel
+          required: false
+          schema:
+            type: string
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelInformationExtendedDto"
+          description: OK
+      summary: Retrieves Hotel Information
+      tags:
+        - hotel-information-controller
+  /v1/content/hotels/{hotelId}/payment-information:
+    get:
+      operationId: getHotelPaymentInformation
+      parameters:
+        - in: path
+          name: hotelId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: requestDto
+          required: true
+          schema:
+            $ref: "#/components/schemas/HotelInformationRequestDto"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelPaymentInformationDto"
+          description: OK
+      summary: Retrieves Hotel Payment Information
+      tags:
+        - hotel-information-controller
+  /v1/content/innb/cardmgmt:
+    get:
+      operationId: getCardManagementInfo
+      parameters:
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CardManagementResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Card Management Info
+      tags:
+        - card-management-controller
+  /v1/content/innb/header:
+    get:
+      operationId: getHeaderInfo
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HeaderResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Header Info
+      tags:
+        - header-controller
+  /v1/content/innb/pagedata:
+    get:
+      operationId: getPageData
+      parameters:
+        - in: query
+          name: dictionaries
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - LAYOUT_DICTIONARY
+                - CARD_MANAGEMENT_DICTIONARY
+                - COMMON_ICONS_DICTIONARY
+                - USER_MANAGEMENT_DICTIONARY
+                - PROFILE_MANAGEMENT_DICTIONARY
+                - COMPANY_MANAGEMENT_DICTIONARY
+                - HOMEPAGE_DICTIONARY
+                - SPENDING_REPORTING_DICTIONARY
+                - PAY_APPLICATION_DICTIONARY
+                - AUTH_DICTIONARY
+                - NOTIFICATIONS_DICTIONARY
+                - CONTACT_US_DICTIONARY
+            maxItems: 100
+            minItems: 1
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves page info by requested dictionary
+      tags:
+        - page-data-controller
+  /v1/content/labels:
+    get:
+      operationId: getLabels
+      parameters:
+        - in: query
+          name: categories
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - MAIN
+                - PI_BOOKINGS
+                - BOOKING
+                - PI_PRE_CHECKIN
+                - PI_GROUP_BOOKING
+                - EXTRAS
+                - PROMOTIONS
+            maxItems: 100
+            minItems: 1
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Label Info
+      tags:
+        - labels-controller
+  /v1/content/labels/extras:
+    get:
+      operationId: getExtras
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExtrasLabelDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Extras Info
+      tags:
+        - labels-controller
+  /v1/content/labels/{category}:
+    get:
+      operationId: getLabels_1
+      parameters:
+        - example: amend
+          in: path
+          name: category
+          required: true
+          schema:
+            type: string
+        - example: "label1,label2"
+          in: query
+          name: labels
+          required: false
+          schema:
+            type: string
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Label Info by Category
+      tags:
+        - labels-controller
+  /v1/content/meals:
+    get:
+      operationId: getMealsInfo
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - example: GLASTA
+          in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MealsInfoResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Meals Info
+      tags:
+        - meals-info-controller
+  /v1/content/price-finder/global-config:
+    get:
+      operationId: getPriceFinderGlobalConfig
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: false
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: false
+          schema:
+            type: string
+        - example: DISTR
+          in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+        - example: PI
+          in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+        - example: path/to/content
+          in: query
+          name: path
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PriceFinderGlobalConfigDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves the price finder config from AEM
+      tags:
+        - price-finder-global-config-controller
+  /v1/content/promo-config:
+    get:
+      operationId: getPromoConfig
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: false
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: false
+          schema:
+            type: string
+        - example: DISTR
+          in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+        - example: PI
+          in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+        - example: ST10R
+          in: query
+          name: promotionCode
+          required: false
+          schema:
+            type: string
+        - example: Arrival date in format yyyy-mm-dd
+          in: query
+          name: BookingDate
+          required: true
+          schema:
+            type: string
+        - example: Arrival date in format yyyy-mm-dd
+          in: query
+          name: stayStartDate
+          required: true
+          schema:
+            type: string
+        - example: Arrival date in format yyyy-mm-dd
+          in: query
+          name: stayEndDate
+          required: true
+          schema:
+            type: string
+        - example: SITE_WIDE
+          in: query
+          name: promoKind
+          required: false
+          schema:
+            type: string
+        - example: true
+          in: query
+          name: isAmendRequest
+          required: false
+          schema:
+            type: boolean
+        - example: true
+          in: query
+          name: isPromoBox
+          required: false
+          schema:
+            type: boolean
+        - example: ST10R
+          in: query
+          name: operaPromoCode
+          required: false
+          schema:
+            type: string
+        - example: ISSUED
+          in: query
+          name: uniquePromoCodeStatus
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PromotionsInformationResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves promo config from AEM
+      tags:
+        - global-config-controller
+  /v1/content/room-class-config:
+    get:
+      operationId: getRoomClassConfig
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: false
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: false
+          schema:
+            type: string
+        - example: DISTR
+          in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+        - example: PI
+          in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomClassConfigDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves the room class config from AEM
+      tags:
+        - global-config-controller
+  /v1/content/room-type:
+    get:
+      operationId: getRoomTypeInformation
+      parameters:
+        - in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: hotelId
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomTypeDto"
+          description: OK
+      summary: 'Retrieves Room Types '
+      tags:
+        - room-type-controller
+  /v1/content/searchresults/data:
+    get:
+      operationId: getSearchResultsData
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResultsDataDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Search Results Data
+      tags:
+        - search-results-data-controller
+  /v1/content/searchrules:
+    get:
+      operationId: getSearchRules
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: false
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: false
+          schema:
+            type: string
+        - example: DISTR
+          in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+        - example: PI
+          in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchRulesDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Search Rules
+      tags:
+        - global-config-controller
+  /v1/content/seo:
+    get:
+      operationId: getSeo
+      parameters:
+        - example: MANOLD
+          in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+        - example: hdp
+          in: query
+          name: page
+          required: true
+          schema:
+            type: string
+            pattern: Home|SRP|HDP|Ancillaries|GDP|Payment|Confirmation|Amend|Dashboard|CYB|Register|CYT
+        - example: GB
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: bookingFlowId
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SeoResponseDto"
+          description: OK
+      summary: Retrieves SEO Info
+      tags:
+        - seo-controller
+components:
+  schemas:
+    AcceptedCreditCardDto:
+      type: object
+      properties:
+        code:
+          type: string
+        code3CP:
+          type: string
+        codeOpera:
+          type: string
+        codeOperaCardType:
+          type: string
+        feeAmount:
+          type: string
+        feeCurrency:
+          type: string
+        listOrder:
+          type: string
+        name:
+          type: string
+        paymentOnly:
+          type: boolean
+        schemeLogo:
+          type: string
+    AcceptedRoomTypesDto:
+      type: object
+      properties:
+        acceptedRoomTypes:
+          type: array
+          items:
+            type: string
+        adultsNumber:
+          type: integer
+          format: int32
+        childrenNumber:
+          type: integer
+          format: int32
+    AccessibilityInfoDto:
+      type: object
+      properties:
+        header:
+          type: string
+        linkText:
+          type: string
+        phoneNumber:
+          type: string
+        text:
+          type: string
+    AccountLinkDto:
+      type: object
+      properties:
+        icon:
+          type: string
+        title:
+          type: string
+        url:
+          type: string
+    AddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        country:
+          type: string
+        postalCode:
+          type: string
+    AmazonChatDto:
+      type: object
+      properties:
+        amazonAuthUrl:
+          type: string
+        amazonChatId:
+          type: string
+        amazonChatSnippetId:
+          type: string
+        amazonChatUrl:
+          type: string
+        chatBotStatus:
+          type: string
+        webChatEnabledPages:
+          type: array
+          items:
+            type: string
+    AncillaryCloseoutDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/AncillaryCloseoutItemDto"
+    AncillaryCloseoutItemDto:
+      type: object
+      properties:
+        endDate:
+          type: string
+        serviceCode:
+          type: string
+        startDate:
+          type: string
+        text:
+          type: string
+        upsellCodes:
+          type: string
+    AnnouncementDto:
+      type: object
+      properties:
+        browserCompatibilityMessage:
+          type: string
+        text:
+          type: string
+        type:
+          type: string
+    ApiDto:
+      type: object
+      properties:
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+    ApplyBannerDto:
+      type: object
+      properties:
+        applyNowButton:
+          type: string
+        image:
+          type: string
+        linkAccountButton:
+          type: string
+        subtitle:
+          type: string
+        title:
+          type: string
+    ArrowDto:
+      type: object
+      properties:
+        down:
+          type: string
+        left:
+          type: string
+        right:
+          type: string
+        up:
+          type: string
+    AttachmentsDto:
+      type: object
+      properties:
+        label:
+          type: string
+        path:
+          type: string
+        type:
+          type: string
+    AuthenticationDto:
+      type: object
+      properties:
+        accountDescription:
+          type: string
+        accountLinks:
+          type: array
+          items:
+            $ref: "#/components/schemas/AccountLinkDto"
+        business:
+          $ref: "#/components/schemas/BusinessDto"
+        businessAccountCardRedirectPath:
+          type: string
+        forgottenPassword:
+          $ref: "#/components/schemas/ForgottenPasswordDto"
+        goBackButton:
+          type: string
+        login:
+          $ref: "#/components/schemas/LoginDto"
+        logoutButton:
+          type: string
+        resetPassword:
+          $ref: "#/components/schemas/ResetPasswordDto"
+        signUpButton:
+          type: string
+    Awards:
+      type: object
+      properties:
+        awardType:
+          type: string
+        image:
+          type: string
+        year:
+          type: string
+      required:
+        - awardType
+        - image
+        - year
+    BadgeDto:
+      type: object
+      properties:
+        accountHolder:
+          type: string
+    BannerDto:
+      type: object
+      properties:
+        imagePath:
+          type: string
+    BookRestaurantCtaDto:
+      type: object
+      properties:
+        bookingCardCtaLink:
+          type: string
+        bookingCardCtaText:
+          type: string
+        bookingCardTrackingId:
+          type: string
+    BookingChannelDto:
+      type: object
+      properties:
+        business:
+          type: string
+        leisure:
+          type: string
+    BookingFlowDto:
+      type: object
+      properties:
+        bookingFlowItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingFlowItemDto"
+        targetBookingFlowItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/TargetBookingFlowItemDto"
+    BookingFlowItemDto:
+      type: object
+      properties:
+        bookingFlowPath:
+          type: string
+        bookingId:
+          type: string
+        bookingIdBB:
+          type: string
+        rateCategory:
+          type: string
+        rateCode:
+          type: string
+    BookingFlowStepDto:
+      type: object
+      properties:
+        id:
+          type: string
+        step:
+          type: string
+        title:
+          type: string
+    BookingInformationDto:
+      type: object
+      properties:
+        bookingFlowSteps:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingFlowStepDto"
+        bookingSpinnerConfig:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingSpinnerConfigDto"
+        brand:
+          type: string
+        donation:
+          $ref: "#/components/schemas/DonationDto"
+        infoMessages:
+          type: array
+          items:
+            $ref: "#/components/schemas/InfoMessageDto"
+        mealsNotAvailableMessage:
+          type: string
+        mealsNotAvailableTitle:
+          type: string
+        paymentInfoMessages:
+          type: array
+          items:
+            $ref: "#/components/schemas/PaymentInfoMessageDto"
+        privacyPolicy:
+          $ref: "#/components/schemas/PrivacyPolicyDto"
+        promotionPanels:
+          type: array
+          items:
+            $ref: "#/components/schemas/PromotionPanelDto"
+        restaurantClosedMessage:
+          type: string
+        restaurantClosedTitle:
+          type: string
+        termsAndConditions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TermsAndConditionsDto"
+        upsellItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemDto"
+    BookingSearchDto:
+      type: object
+      properties:
+        dashboardRedirect:
+          $ref: "#/components/schemas/DashboardRedirectDto"
+        show:
+          type: boolean
+    BookingSpinnerConfigDto:
+      type: object
+      properties:
+        order:
+          type: string
+        seconds:
+          type: string
+        text:
+          type: string
+    BrandDto:
+      type: object
+      properties:
+        hub:
+          type: string
+        hubBadge:
+          type: string
+        hubHdpLogo:
+          type: string
+        hubLogo:
+          type: string
+        pi:
+          type: string
+        piLogo:
+          type: string
+        pid:
+          type: string
+        pidLogo:
+          type: string
+        zip:
+          type: string
+        zipBadge:
+          type: string
+        zipLogo:
+          type: string
+        zipLogoWhite:
+          type: string
+    Breadcrumb:
+      type: object
+      properties:
+        link:
+          type: string
+        title:
+          type: string
+      required:
+        - link
+        - title
+    BreadcrumbDto:
+      type: object
+      properties:
+        link:
+          type: string
+        title:
+          type: string
+    BusinessAccountCardDto:
+      type: object
+      properties:
+        banner:
+          $ref: "#/components/schemas/BannerDto"
+        buttonLabel:
+          type: string
+        tab:
+          type: string
+        tabMobile:
+          type: string
+        textBody:
+          type: string
+        title:
+          type: string
+    BusinessAccountLinkDto:
+      type: object
+      properties:
+        subMenuLinks:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubMenuLinkDto"
+        title:
+          type: string
+    BusinessDto:
+      type: object
+      properties:
+        bookingDashboardRedirectPath:
+          type: string
+        bookingEmailMaxLengthMsg:
+          type: string
+        bookingLoginRequiredText:
+          type: string
+        bookingsInvalidEmailMsg:
+          type: string
+        businessAccountLinks:
+          type: array
+          items:
+            $ref: "#/components/schemas/BusinessAccountLinkDto"
+        companyActivateFailBody:
+          type: string
+        companyActivateFailTitle:
+          type: string
+        companyActivateSuccessBody:
+          type: string
+        companyActivateSuccessTitle:
+          type: string
+        doubleOptInFailMessage:
+          type: string
+        doubleOptInSuccessMessage:
+          type: string
+        emailPlaceholder:
+          type: string
+        employeeActivationSuccessTitle:
+          type: string
+        forgotPasswordLink:
+          type: string
+        formLabel:
+          type: string
+        formTitle:
+          type: string
+        loginButton:
+          type: string
+        loginInfoNotification:
+          type: string
+        signupButton:
+          type: string
+        signupUrl:
+          type: string
+        submitButton:
+          type: string
+        tab:
+          type: string
+        tabMobile:
+          type: string
+    BusinessNoteDto:
+      type: object
+      properties:
+        allow:
+          type: string
+        deny:
+          type: string
+        id:
+          type: string
+        lang:
+          type: string
+    BusinessNotesResponseDto:
+      type: object
+      properties:
+        allowances:
+          type: array
+          items:
+            $ref: "#/components/schemas/NoteDto"
+        businessNotes:
+          type: array
+          items:
+            $ref: "#/components/schemas/BusinessNoteDto"
+        cardTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/NoteDto"
+        footers:
+          type: array
+          items:
+            $ref: "#/components/schemas/NoteDto"
+        headers:
+          type: array
+          items:
+            $ref: "#/components/schemas/NoteDto"
+        packages:
+          type: array
+          items:
+            $ref: "#/components/schemas/NoteDto"
+    CardHolderDto:
+      type: object
+      properties:
+        options:
+          $ref: "#/components/schemas/CardHolderOptionsDto"
+    CardHolderOptionsDto:
+      type: object
+      properties:
+        registered:
+          type: string
+        resendCode:
+          type: string
+    CardManagementContentDto:
+      type: object
+      properties:
+        applyBanner:
+          $ref: "#/components/schemas/ApplyBannerDto"
+        badge:
+          $ref: "#/components/schemas/BadgeDto"
+        cardHolder:
+          $ref: "#/components/schemas/CardHolderDto"
+        cardManagement:
+          $ref: "#/components/schemas/CardManagementDto"
+        cardStatus:
+          $ref: "#/components/schemas/CardStatusDto"
+        columns:
+          $ref: "#/components/schemas/ColumnsDto"
+        creditBox:
+          $ref: "#/components/schemas/CreditBoxDto"
+        download:
+          $ref: "#/components/schemas/DownloadDto"
+        expenseBox:
+          $ref: "#/components/schemas/ExpenseBoxDto"
+        filters:
+          $ref: "#/components/schemas/FiltersDto"
+        invoicesBox:
+          $ref: "#/components/schemas/InvoicesBoxDto"
+        linkAccountBanner:
+          $ref: "#/components/schemas/LinkAccountBannerDto"
+        newCard:
+          $ref: "#/components/schemas/NewCardDto"
+        tabs:
+          $ref: "#/components/schemas/TabsDto"
+        title:
+          type: string
+    CardManagementDto:
+      type: object
+      properties:
+        info:
+          type: string
+        title:
+          type: string
+    CardManagementResponseDto:
+      type: object
+      properties:
+        cardManagementContent:
+          $ref: "#/components/schemas/CardManagementContentDto"
+        commonIcons:
+          $ref: "#/components/schemas/CommonIconsDto"
+    CardStatusDto:
+      type: object
+      properties:
+        options:
+          $ref: "#/components/schemas/CardStatusOptionsDto"
+    CardStatusOptionsDto:
+      type: object
+      properties:
+        activate:
+          type: string
+        active:
+          type: string
+        cancelled:
+          type: string
+        dispatching:
+          type: string
+        expired:
+          type: string
+    CardsDto:
+      type: object
+      properties:
+        icon:
+          type: string
+        link:
+          type: string
+        title:
+          type: string
+    CentrallyStoredDto:
+      type: object
+      properties:
+        description:
+          type: string
+    ChevronDto:
+      type: object
+      properties:
+        down:
+          type: string
+        downPurple:
+          type: string
+        left:
+          type: string
+        leftPurple:
+          type: string
+        right:
+          type: string
+        rightPurple:
+          type: string
+        up:
+          type: string
+        upPurple:
+          type: string
+    ColumnsDto:
+      type: object
+      properties:
+        cardHolderName:
+          type: string
+        cardHolderRegistered:
+          type: string
+        cardId:
+          type: string
+        cardLabel:
+          type: string
+        cardNumber:
+          type: string
+        cardStatus:
+          type: string
+        edit:
+          type: string
+        expiry:
+          type: string
+        yourCard:
+          type: string
+    CommonIconsDto:
+      type: object
+      properties:
+        arrow:
+          $ref: "#/components/schemas/ArrowDto"
+        chevron:
+          $ref: "#/components/schemas/ChevronDto"
+        notification:
+          $ref: "#/components/schemas/NotificationDto"
+        payment:
+          $ref: "#/components/schemas/PaymentDto"
+    ConfigDto:
+      type: object
+      properties:
+        amazonChat:
+          $ref: "#/components/schemas/AmazonChatDto"
+        api:
+          $ref: "#/components/schemas/ApiDto"
+        authentication:
+          $ref: "#/components/schemas/AuthenticationDto"
+        bookingSearch:
+          $ref: "#/components/schemas/BookingSearchDto"
+        promotionBanner:
+          $ref: "#/components/schemas/PromotionBannerDto"
+        roomCodes:
+          $ref: "#/components/schemas/RoomCodesDto"
+    ContactDetailsDto:
+      type: object
+      properties:
+        email:
+          type: string
+        hotelNationalPhone:
+          type: string
+        phone:
+          type: string
+    ContactDto:
+      type: object
+      properties:
+        icon:
+          type: string
+        iconActive:
+          type: string
+        label:
+          type: string
+    ContentDto:
+      type: object
+      properties:
+        authentication:
+          $ref: "#/components/schemas/AuthenticationDto"
+        countries:
+          type: array
+          items:
+            $ref: "#/components/schemas/CountryDto"
+        favicon:
+          $ref: "#/components/schemas/FaviconDto"
+        global:
+          $ref: "#/components/schemas/GlobalDto"
+        header:
+          $ref: "#/components/schemas/HeaderDto"
+        hero:
+          $ref: "#/components/schemas/HeroDto"
+        menu:
+          $ref: "#/components/schemas/MenuDto"
+        seo:
+          $ref: "#/components/schemas/SeoDto"
+        subNav:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubNavDto"
+    CookieDto:
+      type: object
+      properties:
+        domain:
+          type: string
+        minutesTillExpiry:
+          type: string
+        name:
+          type: string
+    CookieDurationConfigDto:
+      type: object
+      properties:
+        cookieOptInExpiryDays:
+          type: string
+        cookieOptOutExpiryDays:
+          type: string
+    CookieGroupDto:
+      type: object
+      properties:
+        cookieName:
+          type: string
+        description:
+          type: string
+        isAlwaysActive:
+          type: boolean
+        title:
+          type: string
+        toggleLabel:
+          type: string
+    CookiePoliciesDto:
+      type: object
+      properties:
+        brand:
+          type: string
+        config:
+          $ref: "#/components/schemas/CookieDurationConfigDto"
+        introView:
+          $ref: "#/components/schemas/IntroViewDto"
+        manageView:
+          $ref: "#/components/schemas/ManageViewDto"
+        version:
+          type: string
+    CookiePoliciesInformationDto:
+      type: object
+      properties:
+        cookiePolicies:
+          $ref: "#/components/schemas/CookiePoliciesDto"
+    CoordinatesDto:
+      type: object
+      properties:
+        hideHotelDistance:
+          type: boolean
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        radius:
+          type: string
+    CountriesDto:
+      type: object
+      properties:
+        countries:
+          type: array
+          items:
+            $ref: "#/components/schemas/CountryInformationDto"
+    CountryDto:
+      type: object
+      properties:
+        flagUrl:
+          type: string
+        language:
+          type: string
+    CountryInformationDto:
+      type: object
+      properties:
+        countryCode:
+          type: string
+        countryCodeLegacy:
+          type: string
+        countryName:
+          type: string
+        dialingCode:
+          type: string
+        flagSrc:
+          type: string
+        nationality:
+          type: string
+        passportRequired:
+          type: boolean
+    CreditBoxDto:
+      type: object
+      properties:
+        icon:
+          type: string
+        subtitle:
+          type: string
+        title:
+          type: string
+    DashboardRedirectDto:
+      type: object
+      properties:
+        bookingReference:
+          type: string
+        cookie:
+          $ref: "#/components/schemas/CookieDto"
+        operaUrl:
+          type: string
+        url:
+          type: string
+    DatePickerDto:
+      type: object
+      properties:
+        checkOut:
+          type: string
+        invalidDate:
+          type: string
+        reset:
+          type: string
+    DestinationsDto:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            $ref: "#/components/schemas/LocationsDto"
+    DlpDto:
+      type: object
+      properties:
+        dlpItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/DlpItemDto"
+        title:
+          type: string
+    DlpInformationDto:
+      type: object
+      properties:
+        breadcrumbs:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreadcrumbDto"
+        coordinates:
+          $ref: "#/components/schemas/CoordinatesDto"
+        description:
+          type: string
+        dlps:
+          $ref: "#/components/schemas/DlpDto"
+        faq:
+          type: array
+          items:
+            $ref: "#/components/schemas/FaqDto"
+        hotels:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelDto"
+        picture:
+          type: string
+        promos:
+          type: array
+          items:
+            $ref: "#/components/schemas/PromoDto"
+        seo:
+          $ref: "#/components/schemas/SeoDto"
+        thingsToDo:
+          $ref: "#/components/schemas/ThingsToDoDto"
+        title:
+          type: string
+        why:
+          $ref: "#/components/schemas/WhyDto"
+    DlpItemDto:
+      type: object
+      properties:
+        link:
+          type: string
+        order:
+          type: integer
+          format: int32
+        picture:
+          type: string
+        title:
+          type: string
+    DonationDto:
+      type: object
+      properties:
+        charityCodes:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        imageSrc:
+          type: string
+        informationBox:
+          type: string
+        name:
+          type: string
+    DownloadDto:
+      type: object
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+    EmployeesDto:
+      type: object
+      properties:
+        icon:
+          type: string
+        link:
+          type: string
+        title:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    ExpenseBoxDto:
+      type: object
+      properties:
+        icon:
+          type: string
+        subtitle:
+          type: string
+        title:
+          type: string
+    ExtraCutoffDto:
+      type: object
+      properties:
+        code:
+          type: string
+        cutOffMinutesBooking:
+          type: integer
+          format: int32
+        cutOffMinutesCIOL:
+          type: integer
+          format: int32
+        message:
+          type: string
+    ExtrasDto:
+      type: object
+      properties:
+        description:
+          type: string
+        id:
+          type: string
+        imageSrc:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        referenceDateType:
+          type: string
+        requiresInventory:
+          type: boolean
+    ExtrasLabelDto:
+      type: object
+      properties:
+        extrasLabels:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExtrasDto"
+        extrasList:
+          type: array
+          items:
+            type: string
+    FactItem:
+      type: object
+      properties:
+        description:
+          type: string
+        title:
+          type: string
+      required:
+        - description
+        - title
+    Facts:
+      type: object
+      properties:
+        factItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/FactItem"
+      required:
+        - factItems
+    Faq:
+      type: object
+      properties:
+        faqItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/FaqItem"
+        title:
+          type: string
+    FaqDto:
+      type: object
+      properties:
+        faqItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/FaqItemDto"
+        title:
+          type: string
+    FaqItem:
+      type: object
+      properties:
+        answer:
+          type: string
+        question:
+          type: string
+    FaqItemDto:
+      type: object
+      properties:
+        answer:
+          type: string
+        question:
+          type: string
+    FaviconDto:
+      type: object
+      properties:
+        faviconUrl:
+          type: string
+        icons:
+          type: array
+          items:
+            $ref: "#/components/schemas/IconDto"
+        msIcons:
+          type: array
+          items:
+            $ref: "#/components/schemas/MsIconDto"
+    FiltersDto:
+      type: object
+      properties:
+        cancelledCards:
+          type: string
+        myCards:
+          type: string
+        show:
+          type: string
+    FooterResponseDto:
+      type: object
+      properties:
+        bottomLinks:
+          type: array
+          items:
+            $ref: "#/components/schemas/LinkItemsDto"
+        copyrightInfo:
+          type: string
+        newsletterSignup:
+          $ref: "#/components/schemas/NewsletterSignupDto"
+        socialMediaIcons:
+          type: array
+          items:
+            $ref: "#/components/schemas/SocialLinksDto"
+        tabs:
+          type: array
+          items:
+            $ref: "#/components/schemas/LinkTabsDto"
+    ForgottenPasswordDto:
+      type: object
+      properties:
+        backToLogin:
+          type: string
+        backToYourDetails:
+          type: string
+        business:
+          $ref: "#/components/schemas/BusinessDto"
+        cancel:
+          type: string
+        emailSentHeader:
+          type: string
+        emailSentMessage:
+          type: string
+        genericError:
+          type: string
+        leisure:
+          $ref: "#/components/schemas/LeisureDto"
+        notRegisteredError:
+          type: string
+    FormDto:
+      type: object
+      properties:
+        adultsHelperText:
+          type: string
+        arrivalDateLabel:
+          type: string
+        bookingInvalid:
+          type: string
+        bookingReferenceLabel:
+          type: string
+        bookingSurnameLabel:
+          type: string
+        checkout:
+          type: string
+        childrenHelperText:
+          type: string
+        cotLimit:
+          type: string
+        findBookingDescription:
+          type: string
+        findBookingTitle:
+          type: string
+        includeCot:
+          type: string
+        invalidDate:
+          type: string
+        invalidFutureDate:
+          type: string
+        invalidLocation:
+          type: string
+        invalidNights:
+          type: string
+        invalidPastDate:
+          type: string
+        invalidReference:
+          type: string
+        invalidRooms:
+          type: string
+        invalidSurname:
+          type: string
+        removeRoom:
+          type: string
+        roomType:
+          type: string
+        searchBookingError:
+          type: string
+        snowdropError:
+          type: string
+        snowdropErrorRetry:
+          type: string
+        where:
+          type: string
+    GalleryImageDto:
+      type: object
+      properties:
+        alt:
+          type: string
+        caption:
+          type: string
+        iconSrc:
+          type: string
+        imageSrc:
+          type: string
+        thumbnailSrc:
+          type: string
+    GlobalConfigDto:
+      type: object
+      properties:
+        upsellItemsExtras:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpsellItemsExtraDto'
+        hotelsWithCityTax:
+          type: array
+          items:
+            type: string
+        maxRoomsLim:
+          $ref: "#/components/schemas/SearchRulesDto"
+        priceFinderConfig:
+          $ref: "#/components/schemas/PriceFinderConfigDto"
+        promotionsConfig:
+          $ref: "#/components/schemas/PromotionsConfigResponseDto"
+        roomClassConfig:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomClassOrderDto"
+        roomUpgradeOptions:
+          $ref: "#/components/schemas/RoomUpgradeOptionsDto"
+    GlobalDto:
+      type: object
+      properties:
+        accessible:
+          type: string
+        accessibleOrBarrierFree:
+          type: string
+        addRoom:
+          type: string
+        adult:
+          type: string
+        adults:
+          type: string
+        adultsLabel:
+          type: string
+        brand:
+          $ref: "#/components/schemas/BrandDto"
+        child:
+          type: string
+        children:
+          type: string
+        childrenLabel:
+          type: string
+        done:
+          type: string
+        double:
+          type: string
+        family:
+          type: string
+        night:
+          type: string
+        offers:
+          type: array
+          items:
+            $ref: "#/components/schemas/OfferDto"
+        promotions:
+          type: array
+          items:
+            $ref: "#/components/schemas/PromotionDto"
+        room:
+          type: string
+        roomLabel:
+          type: string
+        rooms:
+          type: string
+        single:
+          type: string
+        thirdParties:
+          type: string
+        today:
+          type: string
+        tomorrow:
+          type: string
+        twin:
+          type: string
+    HeaderDto:
+      type: object
+      properties:
+        image:
+          type: string
+    HeaderResponseDto:
+      type: object
+      properties:
+        content:
+          $ref: "#/components/schemas/ContentDto"
+        layout:
+          $ref: "#/components/schemas/LayoutDto"
+    HelpDto:
+      type: object
+      properties:
+        contact:
+          $ref: "#/components/schemas/ContactDto"
+        faq:
+          $ref: "#/components/schemas/FaqDto"
+        needHelp:
+          type: string
+        tour:
+          $ref: "#/components/schemas/TourDto"
+    HeroDto:
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+        backgroundImage:
+          type: string
+        bottomCaptionArrowShow:
+          type: boolean
+        bottomCaptionShadow:
+          type: boolean
+        bottomCaptionShow:
+          type: boolean
+        bottomCaptionText:
+          type: string
+        footnotePosRight:
+          type: boolean
+        headingFontColor:
+          type: string
+        headingFontShadow:
+          type: boolean
+        headingFontWeight:
+          type: string
+        headingTextLong:
+          type: string
+        headingTextShort:
+          type: string
+        subHeadingFontColor:
+          type: string
+        subHeadingFontShadow:
+          type: boolean
+        subHeadingFontWeight:
+          type: string
+        subHeadingShow:
+          type: boolean
+        subHeadingText:
+          type: string
+    HotelCityTaxDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        bookingDateFrom:
+          type: string
+        calculation:
+          type: string
+        cityTaxWebUrl:
+          type: string
+        effectiveFrom:
+          type: string
+        isCityTaxBusinessHotel:
+          type: boolean
+        isCityTaxHotel:
+          type: boolean
+        maxNights:
+          type: integer
+          format: int32
+        percentage:
+          type: number
+        posting:
+          type: string
+        vat:
+          type: number
+    HotelCodesDto:
+      type: object
+      properties:
+        code:
+          type: string
+        order:
+          type: integer
+          format: int32
+    HotelDto:
+      type: object
+      properties:
+        code:
+          type: string
+        order:
+          type: integer
+          format: int32
+    HotelFacilityDto:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+        isVisible:
+          type: boolean
+        name:
+          type: string
+        weight:
+          type: integer
+          format: int32
+    HotelInformationDto:
+      type: object
+      properties:
+        accessibilityInfo:
+          $ref: "#/components/schemas/AccessibilityInfoDto"
+        address:
+          $ref: "#/components/schemas/AddressDto"
+        announcement:
+          $ref: "#/components/schemas/AnnouncementDto"
+        bookRestaurantCta:
+          $ref: "#/components/schemas/BookRestaurantCtaDto"
+        bookingFlow:
+          $ref: "#/components/schemas/BookingFlowDto"
+        brand:
+          type: string
+        breadcrumb:
+          type: array
+          items:
+            $ref: "#/components/schemas/Breadcrumb"
+        cityTax:
+          $ref: "#/components/schemas/HotelCityTaxDto"
+        contactDetails:
+          $ref: "#/components/schemas/ContactDetailsDto"
+        coordinates:
+          $ref: "#/components/schemas/CoordinatesDto"
+        directions:
+          type: string
+        distanceFromReference:
+          type: number
+          format: double
+        facts:
+          $ref: "#/components/schemas/Facts"
+        faq:
+          $ref: "#/components/schemas/Faq"
+        galleryImages:
+          type: array
+          items:
+            $ref: "#/components/schemas/GalleryImageDto"
+        headline:
+          type: string
+        hotelDescription:
+          type: string
+        hotelFacilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelFacilityDto"
+        hotelId:
+          type: string
+        hotelOpeningDate:
+          type: string
+        importantInfo:
+          $ref: "#/components/schemas/ImportantInfoDto"
+        isKioskQRCodeScanEnabled:
+          type: boolean
+        links:
+          $ref: "#/components/schemas/LinksDto"
+        messagingFlag:
+          $ref: "#/components/schemas/MessagingFlagDto"
+        name:
+          type: string
+        parkingDescription:
+          type: string
+        restaurant:
+          $ref: "#/components/schemas/RestaurantDto"
+        roomClassConfiguration:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomClassConfigurationDto"
+        roomConfiguration:
+          $ref: "#/components/schemas/RoomConfigurationDto"
+        satNavDirections:
+          type: string
+        seo:
+          $ref: "#/components/schemas/SeoDto"
+        thumbnailImages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ThumbnailImageDto"
+        title:
+          type: string
+        topSectionImages:
+          type: array
+          items:
+            $ref: "#/components/schemas/TopSectionImageDto"
+        transportInformation:
+          type: array
+          items:
+            type: string
+        tripAdvisorReviews:
+          $ref: "#/components/schemas/TripAdvisorReviews"
+        whatThreeWords:
+          type: string
+    HotelInformationExtendedDto:
+      type: object
+      properties:
+        accessibilityInfo:
+          $ref: "#/components/schemas/AccessibilityInfoDto"
+        address:
+          $ref: "#/components/schemas/AddressDto"
+        ancillaryCloseout:
+          $ref: "#/components/schemas/AncillaryCloseoutDto"
+        announcement:
+          $ref: "#/components/schemas/AnnouncementDto"
+        bookRestaurantCta:
+          $ref: "#/components/schemas/BookRestaurantCtaDto"
+        bookingFlow:
+          $ref: "#/components/schemas/BookingFlowDto"
+        brand:
+          type: string
+        checkInTime:
+          type: string
+        checkOutTime:
+          type: string
+        cityTax:
+          $ref: "#/components/schemas/HotelCityTaxDto"
+        contactDetails:
+          $ref: "#/components/schemas/ContactDetailsDto"
+        coordinates:
+          $ref: "#/components/schemas/CoordinatesDto"
+        county:
+          type: string
+        currencyCode:
+          type: string
+        directions:
+          type: string
+        extrasCutoffs:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExtraCutoffDto"
+        galleryImages:
+          type: array
+          items:
+            $ref: "#/components/schemas/GalleryImageDto"
+        headline:
+          type: string
+        hotelDescription:
+          type: string
+        hotelFacilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelFacilityDto"
+        hotelId:
+          type: string
+        hotelOpeningDate:
+          type: string
+        importantInfo:
+          $ref: "#/components/schemas/ImportantInfoDto"
+        isKioskQRCodeScanEnabled:
+          type: boolean
+        languageCode:
+          type: string
+        links:
+          $ref: "#/components/schemas/LinksDto"
+        messagingFlag:
+          $ref: "#/components/schemas/MessagingFlagDto"
+        name:
+          type: string
+        parkingDescription:
+          type: string
+        paymentCodeTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/AcceptedCreditCardDto"
+        restaurant:
+          $ref: "#/components/schemas/RestaurantDto"
+        roomClassConfiguration:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomClassConfigurationDto"
+        roomConfiguration:
+          $ref: "#/components/schemas/RoomConfigurationDto"
+        satNavDirections:
+          type: string
+        thumbnailImages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ThumbnailImageDto"
+        timeZone:
+          type: string
+        title:
+          type: string
+        topSectionImages:
+          type: array
+          items:
+            $ref: "#/components/schemas/TopSectionImageDto"
+        transportInformation:
+          type: array
+          items:
+            type: string
+        tripAdvisorReviews:
+          $ref: "#/components/schemas/TripAdvisorReviewsDto"
+        whatThreeWords:
+          type: string
+    HotelInformationRequestDto:
+      type: object
+      properties:
+        channel:
+          type: string
+        country:
+          type: string
+        language:
+          type: string
+        subchannel:
+          type: string
+      required:
+        - country
+        - language
+    HotelPaymentInformationDto:
+      type: object
+      properties:
+        acceptedCreditCards:
+          type: array
+          items:
+            $ref: "#/components/schemas/AcceptedCreditCardDto"
+        address:
+          $ref: "#/components/schemas/AddressDto"
+        brand:
+          type: string
+        paymentMethodsConfiguration:
+          type: array
+          items:
+            $ref: "#/components/schemas/PaymentMethodsConfigurationDto"
+        paymentMethodsOpera:
+          type: object
+          additionalProperties:
+            type: string
+        paymentProviders:
+          type: array
+          items:
+            $ref: "#/components/schemas/PaymentProviderDto"
+    HotelShortInformationDto:
+      type: object
+      properties:
+        brand:
+          type: string
+        code:
+          type: string
+        hotelPagePath:
+          type: string
+        title:
+          type: string
+    HreflangDto:
+      type: object
+      properties:
+        href:
+          type: string
+        hreflang:
+          type: string
+    IconDto:
+      type: object
+      properties:
+        href:
+          type: string
+        rel:
+          type: string
+        sizes:
+          type: string
+    ImportantInfoDto:
+      type: object
+      properties:
+        infoItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/InfoItemDto"
+        title:
+          type: string
+    IndexHeaderDataDto:
+      type: object
+      properties:
+        announcement:
+          $ref: "#/components/schemas/AnnouncementDto"
+        config:
+          $ref: "#/components/schemas/ConfigDto"
+        content:
+          $ref: "#/components/schemas/ContentDto"
+        datePicker:
+          $ref: "#/components/schemas/DatePickerDto"
+        form:
+          $ref: "#/components/schemas/FormDto"
+        results:
+          $ref: "#/components/schemas/ResultsDto"
+    InfoDto:
+      type: object
+      properties:
+        lift:
+          type: string
+    InfoItemDto:
+      type: object
+      properties:
+        endDate:
+          type: string
+        priority:
+          type: string
+        startDate:
+          type: string
+        text:
+          type: string
+    InfoMessageDto:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/MessageDto"
+        rate:
+          type: string
+        rateCategory:
+          type: string
+        rateDisplaySet:
+          type: string
+    InfoMessagesDto:
+      type: object
+      properties:
+        messageOrder:
+          type: integer
+          format: int32
+        messageSubtitle:
+          type: string
+        messageTitle:
+          type: string
+        messageType:
+          type: string
+    IntroDto:
+      type: object
+      properties:
+        description:
+          type: string
+        name:
+          type: string
+    IntroViewDto:
+      type: object
+      properties:
+        acceptAllButtonText:
+          type: string
+        description:
+          type: string
+        manageButtonText:
+          type: string
+        necessaryOnlyButtonText:
+          type: string
+        title:
+          type: string
+    InvoicesBoxDto:
+      type: object
+      properties:
+        icon:
+          type: string
+        subtitle:
+          type: string
+        title:
+          type: string
+    ItemDto:
+      type: object
+      properties:
+        bartId:
+          type: string
+        code:
+          type: string
+        order:
+          type: string
+    LayoutDto:
+      type: object
+      properties:
+        help:
+          $ref: "#/components/schemas/HelpDto"
+        manageAccount:
+          $ref: "#/components/schemas/ManageAccountDto"
+        menu:
+          $ref: "#/components/schemas/MenuDto"
+        sidebar:
+          $ref: "#/components/schemas/SidebarDto"
+    LeisureDto:
+      type: object
+      properties:
+        emailPlaceholder:
+          type: string
+        formLabel:
+          type: string
+        formTitle:
+          type: string
+        loginButton:
+          type: string
+        signupButton:
+          type: string
+        submitButton:
+          type: string
+        tab:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    LinkAccountBannerDto:
+      type: object
+      properties:
+        linkAccountButton:
+          type: string
+        subtitle:
+          type: string
+        title:
+          type: string
+    LinkColumnsDto:
+      type: object
+      properties:
+        linkItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/LinkItemsDto"
+        name:
+          type: string
+    LinkItemsDto:
+      type: object
+      properties:
+        linkSrc:
+          type: string
+        name:
+          type: string
+        openInNewTab:
+          type: boolean
+    LinkTabsDto:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/LinkColumnsDto"
+        intro:
+          $ref: "#/components/schemas/IntroDto"
+        name:
+          type: string
+    LinksDto:
+      type: object
+      properties:
+        detailsPage:
+          type: string
+    LocationsDto:
+      type: object
+      properties:
+        locationId:
+          type: string
+        locationName:
+          type: string
+        locationOrder:
+          type: integer
+          format: int32
+    LoginDto:
+      type: object
+      properties:
+        badCredentialsError:
+          type: string
+        business:
+          $ref: "#/components/schemas/BusinessDto"
+        businessAccountCard:
+          $ref: "#/components/schemas/BusinessAccountCardDto"
+        forgotPassword:
+          type: string
+        invalidEmail:
+          type: string
+        leisure:
+          $ref: "#/components/schemas/LeisureDto"
+        passwordPlaceholder:
+          type: string
+        rememberMeLabel:
+          type: string
+        sessionExpired:
+          type: string
+        signupLink:
+          type: string
+        signupMessage:
+          type: string
+    ManageAccountDto:
+      type: object
+      properties:
+        cards:
+          $ref: "#/components/schemas/CardsDto"
+        employees:
+          $ref: "#/components/schemas/EmployeesDto"
+        profile:
+          $ref: "#/components/schemas/ProfileDto"
+        title:
+          type: string
+    ManageViewDto:
+      type: object
+      properties:
+        alwaysActiveText:
+          type: string
+        cookieGroup:
+          type: array
+          items:
+            $ref: "#/components/schemas/CookieGroupDto"
+        description:
+          type: string
+        saveSettingsButtonText:
+          type: string
+        title:
+          type: string
+    MealsInfoResponseDto:
+      type: object
+      properties:
+        softBundles:
+          type: array
+          items:
+            $ref: "#/components/schemas/SoftBundleDto"
+        upsellItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/UpsellItemsDto"
+    MenuDto:
+      type: object
+      properties:
+        agentMemo:
+          type: string
+        bookHotel:
+          type: string
+        business:
+          type: string
+        changeLogs:
+          type: string
+        discoverPI:
+          type: string
+        findBooking:
+          type: string
+        guestAccount:
+          type: string
+        language:
+          type: string
+        languageButton:
+          type: string
+        logIn:
+          type: string
+        mobileMenuButton:
+          type: string
+        promoCode:
+          type: string
+        tick:
+          type: string
+    MessageDto:
+      type: object
+      properties:
+        message:
+          type: string
+    MessagingFlagDto:
+      type: object
+      properties:
+        color:
+          type: string
+        description:
+          type: string
+        text:
+          type: string
+    MsIconDto:
+      type: object
+      properties:
+        content:
+          type: string
+        name:
+          type: string
+    NavOptionDto:
+      type: object
+      properties:
+        title:
+          type: string
+        url:
+          type: string
+    NewCardDto:
+      type: object
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+    NewsletterSignupDto:
+      type: object
+      properties:
+        bookStayButtonText:
+          type: string
+        bookStayButtonUrl:
+          type: string
+        confirmationText:
+          type: string
+        countrySelectEmptyFieldError:
+          type: string
+        countrySelectLabel:
+          type: string
+        doubleOptInText:
+          type: string
+        doubleOptInTitle:
+          type: string
+        emailLabel:
+          type: string
+        emailMaxLengthError:
+          type: string
+        emailMinLengthError:
+          type: string
+        emailValidError:
+          type: string
+        firstNameLabel:
+          type: string
+        firstNameMaxLengthError:
+          type: string
+        firstNameMinLengthError:
+          type: string
+        firstNameValidError:
+          type: string
+        introViewText:
+          type: string
+        introViewTitle:
+          type: string
+        lastNameLabel:
+          type: string
+        lastNameMaxLengthError:
+          type: string
+        lastNameMinLengthError:
+          type: string
+        lastNameValidError:
+          type: string
+        newsletterButtonLabel:
+          type: string
+        newsletterText:
+          type: string
+        privacyPolicyText:
+          type: string
+        serverError:
+          type: string
+        signUpButtonText:
+          type: string
+        signupTitle:
+          type: string
+    NoteDto:
+      type: object
+      properties:
+        id:
+          type: string
+        lang:
+          type: string
+        value:
+          type: string
+    NotificationDto:
+      type: object
+      properties:
+        alert:
+          type: string
+        error:
+          type: string
+        info:
+          type: string
+        question:
+          type: string
+        success:
+          type: string
+    NotificationsDto:
+      type: object
+      properties:
+        availabilitiesErrorMessage:
+          type: string
+        ccuiGroupBookingMessage:
+          type: string
+        emp01groupBookingMessage:
+          type: string
+        errorTitle:
+          type: string
+        groupBookingFormPageMessage:
+          type: string
+        groupBookingHeader:
+          type: string
+        groupBookingMessage:
+          type: string
+        noResults:
+          type: string
+    OfferDto:
+      type: object
+      properties:
+        cellCode:
+          type: string
+        corporateId:
+          type: string
+        maxRooms:
+          type: integer
+          format: int32
+        numberOfNights:
+          type: integer
+          format: int32
+        page:
+          type: string
+        ratePlanCode:
+          type: string
+    PackageCodeDto:
+      type: object
+      properties:
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttachmentsDto"
+        description:
+          type: string
+        id:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+    PaymentDto:
+      type: object
+      properties:
+        amex:
+          type: string
+        mastercard:
+          type: string
+        piba:
+          type: string
+        pibaEuro:
+          type: string
+        visa:
+          type: string
+    PaymentInfoMessageDto:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: string
+        paymentType:
+          type: string
+        rate:
+          type: string
+    PaymentMethodDto:
+      type: object
+      properties:
+        code:
+          type: string
+        feeAmount:
+          type: string
+        feeCurrency:
+          type: string
+        listOrder:
+          type: string
+        name:
+          type: string
+        paymentOnly:
+          type: boolean
+        schemeLogo:
+          type: string
+    PaymentMethodsConfigurationDto:
+      type: object
+      properties:
+        code:
+          type: string
+        listOrder:
+          type: string
+        logo:
+          type: string
+        name:
+          type: string
+        operaPaymentMethod:
+          type: string
+        supportedBookingTypes:
+          type: string
+        supportedCards:
+          type: string
+        supportedChannels:
+          type: string
+    PaymentProviderDto:
+      type: object
+      properties:
+        paymentMethods:
+          type: array
+          items:
+            $ref: "#/components/schemas/PaymentMethodDto"
+        providerId:
+          type: string
+    PriceFinderConfigDto:
+      type: object
+      properties:
+        priceFinderViews:
+          type: array
+          items:
+            $ref: "#/components/schemas/PriceFinderViewsDto"
+    PriceFinderGlobalConfigDto:
+      type: object
+      properties:
+        priceFinderConfig:
+          $ref: "#/components/schemas/PriceFinderConfigDto"
+    PriceFinderViewsDto:
+      type: object
+      properties:
+        bannerColour:
+          type: string
+        bannerHeadline:
+          type: string
+        bannerImage:
+          type: string
+        bannerSubtext:
+          type: string
+        checkinDate:
+          type: string
+        dateRangeEnd:
+          type: string
+        dateRangeStart:
+          type: string
+        destinations:
+          type: array
+          items:
+            $ref: "#/components/schemas/DestinationsDto"
+        filterRoomSelected:
+          type: string
+        highlightedPricePrimaryColour:
+          type: string
+        highlightedPriceRangeMax:
+          type: integer
+          format: int32
+        highlightedPriceRangeMin:
+          type: integer
+          format: int32
+        highlightedPriceRangeStep:
+          type: integer
+          format: int32
+        highlightedPriceSecondaryColour:
+          type: string
+        hotelCodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelCodesDto"
+        infoMessages:
+          type: array
+          items:
+            $ref: "#/components/schemas/InfoMessagesDto"
+        locationId:
+          type: string
+        locationName:
+          type: string
+        locationRadius:
+          type: number
+          format: double
+        path:
+          type: string
+        seoCardImageUrl:
+          type: string
+        seoHreflangs:
+          type: array
+          items:
+            $ref: "#/components/schemas/SeoHreflangsDto"
+        seoMetaDescription:
+          type: string
+        seoMetaTitle:
+          type: string
+        seoRobots:
+          type: string
+        termsLabel:
+          type: string
+    PrivacyPolicyDto:
+      type: object
+      properties:
+        description:
+          type: string
+        linkLabel:
+          type: string
+        linkSrc:
+          type: string
+        moreInfo:
+          type: array
+          items:
+            $ref: "#/components/schemas/InfoDto"
+        moreInfoLabel:
+          type: string
+        name:
+          type: string
+    ProfileDto:
+      type: object
+      properties:
+        link:
+          type: string
+        text:
+          type: string
+        title:
+          type: string
+    PromoBoxResponseDto:
+      type: object
+      properties:
+        button:
+          type: string
+        title:
+          type: string
+        whenCodeAlreadyApplied:
+          type: string
+        whenCodeExpired:
+          type: string
+        whenEmpty:
+          type: string
+        whenInvalid:
+          type: string
+        whenMultipleRedeem:
+          type: string
+        whenSuccess:
+          type: string
+        whenUnavailable:
+          type: string
+    PromoDto:
+      type: object
+      properties:
+        description:
+          type: string
+        linkTarget:
+          type: string
+        linkText:
+          type: string
+        linkUrl:
+          type: string
+        order:
+          type: integer
+          format: int32
+        picture:
+          type: string
+        title:
+          type: string
+    PromotionBannerDto:
+      type: object
+      properties:
+        description:
+          type: string
+        enabled:
+          type: boolean
+        icon:
+          type: string
+        srpNotificationText:
+          type: string
+        srpNotificationTitle:
+          type: string
+        terms:
+          type: string
+        title:
+          type: string
+    PromotionDto:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        maxRooms:
+          type: integer
+          format: int32
+        maxRoomsAmend:
+          type: integer
+          format: int32
+        numberOfNights:
+          type: integer
+          format: int32
+        page:
+          type: string
+        promoCode:
+          type: string
+    PromotionItemsResponseDto:
+      type: object
+      properties:
+        bookingEndDate:
+          type: string
+          format: date
+        bookingStartDate:
+          type: string
+          format: date
+        enabled:
+          type: boolean
+        landingPage:
+          type: string
+        maxRooms:
+          type: integer
+          format: int32
+        numberOfNights:
+          type: integer
+          format: int32
+        promoAmendMessage:
+          type: string
+        promoBannerColour:
+          type: string
+        promoBannerIcon:
+          type: string
+        promoBannerSubtitle:
+          type: string
+        promoBannerTitle:
+          type: string
+        promoCode:
+          type: string
+        promoExpiredMessage:
+          type: string
+        promoInvalidMessage:
+          type: string
+        stayEndDate:
+          type: string
+          format: date
+        stayStartDate:
+          type: string
+          format: date
+    PromotionPanelDto:
+      type: object
+      properties:
+        description:
+          type: string
+        displayHotels:
+          type: array
+          items:
+            type: string
+        image:
+          type: string
+        linkLabel:
+          type: string
+        linkPath:
+          type: string
+        name:
+          type: string
+    PromotionsConfigResponseDto:
+      type: object
+      properties:
+        promoItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/PromotionItemsResponseDto"
+    PromotionsInformationResponseDto:
+      type: object
+      properties:
+        appPromoAmendMessage:
+          type: string
+        appPromoBannerSubtitle:
+          type: string
+        appPromoBannerTitle:
+          type: string
+        appPromoExpiredMessage:
+          type: string
+        appPromoInvalidMessage:
+          type: string
+        isWithinPromoWindow:
+          type: boolean
+        landingPage:
+          type: string
+        promoAmendMessage:
+          type: string
+        promoBannerColour:
+          type: string
+        promoBannerIcon:
+          type: string
+        promoBannerSubtitle:
+          type: string
+        promoBannerTitle:
+          type: string
+        promoBox:
+          $ref: "#/components/schemas/PromoBoxResponseDto"
+        promoBoxMessageKey:
+          type: string
+        promoBoxStatus:
+          type: string
+          enum:
+            - EMPTY
+            - INVALID
+            - CODE_ALREADY_APPLIED
+            - CODE_EXPIRED
+            - UNAVAILABLE
+            - SUCCESS
+        promoExpiredMessage:
+          type: string
+        promoInvalidMessage:
+          type: string
+        promoKind:
+          type: string
+          enum:
+            - LANDING_PAGE
+            - SITE_WIDE
+            - GENERIC
+            - UNIQUE
+        promotionCode:
+          type: string
+        showPromo:
+          type: boolean
+        termsLink:
+          type: string
+    UpsellItemsExtraDto:
+      type: object
+      properties:
+        packageCode:
+          type: string
+        promoPackageCode:
+          type: string
+        promoText:
+          type: string
+    RateClassificationDto:
+      type: object
+      properties:
+        additionalDescription:
+          type: string
+        rateCategory:
+          type: string
+        rateClassification:
+          type: string
+        rateDescription:
+          type: string
+        rateDisplaySet:
+          type: string
+        rateLongDescription:
+          type: string
+        rateName:
+          type: string
+        rateNotes:
+          type: string
+        rateOrder:
+          type: string
+        ratePlanCode:
+          type: string
+        rateTags:
+          type: array
+          items:
+            type: string
+    RateInformationDto:
+      type: object
+      properties:
+        rateClassifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/RateClassificationDto"
+    ResetPasswordDto:
+      type: object
+      properties:
+        criteria:
+          type: string
+        criteriaDescription:
+          type: string
+        email:
+          type: string
+        invalidPassword:
+          type: string
+        invalidPasswordConfirmation:
+          type: string
+        logInButton:
+          type: string
+        password:
+          type: string
+        passwordConfirmation:
+          type: string
+        passwordMin:
+          type: string
+        passwordRequired:
+          type: string
+        passwordRequirementsAllowed:
+          type: string
+        passwordRequirementsIdentical:
+          type: string
+        passwordRequirementsMin:
+          type: string
+        resetPasswordTitle:
+          type: string
+        submitButton:
+          type: string
+        successMessage:
+          type: string
+    RestaurantDto:
+      type: object
+      properties:
+        bookingCardBackgroundImage:
+          type: string
+        bookingCardDescription:
+          type: string
+        bookingCardImage:
+          type: string
+        bookingCardTitle:
+          type: string
+        description:
+          type: string
+        logoSrc:
+          type: string
+        menus:
+          type: array
+          items:
+            $ref: "#/components/schemas/MenuDto"
+        name:
+          type: string
+    ResultsDto:
+      type: object
+      properties:
+        notifications:
+          $ref: "#/components/schemas/NotificationsDto"
+    Reviews:
+      type: object
+      properties:
+        publishedDate:
+          type: string
+        rating:
+          type: number
+        text:
+          type: string
+        title:
+          type: string
+        tripType:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+      required:
+        - publishedDate
+        - rating
+        - text
+        - title
+        - tripType
+        - user
+    RoomClassConfigDto:
+      type: object
+      properties:
+        roomClassConfig:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomClassOrderDto"
+    RoomClassConfigurationDto:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+    RoomClassOrderDto:
+      type: object
+      properties:
+        availableUpgrades:
+          type: array
+          items:
+            type: string
+        code:
+          type: string
+        order:
+          type: integer
+          format: int32
+    RoomCodesDto:
+      type: object
+      properties:
+        accessible:
+          type: string
+        double:
+          type: string
+        family:
+          type: string
+        single:
+          type: string
+        twin:
+          type: string
+    RoomConfigurationDto:
+      type: object
+      properties:
+        tabGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/TabGroupDto"
+        tabItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/TabItemDto"
+    RoomTypeDto:
+      type: object
+      properties:
+        roomTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomTypeInformationDto"
+    RoomTypeInformationDto:
+      type: object
+      properties:
+        facilities:
+          type: array
+          items:
+            type: string
+        gridImage:
+          type: string
+        groupId:
+          type: string
+        roomCategory:
+          type: string
+        roomDescription:
+          type: string
+        roomImage:
+          type: string
+        roomInfo:
+          type: string
+        roomInfoLabel:
+          type: string
+        roomLabel:
+          type: string
+        roomTypeCode:
+          type: array
+          items:
+            type: string
+    RoomUpgradeOptionsDto:
+      type: object
+      properties:
+        priceText:
+          type: string
+        primaryButtonText:
+          type: string
+        roomUpgrades:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomUpgradesDto"
+        secondaryButtonText:
+          type: string
+    RoomUpgradesDto:
+      type: object
+      properties:
+        description:
+          type: string
+        heading:
+          type: string
+        imageUrl:
+          type: string
+        roomClass:
+          type: string
+    SearchResultsDataDto:
+      type: object
+      properties:
+        config:
+          $ref: "#/components/schemas/ConfigDto"
+        content:
+          $ref: "#/components/schemas/ContentDto"
+    SearchRulesDto:
+      type: object
+      properties:
+        maxArrivalDate:
+          type: integer
+          format: int32
+        maxNights:
+          type: integer
+          format: int32
+        maxRooms:
+          type: integer
+          format: int32
+        maxRoomsAmend:
+          type: integer
+          format: int32
+        roomOccupancies:
+          type: array
+          items:
+            $ref: "#/components/schemas/AcceptedRoomTypesDto"
+    SeoDto:
+      type: object
+      properties:
+        hreflangs:
+          type: array
+          items:
+            $ref: "#/components/schemas/HreflangDto"
+        pageDescription:
+          type: string
+        pageTitle:
+          type: string
+    SeoHreflangsDto:
+      type: object
+      properties:
+        href:
+          type: string
+        hreflang:
+          type: string
+    SeoResponseDto:
+      type: object
+      properties:
+        cardImageUrl:
+          type: string
+        faq:
+          $ref: "#/components/schemas/FaqDto"
+        faviconUrl:
+          type: string
+        hreflangs:
+          type: array
+          items:
+            $ref: "#/components/schemas/HreflangDto"
+        icons:
+          type: array
+          items:
+            $ref: "#/components/schemas/IconDto"
+        msIcons:
+          type: array
+          items:
+            $ref: "#/components/schemas/MsIconDto"
+        pageDescription:
+          type: string
+        pageTitle:
+          type: string
+    SidebarDto:
+      type: object
+      properties:
+        collapse:
+          type: string
+        expand:
+          type: string
+    SocialLinksDto:
+      type: object
+      properties:
+        iconSrc:
+          type: string
+        label:
+          type: string
+        linkSrc:
+          type: string
+    SoftBundleDto:
+      type: object
+      properties:
+        optional:
+          type: boolean
+        packageCodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/PackageCodeDto"
+        rate:
+          type: array
+          items:
+            type: string
+        roomClass:
+          type: array
+          items:
+            type: string
+    SubMenuLinkDto:
+      type: object
+      properties:
+        title:
+          type: string
+        url:
+          type: string
+    SubNavDto:
+      type: object
+      properties:
+        navOptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/NavOptionDto"
+        title:
+          type: string
+    SubRatings:
+      type: object
+      properties:
+        localisedName:
+          type: string
+        ratingImageUrl:
+          type: string
+        value:
+          type: number
+      required:
+        - localisedName
+        - ratingImageUrl
+        - value
+    TabGroupDto:
+      type: object
+      properties:
+        groupId:
+          type: string
+        groupName:
+          type: string
+    TabItemDto:
+      type: object
+      properties:
+        facilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelFacilityDto"
+        fileReference:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/GalleryImageDto"
+        rateGridRoomDescription:
+          type: string
+        roomDescription:
+          type: string
+        roomName:
+          type: string
+        roomType:
+          type: string
+        roomTypeCode:
+          type: string
+    TabsDto:
+      type: object
+      properties:
+        centrallyStored:
+          $ref: "#/components/schemas/CentrallyStoredDto"
+        centrallyStoredTitle:
+          type: string
+        innBusinessPay:
+          type: string
+    TargetBookingFlowItemDto:
+      type: object
+      properties:
+        bookingFlowPath:
+          type: string
+        id:
+          type: string
+        rateCode:
+          type: string
+    TermsAndConditionsDto:
+      type: object
+      properties:
+        rate:
+          type: string
+        text:
+          type: string
+    ThingsToDoDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ToDoItemDto"
+        title:
+          type: string
+    ThumbnailImageDto:
+      type: object
+      properties:
+        imageSrc:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    ToDoItemDto:
+      type: object
+      properties:
+        link:
+          type: string
+        order:
+          type: integer
+          format: int32
+        picture:
+          type: string
+        target:
+          type: string
+        title:
+          type: string
+    TopSectionImageDto:
+      type: object
+      properties:
+        alt:
+          type: string
+        caption:
+          type: string
+        iconSrc:
+          type: string
+        imageSrc:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        thumbnailSrc:
+          type: string
+    TourDto:
+      type: object
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+    TripAdvisorReviews:
+      type: object
+      properties:
+        address:
+          type: string
+        awards:
+          type: array
+          items:
+            $ref: "#/components/schemas/Awards"
+        hotelCode:
+          type: string
+        locationId:
+          type: string
+        name:
+          type: string
+        numberOfReviews:
+          type: integer
+          format: int32
+        rating:
+          type: number
+        reviews:
+          type: array
+          items:
+            $ref: "#/components/schemas/Reviews"
+        subRatings:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubRatings"
+        webUrl:
+          type: string
+        writeReview:
+          type: string
+      required:
+        - address
+        - awards
+        - hotelCode
+        - locationId
+        - name
+        - numberOfReviews
+        - rating
+        - reviews
+        - subRatings
+        - webUrl
+        - writeReview
+    TripAdvisorReviewsDto:
+      type: object
+      properties:
+        address:
+          type: string
+        awards:
+          type: array
+          items:
+            $ref: "#/components/schemas/Awards"
+        hotelCode:
+          type: string
+        locationId:
+          type: string
+        name:
+          type: string
+        numberOfReviews:
+          type: integer
+          format: int32
+        rating:
+          type: number
+        reviews:
+          type: array
+          items:
+            $ref: "#/components/schemas/Reviews"
+        subRatings:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubRatings"
+        webUrl:
+          type: string
+        writeReview:
+          type: string
+      required:
+        - address
+        - awards
+        - hotelCode
+        - locationId
+        - name
+        - numberOfReviews
+        - rating
+        - reviews
+        - subRatings
+        - webUrl
+        - writeReview
+    UpsellItemsDto:
+      type: object
+      properties:
+        additionalInfo:
+          type: string
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttachmentsDto"
+        code:
+          type: string
+        description:
+          type: string
+        freeBreakfastCode:
+          type: string
+        freeBreakfastMaxPerMeal:
+          type: integer
+          format: int32
+        freeBreakfastOption:
+          type: boolean
+        freeBreakfastTrigger:
+          type: boolean
+        images:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        shortDescription:
+          type: string
+        show:
+          type: boolean
+        upsellType:
+          type: string
+    User:
+      type: object
+      properties:
+        location:
+          type: string
+        username:
+          type: string
+      required:
+        - location
+        - username
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string
+    WhyDto:
+      type: object
+      properties:
+        description:
+          type: string
+        picture:
+          type: string
+        title:
+          type: string
+        whyItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/WhyItemDto"
+    WhyItemDto:
+      type: object
+      properties:
+        itemDescription:
+          type: string
+        itemIcon:
+          type: string
+        itemTitle:
+          type: string

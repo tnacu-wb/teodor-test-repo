@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor Customer
+entity "Hotel Search" as HS #LightBlue
+entity "Availability Cache" as AC #LightGreen
+database AuroraPostgres
+entity Bart #LightPink
+Customer -> HS : Request: /availabilities
+HS -> AC : Request: /availabilities
+AC -> AuroraPostgres : Request: Get available hotels
+AC -> AC : Low inventory threshold filter
+alt Hotels with Low Inventory
+AC -> HS : Hotel Availabilities Response : \n "limitedAvailability": true
+HS -> Bart : Request : Get hotel availabilities \n (only low inventory hotels)
+Bart -> HS : Hotel Availabilities Response
+HS -> HS : Merge HotelAvailabilities Response \n from Availability Cache & Bart
+HS -> Customer : Hotel Availabilities Response
+else Hotels with no Low Inventory
+AC -> HS : Hotel Availabilities Response : \n "limitedAvailability": false
+HS -> Customer : Hotel Availabilities Response
+end
+@enduml

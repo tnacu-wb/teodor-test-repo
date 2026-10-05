@@ -1,0 +1,140 @@
+schema {
+    query: Query
+}
+
+type Query {
+    packages(packagesCriteria: PackagesCriteria!): PackagesResponse
+}
+
+input PackagesCriteria {
+    hotelId: String!
+    startDate: String!
+    endDate: String!
+    adultsNumber: Int!
+    childrenNumber: Int!
+    nightsNumber: Int!
+    language: String!
+    country: String!
+    bookingFlowId: String!
+    basketReferenceId: String
+    channel: Channel
+    isManageBookingPage: Boolean
+    showMealInclusiveRate: Boolean
+    isCiol: Boolean
+}
+
+enum Channel {
+    PI
+    BB
+    CCUI
+    DISTR
+    EMPLOYEE
+}
+
+type PackagesResponse {
+    restaurant: Restaurant
+    packages: Packages
+    privacyPolicy: PrivacyPolicy
+    hotelHasCityTaxForLeisure: Boolean
+    hotelHasCityTaxForBusiness: Boolean
+}
+
+type Restaurant {
+    menus: [Menu]
+    logoSrc: String
+    restaurantNotFound: Boolean
+    noMealsFound: Boolean
+    messageHeader: String
+    messageDescription: String
+}
+
+type Menu {
+    name: String
+    description: String
+    imageSrc: String
+    menuSrc: String
+    menuLabel: String
+    disclaimer: String
+}
+
+type Packages {
+    meals: [MealItem]
+    mealsKids: [MealKids]
+    extrasItems: [ExtrasItem]
+    roomSelection: [RoomSelection]
+    roomSelectionAmendExtras: [RoomSelection]
+}
+
+type MealItem {
+    name: String
+    id: String
+    bartId: String
+    price: Float
+    freeBreakfastOption: Boolean
+    freeBreakfastCode: String
+    freeBreakfastMaxPerMeal: Int
+    imageSrc: String
+    description: String
+    shortDescription: String
+    allergyInfoSrc: String
+    allergyInfoLabel: String
+    currency: String
+    order: Int
+    menu: Menu
+    upsellType: String
+    basePrice: Float
+    isFree: Boolean
+    promoText: String
+}
+
+type MealKids {
+    name: String
+    id: String
+    imageSrc: String
+    description: String
+    allergyInfoSrc: String
+    allergyInfoLabel: String
+    price: Float
+    totalPrice: Float
+    currency: String
+    order: Int
+    menu: Menu
+}
+
+type ExtrasItem {
+    name: String
+    id: String
+    price: Float
+    imageSrc: String
+    description: String
+    currency: String
+    order: Int
+    available: Int
+    basePrice: Float
+    isFree: Boolean
+    promoText: String
+}
+
+type RoomSelection{
+    reservationId: String
+    packagesSelection: [PackageSelection]
+}
+
+type PackageSelection{
+    id: String,
+    noOfSelections: Int
+}
+
+type PrivacyPolicy {
+    name: String
+    description: String
+    linkLabel: String
+    linkSrc: String
+    moreInfoLabel: String
+    moreInfo: [SecurityInfoItem]
+}
+
+type SecurityInfoItem {
+    image: String
+    description: String
+}

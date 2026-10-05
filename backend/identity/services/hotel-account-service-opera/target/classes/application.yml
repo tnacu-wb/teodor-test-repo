@@ -1,0 +1,451 @@
+server:
+  port: 9020
+  shutdown: graceful
+
+swagger:
+  api:
+    version: 1.0.0
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "hotel-account-service-opera"
+    description: "Hotel Account Microservice Opera"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: |
+          @git.commit.message.short@
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /hotel-account-service/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  io:
+    getunleash: TRACE
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      key-prefix: "Hotel-Account-Service-Opera"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+hotel:
+  account:
+    forgotPassword:
+      url: ${HOTEL_ACCOUNT_FORGOT_PASSWORD_URL}
+
+
+# Password policies
+#
+# Auth0:
+# -----------------
+# We want the password to have a minimum length of 8
+# We also want the password to meet 3 of 4 requirements (that is what is configured in Auth0):
+# - At least one lower case letter
+# - At least one upper case letter
+# - At least one digit
+# - At least one special character
+#       Found out in the js file of Auth0 that are considered special characters the following:
+#       - space
+#       - any of: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+# The '3 out of 4' requirement makes the regexp a bit complex as it results in the following structure:
+#     (1lowerCase AND 1upperCase AND 1digit)
+#                     OR
+#     (1lowerCase AND 1 upperCase AND 1specialChar)
+#                     OR
+#     (1lowerCase AND 1digit AND 1specialChar)
+#                     OR
+#     (1upperCase AND 1digit AND 1specialChar)
+passwords:
+  configs:
+    account:
+      minLength: ${PASSWORDS_CONFIGS_ACCOUNT_MIN_LENGTH}
+      maxLength: ${PASSWORDS_CONFIGS_ACCOUNT_MAX_LENGTH}
+      illegalChars: ${PASSWORDS_CONFIGS_ACCOUNT_ILLEGAL_CHARS}
+      allowNull: ${PASSWORDS_CONFIGS_ACCOUNT_ALLOW_NULL}
+    accountAuth0:
+      minLength: ${PASSWORDS_CONFIGS_ACCOUNT_AUTH_MIN_LENGTH}
+      regExps:
+        - (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])|(?=.*[a-z])(?=.*[A-Z])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[a-z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[A-Z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])
+      allowNull: ${PASSWORDS_CONFIGS_ACCOUNT_AUTH_ALLOW_NULL}
+      staticErrorMessage: "Password must be at least 8 characters long and meet three of the following criteria: at least one lower case letter, at least one upper case letter, at least one digit and at least one special character."
+
+# Application used for the tests is https://manage.auth0.com/dashboard/eu/wbmigrationtest/applications/gBVcZzfXChbowQR1mfH8csbUwya9FzOB/settings
+# Microservices Application
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+  management:
+    domain: ${AUTH_MNGMT_DOMAIN}
+    clientId: ${AUTH0_CLIENT_ID}
+    clientSecret: ${AUTH0_CLIENT_SECRET}
+    audience: ${AUTH_MNGMT_AUDIENCE}
+    b2cConnection: ${AUTH_MNGMT_B2C_CONNECTION}
+    b2bConnection: ${AUTH_MNGMT_B2B_CONNECTION}
+    connection: ${AUTH_MNGMT_CONNECTION}
+    lazyMigrationEnabled: ${AUTH_MNGMT_IS_LAZY_MIGRATION_ENABLED}
+    resetPasswordTokenTtlSec: ${AUTH_RESET_PASSWORD_TOKEN_TTL_SEC}
+    customDomain: ${AUTH_MNGMT_CUSTOM_DOMAIN}
+
+azure:
+  pti-email-service:
+    host: ${AZURE_PTI_EMAIL_HOST}
+    username: ${AZURE_EMAIL_SERVICE_USERNAME}
+    password: ${AZURE_EMAIL_SERVICE_PASSWORD}
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: ${AZURE_EMAIL_SERVICE_SUBSCRIPTION_KEY}
+  generic-email-service:
+    host: ${AZURE_GENERIC_EMAIL_HOST}
+    username: ${AZURE_GENERIC_EMAIL_SERVICE_USERNAME}
+    password: ${AZURE_GENERIC_EMAIL_SERVICE_PASSWORD}
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: ${AZURE_GENERIC_EMAIL_SERVICE_SUBSCRIPTION_KEY}
+
+booking-history:
+  upcomingDays: ${CDH_BOOKING_HISTORY_UPCOMING_DAYS:}
+  pastDays: ${CDH_BOOKING_HISTORY_PAST_DAYS:}
+  cancelledDays: ${CDH_BOOKING_HISTORY_CANCELLED_DAYS:}
+
+cdh:
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT_TYPE}
+    enabled: ${CDH_OAUTH_IS_ENABLED}
+  lazyMigrationEnabled: ${CDH_IS_LAZY_MIGRATION_ENABLED}
+  api:
+    host: ${CDH_API_HOST}
+    is-oauth: ${CDH_API_IS_OAUTH}
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: ${ACCOUNT_SERVICES_OAUTH_SUBSCRIPTION_KEY}
+      booking-subscription-key: ${BOOKING_HUB_OAUTH_SUBSCRIPTION_KEY}
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+url:
+  whitelist:
+    regex:
+      - .*\.premierinn\.com
+      - .*\.premierinn\.de
+      - .*\.premierinn\.digital
+      - .*\.nativ-systems\.com
+      - .*\.whitbread\.digital
+      - .*?localhost
+
+countries-requiring-postal-codes:
+  countryCodeList:
+    - GB
+    - DE
+
+email:
+  piResetPasswordUrl: ${EMAIL_PI_RESET_PASSWORD_URL}
+  innBusinessResetPasswordUrl: ${EMAIL_INN_BUSINESS_RESET_PASSWORD_URL}
+  innBusinessResetPasswordUrlDe: ${EMAIL_INN_BUSINESS_RESET_PASSWORD_URL_DE}
+
+feign:
+  hotelcountries:
+    name: hotelcountries
+    url: ${HOTEL_COUNTRIES_URL:http://localhost:9031}
+  pibaguid:
+    name: pibaguid
+    url: ${PIBAGUID_URL:http://localhost:9063}
+  threecPayment:
+    name: threecPayment
+    url: ${THREEC_PAYMENT_URL}
+  cdh:
+    name: cdhAdapterService
+    url: ${CDH_ADAPTER_URL}
+  worldline:
+    name: worldlineService
+    url: ${WORLDLINE_HOST}/PIRestAPI
+    account-info-endpoint: "/api/v1/account/info"
+    user-contact-details-endpoint: "/api/v1/user/contactdetails/{UserTetheredUserGuidToUpdateTheContactDetails}"
+  pibaaccount:
+    name: pibaaccount
+    url: ${PIBA_ACCOUNT_URL:localhost:9064}
+    get-piba-accounts-endpoint: "/piba/account/customers"
+
+worldline:
+  tetheringPlus:
+    enabled: ${WORLDLINE_TETHERING_PLUS:false}
+  rest:
+    default-ip-address: "1.1.1.1"
+    gb:
+      culture-code: en-GB
+      username: ${WORLDLINE_USERNAME_GB}
+      password: ${WORLDLINE_PASSWORD_GB}
+      company-number: 35
+    de:
+      culture-code: de-DE
+      username: ${WORLDLINE_USERNAME_DE}
+      password: ${WORLDLINE_PASSWORD_DE}
+      company-number: 91
+
+feature-flags:
+  company-name-validation:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false
+  booking-history-page-ordering:
+    key: "release_pi_bb_booking_history_page_ordering"
+    fallback: false
+  cdh-api-deprecation:
+    key: "release_pi_cdh_api_deprecation"
+    fallback: false
+
+threadpool:
+  cdh:
+    coreSize: ${CDH_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${CDH_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${CDH_EXECUTOR_QUEUE_SIZE:50}
+
+universal-login:
+  api-key: ${UNIVERSAL_LOGIN_API_KEY:}
+  login-domain-url: ${LOGIN_DOMAIN_URL}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-dit
+        - opera-uat
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+management:
+  health:
+    redis:
+      enabled: false
+
+hotel:
+  account:
+    forgotPassword:
+      url: https://testpi/en/mypremierinn/resetPassword.action?token=
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: http://localhost/oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  lazyMigrationEnabled: true
+  enablePiDataFetch: false
+  enableBbDataFetch: true
+  api:
+    host: https://localhost
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: testKey
+      booking-subscription-key: testBookingKey
+
+email:
+  piResetPasswordUrl: https://piURL/?token=
+  innBusinessResetPasswordUrl: https://innbURL/?key=
+  innBusinessResetPasswordUrlDe: https://innbURL-de/?key=
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    uk.co.whitbread: debug
+    feign: debug
+
+
+
+countries-requiring-postal-codes:
+  countryCodeList:
+    - GB
+    - DE
+
+passwords:
+  configs:
+    account:
+      minLength: 8
+      maxLength: 50
+      illegalChars: ":~"
+      allowNull: true
+    accountAuth0:
+      minLength: 8
+      regExps:
+        - (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])|(?=.*[a-z])(?=.*[A-Z])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[a-z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[A-Z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])
+      allowNull: true
+      staticErrorMessage: "Password must be at least 8 characters long and meet three of the following criteria: at least one lower case letter, at least one upper case letter, at least one digit and at least one special character."
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: https://wbodetest.eu.auth0.com/api/v2/
+      namespace: https://premierinn.com
+      issuer: https://auth0.premierinn.digital/
+      jwkUri: https://auth0.premierinn.digital/.well-known/jwks.json
+  management:
+    domain: http://localhost:${wiremock.server.port:1}
+    clientId: clientId_test
+    clientSecret: clientSecret_test
+    audience: http://mock-audience/api/v2/
+    b2cConnection: ms-test
+    b2bConnection: ms-test-bb
+    connection: auth0-users
+    lazyMigrationEnabled: true
+    resetPasswordTokenTtlSec: 3600
+    customDomain: auth0.premierinn.digital
+
+azure:
+  pti-email-service:
+    host: http://localhost:${wiremock.server.port}/internal/PTIEmailService/v1
+    username: username-test
+    password: password-test
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: subscription-key-test
+  generic-email-service:
+    host: http://localhost:${wiremock.server.port}/internal/EmailService/v1
+    username: username-test
+    password: password-test
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: subscription-key-test
+
+feign:
+  hotelcountries:
+    name: hotelcountries
+    url: https://restapi.dit.premierinn.digital
+  pibaguid:
+    name: pibaguid
+    url: https://restapi.dit.premierinn.digital
+  worldline:
+    name: worldlineService
+    url: https://test-premierinn.worldline.global/PIRestAPI
+    account-info-endpoint: "/api/v1/account/info"
+    user-contact-details-endpoint: "/api/v1/user/contactdetails/{UserTetheredUserGuidToUpdateTheContactDetails}"
+  pibaaccount:
+    name: pibaaccount
+    url: https://restapi.dit.premierinn.digital
+    get-piba-accounts-endpoint: "/piba/account/customers"
+  cdh:
+    name: cdhAdapterService
+    url: https://restapi.dit.premierinn.digital
+  threecPayment:
+    name: threecPayment
+    url: https://restapi.dit.premierinn.digital
+
+worldline:
+  tetheringPlus:
+    enabled: ${WORLDLINE_TETHERING_PLUS:false}
+
+url:
+  whitelist:
+    regex:
+      - .*\.premierinn\.com
+      - .*\.premierinn\.de
+      - .*\.nativ-systems\.com
+      - .*\.whitbread\.digital
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+
+#Proxy is required for developers outside WB network
+#to be able to make requests to lowers envs CDH-Adapter
+config:
+  httpClient:
+    proxy:
+      host: ${HTTP_PROXY_HOST}
+      port: ${HTTP_PROXY_PORT}
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod

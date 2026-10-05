@@ -1,0 +1,312 @@
+name: Frontend CI and Ephemeral Deployment
+
+on:
+  pull_request:
+    branches:
+      - main
+      - test-deployment
+  merge_group:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NODE_VERSION: "24.20.0"
+
+jobs:
+  dependency-review:
+    name: GitHub dependency review
+    if: |
+      (github.event_name == 'pull_request' || github.event_name == 'merge_group') &&
+      !endsWith(github.head_ref || github.ref_name, '-Issues-XX') &&
+      !endsWith(github.head_ref || github.ref_name, '-JIRA-XX')
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Run GitHub dependency review
+        uses: actions/dependency-review-action@v5
+        with:
+          fail-on-severity: moderate
+          # strtok3 10.3.5 is MIT; GitHub incorrectly reports MIT AND Ruby.
+          # https://github.com/actions/dependency-review-action/issues/1143
+          allow-dependencies-licenses: pkg:npm/strtok3@10.3.5
+          allow-licenses: MIT, ISC, Apache-2.0, BSD-2-Clause, BSD-3-Clause, 0BSD, MIT-0, CC0-1.0, Unlicense, MPL-2.0, LGPL-2.0-only, LGPL-2.1-only, LGPL-3.0-only, LGPL-3.0-or-later, CC-BY-4.0, MS-PL, GPL-2.0-only, BlueOak-1.0.0, Zlib, LicenseRef-scancode-unicode, LicenseRef-scancode-protobuf, LicenseRef-scancode-public-domain
+
+  code-analysis:
+    name: Checkov scan (frontend repository)
+    if: |
+      !endsWith(github.head_ref || github.ref_name, '-Issues-XX') &&
+      !endsWith(github.head_ref || github.ref_name, '-JIRA-XX')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Test deployment identity and run Checkov
+        uses: ./.github/frontend/actions/code-analysis
+        with:
+          branch-name: ${{ github.head_ref || github.ref_name }}
+          repository: ${{ github.repository }}
+          prisma-code-analysis-access-key-id: ${{ secrets.PRISMA_CODE_ANALYSIS_ACCESS_KEY_ID }}
+          prisma-code-analysis-secret-key: ${{ secrets.PRISMA_CODE_ANALYSIS_SECRET_KEY }}
+
+  build:
+    name: Lerna build (frontend apps)
+    runs-on: tooling-fe-runner-scale-set
+    defaults:
+      run:
+        working-directory: frontend/pi-front-end-applications
+    outputs:
+      business-booker-version: ${{ steps.frontend-build.outputs.business-booker-version }}
+      ccui-version: ${{ steps.frontend-build.outputs.ccui-version }}
+      premier-inn-version: ${{ steps.frontend-build.outputs.premier-inn-version }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Build, validate, and package with Lerna
+        id: frontend-build
+        uses: ./.github/frontend/actions/build
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          run-full-validation: ${{ !endsWith(github.head_ref || github.ref_name, '-Issues-XX') && !endsWith(github.head_ref || github.ref_name, '-JIRA-XX') }}
+          target-environment: >-
+            ${{ github.ref_name == 'main' && 'dev' ||
+            contains(github.ref, '/merge') && 'dev' ||
+            contains(github.ref, 'gh-readonly-queue') && 'dev' ||
+            contains(github.ref, 'hotfix/release') && 'demo' ||
+            contains(github.ref, 'release/') && 'uat' ||
+            contains(github.ref, 'perf/') && 'perf' }}
+
+      - name: Report build failure to Jira
+        if: ${{ failure() && endsWith(github.head_ref || github.ref_name, '-JIRA-XX') }}
+        continue-on-error: true
+        env:
+          JIRA_DOMAIN: whitbreadis.atlassian.net
+          EMAIL: iyyappan.murugan@whitbread.com
+          API_TOKEN: ${{ secrets.JIRA_KIRO_INTEGRATION }}
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          CI_SCRIPT_ROOT: ${{ github.workspace }}/.github/frontend/scripts
+        run: bash "$CI_SCRIPT_ROOT/notifications/jira-build-failure-comment.sh"
+
+  quality-scans:
+    name: SonarQube scan (${{ matrix.component-path }})
+    if: |
+      !endsWith(github.head_ref || github.ref_name, '-Issues-XX') &&
+      !endsWith(github.head_ref || github.ref_name, '-JIRA-XX')
+    needs: [build]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend/pi-front-end-applications
+    env:
+      SRCCLR_API_TOKEN: ${{ secrets.OPERA_FE_SCA_TOKEN }}
+      SONAR_CLI_VERSION: 6.0.0.4432
+      VOSP_API_WRAPPER_VERSION: "23.8.12.0"
+    strategy:
+      fail-fast: false
+      matrix:
+        component-path: ${{ fromJson(vars.COMPONENTS) }}
+    steps:
+      - name: Checkout ${{ matrix.component-path }} source history
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Run SonarQube for ${{ matrix.component-path }}
+        uses: ./.github/frontend/actions/quality-scan
+        with:
+          component-path: ${{ matrix.component-path }}
+          node-version: ${{ env.NODE_VERSION }}
+          sonar-cli-version: ${{ env.SONAR_CLI_VERSION }}
+          github-ref-name: ${{ github.ref_name }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
+
+  prisma-scans:
+    name: Prisma image scan (${{ matrix.app-name }})
+    if: |
+      !endsWith(github.head_ref || github.ref_name, '-Issues-XX') &&
+      !endsWith(github.head_ref || github.ref_name, '-JIRA-XX') &&
+      ((github.event_name == 'pull_request' &&
+      (startsWith(github.head_ref, 'feature/') ||
+       startsWith(github.head_ref, 'feat/') ||
+       startsWith(github.head_ref, 'bugfix/') ||
+       startsWith(github.head_ref, 'fix/') ||
+       startsWith(github.head_ref, 'hotfix/') ||
+       startsWith(github.head_ref, 'release/')) || github.event_name == 'merge_group'))
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      issues: write
+      pull-requests: write
+    outputs:
+      business-booker-image-tag: ${{ steps.frontend-image.outputs.business-booker-image-tag }}
+      ccui-image-tag: ${{ steps.frontend-image.outputs.ccui-image-tag }}
+      premier-inn-image-tag: ${{ steps.frontend-image.outputs.premier-inn-image-tag }}
+    strategy:
+      matrix:
+        app-name: [business-booker, ccui, premier-inn]
+    steps:
+      - name: Create GitHub token for ${{ matrix.app-name }} Prisma comment
+        id: generate-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.PIPELINE_APP_ID }}
+          private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Checkout ${{ matrix.app-name }} source
+        uses: actions/checkout@v7
+
+      - name: Build ${{ matrix.app-name }} scan image with Docker
+        id: frontend-image
+        uses: ./.github/frontend/actions/container-image
+        with:
+          app-name: ${{ matrix.app-name }}
+          app-version: ${{ needs.build.outputs[format('{0}-version', matrix.app-name)] }}
+          ref-name: ${{ github.ref_name }}
+          commit-sha: ${{ github.sha }}
+          dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+          aws-role-to-assume: arn:aws:iam::327347623470:role/GitHubActionsECRPushRole
+          aws-region: eu-west-1
+
+      - name: Run Prisma scan for ${{ matrix.app-name }}
+        uses: ./.github/actions/prisma-image-scan
+        with:
+          image-name: whitbreaddigital/${{ matrix.app-name }}:${{ steps.frontend-image.outputs.image-tag }}
+          prisma-user: ${{ secrets.PRISMA_ACCESS_KEY_ID }}
+          prisma-password: ${{ secrets.PRISMA_SECRET_KEY }}
+          github-token: ${{ steps.generate-token.outputs.token }}
+          post-pr-comment: ${{ github.event_name == 'pull_request' }}
+
+  image-build:
+    name: Docker publish (${{ matrix.app-name }})
+    if: |
+      always() &&
+      github.event_name != 'merge_group' &&
+      needs.build.result == 'success'
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    outputs:
+      business-booker-image-tag: ${{ steps.frontend-image.outputs.business-booker-image-tag }}
+      ccui-image-tag: ${{ steps.frontend-image.outputs.ccui-image-tag }}
+      premier-inn-image-tag: ${{ steps.frontend-image.outputs.premier-inn-image-tag }}
+      image-tag: ${{ steps.frontend-image.outputs.image-tag }}
+    strategy:
+      matrix:
+        app-name: [business-booker, ccui, premier-inn]
+    steps:
+      - name: Checkout ${{ matrix.app-name }} source
+        uses: actions/checkout@v7
+
+      - name: Build and publish ${{ matrix.app-name }} with Docker
+        id: frontend-image
+        uses: ./.github/frontend/actions/container-image
+        with:
+          app-name: ${{ matrix.app-name }}
+          app-version: ${{ needs.build.outputs[format('{0}-version', matrix.app-name)] }}
+          ref-name: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+          commit-sha: ${{ github.sha }}
+          dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+          aws-role-to-assume: arn:aws:iam::327347623470:role/GitHubActionsECRPushRole
+          aws-region: eu-west-1
+          push-dockerhub: "true"
+          push-ecr: "true"
+
+  gate-ephemeral:
+    name: Decide ephemeral deploy (POC suffix)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-slim
+    outputs:
+      should-deploy: ${{ steps.decide.outputs.should-deploy }}
+    steps:
+      - id: decide
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+          # 'true' when a previous ephemeral deploy (POC or "Ephemeral UP" comment) has
+          # already tagged this PR. The reusable deploy workflow adds this label after a
+          # deploy, so once a PR has an environment every later commit redeploys it.
+          HAS_EPHEMERAL_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'ephemeral-active') }}
+        run: |
+          set -euo pipefail
+          should=false
+          if [[ "$BASE_REF" == "main" || "$BASE_REF" == "test-deployment" ]]; then
+            # Auto-deploy POC-suffixed branches.
+            case "$HEAD_REF" in
+              *-JIRA-XX|*-Issues-XX|*-TEAMS-XX) should=true ;;
+            esac
+            # Redeploy any PR that already has an ephemeral environment, so new commits
+            # ship the latest code (covers comment-triggered PRs with no POC suffix).
+            if [[ "$HAS_EPHEMERAL_LABEL" == "true" ]]; then
+              should=true
+            fi
+          fi
+          echo "should-deploy=$should" >> "$GITHUB_OUTPUT"
+
+  deploy-frontend-ephemeral:
+    name: Ephemeral deploy (reusable workflow)
+    needs: [image-build, gate-ephemeral]
+    if: |
+      always() &&
+      needs.image-build.result == 'success' &&
+      needs.gate-ephemeral.outputs.should-deploy == 'true'
+    # A reusable workflow's token can only be equal to or more restrictive than the
+    # caller job's. The called workflow's jobs request id-token/pull-requests/issues
+    # write, so grant them here or the run fails at startup (permission escalation).
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+      issues: write
+      deployments: write
+    uses: ./.github/workflows/ci-fe-ephemeral-deploy.yaml
+    with:
+      pr-number: ${{ github.event.pull_request.number }}
+      branch-name: ${{ github.head_ref }}
+      business-booker-image-tag: ${{ needs.image-build.outputs.business-booker-image-tag }}
+      ccui-image-tag: ${{ needs.image-build.outputs.ccui-image-tag }}
+      premier-inn-image-tag: ${{ needs.image-build.outputs.premier-inn-image-tag }}
+      trigger-source: pull_request
+    secrets: inherit
+
+  send-workflow-status-to-teams:
+    name: Teams workflow report (frontend)
+    uses: ./.github/workflows/tool-workflow-status-reporter.yaml
+    needs:
+      - dependency-review
+      - code-analysis
+      - build
+      - quality-scans
+      - prisma-scans
+      - image-build
+      - deploy-frontend-ephemeral
+    if: ${{ always() }}
+    permissions:
+      actions: read
+      checks: read
+    secrets:
+      TEAMS_WEBHOOK: ${{ secrets.MSTEAMS_ERRORS_FE }}

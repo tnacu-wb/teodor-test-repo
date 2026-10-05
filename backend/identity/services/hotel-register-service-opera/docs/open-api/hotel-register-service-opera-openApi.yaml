@@ -1,0 +1,444 @@
+openapi: 3.0.1
+info:
+  description: API Documentation
+  title: Hotel register Microservice API Documentation
+  version: 1.10.0
+servers:
+- description: Generated server url
+  url: http://localhost:9027
+paths:
+  /customers/hotels:
+    post:
+      description: Create Customer
+      operationId: createCustomer_1
+      parameters:
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to create a new customer resource
+      tags:
+      - Hotel Register operations
+  /cypher:
+    post:
+      deprecated: true
+      description: Cypher a plain text
+      operationId: cypherPlainText
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to create a new customer resource
+      tags:
+      - Endpoint created to cypher emails. Random endpoint name to mask its purpose
+  /v2/customers/hotels:
+    post:
+      description: Create Customer V2
+      operationId: createCustomer
+      parameters:
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerV2'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to create a new customer resource
+      tags:
+      - Hotel Register operations
+  /va3PkOkJNTUf76oe3UDoIqrA:
+    post:
+      description: Cypher a plain text
+      operationId: cypherBase64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to create a new customer resource
+      tags:
+      - Endpoint created to cypher emails. Random endpoint name to mask its purpose
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        companyName:
+          type: string
+        countryCode:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        line5:
+          type: string
+        postCode:
+          type: string
+        type:
+          type: string
+          enum:
+          - HOME
+          - BUSINESS
+      required:
+      - countryCode
+      - line1
+      - type
+    BookingPreference:
+      type: object
+      properties:
+        foodPreference:
+          type: integer
+          format: int64
+        reason:
+          type: string
+          enum:
+          - LEISURE
+          - BUSINESS
+        roomRequirements:
+          $ref: '#/components/schemas/RoomCriteria'
+        wantSmsConfirmations:
+          type: boolean
+    ContactDetail:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        carRegistration:
+          type: string
+        dialingCode:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobile:
+          type: string
+        nationality:
+          type: string
+        passport:
+          $ref: '#/components/schemas/Passport'
+        telephone:
+          type: string
+        title:
+          type: string
+      required:
+      - address
+      - email
+      - firstName
+      - lastName
+      - title
+    Customer:
+      type: object
+      description: The Customer JSON payload
+      properties:
+        additionalGuests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactDetail'
+        alternativeName:
+          type: string
+        approxAnnualUKHotelSpend:
+          type: string
+        bookingPreference:
+          $ref: '#/components/schemas/BookingPreference'
+        captcha:
+          type: string
+        companyId:
+          type: string
+        companyName:
+          type: string
+        contactDetail:
+          $ref: '#/components/schemas/ContactDetail'
+        guestHistoryNumber:
+          type: string
+        guestId:
+          type: integer
+          format: int64
+        password:
+          type: string
+        paymentPreference:
+          $ref: '#/components/schemas/PaymentPreference'
+      required:
+      - contactDetail
+      - password
+    CustomerResponse:
+      type: object
+      properties:
+        customerId:
+          type: string
+        existingCompany:
+          type: boolean
+        existingEmployee:
+          type: boolean
+        sessionId:
+          type: string
+        success:
+          type: boolean
+    CustomerV2:
+      type: object
+      description: The Customer JSON payload
+      properties:
+        additionalGuests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactDetail'
+        alternativeName:
+          type: string
+        approxAnnualUKHotelSpend:
+          type: string
+        bookingPreference:
+          $ref: '#/components/schemas/BookingPreference'
+        captcha:
+          type: string
+        companyId:
+          type: string
+        companyName:
+          type: string
+        contactDetail:
+          $ref: '#/components/schemas/ContactDetail'
+        guestHistoryNumber:
+          type: string
+        guestId:
+          type: integer
+          format: int64
+        password:
+          type: string
+        paymentPreference:
+          $ref: '#/components/schemas/PaymentPreference'
+      required:
+      - contactDetail
+    EncryptRequest:
+      type: object
+      description: The plainText to be cyphered
+      properties:
+        plainText:
+          type: string
+          deprecated: true
+        r07ff4EmmB9YU2pouslyuBG4bOgqKXbp8xah1UAGbTlUut2U:
+          type: string
+    EncryptResponse:
+      type: object
+      properties:
+        am7VLjo2qMes8BT4PAMBLkNEKVCYPvMMcfSUlbihxZsvlC4w:
+          type: string
+        encrypted:
+          type: string
+          deprecated: true
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+      required:
+      - code
+      - details
+    Passport:
+      type: object
+      properties:
+        countryOfIssue:
+          type: string
+        number:
+          type: string
+      required:
+      - number
+    PaymentCard:
+      type: object
+      properties:
+        cardHolderName:
+          type: string
+        cardNumber:
+          type: string
+        cardType:
+          type: string
+        expiryDate:
+          type: string
+        issueNumber:
+          type: string
+        startDate:
+          type: string
+    PaymentPreference:
+      type: object
+      properties:
+        electronicInvoiceRequired:
+          type: boolean
+        paymentCard:
+          $ref: '#/components/schemas/PaymentCard'
+      required:
+      - paymentCard
+    RoomCriteria:
+      type: object
+      properties:
+        adults:
+          type: integer
+          format: int32
+          minimum: 0
+        children:
+          type: integer
+          format: int32
+          minimum: 0
+        cotRequired:
+          type: boolean
+        hotelBrand:
+          type: string
+        lettingType:
+          type: string
+        type:
+          type: string
+          enum:
+          - FAM
+          - DB
+          - TWIN
+          - DIS
+          - SB
+      required:
+      - adults
+      - children
+      - cotRequired
+      - type

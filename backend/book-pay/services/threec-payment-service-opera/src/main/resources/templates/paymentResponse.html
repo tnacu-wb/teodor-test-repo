@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Payment Details</title>
+</head>
+<body>
+    <script type="text/javascript">
+        [(${commentStart})]
+        try {
+            parent.postMessage("{\"paymentId\": \"[[${paymentId}]]\", \"merchantReference\": \"[[${merchantReference}]]\",\"transactionId\": \"[[${transactionId}]]\",\"authCode\": \"[[${authCode}]]\",\"cardType\": \"[[${cardType}]]\", \"tokenNo\": \"[[${tokenNo}]]\", \"paymentStatus\": \"[[${paymentStatus}]]\"}", "[(${domainUrl})]");
+        } catch (error) {
+            if (console) {
+                console.log(error);
+            }
+        }
+        [(${commentEnd})]
+    </script>
+</body>
+</html>

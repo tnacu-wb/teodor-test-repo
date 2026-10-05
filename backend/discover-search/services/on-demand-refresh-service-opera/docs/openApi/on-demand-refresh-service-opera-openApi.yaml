@@ -1,0 +1,234 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- description: Generated server url
+  url: http://localhost:9099
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /on-demand-refresh-service/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /on-demand-refresh-service/actuator/health:
+    get:
+      operationId: health_1
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /on-demand-refresh-service/actuator/health/{path}:
+    get:
+      operationId: health
+      parameters:
+      - in: path
+        name: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "404":
+          description: Not Found
+      summary: Actuator web endpoint 'health-path'
+      tags:
+      - Actuator
+  /on-demand-refresh-service/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /on-demand-refresh-service/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /on-demand-refresh-service/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "404":
+          description: Not Found
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /on-demand-refresh-service/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /refresh/hotels:
+    get:
+      operationId: refreshHotelAvailabilityOnDemand
+      parameters:
+      - in: query
+        name: hotelIds
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+      - in: query
+        name: startDate
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: endDate
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: OK
+      tags:
+      - hotel-availability-on-demand-refresh-controller
+components:
+  schemas:
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean

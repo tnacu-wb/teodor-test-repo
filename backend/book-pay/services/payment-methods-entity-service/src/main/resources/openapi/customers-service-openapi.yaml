@@ -1,0 +1,315 @@
+openapi: 3.0.1
+info:
+  title: Account Services REST API
+  version: 1.0.0
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  customers/hotels/{customerId}:
+    get:
+      operationId: findCustomerAccount
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: business
+          required: true
+          schema:
+            type: boolean
+        - in: header
+          name: bookingChannel
+          required: false
+          schema:
+            type: string
+            example: null
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerAccountDto'
+        "404":
+          description: Resource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "400":
+          description: 'Error Occurred '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+  company/{companyId}:
+    get:
+      operationId: findCompany
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: header
+          name: session-id
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: header
+          name: employee-id
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: header
+          name: company-id
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetailsResponseDto'
+        "404":
+          description: Resource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "400":
+          description: 'Error Occurred '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+  companies/{companyId}/cards:
+    get:
+      operationId: findCentralStoredCard
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          type: integer
+          format: int32
+          example: 1
+        - in: header
+          name: session-id
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: header
+          name: bookingChannel
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentCardsDto'
+        "404":
+          description: Resource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "400":
+          description: 'Error Occurred '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+      components:
+        schemas:
+          ExceptionResponse:
+            required:
+              - code
+              - details
+            type: object
+            properties:
+              code:
+                type: string
+              details:
+                type: array
+                items:
+                  type: string
+          CustomerAccountDto:
+            type: object
+            example: null
+            properties:
+              additionalGuests:
+                type: array
+                example: null
+                items:
+                  $ref: '#/components/schemas/AdditionalGuestDto'
+              bookingPreference:
+                  $ref: '#/components/schemas/BookingPreferenceDto'
+              business:
+                $ref: '#/components/schemas/BusinessDto'
+              businessUse:
+                type: boolean
+                example: false
+              companyId:
+                type: integer
+                format: int32
+                example: 0
+              companyName:
+                type: string
+              paymentPreference:
+                $ref: '#/components/schemas/ContactDetailDto'
+              guestHistoryNumber:
+                type: string
+              contactDetail:
+                $ref: '#/components/schemas/PaymentPreferenceDto'
+              sessionId:
+                type: string
+          AdditionalGuestDto:
+            type: object
+            example: null
+            properties:
+              address:
+                $ref: '#/components/schemas/AddressDto'
+              carRegistration:
+                type: string
+              dialingCode:
+                type: integer
+                format: int32
+                example: 0
+              email:
+                type: string
+              firstName:
+                type: string
+              lastName:
+                type: string
+              mobile:
+                type: string
+              nationality:
+                type: string
+              passport:
+                $ref: '#/components/schemas/PassportDto'
+              telephone:
+                type: string
+              title:
+                type: string
+          CompanyDetailsResponseDto:
+            type: object
+            example: null
+            properties:
+              requestedCompany:
+                $ref: '#/components/schemas/CompanyDto'
+              allowCentralCreditCard:
+                type: boolean
+                example: false
+              marketingAllowed:
+                type: boolean
+                example: false
+              companyLockedForEditing:
+                type: boolean
+                example: false
+              success:
+                type: boolean
+                example: false
+          CompanyDetailsDto:
+            type: object
+            example: null
+            properties:
+              companyName:
+                type: string
+              alternateCompanyName:
+                type: string
+              numberOfEmployees:
+                type: integer
+                format: int32
+                example: 1
+              bookingAllowances:
+                $ref: '#/components/schemas/BookingAllowancesDto'
+          BookingAllowancesDto:
+            type: object
+            example: null
+            properties:
+              allowAlcohol:
+                type: boolean
+                example: false
+              allowAdditionalCosts:
+                type: boolean
+                example: false
+              allowPremierSaverRates:
+                type: boolean
+                example: false
+              allowIndividualCards:
+                type: boolean
+                example: false
+              maxNumberOfNights:
+                type: boolean
+                example: false
+          PaymentCardDto:
+            type: object
+            example: null
+            properties:
+              billingAddress:
+                $ref: '#/components/schemas/BillingAddressDto'
+              cardHolderName:
+                type: string
+              cardId:
+                type: integer
+                format: int32
+                example: 1
+              cardNumber:
+                type: string
+              issueNumber:
+                type: string
+              cardType:
+                type: string
+              cnpBusinessAccountPassword:
+                type: string
+              cnpBusinessAccountUsername:
+                type: string
+              cnpRequired:
+                type: boolean
+                example: false
+              expiryDate:
+                type: string
+              startDate:
+                type: string

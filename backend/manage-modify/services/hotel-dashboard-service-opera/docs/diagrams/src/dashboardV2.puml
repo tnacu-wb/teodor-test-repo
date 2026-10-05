@@ -1,0 +1,50 @@
+
+@startuml
+
+Actor User
+Control "Hotel Dashboard" as HD
+Control "CDH Adapter" as CDH
+Control "Hotel Account" as HA
+Control "Hotel Info" as HI
+
+User -> HD: confirmationNumber, arrivalDate, surname, recentSearches, Authorization token, business
+
+group if there is upcoming booking
+HD -> CDH: reservation details
+HD <- CDH: return reservation details
+
+HD -> HI: get hotel info
+HD <- HI: return hotel info
+
+HD -> HD: Set dashboard type as UPCOMING_BOOKING
+HD -> HD: Set dashboard content
+end
+
+group if there is no upcoming booking and recentSearches=true
+HD -> HD: Cannot find any upcoming booking within the next 2 weeks
+HD -> HD: Set dashboard type as RECENT_SEARCHES
+end
+
+group if there is no upcoming booking and recentSearches=false
+HD -> HD: Cannot find any upcoming booking within the next 2 weeks
+HD -> HA: get account stays using **Authorization** header
+HD <- HA: Return account stays
+HD -> HI: get hotel info
+HD <- HI: return hotel info
+HD -> HD: Calculate frequent bookings
+HD -> HD: Set dashboard type as FREQUENT_BOOKINGS
+HD -> HD: Set dashboard content
+end
+
+group if there is no upcoming booking, recentSearches=false and no frequentBookings
+HD -> HD: Cannot find any upcoming booking within the next 2 weeks
+HD -> HA: get account stays using **Authorization** header
+HD <- HA: Return account stays
+
+HD -> HD: No frequent bookings found
+HD -> HD: Set dashboard type as PAST_SEARCHES
+end
+
+User <- HD: Dashboard JSON
+
+@enduml

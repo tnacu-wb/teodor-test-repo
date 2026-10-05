@@ -1,0 +1,22 @@
+'Use this platform to render https://plantuml.com/running
+@startuml
+!theme aws-orange
+!include <cloudinsight/java>
+
+cloud "Client \rComponent" as consumers
+node "Rule Engine"  {
+database "AWS Aurora \r(PostgreSQL)" as postgres
+rectangle "<$java>\rRule Agent \rService \r(instance #1)" as agent1
+rectangle "<$java>\rRule Agent \rService \r(instance #2)" as agent2
+rectangle "<$java>\rRule Agent \rService \r(instance #3)" as agent3
+rectangle "<$java>\rRule Manager \rService \r(instance #1)" as manager
+}
+
+consumers --> agent1
+consumers --> agent2
+consumers --> agent3
+agent1 --> postgres : Read-Only
+agent2 --> postgres : Read-Only
+agent3 --> postgres : Read-Only
+postgres <-- manager : Read/Write
+@enduml

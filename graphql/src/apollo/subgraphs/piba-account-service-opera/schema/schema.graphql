@@ -1,0 +1,200 @@
+schema {
+    query: Query,
+    mutation: Mutation
+}
+
+type Query {
+    getAccountList(viewAll: Boolean): AccountList
+    getAccountBalanceSummary(viewAll: Boolean): CustomerAccountCurrentBalancesResponse
+    getAccountBalanceSummaryV2(scheme: Scheme, tetheredUserGuid: String): CurrentBalanceItem
+}
+
+type Mutation {
+    resetMemorableWord(resetMemorableWordRequest: ResetMemorableWordRequest!): ResetMemorableWordResponse
+    viewCustomerInvoicesV2(payload: CustomerAccountInvoiceRequest!): CustomerAccountInvoiceResponse
+    viewAccountTransactions(payload: CustomerAccountTransactionsRequest!): CustomerAccountTransactionsResponse
+}
+
+type CustomerAccountCurrentBalancesResponse {
+    currentBalances: [CurrentBalanceItem]
+    totalRecordCount: Int
+}
+
+type CurrentBalanceItem {
+    schemeCustomerId: Int
+    tetheredGuid: String
+    accountName: String
+    accountNumber: String
+    registrationRoles: [RegistrationRoles]
+    errorCode: String
+    scheme: Scheme
+    outstanding: Currency
+    newTransactions: Currency
+    available: Currency
+    creditLimit: Currency
+    currentBalance: Currency
+    interimPayments: Currency
+}
+
+type Currency {
+    amount: Float
+    currencyCode: String
+    currencySymbol: String
+}
+
+enum RegistrationRoles {
+    ACCOUNT_HOLDER,
+    CARD_HOLDER,
+    FINANCE_USER_CARD_HOLDER,
+    FINANCE_USER,
+    ACCOUNT_CARD_HOLDER,
+    COST_CENTRE_USER
+}
+
+input ResetMemorableWordRequest {
+    tetheredUserGuid: String!
+    memorableWord: String!
+    scheme: String
+}
+
+type ResetMemorableWordResponse {
+    resultCode: String
+}
+
+type AccountList {
+    accounts: [CustomerAccountDetails]
+    totalRecordCount: Int
+}
+
+type CustomerAccountDetails {
+    schemeCustomerId: Int
+    tetheredGuid: String
+    accountName: String
+    accountNumber: String
+    apiUserGuid: String
+    registrationRoles: [RegistrationRole]
+    errorCode: String
+    scheme: Scheme
+}
+
+enum RegistrationRole {
+    ACCOUNT_HOLDER
+    CARD_HOLDER
+    FINANCE_USER_CARD_HOLDER
+    FINANCE_USER
+    ACCOUNT_CARD_HOLDER
+    COST_CENTRE_USER
+}
+
+enum Scheme {
+    GB
+    DE
+}
+
+input CustomerAccountInvoiceRequest {
+    tetheredUserGuid: String!
+    schemeCustomerId: Int!
+    searchCriteria: CustomerAccountInvoiceCriteria
+    pagingRequest: PagingRequestWithoutSort!
+    scheme: Scheme
+}
+
+input CustomerAccountInvoiceCriteria {
+    dateFrom: String!
+    dateTo: String!
+}
+
+input PagingRequestWithoutSort {
+    page: Int!
+    maximumDisplayRows: Int!
+}
+
+type CustomerAccountInvoiceResponse {
+    response: CustomerAccountInvoiceResponseType
+    pagingResult: PagingResult
+}
+
+type CustomerAccountInvoiceResponseType {
+    invoices: [CustomerAccountInvoice!]
+}
+
+type CustomerAccountInvoice {
+    statementDate: String
+    invoiceNo: String
+    broughtForward: Currency
+    paymentsReceived: Currency
+    overdueBalance: Currency
+    invoiceValue: Currency
+    statementBalance: Currency
+    fileAutoID: Int
+}
+
+type PagingResult {
+    totalRecords: Int @deprecated(reason: "Use totalRecordCount instead")
+    totalPages: Int @deprecated(reason: "Use totalRecordCount instead")
+    currentPage: Int @deprecated(reason: "Use lastPage instead")
+    fromRecord: Int
+    toRecord: Int
+    totalRecordCount: Int
+    lastPage: Int
+}
+
+input CustomerAccountTransactionsRequest {
+    tetheredUserGuid: String!
+    schemeCustomerId: Int!
+    scheme: Scheme
+    searchCriteria: CustomerAccountTransactionsCriteria!
+    pagingRequest: PagingRequestWithoutSort!
+}
+
+input CustomerAccountTransactionsCriteria {
+    dateSearch: CustomerAccountTransactionsByDateCriteria
+    invoiceNumberSearch: CustomerAccountTransactionsByInvoiceNumberCriteria
+}
+
+input CustomerAccountTransactionsByDateCriteria {
+    dateFrom: String!
+    dateTo: String!
+    transactionTypes: String!
+    pan: String
+}
+
+input CustomerAccountTransactionsByInvoiceNumberCriteria {
+    invoiceNumber: String!
+}
+
+type CustomerAccountTransactionsResponse {
+    response: CustomerAccountTransactionsResponseType
+    pagingResult: PagingResult
+}
+
+type CustomerAccountTransactionsResponseType {
+    transactions: [CustomerAccountCardTransaction]
+}
+
+type CustomerAccountCardTransaction {
+    invoiceDate: String
+    invoiceNo: String
+    transactionDate: String
+    netAmount: Currency
+    taxAmount: Currency
+    grossAmount: Currency
+    location: String
+    pan: String
+    cardName: String
+    purchaseOrderReference: String
+    customerOwnRef: String
+    salesOrderNumber: String
+    lineItems: [CustomerAccountCardTransactionLineItem]
+}
+
+type CustomerAccountCardTransactionLineItem {
+    description: String
+    quantity: Int
+    netAmount: Currency
+    taxAmount: Currency
+    grossAmount: Currency
+    guestName: String
+    invoiceLineItem: Int
+}
+

@@ -1,0 +1,23 @@
+schema {
+    query: Query
+}
+
+type Query {
+    promotionPanel(bookingFlowCriteria: BookingFlowCriteria!): [PromotionPanel]
+}
+
+input BookingFlowCriteria {
+    bookingChannel:String
+    hotelId: String!
+    language: String!
+    country: String!
+    rateCode: String!
+}
+
+type PromotionPanel {
+    image: String
+    name: String
+    description: String
+    linkLabel: String
+    linkPath: String
+}

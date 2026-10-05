@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+header piba-account-service
+title /piba/account/memorableword
+autonumber
+actor User #red
+participant "'Reset Memorable Word' Button" as Client
+participant "PibaAccountController" as PAC
+participant "PibaAccountService" as PAS
+participant "PibaGuidServiceClient" as PGSC
+participant "WorldlineTransformer" as WLT
+participant "worldlineWebServiceTemplate" as WWST
+participant "WorldLineAccountResponseValidator" as WLARV
+
+User -> Client : Clicks on "Reset Memorable Word"
+Client -> PAC : Calls API /piba/account/memorableword \n for payload request ResetMemorableWordRequest
+PAC -> PAC : Creates UpdateMemorableWordRequest from the passed scheme and ResetMemorableWordRequest
+PAC -> PAS : Calls resetMemorableWord with updateMemorableWordRequest
+PAS -> WLT : Dispatches Request  LoginTetheredUser via method marshalSendAndReceive
+WLT -> PAS : Returns LoginTetheredUserResponse
+PAS -> WLARV : Validate the Response
+PAS -> PAS : Creates createTetheredLoginResponse from the worldline response
+PAS -> PAS : Updates updateMemorableWordRequest with worldline response ( session id, hash etc)
+PAS -> WLT : Dispatches Request  toUpdateMemorableWordRequest via method marshalSendAndReceive
+WLT -> PAS : Returns UpdateMemorableWordResponse
+PAS -> WLARV : Validate the Response
+PAS -> WLT : Calls toResetMemorableWordResponse to generate response from UpdateMemorableWordResponse
+WLT -> PAS : Return ResetMemorableWordResponse from toResetMemorableWordResponse
+PAS -> PAC : Return ResetMemorableWordResponse
+PAC -> Client : Return ResetMemorableWordResponse
+Client -> User : Resets the memorable word
+@enduml

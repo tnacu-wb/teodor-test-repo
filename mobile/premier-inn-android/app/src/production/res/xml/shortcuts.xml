@@ -1,0 +1,46 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_search_shortcut"
+        android:shortcutId="shortcut_search"
+        android:shortcutShortLabel="@string/shortcut_search_hotel"
+        android:shortcutLongLabel="@string/shortcut_search_hotel"
+        android:shortcutDisabledMessage="@string/shortcut_search_hotel">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.whitbread.premierinn.landing.LandingActivity"
+            android:targetPackage="com.whitbread.premierinn"/>
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.whitbread.premierinn.search.SearchActivity"
+            android:targetPackage="com.whitbread.premierinn"/>
+
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_location"
+        android:shortcutId="shortcut_my_location"
+        android:shortcutShortLabel="@string/shortcut_hotels_near_me"
+        android:shortcutLongLabel="@string/shortcut_hotels_near_me"
+        android:shortcutDisabledMessage="@string/shortcut_hotels_near_me">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.whitbread.premierinn.landing.LandingActivity"
+            android:targetPackage="com.whitbread.premierinn"/>
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.whitbread.premierinn.search.SearchActivity"
+            android:targetPackage="com.whitbread.premierinn"/>
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.whitbread.premierinn.shortcutlocationtrampoline.ShortcutLocationTrampolineActivity"
+            android:targetPackage="com.whitbread.premierinn"/>
+
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+</shortcuts>

@@ -1,0 +1,76 @@
+server:
+  port: 9020
+
+swagger:
+  api:
+    version: 1.0.0
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    reader:
+      pattern: get*, find*
+    writer:
+      pattern: add*, update*, delete*, dbBatchUpdate*
+
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    hibernate:
+      ddl-auto: create
+      default_schema: avail_cache
+  sql:
+    init:
+      platform: postgres
+
+db:
+  # Number of sql blocks to be executed each time
+  batchSize: 50
+
+config:
+  service:
+    content:
+      host: ${CONTENT_SERVICE_HOST:http://localhost:9106}
+      globalConfigEndpoint: "/v1/content/global-config"
+    ocd-adapter:
+      host: ${OCD_ADAPTER_SERVICE_HOST:http://localhost:9134}
+      offerEndpoint: "/ocd/v1/hotels/{hotelCode}/offer"
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+feature-flags:
+  city-tax-uk:
+    key: "release_pi_ccui_city_tax_uk"
+    fallback: false
+  city-tax-uk-fallback:
+    key: "release_pi_ccui_city_tax_uk_fallback"
+    fallback: false
+  use-token-refresh-skew:
+    key: "release_opera_use_token_refresh_skew"
+    fallback: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+---

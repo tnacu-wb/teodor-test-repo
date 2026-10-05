@@ -1,0 +1,180 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "opera-ohip-app.fullname" . }}
+  labels:
+    {{- include "opera-ohip-app.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "opera-ohip-app.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        {{- include "opera-ohip-app.selectorLabels" . | nindent 8 }}
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              {{- include "opera-ohip-app.selectorLabels" . | nindent 14 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+              protocol: TCP
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: nextjs-cache
+              mountPath: /app/.next/cache
+          env:
+            # ─── UAT: Config (non-sensitive) ───────────────────────────────
+            {{- if .Values.ohip.uat.baseUrl }}
+            - name: UAT_OHIP_BASE_URL
+              value: {{ .Values.ohip.uat.baseUrl | quote }}
+            {{- end }}
+            {{- if .Values.ohip.uat.scope }}
+            - name: UAT_OHIP_SCOPE
+              value: {{ .Values.ohip.uat.scope | quote }}
+            {{- end }}
+            {{- if .Values.ohip.uat.enterpriseId }}
+            - name: UAT_OHIP_ENTERPRISE_ID
+              value: {{ .Values.ohip.uat.enterpriseId | quote }}
+            {{- end }}
+            # ─── UAT: Secrets (CyberArk-backed) ───────────────────────────
+            # App key behaves like an API credential (x-app-key), so it is
+            # sourced from CyberArk rather than committed to values.
+            - name: UAT_OHIP_APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ohip.secretName }}
+                  key: UAT_OHIP_APP_KEY
+                  optional: true
+            - name: UAT_OHIP_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ohip.secretName }}
+                  key: UAT_OHIP_CLIENT_ID
+                  optional: true
+            - name: UAT_OHIP_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ohip.secretName }}
+                  key: UAT_OHIP_CLIENT_SECRET
+                  optional: true
+            # ─── SIT: Config (non-sensitive) ───────────────────────────────
+            {{- if .Values.ohip.sit.baseUrl }}
+            - name: SIT_OHIP_BASE_URL
+              value: {{ .Values.ohip.sit.baseUrl | quote }}
+            {{- end }}
+            {{- if .Values.ohip.sit.scope }}
+            - name: SIT_OHIP_SCOPE
+              value: {{ .Values.ohip.sit.scope | quote }}
+            {{- end }}
+            {{- if .Values.ohip.sit.enterpriseId }}
+            - name: SIT_OHIP_ENTERPRISE_ID
+              value: {{ .Values.ohip.sit.enterpriseId | quote }}
+            {{- end }}
+            # ─── SIT: Secrets (CyberArk-backed) ───────────────────────────
+            - name: SIT_OHIP_APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ohip.secretName }}
+                  key: SIT_OHIP_APP_KEY
+                  optional: true
+            - name: SIT_OHIP_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ohip.secretName }}
+                  key: SIT_OHIP_CLIENT_ID
+                  optional: true
+            - name: SIT_OHIP_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ohip.secretName }}
+                  key: SIT_OHIP_CLIENT_SECRET
+                  optional: true
+            # ─── PERF: Config (non-sensitive) ──────────────────────────────
+            {{- if .Values.ohip.perf.baseUrl }}
+            - name: PERF_OHIP_BASE_URL
+              value: {{ .Values.ohip.perf.baseUrl | quote }}
+            {{- end }}
+            {{- if .Values.ohip.perf.scope }}
+            - name: PERF_OHIP_SCOPE
+              value: {{ .Values.ohip.perf.scope | quote }}
+            {{- end }}
+            {{- if .Values.ohip.perf.enterpriseId }}
+            - name: PERF_OHIP_ENTERPRISE_ID
+              value: {{ .Values.ohip.perf.enterpriseId | quote }}
+            {{- end }}
+            # ─── PERF: Secrets (CyberArk-backed) ──────────────────────────
+            - name: PERF_OHIP_APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ohip.secretName }}
+                  key: PERF_OHIP_APP_KEY
+                  optional: true
+            - name: PERF_OHIP_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ohip.secretName }}
+                  key: PERF_OHIP_CLIENT_ID
+                  optional: true
+            - name: PERF_OHIP_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ohip.secretName }}
+                  key: PERF_OHIP_CLIENT_SECRET
+                  optional: true
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: nextjs-cache
+          emptyDir: {}

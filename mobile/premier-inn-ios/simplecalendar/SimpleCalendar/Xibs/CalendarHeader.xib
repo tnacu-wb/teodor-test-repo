@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CalendarHeader" id="ZKJ-vf-bcr" customClass="CalendarHeader" customModule="SimpleCalendar">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="117"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 2016" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Wa-7g-XBC">
+                    <rect key="frame" x="20" y="30" width="280" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="25" id="C1R-Bd-47v"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Mkj-in-aL9" customClass="CalendarWeekdaysCollectionView" customModule="SimpleCalendar">
+                    <rect key="frame" x="0.0" y="85" width="320" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="Drv-VF-Mmd"/>
+                    </constraints>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="i9y-ky-LGv">
+                        <size key="itemSize" width="15" height="15"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <cells/>
+                </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nMf-VB-yie" userLabel="Line">
+                    <rect key="frame" x="20" y="106" width="280" height="1"/>
+                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="Ffh-qa-ZTs"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstItem="9Wa-7g-XBC" firstAttribute="top" secondItem="ZKJ-vf-bcr" secondAttribute="top" constant="30" id="1dV-V8-0nJ"/>
+                <constraint firstItem="nMf-VB-yie" firstAttribute="leading" secondItem="ZKJ-vf-bcr" secondAttribute="leading" constant="20" id="2AO-ui-hWD"/>
+                <constraint firstAttribute="trailing" secondItem="nMf-VB-yie" secondAttribute="trailing" constant="20" id="7dD-HL-iJc"/>
+                <constraint firstItem="Mkj-in-aL9" firstAttribute="leading" secondItem="ZKJ-vf-bcr" secondAttribute="leading" id="AF6-l4-5Yj"/>
+                <constraint firstAttribute="bottom" secondItem="Mkj-in-aL9" secondAttribute="bottom" priority="750" constant="20" id="G0R-ND-Mnv"/>
+                <constraint firstAttribute="bottom" secondItem="nMf-VB-yie" secondAttribute="bottom" constant="10" id="Lxa-uP-WSV"/>
+                <constraint firstItem="9Wa-7g-XBC" firstAttribute="leading" secondItem="ZKJ-vf-bcr" secondAttribute="leading" constant="20" id="NZT-hN-MY5"/>
+                <constraint firstItem="Mkj-in-aL9" firstAttribute="top" relation="greaterThanOrEqual" secondItem="9Wa-7g-XBC" secondAttribute="bottom" constant="30" id="bRa-ar-Wdh"/>
+                <constraint firstAttribute="trailing" secondItem="9Wa-7g-XBC" secondAttribute="trailing" constant="20" id="pJh-ic-Iuc"/>
+                <constraint firstAttribute="trailing" secondItem="Mkj-in-aL9" secondAttribute="trailing" id="wcV-7L-cSp"/>
+            </constraints>
+            <connections>
+                <outlet property="collectionView" destination="Mkj-in-aL9" id="Av3-Vd-HAF"/>
+                <outlet property="monthLabel" destination="9Wa-7g-XBC" id="A9Z-WU-a5y"/>
+                <outlet property="separatorLine" destination="nMf-VB-yie" id="G1g-Pk-Ips"/>
+            </connections>
+            <point key="canvasLocation" x="316" y="-397.5"/>
+        </collectionReusableView>
+    </objects>
+</document>

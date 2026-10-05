@@ -1,0 +1,381 @@
+server:
+  port: @application.port@
+  shutdown: graceful
+  max-http-request-header-size: 16KB
+
+3c:
+  endpoints:
+    initialise: /ipage/Service/_2019_09_v1_3_0/IPGService/Initialise
+    transactions: /mxg/Service/_2017_02_v5_2_0/transactions
+    tokenCreate: /mxg/service/_2011_02_v5_1_0/Token.asmx/CreateToken
+    tokenUpdate: /mxg/service/_2011_02_v5_1_0/Token.asmx/ManageToken
+    refund: /mxg/Service/_2017_02_v5_2_0/transactions/%s
+    reconciliation: /mxg/Service/_2019_01_v5_4_0/Reconcile/StartNew
+  iPage:
+    stubMode: ${THREEC_IPAGE_IS_STUB_MODE}
+    title: Contacting Payment Provider
+    providerUrl: ${3c.server}/iPage/Service/_2006_05_v1_0_1/service.aspx
+  timeout:
+    connection: 10000
+    response: 30000
+  refunds:
+    status: CS,CQ
+  provider:
+    success: CS,CQ,AA
+    failure: AD,RE,AR,3E,00,AE,AX,3D,3P,3U
+  noTransaction:
+    code: 711,752,AP
+  fraudCheck:
+    valid: ACCEPT
+  mit:
+    success:
+      result: 0
+      trxState: CQ
+  emerchant:
+    validation:
+      code: ${THREEC_PAYMENT_SERVICE_VALIDATION_CODE}
+  username:
+    default: ${THREEC_USERNAME_DEFAULT}
+    tokenisation: ${THREEC_USERNAME_TOKENISATION}
+    tokenisationDE: ${THREEC_USERNAME_TOKENISATION_DE}
+  fraud:
+    enabled: true
+    mode: 5
+    default:
+  connection:
+    keepAlive: true
+    maxConnections: 16
+    maxIdleTime: 20
+    maxLifetime: 60
+    acquiredTimeout: 45
+    evictTimeout: 120
+    wiretapEnabled: true
+  ttl:
+    initial: ${THREEC_INITIAL_TTL}
+    final: ${THREEC_FINAL_TTL}
+  response:
+    tokenisationResponseCodes: 0, 700
+  server: ${THREEC_SERVER}
+
+planetBartMappings:
+  cardTypes:
+    AX: AM
+    PI: AT
+    DN: DI
+    MC: AC
+    VS: VI
+
+webhook:
+  success: ${webhook.environment}/payments/%s/webhook
+  failure: ${webhook.environment}/payments/%s/webhook
+  environment: ${WEBHOOK_ENVIRONMENT}
+
+redirect:
+  success: ${redirect.environment}/payments/%s/complete
+  failure: ${redirect.environment}/payments/%s/complete
+  environment: ${REDIRECT_ENVIRONMENT}
+  defaultUrl: ${REDIRECT_DEFAULT_URL}
+  regex:
+    - \*
+    - .*\.premierinn\.com
+    - .*\.premierinn\.de
+    - .*\.whitbread\.digital
+    - .*\.premierinn\.digital
+
+feature-flags:
+  mock-payment-return-code:
+    key: "release_pi_bb_mock_payment_return_code"
+    fallback: false
+  release-piba-cnp-iframe-split:
+    key: "release_piba_cnp_iframe_split"
+    fallback: false
+
+gpay:
+  redirect:
+    success: com.whitbread.premierinn.planetpayment://approved/
+    failure: com.whitbread.premierinn.planetpayment://declined/
+
+
+spring:
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+    deserialization:
+      FAIL_ON_NULL_FOR_PRIMITIVES: false
+  main:
+    web-application-type: reactive
+
+springdoc:
+  writer-with-order-by-keys: true
+  packagesToScan: uk.co.whitbread.payments
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+paypal:
+  merchantID: ${THREEC_PAYMENT_SERVICE_PAYPAL_MERCHANT_ID}
+  publicKey: ${THREEC_PAYMENT_SERVICE_PAYPAL_PUBLIC_KEY}
+  privateKey: ${THREEC_PAYMENT_SERVICE_PAYPAL_PRIVATE_KEY}
+  successCodes:
+    result: 0
+    trxState: AA
+    fraudInfoDecision: "ACCEPT"
+  environment: ${PAYPAL_ENVIRONMENT}
+  accountNames:
+    - country: "gb"
+      value: ${PAYPAL_ACCOUNT_NAMES_VALUE_GB}
+    - country: "de"
+      value: ${PAYPAL_ACCOUNT_NAMES_VALUE_DE}
+  paypalTransactions: ${PAYPAL_TRANSACTIONS_URL}
+  timeout: 30000
+  paypalSensitiveData:
+    mitCofIndicator: ${PAYPAL_MIT_COF_INDICATOR}
+    type: "payrequestnocardread"
+    zeroAuthType: "EftAuthorization"
+    Version: "W2MXG520"
+    validationCodeHash: ""
+    optionFlags: "G"
+    cofIndicator: "C"
+    transInitiator: "M"
+  paypalConfigData:
+    enablePaypalConfigData: ${ENABLE_PAYPAL_CONFIG_DATA}
+    paypalProdConfigName: "whitbread_planet_payfast_prod"
+    name: ${PAYPAL_CONFIG_DATA_NAME}
+    url: ${PAYPAL_CONFIG_DATA_URL}
+    body: "json"
+    type: "NetworkTokenizedCard"
+  url: ${PAYPAL_URL}
+  method: "POST"
+  expireAt: 549
+  amount: 0
+  paypalTestCard:
+    enablePaypalTestCard: ${ENABLE_PAYPAL_TEST_CARD}
+    testCardHotelCodes: NURACO
+    testCardNumber: "5453010000083303"
+    testCardExpiryDateMMYY: "0325"
+    testCVV2: "901"
+    testCardholderStreetAddress1: "134 The Avenue"
+    testCardholderCity: "Endon"
+    testCardholderZipCode: "ST94BD"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+swagger:
+  api:
+    version: "@project.version@"
+
+encrypt:
+  failOnError: false
+
+management:
+  endpoints:
+    web:
+      base-path: /threec-payment-service/actuator
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  level:
+    brave: WARN
+    io:
+      getunleash: TRACE
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+whitbread:
+  api:
+    key: X-WHIT-API-KEY
+    value: ${THREEC_PAYMENT_SERVICE_API_KEY}
+
+hotel:
+  codes:
+    list: ${HOTEL_CODES_LIST}
+
+hotel-booking:
+  keepAlive: true
+  maxConnections: 16
+  maxIdleTime: 20
+  maxLifetime: 60
+  acquiredTimeout: 45
+  evictTimeout: 120
+  makeBookingEndpoint: ${HOTEL_MAKE_BOOKING_HOST:http://localhost:9016}/booking/hotels/%s/book
+
+basket-booking:
+  keepAlive: true
+  maxConnections: 16
+  maxIdleTime: 20
+  maxLifetime: 60
+  acquiredTimeout: 45
+  evictTimeout: 120
+  securityKey: X-WHIT-API-KEY
+  schema: http
+  port: 80
+  host: ${BASKET_SERVICE_HOST:localhost:9104}
+  makeBookingEndpoint: /v1/baskets/{reference}/payment-webhook
+  securityValue: ${BASKET_BOOKING_SECURITY_VALUE}
+
+hotel-card:
+  keepAlive: true
+  maxConnections: 16
+  maxIdleTime: 20
+  maxLifetime: 60
+  acquiredTimeout: 45
+  evictTimeout: 120
+  saveCardEndpoint: ${HOTEL_CARD_HOST:http://localhost:9030}/v2/customers/cards
+
+eckoh:
+  enabled: ${ECKOH_ENABLED}
+
+amazon:
+  dynamodb:
+    maxConcurrency: 150
+    maxPendingConnectionAcquires: 10_000
+    connectionAcquisitionTimeout: 5
+    connectionTimeout: 5
+    readTimeout: 5
+    apiCallAttemptTimeout: 5
+    tableName: ${THREEC_DYNAMODB_TABLE_NAME}
+    irsa: ${THREEC_DYNAMODB_IS_IRSA}
+
+revisedsolution:
+  featureEnabled: ${REVISED_SOLUTION_IS_FEATURE_ENABLED}
+  mobileAppEnabled: ${REVISED_SOLUTION_IS_MOBILE_APP_ENABLED}
+  androidAppEnabled: ${REVISED_SOLUTION_IS_ANDROID_APP_ENABLED}
+  iosAppEnabled: ${REVISED_SOLUTION_IS_IOS_APP_ENABLED}
+  motoBookingEnabled: ${REVISED_SOLUTION_IS_MOTO_BOOKING_ENABLED}
+  hotelList: ${REVISED_SOLUTION_HOTEL_LIST}
+
+
+management.security.enabled: ${IS_MANAGEMENT_SECURITY_ENABLED}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+whitbread:
+  api:
+    key: X-WHIT-API-KEY
+    value: kasUAsiohjasAJSKIS9whkasjbsjkdKALShinash
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+amazon:
+  dynamodb:
+    endpoint: http://localhost:8042
+    tableName: threec-payment-dev
+    accessKey: testKey
+    secretKey: testSecret
+    irsa: false
+
+redirect:
+  regex:
+    - .*localhost.*
+
+logging:
+  configuration:
+    logger: default
+  level:
+    uk.co.whitbread: INFO
+    org.springframework.web: WARN
+    org.hibernate: ERROR
+    reactor.netty.http.client: DEBUG
+    _reactor:
+      netty:
+        channel:
+          LeakDetection: DEBUG
+
+basket-booking:
+  makeBookingEndpoint: http://localhost:9016/v1/baskets/{reference}/payment-webhook
+  securityValue: "b246acfc-2271-4c0d-ac39-02554040b499"
+  schema: http
+  port: 80
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - opera-uat
+        - opera-dit
+
+logging:
+  level:
+    uk.co.whitbread: debug
+    reactor.netty.http.client: TRACE
+
+redirect:
+  regex:
+    - \*
+    - .*localhost.*
+    - .*\.premierinn\.com
+    - .*\.premierinn\.de
+    - .*\.whitbread\.digital
+    - .*\.premierinn\.digital
+
+---
+spring:
+  config:
+    activate:
+      on-profile: opera-perf
+
+
+eckoh:
+  endpoints:
+    environment: ccui_pt
+  server: https://premierinniframe.vt.uat.eckoh.uk
+
+---
+spring:
+  config:
+    activate:
+      on-profile: opera-prod
+
+logging:
+  level:
+    uk.co.whitbread: INFO

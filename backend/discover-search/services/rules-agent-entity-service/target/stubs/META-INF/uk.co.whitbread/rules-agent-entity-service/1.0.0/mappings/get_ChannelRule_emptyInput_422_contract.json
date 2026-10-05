@@ -1,0 +1,31 @@
+{
+  "id" : "c5fd8fdc-0baa-4a26-b075-aee561a3dc8f",
+  "request" : {
+    "urlPath" : "/v1/rules/channel-info",
+    "method" : "GET",
+    "queryParameters" : {
+      "channel" : {
+        "equalTo" : ""
+      },
+      "subchannel" : {
+        "equalTo" : "WEB"
+      },
+      "language" : {
+        "equalTo" : "EN"
+      },
+      "pms" : {
+        "equalTo" : "OP"
+      }
+    }
+  },
+  "response" : {
+    "status" : 422,
+    "body" : "{\"errCode\":401,\"globalErrTextTemplate\":\"validation.error.form\",\"details\":[{\"elementId\":\"channel\",\"errTextTemplate\":\"must not be empty\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "c5fd8fdc-0baa-4a26-b075-aee561a3dc8f",
+  "priority" : 1
+}

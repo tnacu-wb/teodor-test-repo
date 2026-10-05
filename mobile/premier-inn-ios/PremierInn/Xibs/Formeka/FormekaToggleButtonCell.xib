@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="FormekaToggleButtonCell" rowHeight="91" id="f2T-vW-WLH" customClass="FormekaToggleButtonCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="55"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="f2T-vW-WLH" id="4CZ-qc-vxl">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="55"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="amh-Pe-BKm">
+                        <rect key="frame" x="16" y="0.0" width="42" height="48"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="48" id="J3z-sP-j4M"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="HeM-86-96n">
+                        <rect key="frame" x="345" y="9" width="51" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="Dpu-N7-cIq"/>
+                        </constraints>
+                        <connections>
+                            <action selector="switchButtonDidTap:" destination="f2T-vW-WLH" eventType="touchUpInside" id="9wp-Wc-dEQ"/>
+                        </connections>
+                    </switch>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="amh-Pe-BKm" secondAttribute="bottom" priority="750" constant="24" id="Sij-7w-sDz"/>
+                    <constraint firstItem="HeM-86-96n" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="amh-Pe-BKm" secondAttribute="trailing" constant="20" id="Uzg-Zb-RWK"/>
+                    <constraint firstAttribute="trailing" secondItem="HeM-86-96n" secondAttribute="trailing" constant="20" id="WA5-94-RAk"/>
+                    <constraint firstItem="amh-Pe-BKm" firstAttribute="leading" secondItem="4CZ-qc-vxl" secondAttribute="leading" constant="16" id="dfr-gk-HdB"/>
+                    <constraint firstItem="amh-Pe-BKm" firstAttribute="top" secondItem="4CZ-qc-vxl" secondAttribute="top" id="i5l-mB-5j4"/>
+                    <constraint firstItem="HeM-86-96n" firstAttribute="centerY" secondItem="amh-Pe-BKm" secondAttribute="centerY" id="nJy-cJ-NWf"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="button" destination="HeM-86-96n" id="SDv-PV-PJ0"/>
+                <outlet property="label" destination="amh-Pe-BKm" id="MaQ-dD-2go"/>
+            </connections>
+            <point key="canvasLocation" x="-62.318840579710148" y="69.977678571428569"/>
+        </tableViewCell>
+    </objects>
+</document>

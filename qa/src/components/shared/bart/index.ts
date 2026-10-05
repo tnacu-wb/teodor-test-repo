@@ -1,0 +1,13 @@
+export { BartFilterPanelComponent } from './searchResults/filterPanel.component';
+export { BartHotelCardComponent } from './searchResults/hotelCard.component';
+export { BartRoomPanelComponent } from './searchConsole/roomPanel.component';
+export { BartRoomsPanelComponent } from './searchConsole/roomsPanel.component';
+export { BartUserDropdownMenuComponent } from './header/userDropdownMenu.component';
+export { AccountSettingsPageComponent } from './accountSettings/settings.component';
+export { YourProfileSectionComponent } from './accountSettings/yourProfile.component';
+export { PasswordSectionComponent } from './accountSettings/password.component';
+export { BartAccountPaymentSectionComponent } from './accountSettings/payment.component';
+export { RegularGuestsSectionComponent } from './accountSettings/regularGuests.component';
+export { ExtrasPreferencesSectionComponent } from './accountSettings/extrasPreferences.component';
+export { RoomPreferencesSectionComponent } from './accountSettings/roomPreferences.component';
+export { ManagePermissionsSectionComponent } from './accountSettings/managePermissions.component';

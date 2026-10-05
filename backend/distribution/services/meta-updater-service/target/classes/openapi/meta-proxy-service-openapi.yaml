@@ -1,0 +1,120 @@
+openapi: 3.0.1
+info:
+  title: Meta Proxy Service API Documentation
+  description: Retrieve availabilities from Availability Cache
+  version: '@project.version@'
+servers:
+- url: http://localhost:9069
+  description: Generated server url
+paths:
+  /v1/meta-proxy/availabilities:
+    post:
+      tags:
+      - meta-proxy-controller
+      summary: Retrieves Availabilities
+      operationId: queryForAvailabilities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotelAvailabilitiesRequest'
+        required: true
+      responses:
+        400:
+          description: 'Error Occurred '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Resource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelAvailabilitiesResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    HotelAvailabilitiesRequest:
+      type: object
+      properties:
+        hotelCode:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        roomTypes:
+          type: array
+          items:
+            type: string
+    ErrorResponse:
+      required:
+      - code
+      - details
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+    HotelAvailabilitiesResponse:
+      type: object
+      properties:
+        hotelCode:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Room'
+    Rate:
+      type: object
+      properties:
+        availability:
+          type: boolean
+        rateClassification:
+          type: string
+        rateCode:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        minNights:
+          type: integer
+          format: int32
+        maxNights:
+          type: integer
+          format: int32
+        premiumAmount:
+          type: number
+    Room:
+      type: object
+      properties:
+        availabilityDate:
+          type: string
+          format: date
+        roomType:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'

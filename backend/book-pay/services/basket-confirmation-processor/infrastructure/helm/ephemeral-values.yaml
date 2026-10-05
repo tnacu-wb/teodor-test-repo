@@ -1,0 +1,111 @@
+# Ephemeral (per-PR) values for basket-confirmation-processor.
+#
+# ci-matrix-deploy-eph.yaml layers this file OVER the backend stack defaults at
+# backend/infrastructure/helm/ephemeral-values.yaml:
+#
+#   opera-app-chart/values.yaml  <  stack ephemeral defaults  <  THIS FILE  <  --set
+#
+# Everything generic to a PR release — canary/autoscaling/pdb/istio/prometheus off,
+# replicaCount 1, the trimmed lifecycle and grace period, ndots, probe TIMINGS,
+# imagePullSecrets, namespace — is inherited and is not repeated here.
+#
+# Overridden per-deploy by ci-matrix-deploy-eph.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create, ephemeral
+#
+# Environment is inlined rather than read from `basket-confirmation-processor-configmap`
+# because the chart names its ConfigMap `{{ applicationName }}-configmap` and
+# applicationName is the PR release name here, so a created one would never match a
+# hard-coded configMapKeyRef.
+#
+# ── The Kafka consumer group ─────────────────────────────────────────────────
+#
+# KAFKA_GROUP_ID is deliberately NOT the dev group. A PR release joining
+# `basket-ack-dev` would be handed live partitions of `ack-dev` and would steal
+# confirmations from the shared dev consumer. It gets its own group, and therefore its
+# own offsets. The group name is a constant, so two concurrent PR releases of THIS
+# service share one group and split the partitions between them.
+
+applicationName: basket-confirmation-processor
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/basket-confirmation-processor
+
+deployment:
+  containerPorts:
+    - containerPort: 9109
+      protocol: TCP
+      name: http
+    # Not published through the Service — reach it with
+    # `kubectl port-forward -n opera-be deploy/<release> 5005:5005`.
+    - containerPort: 5005
+      protocol: TCP
+      name: debug
+
+  containerEnvFrom:
+    # Cluster-provisioned and shared, so its fixed name is safe here. `optional: true`
+    # because nothing in .github/workflows creates it: absent, the app falls back to
+    # application.yml's localhost:9092 and fails to consume — a degraded environment
+    # rather than a pod stuck in CreateContainerConfigError with `helm --wait` timing out.
+    - configMapRef:
+        name: kafka-bootstrap-config
+        optional: true
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=70 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # Shared dev basket-service, addressed by bare hostname (its Service publishes 80).
+    # Point this at a basket-service PR release instead when the two changes go together:
+    #   --set-string 'deployment.containerEnvs[..]' is not available, so edit here on the
+    #   branch, or deploy against the release name basket-service-pr-<n>.
+    - name: BASKET_HOST
+      value: basket-service
+
+    - name: TOPICS_ACK
+      value: ack-dev
+
+    # See the header: an isolated group so a PR release cannot consume the shared dev
+    # consumer's messages.
+    - name: KAFKA_GROUP_ID
+      value: basket-ack-eph
+    - name: KAFKA_ACK_CONCURRENCY
+      value: '1'
+    - name: KAFKA_REQUEST_TIMEOUT
+      value: '30000'
+    - name: KAFKA_HEARTBEAT_INTERVAL
+      value: '1000'
+    - name: KAFKA_MAX_POLL_INTERVAL
+      value: '900000'
+    - name: KAFKA_MAX_POLL_RECORDS
+      value: '30'
+    - name: KAFKA_SESSION_TIMEOUT
+      value: '45000'
+
+  readinessProbe:
+    httpGet:
+      path: /bcp/actuator/health/readiness
+      port: 9109
+
+  livenessProbe:
+    httpGet:
+      path: /bcp/actuator/health/liveness
+      port: 9109
+
+  # Only memory is stated; requests.cpu (50m) merges through from the stack defaults.
+  # requests.memory is pinned to limits.memory because the heap is sized off the limit.
+  resources:
+    requests:
+      memory: 1024Mi
+    limits:
+      memory: 1024Mi
+
+service:
+  name: basket-confirmation-processor
+  ports:
+    - port: 80
+      targetPort: 9109
+      protocol: TCP
+      name: port9109

@@ -1,0 +1,30 @@
+@startuml
+entity "Front-End" as A
+
+participant CcuiEckohController as Controller
+participant CcuiEckohInPort as CcuiInPort
+participant PaymentOutPort as PayOutPort
+
+entity "Dynamo DB/SQL DB" as DB
+entity "WB Payments Service" as WBPayment
+
+A -> Controller: GET /v1/baskets/ccui/{basketReference}/eckoh
+Controller -> CcuiInPort: paymentStatus(basketReference)
+CcuiInPort -> BskOutPort: getBasketByReference(referenceNumber)
+
+BskOutPort -> DB: getBasketByReference(referenceNumber)
+BskOutPort <- DB: Basket
+
+BskOutPort -> CcuiInPort: Basket
+
+CcuiInPort -> PayOutPort: getPaymentConfirmation(paymentId)
+PayOutPort -> PayClient: getPaymentConfirmation(paymentId)
+PayClient -> WBPayment: getPaymentConfirmation(paymentId)
+
+WBPayment -> PayClient: Payment
+PayClient -> PayOutPort: Payment
+CcuiInPort <- PayOutPort: Payment
+
+Controller <- CcuiInPort: PaymentStatusResponse
+A <- Controller: PaymentStatusResponse
+@enduml

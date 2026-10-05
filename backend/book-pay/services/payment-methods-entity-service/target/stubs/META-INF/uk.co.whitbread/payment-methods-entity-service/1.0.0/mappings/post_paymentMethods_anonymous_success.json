@@ -1,0 +1,24 @@
+{
+  "id" : "8ec35cf1-28f9-4dda-913d-6a2c360f3baf",
+  "request" : {
+    "urlPath" : "/v1/payment-methods",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['basketReference'] == 'LONHOL5778172')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['type'] == 'CARD')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['selectedPaymentOption'] == 'PAY_ON_ARRIVAL')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "8ec35cf1-28f9-4dda-913d-6a2c360f3baf"
+}

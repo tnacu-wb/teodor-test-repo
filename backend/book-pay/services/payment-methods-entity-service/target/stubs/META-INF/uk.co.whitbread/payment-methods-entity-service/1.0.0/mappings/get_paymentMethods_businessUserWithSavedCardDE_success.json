@@ -1,0 +1,41 @@
+{
+  "id" : "fa49af53-5ce2-419d-a51e-7bc7a28739df",
+  "request" : {
+    "urlPath" : "/v1/payment-methods",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "WB-Authorization" : {
+        "equalTo" : "Bearer test=="
+      },
+      "bookingChannel" : {
+        "equalTo" : "WEB"
+      }
+    },
+    "queryParameters" : {
+      "basketReference" : {
+        "equalTo" : "MUNCIT5778172"
+      },
+      "country" : {
+        "equalTo" : "de"
+      },
+      "language" : {
+        "equalTo" : "de"
+      },
+      "userType" : {
+        "equalTo" : "BUSINESS"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "[{\"name\":\"PIBA\",\"type\":\"SAVED_CARD\",\"order\":1,\"card\":{\"expiryMonth\":\"05\",\"expiryYear\":\"30\",\"type\":\"AT\",\"logoSrc\":\"\",\"cardHolderName\":\"John Smith\",\"cardType\":\"BUSINESS_PERSONAL_STORED_CARD\",\"cnpRequired\":false},\"paymentOptions\":[{\"type\":\"PAY_NOW\",\"order\":1,\"enabled\":false},{\"type\":\"PAY_ON_ARRIVAL\",\"order\":2,\"enabled\":false}],\"enabled\":false,\"cnpPreSelected\":false,\"cnpOptionAvailable\":true,\"reasons\":[\"CARD_NOT_ACCEPTED_AT_HOTEL\",\"PIBA_ALLOWED_ONLY_IN_UK\"]},{\"name\":\"CARD\",\"type\":\"NEW_CARD\",\"order\":2,\"acceptedCardTypes\":[{\"type\":\"MC\",\"name\":\"Mastercard Credit\",\"logoSrc\":\"/content/dam/global/booking/Mastercard.jpg\"},{\"type\":\"AX\",\"name\":\"American Express\",\"logoSrc\":\"/content/dam/global/booking/AX.jpg\"},{\"type\":\"VS\",\"name\":\"Visa Debit\",\"logoSrc\":\"/content/dam/global/booking/Visa_Debit.jpg\"},{\"type\":\"MC\",\"name\":\"Mastercard Debit\",\"logoSrc\":\"/content/dam/global/booking/MD.jpg\"},{\"type\":\"VS\",\"name\":\"Visa Credit\",\"logoSrc\":\"/content/dam/global/booking/VC.jpg\"}],\"paymentOptions\":[{\"type\":\"PAY_NOW\",\"order\":1,\"enabled\":true},{\"type\":\"PAY_ON_ARRIVAL\",\"order\":2,\"enabled\":true}],\"enabled\":true,\"cnpPreSelected\":false,\"cnpOptionAvailable\":false,\"reasons\":[]},{\"name\":\"PIBA\",\"type\":\"NEW_PIBA\",\"order\":3,\"acceptedCardTypes\":[],\"paymentOptions\":[{\"type\":\"PAY_NOW\",\"order\":1,\"enabled\":false},{\"type\":\"PAY_ON_ARRIVAL\",\"order\":2,\"enabled\":false}],\"enabled\":false,\"cnpPreSelected\":false,\"cnpOptionAvailable\":true,\"reasons\":[\"PIBA_ALLOWED_ONLY_IN_UK\"]}]",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "fa49af53-5ce2-419d-a51e-7bc7a28739df"
+}

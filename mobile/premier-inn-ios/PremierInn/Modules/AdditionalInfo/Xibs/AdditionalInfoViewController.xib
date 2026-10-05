@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AdditionalInfoViewController" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="screenTitleLabel" destination="Vuw-Pg-fhj" id="Rqa-sj-jaE"/>
+                <outlet property="table" destination="hOn-uC-0y4" id="uUI-nl-hLx"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vuw-Pg-fhj" userLabel="Title" customClass="UIPaddingLabel" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="21"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="left">
+                            <real key="value" value="16"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hOn-uC-0y4">
+                    <rect key="frame" x="0.0" y="21" width="320" height="547"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="MET-Tc-bsa"/>
+                        <outlet property="delegate" destination="-1" id="biN-ZF-ew0"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="hOn-uC-0y4" firstAttribute="top" secondItem="Vuw-Pg-fhj" secondAttribute="bottom" id="1db-Kx-Tad"/>
+                <constraint firstItem="Vuw-Pg-fhj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="1pJ-6L-Z5Q"/>
+                <constraint firstItem="hOn-uC-0y4" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="25Z-hR-1Bt"/>
+                <constraint firstItem="Vuw-Pg-fhj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="3PO-k5-zru"/>
+                <constraint firstAttribute="bottom" secondItem="hOn-uC-0y4" secondAttribute="bottom" id="Djb-kt-kDp"/>
+                <constraint firstAttribute="trailing" secondItem="hOn-uC-0y4" secondAttribute="trailing" id="Ony-1w-u5O"/>
+                <constraint firstAttribute="trailing" secondItem="Vuw-Pg-fhj" secondAttribute="trailing" id="cOR-Ce-H7B"/>
+            </constraints>
+            <point key="canvasLocation" x="139" y="22"/>
+        </view>
+    </objects>
+</document>

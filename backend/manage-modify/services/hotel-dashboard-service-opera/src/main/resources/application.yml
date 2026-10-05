@@ -1,0 +1,140 @@
+server:
+  port: 9056
+
+swagger:
+  api:
+    version: @project.version@
+
+info:
+  build:
+    groupId: '@project.groupId@'
+    artifact: '@project.artifactId@'
+    description: '@project.description@'
+    version: '@project.version@'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /hotel-dashboard-service/actuator
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+encrypt:
+  failOnError: false
+
+dashboard:
+  maxDays: ${DASHBOARD_MAX_DAYS}
+  minToBeFrequent: ${DASHBOARD_MIN_TO_BE_FREQUENT}
+  maxFrequent: ${DASHBOARD_MAX_FREQUENT}
+  environment: ${DASHBOARD_ENVIRONMENT}
+  actionMapping:
+    en:
+      CIOL: Check in
+      UPSELLS: Add meals or extras
+      DIRECTIONS: Show hotel directions
+      BOOKING_DETAILS: View booking details
+    de:
+      CIOL: Check in
+      UPSELLS: Mahlzeiten oder Extras hinzufügen
+      DIRECTIONS: Hotelanfahrt anzeigen
+      BOOKING_DETAILS: Buchungsdetails anzeigen
+
+config:
+  service:
+    hotel-info:
+      host: http://${HOTEL_INFO_HOST}
+      hotelInfoEndpoint: "/hotels/{hotel-code}"
+    cdh-adapter:
+      host: http://${CDH_ADAPTER_HOST}
+      reservationByIdEndpoint: "/v1/cdh/reservation/{reservationId}"
+    hotel-account:
+      host: http://${HOTEL_ACCOUNT_HOST}
+      customerStaysEndpoint: "/customers/hotels/{customer-id}/stays"
+    reservation:
+      host: http://${RESERVATION_HOST}
+      cancelInformationEndpoint: "/v1/reservations/cancel"
+      findBookingEndpoint: "/v1/reservations/find"
+    content:
+      host: http://${CONTENT_HOST}
+      roomTypeEndpoint: "/v1/content/room-type"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-qa
+        - opera-dev
+        - opera-perf
+        - opera-uat
+        - opera-dit
+        - opera-sit
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+dashboard:
+  maxDays: 114
+  minToBeFrequent: 2
+  maxFrequent: 3
+  environment: "https://www.premierinn.com"
+
+logging:
+  level:
+    uk.co.whitbread: debug

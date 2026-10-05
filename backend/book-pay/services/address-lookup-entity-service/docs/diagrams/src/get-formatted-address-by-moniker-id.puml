@@ -1,0 +1,21 @@
+@startuml
+entity "Address Lookup Entity Service" as ALS
+participant AddressLookupController as Controller
+participant AddressLookupInPort as InboundPort
+participant AddressLookupOutPort as OutboundPort
+participant QASClient as WebClient
+entity "Experian QAS" as QAS
+
+ALS -> Controller: GET v1/addresses/{{monikerId}}
+Controller -> InboundPort: getFormattedAddress
+InboundPort -> OutboundPort: getFormattedAddress
+OutboundPort -> WebClient: getFormattedAddress
+WebClient -> QAS: POST {{host}}/ProOnDemand/V3/ProOnDemandService.asmx
+
+WebClient <- QAS: Address
+OutboundPort <- WebClient: AddressFormatResponse
+InboundPort <- OutboundPort: AddressFormatResponse
+Controller <- InboundPort: AddressFormatResponse
+ALS <- Controller: AddressFormatResponseDto
+@enduml
+

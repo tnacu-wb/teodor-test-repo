@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Semibold.ttf">
+            <string>ProximaNova-Semibold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AmendBookingView" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="activityIndicator" destination="USy-x3-wxG" id="8mR-Tu-cmJ"/>
+                <outlet property="continueButton" destination="IE4-Je-J6d" id="Mzc-Ua-Uiv"/>
+                <outlet property="continueContainer" destination="scc-Z3-iGV" id="OIg-EL-47q"/>
+                <outlet property="continueContainerBottomConstraint" destination="P97-mf-BtK" id="UWg-zt-2YC"/>
+                <outlet property="continueContainerHeight" destination="mJh-1c-1Fu" id="LaS-Oe-ZwR"/>
+                <outlet property="priceDifference" destination="pQV-Fj-AZl" id="dgM-09-XXc"/>
+                <outlet property="table" destination="Adl-Es-m2N" id="4J5-kA-WNH"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Adl-Es-m2N">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                </tableView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="USy-x3-wxG">
+                    <rect key="frame" x="169" y="315" width="37" height="37"/>
+                    <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                </activityIndicatorView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="scc-Z3-iGV">
+                    <rect key="frame" x="0.0" y="703" width="375" height="64"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IE4-Je-J6d" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                            <rect key="frame" x="195" y="10" width="170" height="44"/>
+                            <color key="backgroundColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="170" id="BIE-P7-A3I"/>
+                                <constraint firstAttribute="height" constant="44" id="F74-6g-bmd"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="16"/>
+                            <state key="normal" title="Review amends">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="4"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="continueButtonDidTap:" destination="-1" eventType="touchUpInside" id="9Vb-YR-5Ae"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pQV-Fj-AZl">
+                            <rect key="frame" x="20" y="12" width="163" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="IE4-Je-J6d" firstAttribute="leading" secondItem="pQV-Fj-AZl" secondAttribute="trailing" constant="12" id="1Hg-OO-lxt"/>
+                        <constraint firstItem="IE4-Je-J6d" firstAttribute="top" secondItem="scc-Z3-iGV" secondAttribute="top" constant="10" id="V0E-hB-2gR"/>
+                        <constraint firstItem="pQV-Fj-AZl" firstAttribute="top" secondItem="scc-Z3-iGV" secondAttribute="top" constant="12" id="WhY-xP-yXV"/>
+                        <constraint firstAttribute="trailing" secondItem="IE4-Je-J6d" secondAttribute="trailing" constant="10" id="dEX-di-4ia"/>
+                        <constraint firstAttribute="height" constant="64" id="mJh-1c-1Fu"/>
+                        <constraint firstItem="pQV-Fj-AZl" firstAttribute="leading" secondItem="scc-Z3-iGV" secondAttribute="leading" constant="20" id="ruN-Lg-jLQ"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="USy-x3-wxG" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="2ov-Kq-TFi"/>
+                <constraint firstItem="scc-Z3-iGV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="CYa-Nj-Dct"/>
+                <constraint firstItem="Adl-Es-m2N" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="HUC-aI-84J"/>
+                <constraint firstAttribute="bottom" secondItem="scc-Z3-iGV" secondAttribute="bottom" constant="-100" id="P97-mf-BtK"/>
+                <constraint firstAttribute="trailing" secondItem="scc-Z3-iGV" secondAttribute="trailing" id="SjT-KI-n8y"/>
+                <constraint firstAttribute="bottom" secondItem="Adl-Es-m2N" secondAttribute="bottom" id="WPi-d5-YCd"/>
+                <constraint firstItem="Adl-Es-m2N" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="gye-Ou-vHg"/>
+                <constraint firstAttribute="trailing" secondItem="Adl-Es-m2N" secondAttribute="trailing" id="poJ-b4-ioA"/>
+                <constraint firstItem="USy-x3-wxG" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="rPF-VA-8ew"/>
+            </constraints>
+            <point key="canvasLocation" x="134" y="146"/>
+        </view>
+    </objects>
+    <designables>
+        <designable name="IE4-Je-J6d">
+            <size key="intrinsicContentSize" width="113" height="32"/>
+        </designable>
+    </designables>
+    <resources>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

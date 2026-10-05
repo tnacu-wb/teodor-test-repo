@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>uk.co.whitbread</groupId>
+    <artifactId>digital-monorepo-service-parent</artifactId>
+    <version>${revision}</version>
+    <relativePath>../../../parents/service-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>company-service-opera</artifactId>
+  <packaging>jar</packaging>
+  <name>company-service-opera</name>
+  <description>Whitbread Company API Service</description>
+
+  <properties>
+    <application.port>9022</application.port>
+    <sonar.coverage.exclusions>
+      **/model/**,
+      **/properties/**,
+      **/mapper/**,
+      **/config/**,
+      **/exceptions/**,
+      **CompanyServiceApplication*
+    </sonar.coverage.exclusions>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>common-auth0</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.errorprone</groupId>
+          <artifactId>error_prone_annotations</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-cdh-lib</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-azure-email-service</artifactId>
+    </dependency>
+
+    <!-- Spring/SpringBoot -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web-services</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+    </dependency>
+
+    <!-- Other Dependencies -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.github.benas</groupId>
+      <artifactId>random-beans</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-entity-validators</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.getunleash</groupId>
+      <artifactId>springboot-unleash-starter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.netflix.hystrix</groupId>
+      <artifactId>hystrix-core</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+        </configuration>
+        <executions>
+          <execution>
+            <id>pre-integration-test</id>
+            <goals>
+              <goal>start</goal>
+            </goals>
+            <configuration>
+              <profiles>
+                <profile>integration</profile>
+              </profiles>
+            </configuration>
+          </execution>
+          <execution>
+            <id>post-integration-test</id>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!--Used to generate OpenAPI yaml description -->
+      <plugin>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <apiDocsUrl>http://localhost:${application.port}/v3/api-docs.yaml</apiDocsUrl>
+          <outputFileName>${project.name}-openApi.yaml</outputFileName>
+          <outputDir>${basedir}/docs/openApi</outputDir>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <configuration>
+          <excludedClasses>
+            <param>uk.co.whitbread.company.CompanyServiceApplication</param>
+          </excludedClasses>
+          <excludedTestClasses>
+            <excludedTestClass>
+              uk.co.whitbread.reservation.architecture.ArchUnitTests
+            </excludedTestClass>
+          </excludedTestClasses>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

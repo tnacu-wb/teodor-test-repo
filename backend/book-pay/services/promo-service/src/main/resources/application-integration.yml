@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:int-db;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: sa
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  liquibase:
+    enabled: true
+    change-log: classpath:sql/liquibase/db.changelog-master.xml
+    default-schema: promotions
+
+copy-datasource:
+  enabled: true
+  url: jdbc:h2:mem:int-db;DB_CLOSE_DELAY=-1
+  username: sa
+  password: sa
+
+config:
+  service:
+    ohip:
+      host: http://${OHIP_HOST}/ohip
+      promotionsEndpoint: "/promotions"
+
+auth:
+  tenants:
+    - name: "CCUI Tenant"
+      audience: dummy
+      namespace: dummy
+      issuer: dummy
+      jwkUri: https://dummy/.well-known/jwks.json
+    - name: "PI BB Tenant"
+      audience: dummy
+      namespace: dummy
+      issuer: dummy
+      jwkUri: https://dummy/.well-known/jwks.json
+
+server:
+  port: 9137
+
+io:
+  getunleash:
+    app-name: promo-service
+    instance-id: integration
+    environment: integration
+    api-url: http://localhost:3063/api
+    api-token: dummy-token

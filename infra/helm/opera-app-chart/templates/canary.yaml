@@ -1,0 +1,114 @@
+{{/*
+Progressive delivery via Flagger.
+
+Skipped entirely when `ephemeral: true`. Once a Canary exists, Flagger takes
+ownership of the apex Service's .spec.selector and .spec.ports[].name and of the
+VirtualService's .spec.http, so Helm's server-side apply collides with it on the
+next `helm upgrade`:
+
+  conflicts with "flagger" using v1: .spec.selector
+
+Long-lived environments reconcile through Flagger, so that ownership is correct
+there. Per-PR releases are created and destroyed faster than a canary analysis
+can complete and get upgraded on every push, so they must own their own Service
+and VirtualService outright.
+
+The value is compared as a string so both `--set ephemeral=true` (bool) and
+`--set-string ephemeral=true` behave the same.
+*/}}
+{{- $ephemeral := eq (toString (default false .Values.ephemeral)) "true" -}}
+{{- if and (not $ephemeral) .Values.canary (ne (.Values.canary).create false) }}
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: {{ .Values.applicationName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.applicationName }}
+  progressDeadlineSeconds: 300
+  autoscalerRef:
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    name: {{ .Values.applicationName }}
+  service:
+    port: {{ index (index .Values.service.ports 0) "port" }}
+    targetPort: {{ index (index .Values.service.ports 0) "targetPort" }}
+    gateways:
+      - {{ .Values.istio.gateway }}
+    hosts:
+      - "*"
+    match:
+      - uri:
+          {{- if eq ((.Values.istio).regex).enabled true }}
+          regex: {{ .Values.istio.regex.pattern }}
+          {{ else if (.Values.istio).prefix}}
+          prefix: {{ .Values.istio.prefix }}
+          {{- end }}
+    trafficPolicy:
+      tls:
+        # use ISTIO_MUTUAL when mTLS is enabled
+        mode: ISTIO_MUTUAL
+  analysis:
+    interval: {{ .Values.canary.analysis.interval }}
+    threshold: {{ .Values.canary.analysis.threshold }}
+    maxWeight: {{ .Values.canary.analysis.maxWeight }}
+    stepWeight: {{ .Values.canary.analysis.stepWeight }}
+    {{- with .Values.canary.metrics }}
+    metrics:
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    webhooks:
+      {{- if .Values.canary.loadtests }}
+      {{- range .Values.canary.loadtests }}
+      - name: {{ .name }}
+        url: {{ .url | default "http://flagger-loadtester.flagger/"}}
+        timeout: 5s
+        metadata:
+          cmd: "hey \
+            -z {{ (.parameters).duration | default "1m" }} \
+            -c {{ (.parameters).concurrent_requests | default 2 }} \
+            -q {{ (.parameters).rate_limit | default 5 }} \
+            {{- if (.parameters).number_of_requests }}
+            -n {{ (.parameters).number_of_requests }} \
+            {{- end }}
+            {{- if (.parameters).header }}
+            -H \"{{ (.parameters).header }}\" \
+            {{- end }}
+            {{- if (.parameters).request_timeout }}
+            -t {{ (.parameters).request_timeout }} \
+            {{- end }}
+            {{- if (.parameters).authentication }}
+            -a {{ (.parameters).authentication }} \
+            {{- end }}
+            -m {{ ((.parameters).method).type | default "GET" }} \
+            {{- if eq ((.parameters).method).type "POST" }}
+            {{- if (.parameters.method).body }}
+            -d '{{ (.parameters.method).body }}' \
+            {{- else }}
+            {{- fail "body parameter is required when method type is set to POST" }}
+            {{- end }}
+            {{- end }}
+            \"http://{{ $.Values.applicationName }}-canary.{{ $.Values.namespace }}:{{ index (index $.Values.service.ports 0) "port" }}{{ .path | required "path is required for loadtest" }}\""
+      {{- end }}
+      {{- end }}
+    {{- if .Values.canary.whscripts }}
+      - name: close-rollback
+        type: confirm-rollout
+        url: http://flagger-bashtester.flagger/rollback/close
+      {{- range $i, $script := .Values.canary.whscripts }}
+      - name: {{ $.Values.applicationName }}-rollback-check
+        type: rollback
+        url: http://flagger-bashtester.flagger/rollback/check
+      - name: {{ $script.name }}
+        timeout: {{ $script.timeout | default "1800s" }}
+        type: confirm-promotion
+        url: http://flagger-bashtester.flagger
+        metadata:
+          type: bash
+          cmd: "bash /scripts/invoker.sh {{ $script.script }} --service_name {{ $.Values.applicationName }} --namespace {{ $.Values.namespace }} {{- range $key, $value := $script.parameters }} --{{ $key }} {{ $value }}{{- end }}"
+      {{- end }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,15 @@
+query getPaymentInfo($paymentInfoCriteria: PaymentInfoCriteria!) {
+  getPaymentInfo(paymentInfoCriteria: $paymentInfoCriteria) {
+    payments {
+        paymentDate
+        paymentDescription
+        failureReason
+        paymentFailed
+        paymentValue{
+            value
+            currencyCode
+            currencySymbol
+        }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+query getAccountInfo($scheme: Scheme!, $tetheredUserId: String!) {
+    getAccountInfo(scheme: $scheme, tetheredUserId: $tetheredUserId) {
+      billingFrequency
+      daysToPay
+      outStandingBalance {
+        currencyCode
+        value
+      }
+      statementValue {
+        currencyCode
+        value
+      }
+      status
+    }
+  }

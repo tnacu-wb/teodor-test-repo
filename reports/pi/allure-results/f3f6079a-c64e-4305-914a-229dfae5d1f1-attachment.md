@@ -1,0 +1,374 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: regressions/pi/baseline-e2e-guest-uk-hotel-flex-poa-piba-amendment.spec.ts >> PI Baseline E2E - Guest PIBA Pay on Arrival Amendment >> Test Book as Guest user: 1 night, 1 room (Double), 2 adults, Flex rate, meals, donations - POA BAC card and Amend by change room type. TestCase ID: 380779.
+- Location: qa/tests/regressions/pi/baseline-e2e-guest-uk-hotel-flex-poa-piba-amendment.spec.ts:51:7
+
+# Error details
+
+```
+Error: Unexpected price per night. Expected room rates were not found
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=f51e1]:
+  - generic [ref=f51e3]:
+    - generic [ref=f51e6]:
+      - link [ref=f51e9] [cursor=pointer]:
+        - /url: https://www.uat.premierinn.digital/gb/en/home.html
+      - generic [ref=f51e13]:
+        - paragraph [ref=f51e22]: Choose your meals
+        - generic [ref=f51e23]:
+          - separator [ref=f51e24]
+          - paragraph [ref=f51e32]: Your details
+        - generic [ref=f51e33]:
+          - separator [ref=f51e34]
+          - paragraph [ref=f51e42]: Payment details
+    - generic [ref=f51e43]:
+      - generic [ref=f51e44]:
+        - generic [ref=f51e45]:
+          - paragraph [ref=f51e46]: Thanks for your booking, John
+          - paragraph [ref=f51e47]:
+            - text: A confirmation email has been sent to
+            - strong [ref=f51e48]: test-a3e60e53-e3f6-4235-a869-3cc08b23e692@mailinator.com
+            - text: .
+        - separator [ref=f51e49]
+        - generic [ref=f51e50]:
+          - paragraph [ref=f51e51]: "Booking reference:"
+          - paragraph [ref=f51e52]: AQN8631755
+          - paragraph [ref=f51e53]: London Heathrow Airport (M4/J4)
+          - paragraph [ref=f51e54]: Shepiston Lane, Middlesex, UB3 1RW
+          - paragraph [ref=f51e55]: Tel. 0333 003 1715
+        - generic [ref=f51e56]:
+          - paragraph [ref=f51e58]: Room details
+          - generic [ref=f51e60]:
+            - generic [ref=f51e61] [cursor=pointer]:
+              - generic [ref=f51e62]:
+                - paragraph [ref=f51e63]: Room 1
+                - paragraph [ref=f51e64]: 23 Sep - 24 Sep
+              - generic [ref=f51e65]:
+                - paragraph [ref=f51e66]: "Room total:"
+                - paragraph [ref=f51e68]: £109.00
+            - generic [ref=f51e72]:
+              - generic [ref=f51e73]:
+                - generic [ref=f51e74]:
+                  - generic [ref=f51e75]:
+                    - paragraph [ref=f51e76]: Lead guest
+                    - paragraph [ref=f51e77]: Mr John Smith
+                  - generic [ref=f51e78]:
+                    - paragraph [ref=f51e79]: Your room
+                    - paragraph [ref=f51e80]: Double room
+                  - generic [ref=f51e81]:
+                    - paragraph [ref=f51e82]: Your rate
+                    - paragraph [ref=f51e83]: Flex - Pay now or on arrival. Fully refundable up to 1 pm on day of arrival
+                  - generic [ref=f51e84]:
+                    - paragraph [ref=f51e85]: Your group
+                    - paragraph [ref=f51e86]: 2 Adults
+                - generic [ref=f51e87]:
+                  - generic [ref=f51e88]:
+                    - paragraph [ref=f51e89]: Arriving
+                    - generic [ref=f51e90]:
+                      - generic [ref=f51e91]:
+                        - paragraph [ref=f51e92]: Wednesday
+                        - paragraph [ref=f51e93]: Check in from 3pm
+                      - generic [ref=f51e94]:
+                        - paragraph [ref=f51e95]: 23 Sep 2026
+                        - paragraph [ref=f51e96]: £85.00
+                      - separator [ref=f51e97]
+                  - generic [ref=f51e98]:
+                    - paragraph [ref=f51e99]: Leaving
+                    - generic [ref=f51e100]:
+                      - paragraph [ref=f51e101]: Thursday
+                      - paragraph [ref=f51e102]: Check out before 12pm
+                    - paragraph [ref=f51e103]: 24 Sep 2026
+                  - separator [ref=f51e104]
+                  - generic [ref=f51e105]:
+                    - paragraph [ref=f51e106]: Meals
+                    - generic [ref=f51e107]:
+                      - paragraph [ref=f51e109]: 2 Adults Unlimited Premier Inn Breakfast
+                      - paragraph [ref=f51e110]: £24.00
+              - generic [ref=f51e111]:
+                - paragraph [ref=f51e112]: "Room 1 total cost:"
+                - paragraph [ref=f51e113]: £109.00
+        - generic [ref=f51e114]:
+          - paragraph [ref=f51e115]: Create an account
+          - paragraph [ref=f51e116]: Making and managing bookings is even easier with a My Premier Inn account! We have your booking details to help you get started – click below to finish the last few steps.
+          - button [ref=f51e117] [cursor=pointer]:
+            - paragraph [ref=f51e118]: Create account
+        - generic [ref=f51e121]:
+          - paragraph [ref=f51e122]: Hotel directions
+          - generic [ref=f51e125]:
+            - generic:
+              - button "Keyboard shortcuts"
+            - region "Map" [ref=f51e126]
+            - generic [ref=f51e127]:
+              - generic [ref=f51e149] [cursor=pointer]
+              - iframe [ref=f51e150]:
+                
+              - button "Toggle fullscreen view" [ref=f51e151] [cursor=pointer]
+              - link "Open this area in Google Maps (opens a new window)" [ref=f51e153] [cursor=pointer]:
+                - /url: https://maps.google.com/maps?ll=51.496015,-0.447979&z=13&t=m&hl=en-GB&gl=US&mapclient=apiv3
+                - img "Google" [ref=f51e155]
+              - generic [ref=f51e156]:
+                - button "Keyboard shortcuts" [ref=f51e162] [cursor=pointer]
+                - generic [ref=f51e163]: Map data ©2026 Google
+                - link "Terms (opens in new tab)" [ref=f51e172] [cursor=pointer]:
+                  - /url: https://www.google.com/intl/en-GB_US/help/terms_maps.html
+                  - text: Terms
+                - link "Report a map error (opens in new tab)" [ref=f51e177] [cursor=pointer]:
+                  - /url: https://www.google.com/maps/@51.496015,-0.447979,13z/data=!10m1!1e1!12b1?source=apiv3&rapsrc=apiv3
+                  - text: Report a map error
+          - paragraph [ref=f51e179]: From M4 exit Jtn 4 then follow signs to Uxbridge remaining in left hand lane. Bear left following signs for other routes and Hayes. At give way point, use as a roundabout and take the 4th exit off (sign posted Hayes). The hotel is 200 yards away on the right hand side. (SAT NAV - UB3 1RW) Parking costs 12 GBP per night for Premier Inn guests.
+        - generic [ref=f51e181]:
+          - generic [ref=f51e182]:
+            - generic [ref=f51e183]: On-line charitable pledge
+            - generic [ref=f51e184]: £3.00
+          - separator [ref=f51e185]
+          - generic [ref=f51e186]:
+            - generic [ref=f51e187]:
+              - generic [ref=f51e188]: "Total cost:"
+              - paragraph [ref=f51e189]: Thank you, your payment will be taken on arrival.
+            - paragraph [ref=f51e191]: £112.00
+        - button "Continue to homepage" [ref=f51e193] [cursor=pointer]
+        - generic [ref=f51e200]:
+          - heading "We keep your personal data safe and secure." [level=3] [ref=f51e202]
+          - generic [ref=f51e203]:
+            - paragraph [ref=f51e205]: "We need to collect and keep some mandatory information in order to process your booking. Full details about how we use your data are set out in our Privacy notice. Premier Inn Hotels Limited (company no. 5137608) is a member of the Whitbread Group, the parent of which is Whitbread Group PLC (company no. 29423). Registered office: Whitbread Court, Houghton Hall Business Park, Porz Avenue, Dunstable LU5 5XE."
+            - link "View our Privacy Notice" [ref=f51e206] [cursor=pointer]:
+              - /url: https://www.uat.premierinn.digital/gb/en/terms/privacy-policy.html
+          - button [ref=f51e207] [cursor=pointer]:
+            - heading "Find out more" [level=3] [ref=f51e208]
+      - generic [ref=f51e212]:
+        - button "Continue to homepage" [ref=f51e213] [cursor=pointer]
+        - button [ref=f51e214] [cursor=pointer]:
+          - paragraph [ref=f51e218]: Print details
+        - link "Book a table" [ref=f51e223] [cursor=pointer]:
+          - /url: /gb/en/restaurants/the-social/london-heathrow-airport-m4j4/book
+  - alert [ref=f51e224]: /en/booking-a1/confirmation?reservationId=AQN-cb6cc476-8a06-4731-b34b-74c939145553
+  - generic:
+    - region "Notifications-top"
+    - region "Notifications-top-left"
+    - region "Notifications-top-right"
+    - region "Notifications-bottom-left"
+    - region "Notifications-bottom"
+    - region "Notifications-bottom-right"
+```
+
+# Test source
+
+```ts
+  604 |     for (const reservation of reservationByIdList) {
+  605 |       const roomStay = this.asObject(reservation.roomStay);
+  606 |       const expectedPackages = this.asArray(await ApiCalls.graphqlGetAncillariesWiFiExtras({
+  607 |         hotelId: String(this.bookingConfirmationData.hotelId ?? ''), bookingFlowId, nightsNumber, startDate: arrivalDate, endDate: departureDate,
+  608 |         adultsNumber: Number(roomStay.adultsNumber ?? 0), childrenNumber: Number(roomStay.childrenNumber ?? 0),
+  609 |       }));
+  610 |       const actualPackage = this.asArray(reservation.reservationPackageList).find((pkg) => String(pkg.packageCode ?? '') === Constants.WIFI_CODE);
+  611 |       if (noPackage) {
+  612 |         global.expect(actualPackage, 'WiFi package is present and it was not expected').toBeUndefined();
+  613 |       } else {
+  614 |         global.expect(Number(this.asObject(actualPackage).unitPrice ?? 0), 'Unexpected WiFi package unit price').toBe(Number(this.asObject(expectedPackages[0]).price ?? 0));
+  615 |       }
+  616 |     }
+  617 |   }
+  618 | 
+  619 |   /**
+  620 |    * Validate rates per night
+  621 |   * @param {Array<number | Array<ExpectedRatePerNight>>} expectedRatesPerRoomPerNight expected rates per room
+  622 |    * @param {Number} discountAmount the discount amount applied
+  623 |    * @param {Boolean} includesCityTax true if the expectedRatesPerRoomPerNight per room includes the city tax.
+  624 |    */
+  625 |   async validateRatesPerNight(
+  626 |     expectedRatesPerRoomPerNight: number[] | ExpectedRatePerNight[][],
+  627 |     discountAmount: number = 0,
+  628 |     includesCityTax: boolean = true,
+  629 |   ): Promise<void> {
+  630 |     console.log('Validate rates per night');
+  631 |     const expectedRates = Array.isArray(expectedRatesPerRoomPerNight) ? expectedRatesPerRoomPerNight : [];
+  632 |     const discount = Number(discountAmount ?? 0);
+  633 |     const includesTax = Boolean(includesCityTax ?? true);
+  634 |     const reservationByIdList = this.asArray(this.bookingConfirmationData.reservationByIdList);
+  635 | 
+  636 |     if (expectedRates.length > 0 && typeof expectedRates[0] === 'number') {
+  637 |       const expectedFlat = expectedRates as number[];
+  638 |       const firstRoom = this.asObject(reservationByIdList[0]);
+  639 |       const ratesPerNight = this.asArray(this.asObject(firstRoom.roomStay).ratesPerNight);
+  640 |       global.expect(ratesPerNight.length, 'Rates per room per night rooms count').toBe(expectedFlat.length);
+  641 |       for (let i = 0; i < ratesPerNight.length; i++) {
+  642 |         const rate = this.asObject(ratesPerNight[i]);
+  643 |         const cityTax = includesTax ? Number(rate.cityTaxPerNight ?? 0) : 0;
+  644 |         const actual = Number((Number(rate.pricePerNight ?? 0) + cityTax).toFixed(2));
+  645 |         const expected = Number(Number(expectedFlat[i]).toFixed(2));
+  646 |         global.expect(actual, 'Unexpected price per night').toBe(expected);
+  647 |       }
+  648 |       return;
+  649 |     }
+  650 | 
+  651 |     global.expect(reservationByIdList.length, 'Rates per room per night rooms count').toBe(expectedRates.length);
+  652 |     const unmatchedRooms = [...reservationByIdList];
+  653 |     for (const expectedRoom of expectedRates as ExpectedRatePerNight[][]) {
+  654 |       let hasThisRoomPricePerNight = false;
+  655 |       let hasThisRoomStartDate = false;
+  656 | 
+  657 |       for (let roomIndex = 0; roomIndex < unmatchedRooms.length; roomIndex++) {
+  658 |         const room = this.asObject(unmatchedRooms[roomIndex]);
+  659 |         const rates = this.asArray(this.asObject(room.roomStay).ratesPerNight);
+  660 |         let totalPricePerNight = 0;
+  661 |         let expectedTotalPricePerNight = 0;
+  662 | 
+  663 |         for (let rateIndex = 0; rateIndex < rates.length; rateIndex++) {
+  664 |           const rate = this.asObject(rates[rateIndex]);
+  665 |           const expectedRate = this.asObject(expectedRoom[rateIndex]);
+  666 |           const cityTaxAmount = includesTax ? Number(rate.cityTaxPerNight ?? 0) : 0;
+  667 |           const expectedPricePerNightValue = (roomIndex === 0 && rateIndex === 0 && discount > 0)
+  668 |             ? Number(expectedRate.pricePerNight ?? 0) - discount
+  669 |             : Number(expectedRate.pricePerNight ?? 0);
+  670 | 
+  671 |           hasThisRoomPricePerNight = Number((Number(rate.pricePerNight ?? 0) + cityTaxAmount).toFixed(2))
+  672 |             === Number(Number(expectedPricePerNightValue).toFixed(2));
+  673 |           hasThisRoomStartDate = String(rate.startDate ?? '') === String(expectedRate.date ?? '');
+  674 | 
+  675 |           // Workaround for date mismatch issue — check if dates are off by 1 day
+  676 |           if (!hasThisRoomStartDate && rate.startDate && expectedRate.date) {
+  677 |             const rateDate = new Date(String(rate.startDate));
+  678 |             const expectedDate = new Date(String(expectedRate.date));
+  679 |             const dateDiffMs = Math.abs(rateDate.getTime() - expectedDate.getTime());
+  680 |             const oneDayMs = 24 * 60 * 60 * 1000;
+  681 |             if (dateDiffMs === oneDayMs) {
+  682 |               hasThisRoomStartDate = true;
+  683 |             }
+  684 |           }
+  685 | 
+  686 |           expectedTotalPricePerNight += expectedPricePerNightValue;
+  687 |           totalPricePerNight += Number(rate.pricePerNight ?? 0);
+  688 | 
+  689 |           if (discount === 0 && (!hasThisRoomPricePerNight || !hasThisRoomStartDate)) {
+  690 |             break;
+  691 |           }
+  692 |         }
+  693 | 
+  694 |         if (discount > 0 && Number(totalPricePerNight.toFixed(2)) === Number(expectedTotalPricePerNight.toFixed(2))) {
+  695 |           hasThisRoomPricePerNight = true;
+  696 |         }
+  697 | 
+  698 |         if (hasThisRoomPricePerNight && hasThisRoomStartDate) {
+  699 |           unmatchedRooms.splice(roomIndex, 1);
+  700 |           break;
+  701 |         }
+  702 |       }
+  703 | 
+> 704 |       global.expect(hasThisRoomPricePerNight, 'Unexpected price per night. Expected room rates were not found').toBe(true);
+      |                                                                                                                 ^ Error: Unexpected price per night. Expected room rates were not found
+  705 |       global.expect(hasThisRoomStartDate, 'Unexpected rate start date. Expected room dates were not found').toBe(true);
+  706 |     }
+  707 |   }
+  708 | 
+  709 |   /**
+  710 |    * Validate Currency
+  711 |    * @param {String} expectedCurrency expected currency
+  712 |    */
+  713 |   async validateCurrency(expectedCurrencyInput: string): Promise<void> {
+  714 |     const expectedCurrency = String(expectedCurrencyInput ?? '');
+  715 |     global.expect(String(this.bookingConfirmationData.currencyCode ?? ''), 'Unexpected currency code').toBe(expectedCurrency);
+  716 |   }
+  717 | 
+  718 |   /**
+  719 |    * Validate Booking flow id
+  720 |    * @param {String} expectedBookingFlowId expected booking flow id
+  721 |    */
+  722 |   async validateBookingFlowId(expectedBookingFlowIdInput: string): Promise<void> {
+  723 |     const expectedBookingFlowId = String(expectedBookingFlowIdInput ?? '');
+  724 |     global.expect(String(this.bookingConfirmationData.bookingFlowId ?? ''), 'Unexpected booking flow id').toBe(expectedBookingFlowId);
+  725 |   }
+  726 | 
+  727 |   /**
+  728 |    * Validate policy code
+  729 |    * @param {String} policyCode policy code 
+  730 |    */
+  731 |   async validatePolicyCode(policyCodeInput: string): Promise<void> {
+  732 |     const policyCode = String(policyCodeInput ?? '');
+  733 |     global.expect(String(this.bookingConfirmationData.policyCode ?? ''), 'policyCode is not as expected').toBe(policyCode);
+  734 |   }
+  735 | 
+  736 |   /**
+  737 |    * Format a date as an ISO calendar day in UTC.
+  738 |    * @param date date to format
+  739 |    * @returns ISO date in YYYY-MM-DD format
+  740 |    */
+  741 |   private toIsoDayDate(date: Date): string {
+  742 |     const year = date.getUTCFullYear();
+  743 |     const month = `${date.getUTCMonth() + 1}`.padStart(2, '0');
+  744 |     const day = `${date.getUTCDate()}`.padStart(2, '0');
+  745 |     return `${year}-${month}-${day}`;
+  746 |   }
+  747 | 
+  748 |   /**
+  749 |    * Calculate the number of nights between arrival and departure dates.
+  750 |    * @param arrivalDate arrival date string
+  751 |    * @param departureDate departure date string
+  752 |    * @returns number of nights between the supplied dates
+  753 |    */
+  754 |   private getNightsBetween(arrivalDate: string, departureDate: string): number {
+  755 |     return Math.round((new Date(departureDate).getTime() - new Date(arrivalDate).getTime()) / (24 * 60 * 60 * 1000));
+  756 |   }
+  757 | 
+  758 |   /**
+  759 |    * Validate room total price 
+  760 |    * @param {Array<String>} expectedRoomPrices expectedRoomPrices
+  761 |    * @param {Number} discountAmount the discount amount applied
+  762 |    * @param {Boolean} includesCityTax true if the final expected room price should include the city tax
+  763 |    */
+  764 |   async validateRoomPrice(
+  765 |     expectedRoomPricesInput: Array<number | string | Record<string, unknown>>,
+  766 |     discountAmount: number = 0,
+  767 |     includesCityTax: boolean = false,
+  768 |   ): Promise<void> {
+  769 |     console.log('Validate room total price');
+  770 |     const expectedRoomPrices = Array.isArray(expectedRoomPricesInput) ? expectedRoomPricesInput : [];
+  771 |     const discount = Number(discountAmount ?? 0);
+  772 |     const includesTax = Boolean(includesCityTax ?? false);
+  773 |     const reservationByIdList = this.asArray(this.bookingConfirmationData.reservationByIdList);
+  774 | 
+  775 |     global.expect(reservationByIdList.length, 'Total price rooms count mismatch').toBe(expectedRoomPrices.length);
+  776 |     const unmatchedRooms = [...reservationByIdList];
+  777 | 
+  778 |     for (const expectedRoomPriceRaw of expectedRoomPrices) {
+  779 |       const expectedRoomPriceObj = this.asObject(expectedRoomPriceRaw);
+  780 |       const expectedRoomPrice = Number(
+  781 |         typeof expectedRoomPriceRaw === 'number' || typeof expectedRoomPriceRaw === 'string'
+  782 |           ? expectedRoomPriceRaw
+  783 |           : (expectedRoomPriceObj.totalPrice ?? 0),
+  784 |       );
+  785 | 
+  786 |       let hasThisRoomPrice = false;
+  787 |       for (let roomIndex = 0; roomIndex < unmatchedRooms.length; roomIndex++) {
+  788 |         const room = this.asObject(unmatchedRooms[roomIndex]);
+  789 |         const roomStay = this.asObject(room.roomStay);
+  790 |         const ratesPerNight = this.asArray(roomStay.ratesPerNight);
+  791 |         const cityTaxAmount = includesTax
+  792 |           ? ratesPerNight.reduce((totalCityTax, currentValue) => totalCityTax + Number(this.asObject(currentValue).cityTaxPerNight ?? 0), 0)
+  793 |           : 0;
+  794 | 
+  795 |         let expectedRoomPriceValue = discount > 0
+  796 |           ? Math.trunc((expectedRoomPrice + Math.round(cityTaxAmount * 100) / 100 - discount) * 100) / 100
+  797 |           : Math.trunc((expectedRoomPrice + Math.round(cityTaxAmount * 100) / 100) * 100) / 100;
+  798 | 
+  799 |         const actualRoomPrice = Number((Math.round(Number.parseFloat(String(roomStay.roomPrice ?? 0)) * 100) / 100).toFixed(2));
+  800 |         expectedRoomPriceValue = Number((Math.round(Number.parseFloat(String(expectedRoomPriceValue)) * 100) / 100).toFixed(2));
+  801 | 
+  802 |         hasThisRoomPrice = actualRoomPrice === expectedRoomPriceValue
+  803 |           || Number((actualRoomPrice + 0.01).toFixed(2)) === expectedRoomPriceValue
+  804 |           || actualRoomPrice === Number((expectedRoomPriceValue + 0.01).toFixed(2));
+```

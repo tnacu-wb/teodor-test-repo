@@ -1,0 +1,63 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationPort as InboundPort
+participant OhipOutPort as OhipOutPort
+participant HotelReservationWebClient as Webclient
+participant BasketServiceOutPort as BasketOutPort
+participant BasketWebClient as BasketWebClient
+participant RulesServiceOutPort as RulesOutPort
+entity "Authentication Service" as Auth
+entity "OHIPAdapter Service" as OHIPAdapterService
+entity "Basket Service" as BasketService
+
+A -> Controller: PUT /v1/reservations/amend/editRoom
+Controller -> InboundPort: editRoom
+InboundPort -> BasketOutPort: getBasketByReference
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+InboundPort -> Auth: validateToken for not logged ind user
+InboundPort <- Auth
+
+InboundPort -> BasketOutPort: (isBookingNonRefundable) getAllReservationsJustByBasketReference
+BasketOutPort -> BasketWebClient: (sendGetBasket) GET /v1/baskets/{basket-reference}
+BasketWebClient -> BasketService
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+InboundPort -> OhipOutPort: getReservationsByIds
+OhipOutPort -> OHIPAdapterService: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+
+InboundPort -> BasketOutPort: (isBookingNonRefundable) getAllReservationsJustByBasketReference
+BasketOutPort -> BasketWebClient: (sendGetBasket) GET /v1/baskets/{basket-reference}
+BasketWebClient -> BasketService
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+InboundPort -> OhipOutPort: getReservationsByIds
+OhipOutPort -> OHIPAdapterService: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+InboundPort -> OhipOutPort: getWbRoomTypes
+OhipOutPort -> RulesOutPort: getWbRoomTypes
+
+OhipOutPort <- RulesOutPort: List<String>
+InboundPort <- OhipOutPort: List<String>
+
+InboundPort -> OhipOutPort: amendEditRoom
+OhipOutPort -> Webclient: sendUpdateReservationAmend
+Webclient -> OHIPAdapterService: PUT /v1/reservations
+Webclient <- OHIPAdapterService: UpdateReservationResponse
+OhipOutPort <- Webclient: UpdateReservationResponse
+InboundPort <- OhipOutPort: UpdateReservationResponse
+Controller <- InboundPort: EditRoomResponse (basketReferenceId)
+A <- Controller: Edit room reservation response
+@enduml

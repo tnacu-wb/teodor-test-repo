@@ -1,0 +1,37 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant BasketServiceOutPort as BasketOutPort
+participant BasketWebClient as BasketWebClient
+participant OhipOutPort as OhipOutPort
+entity "Authentication Service" as Auth
+entity "Basket Service" as BasketService
+entity "OHIPAdapter Service" as OHIPAdapterService
+
+A -> Controller: POST /reservations/rooms/delete
+Controller -> InboundPort: removeRoom
+InboundPort -> BasketOutPort: getBasketById
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+InboundPort -> Auth: validateToken for not logged ind user
+InboundPort <- Auth
+
+InboundPort -> OhipOutPort: deleteReservation
+OhipOutPort -> OHIPAdapterService: (deleteReservationRequest) DELETE /v1/reservations
+OhipOutPort <- OHIPAdapterService: 200 OK
+InboundPort <- OhipOutPort
+InboundPort -> BasketOutPort: removeItem
+BasketOutPort -> BasketWebClient: removeItem
+BasketWebClient -> BasketService: DELETE /v1/baskets/{basket-reference}/items/{itemId}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+Controller <- InboundPort: TempBookingRefResponse
+A <- Controller: Remove room temp basket ref resp
+@enduml

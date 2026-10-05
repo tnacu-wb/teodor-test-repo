@@ -1,0 +1,10 @@
+// Base.xcconfig
+// This file is committed to git and provides default build configuration.
+// It optionally includes Secrets.xcconfig if it exists (for local development and CI).
+
+// Default placeholder values (overridden by Secrets.xcconfig if present)
+UNLEASH_DEV_TOKEN = placeholder-dev-token
+
+// Include secrets file if present (the ? makes it optional - won't fail if missing)
+// Values from Secrets.xcconfig will override the defaults above
+#include? "Secrets.xcconfig"

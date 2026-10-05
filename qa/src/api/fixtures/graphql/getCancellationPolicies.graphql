@@ -1,0 +1,18 @@
+query CancellationPolicy(
+  $hotelId: String!
+  $arrivalDate: String!
+  $ratePlanCode: String!
+  $basketRef: String
+) {
+  cancellationPolicies(
+    cancellationPolicies: {
+      hotelId: $hotelId
+      arrivalDate: $arrivalDate
+      ratePlanCode: $ratePlanCode
+      basketRef: $basketRef
+    }
+  ) {
+    time
+    text
+  }
+}

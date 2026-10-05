@@ -1,0 +1,21 @@
+@startuml
+entity "PMS Adapter Service" as PMS
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as Webclient
+entity Opera as opera
+
+PMS -> Controller: POST /ohip/v1/reservations/confirm
+Controller -> InboundPort: confirmReservation(ConfirmReservationRequest confirmReservationRequest)
+InboundPort -> OutboundPort: confirmReservation(ConfirmReservationRequest confirmReservationRequest)
+OutboundPort -> Webclient: sendChangeReservationRequest(String hotelId, String reservationId, ChangeReservation changeReservation)
+
+Webclient -> opera: PUT /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}
+Webclient <- opera: ChangeReservationDetails
+
+OutboundPort <- Webclient: ConfirmReservationResponse
+InboundPort <- OutboundPort: ConfirmReservationResponse
+Controller <- InboundPort: ConfirmReservationResponse
+PMS <- Controller: ConfirmReservationResponseDto
+@enduml

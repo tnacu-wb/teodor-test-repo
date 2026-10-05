@@ -1,0 +1,24 @@
+{
+  "id" : "de62214e-7220-4c80-a90a-c77778a88aa8",
+  "request" : {
+    "urlPath" : "/customers/hotels/customer@test.com/stays?business=false",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer mockAuthorization2"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"stays\":[]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "de62214e-7220-4c80-a90a-c77778a88aa8"
+}

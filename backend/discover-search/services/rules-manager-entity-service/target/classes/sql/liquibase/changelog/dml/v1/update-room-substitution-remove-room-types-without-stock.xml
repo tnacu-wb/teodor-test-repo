@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="cristina.dodu" id="tag_update-room-substitution-remove-room-types-without-stock">
+    <tagDatabase tag="version_update-room-substitution-remove-room-types-without-stock" />
+  </changeSet>
+
+  <changeSet author="cristina.dodu" id="update-room-substitution-remove-room-types-without-stock">
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'FMTRSC'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'FMBUNK'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'ACCSGL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'DBLNWD'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'BIGNWD'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'ACCNWD'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VTWNRM'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VSINGL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VDBDBL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'PDBZPL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'PFAMIL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'BIGZPL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VPDBZP'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VPFMIL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VBRFDB'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VBRFTW'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VBRFZB'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VZPDBL'</where>
+    </delete>
+
+    <rollback>
+    <loadData tableName="room_substitution_rule" file="sql/liquibase/rollback/data/room_substitution_rules_types_without_stock.csv"/>
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+header piba-account-service
+title /piba/account/transactions
+autonumber
+participant "UI" as Client
+participant "PibaAccountController" as PAC
+participant "PibaAccountService" as PAS
+participant "TokenService" as TS
+participant "PibaGuidServiceClient" as PGSC
+participant "WorldlineTransformer" as WLT
+participant "worldlineWebServiceTemplate" as WWST
+participant "WorldLineAccountResponseValidator" as WLARV
+
+Client -> PAC : Fetches Current Account Transactions (/piba/account/transactions)\n with SchemeCustomerId={} TetheredUserGuid={}
+PAC -> PAS : Calls viewTransactions for CustomerAccountTransactionsRequest
+PAS -> WLT : Calls toCustomerAccountTransactionsRequest
+WLT -> PAS : Returns CustomerAccountViewTransactions
+PAS -> WWST : Dispatch Worldline Request : marshalSendAndReceive
+PAS -> PAS : Converts to CustomerAccountViewTransactionsResponse
+PAS -> WLARV : Validate the Response
+PAS -> WLT : toCustomerAccountTransactionsResponse
+WLT -> PAS : Return CustomerAccountTransactionsResponse
+PAS -> PAC : Return CustomerAccountTransactionsResponse
+PAC -> Client : Return CustomerAccountTransactionsResponse
+@enduml

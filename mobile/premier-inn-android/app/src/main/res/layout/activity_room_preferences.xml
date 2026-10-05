@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="?attr/actionBarSize" />
+
+    <ProgressBar
+        android:id="@+id/room_preferences_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/default_extra_large_margin"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/criteria_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/room_preferences_save_changes_button"
+        style="@style/Button1"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginStart="@dimen/default_large_margin"
+        android:layout_marginLeft="@dimen/default_large_margin"
+        android:layout_marginTop="@dimen/default_extra_large_margin"
+        android:layout_marginEnd="@dimen/default_large_margin"
+        android:layout_marginRight="@dimen/default_large_margin"
+        android:layout_marginBottom="@dimen/default_xx_large_margin"
+        android:text="@string/save_changes_label"
+        app:cab_background_color="@color/premier_inn_purple_light"
+        app:cab_spinner_color="@color/white"
+        app:cab_text_color="@color/white" />
+</LinearLayout>

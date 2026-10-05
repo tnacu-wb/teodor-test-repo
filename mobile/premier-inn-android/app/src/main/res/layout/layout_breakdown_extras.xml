@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/summary_breakdown_extras_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/generic_margin_16"
+    android:layout_marginTop="@dimen/generic_margin_16"
+    android:layout_marginEnd="@dimen/generic_margin_16"
+    android:layout_marginBottom="@dimen/generic_margin_20"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/summary_breakdown_extras_heading"
+        style="@style/Header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/summary_breakdown_extras_heading" />
+
+    <com.whitbread.premierinn.common.view.SummaryExpensesView
+        android:id="@+id/summary_breakdown_extras_nonmeals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/summary_breakdown_extras_heading"
+        android:layout_marginTop="@dimen/generic_margin_20"
+        android:visibility="gone"
+        app:defaultTitle="@string/kids_breakfast_label" />
+
+    <LinearLayout
+        android:id="@+id/summary_meals_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/summary_breakdown_extras_nonmeals"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/summary_breakdown_meals_heading"
+            style="@style/Header3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:layout_marginBottom="@dimen/generic_margin_8"
+            android:text="@string/summary_breakdown_meals_heading"
+            android:textColor="@color/teal" />
+
+        <com.whitbread.premierinn.common.view.SummaryExpensesView
+            android:id="@+id/summary_meal_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.whitbread.premierinn.common.view.SummaryExpensesView
+            android:id="@+id/summary_children_breakfast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_20"
+            android:visibility="gone"
+            app:defaultTitle="@string/kids_breakfast_label" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/summary_extras_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/summary_meals_container"
+        android:orientation="vertical"
+        android:visibility="gone">
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,23 @@
+{
+  "id" : "d49a7d4b-a1e2-4f6e-b7d1-1674ee773f27",
+  "request" : {
+    "url" : "/business/tether/login",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json;charset=UTF-8"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['guid'] == 'cdac7548-467b-4fbd-85bb-2803a4d38288')]"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "d49a7d4b-a1e2-4f6e-b7d1-1674ee773f27"
+}

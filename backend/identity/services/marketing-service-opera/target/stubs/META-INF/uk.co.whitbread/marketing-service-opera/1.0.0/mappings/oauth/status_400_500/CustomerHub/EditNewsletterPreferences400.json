@@ -1,0 +1,40 @@
+{
+  "id" : "4bce78a4-84a1-4c91-8b3f-4d030f0efd7c",
+  "request" : {
+    "url" : "/marketing/hotels/newsletter/edit",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['userId'] == 'name.surname')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*][?(@.['contactChannelType'] == 'Telephone')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*][?(@.['contactChannelValue'] == '+447777777777')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*][?(@.['contactChannelSubType'] == 'Mobile')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*][?(@.['contactChannelPermission'] == 'false')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['brandCodes'][?(@ == 'WINN')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['contentPermission'][?(@.['secondParty'] == true)]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['contentPermission'][?(@.['thirdParty'] == true)]"
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "body" : "{\"code\":\"3001\",\"details\":[\"Required properties not found or invalid. Please ensure request contains all required properties. Ensure brand codes supplied are valid.\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "4bce78a4-84a1-4c91-8b3f-4d030f0efd7c"
+}

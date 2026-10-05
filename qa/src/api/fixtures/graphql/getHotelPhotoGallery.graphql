@@ -1,0 +1,15 @@
+query getHotelGalleryImages(
+  $hotelId: String!
+  $language: String!
+  $country: String!
+) {
+  hotelInformation(hotelId: $hotelId, language: $language, country: $country) {
+    galleryImages {
+      alt
+      caption
+      iconSrc
+      imageSrc
+      thumbnailSrc
+    }
+  }
+}

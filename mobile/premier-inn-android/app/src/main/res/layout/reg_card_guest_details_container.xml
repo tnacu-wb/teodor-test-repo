@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/generic_margin_16"
+    android:layout_marginEnd="@dimen/generic_margin_16">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/regCardGuestLabel"
+            style="@style/Header2ExtraBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_padding_16"
+            android:layout_marginBottom="@dimen/generic_padding_16"
+            tools:text="@string/reg_card_lead_guest_label"
+            android:textColor="@color/full_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/regCardGuestNameLayout"
+            layout="@layout/reg_card_element_container" />
+
+        <include
+            android:id="@+id/regCardGuestHomeAddressLayout"
+            layout="@layout/reg_card_element_container"
+            android:visibility="gone"/>
+
+        <include
+            android:id="@+id/regCardGuestDateOfBirthLayout"
+            layout="@layout/reg_card_element_container" />
+
+        <include
+            android:id="@+id/regCardGuestNationalityLayout"
+            layout="@layout/reg_card_element_container" />
+
+        <include
+            android:id="@+id/regCardGuestPassportNumberLayout"
+            layout="@layout/reg_card_element_container"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/addOrEditDetailsButton"
+            style="@style/BodyMediumRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackground"
+            android:paddingStart="@dimen/generic_padding_32"
+            android:paddingEnd="@dimen/generic_padding_8"
+            android:drawablePadding="@dimen/generic_padding_6"
+            android:textColor="@color/teal_dark"
+            app:drawableEndCompat="@drawable/ic_chevron_rounded_corners_right"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/pre_stay_add" />
+
+        <com.whitbread.premierinn.common.view.InfoMessageBoxView
+            android:id="@+id/guestError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            android:background="@drawable/shape_error_red_background"
+            android:paddingHorizontal="@dimen/generic_padding_12"
+            android:paddingVertical="@dimen/generic_padding_8"
+            android:src="@drawable/ic_info"
+            android:textColor="@color/grey_dark"
+            android:visibility="gone"
+            app:iconTintColor="@color/new_error_red"
+            app:layout_constraintTop_toBottomOf="@id/addOrEditDetailsButton"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

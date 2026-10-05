@@ -1,0 +1,14 @@
+@startuml
+actor User
+participant "Login Page" as LP
+participant "Hotel Login Microservice" as MS
+User -> LP: Login
+LP -> MS: Login request
+MS -> BART: Login SOAP request
+MS <- BART: User details
+MS -> MS: Encrypt guest history number
+MS -> Auth0: Save user (if not already present)
+MS <- Auth0: User saved
+LP <- MS: sessionId
+User <- LP: Login successful
+@enduml

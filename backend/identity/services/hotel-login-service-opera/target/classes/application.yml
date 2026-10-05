@@ -1,0 +1,169 @@
+server:
+  port: 9028
+  shutdown: graceful
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+swagger:
+  api:
+    version: 1.0.0
+
+info:
+  build:
+    groupId: 'uk.co.whitbread'
+    artifact: 'hotel-login-service-opera'
+    description: 'Hotel Login MicroService Opera'
+    version: '1.0.0'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+bart:
+  password: ${BART_PASSWORD}
+  username: ${BART_USERNAME}
+  host: ${BART_HOST}
+  initSession:
+    username: ${BART_INIT_SESSION_USERNAME}
+    password: ${BART_INIT_SESSION_PASSWORD}
+
+  service:
+    pi.guestService:
+      url: ${bart.host}/csp/sql/ws.RegisteredGuest.RegisteredGuestService.cls
+    pi.initSession.auth0Service:
+      url: ${bart.host}/csp/sql/ws.RegisteredGuest.Auth0Service.cls
+    bb.clientService:
+      url: ${bart.host}/csp/sql/ws.Corporate.DashboardService.cls
+    bb.initSession.auth0Service:
+      url: ${bart.host}/csp/sql/ws.Corporate.Auth0Service.cls
+    booking:
+      url: ${bart.host}/csp/sql/ws.Booking.BookingService.cls
+
+management:
+  endpoints:
+    web:
+      base-path: /hotel-login-service/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+auth:
+  management:
+    domain: ${AUTH_MNGMT_DOMAIN}
+    clientId: ${AUTH0_CLIENT_ID}
+    clientSecret: ${AUTH0_CLIENT_SECRET}
+    audience: ${AUTH_MNGMT_AUDIENCE}
+    b2cConnection: ${AUTH_MNGMT_B2C_CONNECTION}
+    b2bConnection: ${AUTH_MNGMT_B2B_CONNECTION}
+    lazyMigrationEnabled: ${AUTH_MNGMT_IS_LAZY_MIGARATION_ENABLED}
+  encryption:
+    key: ${AUTH0_ENCRYPTION_KEY}
+
+encrypt:
+  failOnError: false
+
+springdoc:
+  show-actuator: true
+  packagesToScan: uk.co.whitbread.hotel.account.controller
+  pathsToMatch: /auth/**
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-prod
+
+management.security.enabled: false
+
+session:
+  security:
+    encryptionEnabled: true
+    # Encryption key in base64 (+ config server encrypted)
+    encryptionKey: ${HOTEL_LOGIN_SESSION_ENCRYPTION_KEY}
+    whitelistingEnabled: true
+    # Auth0 servers addresses
+    whitelistedAddresses:
+      - 52.28.56.226
+      - 52.28.45.240
+      - 52.16.224.164
+      - 52.16.193.66
+      - 34.253.4.94
+      - 52.50.106.250
+      - 52.211.56.181
+      - 52.213.38.246
+      - 52.213.74.69
+      - 52.213.216.142
+      - 35.156.51.163
+      - 35.157.221.52
+      - 52.28.184.187
+      - 52.28.212.16
+      - 52.29.176.99
+      - 52.57.230.214
+      - 54.76.184.103
+      - 52.210.122.50
+      - 52.208.95.174
+      - 52.210.122.50
+      - 52.208.95.174
+      - 54.76.184.103
+
+logging:
+  level:
+    uk.co.whitbread: debug
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+auth:
+  lazyMigrationEnabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    uk.co.whitbread: debug
+    feign: debug

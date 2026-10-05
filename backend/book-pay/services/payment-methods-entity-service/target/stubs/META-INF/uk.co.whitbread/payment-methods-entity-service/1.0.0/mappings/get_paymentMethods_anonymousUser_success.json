@@ -1,0 +1,35 @@
+{
+  "id" : "2e322918-9ef5-43bc-927c-aaa5a0853c57",
+  "request" : {
+    "urlPath" : "/v1/payment-methods",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "bookingChannel" : {
+        "equalTo" : "WEB"
+      }
+    },
+    "queryParameters" : {
+      "basketReference" : {
+        "equalTo" : "LONHOL5778172"
+      },
+      "country" : {
+        "equalTo" : "gb"
+      },
+      "language" : {
+        "equalTo" : "en"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "[{\"name\":\"CARD\",\"type\":\"NEW_CARD\",\"order\":1,\"acceptedCardTypes\":[{\"type\":\"MC\",\"name\":\"Mastercard Credit\",\"logoSrc\":\"/content/dam/global/booking/Mastercard.jpg\"},{\"type\":\"AX\",\"name\":\"American Express\",\"logoSrc\":\"/content/dam/global/booking/AX.jpg\"},{\"type\":\"DN\",\"name\":\"Diners Club\",\"logoSrc\":\"/content/dam/global/booking/DClub.jpg\"},{\"type\":\"VS\",\"name\":\"Visa Debit\",\"logoSrc\":\"/content/dam/global/booking/Visa_Debit.jpg\"},{\"type\":\"VS\",\"name\":\"Electron\",\"logoSrc\":\"/content/dam/global/booking/Electron_white_v.jpg\"},{\"type\":\"MA\",\"name\":\"Maestro\",\"logoSrc\":\"/content/dam/global/booking/maestro.jpg\"},{\"type\":\"MC\",\"name\":\"Mastercard Debit\",\"logoSrc\":\"/content/dam/global/booking/MD.jpg\"},{\"type\":\"VS\",\"name\":\"Visa Credit\",\"logoSrc\":\"/content/dam/global/booking/VC.jpg\"}],\"paymentOptions\":[{\"type\":\"PAY_NOW\",\"order\":1,\"enabled\":true},{\"type\":\"PAY_ON_ARRIVAL\",\"order\":2,\"enabled\":false}],\"enabled\":true,\"cnpPreSelected\":false,\"cnpOptionAvailable\":false,\"reasons\":[]},{\"name\":\"PIBA\",\"type\":\"NEW_PIBA\",\"order\":2,\"acceptedCardTypes\":[{\"type\":\"PI\",\"name\":\"Business Account\",\"logoSrc\":\"/content/dam/global/booking/Business_Account.jpg\"}],\"paymentOptions\":[{\"type\":\"PAY_NOW\",\"order\":1,\"enabled\":false},{\"type\":\"PAY_ON_ARRIVAL\",\"order\":2,\"enabled\":true}],\"enabled\":true,\"cnpPreSelected\":false,\"cnpOptionAvailable\":true,\"reasons\":[]}]",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "2e322918-9ef5-43bc-927c-aaa5a0853c57"
+}

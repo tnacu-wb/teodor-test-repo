@@ -1,0 +1,117 @@
+bart:
+  password: dummyPass
+  username: username
+  host: http://localhost:${wiremock.server.port:0}
+  service:
+    marketingService:
+      url: ${bart.host}/csp/sql/ws.ElectronicMagazine.ElectronicMagazineService2015.cls
+    sharedDataService:
+      url: ${bart.host}/csp/sql/ws.UnifiedSystems.UnifiedSystemsDataService.cls
+
+permissionManagementApi:
+  oauth:
+    host: http://localhost:${wiremock.server.port:0}
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: dummyValue
+    timeout: 50000
+    source-system: Whitbread-Digital
+    get-marketing-preferences-url: ${customerHub.oauth.host}${customerHub.oauth.get-marketing-preferences-endpoint}
+    get-marketing-preferences-v2-url: ${customerHub.oauth.host}/CustomerHub/V2/GetPermissions
+    update-marketing-preferences-url: ${permissionManagementApi.oauth.host}/PermissionManagement/V1/UpdatePermissions
+    confirm-double-opt-in-url: ${permissionManagementApi.oauth.host}/PermissionManagement/V1/ConfirmDoubleOptIn
+    unsubscribe-url: ${permissionManagementApi.oauth.host}/PermissionManagement/V1/Unsubscribe
+
+customerHub:
+  host: http://localhost:${wiremock.server.port:0}
+  authKeyHeaderName: x-functions-key
+  timeout: 50000
+  sourceSystem: ACE
+  service:
+    updateMarketingPreferences:
+      url: ${customerHub.host}/api/updatepermissions
+      authKey: authKey
+    editMarketingPreferences:
+      url: ${customerHub.host}/api/editpermissions
+      authKey: authKey
+    getMarketingPreferences:
+      url: ${customerHub.host}/api/getpermissions
+      authKey: authKey
+  oauth:
+    host: http://localhost:${wiremock.server.port:0}
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: dummyValue
+    subscription-key-v2: dummyValueV22
+    timeout: 50000
+    source-system: Whitbread-Digital
+    get-marketing-preferences-endpoint: /CustomerHub/V1/GetPermissions
+    get-marketing-preferences-url: ${customerHub.oauth.host}${customerHub.oauth.get-marketing-preferences-endpoint}
+    edit-marketing-preferences-endpoint: /CustomerHub/V1/EditPermissions
+    edit-marketing-preferences-url: ${customerHub.oauth.host}${customerHub.oauth.edit-marketing-preferences-endpoint}
+
+swagger:
+  api:
+    version: 2.2
+
+azure:
+  oauth-client:
+    host: http://localhost:${wiremock.server.port:0}
+    token-url: dummyValue
+    client-id: some-id
+    client-secret: some-secret
+    scope: https://somedomain/.default
+    grant-type: test_client_credentials
+
+auth:
+  tenants:
+    - name: test
+      audience: http://mock-audience/api/v2/
+      namespace: https://premierinn.com
+      issuer: http://localhost/
+      jwkUri: http://localhost:${wiremock.server.port:1}/.well-known/jwks.json
+
+hotelaccount:
+  path: /customers/internal/{customer-id}
+
+feign:
+  hotelaccount:
+    name: hotelaccount
+    url: http://localhost:${wiremock.server.port:1}
+  client:
+    config:
+      hotelcard:
+        connectTimeout: 10000
+        readTimeout: 10000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: disable-caching
+  autoconfigure:
+    exclude: org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration
+  cache:
+    type: none
+
+---
+spring:
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+      fail-fast: true
+    bus:
+      enabled: false
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing: trace
+    uk.co.whitbread: debug

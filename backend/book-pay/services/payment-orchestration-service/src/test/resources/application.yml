@@ -1,0 +1,14 @@
+logging:
+  configuration:
+    debug:
+      enabled: false
+
+integrations:
+  datatrans:
+    base-url: ${DATATRANS_BASE_URL:https://api.sandbox.datatrans.com}
+    reconciliation:
+      initial-delay: ${DATATRANS_RECONCILIATION_INITIAL_DELAY:2m}
+      poll-interval: ${DATATRANS_RECONCILIATION_POLL_INTERVAL:30s}
+      max-duration: ${DATATRANS_RECONCILIATION_MAX_DURATION:30m}
+      enabled: ${DATATRANS_RECONCILIATION_ENABLED:true}
+

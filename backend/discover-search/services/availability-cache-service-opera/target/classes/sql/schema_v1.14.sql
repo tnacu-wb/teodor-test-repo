@@ -1,0 +1,116 @@
+create schema if not exists avail_cache;
+
+-- DROP TABLE avail_cache.hotel_ac;
+-- DROP TABLE avail_cache.rate;
+-- DROP TABLE avail_cache.room;
+
+CREATE TABLE IF NOT EXISTS avail_cache.hotel_ac (
+	id varchar(17) NOT NULL,
+	avail_date timestamp NOT NULL,
+	hotel_code varchar(6) NOT NULL,
+	CONSTRAINT hotel_ac_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS avail_cache.rate (
+	id varchar(26) NOT NULL,
+	amount numeric(19,2) NULL,
+	avail bool NULL,
+	currency varchar(1) NULL,
+	min_nights int4 NULL,
+	rate varchar(1) NULL,
+	hotel_id varchar(17) NULL,
+	max_nights int4 NULL,
+	premium_amt numeric(19,2) NULL,
+	CONSTRAINT rate_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_rate_hotel FOREIGN KEY (hotel_id) REFERENCES avail_cache.hotel_ac(id) on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS avail_cache.room (
+	id varchar(26) NOT NULL,
+	quantity int4 NULL,
+	type varchar(6) NULL,
+	hotel_id varchar(17) NULL,
+	CONSTRAINT room_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_room_hotel FOREIGN KEY (hotel_id) REFERENCES avail_cache.hotel_ac(id) on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS avail_cache.test1 (id varchar(26) NOT NULL,
+        name varchar(26) NULL);
+
+
+CREATE TABLE IF NOT EXISTS avail_cache.hotel_location(
+        hotel_code varchar(6) not null,
+        place_id varchar(64) not null,
+        constraint hotel_location_pkey primary key (hotel_code, place_id)
+);
+
+CREATE TABLE IF NOT EXISTS avail_cache.location_price(
+         place_id varchar(64) not null,
+         avail_date date not null,
+         currency varchar(1),
+         price numeric(10,2),
+         constraint location_price_pkey primary key (place_id, avail_date)
+);
+
+CREATE INDEX if not exists rate_hotel_id_fk ON avail_cache.rate (hotel_id);
+
+CREATE INDEX if not exists room_hotel_id_fk ON avail_cache.room (hotel_id);
+
+DROP procedure IF EXISTS avail_cache.UPDATE_LOCATION_PRICE;
+
+CREATE OR REPLACE PROCEDURE avail_cache.UPDATE_LOCATION_PRICE(
+  v_avail_date DATE,
+  v_hotel_code varchar(10)
+)
+AS '
+declare
+    v_place_id record;
+    location_price_record record;
+begin
+    for v_place_id in select distinct hl.place_id from avail_cache.hotel_location hl where hl.hotel_code = v_hotel_code
+    loop
+        select min(ra.amount) price, ra.currency into location_price_record
+            from avail_cache.hotel_ac ha
+            inner join avail_cache.rate ra on (ra.hotel_id=ha.id)
+            where ha.hotel_code in (select hotel_code from avail_cache.hotel_location where place_id =  v_place_id.place_id)
+            and ha.avail_date = v_avail_date
+            group by ra.currency
+            having (min(ra.amount) is not null) and min(ra.amount)>0;
+        insert into avail_cache.location_price values
+         (v_place_id.place_id, v_avail_date, location_price_record.currency, location_price_record.price)
+         on conflict on constraint location_price_pkey do update set currency=location_price_record.currency,
+         price=location_price_record.price;
+     end loop;
+end;
+' LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE PROCEDURE avail_cache.lambda_user_creation()
+AS
+'DECLARE
+ BEGIN
+   IF EXISTS (SELECT FROM pg_user WHERE usename = ''lambda_postgres'')
+   THEN
+     RAISE NOTICE ''SKIP ROLE AND USERNAME CREATION!'';
+   ELSE
+     BEGIN
+      IF EXISTS (SELECT FROM pg_roles WHERE rolname = ''lambda_postgres'')
+      THEN
+        RAISE NOTICE ''SKIP ROLE CREATION!'';
+   ELSE
+     BEGIN
+       CREATE ROLE readwrite;
+       GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA avail_cache TO readwrite;
+	     CREATE USER lambda_postgres WITH LOGIN;
+	     GRANT readwrite TO lambda_postgres;
+       GRANT rds_iam TO lambda_postgres;
+       GRANT CREATE ON SCHEMA avail_cache TO lambda_postgres;
+       GRANT USAGE ON SCHEMA avail_cache TO lambda_postgres;
+       EXCEPTION WHEN duplicate_object THEN RAISE NOTICE ''%, moving to next statement'', SQLERRM USING ERRCODE = SQLSTATE;
+     END;
+     END IF;
+     END;
+   END IF;
+ END;
+' LANGUAGE PLPGSQL;
+
+CALL avail_cache.lambda_user_creation();

@@ -1,0 +1,21 @@
+{
+  "id" : "f9647567-7486-438e-8237-8b6a0d409d49",
+  "request" : {
+    "urlPath" : "/customers/hotels/customer@test.com?business=false",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    }
+  },
+  "response" : {
+    "status" : 401,
+    "body" : "{\"code\":\"7101\",\"details\":[\"No authorization provided for customer request\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "f9647567-7486-438e-8237-8b6a0d409d49"
+}

@@ -1,0 +1,18 @@
+---
+{{- if .Values.istio.enabled -}}
+kind: VirtualService
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: {{ .Values.applicationName  }}
+  namespace: {{ .Values.namespace }}
+spec:
+  gateways:
+    - {{ .Values.istio.gateway }}
+  hosts:
+    - "*"
+  http:
+    - route:
+        - destination:
+            host: {{ .Values.service.name }}
+          weight: 100
+{{- end }}

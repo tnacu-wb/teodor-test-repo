@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/generic_padding_100">
+
+            <include
+                android:id="@+id/headerContainer"
+                layout="@layout/view_pre_stay_header" />
+
+            <include
+                android:id="@+id/leadBookerContainer"
+                layout="@layout/pre_stay_element_container"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/generalInfoContainer" />
+
+            <include
+                android:id="@+id/emailContainer"
+                layout="@layout/pre_stay_element_container" />
+
+            <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                android:id="@+id/leadGuestEmailWarningBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginBottom="@dimen/generic_margin_20"
+                android:paddingStart="@dimen/generic_padding_12"
+                android:paddingEnd="@dimen/generic_padding_8"
+                android:text="@string/pre_stay_email_error"
+                android:textColor="@color/grey_dark"
+                android:paddingVertical="@dimen/generic_padding_8"
+                android:background="@drawable/shape_error_red_background"
+                android:backgroundTint="@color/orange_sunrise"
+                android:src="@drawable/notifications_alert"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:iconTintColor="@color/new_error_red" />
+
+            <include
+                android:id="@+id/phoneContainer"
+                layout="@layout/pre_stay_element_container" />
+
+            <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                android:id="@+id/leadGuestPhoneNumberWarningBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginBottom="@dimen/generic_margin_20"
+                android:paddingStart="@dimen/generic_padding_12"
+                android:paddingEnd="@dimen/generic_padding_8"
+                android:text="@string/pre_stay_phone_number_error"
+                android:textColor="@color/grey_dark"
+                android:paddingVertical="@dimen/generic_padding_8"
+                android:background="@drawable/shape_error_red_background"
+                android:backgroundTint="@color/orange_sunrise"
+                android:src="@drawable/notifications_alert"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:iconTintColor="@color/new_error_red" />
+
+            <include
+                android:id="@+id/addressContainer"
+                layout="@layout/pre_stay_element_container" />
+
+            <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                android:id="@+id/leadGuestAddressWarningBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginBottom="@dimen/generic_margin_20"
+                android:paddingStart="@dimen/generic_padding_12"
+                android:paddingEnd="@dimen/generic_padding_8"
+                android:text="@string/pre_stay_address_error"
+                android:textColor="@color/grey_dark"
+                android:paddingVertical="@dimen/generic_padding_8"
+                android:background="@drawable/shape_error_red_background"
+                android:backgroundTint="@color/orange_sunrise"
+                android:src="@drawable/notifications_alert"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:iconTintColor="@color/new_error_red" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/roomList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/generic_margin_16"
+                tools:listitem="@layout/view_pre_stay_room_overview" />
+
+            <include
+                android:id="@+id/specialOccasionContainer"
+                android:visibility="gone"
+                layout="@layout/view_pre_stay_special_occasion" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/footerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/preStayInfoLoading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_margin="@dimen/generic_margin_8"
+        tools:visibility="visible" />
+
+</FrameLayout>

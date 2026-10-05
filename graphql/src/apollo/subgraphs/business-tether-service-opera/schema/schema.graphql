@@ -1,0 +1,36 @@
+schema {
+    mutation: Mutation
+}
+
+type Mutation {
+    businessTetherLogin(loginCriteria: LoginCriteria!): BusinessTetherLoginResponse
+    businessTether(tetherLinkRequest: TetherLinkRequest!): TetherLinkResponse
+}
+
+input LoginCriteria {
+    guid: String!
+    worldlineSessionId: String
+    worldlineSharedSecret: String
+    scheme: String
+}
+
+type BusinessTetherLoginResponse {
+    errorCode: String
+    errorDescription: String
+    hash: String
+    sessionId: String
+    sharedSecret: String
+    nonce: String
+    timestamp: String
+}
+
+input TetherLinkRequest {
+    linkCode: String!
+    linkId: String!
+    memorableWord: String!
+    saveInCdh: Boolean
+}
+
+type TetherLinkResponse {
+    guid: String
+}

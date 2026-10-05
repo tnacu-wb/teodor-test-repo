@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet author="beata.tamas" id="init_data_vat_rule" runOnChange="true">
+    <preConditions onFail="MARK_RAN">
+      <and>
+        <tableExists tableName="vat_rule"/>
+
+        <sqlCheck expectedResult="0">select count(*) from rules_engine.vat_rule</sqlCheck>
+      </and>
+    </preConditions>
+
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_data.csv"/>
+  </changeSet>
+
+  <changeSet author="oana.rachiteanu" id="addColumn_vat_bearing">
+    <addColumn schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="vat_bearing" type="boolean" defaultValue="true">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="oana.rachiteanu" id="delete_citytax">
+    <delete schemaName="rules_engine"
+      tableName="vat_rule">
+      <where>tran_code='9061'</where>
+    </delete>
+  </changeSet>
+
+  <changeSet author="oana.rachiteanu" id="update_flag_citytax">
+    <update schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="vat_bearing" value="false"/>
+      <where>tran_code='9060'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="oana.rachiteanu" id="update_description_citytax">
+    <update schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="description" value="Prepayment (VAT)"/>
+      <where>tran_code='9062'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="oana.rachiteanu" id="update_vat_region_de">
+    <update schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="vat_region" value="DE"/>
+      <where>vat_region='GERMANY'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="oana.rachiteanu" id="update_vat_region_gu">
+    <update schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="vat_region" value="GU"/>
+      <where>vat_region='GUERNSEY'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="oana.rachiteanu" id="update_vat_region_je">
+    <update schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="vat_region" value="JE"/>
+      <where>vat_region='JERSEY'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="oana.rachiteanu" id="add_accomod_mealDeal_vat_rules">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_accmmod_mealDeal_data.csv"/>
+  </changeSet>
+
+  <changeSet author="oana.rachiteanu" id="add_vat_rule_v1_7">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_version_1_7.csv"/>
+  </changeSet>
+
+  <changeSet author="linda.szasz" id="add_vat_rule_packaged_parking_data">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_packaged_parking_data.csv"/>
+  </changeSet>
+
+  <changeSet author="beata.tamas" id="add_vat_rule_v1_9">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_version_1_9.csv"/>
+  </changeSet>
+
+  <changeSet author="beata.tamas" id="add_vat_rule_v2_02">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_version_2_02.csv"/>
+  </changeSet>
+
+  <changeSet author="beata.tamas" id="update_roi_start_date">
+    <update schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="enable_timestamp" value="2023-09-01"/>
+      <where>enable_timestamp='2023-02-01' AND vat_region='ROI'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="beata.tamas" id="update_roi_end_date">
+    <update schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="disable_timestamp" value="2023-08-31T23:59:59"/>
+      <where>disable_timestamp='2023-01-31T23:59:59' AND vat_region='ROI'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="beata.tamas" id="delete_duplicate_entries">
+    <delete schemaName="rules_engine"
+      tableName="vat_rule">
+      <where>(pkg_code='ZCHRY6' OR pkg_code='ZCHRY7' OR pkg_code='ZCHRY8')
+        AND (vat_region = 'DE' OR vat_region= 'ROI')
+        AND (enable_timestamp='2024-01-01' OR enable_timestamp='2023-09-01')
+      </where>
+    </delete>
+  </changeSet>
+
+  <changeSet author="beata.tamas" id="update_end_date_DE_ROI">
+    <update schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="disable_timestamp" value="9999-12-31T23:59:59"/>
+      <where>(pkg_code='ZCHRY6' OR pkg_code='ZCHRY7' OR pkg_code='ZCHRY8')
+        AND (vat_region='DE' OR vat_region='ROI')
+      </where>
+    </update>
+  </changeSet>
+
+  <changeSet author="beata.tamas" id="update_tran_code_GU">
+    <update schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="tran_code" value="9070"/>
+      <where>(pkg_code='ZCHRY6' OR pkg_code='ZCHRY7')
+        AND vat_region='GU'
+      </where>
+    </update>
+  </changeSet>
+
+  <changeSet author="beata.tamas" id="add_vat_rule_v2_03">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_version_2_03.csv"/>
+  </changeSet>
+
+  <changeSet author="constantin.lungu" id="add_vat_rule_promo_breakfast_data">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_promo_breakfast_data.csv"/>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="vat_rule_prepayment_breakfast_data">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_prepayment_breakfast_data.csv"/>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="vat_rule_promo_compensation_breakfast_data">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_promo_compensation_breakfast_data.csv"/>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="delete_compensation_breakfast">
+    <delete schemaName="rules_engine"
+            tableName="vat_rule">
+      <where>pkg_code='OBFREP' AND vat_region = 'UK' AND tran_code = '9026'
+      </where>
+    </delete>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="vat_rule_promo_accomodation_compensation_breakfast_data">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_promo_accomodation_compensation_breakfast_data.csv"/>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="vat_rule_promotion_breakfast_data">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_promotion_breakfast_data.csv"/>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="delete_compensation_breakfast_pkg">
+    <delete schemaName="rules_engine"
+            tableName="vat_rule">
+      <where>pkg_code='OBFREP'
+      </where>
+    </delete>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="vat_rule_promo_breakfast_campaign_data">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_promo_breakfast_campaign_data.csv"/>
+  </changeSet>
+
+  <changeSet author="cristina.dodu" id="tag_vat_rule_grab_and_go_breakfast_data">
+    <tagDatabase tag="version_vat_rule_grab_and_go_breakfast_data" />
+  </changeSet>
+
+  <changeSet author="cristina.dodu" id="vat_rule_grab_and_go_breakfast_data">
+    <loadData tableName="vat_rule"
+      file="sql/liquibase/data/vat_rule_grab_and_go_breakfast_data.csv"/>
+    <rollback>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'BFGROL'</where>
+      </delete>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'BFGLGH'</where>
+      </delete>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'BFGCON'</where>
+      </delete>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'BFGCHD'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+
+
+  <changeSet author="cristina.dodu" id="tag_vat_rule_GOSH_donations">
+    <tagDatabase tag="version_vat_rule_GOSH_donations" />
+  </changeSet>
+
+  <changeSet author="cristina.dodu" id="vat_rule_GOSH_donations">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_GOSH_donations.csv"/>
+    <rollback>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'ZCHR10'</where>
+      </delete>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'ZCHR11'</where>
+      </delete>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'ZCHR12'</where>
+      </delete>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'ZCHR13'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="marina.baban" id="vat_rule_city_tax_uk_data">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_city_tax_uk_data.csv"/>
+    <rollback>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>tran_code = '9063'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="marina.baban" id="tag_update_vat_rule_city_tax_uk_vat_bearing_to_true">
+    <tagDatabase tag="version_update_vat_rule_city_tax_uk_vat_bearing_to_true" />
+  </changeSet>
+
+  <changeSet author="marina.baban" id="update_vat_rule_city_tax_uk_vat_bearing_to_true">
+    <update schemaName="rules_engine"
+      tableName="vat_rule">
+      <column name="vat_bearing" value="true"/>
+      <where>tran_code='9063'</where>
+    </update>
+    <rollback>
+      <update schemaName="rules_engine"
+        tableName="vat_rule">
+        <column name="vat_bearing" value="false"/>
+        <where>tran_code='9063'</where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="rajesh.nadella" id="add_vat_rule_v2_04">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_version_2_04.csv"/>
+  </changeSet>
+
+  <changeSet author="adrian.lepadatu" id="add_vat_rule_booking_fees">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_booking_fees.csv"/>
+  </changeSet>
+
+  <changeSet author="adrian.lepadatu" id="add_vat_rule_HSINTC_HSPPFD">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_HSINTC_HSPPFD.csv"/>
+  </changeSet>
+
+  <changeSet author="teodora.verdes2" id="add_vat_rule_HSRVFD_HSPVFD">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_HSRVFD_HSPVFD.csv"/>
+  </changeSet>
+
+  <changeSet author="teodora.verdes2" id="add_vat_rule_IOM">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_add_IOM.csv"/>
+  </changeSet>
+
+  <changeSet author="teodora.verdes2" id="update_vat_rule_code_9016">
+    <update schemaName="rules_engine"
+            tableName="vat_rule">
+      <column name="tran_code" value="9095"/>
+      <column name="description" value="Prepayment (20% VAT) Accomm Extra"/>
+      <where>tran_code='9016' AND vat_region = 'UK' AND pkg_code IN ('HSATWN', 'HSCKIN', 'HSCOU2', 'HSCOU4',
+        'REB01D', 'REB01C', 'REB02D', 'REB02C', 'REB03D', 'REB03C', 'REB04D', 'REB04C', 'REB05D', 'REB05C',
+        'REB06D', 'REB06C', 'REB07D', 'REB07C', 'REB08D', 'REB08C', 'REB09D', 'REB09C', 'REB10D', 'REB10C',
+        'REB11D', 'REB11C', 'REB12D', 'REB12C', 'REB13D', 'REB13C', 'REB14D', 'REB14C', 'REB15D', 'REB15C')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="teodora.verdes2" id="update_vat_rule_code_9011">
+    <update schemaName="rules_engine"
+            tableName="vat_rule">
+      <column name="tran_code" value="9090"/>
+      <column name="description" value="Prepayment (5% VAT) Accomm Extra"/>
+      <where>tran_code='9011' AND vat_region IN ('IOM', 'JE') AND pkg_code IN ('HSATWN', 'HSCKIN', 'HSCOU2', 'HSCOU4',
+        'REB01D', 'REB01C', 'REB02D', 'REB02C', 'REB03D', 'REB03C', 'REB04D', 'REB04C', 'REB05D', 'REB05C',
+        'REB06D', 'REB06C', 'REB07D', 'REB07C', 'REB08D', 'REB08C', 'REB09D', 'REB09C', 'REB10D', 'REB10C',
+        'REB11D', 'REB11C', 'REB12D', 'REB12C', 'REB13D', 'REB13C', 'REB14D', 'REB14C', 'REB15D', 'REB15C')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="teodora.verdes2" id="update_vat_rule_code_9012">
+    <update schemaName="rules_engine"
+            tableName="vat_rule">
+      <column name="tran_code" value="9091"/>
+      <column name="description" value="Prepayment (7% VAT) Accomm Extra"/>
+      <where>tran_code='9012' AND vat_region='DE' AND pkg_code IN ('HSATWN', 'HSCKIN', 'HSCOU2', 'HSCOU4',
+        'REB01D', 'REB01C', 'REB02D', 'REB02C', 'REB03D', 'REB03C', 'REB04D', 'REB04C', 'REB05D', 'REB05C',
+        'REB06D', 'REB06C', 'REB07D', 'REB07C', 'REB08D', 'REB08C', 'REB09D', 'REB09C', 'REB10D', 'REB10C',
+        'REB11D', 'REB11C', 'REB12D', 'REB12C', 'REB13D', 'REB13C', 'REB14D', 'REB14C', 'REB15D', 'REB15C')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="teodora.verdes2" id="update_vat_rule_code_9015">
+    <update schemaName="rules_engine"
+            tableName="vat_rule">
+      <column name="tran_code" value="9093"/>
+      <column name="description" value="Prepayment (13.5% VAT) Accomm Extra"/>
+      <where>tran_code='9015' AND vat_region='ROI' AND pkg_code IN ('HSATWN', 'HSCKIN', 'HSCOU2', 'HSCOU4',
+        'REB01D', 'REB01C', 'REB02D', 'REB02C', 'REB03D', 'REB03C', 'REB04D', 'REB04C', 'REB05D', 'REB05C',
+        'REB06D', 'REB06C', 'REB07D', 'REB07C', 'REB08D', 'REB08C', 'REB09D', 'REB09C', 'REB10D', 'REB10C',
+        'REB11D', 'REB11C', 'REB12D', 'REB12C', 'REB13D', 'REB13C', 'REB14D', 'REB14C', 'REB15D', 'REB15C')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="teodora.verdes2" id="update_vat_rule_code_9017">
+    <update schemaName="rules_engine"
+            tableName="vat_rule">
+      <column name="tran_code" value="9097"/>
+      <column name="description" value="Prepayment (NO GST) Accomm Extra"/>
+      <where>tran_code='9017' AND vat_region='GU' AND pkg_code IN ('HSATWN', 'HSCKIN', 'HSCOU2', 'HSCOU4',
+        'REB01D', 'REB01C', 'REB02D', 'REB02C', 'REB03D', 'REB03C', 'REB04D', 'REB04C', 'REB05D', 'REB05C',
+        'REB06D', 'REB06C', 'REB07D', 'REB07C', 'REB08D', 'REB08C', 'REB09D', 'REB09C', 'REB10D', 'REB10C',
+        'REB11D', 'REB11C', 'REB12D', 'REB12C', 'REB13D', 'REB13C', 'REB14D', 'REB14C', 'REB15D', 'REB15C')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="sebastian.stanciu" id="add_vat_rule_HSCKIF">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_HSCKIF.csv"/>
+    <rollback>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'HSCKIF'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="sebastian.stanciu" id="revert_add_vat_rule_HSCKIF">
+    <delete schemaName="rules_engine" tableName="vat_rule">
+      <where>pkg_code = 'HSCKIF'</where>
+    </delete>
+  </changeSet>
+
+  <changeSet author="lingeswaran" id="add_vat_rule_DE_breakfast">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_de_7_percentage_food.csv"/>
+  </changeSet>
+
+  <changeSet author="lingeswaran" id="update_vat_rule_code_9027">
+    <update schemaName="rules_engine"
+            tableName="vat_rule">
+      <column name="disable_timestamp" value="2025-12-31T23:59:59"/>
+      <where>tran_code='9027' AND vat_region='DE' AND pkg_code IN ('BFADBF', 'INCPIB', 'BFADCT',
+        'INCCTB', 'BFCHDP', 'ADDPIB', 'ADDCTB', 'BFCHDF', 'INCCBF', 'OBFCOM', 'OBFADS', 'MDBFST',
+        'MD2DIN', 'OBFGRF', 'INCFCP', 'BFGROL', 'OBFPRO', 'OBFBRK')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="adriana.enoiu" id="add_vat_rule_inc_breakfast">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_inc_breakfast_packages.csv"/>
+  </changeSet>
+
+  <changeSet author="anish.narayanan" id="add_vat_rule_third_party">
+      <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_third_party_breakfast_accomodation_packages_data.csv"/>
+      <rollback>
+          <delete schemaName="rules_engine" tableName="vat_rule">
+              <where>pkg_code = 'ADDEPB'</where>
+          </delete>
+          <delete schemaName="rules_engine" tableName="vat_rule">
+              <where>pkg_code = 'EXPCMD'</where>
+          </delete>
+          <delete schemaName="rules_engine" tableName="vat_rule">
+              <where>pkg_code = 'EXPCMC'</where>
+          </delete>
+          <delete schemaName="rules_engine" tableName="vat_rule">
+              <where>pkg_code = 'CITYEXP'</where>
+          </delete>
+      </rollback>
+  </changeSet>
+
+  <changeSet author="lingeswaran" id="add_vat_rule_de_city_tax">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_de_city_tax_packages.csv"/>
+  </changeSet>
+
+  <changeSet author="lingeswaran" id="add_vat_rule_booking_fees_v1">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_booking_fees_v1.csv"/>
+  </changeSet>
+
+  <changeSet author="lingeswaran" id="add_vat_rule_austria_data">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_austria_data.csv"/>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="readd_vat_rule_HSCKIF">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_HSCKIF.csv"/>
+    <rollback>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'HSCKIF'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="add_vat_rule_FHSCOU2_data">
+    <loadData
+            tableName="vat_rule"
+            file="sql/liquibase/data/vat_rule_free_extras_data.csv"/>
+  </changeSet>
+
+  <changeSet author="lingeswaran" id="update_vat_rule_code_9025">
+    <update schemaName="rules_engine"
+            tableName="vat_rule">
+      <column name="disable_timestamp" value="2026-06-30T23:59:59"/>
+      <where>tran_code='9025' AND vat_region='ROI' AND pkg_code IN ('BFADBF', 'INCPIB', 'BFADCT',
+        'INCCTB', 'BFCHDP', 'OBFBOX', 'OBFGGO', 'INCPIO', 'ADDPIO', 'ADDPIB', 'ADDCTB', 'BFCHDF',
+        'INCCBF', 'OBFCOM', 'OBFADS', 'OBFGRF', 'INCBFO', 'ADDBFO', 'INCP13', 'ADDP13', 'ZMIGBF',
+        'ZMI13F', 'INCFCP', 'ADBFPR', 'OBFPRO', 'OBFBRK', 'ADDFCP', 'BFGROL', 'BFGLGH', 'BFGCON',
+        'BFGCHD', 'ADDEPB')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="lingeswaran" id="update_vat_rule_code_9055">
+    <update schemaName="rules_engine"
+            tableName="vat_rule">
+      <column name="disable_timestamp" value="2026-06-30T23:59:59"/>
+      <where>tran_code='9055' AND vat_region='ROI' AND pkg_code IN ('MDBFPK', 'MDDNPK', 'DBDNPR','MDBFST',
+        'MD2DIN', 'MDBFGP', 'MDDNGP')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="lingeswaran" id="add_vat_rule_roi_data">
+    <loadData tableName="vat_rule" file="sql/liquibase/data/vat_rule_roi_data.csv"/>
+  </changeSet>
+
+</databaseChangeLog>

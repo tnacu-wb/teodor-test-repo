@@ -1,0 +1,25 @@
+{
+  "id" : "5f0635b6-a02d-4bfa-8338-92a765289919",
+  "request" : {
+    "urlPath" : "/v1/reservations/confirm",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['reservationId'] == '')]"
+    } ]
+  },
+  "response" : {
+    "status" : 422,
+    "body" : "{\"errCode\":401,\"globalErrTextTemplate\":\"validation.error.form\",\"details\":[{\"elementId\":\"reservationId\",\"errTextTemplate\":\"must not be empty\"},{\"elementId\":\"paymentOption\",\"errTextTemplate\":\"must not be null\"},{\"elementId\":\"hotelId\",\"errTextTemplate\":\"must not be empty\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "5f0635b6-a02d-4bfa-8338-92a765289919",
+  "priority" : 100
+}

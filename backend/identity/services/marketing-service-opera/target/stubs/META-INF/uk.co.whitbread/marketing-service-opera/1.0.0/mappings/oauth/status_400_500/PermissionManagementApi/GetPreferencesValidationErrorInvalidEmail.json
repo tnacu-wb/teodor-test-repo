@@ -1,0 +1,24 @@
+{
+  "id" : "81f3b379-ad12-4f54-8408-d57e4606cd0d",
+  "request" : {
+    "url" : "/marketing/newsletter/email/rachel.cody@housemark.c?brandCodes=PINN,WINN",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "Authentication" : {
+        "equalTo" : "Bearer dummyToken"
+      }
+    }
+  },
+  "response" : {
+    "status" : 400,
+    "body" : "{\"code\":\"001\",\"details\":[\"Invalid email\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "81f3b379-ad12-4f54-8408-d57e4606cd0d"
+}

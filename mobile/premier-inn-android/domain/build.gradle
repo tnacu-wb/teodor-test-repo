@@ -1,0 +1,35 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'java'
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+dependencies {
+    implementation Libs.kotlinStdlib
+    implementation Libs.rxJava
+    implementation Libs.javaxInject
+    implementation Libs.coroutinesCore
+    implementation Libs.gson
+
+    testImplementation Libs.jUnit
+    testImplementation Libs.jUnitParams
+    testImplementation Libs.kotlinTestlib
+    testImplementation Libs.coroutinesTest
+    testImplementation Libs.mockito
+    testImplementation Libs.mockitoKotlin
+    testImplementation Libs.mockK
+
+    testImplementation Libs.thruth
+
+    implementation Libs.threetenabp
+
+}

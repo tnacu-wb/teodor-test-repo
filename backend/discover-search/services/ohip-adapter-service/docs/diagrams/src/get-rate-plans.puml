@@ -1,0 +1,20 @@
+@startuml
+entity "Content Entity Service" as CONTENT
+participant RatePlansController as Controller
+participant RatePlansInPort as InboundPort
+participant RatePlansOutPort as OutboundPort
+participant OhipRatePlansClient as OhipClient
+entity OPERA
+
+CONTENT -> Controller: GET /ohip/ratePlans?ratePlanCodes={rateCodeList}
+Controller -> InboundPort: getRatePlans
+InboundPort -> OutboundPort: getRatePlans
+OutboundPort -> OhipClient: getRatePlans
+OhipClient -> OPERA: GET {host}/rtp/v0/ratePlans?ratePlanCode={rateCode1}&ratePlanCode={rateCode2}...
+
+OhipClient <- OPERA: RatePlan details
+OutboundPort <- OhipClient: RatePlan details
+InboundPort <- OutboundPort: RatePlan details
+Controller <- InboundPort: RatePlan details
+CONTENT <- Controller: RatePlan details
+@enduml

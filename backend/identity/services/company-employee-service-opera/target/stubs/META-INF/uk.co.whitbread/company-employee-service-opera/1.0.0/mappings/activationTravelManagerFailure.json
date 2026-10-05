@@ -1,0 +1,24 @@
+{
+  "id" : "b19b6b08-4a5d-49ab-b1c1-8987ed01b89f",
+  "request" : {
+    "url" : "/companies/activation",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "bookingChannel" : {
+        "equalTo" : "CBT"
+      }
+    }
+  },
+  "response" : {
+    "status" : 400,
+    "body" : "{\"code\":\"013\",\"details\":[\"Required request parameter 'activation-key' for method parameter type String is not present\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "b19b6b08-4a5d-49ab-b1c1-8987ed01b89f"
+}

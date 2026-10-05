@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="cristina.manitiu" id="delete_room_types_from_room_substitution_rules">
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'EXTDBL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'EXDZPL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'EXDLOW'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'EXDWET'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'SUIDBL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'SUIQUA'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VDBWIN'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VBGWIN'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VBGZPL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VACWIN'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VLOWDB'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VWETDB'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VLOWTW'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VWETTW'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VACSGL'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VPPDLW'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="room_substitution_rule">
+      <where>pms_room_type = 'VPPDWT'</where>
+    </delete>
+
+
+  </changeSet>
+
+</databaseChangeLog>

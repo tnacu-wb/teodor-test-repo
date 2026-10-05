@@ -1,0 +1,28 @@
+@startuml
+title Retrieve 'payment info messages' from AEM
+
+entity "GraphQL pipeline" as GraphQL_endpoint
+entity "content-entity-service" as CES
+entity "ohip-adapter" as OHIP
+entity "ohip-adapter" as OHIP
+entity AEM
+
+group getHotelInformation
+GraphQL_endpoint -> CES  ++: GET /hotels/{hotel-id}}/information?language=en&country=gb
+CES -> AEM: GET /{country}/{language}/hoteldirectory/{hotelDirectory}/{hotelId}.complete.data
+AEM -> CES: bookingFlowId
+GraphQL_endpoint <- CES -- : bookingFlowId
+end
+
+group getBookingInformation
+GraphQL_endpoint -> CES  ++: GET /v1/content/booking?bookingFlowId={bookingFlowId}$ratePlanCodes={ratePlanCodes}
+CES -> AEM: GET /{country}/{language}/content-service.booking-flow.detail/bookingId/{bookingFlowId}.json
+AEM -> CES: bookingInfo
+CES -> OHIP: GET /ratePlans?ratePlanCodes={rateCodeList}
+OHIP -> OHIP: GET /ratePlans?ratePlanCodes={rateCodeList}
+OHIP -> OHIP: ratePlansInfo
+OHIP -> CES: ratePlansInfo
+GraphQL_endpoint <- CES -- : filtered payment info messages by rateCategory and displaySet
+end
+
+@enduml

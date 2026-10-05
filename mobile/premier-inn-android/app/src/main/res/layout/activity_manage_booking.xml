@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/manage_booking_layout"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Header2"
+                    android:layout_marginTop="@dimen/generic_margin_30"
+                    android:layout_marginStart="@dimen/generic_margin_24"
+                    android:layout_marginEnd="@dimen/generic_margin_24"
+                    android:text="@string/manage_booking_amend_booking"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Body"
+                    android:layout_marginTop="@dimen/generic_margin_20"
+                    android:layout_marginStart="@dimen/generic_margin_24"
+                    android:layout_marginEnd="@dimen/generic_margin_24"
+                    android:text="@string/manage_booking_amend_booking_message"
+                    android:textColor="@color/grey"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Body"
+                    android:layout_marginTop="@dimen/generic_margin_18"
+                    android:layout_marginStart="@dimen/generic_margin_24"
+                    android:layout_marginEnd="@dimen/generic_margin_24"
+                    android:text="@string/manage_booking_bullet_points_options"
+                    android:textColor="@color/grey"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Body"
+                    android:layout_marginTop="@dimen/generic_margin_18"
+                    android:layout_marginStart="@dimen/generic_margin_24"
+                    android:layout_marginEnd="@dimen/generic_margin_24"
+                    android:text="@string/manage_booking_give_call_message"
+                    android:textColor="@color/grey"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="@dimen/generic_margin_30"
+                    android:layout_marginStart="@dimen/generic_margin_16"
+                    android:layout_marginEnd="@dimen/generic_margin_16"
+                    android:layerType="software"
+                    android:src="@drawable/shape_dashed_line_separator"/>
+
+                <com.whitbread.premierinn.criteria.view.CallUsView
+                    android:id="@+id/cuv_manage_booking_call_us"
+                    android:layout_width="match_parent"
+                    tools:visibility="visible"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/generic_margin_30"
+                    app:cuv_descriptive_text="@string/manage_booking_calls_free_message"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_light"
+                    android:layout_marginTop="@dimen/generic_margin_40"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/generic_margin_16"
+                android:layout_marginBottom="@dimen/generic_margin_40"
+                android:background="@android:color/white">
+
+                <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                    android:id="@+id/cab_manage_booking_cancel_booking"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    style="@style/Button1"
+                    android:layout_marginTop="@dimen/generic_margin_40"
+                    android:layout_marginBottom="@dimen/generic_margin_40"
+                    android:layout_marginStart="@dimen/generic_margin_24"
+                    android:layout_marginEnd="@dimen/generic_margin_24"
+                    android:paddingEnd="@dimen/generic_padding_12"
+                    android:paddingStart="@dimen/generic_padding_12"
+                    app:cab_background_color="@color/red"
+                    android:text="@string/manage_booking_cancel_booking"
+                    app:cab_text_color="@android:color/white"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_light"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

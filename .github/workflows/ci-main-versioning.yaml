@@ -1,0 +1,232 @@
+# Production repo-wide versioning.
+#
+# Runs on pushes to `main` (a burst of pushes is coalesced, see concurrency
+# below). The version lives only in git tags — there is no VERSION or
+# CHANGELOG.md file and nothing is committed back to `main`:
+#   1. read the highest X.Y.Z tag and minor-bump it (no tag yet => INITIAL_VERSION)
+#   2. render the change log from conventional commits since the previous tag in
+#      this commit's history
+#   3. tag the pushed commit (github.sha) with an annotated, unprefixed tag whose
+#      message is the change log, and publish the same text on the tag's GitHub
+#      Release page
+#   4. run the backend and frontend pipelines as reusable workflows with that
+#      version. They keep this run's `main` push context, and their main-line
+#      deployment gates verify the tag points at github.sha before building.
+
+name: Main Production Versioning
+
+on:
+  push:
+    # Branch refs only: no pull-request or tag trigger.
+    branches:
+      - main
+
+# One versioning run at a time. A queued run waits for the running one, so it
+# always sees the previous run's tag.
+#
+# Coalescing contract: GitHub keeps at most one pending run per group, so when
+# several pushes land while a run is in progress only the newest is versioned.
+# No commit is lost: the next version's tag sits on the newest commit, its
+# change log covers every commit since the previous tag (including those whose
+# own run was superseded), and the pipelines deploy that newest commit. Versions
+# therefore map to deployed states of `main`, not to individual pushes.
+concurrency:
+  group: production-main-versioning
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  version:
+    name: Compute version, tag and publish change log
+    runs-on: tooling-default-runner-scale-set
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.compute.outputs.version }}
+    steps:
+      - name: Validate fixed production target
+        env:
+          EXPECTED_REF: refs/heads/main
+          ACTUAL_REF: ${{ github.ref }}
+        run: |
+          set -euo pipefail
+          if [[ "$ACTUAL_REF" != "$EXPECTED_REF" ]]; then
+            echo "::error::Production versioning may run only for ${EXPECTED_REF}; got ${ACTUAL_REF}."
+            exit 1
+          fi
+
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.PIPELINE_APP_ID }}
+          private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          permission-contents: write
+
+      # Full history plus all tags: the current version is read from tags and the
+      # change log covers (previous tag, github.sha].
+      - name: Checkout pushed commit with full history and tags
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          fetch-tags: true
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22.22.2'
+
+      - name: Compute next version from tags
+        id: compute
+        env:
+          # First version when the repo has no X.Y.Z tag yet.
+          INITIAL_VERSION: '1.3.0'
+        run: |
+          set -euo pipefail
+          semver_re='^[0-9]+\.[0-9]+\.[0-9]+$'
+          EXISTING_TAGS="$(git tag --list | grep -E "$semver_re" || true)"
+
+          # The change log starts at the highest tag in this commit's own history,
+          # excluding tags on the commit itself (--no-contains), so a re-run of an
+          # already-tagged commit still reports the tag before it. That is normally
+          # CURRENT_VERSION; it differs only if a higher tag was put on a commit
+          # outside main's history, whose commits must not be counted here.
+          PREVIOUS_TAG="$(git tag --merged "$GITHUB_SHA" --no-contains "$GITHUB_SHA" | grep -E "$semver_re" | sort -V | tail -n1 || true)"
+          echo "change log lower bound (highest earlier tag in history): '${PREVIOUS_TAG:-<none>}'"
+          echo "previous-tag=${PREVIOUS_TAG}" >> "$GITHUB_OUTPUT"
+
+          # Re-run safety: a commit that is already tagged keeps its version
+          # rather than getting a second tag.
+          already_tagged="$(git tag --points-at "$GITHUB_SHA" | grep -E "$semver_re" | sort -V | tail -n1 || true)"
+          if [[ -n "$already_tagged" ]]; then
+            echo "::notice::${GITHUB_SHA} is already tagged ${already_tagged}; reusing that version."
+            echo "version=${already_tagged}" >> "$GITHUB_OUTPUT"
+            echo "already-tagged=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Highest X.Y.Z tag in the repo, not `git describe`: describe only sees
+          # tags in this commit's history and could return a lower version.
+          CURRENT_VERSION="$(printf '%s\n' "$EXISTING_TAGS" | sort -V | tail -n1)"
+          echo "::group::Compute next version"
+          echo "current version (highest tag): '${CURRENT_VERSION:-<none>}'"
+          echo "existing semantic tags:"
+          echo "${EXISTING_TAGS:-<none>}"
+          export CURRENT_VERSION EXISTING_TAGS
+          bash .github/workflows/scripts/compute-next-version.sh
+          echo "::endgroup::"
+          echo "already-tagged=false" >> "$GITHUB_OUTPUT"
+
+      - name: Generate change log
+        if: steps.compute.outputs.already-tagged != 'true'
+        env:
+          VERSION: ${{ steps.compute.outputs.version }}
+          PREVIOUS_TAG: ${{ steps.compute.outputs.previous-tag }}
+          TO_REF: ${{ github.sha }}
+          NOTES_FILE: ${{ runner.temp }}/changelog.md
+        run: bash .github/workflows/scripts/generate-changelog.sh
+
+      - name: Create and push annotated semantic tag
+        if: steps.compute.outputs.already-tagged != 'true'
+        env:
+          VERSION: ${{ steps.compute.outputs.version }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+          NOTES_FILE: ${{ runner.temp }}/changelog.md
+        run: |
+          set -euo pipefail
+          if [[ -z "${APP_SLUG:-}" ]]; then
+            echo "::error::GitHub App slug is empty; verify the app token step produced its app-slug output and the configured App credentials are valid."
+            exit 1
+          fi
+          # An annotated tag records a tagger, so give it the App identity.
+          bot_actor="${APP_SLUG}[bot]"
+          git config --local user.name "$bot_actor"
+          git config --local user.email "${bot_actor}@users.noreply.github.com"
+
+          # No prefix: tag names are exactly 1.3.0, 1.4.0, and so on.
+          # --cleanup=verbatim keeps the Markdown headings (lines starting with #).
+          git tag -a "$VERSION" --cleanup=verbatim -F "$NOTES_FILE" "$GITHUB_SHA"
+          bash .github/workflows/scripts/retry-push.sh git push origin "refs/tags/${VERSION}"
+
+      # Shows the change log on GitHub's tag page. The API object is called a
+      # "release", but it adds nothing beyond the tag and its change log.
+      - name: Publish change log on GitHub
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          VERSION: ${{ steps.compute.outputs.version }}
+          NOTES_FILE: ${{ runner.temp }}/changelog.md
+        run: |
+          set -euo pipefail
+          # On a re-run the tag already exists; take the change log from its message.
+          if [[ ! -s "$NOTES_FILE" ]]; then
+            git tag --list --format='%(contents)' "$VERSION" > "$NOTES_FILE"
+          fi
+          payload="$(jq -n --arg tag "$VERSION" --rawfile body "$NOTES_FILE" \
+            '{tag_name: $tag, name: $tag, body: $body}')"
+          status="$(curl -sS --retry 3 -o "${RUNNER_TEMP}/github-response.json" -w '%{http_code}' \
+            -X POST \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases" \
+            -d "$payload")"
+          if [[ "$status" == "201" ]]; then
+            echo "Published change log for ${VERSION}."
+          elif [[ "$status" == "422" ]] && jq -e '.errors[]? | select(.code == "already_exists")' "${RUNNER_TEMP}/github-response.json" >/dev/null; then
+            echo "Change log for ${VERSION} is already published; nothing to do."
+          else
+            echo "::error::Publishing the change log for ${VERSION} failed with HTTP ${status}."
+            cat "${RUNNER_TEMP}/github-response.json" >&2
+            exit 1
+          fi
+
+      - name: Report versioning summary
+        env:
+          VERSION: ${{ steps.compute.outputs.version }}
+          PREVIOUS_TAG: ${{ steps.compute.outputs.previous-tag }}
+        run: |
+          set -euo pipefail
+          {
+            echo "### Production main versioning"
+            echo ""
+            echo "- Version: \`${VERSION}\`"
+            echo "- Previous tag: \`${PREVIOUS_TAG:-<none>}\`"
+            echo "- Tagged commit: \`${GITHUB_SHA}\`"
+            echo "- Change log: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${VERSION}"
+            echo "- Next: backend and frontend pipelines build \`${VERSION}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # The called workflows cannot hold more permissions than their calling job, so
+  # each job grants the union of what that pipeline's jobs declare.
+  backend:
+    name: Backend pipeline
+    needs: version
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      id-token: write
+      pull-requests: write
+      issues: write
+    uses: ./.github/workflows/ci-be.yaml
+    with:
+      semantic-version: ${{ needs.version.outputs.version }}
+    secrets: inherit
+
+  frontend:
+    name: Frontend pipeline
+    needs: version
+    permissions:
+      actions: read
+      checks: read
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/ci-fe-deploy.yaml
+    with:
+      semantic-version: ${{ needs.version.outputs.version }}
+    secrets: inherit

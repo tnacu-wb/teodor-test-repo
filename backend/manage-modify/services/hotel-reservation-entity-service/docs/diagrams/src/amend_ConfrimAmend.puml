@@ -1,0 +1,219 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant BasketServiceOutPort as BasketOutPort
+participant RulesServiceOutPort as RulesOutPort
+participant OhipOutPort as OhipOutPort
+participant BasketWebClient as BasketWebClient
+entity "Authentication Service" as Auth
+entity "Basket Service" as BasketService
+entity "Rules Service" as RulesService
+entity "OHIPAdapter Service" as OHIPAdapterService
+
+A -> Controller: PUT /reservations/amend/confirmAmend
+Controller -> InboundPort: confirmAmend
+InboundPort -> BasketOutPort: getBasketById (tempBasket)
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+InboundPort -> Auth: validateToken for not logged ind user
+InboundPort <- Auth
+
+InboundPort -> BasketOutPort: getBasketById (original)
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+alt originalReservationsToDelete
+    InboundPort -> OhipOutPort: getReservationsByIds (originalBasket)
+    OhipOutPort -> OHIPAdapterService: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+    OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+    InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+    InboundPort -> BasketOutPort: triggerRefundRequest
+    BasketOutPort -> BasketWebClient: triggerRefund
+    BasketWebClient -> BasketService: POST /v1/baskets/{basketReference}/refund
+    BasketWebClient <- BasketService: BasketDto
+    BasketOutPort <- BasketWebClient: BasketResponse
+    InboundPort <- BasketOutPort: BasketResponse
+
+    InboundPort -> BasketOutPort: getBasketById (original)
+    BasketOutPort -> BasketWebClient: sendGetBasket
+    BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+    BasketWebClient <- BasketService: BasketDto
+    BasketOutPort <- BasketWebClient: BasketResponse
+    InboundPort <- BasketOutPort: BasketResponse
+
+    loop originalReservationsToDelete
+        InboundPort -> OhipOutPort: cancelReservation (originalBasket)
+        OhipOutPort -> OHIPAdapterService: (sendCancelReservationRequest) POST /v1/reservations/cancellations
+        OhipOutPort <- OHIPAdapterService: CancelReservationResponseDto
+        InboundPort <- OhipOutPort: CancelReservationResponse
+
+        InboundPort -> BasketOutPort: removeItem
+        BasketOutPort -> BasketWebClient: removeItem
+        BasketWebClient -> BasketService: DELETE /v1/baskets/{basket-reference}/items/{itemId}
+        BasketWebClient <- BasketService: BasketDto
+        BasketOutPort <- BasketWebClient: BasketResponse
+        InboundPort <- BasketOutPort: BasketResponse
+    end loop
+end alt
+
+alt reservationsToBeAdded
+    InboundPort -> BasketOutPort: getBasketById (original)
+    BasketOutPort -> BasketWebClient: sendGetBasket
+    BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+    BasketWebClient <- BasketService: BasketDto
+    BasketOutPort <- BasketWebClient: BasketResponse
+    InboundPort <- BasketOutPort: BasketResponse
+
+    InboundPort -> OhipOutPort: copyReservations
+    OhipOutPort -> OHIPAdapterService: (sendCopyReservationsRequest) POST /v1/reservations/copy
+    OhipOutPort <- OHIPAdapterService: CopyReservationsResponseDto
+    InboundPort <- OhipOutPort: CopyReservationsResponse
+
+    InboundPort -> BasketOutPort: addReservationsToBasket
+    BasketOutPort -> BasketWebClient: addBasketItems
+    BasketWebClient -> BasketService: POST /v1/baskets/{basket-reference}/items
+    BasketWebClient <- BasketService: BasketDto
+    BasketOutPort <- BasketWebClient: BasketResponse
+    InboundPort <- BasketOutPort: BasketResponse
+
+    InboundPort -> BasketOutPort: getAllReservationsJustByBasketReference
+    BasketOutPort -> BasketWebClient: (sendGetBasket) GET /v1/baskets/{basket-reference}
+    BasketWebClient -> BasketService
+    BasketWebClient <- BasketService: BasketDto
+    BasketOutPort <- BasketWebClient: BasketResponse
+    InboundPort <- BasketOutPort: BasketResponse
+    InboundPort -> OhipOutPort: getReservationsByIds
+    OhipOutPort -> OHIPAdapterService: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+    OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+    InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+    InboundPort -> BasketOutPort: getBasketById
+    BasketOutPort -> BasketWebClient: sendGetBasket
+    BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+    BasketWebClient <- BasketService: BasketDto
+    BasketOutPort <- BasketWebClient: BasketResponse
+    InboundPort <- BasketOutPort: BasketResponse
+
+    loop reservationAdded - copyBookingAllowances
+
+        InboundPort -> BasketOutPort: getBasketById
+        BasketOutPort -> BasketWebClient: sendGetBasket
+        BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+        BasketWebClient <- BasketService: BasketDto
+        BasketOutPort <- BasketWebClient: BasketResponse
+        InboundPort <- BasketOutPort: BasketResponse
+
+        InboundPort -> OhipOutPort: getBookingAllowances
+        OhipOutPort -> OHIPAdapterService: (getBookingAllowances) GET /v1/reservations/bookingAllowances
+        OhipOutPort <- OHIPAdapterService: BookingAllowancesResponse
+        InboundPort <- OhipOutPort: BookingAllowancesResponse
+
+        InboundPort -> ContentServiceOutPort: getBusinessNotes
+        ContentServiceOutPort -> ContentService: (getBusinessNotes) GET /v1/content/businessNotes
+        ContentService -> ContentServiceOutPort: BusinessNotesResponse
+        ContentServiceOutPort -> InboundPort: BusinessNotesResponse
+
+        InboundPort -> OhipOutPort: updateBusinessItems
+        OhipOutPort -> OHIPAdapterService: (sendUpdateBusinessItemsRequest) PUT /v1/reservations/business
+        OhipOutPort <- OHIPAdapterService: 200 OK
+        InboundPort <- OhipOutPort: updateBusinessItems
+    end loop
+
+end alt
+
+InboundPort -> BasketOutPort: getBasketById (temporaryBasket)
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+InboundPort -> BasketOutPort: getBasketById (originalBasket)
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+'UpdatePckages for ConfirmAmend'
+InboundPort -> OhipOutPort: getReservationsByIds (originalBasket)
+OhipOutPort -> OHIPAdapterService: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+InboundPort -> OhipOutPort: getReservationsPackagesByBasketRef (originalBasket)
+OhipOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+OhipOutPort <- BasketOutPort: BasketResponse
+OhipOutPort -> OHIPAdapterService: (getReservationsPackagesByIdsRequest) GET /v1/reservations/ancillaries
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+InboundPort -> OhipOutPort: getReservationsPackagesByBasketRef (temporaryBasket)
+OhipOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+OhipOutPort <- BasketOutPort: BasketResponse
+OhipOutPort -> OHIPAdapterService: (getReservationsPackagesByIdsRequest) GET /v1/reservations/ancillaries
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+InboundPort -> OhipOutPort: updateReservationPackagesById
+OhipOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+OhipOutPort <- BasketOutPort: BasketResponse
+OhipOutPort -> OHIPAdapterService: PUT /v1/reservations/ancillaries
+OhipOutPort <- OHIPAdapterService: 200 OK
+InboundPort <- OhipOutPort
+
+'Confirm Amend Reservations'
+InboundPort -> OhipOutPort: confirmAmend
+OhipOutPort -> OHIPAdapterService: (sendConfirmAmend) PUT /v1//reservations/confirmAmend
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+loop cleanUpTempBasket
+    InboundPort -> OhipOutPort: deleteReservation
+    OhipOutPort -> OHIPAdapterService: (deleteReservationRequest) DELETE /v1/reservations
+    OhipOutPort <- OHIPAdapterService: 200 OK
+    InboundPort <- OhipOutPort
+
+    InboundPort -> BasketOutPort: removeItem
+    BasketOutPort -> BasketWebClient: removeItem
+    BasketWebClient -> BasketService: DELETE /v1/baskets/{basket-reference}/items/{itemId}
+    BasketWebClient <- BasketService: BasketDto
+    BasketOutPort <- BasketWebClient: BasketResponse
+    InboundPort <- BasketOutPort: BasketResponse
+end loop
+
+InboundPort -> BasketOutPort: getBasketById (temporaryBasket)
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+InboundPort -> BasketOutPort: deleteBasket(temporaryBasket)
+BasketOutPort -> BasketWebClient: removeItem
+BasketWebClient -> BasketService: DELETE /v1/baskets/{basket-reference}/items/{itemId}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+Controller <- InboundPort: ReservationByBasketRefResponse
+A <- Controller: Confirm Amend response
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+actor Client
+box "Subscription Info"
+    boundary "Newsletter Info" as S
+end box
+entity BART
+
+Client -> S: FE sends customer email (customerId)
+S -> BART: Sends email and flag fullSearch=true to ws.ElectronicMagazine.ElectronicMagazineService2015.cls
+BART -> S: Returns newsletter subscription info and regions
+Client <- S: Returns newsletter subscription info and regions
+@enduml

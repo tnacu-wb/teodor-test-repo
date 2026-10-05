@@ -1,0 +1,647 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: regressions/pi/baseline-e2e-guest-uk-hotel-flex-poa-piba-amendment.spec.ts >> PI Baseline E2E - Guest PIBA Pay on Arrival Amendment >> Test Book as Guest user: 1 night, 1 room (Double), 2 adults, Flex rate, meals, donations - POA BAC card and Amend by change room type. TestCase ID: 380779.
+- Location: qa/tests/regressions/pi/baseline-e2e-guest-uk-hotel-flex-poa-piba-amendment.spec.ts:51:8
+
+# Error details
+
+```
+Error: Price breakdown should show 1 rows per room
+
+expect(locator).toHaveCount(expected) failed
+
+Locator:  locator('[data-testid="hdp_basketBreakdownRow"]:visible')
+Expected: 1
+Received: 0
+Timeout:  10000ms
+
+Call log:
+  - Price breakdown should show 1 rows per room with timeout 10000ms
+  - waiting for locator('[data-testid="hdp_basketBreakdownRow"]:visible')
+    5 × locator resolved to 2 elements
+      - unexpected value "2"
+    - waiting for "https://www.uat.premierinn.digital/gb/en/hotels/england/greater-london/london/london-heathrow-airport-m4j4.html?ARRdd=08&ARRmm=10&ARRyyyy=2026&NIGHTS=1&ROOMS=1&ADULT1=2&CHILD1=0&COT1=0&INTTYP1=DB" navigation to finish...
+    - navigated to "https://www.uat.premierinn.digital/gb/en/hotels/england/greater-london/london/london-heathrow-airport-m4j4.html?ARRdd=08&ARRmm=10&ARRyyyy=2026&NIGHTS=1&ROOMS=1&ADULT1=2&CHILD1=0&COT1=0&INTTYP1=DB"
+    16 × locator resolved to 0 elements
+       - unexpected value "0"
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=f50e1]:
+  - generic [ref=f50e3]:
+    - banner [ref=f50e4]:
+      - generic [ref=f50e7]:
+        - link [ref=f50e10] [cursor=pointer]:
+          - /url: https://www.uat.premierinn.digital/gb/en/home.html
+          - img "Premier Inn Rest Easy" [ref=f50e11]
+        - generic [ref=f50e12]:
+          - img "English" [ref=f50e15] [cursor=pointer]
+          - generic [ref=f50e16]:
+            - paragraph [ref=f50e19] [cursor=pointer]: Discover Premier Inn
+            - paragraph [ref=f50e22] [cursor=pointer]: Business
+            - paragraph [ref=f50e24] [cursor=pointer]: Manage booking
+            - generic [ref=f50e26]:
+              - button "Log in" [ref=f50e27] [cursor=pointer]
+              - button "Sign up" [ref=f50e28] [cursor=pointer]
+    - main [ref=f50e29]:
+      - generic [ref=f50e31]:
+        - group [ref=f50e32] [cursor=pointer]:
+          - paragraph [ref=f50e38]: London Heathrow Airport (M4/J4)
+          - paragraph [ref=f50e40]: 08 Oct - 09 Oct
+          - paragraph [ref=f50e42]: 2 adults, 1 room
+        - separator [ref=f50e43]
+        - navigation "breadcrumb" [ref=f50e45]:
+          - list [ref=f50e46]:
+            - listitem [ref=f50e47]:
+              - link "Home" [ref=f50e48] [cursor=pointer]:
+                - /url: /gb/en/home.html
+              - text: /
+            - listitem [ref=f50e49]:
+              - link "Hotel Directory" [ref=f50e50] [cursor=pointer]:
+                - /url: /gb/en/hotels.html
+              - text: /
+            - listitem [ref=f50e51]:
+              - link "England" [ref=f50e52] [cursor=pointer]:
+                - /url: /gb/en/hotels/england.html
+              - text: /
+            - listitem [ref=f50e53]:
+              - link "Greater London" [ref=f50e54] [cursor=pointer]:
+                - /url: /gb/en/hotels/england/greater-london.html
+              - text: /
+            - listitem [ref=f50e55]:
+              - link "London" [ref=f50e56] [cursor=pointer]:
+                - /url: /gb/en/hotels/england/greater-london/london.html
+              - text: /
+            - listitem [ref=f50e57]:
+              - generic [ref=f50e58] [cursor=pointer]: London Heathrow Airport M4j4
+        - generic [ref=f50e59]:
+          - generic [ref=f50e60]:
+            - heading "London Heathrow Airport (M4/J4) hotel" [level=1] [ref=f50e62]
+            - generic [ref=f50e63]:
+              - generic [ref=f50e64]:
+                - img "ta-ratings-img" [ref=f50e65]
+                - generic [ref=f50e66] [cursor=pointer]: (2506 reviews)
+              - img "Travelers Choice" [ref=f50e67] [cursor=pointer]
+            - generic [ref=f50e68]:
+              - list [ref=f50e70]:
+                - listitem [ref=f50e71]:
+                  - generic [ref=f50e72]: New Premier Plus rooms | New restaurant
+              - paragraph [ref=f50e75]: A cosy base for stopovers in Surrey, just a 10-minute drive from Heathrow Airport
+            - generic [ref=f50e76]: Hotel FacilitiesSee all
+            - generic [ref=f50e77]:
+              - paragraph [ref=f50e81] [cursor=pointer]: Chargeable onsite parking
+              - paragraph [ref=f50e85] [cursor=pointer]: Air conditioning
+              - paragraph [ref=f50e89] [cursor=pointer]: Breakfast
+              - paragraph [ref=f50e93] [cursor=pointer]: Restaurant
+              - paragraph [ref=f50e97] [cursor=pointer]: Free Wi‑Fi
+              - paragraph [ref=f50e101] [cursor=pointer]: Accessible
+          - generic [ref=f50e103]:
+            - generic [ref=f50e104]:
+              - generic [ref=f50e105]:
+                - generic [ref=f50e106] [cursor=pointer]
+                - generic:
+                  - img "overlay"
+                  - paragraph: New Premier Plus rooms & news restaurant
+              - generic [ref=f50e108] [cursor=pointer]
+              - generic [ref=f50e110] [cursor=pointer]
+            - button "See all photos" [ref=f50e111] [cursor=pointer]
+        - generic [ref=f50e115]:
+          - heading "Choose your rate" [level=3] [ref=f50e116]
+          - paragraph [ref=f50e117]: We know plans can change, so please make sure you book the rate with the right level of flexibility for you.
+          - generic [ref=f50e118]:
+            - generic [ref=f50e119]:
+              - generic [ref=f50e122]:
+                - generic [ref=f50e123]:
+                  - generic [ref=f50e124]:
+                    - generic [ref=f50e125]: Premier Plus room
+                    - paragraph [ref=f50e126]: Our enhanced room design. Includes Ultimate Wi-Fi, coffee machine, mini-fridge, bedside USB ports, iron, upgraded workspace & more.
+                  - img "Room type Image" [ref=f50e128]
+                - generic [ref=f50e130]:
+                  - generic [ref=f50e131]:
+                    - generic [ref=f50e133]:
+                      - generic [ref=f50e135] [cursor=pointer]:
+                        - radio "Flex Pay now or on arrival. Fully refundable up to 1 pm on day of arrival" [checked] [ref=f50e136]
+                        - generic [ref=f50e139]:
+                          - text: Flex
+                          - paragraph [ref=f50e140]: Pay now or on arrival. Fully refundable up to 1 pm on day of arrival
+                      - generic [ref=f50e141]:
+                        - paragraph [ref=f50e143]:
+                          - generic "£67" [ref=f50e144]:
+                            - generic [ref=f50e145]: £
+                            - generic [ref=f50e146]: "67"
+                        - paragraph [ref=f50e147]: Total price
+                        - generic [ref=f50e148]:
+                          - paragraph [ref=f50e149]: 1 room,
+                          - paragraph [ref=f50e150]: 1 night
+                    - separator [ref=f50e151]
+                  - generic [ref=f50e152]:
+                    - generic [ref=f50e154]:
+                      - generic [ref=f50e156] [cursor=pointer]:
+                        - radio "Semi-Flex Pay now, fully refundable up to 3 days before arrival" [ref=f50e157]
+                        - generic [ref=f50e160]:
+                          - text: Semi-Flex
+                          - paragraph [ref=f50e161]: Pay now, fully refundable up to 3 days before arrival
+                      - generic [ref=f50e162]:
+                        - paragraph [ref=f50e164]:
+                          - generic "£55" [ref=f50e165]:
+                            - generic [ref=f50e166]: £
+                            - generic [ref=f50e167]: "55"
+                        - paragraph [ref=f50e168]: Total price
+                        - generic [ref=f50e169]:
+                          - paragraph [ref=f50e170]: 1 room,
+                          - paragraph [ref=f50e171]: 1 night
+                    - separator [ref=f50e172]
+                  - generic [ref=f50e175]:
+                    - generic [ref=f50e177] [cursor=pointer]:
+                      - radio "Standard Pay now, non-refundable. Check-in date amendable before 1pm on day of arrival" [ref=f50e178]
+                      - generic [ref=f50e181]:
+                        - text: Standard
+                        - paragraph [ref=f50e182]: Pay now, non-refundable. Check-in date amendable before 1pm on day of arrival
+                    - generic [ref=f50e183]:
+                      - paragraph [ref=f50e185]:
+                        - generic "£44" [ref=f50e186]:
+                          - generic [ref=f50e187]: £
+                          - generic [ref=f50e188]: "44"
+                      - paragraph [ref=f50e189]: Total price
+                      - generic [ref=f50e190]:
+                        - paragraph [ref=f50e191]: 1 room,
+                        - paragraph [ref=f50e192]: 1 night
+              - generic [ref=f50e195]:
+                - generic [ref=f50e196]:
+                  - generic [ref=f50e197]:
+                    - generic [ref=f50e198]: Premier Plus room with a view
+                    - paragraph [ref=f50e199]: Our enhanced room design with a great view, Ultimate Wi-Fi, coffee machine, mini-fridge, bedside USB ports, iron, upgraded workspace & more.
+                  - img "Room type Image" [ref=f50e201]
+                - generic [ref=f50e203]:
+                  - generic [ref=f50e204]:
+                    - generic [ref=f50e206]:
+                      - generic [ref=f50e208] [cursor=pointer]:
+                        - radio "Flex Pay now or on arrival. Fully refundable up to 1 pm on day of arrival" [ref=f50e209]
+                        - generic [ref=f50e212]:
+                          - text: Flex
+                          - paragraph [ref=f50e213]: Pay now or on arrival. Fully refundable up to 1 pm on day of arrival
+                      - generic [ref=f50e214]:
+                        - paragraph [ref=f50e216]:
+                          - generic "£67" [ref=f50e217]:
+                            - generic [ref=f50e218]: £
+                            - generic [ref=f50e219]: "67"
+                        - paragraph [ref=f50e220]: Total price
+                        - generic [ref=f50e221]:
+                          - paragraph [ref=f50e222]: 1 room,
+                          - paragraph [ref=f50e223]: 1 night
+                    - separator [ref=f50e224]
+                  - generic [ref=f50e225]:
+                    - generic [ref=f50e227]:
+                      - generic [ref=f50e229] [cursor=pointer]:
+                        - radio "Semi-Flex Pay now, fully refundable up to 3 days before arrival" [ref=f50e230]
+                        - generic [ref=f50e233]:
+                          - text: Semi-Flex
+                          - paragraph [ref=f50e234]: Pay now, fully refundable up to 3 days before arrival
+                      - generic [ref=f50e235]:
+                        - paragraph [ref=f50e237]:
+                          - generic "£55" [ref=f50e238]:
+                            - generic [ref=f50e239]: £
+                            - generic [ref=f50e240]: "55"
+                        - paragraph [ref=f50e241]: Total price
+                        - generic [ref=f50e242]:
+                          - paragraph [ref=f50e243]: 1 room,
+                          - paragraph [ref=f50e244]: 1 night
+                    - separator [ref=f50e245]
+                  - generic [ref=f50e248]:
+                    - generic [ref=f50e250] [cursor=pointer]:
+                      - radio "Standard Pay now, non-refundable. Check-in date amendable before 1pm on day of arrival" [ref=f50e251]
+                      - generic [ref=f50e254]:
+                        - text: Standard
+                        - paragraph [ref=f50e255]: Pay now, non-refundable. Check-in date amendable before 1pm on day of arrival
+                    - generic [ref=f50e256]:
+                      - paragraph [ref=f50e258]:
+                        - generic "£44" [ref=f50e259]:
+                          - generic [ref=f50e260]: £
+                          - generic [ref=f50e261]: "44"
+                      - paragraph [ref=f50e262]: Total price
+                      - generic [ref=f50e263]:
+                        - paragraph [ref=f50e264]: 1 room,
+                        - paragraph [ref=f50e265]: 1 night
+              - generic [ref=f50e268]:
+                - generic [ref=f50e269]:
+                  - generic [ref=f50e270]:
+                    - generic [ref=f50e271]: Standard room
+                    - paragraph [ref=f50e272]: A super-comfy bed, a power shower and free Wi-Fi – our double rooms have everything you’ll need for a great night’s sleep.
+                    - paragraph [ref=f50e275]: See details
+                  - img "Room type Image" [ref=f50e277]
+                - generic [ref=f50e279]:
+                  - generic [ref=f50e280]:
+                    - generic [ref=f50e282]:
+                      - generic [ref=f50e284] [cursor=pointer]:
+                        - radio "Flex Pay now or on arrival. Fully refundable up to 1 pm on day of arrival" [ref=f50e285]
+                        - generic [ref=f50e288]:
+                          - text: Flex
+                          - paragraph [ref=f50e289]: Pay now or on arrival. Fully refundable up to 1 pm on day of arrival
+                      - generic [ref=f50e290]:
+                        - paragraph [ref=f50e292]:
+                          - generic "£67" [ref=f50e293]:
+                            - generic [ref=f50e294]: £
+                            - generic [ref=f50e295]: "67"
+                        - paragraph [ref=f50e296]: Total price
+                        - generic [ref=f50e297]:
+                          - paragraph [ref=f50e298]: 1 room,
+                          - paragraph [ref=f50e299]: 1 night
+                    - separator [ref=f50e300]
+                  - generic [ref=f50e301]:
+                    - generic [ref=f50e303]:
+                      - generic [ref=f50e305] [cursor=pointer]:
+                        - radio "Semi-Flex Pay now, fully refundable up to 3 days before arrival" [ref=f50e306]
+                        - generic [ref=f50e309]:
+                          - text: Semi-Flex
+                          - paragraph [ref=f50e310]: Pay now, fully refundable up to 3 days before arrival
+                      - generic [ref=f50e311]:
+                        - paragraph [ref=f50e313]:
+                          - generic "£55" [ref=f50e314]:
+                            - generic [ref=f50e315]: £
+                            - generic [ref=f50e316]: "55"
+                        - paragraph [ref=f50e317]: Total price
+                        - generic [ref=f50e318]:
+                          - paragraph [ref=f50e319]: 1 room,
+                          - paragraph [ref=f50e320]: 1 night
+                    - separator [ref=f50e321]
+                  - generic [ref=f50e324]:
+                    - generic [ref=f50e326] [cursor=pointer]:
+                      - radio "Standard Pay now, non-refundable. Check-in date amendable before 1pm on day of arrival" [ref=f50e327]
+                      - generic [ref=f50e330]:
+                        - text: Standard
+                        - paragraph [ref=f50e331]: Pay now, non-refundable. Check-in date amendable before 1pm on day of arrival
+                    - generic [ref=f50e332]:
+                      - paragraph [ref=f50e334]:
+                        - generic "£44" [ref=f50e335]:
+                          - generic [ref=f50e336]: £
+                          - generic [ref=f50e337]: "44"
+                      - paragraph [ref=f50e338]: Total price
+                      - generic [ref=f50e339]:
+                        - paragraph [ref=f50e340]: 1 room,
+                        - paragraph [ref=f50e341]: 1 night
+            - generic [ref=f50e345]:
+              - paragraph [ref=f50e346]: Double room
+              - paragraph [ref=f50e347]: Flex
+              - separator [ref=f50e348]
+              - generic [ref=f50e349]:
+                - generic [ref=f50e350]:
+                  - paragraph [ref=f50e351]: Stay
+                  - paragraph [ref=f50e352]: 1 night
+                - generic [ref=f50e353]:
+                  - paragraph [ref=f50e354]: Price
+                  - generic [ref=f50e355]:
+                    - link "See breakdown" [ref=f50e356] [cursor=pointer]:
+                      - /url: "#"
+                    - paragraph [ref=f50e357]: £67
+              - separator [ref=f50e358]
+              - generic [ref=f50e359]:
+                - paragraph [ref=f50e360]: Total
+                - paragraph [ref=f50e361]:
+                  - generic "£67" [ref=f50e362]:
+                    - generic [ref=f50e363]: £
+                    - generic [ref=f50e364]: "67"
+              - button "Book now" [ref=f50e365] [cursor=pointer]
+              - generic [ref=f50e366]: Enter your code
+        - generic [ref=f50e371]:
+          - heading "Location" [level=3] [ref=f50e372]
+          - generic [ref=f50e375]:
+            - generic [ref=f50e376]:
+              - paragraph [ref=f50e377]: Shepiston Lane, Middlesex,
+              - paragraph [ref=f50e378]: UB3 1RW
+            - generic [ref=f50e379]:
+              - generic [ref=f50e380]: Sat Nav Directions:UB3 1LL
+              - generic [ref=f50e381]: What 3 Words:///stiff.amused.pumps
+            - generic [ref=f50e382]:
+              - paragraph [ref=f50e383]: "Directions:"
+              - paragraph [ref=f50e386]: From M4 exit Jtn 4 then follow signs to Uxbridge remaining in left hand lane. Bear left following signs for other routes and Hayes. At give way point, use as a roundabout and take the 4th exit off (sign posted Hayes). The hotel is 200 yards away on the right hand side. (SAT NAV - UB3 1RW) Parking costs 12 GBP per night for Premier Inn guests.
+              - paragraph [ref=f50e388] [cursor=pointer]: Read more
+            - generic [ref=f50e389]:
+              - paragraph [ref=f50e390]: "Transport and local information:"
+              - list [ref=f50e392]:
+                - listitem [ref=f50e393]:
+                  - paragraph [ref=f50e394]: Heathrow Terminals 2&3 - 2.5 miles
+                - listitem [ref=f50e395]:
+                  - paragraph [ref=f50e396]: Heathrow Terminal 4 - 5.5 miles
+                - listitem [ref=f50e397]:
+                  - paragraph [ref=f50e398]: Heathrow Terminal 5 - 4.5 miles
+        - generic [ref=f50e400]:
+          - heading "Parking at Premier Inn London Heathrow Airport (M4/J4) hotel" [level=3] [ref=f50e401]
+          - generic [ref=f50e402]: We offer an exclusive guest parking discount of £12 per 24 hours. Simply find a space and pay less to park. This car park is managed by Horizon Parking. Parking is avaliable on a first, come first serve basis. For larger vehicles such as coaches, vans or lorries, the parking fee is £30. This must be arranged with the hotel via email, as we can only accommodate up to 3 larger vehicles at a time. Parking availability can vary, if you have any questions please contact the hotel prior to your stay. Airport parking is available through our partners Holiday Extras at great prices (see frequently asked questions section for more details).
+        - generic "Restaurant" [ref=f50e404]:
+          - heading "Restaurant" [level=3] [ref=f50e405]
+          - img "Thyme Bar & Grill" [ref=f50e407]
+          - status [ref=f50e408]:
+            - generic [ref=f50e412]: Depending on your selected hotel and dates you stay, we will be offering different breakfast and evening options.
+          - generic [ref=f50e414]:
+            - tablist [ref=f50e415]:
+              - tab [selected] [ref=f50e416] [cursor=pointer]:
+                - heading "Breakfast" [level=3] [ref=f50e418]
+              - tab [ref=f50e419] [cursor=pointer]:
+                - heading "Lunch & Dinner" [level=3] [ref=f50e421]
+              - tab [ref=f50e422] [cursor=pointer]:
+                - heading "Meal Deal" [level=3] [ref=f50e424]
+            - tabpanel "Breakfast" [ref=f50e426]:
+              - generic [ref=f50e427]:
+                - img "Breakfast" [ref=f50e429]
+                - generic [ref=f50e430]:
+                  - generic [ref=f50e431]:
+                    - paragraph [ref=f50e435]: Mornings have never been so tasty! Build your own breakfast and fill up your plate with freshly cooked favourites like bacon, sausages, eggs and hash browns – plus a tasty selection of veggie and vegan options – and continental delights like fruit, cereal and freshly baked pastries. Plus, when an adult orders a Premier Inn Breakfast, up to two kids eat breakfast for free**
+                    - text: Read more
+                  - button "Breakfast Menu" [ref=f50e437] [cursor=pointer]
+        - generic [ref=f50e439]:
+          - heading "Reviews for Premier Inn London Heathrow Airport (M4/J4) hotel" [level=3] [ref=f50e440]
+          - generic [ref=f50e441]:
+            - button "See reviews" [ref=f50e444] [cursor=pointer]
+            - generic [ref=f50e448]:
+              - paragraph [ref=f50e449]: Traveller reviews brought to you by
+              - generic [ref=f50e451]:
+                - paragraph [ref=f50e454]: Location
+                - paragraph [ref=f50e458]: Sleep Quality
+                - paragraph [ref=f50e462]: Rooms
+                - paragraph [ref=f50e466]: Service
+                - paragraph [ref=f50e470]: Value
+                - paragraph [ref=f50e474]: Cleanliness
+              - paragraph [ref=f50e477]: Write Review
+        - generic [ref=f50e478]:
+          - generic [ref=f50e481]:
+            - heading "Hotel description" [level=3] [ref=f50e482]
+            - paragraph [ref=f50e484]:
+              - text: For comfy, stress-free accommodation before jetting off on holiday, look no further than our Premier Inn London Heathrow Airport (M4/J4) hotel. We’re based just off the M4 near Hayes & Harlington station, just a 10-minute drive from Heathrow Terminals 2 and 3, a 20-minute drive from Heathrow Terminal 4, and a 15-minute drive from Terminal 5. If you have some time before take-off, why not visit Twickenham High Street for some retail therapy or
+              - link "Twickenham Stadium" [ref=f50e485] [cursor=pointer]:
+                - /url: https://www.premierinn.com/gb/en/things-to-do/twickenham/twickenham-stadium.html
+              - text: for a rugby match? Popular Surrey attractions like Thorpe Park and Windsor Castle are just a 20-minute drive away too! Our Premier Inn at London Heathrow Airport is an ideal place to stay before Heathrow flights or if you’re just looking for hotels near Ashford. Plus, thanks to our in-house Thyme restaurant and
+              - link "super-comfy beds" [ref=f50e486] [cursor=pointer]:
+                - /url: https://www.premierinn.com/gb/en/sleep/our-bed.html
+              - text: ", you’ll have everything you need for great-value stopovers."
+          - generic [ref=f50e489]:
+            - heading "London Heathrow Airport (M4/J4) FAQs" [level=3] [ref=f50e490]
+            - generic [ref=f50e492]:
+              - button "Can you walk from Heathrow airport to Premier Inn London Heathrow Airport (M4/J4) hotel?" [ref=f50e494] [cursor=pointer]
+              - button "How do I get from Heathrow Terminal 4 to your Premier Inn London Heathrow Airport (M4/J4) hotel?" [ref=f50e499] [cursor=pointer]
+              - button "Does your Premier Inn London Heathrow Airport (M4/J4) hotel have parking?" [ref=f50e504] [cursor=pointer]
+              - button "How do I add airport parking to my booking?" [ref=f50e509] [cursor=pointer]
+              - button "Can I book airport lounges, fast passes and other extras?" [ref=f50e514] [cursor=pointer]
+              - button "What time is breakfast at your Premier Inn London Heathrow Airport (M4/J4) hotel?" [ref=f50e519] [cursor=pointer]
+              - button "Which room amenities are available at your Premier Inn London Heathrow Airport (M4/J4) hotel?" [ref=f50e524] [cursor=pointer]
+              - button "Is your Premier Inn London Heathrow Airport (M4/J4) hotel accessible?" [ref=f50e529] [cursor=pointer]
+              - button "Why book with Premier Inn?" [ref=f50e534] [cursor=pointer]
+              - button "Why is booking with Premier Inn the right choice for families?" [ref=f50e539] [cursor=pointer]
+              - button "Why is booking with Premier Inn the right choice for business travellers?" [ref=f50e544] [cursor=pointer]
+        - generic [ref=f50e548]:
+          - heading "Hotel contact information" [level=3] [ref=f50e549]
+          - paragraph [ref=f50e550]: "Phone: 0333 003 1715"
+          - generic [ref=f50e551]: Calls to our UK hotels cost no more than calls to standard 01 or 02 numbers and are usually included in landline or mobile call packages. The same applies to calls to our hotels in the Republic of Ireland. For hotels outside the UK and Ireland, standard international call charges may apply – please check with your provider.
+    - generic [ref=f50e555]:
+      - generic [ref=f50e556]:
+        - tablist [ref=f50e557]:
+          - tab [selected] [ref=f50e558] [cursor=pointer]:
+            - heading "About us" [level=3] [ref=f50e560]
+          - tab [ref=f50e561] [cursor=pointer]:
+            - heading "City breaks" [level=3] [ref=f50e563]
+          - tab [ref=f50e564] [cursor=pointer]:
+            - heading "Summer breaks" [level=3] [ref=f50e566]
+          - tab [ref=f50e567] [cursor=pointer]:
+            - heading "Winter breaks" [level=3] [ref=f50e569]
+          - tab [ref=f50e570] [cursor=pointer]:
+            - heading "Business" [level=3] [ref=f50e572]
+        - tabpanel "About us" [ref=f50e574]:
+          - generic [ref=f50e575]:
+            - paragraph [ref=f50e577]: Is it our comfy beds, our seriously tasty food, our great value hotels or our amazing teams that guests love so much? We reckon it’s a bit of everything. Take a look around to find out why we’re a much-loved, award-winning hotel chain, and rest easy knowing our range of rates give you both choice and flexibility.
+            - generic [ref=f50e578]:
+              - generic [ref=f50e579]:
+                - paragraph [ref=f50e580]: Get in touch
+                - generic [ref=f50e581]:
+                  - link "Contact us" [ref=f50e582] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/contact-us.html
+                  - link "FAQs" [ref=f50e583] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/faq.html
+                  - link "Group bookings" [ref=f50e584] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/why/groups.html
+                  - link "Affiliates" [ref=f50e585] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/premier-inn-affiliate-programme.html
+                  - link "International development" [ref=f50e586] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/business/international-development.html
+                  - link "Careers" [ref=f50e587] [cursor=pointer]:
+                    - /url: https://www.whitbreadcareers.com/our-brands/premier-inn/
+              - generic [ref=f50e588]:
+                - paragraph [ref=f50e589]: Legal
+                - generic [ref=f50e590]:
+                  - link "Terms and conditions" [ref=f50e591] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/terms/booking-terms-and-conditions.html
+                  - link "Terms of use" [ref=f50e592] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/terms/terms-of-use.html
+                  - link "Privacy policy" [ref=f50e593] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/terms/privacy-policy.html
+                  - link "Cookies notice" [ref=f50e594] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/terms/how-we-use-cookies.html
+                  - link "Good Night Guarantee" [ref=f50e595] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/sleep/good-night-guarantee.html
+                  - link "Modern Slavery Act statement" [ref=f50e596] [cursor=pointer]:
+                    - /url: https://cdn.whitbread.co.uk/media/2023/05/23926_MSA-Report-2022-23_Stage2_230510_14.48-Final-High-Res.pdf
+              - generic [ref=f50e597]:
+                - paragraph [ref=f50e598]: Locations
+                - generic [ref=f50e599]:
+                  - link "Hotel directory" [ref=f50e600] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/hotels.html
+                  - link "New hotels" [ref=f50e601] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/why/locations/new-hotels.html
+                  - link "Local guides" [ref=f50e602] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/short-breaks/city-breaks.html
+                  - link "Short breaks" [ref=f50e603] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/short-breaks.html
+                  - link "Hotels in Germany" [ref=f50e604] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/hotels/germany.html
+                  - link "Dubai and beyond" [ref=f50e605] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/hotels/middle-east.html
+              - generic [ref=f50e606]:
+                - paragraph [ref=f50e607]: Our hotels
+                - generic [ref=f50e608]:
+                  - link "Our rooms" [ref=f50e609] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/sleep/our-rooms.html
+                  - link "Family friendly" [ref=f50e610] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/why/family.html
+                  - link "Sleep" [ref=f50e611] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/sleep.html
+                  - link "Food & drink" [ref=f50e612] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/why/food.html
+                  - link "hub by Premier Inn" [ref=f50e613] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/hub.html
+                  - link "ZIP by Premier Inn" [ref=f50e614] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/zip.html
+              - generic [ref=f50e615]:
+                - paragraph [ref=f50e616]: Find out more
+                - generic [ref=f50e617]:
+                  - link "About us" [ref=f50e618] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/why.html
+                  - link "Rest easy" [ref=f50e619] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/resteasy.html
+                  - link "GOSH Charity" [ref=f50e620] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/why/gosh-childrens-charity.html
+                  - link "Force for Good" [ref=f50e621] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/why/force-for-good.html
+                  - link "Disabled access" [ref=f50e622] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/terms/disabled-access.html
+                  - link "News" [ref=f50e623] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/news.html
+              - generic [ref=f50e624]:
+                - paragraph [ref=f50e625]: Everything else
+                - generic [ref=f50e626]:
+                  - link "Our rates" [ref=f50e627] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/why/rates.html
+                  - link "Offers" [ref=f50e628] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/offers.html
+                  - link "Buy our bed" [ref=f50e629] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/sleep/buy-our-bed.html
+                  - link "Mobile apps" [ref=f50e630] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/why/apps.html
+                  - link "We value difference" [ref=f50e631] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/terms/diversity-and-inclusion.html
+                  - link "Sitemap" [ref=f50e632] [cursor=pointer]:
+                    - /url: https://www.uat.premierinn.digital/gb/en/sitemap.html
+      - generic [ref=f50e633]:
+        - generic [ref=f50e634]: © 2026 Premier Inn
+        - generic [ref=f50e635]:
+          - link [ref=f50e636] [cursor=pointer]:
+            - /url: https://www.facebook.com/premierinn
+          - link [ref=f50e638] [cursor=pointer]:
+            - /url: https://twitter.com/premierinn
+          - link [ref=f50e640] [cursor=pointer]:
+            - /url: https://www.instagram.com/premierinn
+  - alert [ref=f50e642]
+  - generic:
+    - region "Notifications-top"
+    - region "Notifications-top-left"
+    - region "Notifications-top-right"
+    - region "Notifications-bottom-left"
+    - region "Notifications-bottom"
+    - region "Notifications-bottom-right"
+```
+
+# Test source
+
+```ts
+  511 |     isDisplayed = true,
+  512 |     hotelId,
+  513 |   }: {
+  514 |     isDisplayed?: boolean;
+  515 |     hotelId: string;
+  516 |   }): Promise<void> {
+  517 |     console.log(`Validate announcement notification displayed=${isDisplayed}`);
+  518 |     if (!isDisplayed) {
+  519 |       await expect(this.announcementNotificationSection, 'Announcement section should not be visible').not.toBeVisible();
+  520 |       return;
+  521 |     }
+  522 | 
+  523 |     const hotelDictionary = await ApiDictionary.fetchHotelDirectoryDictionary({ hotelId });
+  524 |     const announcement = hotelDictionary.announcement as { text?: string } | undefined;
+  525 |     await expect(this.announcementNotificationSection, 'Announcement section should be visible').toBeVisible();
+  526 |     await expect(this.announcementNotificationText, 'Announcement description should match AEM').toContainText(announcement?.text ?? '');
+  527 |   }
+  528 | 
+  529 |   /** Validate required room occupancy query parameters in the current HDP URL. */
+  530 |   async validateSearchParamsInCurrentUrl({
+  531 |     roomsList,
+  532 |   }: {
+  533 |     roomsList: Array<{ adultsNumber: number; childrenNumber: number; roomType: { id: string } }>;
+  534 |   }): Promise<void> {
+  535 |     const currentUrl = new URL(this.page.url());
+  536 |     expect(currentUrl.searchParams.get('ROOMS'), 'ROOMS query parameter should match selected rooms').toBe(`${roomsList.length}`);
+  537 |     for (const [index, room] of roomsList.entries()) {
+  538 |       const roomNumber = index + 1;
+  539 |       expect(currentUrl.searchParams.get(`ADULT${roomNumber}`), `ADULT${roomNumber} query parameter should match`).toBe(`${room.adultsNumber}`);
+  540 |       expect(currentUrl.searchParams.get(`CHILD${roomNumber}`), `CHILD${roomNumber} query parameter should match`).toBe(`${room.childrenNumber}`);
+  541 |       expect(currentUrl.searchParams.get(`INTTYP${roomNumber}`), `INTTYP${roomNumber} query parameter should match`).toBe(room.roomType.id);
+  542 |     }
+  543 |   }
+  544 | 
+  545 |   /**
+  546 |    * Validate that the Hotel Details Page has fully loaded.
+  547 |    * Waits for the page loaded indicator to be visible within 30s.
+  548 |    * @throws Error with page name and selector if indicator not found
+  549 |    */
+  550 |   async validatePage(): Promise<void> {
+  551 |     console.log('Validating hotel details page loaded');
+  552 |     try {
+  553 |       await this.pageLoadedIndicator.waitFor({ state: 'visible', timeout: 30000 });
+  554 |     } catch {
+  555 |       throw new Error(
+  556 |         `HotelDetailsPage did not load within 30s. Selector not found: h1[data-testid="hdp_hotelTitle"]`
+  557 |       );
+  558 |     }
+  559 |   }
+  560 | 
+  561 |   /**
+  562 |    * Validate that the price breakdown section is visible and contains pricing content.
+  563 |    * Checks that the stay/price area shows the total cost for nights.
+  564 |    */
+  565 |   async validatePriceBreakdown(): Promise<void> {
+  566 |     console.log('Validating price breakdown section');
+  567 |     await this.priceBreakdownSection.waitFor({ state: 'visible', timeout: 30000 });
+  568 |     await expect(this.priceBreakdownTotalForNights, 'Price breakdown total should be displayed').toBeVisible({ timeout: 10000 });
+  569 |     // Verify the total for nights contains a numeric value (currency symbol + digits)
+  570 |     await expect(this.priceBreakdownTotalForNights, 'Price breakdown should contain currency and amount').toHaveText(/[£€$]\s*\d+/, { timeout: 10000 });
+  571 |   }
+  572 | 
+  573 |   /** Validate the selected booking summary rate plan and room count. */
+  574 |   async validateBookingSummaryRatePlan(options: { ratePlan: string; roomsCount?: number }): Promise<void> {
+  575 |     const { ratePlan, roomsCount = 1 } = options;
+  576 |     console.log(`Validating booking summary rate plan: ${ratePlan}`);
+  577 |     if (!Constants.BROWSER_RESOLUTIONS.isDesktop()) {
+  578 |       return;
+  579 |     }
+  580 | 
+  581 |     if (roomsCount > 1) {
+  582 |       await expect(this.bookingSummaryRoomsCountLabel, 'Booking summary rooms count should match').toContainText(`${roomsCount}`, { timeout: 10000 });
+  583 |       await expect(this.bookingSummaryRoomsCountLabel, 'Booking summary rate plan should match').toContainText(ratePlan, { timeout: 10000 });
+  584 |       return;
+  585 |     }
+  586 | 
+  587 |     await expect(this.bookingSummaryRateLabel, 'Booking summary selected rate should match').toHaveText(ratePlan, { timeout: 10000 });
+  588 |   }
+  589 | 
+  590 |   /** Validate whether the booking summary total price is displayed. */
+  591 |   async validateTotalPriceRate(options: { isDisplayed?: boolean } = {}): Promise<void> {
+  592 |     const { isDisplayed = true } = options;
+  593 |     console.log('Validating total price rate');
+  594 |     if (isDisplayed) {
+  595 |       await expect(this.bookingSummaryTotalPrice, 'Total price summary should be displayed').toBeVisible({ timeout: 10000 });
+  596 |       await expect(this.bookingSummaryTotalPrice, 'Total price summary should contain currency and amount').toHaveText(/[£€$]\s*\d+/, { timeout: 10000 });
+  597 |       return;
+  598 |     }
+  599 | 
+  600 |     await expect(this.bookingSummaryTotalPrice, 'Total price summary should not be displayed').not.toBeVisible({ timeout: 10000 });
+  601 |   }
+  602 | 
+  603 |   /**
+  604 |    * Validate the per-night price rows shown in the HDP price breakdown.
+  605 |    * @param options.numberOfDays - Expected number of nights in the stay
+  606 |    * @param options.numberOfRooms - Expected number of rooms in the stay
+  607 |    * @param options.hotelCurrency - Hotel country/currency code used to validate the displayed symbol
+  608 |    */
+  609 |   async validatePricesPerNight(options: { numberOfDays: number; numberOfRooms: number; hotelCurrency: string }): Promise<void> {
+  610 |     console.log('Validating prices per night in HDP breakdown');
+> 611 |     await expect(this.priceBreakdownRows, `Price breakdown should show ${options.numberOfDays} rows per room`).toHaveCount(
+      |                                                                                                                ^ Error: Price breakdown should show 1 rows per room
+  612 |       options.numberOfDays * options.numberOfRooms,
+  613 |       { timeout: 10000 }
+  614 |     );
+  615 | 
+  616 |     const expectedSymbol = options.hotelCurrency.toUpperCase() === 'GBP' || options.hotelCurrency.toLowerCase() === 'gb' ? '£' : '€';
+  617 |     for (let index = 0; index < await this.priceBreakdownRows.count(); index++) {
+  618 |       const priceText = await this.priceBreakdownRows.nth(index).locator('span').nth(1).innerText();
+  619 |       expect(priceText, `Price breakdown row ${index} should contain ${expectedSymbol}`).toContain(expectedSymbol);
+  620 |       expect(PriceHelpers.getPriceAmountFromUiLabel(priceText), `Price breakdown row ${index} should contain a positive price`).toBeGreaterThan(0);
+  621 |     }
+  622 |   }
+  623 | }
+  624 | 
+```

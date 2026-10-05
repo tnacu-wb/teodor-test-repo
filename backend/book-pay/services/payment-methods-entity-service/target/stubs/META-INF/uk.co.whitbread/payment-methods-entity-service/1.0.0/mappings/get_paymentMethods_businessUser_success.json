@@ -1,0 +1,41 @@
+{
+  "id" : "15fb09fe-879c-4a0e-bd96-2395de6e6fd9",
+  "request" : {
+    "urlPath" : "/v1/payment-methods",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "WB-Authorization" : {
+        "equalTo" : "Bearer test=="
+      },
+      "bookingChannel" : {
+        "equalTo" : "WEB"
+      }
+    },
+    "queryParameters" : {
+      "basketReference" : {
+        "equalTo" : "LONHOL5778172"
+      },
+      "country" : {
+        "equalTo" : "gb"
+      },
+      "language" : {
+        "equalTo" : "en"
+      },
+      "userType" : {
+        "equalTo" : "BUSINESS"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "[{\"name\":\"CARD\",\"type\":\"SAVED_CARD\",\"order\":1,\"card\":{\"expiryMonth\":\"12\",\"expiryYear\":\"30\",\"type\":\"AC\",\"logoSrc\":\"/content/dam/global/booking/Mastercard.jpg\",\"cardHolderName\":\"John Smith\",\"cardType\":\"BUSINESS_PERSONAL_STORED_CARD\",\"cnpRequired\":false},\"paymentOptions\":[{\"type\":\"PAY_NOW\",\"order\":1,\"enabled\":true},{\"type\":\"PAY_ON_ARRIVAL\",\"order\":2,\"enabled\":false}],\"enabled\":true,\"cnpPreSelected\":false,\"cnpOptionAvailable\":false,\"reasons\":[]},{\"name\":\"PIBA\",\"type\":\"SAVED_CARD\",\"subType\":\"PIBAGB\",\"order\":2,\"card\":{\"expiryMonth\":\"04\",\"expiryYear\":\"30\",\"type\":\"AT\",\"logoSrc\":\"/content/dam/global/booking/Business_Account.jpg\",\"cardHolderName\":\"PIBA Test CC\",\"cardType\":\"BUSINESS_CENTRALLY_STORED_CARD\",\"cnpRequired\":true},\"paymentOptions\":[{\"type\":\"PAY_NOW\",\"order\":1,\"enabled\":true},{\"type\":\"PAY_ON_ARRIVAL\",\"order\":2,\"enabled\":false}],\"enabled\":true,\"cnpPreSelected\":true,\"cnpOptionAvailable\":false,\"reasons\":[],\"bookingAllowances\":{\"allowCarParking\":true,\"allowIndividualCards\":true,\"allowAlcohol\":false,\"allowAdditionalCosts\":false,\"allowPremierSaverRates\":true,\"maxDinnerBudgets\":{\"ukWide\":{\"amount\":25,\"currency\":\"GBP\"}},\"maxNumberOfNights\":14}},{\"name\":\"CARD\",\"type\":\"NEW_CARD\",\"order\":3,\"acceptedCardTypes\":[{\"type\":\"MC\",\"name\":\"Mastercard Credit\",\"logoSrc\":\"/content/dam/global/booking/Mastercard.jpg\"},{\"type\":\"AX\",\"name\":\"American Express\",\"logoSrc\":\"/content/dam/global/booking/AX.jpg\"},{\"type\":\"DN\",\"name\":\"Diners Club\",\"logoSrc\":\"/content/dam/global/booking/DClub.jpg\"},{\"type\":\"VS\",\"name\":\"Visa Debit\",\"logoSrc\":\"/content/dam/global/booking/Visa_Debit.jpg\"},{\"type\":\"VS\",\"name\":\"Electron\",\"logoSrc\":\"/content/dam/global/booking/Electron_white_v.jpg\"},{\"type\":\"MA\",\"name\":\"Maestro\",\"logoSrc\":\"/content/dam/global/booking/maestro.jpg\"},{\"type\":\"MC\",\"name\":\"Mastercard Debit\",\"logoSrc\":\"/content/dam/global/booking/MD.jpg\"},{\"type\":\"VS\",\"name\":\"Visa Credit\",\"logoSrc\":\"/content/dam/global/booking/VC.jpg\"}],\"paymentOptions\":[{\"type\":\"PAY_NOW\",\"order\":1,\"enabled\":true},{\"type\":\"PAY_ON_ARRIVAL\",\"order\":2,\"enabled\":false}],\"enabled\":true,\"cnpPreSelected\":false,\"cnpOptionAvailable\":false,\"reasons\":[]},{\"name\":\"PIBA\",\"type\":\"NEW_PIBA\",\"subType\":\"PIBAGB\",\"order\":4,\"acceptedCardTypes\":[{\"type\":\"PI\",\"name\":\"Business Account\",\"logoSrc\":\"/content/dam/global/booking/Business_Account.jpg\"}],\"paymentOptions\":[{\"type\":\"PAY_NOW\",\"order\":1,\"enabled\":false},{\"type\":\"PAY_ON_ARRIVAL\",\"order\":2,\"enabled\":true}],\"enabled\":true,\"cnpPreSelected\":false,\"cnpOptionAvailable\":true,\"reasons\":[],\"bookingAllowances\":{\"allowCarParking\":true,\"allowIndividualCards\":true,\"allowAlcohol\":false,\"allowAdditionalCosts\":false,\"allowPremierSaverRates\":true,\"maxDinnerBudgets\":{\"ukWide\":{\"amount\":25,\"currency\":\"GBP\"}},\"maxNumberOfNights\":14}}]",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "15fb09fe-879c-4a0e-bd96-2395de6e6fd9"
+}

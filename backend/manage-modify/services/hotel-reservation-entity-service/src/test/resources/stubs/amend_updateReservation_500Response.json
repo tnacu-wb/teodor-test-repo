@@ -1,0 +1,18 @@
+{
+  "request": {
+    "urlPath": "/v1/reservations",
+    "method": "PUT",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.['reservations'][*][?(@.['reservationId'] == 9966557)]"
+      }
+    ]
+  },
+    "response": {
+      "status": 500,
+      "bodyFileName": "amend_updateReservation_500Response.json",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  }

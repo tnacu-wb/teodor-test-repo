@@ -1,0 +1,32 @@
+server:
+  port: 9120
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+config:
+  service:
+    customers:
+      host: "http://localhost:${wiremock.server.port:0}"
+      registrationEndpoint: "/customers/hotels"
+    marketing:
+      host: "http://localhost:${wiremock.server.port:0}"
+      newsletterPreferencesEndpoint: "/marketing/newsletter/email/"
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'default:production.unleash-insecure-api-token'
+
+feature-flags:
+  company-name-validation:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false

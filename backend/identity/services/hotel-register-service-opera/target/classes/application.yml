@@ -1,0 +1,368 @@
+server:
+  port: 9027
+  shutdown: graceful
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:redis}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+swagger:
+  api:
+    version: 1.0.0
+
+info:
+  build:
+    groupId: 'uk.co.whitbread'
+    artifact: 'hotel-register-service-opera'
+    description: 'Hotel Register MicroService Opera'
+    version: '1.0.0'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /v1/hotel-register/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - password
+        - Authorization
+        - subscriptionKey
+        - bookingSubscriptionKey
+        - accessToken
+        - clientSecret
+        - clientId
+        - ActivationKey
+        - PageToken
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+register:
+  secretKey: ${HOTEL_REGISTER_SECRET_KEY}
+  salt: ${HOTEL_REGISTER_SALT}
+  staticIV: ${HOTEL_REGISTER_STATIC_IV}
+
+# Password policies
+#
+# Legacy Bart and Business booker:
+# -----------------
+# We want the password to have a minimum length of 8
+# Without any of: ~:
+#
+# Auth0:
+# -----------------
+# We want the password to have a minimum length of 8
+# We also want the password to meet 3 of 4 requirements (that is what is configured in Auth0):
+# - At least one lower case letter
+# - At least one upper case letter
+# - At least one digit
+# - At least one special character
+#       Found out in the js file of Auth0 that are considered special characters the following:
+#       - space
+#       - any of: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+# The '3 out of 4' requirement makes the regexp a bit complex as it results in the following structure:
+#     (1lowerCase AND 1upperCase AND 1digit)
+#                     OR
+#     (1lowerCase AND 1 upperCase AND 1specialChar)
+#                     OR
+#     (1lowerCase AND 1digit AND 1specialChar)
+#                     OR
+#     (1upperCase AND 1digit AND 1specialChar)
+passwords:
+  configs:
+    register:
+      minLength: ${PASSWORDS_CONFIGS_REGISTER_MIN_LENGTH}
+      maxLength: ${PASSWORDS_CONFIGS_REGISTER_MAX_LENGTH}
+      illegalChars: ${PASSWORDS_CONFIGS_REGISTER_ILLEGAL_CHARS}
+    registerAuth0:
+      minLength: ${PASSWORDS_CONFIGS_REGISTER_AUTH_MIN_LENGTH}
+      regExps:
+        - (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])|(?=.*[a-z])(?=.*[A-Z])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[a-z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[A-Z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])
+      staticErrorMessage: "Password must be at least 8 characters long and meet three of the following criteria: at least one lower case letter, at least one upper case letter, at least one digit and at least one special character."
+
+encrypt:
+  failOnError: false
+
+auth:
+  management:
+    domain: ${AUTH_MNGMT_DOMAIN}
+    clientId: ${AUTH0_CLIENT_ID}
+    clientSecret: ${AUTH0_CLIENT_SECRET}
+    audience: ${AUTH_MNGMT_AUDIENCE}
+    b2cConnection: ${AUTH_MNGMT_B2C_CONNECTION}
+    b2bConnection: ${AUTH_MNGMT_B2B_CONNECTION}
+  encryption:
+    key: ${AUTH0_ENCRYPTION_KEY}
+
+azure:
+  pti-email-service:
+    host: ${AZURE_PTI_EMAIL_HOST}
+    username: ${AZURE_EMAIL_SERVICE_USERNAME}
+    password: ${AZURE_EMAIL_SERVICE_PASSWORD}
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: ${AZURE_EMAIL_SERVICE_SUBSCRIPTION_KEY}
+  generic-email-service:
+    host: ${AZURE_GENERIC_EMAIL_HOST}
+    username: ${AZURE_GENERIC_EMAIL_SERVICE_USERNAME}
+    password: ${AZURE_GENERIC_EMAIL_SERVICE_PASSWORD}
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: ${AZURE_GENERIC_EMAIL_SERVICE_SUBSCRIPTION_KEY}
+
+feign:
+  hotelcountries:
+    name: hotelcountries
+    url: ${HOTEL_COUNTRIES_URL}
+  hotel-reservation-entity-service-host:
+    name: hotel-reservation-entity-service-host
+    url: ${HOTEL_RESERVATION_ENTITY_SERVICE_HOST}
+  marketing-service-opera:
+    name: marketing-service-opera
+    url: ${MARKETING_SERVICE_OPERA_URL}
+
+cdh:
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT_TYPE}
+    enabled: ${CDH_OAUTH_IS_ENABLED}
+
+  api:
+    host: ${CDH_API_HOST}
+    is-oauth: ${CDH_API_IS_OAUTH}
+    oauth:
+      subscription-key: ${ACCOUNT_SERVICES_OAUTH_SUBSCRIPTION_KEY}
+
+email:
+  companyActivationUrl: ${COMPANY_ACTIVATION_URL}
+  companyActivationUrlDe: ${COMPANY_ACTIVATION_URL_DE}
+  innbCompanyActivationUrl: ${INNB_COMPANY_ACTIVATION_URL}
+  innbCompanyActivationUrlDe: ${INNB_COMPANY_ACTIVATION_URL_DE}
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+feature-flags:
+  company-name-validation:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false
+  cdh-api-deprecation:
+    key: "release_pi_cdh_api_deprecation"
+    fallback: false
+
+universal-login:
+  api-key: ${UNIVERSAL_LOGIN_API_KEY:}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - opera-uat
+
+captcha:
+  secret: ${CAPTCHA_SECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Application used for the tests is https://manage.auth0.com/dashboard/eu/wbmigrationtest/applications/gBVcZzfXChbowQR1mfH8csbUwya9FzOB/settings
+# Microservices Application
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    uk.co.whitbread: debug
+    feign: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+captcha:
+  secret: ${HOTEL_REGISTER_CAPTCHA_SECRET}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+swagger:
+  api:
+    version: "1.10.0"
+
+logging:
+  level:
+    uk.co.whitbread: debug
+    org.apache.http: debug
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+
+register:
+  # needs to be 16 characters
+  encryptKey: dummyValue123456
+  secretKey: "dummy-value"
+  salt: "dummy-value"
+  staticIV: "dummy-iv-16-char"
+
+captcha:
+  secret: 'dummy-value'
+
+passwords:
+  configs:
+    register:
+      minLength: 8
+      maxLength: 50
+      illegalChars: ":~"
+    registerAuth0:
+      minLength: 8
+      regExps:
+        - (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])|(?=.*[a-z])(?=.*[A-Z])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[a-z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])|(?=.*[A-Z])(?=.*[0-9])(?=.*[\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~])
+      staticErrorMessage: "Password must be at least 8 characters long and meet three of the following criteria: at least one lower case letter, at least one upper case letter, at least one digit and at least one special character."
+
+# Application used for the tests is https://manage.auth0.com/dashboard/eu/wbmigrationtest/applications/u9FzYjYAwd7yCzIhgMc9gpDVNI5WcHw8/settings
+# API Explorer Application
+auth:
+  management:
+    domain: http://localhost:${wiremock.server.port:1}
+    clientId: clientId_test
+    clientSecret: clientSecret_test
+    audience: http://mock-audience/api/v2/
+    connection: Connection-Test
+    b2bConnection: test connection
+    b2cConnection: test connection
+  encryption:
+    key: aZCGss97HqRj4r8XraMV+6XO15T7q+yxN3q1TTLoqOU=
+
+azure:
+  pti-email-service:
+    host: http://localhost:${wiremock.server.port:1}/pti
+    username: username
+    password: password
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: subscription_key
+
+cdh:
+  oauth-client:
+    host: https://login.microsoftonline.com
+    token-url: "token-url"
+    client-id: "client-id"
+    client-secret: "client-secret"
+    scope: https://wbch-uat-api-v2.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: https://whitbread-uat.azure-api.net/AccountServices/V1
+    is-oauth: true
+    oauth:
+      subscription-key: "subscription-key"
+      customer-account-url: ${cdh.api.host}/CustomerAccount
+
+feign:
+  hotelcountries:
+    name: hotelcountries
+    url: http://localhost/hotelcountries
+  hotel-reservation-entity-service-host:
+    name: hotel-reservation-entity-service-host
+    url: https://restapi.dit.premierinn.digital
+
+#Proxy is required for developers outside WB network
+#to be able to make requests to lowers envs CDH-Adapter
+config:
+  httpClient:
+    proxy:
+      host: ${HTTP_PROXY_HOST:}
+      port: ${HTTP_PROXY_PORT:}
+
+universal-login:
+  api-key:
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'default:production.unleash-insecure-api-token'

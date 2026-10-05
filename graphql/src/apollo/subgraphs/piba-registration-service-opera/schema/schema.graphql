@@ -1,0 +1,89 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    getRegistrationInfo(registrationCode: String!): RegistrationInfoResponse
+}
+
+type RegistrationInfoResponse {
+    registrationCodeInfo: RegistrationCodeInfo
+}
+
+type RegistrationCodeInfo {
+    registrationCode: String
+    primarySchemeCustomerId: Int
+    schemeCustomerId: Int
+    registrationRole: PibaRegistrationRole
+    authenticationQuestions: [AuthenticationQuestion]
+}
+
+type AuthenticationQuestion {
+    questionId: Int
+    question: String
+}
+
+enum PibaRegistrationRole {
+    AccountHolder
+    Cardholder
+    FinanceUser
+    CostCenterUser
+    CostCentreHolder
+}
+
+type Mutation {
+    authenticateRegistration(authenticateRegistrationRequest: AuthenticateRegistrationRequest!): AuthenticateRegistrationResponse
+    submitRegistration(registrationSubmitRequest: RegistrationSubmitRequest!): RegistrationSubmitResponse
+}
+
+input AuthenticateRegistrationRequest {
+    registrationCode: String!
+    authenticationAnswers: [AuthenticationAnswer]
+}
+
+input AuthenticationAnswer {
+    questionId: Int!
+    answer: String!
+}
+
+type RegistrationPrePopulatedItems {
+    title: String
+    forename: String
+    surname: String
+    emailAddress: String
+    mobileNumber: String
+    landlineNumber: String
+}
+
+type AuthenticateRegistrationResponse {
+    registrationCodeInfo: RegistrationCodeInfo
+    registrationPrePopulatedItems: RegistrationPrePopulatedItems
+}
+
+input RegistrationSubmitRequest {
+    innBusiness: Boolean
+    registrationCode: String!
+    authenticationAnswers: [AuthenticationAnswer]
+    registrationDetails: RegistrationDetails!
+}
+
+input RegistrationDetails {
+    title: String!
+    forename: String!
+    surname: String!
+    emailAddress: String!
+    mobileNumber: String
+    landlineNumber: String
+    memorableWord: String!
+}
+
+type RegistrationSubmitResponse {
+    registrationCodeInfo: RegistrationCodeInfo
+    tetherDetails: TetherDetails
+}
+
+type TetherDetails {
+    tetheredUserGuid: String
+    accountNumber: String
+}

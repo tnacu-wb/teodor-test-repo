@@ -1,0 +1,30 @@
+@startuml
+entity "Reservations Manager Entity Service (Opera)" as ES
+participant BookingController as Controller
+participant BookingInPort as BookingInPort
+
+participant MigrationStatusOutPort as MigrationStatusOutPort
+participant MigrationStatusClient as MigrationStatusClient
+participant OperaBookingOutPort as OperaBookingOutPort
+participant OperaClient as OperaClient
+
+
+ES -> Controller: GET /v1/bookings/information?\nhotelId={hotelId}&\narrival={arrival}&\nbookingReference={bookingReference}&\nsurname={surname}&\nsourceSystem={sourceSystem}
+Controller -> BookingInPort: getBookingInformation
+
+alt sourceSystem is not present
+  BookingInPort -> MigrationStatusOutPort
+  MigrationStatusOutPort -> MigrationStatusClient
+  MigrationStatusOutPort <- MigrationStatusClient: OPERA
+  BookingInPort <- MigrationStatusOutPort
+end
+BookingInPort -> OperaBookingOutPort: getBookingInformation/getPaymentOption/getCancelReservation/getRateInformation/getReservationToken
+OperaBookingOutPort -> OperaClient: getBookingInformation/getPaymentOption/getCancelReservation/getRateInformation/getReservationToken
+OperaClient -> HotelReservationService
+OperaClient <- HotelReservationService
+OperaBookingOutPort <- OperaClient
+BookingInPort <- OperaBookingOutPort
+
+Controller <- BookingInPort
+ES <- Controller
+@endum

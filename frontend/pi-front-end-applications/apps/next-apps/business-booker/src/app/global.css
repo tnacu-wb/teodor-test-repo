@@ -1,0 +1,355 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 88, 77%, 78%;
+    --secondary-foreground: 170, 97%, 40%;
+
+    --tertiary: 285, 53%, 25%;
+    --tertiary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+
+    --light-grey-1: #979797;
+    --light-grey-2: #cccccc;
+    --light-grey-3: #dddddd;
+    --light-grey-4: #e0e0e0;
+    --light-grey-5: #f8f8f8;
+    --dark-grey-1: #333333;
+    --dark-grey-2: #58595b;
+    --alert-yellow-1: #feefd9;
+    --primaryColor: #00798e;
+    --linearGradient: #c0dee3;
+    --secondaryColor: #511e62;
+    --secondaryColorHover: #5e0076;
+    --baseWhite: #ffffff;
+    --toggleButtonPressed: #e3dee6;
+    --success: #1c8754;
+    --successTint: #e8f3ed;
+    --successTint2: #a0c6b2;
+    --error: #d73d00;
+    --errorTint: #e092a8;
+    --warning: #f2b203;
+    --tooltipError: #fbe6ec;
+    --tooltipInfo: #e5f2f6;
+    --tooltipInfoTint: #96c2d6;
+    --notificationAlertBg: #feefd9;
+    --notificationAlertBorder: #efb199;
+    --destructive: #d90941;
+
+    --sidebarWidth: 16.5rem;
+    --sidebarLevel2Width: 22.125rem;
+    --sidebarCollapsedWidth: 8.563rem;
+
+    --headerHeight: 6.25rem;
+    --mobileHeaderHeight: 19.063rem;
+    --mobileSidebarHeight: 7.125rem;
+    --mobileSidebarLevel2Height: 12.25rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-darkGrey1;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    overscroll-behavior: none;
+  }
+  html {
+    font-family: 'Proxima Nova', system-ui, sans-serif;
+  }
+
+  h1.text-\[2\.5rem\].text-secondaryColor {
+    font-family: 'Premierinn-Sans', 'Proxima Nova', system-ui, sans-serif;
+  }
+
+  h2.text-\[2\.5rem\].text-secondaryColor {
+    font-family: 'Premierinn-Sans', 'Proxima Nova', system-ui, sans-serif;
+  }
+
+  .ib-word-break {
+    word-break: break-word;
+  }
+
+  .ib-faded-end-of-month,
+  .ib-faded-start-of-month {
+    position: relative;
+  }
+  .ib-faded-end-of-month:hover,
+  .ib-faded-start-of-month:hover {
+    position: initial;
+  }
+  .ib-faded-end-of-month::before {
+    display: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(to right, #c0dee3 40%, #ffffff);
+    width: 20px;
+    left: 80%;
+    z-index: -1;
+  }
+  .ib-faded-start-of-month::before {
+    display: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(to left, #c0dee3 40%, #ffffff);
+    width: 20px;
+    right: 80%;
+    z-index: -1;
+  }
+
+  .ib-faded-start-of-month:not(.only-start):hover::before,
+  .ib-faded-end-of-month:hover::before,
+  .ib-faded-start-of-month.day-range-start::before {
+    display: none;
+  }
+
+  .ib-faded-start-of-month[aria-selected='true']:not(.day-range-start)::before,
+  .ib-faded-end-of-month[aria-selected='true']:not(.day-range-end)::before,
+  .in-hover-range::before {
+    display: block;
+  }
+
+  .ib-day-range-start {
+    background: linear-gradient(to left, #c0dee3 50%, transparent 50%);
+  }
+  .ib-day-range-end {
+    background: linear-gradient(to right, #c0dee3 50%, transparent 50%);
+  }
+  .ib-transparent {
+    background: transparent;
+  }
+
+  td:has(.in-hover-range.day-range-start) {
+    background: linear-gradient(to left, #c0dee3 50%, transparent 50%) !important;
+  }
+
+  td:has(.in-hover-range:hover):not(.ib-faded-start-of-month) {
+    background: linear-gradient(to right, #c0dee3 50%, transparent 50%) !important;
+  }
+
+  td:has(.day-range-start:hover.only-start) {
+    background: none !important;
+  }
+
+  .ib-select-input-active .ib-select-label {
+    color: #00798e;
+  }
+
+  .ib-select-input-active .ib-select-collapsed-icon {
+    display: none;
+  }
+
+  .ib-select-input-active .ib-select-expanded-icon {
+    display: block;
+  }
+
+  .active-chart-cell {
+    opacity: 100%;
+  }
+
+  .inactive-chart-cell {
+    opacity: 30%;
+  }
+
+  .recharts-tooltip-wrapper .recharts-tooltip-cost {
+    font-weight: 600;
+  }
+
+  .recharts-tooltip-wrapper .recharts-tooltip-subwrapper:after {
+    content: '';
+    border-top: 1px dashed #e5f2f6;
+    border-right: 1px dashed #e5f2f6;
+    border-left: 1px dashed #e5f2f6;
+    background-color: #e5f2f6;
+    position: absolute;
+    left: 8px;
+    top: -4px;
+    width: 12px;
+    height: 11px;
+    transform: rotate(45deg);
+  }
+
+  [data-testid='CompanyTab-recharts-container']:after {
+    content: '';
+    border-bottom: 8px solid #00798e;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+    position: absolute;
+    right: 3.8%;
+    bottom: 24px;
+    width: 0;
+    height: 0;
+    z-index: -1;
+  }
+
+  [data-testid='CompanyTab-recharts-container'].disabled:after {
+    border-bottom-color: var(--dark-grey-2);
+  }
+
+  [data-testid$='-IB-Form-Select'] [data-radix-popper-content-wrapper],
+  [data-testid$='-IB-Select'] [data-radix-popper-content-wrapper] {
+    width: 100% !important;
+    right: 0;
+    position: absolute !important;
+    top: calc(100% + 4px) !important;
+    transform: none !important;
+    min-width: unset !important;
+    z-index: 29 !important;
+  }
+
+  [data-testid$='InnBusiness-DataTable'] tr:nth-child(15n):not(:last-child) td {
+    border-bottom: none;
+  }
+
+  .form-page + [data-testid='IB-Footer'] .links-container {
+    border-top-width: 0;
+    padding-top: 0;
+  }
+
+  [data-testid='IB-Desktop-Calendar-Single-Date-Picker'] [data-radix-popper-content-wrapper] {
+    right: 0;
+    position: absolute !important;
+    top: calc(100% + 5px) !important;
+    transform: none !important;
+    width: 100% !important;
+    min-width: unset !important;
+    z-index: 51 !important;
+  }
+
+  .form-details-box {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    background-color: var(--baseWhite);
+    border-radius: 0.5rem;
+    border: 1px solid var(--light-grey-3);
+  }
+
+  .form-box-separator {
+    height: 1px;
+    background-color: var(--light-grey-3);
+    width: 100%;
+    margin: 1.5rem 0;
+  }
+
+  .spend-over-time-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  [data-testid='InnBusiness-DataTable-body'] tr:nth-child(even),
+  [data-testid='PaymentsTable-DataTableClient']
+    tbody
+    tr:nth-child(even):not([data-testid='PaymentsTable-DataTableClient-row-expanded']) {
+    background-color: var(--light-grey-5);
+  }
+
+  [data-testid='InnBusiness-DataTable-body'] tr:last-child,
+  [data-testid='PaymentsTable-DataTableClient']
+    tbody
+    tr:last-child:not([data-testid='PaymentsTable-DataTableClient-row-expanded']),
+  [data-testid='PaymentsTable-DataTableClient'] {
+    background-color: var(--baseWhite);
+  }
+
+  [data-testid='PaymentsTable-DataTableClient']
+    tbody
+    tr:last-child[data-testid='PaymentsTable-NoResults-container'],
+  [data-testid='InnBusiness-DataTable-body']
+    tr:last-child[data-testid='NoResultsStatements-container'],
+  [data-testid='InnBusiness-DataTable-body'] tr:last-child {
+    background-color: transparent;
+  }
+
+  [data-testid='PaymentsTable-DataTableClient']
+    tbody
+    [data-testid='PaymentsTable-DataTableClient-row-expanded']:hover {
+    background-color: var(--light-grey-4);
+  }
+
+  @media (max-width: 1279px) {
+    [data-testid='IB-Date-Picker-Wrapper'] [data-radix-popper-content-wrapper] {
+      right: 0;
+      position: absolute !important;
+      width: 100% !important;
+    }
+
+    [data-testid='IB-Search-Container-Mobile-Room-Occupancy']
+      > [data-radix-popper-content-wrapper] {
+      position: absolute !important;
+      transform: none !important;
+      top: 80px !important;
+      width: 100% !important;
+      min-width: 100% !important;
+    }
+
+    [data-testid='companySector-IB-Form-Select'] > [data-radix-popper-content-wrapper],
+    [data-testid='averageMonthlyBooking-IB-Form-Select'] > [data-radix-popper-content-wrapper],
+    [data-testid='numberOfEmployee-IB-Form-Select'] > [data-radix-popper-content-wrapper] {
+      display: contents !important;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .spend-over-time-item:nth-child(6) {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    [data-testid='Main'] [data-testid='SRP-Filters-content'] {
+      margin-top: var(--headerHeight);
+      margin-left: var(--sidebarCollapsedWidth);
+    }
+  }
+
+  @media (max-width: 768px) {
+    [data-testid='IB-Desktop-Calendar-Single-Date-Picker'],
+    [data-testid='IB-Single-Date-Picker-Wrapper'],
+    [data-testid='IB-Single-Date-Picker-Wrapper'] > button,
+    [data-testid='IB-Generate-Report'] {
+      width: 100%;
+      min-width: auto;
+    }
+  }
+
+  ::-ms-reveal {
+    display: none;
+  }
+}

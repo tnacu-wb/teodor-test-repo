@@ -1,0 +1,32 @@
+{
+  "request": {
+    "url": "/customers/hotels/dashboard-user/stays",
+    "headers" : {
+      "Authorization" : {
+        "contains" : "Bearer VALID_BB_TOKEN"
+      },
+      "bookingChannel" : {
+        "contains" : "CBT"
+      }
+    },
+    "bodyPatterns": [{
+      "equalToJson": {
+        "pageIndex": 1,
+        "pageSize": 2147483647,
+        "typeOfBooking": "PAST",
+        "sortOrder": "DEFAULT",
+        "business": true,
+        "companyId": "13",
+        "employeeId": "1"
+      }
+    }],
+    "method": "POST"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "getPastStays11items_4frequent.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,1254 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- description: Generated server url
+  url: http://localhost:9060
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /availability-cache-service/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /availability-cache-service/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /availability-cache-service/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /availability-cache-service/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /availability-cache-service/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "404":
+          description: Not Found
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /availability-cache-service/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /dist/search/hotels/availabilities:
+    get:
+      operationId: distributionAvailabilities
+      parameters:
+      - in: query
+        name: distributionSearchCriteria
+        required: true
+        schema:
+          $ref: "#/components/schemas/DistributionSearchCriteria"
+      - in: query
+        name: inputMap
+        required: true
+        schema:
+          $ref: "#/components/schemas/MultiValueMapStringString"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DistributionHotelAvailabilitiesDto"
+          description: OK
+      tags:
+      - distribution-hotel-availabilities-controller
+  /gqt/search/hotels/availabilities:
+    get:
+      operationId: getGqtHotelAvailabilities
+      parameters:
+      - in: query
+        name: gqtSearchCriteria
+        required: true
+        schema:
+          $ref: "#/components/schemas/GqtSearchCriteria"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GqtHotelAvailabilitiesDto"
+          description: OK
+      tags:
+      - gqt-hotel-availabilities-controller
+  /search/hotels/availabilities:
+    get:
+      operationId: getHotelAvailabilities
+      parameters:
+      - in: query
+        name: searchCriteria
+        required: true
+        schema:
+          $ref: "#/components/schemas/SearchCriteria"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilitiesDto"
+          description: OK
+      tags:
+      - hotel-availabilities-controller
+  /search/hotels/availabilities/v1:
+    get:
+      operationId: getOperaHotelAvailabilities
+      parameters:
+      - in: query
+        name: operaSearchCriteria
+        required: true
+        schema:
+          $ref: "#/components/schemas/OperaSearchCriteria"
+      - in: query
+        name: roomTypeMap
+        required: true
+        schema:
+          $ref: "#/components/schemas/MultiValueMapStringString"
+      - in: query
+        name: flagMlos
+        required: false
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OperaHotelAvailabilitiesDto"
+          description: OK
+      tags:
+      - opera-hotel-availabilities-controller
+  /search/hotels/prices:
+    get:
+      operationId: getHotelsWithPrices
+      parameters:
+      - in: query
+        name: hotelPriceRequest
+        required: true
+        schema:
+          $ref: "#/components/schemas/HotelPriceRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelPriceResponseDto"
+          description: OK
+      tags:
+      - hotel-price-controller
+  /search/hotels/{hotelCode}/calendars:
+    get:
+      operationId: getHotelPriceDetails
+      parameters:
+      - in: path
+        name: hotelCode
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: hotelPriceCalendarRequest
+        required: true
+        schema:
+          $ref: "#/components/schemas/HotelPriceCalendarRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelPriceCalendarResponse"
+          description: OK
+      tags:
+      - hotel-price-controller
+  /search/locations/prices:
+    get:
+      operationId: getBestPricedHotels
+      parameters:
+      - in: query
+        name: locationPriceRequest
+        required: true
+        schema:
+          $ref: "#/components/schemas/LocationPriceRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationPriceResponse"
+          description: OK
+      tags:
+      - location-price-controller
+  /search/price-finder/calendar:
+    get:
+      operationId: getLowestPricesByLocationForCalendar
+      parameters:
+      - in: query
+        name: criteria
+        required: true
+        schema:
+          $ref: "#/components/schemas/CalendarPriceFinderLocationSearchCriteria"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CalendarPriceFinderHotelAvailabilitiesDto"
+          description: OK
+      tags:
+      - price-finder-controller
+  /search/price-finder/hotels:
+    get:
+      operationId: getLowestPricesByHotel
+      parameters:
+      - in: query
+        name: priceFinderSearchCriteria
+        required: true
+        schema:
+          $ref: "#/components/schemas/PriceFinderSearchCriteria_HotelCodeView"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PriceFinderHotelAvailabilitiesDto_HotelCodeView"
+          description: OK
+      tags:
+      - price-finder-controller
+  /search/price-finder/location:
+    get:
+      operationId: loadLowestPricesByLocation
+      parameters:
+      - in: query
+        name: criteria
+        required: true
+        schema:
+          $ref: "#/components/schemas/PriceFinderLocationSearchCriteria_HotelNameView"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PriceFinderHotelAvailabilitiesDto_HotelNameView"
+          description: OK
+      tags:
+      - price-finder-controller
+components:
+  schemas:
+    AvailabilitiesDto:
+      type: object
+      properties:
+        availableDate:
+          type: string
+          format: date
+        rates:
+          type: array
+          items:
+            $ref: "#/components/schemas/RateDto"
+          uniqueItems: true
+    AvailabilitiesDto_HotelCodeView:
+      type: object
+      properties:
+        availableDate:
+          type: string
+        currency:
+          type: string
+        finalPrice:
+          type: number
+        hasClosedRestriction:
+          type: boolean
+        hasMlosRestriction:
+          type: boolean
+        minimumNights:
+          type: integer
+          format: int32
+        minimumRate:
+          type: number
+        quantity:
+          type: integer
+          format: int32
+        rateClassification:
+          type: string
+        rateCode:
+          type: string
+        roomCategory:
+          type: string
+        roomType:
+          type: string
+    AvailabilitiesDto_HotelNameView:
+      type: object
+      properties:
+        availableDate:
+          type: string
+        currency:
+          type: string
+        finalPrice:
+          type: number
+        hasClosedRestriction:
+          type: boolean
+        hasMlosRestriction:
+          type: boolean
+        minimumNights:
+          type: integer
+          format: int32
+        minimumRate:
+          type: number
+        quantity:
+          type: integer
+          format: int32
+        rateClassification:
+          type: string
+        rateCode:
+          type: string
+        roomCategory:
+          type: string
+        roomType:
+          type: string
+    AvailableCostDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        date:
+          type: string
+          format: date
+        qtyAvailable:
+          type: integer
+          format: int32
+    BestPricedHotelDto:
+      type: object
+      properties:
+        bestPrice:
+          $ref: "#/components/schemas/PriceDto"
+        hotelBrand:
+          type: string
+        hotelCode:
+          type: string
+    CalendarPriceFinderHotelAvailabilitiesDto:
+      type: object
+      properties:
+        calendarPriceFinderOperaHotelAvailabilitiesDtoList:
+          $ref: "#/components/schemas/CalendarPriceFinderOperaHotelAvailabilitiesDto"
+    CalendarPriceFinderLocationSearchCriteria:
+      type: object
+      properties:
+        locationId:
+          type: string
+        milesRadius:
+          type: integer
+          format: int32
+        month:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+      required:
+      - locationId
+      - milesRadius
+    CalendarPriceFinderOperaHotelAvailabilitiesDto:
+      type: object
+      properties:
+        currency:
+          type: string
+        locationId:
+          type: string
+        lowestRates:
+          type: array
+          items:
+            $ref: "#/components/schemas/LowestRatesDto"
+          uniqueItems: true
+        milesRadius:
+          type: integer
+          format: int32
+        month:
+          type: integer
+          format: int32
+    DistributionHotelAvailabilitiesDto:
+      type: object
+      properties:
+        operaHotelAvailabilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/DistributionHotelDto"
+        total:
+          type: integer
+          format: int32
+    DistributionHotelDto:
+      type: object
+      properties:
+        arrivalDateToday:
+          type: boolean
+        available:
+          type: boolean
+        hotelBrand:
+          type: string
+        hotelCode:
+          type: string
+        hotelName:
+          type: string
+        pmsSource:
+          type: string
+        rates:
+          type: array
+          items:
+            $ref: "#/components/schemas/DistributionRatePlanDto"
+    DistributionRatePlanDto:
+      type: object
+      properties:
+        classification:
+          type: string
+        ratePlanCode:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: "#/components/schemas/DistributionRoomDto"
+    DistributionRoomDto:
+      type: object
+      properties:
+        availableCosts:
+          type: array
+          items:
+            $ref: "#/components/schemas/AvailableCostDto"
+        cotRequired:
+          type: boolean
+        qtyRequested:
+          type: integer
+          format: int32
+        roomType:
+          type: string
+    DistributionSearchCriteria:
+      type: object
+      properties:
+        adults:
+          type: array
+          items:
+            type: integer
+            format: int32
+          maxItems: 2147483647
+          minItems: 1
+        arrival:
+          type: string
+          minLength: 1
+        children:
+          type: array
+          items:
+            type: integer
+            format: int32
+          maxItems: 2147483647
+          minItems: 1
+        cot:
+          type: array
+          items:
+            type: boolean
+        country:
+          type: string
+        departure:
+          type: string
+          minLength: 1
+        hotelCodes:
+          type: array
+          items:
+            type: string
+        language:
+          type: string
+        ratePlanCodes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+        roomQty:
+          type: array
+          items:
+            type: integer
+            format: int32
+          maxItems: 2147483647
+          minItems: 1
+        roomTypes:
+          type: array
+          items:
+            type: string
+          maxItems: 2147483647
+          minItems: 1
+        rooms:
+          type: integer
+          format: int32
+      required:
+      - adults
+      - arrival
+      - children
+      - cot
+      - departure
+      - hotelCodes
+      - roomQty
+      - roomTypes
+    GqtHotelAvailabilitiesDto:
+      type: object
+      properties:
+        gqtOperaHotelAvailabilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/GqtOperaHotelAvailabilitiesDto"
+    GqtOperaHotelAvailabilitiesDto:
+      type: object
+      properties:
+        availabilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/AvailabilitiesDto"
+          uniqueItems: true
+        hotelCode:
+          type: string
+    GqtRoomDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        cta:
+          type: boolean
+        maxNights:
+          type: integer
+          format: int32
+        minNights:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int64
+        roomType:
+          type: string
+    GqtSearchCriteria:
+      type: object
+      properties:
+        arrival:
+          type: string
+          minLength: 1
+        country:
+          type: string
+        departure:
+          type: string
+          minLength: 1
+        hotelCodes:
+          type: array
+          items:
+            type: string
+        language:
+          type: string
+      required:
+      - arrival
+      - departure
+      - hotelCodes
+    HotelAvailabilitiesDto:
+      type: object
+      properties:
+        hotelAvailabilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelDto"
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    HotelCityTax:
+      type: object
+      properties:
+        amount:
+          type: number
+        bookingDateFrom:
+          type: string
+        calculation:
+          type: string
+          enum:
+          - PER_ROOM
+          - PER_ADULT
+          - PER_CHILD
+          - PER_PERSON
+        cityTaxWebUrl:
+          type: string
+        effectiveFrom:
+          type: string
+        isCityTaxBusinessHotel:
+          type: boolean
+        isCityTaxHotel:
+          type: boolean
+        maxNights:
+          type: integer
+          format: int32
+        percentage:
+          type: number
+        posting:
+          type: string
+          enum:
+          - PER_NIGHT
+        vat:
+          type: number
+    HotelDto:
+      type: object
+      properties:
+        arrivalDateToday:
+          type: boolean
+        available:
+          type: boolean
+        euroCurrencyHotel:
+          type: boolean
+        hasMlosRestriction:
+          type: boolean
+        hotelBrand:
+          type: string
+        hotelCode:
+          type: string
+        hotelName:
+          type: string
+        limitedAvailability:
+          type: boolean
+        pmsSource:
+          type: string
+        rates:
+          type: array
+          items:
+            $ref: "#/components/schemas/RatePlanDto"
+    HotelPriceCalendar:
+      type: object
+      properties:
+        date:
+          type: string
+        price:
+          type: number
+    HotelPriceCalendarRequest:
+      type: object
+      properties:
+        arrival:
+          type: string
+          minLength: 1
+        departure:
+          type: string
+          minLength: 1
+        hotelCityTaxInfo:
+          $ref: "#/components/schemas/HotelsCityTaxInfo"
+        roomType:
+          type: string
+          minLength: 1
+      required:
+      - arrival
+      - departure
+      - roomType
+    HotelPriceCalendarResponse:
+      type: object
+      properties:
+        bestPricedHotels:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelPriceCalendar"
+    HotelPriceRequest:
+      type: object
+      properties:
+        arrival:
+          type: string
+          minLength: 1
+        departure:
+          type: string
+          minLength: 1
+        hotelCodes:
+          type: array
+          items:
+            type: string
+        roomType:
+          type: string
+      required:
+      - arrival
+      - departure
+      - hotelCodes
+      - roomType
+    HotelPriceResponseDto:
+      type: object
+      properties:
+        bestPricedHotels:
+          type: array
+          items:
+            $ref: "#/components/schemas/BestPricedHotelDto"
+        total:
+          type: integer
+          format: int32
+    HotelsCityTaxInfo:
+      type: object
+      properties:
+        hotelsCityTaxes:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/HotelCityTax"
+        hotelsWithCityTax:
+          type: array
+          items:
+            type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    LocationPrice:
+      type: object
+      properties:
+        bestPrice:
+          $ref: "#/components/schemas/PriceDto"
+        hotelCode:
+          type: string
+        placeId:
+          type: string
+    LocationPriceRequest:
+      type: object
+      properties:
+        altPriceThreshold:
+          type: number
+        endDate:
+          type: string
+          minLength: 1
+        priceThreshold:
+          type: number
+        startDate:
+          type: string
+          minLength: 1
+      required:
+      - altPriceThreshold
+      - endDate
+      - priceThreshold
+      - startDate
+    LocationPriceResponse:
+      type: object
+      properties:
+        bestPricedHotels:
+          type: array
+          items:
+            $ref: "#/components/schemas/LocationPrice"
+    LowestRatesDto:
+      type: object
+      properties:
+        availableDate:
+          type: string
+          format: date
+        minimumRate:
+          type: number
+    MultiValueMapStringString:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          type: string
+      properties:
+        all:
+          type: object
+          additionalProperties:
+            type: string
+          writeOnly: true
+        empty:
+          type: boolean
+    OperaHotelAvailabilitiesDto:
+      type: object
+      properties:
+        operaHotelAvailabilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/OperaHotelDto"
+        total:
+          type: integer
+          format: int32
+    OperaHotelDto:
+      type: object
+      properties:
+        arrivalDateToday:
+          type: boolean
+        available:
+          type: boolean
+        hasMlosRestriction:
+          type: boolean
+        hotelBrand:
+          type: string
+        hotelCode:
+          type: string
+        hotelName:
+          type: string
+        limitedAvailability:
+          type: boolean
+        pmsSource:
+          type: string
+        rates:
+          type: array
+          items:
+            $ref: "#/components/schemas/OperaRatePlanDto"
+    OperaRatePlanDto:
+      type: object
+      properties:
+        classification:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        order:
+          type: string
+        rooms:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/OperaRoomDto"
+    OperaRoomDto:
+      type: object
+      properties:
+        cotRequired:
+          type: boolean
+        limitedAvailability:
+          type: boolean
+        qtyRequested:
+          type: integer
+          format: int32
+        quantityAvailable:
+          type: integer
+          format: int32
+        totalCost:
+          $ref: "#/components/schemas/PriceDto"
+        type:
+          type: string
+    OperaSearchCriteria:
+      type: object
+      properties:
+        adults:
+          type: array
+          items:
+            type: integer
+            format: int32
+          maxItems: 2147483647
+          minItems: 1
+        arrival:
+          type: string
+          minLength: 1
+        children:
+          type: array
+          items:
+            type: integer
+            format: int32
+          maxItems: 2147483647
+          minItems: 1
+        cot:
+          type: array
+          items:
+            type: boolean
+        country:
+          type: string
+          minLength: 1
+        departure:
+          type: string
+          minLength: 1
+        hotelCodes:
+          type: array
+          items:
+            type: string
+        language:
+          type: string
+          minLength: 1
+        roomQty:
+          type: array
+          items:
+            type: integer
+            format: int32
+          maxItems: 2147483647
+          minItems: 1
+        rooms:
+          type: integer
+          format: int32
+          maximum: 9
+          minimum: 1
+      required:
+      - adults
+      - arrival
+      - children
+      - cot
+      - country
+      - departure
+      - hotelCodes
+      - language
+      - roomQty
+    PriceDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+    PriceFinderHotelAvailabilitiesDto_HotelCodeView:
+      type: object
+      properties:
+        priceFinderOperaHotelAvailabilitiesDtoList:
+          type: array
+          items:
+            $ref: "#/components/schemas/PriceFinderOperaHotelAvailabilitiesDto_HotelCodeView"
+    PriceFinderHotelAvailabilitiesDto_HotelNameView:
+      type: object
+      properties:
+        lowestMonthlyRate:
+          $ref: "#/components/schemas/PriceFinderRateDto_HotelNameView"
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        priceFinderOperaHotelAvailabilitiesDtoList:
+          type: array
+          items:
+            $ref: "#/components/schemas/PriceFinderOperaHotelAvailabilitiesDto_HotelNameView"
+        total:
+          type: integer
+          format: int32
+    PriceFinderLocationSearchCriteria_HotelNameView:
+      type: object
+      properties:
+        arrival:
+          type: string
+          minLength: 1
+        daysRange:
+          type: integer
+          format: int32
+          maximum: 364
+          minimum: 1
+        filterByRoomType:
+          type: string
+        initialPageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        lazyLoadPageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        locationId:
+          type: string
+        page:
+          type: integer
+          format: int32
+          minimum: 1
+        showMinimumNights:
+          type: boolean
+        sortBy:
+          type: string
+          enum:
+          - DISTANCE
+          - PRICE
+        sortDate:
+          type: string
+      required:
+      - arrival
+      - initialPageSize
+      - lazyLoadPageSize
+      - locationId
+      - page
+    PriceFinderOperaHotelAvailabilitiesDto_HotelCodeView:
+      type: object
+      properties:
+        availabilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/AvailabilitiesDto_HotelCodeView"
+          uniqueItems: true
+        hotelCode:
+          type: string
+    PriceFinderOperaHotelAvailabilitiesDto_HotelNameView:
+      type: object
+      properties:
+        availabilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/AvailabilitiesDto_HotelNameView"
+          uniqueItems: true
+        hotelCode:
+          type: string
+        hotelName:
+          type: string
+    PriceFinderRateDto_HotelNameView:
+      type: object
+      properties:
+        currency:
+          type: string
+        price:
+          type: number
+    PriceFinderSearchCriteria_HotelCodeView:
+      type: object
+      properties:
+        arrival:
+          type: string
+          minLength: 1
+        country:
+          type: string
+        departure:
+          type: string
+        hotelCodes:
+          type: array
+          items:
+            type: string
+        language:
+          type: string
+        rooms:
+          type: integer
+          format: int32
+          minimum: 1
+        showMinimumNights:
+          type: boolean
+      required:
+      - arrival
+      - hotelCodes
+    RateDto:
+      type: object
+      properties:
+        available:
+          type: boolean
+        classification:
+          type: string
+        code:
+          type: string
+        currency:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: "#/components/schemas/GqtRoomDto"
+          uniqueItems: true
+    RatePlanDto:
+      type: object
+      properties:
+        classification:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        order:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomDto"
+        totalCost:
+          $ref: "#/components/schemas/PriceDto"
+    RoomDto:
+      type: object
+      properties:
+        adults:
+          type: integer
+          format: int32
+        children:
+          type: integer
+          format: int32
+        cotRequired:
+          type: boolean
+        totalCost:
+          $ref: "#/components/schemas/PriceDto"
+        type:
+          type: string
+    SearchCriteria:
+      type: object
+      properties:
+        adults:
+          type: array
+          items:
+            type: integer
+            format: int32
+          maxItems: 2147483647
+          minItems: 1
+        arrival:
+          type: string
+          minLength: 1
+        children:
+          type: array
+          items:
+            type: integer
+            format: int32
+          maxItems: 2147483647
+          minItems: 1
+        cot:
+          type: boolean
+        country:
+          type: string
+        departure:
+          type: string
+          minLength: 1
+        flagMlos:
+          type: boolean
+        hotelCodes:
+          type: array
+          items:
+            type: string
+        hotelsCityTaxInfo:
+          $ref: "#/components/schemas/HotelsCityTaxInfo"
+        language:
+          type: string
+        page:
+          type: integer
+          format: int32
+        rooms:
+          type: integer
+          format: int32
+          maximum: 9
+          minimum: 1
+        size:
+          type: integer
+          format: int32
+        sort:
+          type: string
+          enum:
+          - DISTANCE
+          - PRICE
+        type:
+          type: array
+          items:
+            type: string
+          maxItems: 2147483647
+          minItems: 1
+      required:
+      - adults
+      - arrival
+      - children
+      - departure
+      - hotelCodes
+      - type

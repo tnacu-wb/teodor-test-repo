@@ -1,0 +1,37 @@
+@startuml
+entity "Reservations Manager Service" as Service
+participant HotelReservationController as Controller
+participant BookingInPort as BookingInPort
+participant MigrationStatusOutPort as MigrationPort
+participant ReservationOutPort as ReservationOutPort
+participant BookingOutPort as BookingOutPort
+participant HotelReservationWebClient as ReservationClient
+participant AccountServicesWebClient as ASClient
+
+entity HotelReservationService as HotelReservation
+entity AccountServices as AS
+
+Service -> Controller: POST /v1/bookings/cancel
+Controller -> BookingInPort: cancelBooking
+alt sourceSystem is not present
+  BookingInPort -> MigrationPort: getMigrationStatus
+  MigrationPort -> BookingInPort: status with PMS source
+end
+alt PMS source is OPERA case
+  BookingInPort -> ReservationOutPort: cancelBooking
+  ReservationOutPort -> ReservationClient: cancelBooking
+  ReservationClient -> HotelReservation: POST /v1/reservations/cancellations
+  HotelReservation -> ReservationClient: basketReference
+  ReservationClient -> ReservationOutPort: basketReference
+  ReservationOutPort -> BookingInPort: basketReference
+else PMS source is BART case
+  BookingInPort -> BookingOutPort: cancelBooking
+  BookingOutPort -> ASClient: cancelBooking
+  ASClient -> AS: DELETE /reservation/hotels/{reservation-id}
+  AS -> ASClient: cancellationId
+  ASClient -> BookingOutPort: cancellationId
+  BookingOutPort -> BookingInPort: cancellationId
+end
+BookingInPort -> Controller: CancelBookingResponseDto (basketReference, cancellationId)
+Controller -> Service: CancelBookingResponse (basketReference, cancellationId)
+@enduml

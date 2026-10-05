@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="132" id="4HZ-iF-KSv" customClass="BookingReviewTotalPriceCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="143"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4HZ-iF-KSv" id="z6v-Dl-nAc">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="143"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Total" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tj6-gG-9No">
+                        <rect key="frame" x="20" y="38" width="36" height="20"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" ambiguous="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NL7-e2-BPK">
+                        <rect key="frame" x="20" y="70" width="374" height="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" ambiguous="YES" text="£123.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7K-QC-bGy">
+                        <rect key="frame" x="289" y="31" width="105" height="34"/>
+                        <accessibility key="accessibilityConfiguration" identifier="totalPriceAcc"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Y7K-QC-bGy" firstAttribute="centerY" secondItem="Tj6-gG-9No" secondAttribute="centerY" id="1Qe-VE-vMj"/>
+                    <constraint firstItem="Tj6-gG-9No" firstAttribute="leading" secondItem="z6v-Dl-nAc" secondAttribute="leading" constant="20" id="22p-km-0OX"/>
+                    <constraint firstAttribute="trailing" secondItem="NL7-e2-BPK" secondAttribute="trailing" constant="20" id="2K2-D5-xnc"/>
+                    <constraint firstItem="NL7-e2-BPK" firstAttribute="leading" secondItem="z6v-Dl-nAc" secondAttribute="leading" constant="20" id="FYM-Pj-iea"/>
+                    <constraint firstAttribute="bottom" secondItem="NL7-e2-BPK" secondAttribute="bottom" constant="20" id="SF9-MV-gKP"/>
+                    <constraint firstItem="NL7-e2-BPK" firstAttribute="top" secondItem="Y7K-QC-bGy" secondAttribute="bottom" constant="5" id="W9o-r6-QKn"/>
+                    <constraint firstAttribute="trailing" secondItem="Y7K-QC-bGy" secondAttribute="trailing" constant="20" id="e1l-bj-cuR"/>
+                    <constraint firstItem="Y7K-QC-bGy" firstAttribute="top" secondItem="z6v-Dl-nAc" secondAttribute="top" id="f0T-UB-5nT"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="cityTaxLabel" destination="NL7-e2-BPK" id="liK-jQ-3rn"/>
+                <outlet property="totalLabel" destination="Tj6-gG-9No" id="8Qf-eG-S5B"/>
+                <outlet property="totalPriceLabel" destination="Y7K-QC-bGy" id="gsj-HE-Act"/>
+            </connections>
+            <point key="canvasLocation" x="124.6376811594203" y="117.52232142857142"/>
+        </tableViewCell>
+    </objects>
+</document>

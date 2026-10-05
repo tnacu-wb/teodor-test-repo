@@ -1,0 +1,16 @@
+@startuml
+actor User
+participant "Front-End App" as FE
+participant Auth0
+participant "Hotel Login Microservice" as MS
+User -> FE: Login
+FE -> Auth0: Redirect
+Auth0 -> Auth0: Validate credentials
+Auth0 -> MS: /auth/session (encrypted ghn)
+MS -> MS: Decrypt ghn
+MS -> BART: Initialize session request (decrypted ghn)
+MS <- BART: Return sessionId
+Auth0 <- MS: Return sessionId
+FE <- Auth0: Return JWT(sessionId)
+User <- FE: Login successful
+@enduml

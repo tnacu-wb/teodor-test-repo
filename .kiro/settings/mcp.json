@@ -1,0 +1,73 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "disabled": false,
+      "autoApprove": []
+    },
+    "figma": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "--stdio"
+      ],
+      "env": {
+        "FIGMA_API_KEY": "${FIGMA_ACCESS_TOKEN}"
+      },
+      "disabled": false
+    },
+    "com.atlassian/mcp-server": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp/authv2",
+      "gallery": "https://restapi.premierinn.com/mcp-registry",
+      "version": "1.0.0",
+      "disabled": false
+    },
+    "lucid": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.lucid.app/mcp"
+      ],
+      "disabled": false,
+      "autoApprove": []
+    },
+    "lambdatest": {
+      "type": "http",
+      "url": "https://mcp.lambdatest.com/mcp",
+      "disabled": false
+    }
+  },
+  "powers": {
+    "mcpServers": {
+      "power-figma-figma": {
+        "type": "http",
+        "url": "https://mcp.figma.com/mcp"
+      },
+      "power-unleash-unleash": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@unleash/mcp@latest",
+          "--log-level",
+          "error"
+        ],
+        "env": {
+          "UNLEASH_BASE_URL": "${UNLEASH_BASE_URL}",
+          "UNLEASH_PAT": "${UNLEASH_PAT}",
+          "UNLEASH_DEFAULT_PROJECT": "${UNLEASH_DEFAULT_PROJECT}"
+        },
+        "disabledTools": []
+      }
+    }
+  }
+}

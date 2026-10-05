@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="clara.stancu" id="update-offer-codes-non-st-room-substitution-rules">
+    <loadUpdateData tableName="room_substitution_rule"
+      file="sql/liquibase/data/room_substitution_rules_update_offer_codes_non_st_rooms.csv"
+      primaryKey="rule_id" />
+  </changeSet>
+
+  <changeSet author="clara.stancu" id="update-offer-codes-substitution-rules">
+    <update schemaName="rules_engine" tableName="room_substitution_rule">
+      <column name="offer_order" value="32"/>
+      <where>rule_id=199</where>
+    </update>
+    <update schemaName="rules_engine" tableName="room_substitution_rule">
+      <column name="offer_order" value="33"/>
+      <where>rule_id=464</where>
+    </update>
+    <update schemaName="rules_engine" tableName="room_substitution_rule">
+      <column name="offer_order" value="34"/>
+      <where>rule_id=497</where>
+    </update>
+  </changeSet>
+
+</databaseChangeLog>

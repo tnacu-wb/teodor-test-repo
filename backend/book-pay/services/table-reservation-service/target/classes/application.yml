@@ -1,0 +1,141 @@
+server:
+  port: "9121"
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "table-reservation-service"
+    description: "Whitbread Table Reservation Microservice"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /v1/sample/actuator
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    redis:
+      enabled: false
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  tracing:
+    propagation:
+      type: w3c
+
+logging:
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - hotelCode
+        - hotelName
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      key-prefix: "table-reservation-service"
+      use-key-prefix: true
+      time-to-live: 60m
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  jmx:
+    enabled: false
+  jackson:
+    deserialization:
+      fail-on-null-for-primitives: false
+      fail-on-unknown-properties: false
+
+#TODO:: specific values to come as k8s secrets/config-map and config server
+auth:
+  rulesEngineHost: rules-agent-entity-service
+  isAllowedAccessForRoleIdsEndpoint: /v1/rules/ccui/rbac
+  tenants:
+    - name: "CCUI Auth0 Tenant"
+      audience: ${CCUI_TENANT_AUDIENCE}
+      namespace: ${CCUI_TENANT_NAMESPACE}
+      issuer: ${CCUI_TENANT_ISSUER:}
+      jwkUri: ${CCUI_TENANT_JWK_URI:https://dev-whitbread-digital.eu.auth0.com/.well-known/jwks.json}
+
+---
+
+logging:
+  configuration:
+    logger: custom
+
+auth:
+  rulesEngineHost: http://localhost:9108
+
+zonal:
+  username: ${username}
+  password: ${Password}
+  base-uri: ${ZONAL_URL}
+  connect-timeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+  read-timeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  check-uri: /events/v1/check
+  occasions-uri: /events/v1/occasions
+  slots-uri: /events/v1/slots
+  outlets-uri: /events/v1/outlets
+  events-uri: /events/v1/events
+  enquiries-uri: /events/v1/enquiries
+  menus-uri: /events/v1/menus
+
+aem:
+  username: ${AEM_CREDENTIALS_ENV_USER}
+  password: ${AEM_CREDENTIALS_ENV_PASS}
+  connect-timeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+  read-timeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  base-uri: ${AEM_URL}
+  cookieConsent-uri: https://www.premierinn.com/gb/en/content-service.cookie-policies.detail/site/restaurant.json
+  footer-uri: /footerdata.json
+  header-uri: /headerdata.json
+  zonalUuid-uri: /locations.search.json
+  unbranded-restaurants-uri: ${UNBRANDED_AEM_URL}
+  label-uri: ${LABEL_URL}
+
+
+
+Access-Control-Allow-Credentials: true
+
+spring:
+  cloud:
+    compatibility-verifier:
+      enabled: false

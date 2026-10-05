@@ -1,0 +1,33 @@
+{
+  "id" : "da46f1c3-8315-4feb-a4f0-4762fb7680e2",
+  "request" : {
+    "url" : "/piba/account/balance",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "session-id" : {
+        "equalTo" : "13245312321345"
+      },
+      "company-id" : {
+        "equalTo" : "123"
+      },
+      "employee-id" : {
+        "equalTo" : "10"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value4"
+      }
+    }
+  },
+  "response" : {
+    "status" : 400,
+    "body" : "{\"code\":\"2604\",\"details\":[\"Error retrieving tetheredGuids\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "da46f1c3-8315-4feb-a4f0-4762fb7680e2"
+}

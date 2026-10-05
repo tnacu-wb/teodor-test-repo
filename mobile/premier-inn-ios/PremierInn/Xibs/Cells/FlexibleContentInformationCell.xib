@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="PremierInnSans-Regular.ttf">
+            <string>PremierInnSans</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="FlexibleContentInformationCell" id="KGk-i7-Jjw" customClass="FlexibleContentInformationCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="97"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="97"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rMc-ty-rKd" customClass="RoundedCornersView" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="16" y="20" width="288" height="57"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="importantInfo" translatesAutoresizingMaskIntoConstraints="NO" id="d0W-VI-3JI">
+                                <rect key="frame" x="12" y="10" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="d0W-VI-3JI" secondAttribute="height" multiplier="1:1" id="KGA-vM-21l"/>
+                                    <constraint firstAttribute="width" constant="20" id="L5L-tt-Gon"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4W1-CP-Wi9">
+                                <rect key="frame" x="44" y="10" width="216" height="37"/>
+                                <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nbk-3h-FKi">
+                                <rect key="frame" x="260" y="10" width="16" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="16" id="CY5-zG-rHF"/>
+                                    <constraint firstAttribute="height" constant="16" id="E1r-Cx-p1g"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="newCross"/>
+                                <connections>
+                                    <action selector="crossIconClicked:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="d9F-2y-KGB"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.94117647058823528" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="4W1-CP-Wi9" secondAttribute="bottom" constant="10" id="LLC-0k-YrO"/>
+                            <constraint firstItem="4W1-CP-Wi9" firstAttribute="top" secondItem="rMc-ty-rKd" secondAttribute="top" constant="10" id="OzN-kB-Bwd"/>
+                            <constraint firstItem="Nbk-3h-FKi" firstAttribute="leading" secondItem="4W1-CP-Wi9" secondAttribute="trailing" id="Wei-RD-WfE"/>
+                            <constraint firstItem="4W1-CP-Wi9" firstAttribute="leading" secondItem="d0W-VI-3JI" secondAttribute="trailing" constant="12" id="izV-SA-WAG"/>
+                            <constraint firstItem="d0W-VI-3JI" firstAttribute="leading" secondItem="rMc-ty-rKd" secondAttribute="leading" constant="12" id="nxe-Ad-obc"/>
+                            <constraint firstItem="Nbk-3h-FKi" firstAttribute="top" secondItem="4W1-CP-Wi9" secondAttribute="top" id="sFs-1d-CUZ"/>
+                            <constraint firstAttribute="trailing" secondItem="Nbk-3h-FKi" secondAttribute="trailing" constant="12" id="uNl-bZ-RHx"/>
+                            <constraint firstItem="d0W-VI-3JI" firstAttribute="top" secondItem="4W1-CP-Wi9" secondAttribute="top" id="xOy-Xr-mjl"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                <color key="value" red="0.88627450980392153" green="0.90196078431372551" blue="0.89803921568627454" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="rMc-ty-rKd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="OqN-o8-nCk"/>
+                    <constraint firstAttribute="bottom" secondItem="rMc-ty-rKd" secondAttribute="bottom" constant="20" id="Vq9-fb-MkR"/>
+                    <constraint firstItem="rMc-ty-rKd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="Xed-92-hLb"/>
+                    <constraint firstAttribute="trailing" secondItem="rMc-ty-rKd" secondAttribute="trailing" constant="16" id="kpT-nA-M8G"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="bottomConstraint" destination="Vq9-fb-MkR" id="aAd-MV-Niq"/>
+                <outlet property="containerView" destination="rMc-ty-rKd" id="yN9-fn-bgQ"/>
+                <outlet property="content" destination="4W1-CP-Wi9" id="2d8-1U-A4R"/>
+                <outlet property="crossIcon" destination="Nbk-3h-FKi" id="qkK-lK-3Wx"/>
+                <outlet property="icon" destination="d0W-VI-3JI" id="llv-XP-QqW"/>
+                <outlet property="leadingConstraint" destination="Xed-92-hLb" id="DVR-SJ-pt5"/>
+                <outlet property="topConstraint" destination="OqN-o8-nCk" id="78a-Ii-484"/>
+                <outlet property="trailingConstraint" destination="kpT-nA-M8G" id="bjb-um-fIQ"/>
+            </connections>
+            <point key="canvasLocation" x="137.59999999999999" y="152.47376311844079"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="importantInfo" width="26" height="26"/>
+        <image name="newCross" width="12" height="12"/>
+    </resources>
+</document>

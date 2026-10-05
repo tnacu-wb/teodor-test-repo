@@ -1,0 +1,307 @@
+server:
+  port: 9060
+  shutdown: graceful
+  compression.enabled: true
+  compression.mime-types: application/json
+
+swagger:
+  api:
+    version: '1.0.0'
+
+info:
+  build:
+    groupId: 'uk.co.whitbread'
+    artifact: 'availability-cache-service-opera'
+    description: 'Availability Cache Microservice'
+    version: '1.0.0'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: "${UNLEASH_ENVIRONMENT:local}"
+    api-url: "${UNLEASH_URL:http://localhost:3063/api}"
+    api-token: "${UNLEASH_TOKEN:dummy-value}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+
+feature-flags:
+  release-pi-ccui-city-tax-uk:
+    key: "release_pi_ccui_city_tax_uk"
+    fallback: false
+  release-pi-ccui-city-tax-uk-fallback:
+    key: "release_pi_ccui_city_tax_uk_fallback"
+    fallback: false
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /availability-cache-service/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  io:
+    getunleash: TRACE
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+hotel:
+  search:
+    default:
+      maxNights: 14
+      gqtMaxNights: 28
+      page: 1
+      size: 40
+    distribution:
+      maxNights: 364
+      maxRooms: 9
+
+rate-classifications:
+  hotels:
+    - BRIMTI
+
+async-thread-config:
+  corePoolSize: 2
+  maxPoolSize: 2
+  queueCapacity: 16
+
+low:
+  inventory:
+    threshold: ${LOW_INVENTORY_THRESHOLD}
+
+#needed for Feign fallback
+spring:
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    config:
+      enabled: false
+    circuitbreaker:
+      bulkhead:
+        resilience4j:
+          enabled: false
+  config:
+    name: application, error_mapping_config
+  datasource:
+    reader:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://${AVAILABILITY_CACHE_POSTGRES_DB_HOST_READER}:${AVAILABILITY_CACHE_POSTGRES_DB_PORT}/${AVAILABILITY_CACHE_POSTGRES_DB_NAME}
+      username: ${AVAILABILITY_CACHE_POSTGRES_DB_USERNAME}
+      password: ${AVAILABILITY_CACHE_POSTGRES_DB_PASSWORD}
+    hikari:
+      connectionTimeout: 10000
+      idleTimeout: 240000
+      maxLifetime: 300000
+      maxPoolSize: ${HIKARI_MAXPOOLSIZE:10}
+  liquibase:
+    # Old - keep it if you want to keep using the old approach
+    change-log: classpath:sql/liquibase/changelog/db.changelog-master.xml
+
+    # New - the modern, right Liquibase approach
+    #change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: ${ENABLE_LIQUIBASE}
+    url: jdbc:postgresql://${AVAILABILITY_CACHE_POSTGRES_DB_HOST_WRITER}:${AVAILABILITY_CACHE_POSTGRES_DB_PORT}/${AVAILABILITY_CACHE_POSTGRES_DB_NAME}
+    user: ${AVAILABILITY_CACHE_POSTGRES_DB_USERNAME}
+    password: ${AVAILABILITY_CACHE_POSTGRES_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+  cache:
+    type: ${CACHE_TYPE}
+    redis:
+      key-prefix: "Availability-Cache-Service-Opera"
+      content-entity-service-key-prefix: "Content-Entity-Service"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  web:
+    error:
+      include-message: always
+      include-binding-errors: always
+
+config:
+  httpClient:
+    connectionTimeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+    responseTimeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  service:
+    content-service:
+      host: ${CONTENT_SERVICE_HOST}
+      hotelInformationEndpoint: "/v1/content/hotels/{hotelId}/information"
+      globalConfigEndpoint: "/v1/content/global-config"
+    rules-agent:
+      host: ${RULES_AGENT_HOST}
+      roomSubstitutionEndpoint: "/v1/rules/room-substitutions"
+      wbRoomTypes:
+        - "SB"
+        - "DB"
+        - "FAM"
+        - "TWIN"
+        - "DIS"
+
+feign-clients:
+  aem:
+    url: ${AEM_HOST}
+    country: gb
+    language: en
+    resource: email/email-landing-page-locations.model.json
+    username: ${AEM_USERNAME}
+    password: ${AEM_PASSWORD}
+  snowdrop:
+    host: ${SNOWDROP_HOST}
+    authentication:
+      enabled: true
+      username: ${SNOWDROP_USERNAME}
+      password: ${SNOWDROP_PASSWORD}
+
+feign:
+  content-service:
+    name: content-service
+    url: ${CONTENT_SERVICE_URL}
+  httpclient:
+    max-connections-per-route: 200
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 15000
+
+rt:
+  maxDays: 90
+  roomTypes:
+    - DB
+    - TWIN
+    - DIS
+    - FAM
+    - PRE
+    - SB
+
+db:
+  batchSize: ${DB_BATCH_SIZE}
+
+network:
+  cache-ttl: 60
+  cache-neg-ttl: 60
+
+enable:
+  citytax:
+    currency: ${ENABLE_CITYTAX_CURRENCY}
+
+data:
+  validation:
+    enabled: ${ENABLE_DATA_VALIDATION}
+
+resilience4j.timelimiter:
+  configs:
+    default:
+      timeoutDuration: 15s
+      cancelRunningFuture: true
+
+availability:
+  ratePlanClasses:
+    - "A"
+    - "C"
+    - "S"
+    - "U"
+    - "O"
+  employeeRatePlanClasses:
+    - "A"
+    - "B"
+    - "C"
+    - "S"
+    - "U"
+    - "O"
+
+priceFinder:
+  locationRadiusInMiles: ${PRICE_FINDER_LOCATION_RADIUS_IN_MILES:30}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

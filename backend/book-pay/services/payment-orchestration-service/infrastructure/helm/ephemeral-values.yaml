@@ -1,0 +1,231 @@
+# Ephemeral (per-PR) values for payment-orchestration-service.
+#
+# Self-contained: this is the ONLY values file the ephemeral deploy passes. It
+# is not layered on top of values.yaml, so anything the service needs to boot
+# has to be here. Keeping the two separate means a production tuning change
+# cannot silently alter PR environments, and vice versa.
+#
+# Shaped for opera-app-chart (whitbread-eos/helm-central-charts). That chart
+# reads the pod spec from `deployment.*` and gates every optional resource on a
+# `create` flag — keys outside those names are silently ignored, so an unset
+# `deployment.containerEnvs` renders `env: null` and the pod boots with no
+# environment at all and falls back to its localhost defaults.
+#
+# Overridden per-deploy by ci-matrix-deploy-eph.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create, ephemeral
+
+# ── Ephemeral switches ───────────────────────────────────────────────────────
+
+# Gates the Flagger Canary out of the chart. Once a Canary exists Flagger claims
+# ownership of the Service's .spec.selector and .spec.ports[].name and of the
+# VirtualService's .spec.http, and Helm's server-side apply then fails on the
+# next upgrade of the same release with:
+#   conflicts with "flagger" using v1: .spec.selector
+# A canary analysis also cannot finish inside the lifetime of a PR release.
+ephemeral: true
+
+canary:
+  create: false
+# An HPA competing with a redeploy on every push is churn and cost, no benefit.
+autoscaling:
+  create: false
+# Nothing should auto-bump the image; the pipeline sets the tag on every deploy.
+imageAutomation:
+  create: false
+# A disruption budget over a single short-lived replica just blocks node drains.
+pdb:
+  create: false
+
+# ── Identity ─────────────────────────────────────────────────────────────────
+# Both are replaced with the PR release name at deploy time. They are kept here
+# so `helm template` renders standalone for local inspection.
+
+applicationName: payment-orchestration-service
+namespace: opera-be
+
+image:
+  # Ephemeral images come from ECR, not DockerHub. Repository and tag are both
+  # set by the workflow; the value here only documents the shape.
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/payment-orchestration-service
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: regcred
+
+# ── Workload ─────────────────────────────────────────────────────────────────
+
+deployment:
+  create: true
+  replicaCount: 1
+
+  # The chart defaults to a 20s preStop sleep and a 90s grace period, which is
+  # right for draining production traffic behind Istio but adds ~2 minutes to
+  # every push here. null removes the chart's default rather than merging with
+  # it — an empty map would leave the default in place.
+  lifecycle: null
+  terminationGracePeriodSeconds: 15
+
+  containerPorts:
+    - containerPort: 9200
+      protocol: TCP
+      name: http
+
+  containerEnvs:
+    # Temporal — without these the workflow client dials localhost:7233 and the
+    # service starts but every payment workflow fails to schedule.
+    - name: TEMPORAL_HOST
+      value: temporal-frontend.temporal.svc.cluster.local
+    - name: TEMPORAL_PORT
+      value: "7233"
+    # Per-PR Temporal namespace via the downward API. The `app` pod label
+    # carries the release name (the workflow --sets applicationName to
+    # <service>-pr-<n>), so every PR environment polls its own namespace and
+    # cannot steal workflow tasks from dev or from other PRs. The chart renders
+    # containerEnvs with plain toYaml (no tpl), so a label reference is the only
+    # way to get a per-release value from this file. The namespace must exist
+    # on the Temporal server before the worker starts — ci-matrix-deploy-eph.yaml
+    # creates it (retention 72h) before the helm upgrade.
+    - name: TEMPORAL_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app']
+
+    # Datatrans (sandbox). The secret is NOT created by the deploy workflow —
+    # nothing in .github/workflows applies it — so it has to already exist in
+    # opera-be. `optional: true` is what keeps that a degraded environment
+    # rather than a broken one: a hard secretKeyRef to a missing secret leaves
+    # the pod in CreateContainerConfigError forever and `helm --wait` just times
+    # out. Optional, the app falls back to application.yml's empty default and
+    # every Datatrans call returns 401 — the rest of the service is testable.
+    - name: DATATRANS_BASE_URL
+      value: https://api.sandbox.datatrans.com
+    - name: DATATRANS_MERCHANT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: payment-orchestration-datatrans
+          key: merchant-password
+          optional: true
+
+    # Downstream services — shared dev instances, not per-PR copies. No port:
+    # these match the hostnames production values.yaml uses, so they resolve to
+    # port 80 on the target Service. If the PR pod logs connection-refused
+    # against either of these, the Service publishes the app port instead and
+    # these need :9103 / :9107 (their server.port in each service's pom).
+    - name: RESERVATION_HOST
+      value: http://hotel-reservation-entity-service
+    - name: PAYMENT_METHOD_SERVICE_HOST
+      value: http://payment-methods-entity-service
+
+    # Matches the convention used by 58 services in microservices-gitops, and
+    # turns on DEBUG logging for uk.co.whitbread via the profile block in
+    # application.yml — a PR environment exists to be debugged.
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+
+    # NOT SET, deliberately:
+    #
+    #   KAFKA_BOOTSTRAP_SERVERS — application.yml defaults this to
+    #     localhost:9092, so publishing payment-authorised events will fail in
+    #     this environment. No broker address exists anywhere in
+    #     microservices-gitops, so there is nothing correct to point at yet.
+    #     Add it here once the dev broker's address is known.
+    #
+    #   DATATRANS_WEBHOOK_VALIDATION_ENABLED — application.yml states it MUST
+    #     be true in deployed environments. Datatrans cannot reach a PR release
+    #     anyway, so drive callbacks from tests rather than weakening signature
+    #     checking on a deployed workload. DATATRANS_WEBHOOK_BASE_URL and
+    #     DATATRANS_WEBHOOK_HMAC_KEY are left empty for the same reason.
+    #
+    #   TEMPORAL_TRACING_UPDATE_WITH_START_ENABLED — the interceptor it enables
+    #     depends on an internal temporal-opentracing package; application.yml
+    #     keeps it off everywhere except the integration stack, and a PR release
+    #     is a deployed workload.
+    #
+    #   DATATRANS_MERCHANT_ID — dropped rather than forgotten.
+    #     `integrations.datatrans.merchant-id` binds to MerchantIdProperties, an
+    #     object built from prefix + default-merchant-id + provisioned-hotels.
+    #     No property reads a bare DATATRANS_MERCHANT_ID, so the variable
+    #     production values.yaml sets is dead — but its secretKeyRef is not, and
+    #     a missing `merchant-id` key would block the pod on a value nothing
+    #     consumes.
+    #
+    #   OPERA_BASE_URL — same story. OperaClient is still a Phase 1 stub whose
+    #     postDeposit throws UnsupportedOperationException; it holds no HTTP
+    #     config and no property binds this name. Set it here when the client
+    #     gets a real base-url property.
+
+  # Readiness starts checking sooner than production's 90s so `helm --wait`
+  # returns as soon as the pod is actually up, while the higher failureThreshold
+  # keeps the overall startup budget generous (20s + 24×5s ≈ 140s).
+  readinessProbe:
+    httpGet:
+      path: /payment-orchestrator/actuator/health/readiness
+      port: 9200
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 24
+
+  # Liveness stays late and lenient — restarting a slow-starting JVM mid-boot
+  # turns a slow deploy into a crash loop.
+  livenessProbe:
+    httpGet:
+      path: /payment-orchestrator/actuator/health/liveness
+      port: 9200
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+
+  # Requests are what reserve node capacity, so they are cut hard to let many
+  # concurrent PR environments pack onto the same nodes. Limits stay roomy
+  # enough that a JVM under a debugger or a load test is not OOMKilled.
+  resources:
+    requests:
+      cpu: 50m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 2000Mi
+
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 9001
+    runAsGroup: 9001
+    fsGroup: 9001
+    seccompProfile:
+      type: RuntimeDefault
+
+  dns:
+    ndots: 3
+
+# ── Networking ───────────────────────────────────────────────────────────────
+
+service:
+  create: true
+  # Overridden with the release name at deploy time. The chart names the Service
+  # after applicationName but points the VirtualService at service.name, so if
+  # this is left pinned to the production name the PR release routes traffic
+  # straight at production.
+  name: payment-orchestration-service
+  type: ClusterIP
+  ports:
+    - port: 9200
+      targetPort: 9200
+      protocol: TCP
+      name: http
+
+# No VirtualService. ci-matrix-deploy-eph.yaml states it outright — "Ephemeral
+# backend releases are not published through the Istio gateway; they are
+# addressed in-cluster by their service name" — and it never passes an
+# istio.host, so the chart has no per-PR hostname to route on. Creating one
+# anyway attaches `prefix: /` to the shared `opera-api` gateway, where every
+# concurrent PR release would then be competing with production for the root
+# path. Reach a PR release at:
+#   <release-name>.opera-be.svc.cluster.local:9200
+# which is exactly the service-host the prepare job prints.
+istio:
+  create: false

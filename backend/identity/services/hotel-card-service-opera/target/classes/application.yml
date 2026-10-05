@@ -1,0 +1,366 @@
+server:
+  port: 9030
+  error:
+    include-message: always
+    include-binding-errors: always
+  shutdown: graceful
+
+swagger:
+  api:
+    version: '1.0.0'
+
+spring.jackson.datatype.datetime.WRITE_DATES_AS_TIMESTAMPS: false
+
+info:
+  build:
+    groupId: 'uk.co.whitbread'
+    artifact: 'hotel-card-service-opera'
+    description: 'Whitbread Hotel Card Service'
+    version: '1.0.0'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /hotel-card-service/actuator
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+feign:
+  hotelaccount:
+    name: hotelaccount
+    url: http://${HOTEL_ACCOUNT_URL:localhost:9020}
+  threecPayment:
+    name: threecPayment
+    url: ${THREEC_PAYMENT_URL:localhost:9001}
+  worldline:
+    name: worldline
+    url: ${WORLDLINE_HOST:localhost:9002}/PIRestAPI
+  pibaaccount:
+    name: pibaaccount
+    url: ${PIBA_ACCOUNT_URL:localhost:9003}
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+        recordExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+          - feign.RetryableException
+    instances:
+      hotelaccount:
+        baseConfig: default
+      threecPayment:
+        baseConfig: default
+      worldline:
+        baseConfig: default
+      pibaaccount:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 30s
+    instances:
+      hotelaccount:
+        baseConfig: default
+      threecPayment:
+        baseConfig: default
+      worldline:
+        baseConfig: default
+      pibaaccount:
+        baseConfig: default
+
+spring:
+  jackson:
+    mapper:
+      ACCEPT_CASE_INSENSITIVE_ENUMS: true
+    deserialization:
+      FAIL_ON_NULL_FOR_PRIMITIVES: false
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+  cache:
+    type: ${CACHE_TYPE:redis}
+  codec:
+    max-in-memory-size: 16MB
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
+auth:
+  token:
+    providers:
+      - domain: ${PI_BB_TOKEN_PROVIDERS_DOMAIN}
+        host: ${PI_BB_TOKEN_PROVIDERS_HOST}
+        issuer: ${PI_BB_TENANT_ISSUER}
+  tenants:
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+
+cdh:
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT_TYPE}
+    enabled: ${CDH_OAUTH_IS_ENABLED}
+  api:
+    host: ${CDH_API_HOST}
+    is-oauth: ${CDH_API_IS_OAUTH}
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: ${ACCOUNT_SERVICES_OAUTH_SUBSCRIPTION_KEY}
+
+worldline:
+  clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+  cultureCode: en-GB
+  piba:
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    service:
+      url: ${WORLDLINE_HOST}/b2b.pi.v1.1/b2bpiapi.svc
+  tetheringPlus:
+    enabled: true
+  gb:
+    clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+    cultureCode: en-GB
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    url: ${WORLDLINE_HOST}/b2b.pi.v1.1/b2bpiapi.svc
+  de:
+    clientMessageId: ${WORLDLINE_DE_CLIENT_MESSAGE_ID}
+    cultureCode: de-DE
+    username: ${WORLDLINE_DE_USERNAME}
+    password: ${WORLDLINE_DE_PASSWORD}
+    url: ${WORLDLINE_HOST}/b2b.pi.v1.1/b2bpiapi.svc
+  rest:
+    default-ip-address: "1.1.1.1"
+    gb:
+      culture-code: en-GB
+      username: ${WORLDLINE_USERNAME_GB}
+      password: ${WORLDLINE_PASSWORD_GB}
+      company-number: 35
+    de:
+      culture-code: de-DE
+      username: ${WORLDLINE_USERNAME_DE}
+      password: ${WORLDLINE_PASSWORD_DE}
+      company-number: 91
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+logging:
+  level:
+    io:
+      getunleash: TRACE
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+feature-flags:
+  cdh-delay:
+    key: "test_pi_ccui_bb_web1_cdh_delay"
+    fallback: false
+  company-name-validation:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false
+  cdh-api-deprecation:
+    key: "release_pi_cdh_api_deprecation"
+    fallback: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-dit
+        - opera-uat
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    uk.co.whitbread: debug
+    feign: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+  cache:
+    type: none
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+auth0:
+  host: http://localhost:${wiremock.server.port:0}
+  issuer: http://localhost/
+
+cache:
+  default:
+    ttl: 300
+hotel:
+  card:
+    cache:
+      hotelCard:
+        name: hotelCard
+        ttl: 86400
+
+auth:
+  token:
+    providers:
+      - domain: https://wbodetest.eu.auth0.com
+        host: https://wbodetest.eu.auth0.com
+        issuer: https://wbodetest.eu.auth0.com/
+      - domain: https://auth0.premierinn.digital
+        host: https://auth0.premierinn.digital
+        issuer: https://auth0.premierinn.digital/
+  tenants:
+    - name: "PI BB Tenant"
+      audience: https://wbodetest.eu.auth0.com/api/v2/
+      namespace: https://premierinn.com
+      issuer: https://auth0.premierinn.digital/
+      jwkUri:  https://auth0.premierinn.digital/.well-known/jwks.json
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: http://localhost/oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: https://localhost/AccountServices/V1
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: 88134dec7f304a
+
+worldline:
+  clientMessageId: '{a6173aca-ea66-48e6-8ce2-4e04f1d4b628}'
+  cultureCode: en-GB
+  host: http://localhost:${wiremock.server.port:0}
+  piba:
+    # Get username and password from https://worldline.atlassian.net/wiki/spaces/WPW/pages/52723923/Release+0+-+Stubs+preview+release+22+06+2016+UAT
+    username: to_be_replaced
+    password: to_be_replaced
+    service:
+      #      url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+      url: https://test-premierinn.worldline.global/b2b.pi.v1.1/b2bpiapi.svc
+  gb:
+    clientMessageId: '{gb-client-message-id}'
+    cultureCode: en-GB
+    username: to_be_replaced
+    password: to_be_replaced
+    #    url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+    url: https://test-premierinn.worldline.global/b2b.pi.v1.1/b2bpiapi.svc
+  de:
+    clientMessageId: '{de-client-message-id}'
+    cultureCode: de-DE
+    username: to_be_replaced
+    password: to_be_replaced
+    url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+logging:
+  configuration:
+    logger: default
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'

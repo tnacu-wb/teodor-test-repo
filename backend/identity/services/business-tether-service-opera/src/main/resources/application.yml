@@ -1,0 +1,259 @@
+server:
+  port: 9047
+  shutdown: graceful
+
+swagger:
+  api:
+    version: @project.version@
+
+info:
+  build:
+    groupId: '@project.groupId@'
+    artifact: '@project.artifactId@'
+    description: '@project.description@'
+    version: '@project.version@'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /business-tether-service/actuator
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+validator:
+  link-code:
+    length: ${VALIDATOR_LINK_CODE_LENGTH}
+
+worldline:
+  tetheringPlus:
+    enabled: ${WORLDLINE_TETHERING_PLUS_ENABLED:false}
+  clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+  cultureCode: en-GB
+  piba:
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    service:
+      url: ${BUSINESS_TETHER_WORLDLINE_SERVICE_URL}
+
+  gb:
+    clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+    cultureCode: en-GB
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    url: ${BUSINESS_TETHER_WORLDLINE_GB_URL}
+
+  de:
+    clientMessageId: ${WORLDLINE_DE_CLIENT_MESSAGE_ID}
+    cultureCode: de-DE
+    username: ${WORLDLINE_DE_USERNAME}
+    password: ${WORLDLINE_DE_PASSWORD}
+    url: ${BUSINESS_TETHER_WORLDLINE_DE_URL}
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+  management:
+    domain: ${AUTH_MNGMT_DOMAIN}
+    clientId: ${AUTH0_CLIENTID}
+    clientSecret: ${AUTH0_CLIENTSECRET}
+    audience: ${AUTH_MNGMT_AUDIENCE}
+    connection: ${AUTH_MNGMT_CONNECTION}
+  urlPathRegex:
+    - .*\/business\/tether\/.*
+
+feign:
+  pibaguid:
+    name: pibaguid
+    url: http://${PIBA_GUID_URL:localhost:9063}
+
+#needed for Feign fallback
+spring:
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    config:
+      enabled: false
+  cache:
+    type: ${CACHE_TYPE:redis}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+cdh:
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT_TYPE}
+    enabled: ${CDH_OAUTH_IS_ENABLED}
+  api:
+    host: ${CDH_API_HOST}
+    is-oauth: ${CDH_API_IS_OAUTH}
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: ${INN_BUSINESS_OAUTH_SUBSCRIPTION_KEY}
+
+encrypt:
+  failOnError: false
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-dev
+        - opera-dit
+        - opera-sit
+        - opera-uat
+        - opera-demo
+        - opera-qa
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+  cache:
+    type: none
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing: trace
+
+worldline:
+  clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+  cultureCode: en-GB
+  piba:
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    service:
+      url: https://test-premierinn.atosb2b.com/b2b.pi.v1.1/b2bpiapi.svc
+  gb:
+    clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+    cultureCode: en-GB
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    url: https://test-premierinn.atosb2b.com/b2b.pi.v1.1/b2bpiapi.svc
+
+  de:
+    clientMessageId: ${WORLDLINE_DE_CLIENT_MESSAGE_ID}
+    cultureCode: de-DE
+    username: ${WORLDLINE_DE_USERNAME}
+    password: ${WORLDLINE_DE_PASSWORD}
+    url: https://test-premierinn.atosb2b.com/b2b.pi.v1.1/b2bpiapi.svc
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: http://localhost/api/v2/
+      namespace: http://localhost
+      issuer: http://localhost/
+      jwkUri: http://localhost/.well-known/jwks.json
+  management:
+    domain: http://localhost:${wiremock.server.port:1}
+    clientId: clientId_test
+    clientSecret: clientSecret_test
+    audience: http://mock-audience/api/v2/
+    connection: Connection-Test
+
+cdh:
+  oauth-client:
+    host: https://login.microsoftonline.com
+    token-url: "token-url"
+    client-id: "client-id"
+    client-secret: "client-secret"
+    scope: https://wbch-uat-api-v2.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: https://whitbread-uat.azure-api.net/AccountServices/V1
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: "subscription-key"
+
+validator:
+  link-code:
+    length: 11

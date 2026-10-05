@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/location_type_img"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:contentDescription="@string/location_img_content_description"
+        app:layout_constraintBottom_toBottomOf="@+id/departure_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recent_search_location_title"
+        tools:srcCompat="@drawable/ic_hotel_purple" />
+
+    <TextView
+        android:id="@+id/recent_search_location_title"
+        style="@style/Header4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_12"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/location_type_img"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="H6" />
+
+    <TextView
+        android:id="@+id/arrival_date"
+        style="@style/BodySmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/generic_margin_12"
+        android:maxLines="1"
+        android:textColor="@color/grey_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/recent_search_location_title"
+        app:layout_constraintTop_toBottomOf="@+id/recent_search_location_title"
+        tools:text="Tue 15 Ded" />
+
+    <ImageView
+        android:id="@+id/arrow_right"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_4"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/arrival_date"
+        app:layout_constraintStart_toEndOf="@+id/arrival_date"
+        app:layout_constraintTop_toTopOf="@+id/arrival_date"
+        app:srcCompat="@drawable/ic_navigation_arrow_right"
+        tools:contentDescription="arrow" />
+
+    <TextView
+        android:id="@+id/departure_date"
+        style="@style/BodySmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textColor="@color/grey_dark"
+        app:layout_constraintBottom_toBottomOf="@+id/arrival_date"
+        app:layout_constraintStart_toEndOf="@+id/arrow_right"
+        app:layout_constraintTop_toTopOf="@+id/arrival_date"
+        tools:text="Wed 16 Dec" />
+
+    <ImageView
+        android:id="@+id/dot"
+        android:layout_width="3dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="@dimen/generic_margin_5"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/arrow_right"
+        app:layout_constraintStart_toEndOf="@+id/departure_date"
+        app:layout_constraintTop_toTopOf="@+id/arrow_right"
+        app:srcCompat="@drawable/ic_small_circle" />
+
+    <TextView
+        android:id="@+id/guest_room_info"
+        style="@style/BodySmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_5"
+        android:maxLines="1"
+        android:textColor="@color/grey_dark"
+        app:layout_constraintBottom_toBottomOf="@+id/departure_date"
+        app:layout_constraintEnd_toEndOf="@+id/recent_search_location_title"
+        app:layout_constraintStart_toEndOf="@+id/dot"
+        app:layout_constraintTop_toTopOf="@+id/departure_date"
+        tools:text="1 adult, 1 room" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,50 @@
+server:
+  port: 9109
+  servlet:
+    contextPath: "/bcp/"
+
+swagger:
+  api:
+    version: "@project.version@"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+
+config:
+  service:
+    basket:
+      host: http://${BASKET_HOST:localhost:9104}
+      confirmItemProcessingEndpoint: "/v1/baskets/{basket-reference}/items/{itemId}/acks"
+
+basket:
+  confirmation:
+    topics:
+      ack:
+        name: "ack"
+        concurrency: 1
+  kafka:
+    bootstrapServers: ${spring.embedded.kafka.brokers:localhost:8000}
+    groupId: basketOrder
+    requestTimeout: 480000
+    heartBeatInterval: 1000
+    maxPollInterval: 900000
+    maxPollRecords: 100
+    sessionTimeout: 600000
+
+logging:
+  configuration:
+    logger: default
+

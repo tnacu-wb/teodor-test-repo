@@ -1,0 +1,13 @@
+spring:
+  config:
+    activate:
+      on-profile:
+        - integration
+
+auth:
+  tenants:
+    - name: "Distribution Tenant"
+      audience: ${DISTR_TENANT_AUDIENCE:test-audience}
+      namespace: ${DISTR_TENANT_NAMESPACE:https://test.namespace/}
+      issuer: ${DISTR_TENANT_ISSUER:https://test.auth0.com/}
+      jwkUri: ${DISTR_TENANT_JWK_URI:https://test.auth0.com/.well-known/jwks.json}

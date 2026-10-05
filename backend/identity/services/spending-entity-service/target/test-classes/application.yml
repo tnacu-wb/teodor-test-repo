@@ -1,0 +1,79 @@
+server:
+  port: 9132
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: /oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: http://localhost:${wiremock.server.port:1}
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: 88134dec7f304a
+
+worldline:
+  rest:
+    name: worldline
+    gb:
+      culture-code: en-GB
+      username: test
+      password: test
+    de:
+      culture-code: de-DE
+      username: test
+      password: test
+    url: https://test/PIRestAPI
+    account-info-endpoint: "/api/v1/account/info"
+
+config:
+  service:
+    piba-account-service:
+      name: pibaaccountserviceclient
+      host: http://localhost:${wiremock.server.port:0}
+      tetheredUserDetailsEndpoint: "/piba/account/tethereduserdetail/{tetheredUserGuid}/{scheme}"
+    cdh-adapter-service:
+      name: cdhadapterserviceclient
+      host: http://localhost:${wiremock.server.port:0}
+      employeeSpendEndpoint: "/v1/cdh/companies/{companyAccountId}/employees/{employeeAccountId}/reports/employee-spend"
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:none}
+  data:
+    redis:
+      ssl:
+        enabled: false
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  cloud:
+    #needed for Feign fallback
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    config:
+      enabled: false

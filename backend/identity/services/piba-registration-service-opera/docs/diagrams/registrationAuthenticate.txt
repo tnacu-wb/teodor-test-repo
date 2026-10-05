@@ -1,0 +1,148 @@
+Messages.xsd:
+<xs:element name="registrationAuthenticate">
+		<xs:annotation>
+			<xs:documentation>Submit authentication answers supplied by registrant as part of registration</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Request" type="data:RegistrationAuthenticateRequestType"/>
+			</xs:sequence>
+		</xs:complexType>
+</xs:element>
+	
+<xs:element name="registrationAuthenticateResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Response" type="data:RegistrationAuthenticateResponseType"/>
+			</xs:sequence>
+		</xs:complexType>
+</xs:element>
+
+Data.xsd:
+
+RegistrationAuthenticateRequestType:
+<xs:complexType name="RegistrationAuthenticateRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="RegistrationCode">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="AuthenticationAnswers" type="tns:RegistrationAuthenticationAnswerType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Responses to authentication questions (if any were requested)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+</xs:complexType>
+RegistrationAuthenticationAnswerType:
+<xs:complexType name="RegistrationAuthenticationAnswerType">
+		<xs:sequence>
+			<xs:element name="QuestionId">
+				<xs:annotation>
+					<xs:documentation>Question Id 1-based)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Answer">
+				<xs:annotation>
+					<xs:documentation>Response from registrant</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+						<xs:maxLength value="1000"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+</xs:complexType>
+RegistrationAuthenticateResponseType:
+<xs:complexType name="RegistrationAuthenticateResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="RegistrationCodeInfo" type="tns:RegistrationCodeInfoType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Same summary information as provided before for reference </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="PrepopulatedItems" type="tns:RegistrationPrepopulatedItemsType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Pre-populated items that should be  used as defaults for the registrant (these can be changed)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+</xs:complexType>
+RegistrationCodeInfoType:
+<xs:complexType name="RegistrationCodeInfoType">
+		<xs:sequence>
+			<xs:element name="RegistrationCode">
+				<xs:annotation>
+					<xs:documentation>The verified registration code </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PrimarySchemeCustomerId" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>Worldline customerId of the overall account</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SchemeCustomerId" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>When a cost centre this will be populated with a *different* value to PrimarySchemeCustomerId otherwise will be identical</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RegistrationRole">
+				<xs:annotation>
+					<xs:documentation>The role that the registration code relates to</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="AuthenticationQuestions" type="tns:RegistrationAuthenticationQuestionType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Authentication questions.  There could be none, 1 or many of these</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+</xs:complexType>
+
+
+Loggers:
+Sent request [<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header/><SOAP-ENV:Body>
+<ns3:registrationAuthenticate xmlns:ns2="worldline.mst.bsm.api.b2b.pi.data.v1.1" xmlns:ns3="worldline.mst.bsm.api.b2b.pi.messages.v1.1">
+<ns3:Request><ns2:Header><ns2:ClientMessageId>{a6173aca-ea66-48e6-8ce2-4e04f1d4b628}</ns2:ClientMessageId>
+<ns2:CultureCode>en-GB</ns2:CultureCode></ns2:Header>
+<ns2:TrustedPartnerCredentials>
+<ns2:Username>PremierInnMW</ns2:Username><ns2:Password><![CDATA[YJih#dxd16]]></ns2:Password></ns2:TrustedPartnerCredentials><ns2:RegistrationCode>A2YZ-4VZZ-Z4W6-W223</ns2:RegistrationCode><ns2:AuthenticationAnswers><ns2:QuestionId>1</ns2:QuestionId><ns2:Answer>Mercedes Benz</ns2:Answer></ns2:AuthenticationAnswers></ns3:Request></ns3:registrationAuthenticate></SOAP-ENV:Body></SOAP-ENV:Envelope>]
+
+
+Received response [<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+<s:Body xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<registrationAuthenticateResponse xmlns="worldline.mst.bsm.api.b2b.pi.messages.v1.1"><Response><ResultCode xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1">OK</ResultCode><MetaInfo xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1"><MessageGuid>4e83eb4d-d46f-4edd-9cdc-3d93dd4682e4</MessageGuid><TimeStamp>2023-05-06T22:42:06.2718577Z</TimeStamp></MetaInfo><RegistrationCodeInfo xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1"><RegistrationCode>A2YZ-4VZZ-Z4W6-W223</RegistrationCode><PrimarySchemeCustomerId>1073368</PrimarySchemeCustomerId><SchemeCustomerId>1073368</SchemeCustomerId><RegistrationRole>AccountHolder</RegistrationRole><AuthenticationQuestions><QuestionId>1</QuestionId><Question>What was the make and model of your first car?</Question></AuthenticationQuestions></RegistrationCodeInfo><PrepopulatedItems xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1"><Title>Mr</Title><Forename>Viral</Forename><Surname>Desai</Surname><EmailAddress>eagletoursandtravelsuk@gmail.com</EmailAddress><LandlineNumber>+447752392089</LandlineNumber></PrepopulatedItems></Response></registrationAuthenticateResponse></s:Body></s:Envelope>] 

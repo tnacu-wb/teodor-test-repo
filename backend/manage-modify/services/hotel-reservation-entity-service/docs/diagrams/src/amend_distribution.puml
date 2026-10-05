@@ -1,0 +1,104 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant AmendDistributionLogicInPort
+participant BasketServiceOutPort as BasketOutPort
+participant RulesServiceOutPort as RulesOutPort
+participant OhipOutPort as OhipOutPort
+participant BasketWebClient as BasketWebClient
+entity "Authentication Service" as Auth
+entity "Basket Service" as BasketService
+entity "Rules Service" as RulesService
+entity "OHIPAdapter Service" as OHIPAdapterService
+
+A -> Controller: POST /reservations/amendDistribution/{basketReference}
+Controller -> InboundPort: amendDistribution
+InboundPort -> AmendDistributionLogicInPort: validateBasketByReference
+AmendDistributionLogicInPort -> BasketOutPort: getBasketById
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+AmendDistributionLogicInPort <- BasketOutPort: BasketResponse
+InboundPort <- AmendDistributionLogicInPort: BasketResponse
+
+InboundPort -> AmendDistributionLogicInPort: validateDistributionReservations
+InboundPort <- AmendDistributionLogicInPort
+
+InboundPort -> InboundPort: copyBooking WORKFLOW
+
+InboundPort -> AmendDistributionLogicInPort: extractRemovedRoomsIds
+AmendDistributionLogicInPort -> BasketOutPort: getBasketById
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+AmendDistributionLogicInPort <- BasketOutPort: BasketResponse
+InboundPort <- AmendDistributionLogicInPort: List<String> removedRoomsId
+
+loop extractRemovedRoomsIds
+    InboundPort -> InboundPort: removeRoom WORKFLOW
+end loop
+
+InboundPort -> BasketOutPort: getAllReservationsJustByBasketReference
+BasketOutPort -> BasketWebClient: (sendGetBasket) GET /v1/baskets/{basket-reference}
+BasketWebClient -> BasketService
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+InboundPort -> OhipOutPort: getReservationsByIds
+OhipOutPort -> OHIPAdapterService: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+InboundPort -> AmendDistributionLogicInPort: extractStayDates
+InboundPort <- AmendDistributionLogicInPort: List<AmendStayDatesRequest>
+
+loop extractStayDates
+    InboundPort -> InboundPort: amendStayDates WORKFLOW
+end loop
+
+InboundPort -> AmendDistributionLogicInPort: extractNewRooms
+InboundPort <- AmendDistributionLogicInPort: List<Reservation> newRooms
+
+loop addNewRoomToExistingBasket
+    InboundPort -> InboundPort: addNewRoomToExistingBasket WORKFLOW
+end loop
+
+InboundPort -> BasketOutPort: getAllReservationsJustByBasketReference (tempBasket)
+BasketOutPort -> BasketWebClient: (sendGetBasket) GET /v1/baskets/{basket-reference}
+BasketWebClient -> BasketService
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+InboundPort -> OhipOutPort: getReservationsByIds
+OhipOutPort -> OHIPAdapterService: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+InboundPort -> AmendDistributionLogicInPort: setRoomsSelections
+InboundPort <- AmendDistributionLogicInPort
+
+InboundPort -> OhipOutPort: updateReservationPackagesById
+OhipOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+OhipOutPort <- BasketOutPort: BasketResponse
+OhipOutPort -> OHIPAdapterService: PUT /v1/reservations/ancillaries
+OhipOutPort <- OHIPAdapterService: 200 OK
+InboundPort <- OhipOutPort
+
+InboundPort -> AmendDistributionLogicInPort: extractUpdatedReservations
+InboundPort <- AmendDistributionLogicInPort: List<UpdateReservationsRequest> updatedReservationRequests
+
+loop updatedReservationRequests.forEach(updatedReservation)
+    InboundPort -> InboundPort: editRoom WORKFLOW
+end loop
+
+InboundPort -> InboundPort: confirmAmend WORKFLOW
+
+Controller <- InboundPort: ReservationByBasketRefResponse
+A <- Controller: Confirm Amend response
+@enduml

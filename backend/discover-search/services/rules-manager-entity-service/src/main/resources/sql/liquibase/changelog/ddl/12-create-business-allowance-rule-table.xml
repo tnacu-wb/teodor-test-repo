@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet author="marian.gradea" id="create_business_allowance_rule" runOnChange="true">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="business_allowance_rule"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="business_allowance_rule">
+      <column name="rule_id" autoIncrement="true" remarks="rule_id" type="SERIAL">
+        <constraints primaryKey="true" primaryKeyName="business_allowance_rule_pkey"/>
+      </column>
+
+      <column name="ref_rule_id" type="integer">
+        <constraints nullable="true" foreignKeyName="business_allowance_rule_ref_rule_id_fkey"
+          references="business_allowance_rule(rule_id)"/>
+      </column>
+
+      <column name="status" type="VARCHAR(20)" defaultValue="NEW">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="NOW()">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="last_modified_at" type="TIMESTAMP WITHOUT TIME ZONE"
+        defaultValueComputed="NOW()">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="enable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE"
+        defaultValueComputed="NOW()">
+      </column>
+      <column name="disable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
+      </column>
+
+      <column name="pms" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="source_id" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="target_id" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+
+    </createTable>
+
+    <addUniqueConstraint
+      columnNames="pms, source_id, target_id"
+      constraintName="unique_business_allowance_constraint"
+      tableName="business_allowance_rule"
+    />
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update_business_allowance_rule_table_add_is_transaction_code">
+    <validCheckSum>ANY</validCheckSum>
+    <addColumn schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_transaction_code" type="boolean" defaultValue="true">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="alin.bucea" id="update_business_allowance_rule_table_add_meal_package_allowances">
+    <validCheckSum>ANY</validCheckSum>
+    <addColumn schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="source_type" type="VARCHAR(255)" defaultValue="ALLOWANCE">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="gabriela.ciurea" id="update_business_allowance_rule_table_add_aem_id">
+    <addColumn schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" type="VARCHAR(255)" defaultValue="boxedBreakfast">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update_business_allowance_rule_table_add_applicable_daily">
+    <addColumn schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" type="boolean" defaultValue="true">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="alin.bucea" id="update_business_allowance_rule_table_add_business_notes_mandatory">
+    <addColumn schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_notes_mandatory" type="boolean" defaultValue="true">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:s="http://www.w3.org/2001/XMLSchema"
+             xmlns:s0="http://tempuri.org"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             targetNamespace="http://tempuri.org">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org">
+            <s:complexType name="ClientHeader">
+                <s:sequence>
+                    <s:element name="languageCode" type="s:string" minOccurs="1" />
+                    <s:element name="countryCode" type="s:string" minOccurs="1" />
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Login">
+                <s:sequence>
+                    <s:element name="username" type="s:string" minOccurs="1" />
+                    <s:element name="password" type="s:string" minOccurs="1" />
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Source">
+                <s:sequence>
+                    <s:element name="bookingChannel" type="s:string" minOccurs="1" />
+                </s:sequence>
+            </s:complexType>
+            <s:element name="tetherByAccount">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:TetherByAccountRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TetherByAccountRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element name="ipAddress">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="15"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="linkCode">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="60"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="account">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="40"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="memorableWord">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="30"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="tetherByAccountResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="tetherByAccountResult" type="s0:TetherByAccountResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TetherByAccountResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="tetheredGuid" type="s:string"/>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="resultCode" type="s:string"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorsItemString"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOferrorsItemString">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="errorsItem" nillable="true" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="tetherByCard">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:TetherByCardRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TetherByCardRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element name="ipAddress">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="15"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="linkCode">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="60"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="card">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="40"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="memorableWord">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="30"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="tetherByCardResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="tetherByCardResult" type="s0:TetherByCardResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TetherByCardResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="tetheredGuid" type="s:string"/>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="resultCode" type="s:string"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorsItemString"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="updateMemorableWord">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpdateMemorableWordRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateMemorableWordRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element name="ipAddress">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="15"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="worldLineSession" type="s:string"/>
+                    <s:element name="secret">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="40"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="memorableWord">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="30"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="updateMemorableWordResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="updateMemorableWordResult" type="s0:UpdateMemorableWordResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateMemorableWordResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="resultCode" type="s:string"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorsItemString"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </types>
+    <message name="AuthorizationRequestSoapIn">
+        <part name="ClientHeader" type="s0:ClientHeader"/>
+        <part name="Login" type="s0:Login"/>
+    </message>
+    <message name="SourceRequestSoapIn">
+        <part name="Source" type="s0:Source"/>
+    </message>
+    <message name="tetherByAccountSoapIn">
+        <part name="parameters" element="s0:tetherByAccount"/>
+    </message>
+    <message name="tetherByAccountSoapOut">
+        <part name="parameters" element="s0:tetherByAccountResponse"/>
+    </message>
+    <message name="tetherByCardSoapIn">
+        <part name="parameters" element="s0:tetherByCard"/>
+    </message>
+    <message name="tetherByCardSoapOut">
+        <part name="parameters" element="s0:tetherByCardResponse"/>
+    </message>
+    <message name="updateMemorableWordSoapIn">
+        <part name="parameters" element="s0:updateMemorableWord"/>
+    </message>
+    <message name="updateMemorableWordSoapOut">
+        <part name="parameters" element="s0:updateMemorableWordResponse"/>
+    </message>
+    <portType name="BusinessAccountServiceSoap">
+        <operation name="tetherByAccount">
+            <input message="s0:tetherByAccountSoapIn"/>
+            <output message="s0:tetherByAccountSoapOut"/>
+        </operation>
+        <operation name="tetherByCard">
+            <input message="s0:tetherByCardSoapIn"/>
+            <output message="s0:tetherByCardSoapOut"/>
+        </operation>
+        <operation name="updateMemorableWord">
+            <input message="s0:updateMemorableWordSoapIn"/>
+            <output message="s0:updateMemorableWordSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="BusinessAccountServiceSoap" type="s0:BusinessAccountServiceSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="tetherByAccount">
+            <soap:operation soapAction="http://tempuri.org/ws.Corporate.BusinessAccountService.tetherByAccount" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="tetherByCard">
+            <soap:operation soapAction="http://tempuri.org/ws.Corporate.BusinessAccountService.tetherByCard" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="updateMemorableWord">
+            <soap:operation soapAction="http://tempuri.org/ws.Corporate.BusinessAccountService.updateMemorableWord" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="BusinessAccountService">
+        <port name="BusinessAccountServiceSoap" binding="s0:BusinessAccountServiceSoap">
+            <soap:address location="https://inntouch.slough.microsdc.com:443/csp/sql/ws.Corporate.BusinessAccountService.cls"/>
+        </port>
+    </service>
+</definitions>

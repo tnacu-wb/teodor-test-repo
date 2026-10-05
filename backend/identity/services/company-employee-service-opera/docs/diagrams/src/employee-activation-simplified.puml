@@ -1,0 +1,23 @@
+@startuml
+actor "Travel Manager" as TM
+actor Employee as E
+
+box "New Business Booker Front End"
+    participant "Create Employee Page" as CEFE
+    participant "Activation Landing Page" as ALP
+end box
+
+box "Company Employee Microservice /companies/"
+    participant "Create Employee" as CEMS
+    participant "Get Activation Details" as EDMS
+    participant "Activate/Update Employee" as UEMS
+end box
+
+TM -> CEFE: Creates new employee
+CEFE -> CEMS: FE calls Create new employee endpoint
+ALP -> EDMS: FE sends activation-key to get Activation details endpoint
+ALP -> ALP: Populates Activation Page with employee's details
+E -> ALP: Type Password, additional changes and click Create account
+ALP -> UEMS: FE calls update employee endpoint with activation key
+
+@enduml

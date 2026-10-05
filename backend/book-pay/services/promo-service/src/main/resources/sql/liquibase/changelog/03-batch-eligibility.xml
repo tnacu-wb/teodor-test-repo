@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
+
+    <changeSet id="07-create-batch-eligibility-table" author="nikhitha">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists
+                        tableName="batch_eligibility"
+                        schemaName="promotions"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="batch_eligibility" schemaName="promotions">
+
+            <column name="batch_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="region" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="channel" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="platform" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addPrimaryKey
+                schemaName="promotions"
+                tableName="batch_eligibility"
+                columnNames="batch_id, region, channel, platform"
+                constraintName="batch_eligibility_pkey"/>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="promotions"
+                baseTableName="batch_eligibility"
+                baseColumnNames="batch_id"
+                referencedTableSchemaName="promotions"
+                referencedTableName="promo_batch"
+                referencedColumnNames="batch_id"
+                constraintName="fk_batch_eligibility"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+
+    </changeSet>
+
+    <changeSet id="08-backfill-batch-eligibility" author="nikhitha">
+
+        <sql>
+            INSERT INTO promotions.batch_eligibility
+            (batch_id, region, channel, platform)
+
+            SELECT pb.batch_id, v.region, v.channel, v.platform
+            FROM promotions.promo_batch pb
+            CROSS JOIN (
+            VALUES
+            ('GB','PI','WEB'),
+            ('GB','PI','MOBILE'),
+            ('GB','CCUI','WEB'),
+            ('GB','BB','WEB'),
+            ('GB','BB','MOBILE'),
+            ('DE','PI','WEB'),
+            ('DE','PI','MOBILE'),
+            ('DE','CCUI','WEB'),
+            ('DE','BB','WEB'),
+            ('DE','BB','MOBILE')
+            ) AS v(region, channel, platform)
+            WHERE pb.status != 'EXPIRED'
+            AND NOT EXISTS (
+            SELECT 1
+            FROM promotions.batch_eligibility be
+            WHERE be.batch_id = pb.batch_id
+            AND be.region = v.region
+            AND be.channel = v.channel
+            AND be.platform = v.platform
+            );
+        </sql>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="linda.szasz" id="create_table_room_substitution_rule" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="room_substitution_rule"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="room_substitution_rule">
+            <column name="rule_id" autoIncrement="true" remarks="rule_id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="room_substitution_rule_pkey"/>
+            </column>
+
+            <column name="ref_rule_id" type="integer">
+                <constraints nullable="true" foreignKeyName="room_substitution_rule_ref_rule_id_fkey"
+                    references="room_substitution_rule(rule_id)"/>
+            </column>
+
+            <column name="status" type="VARCHAR(20)" defaultValue="NEW">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_modified_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="enable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
+            </column>
+            <column name="disable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
+            </column>
+
+            <column name="pms" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="adults" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="children" type="integer">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="room_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pms_room_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="offer_order" type="integer">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,21 @@
+package uk.co.whitbread.rules.agent.infrastructure.repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import uk.co.whitbread.rules.agent.infrastructure.repository.model.VatRuleEntity;
+
+@Repository
+public interface VatCacheRepository extends JpaRepository<VatRuleEntity, Integer> {
+
+  @Query("SELECT u FROM VatRuleEntity u WHERE u.status = 'ACTIVE'")
+  List<VatRuleEntity> findAllByStatusActive();
+
+  @Query("SELECT u FROM VatRuleEntity u WHERE u.lastModifiedAt >= ?1 "
+      + "and (u.status='ACTIVE' or u.status='INACTIVE')")
+  List<VatRuleEntity> findAllUpdatedAfter(LocalDateTime after);
+
+
+}

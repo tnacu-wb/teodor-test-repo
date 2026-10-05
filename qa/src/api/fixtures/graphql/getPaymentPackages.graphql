@@ -1,0 +1,41 @@
+query GetPaymentPackages(
+  $hotelId: String!
+  $startDate: String!
+  $endDate: String!
+  $adultsNumber: Int!
+  $childrenNumber: Int!
+  $nightsNumber: Int!
+  $language: String!
+  $country: String!
+  $bookingFlowId: String!
+  $basketReferenceId: String!
+) {
+  packages(
+    packagesCriteria: {
+      hotelId: $hotelId
+      startDate: $startDate
+      endDate: $endDate
+      adultsNumber: $adultsNumber
+      childrenNumber: $childrenNumber
+      nightsNumber: $nightsNumber
+      language: $language
+      country: $country
+      bookingFlowId: $bookingFlowId
+      basketReferenceId: $basketReferenceId
+    }
+  ) {
+    privacyPolicy {
+      description
+      linkLabel
+      linkSrc
+      moreInfoLabel
+      moreInfo {
+        description
+        image
+      }
+      name
+    }
+    hotelHasCityTaxForLeisure
+    hotelHasCityTaxForBusiness
+  }
+}

@@ -1,0 +1,46 @@
+@startuml
+!pragma teoz true
+
+actor User as USR
+entity "Front End App" as FE
+entity "Reservation Experience Service" as RE
+entity "Reservation Entity Service" as R
+entity "Basket Experience Service" as BSKE
+entity "Basket Service" as BSK
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OAD
+entity "OPERA" as OPERA
+entity "Rules Service" as RS
+
+USR -> FE: Book now
+FE -> RE: graphql reservations
+RE -> R: POST /reservations
+
+group Basket not created
+    R -> BSK: POST /v1/baskets
+    BSK -> BSK: - Create new cart\n- Generate new unique reservation number
+    BSK --> R: return reservation number
+end
+
+group For each
+    R -> R: set reservation number
+end
+
+R -> PMS: POST /v1/reservations
+PMS -> OAD: POST /v1/reservations
+OAD -> RS: GET /v1/rules/channel-info?{bookingChannel}
+OAD <- RS:  source code channel-info
+group For each (concurrent)
+  OAD -> OPERA: POST /rsv/v1/hotels/{hotelId}/reservations
+  OPERA -> OAD: create reservation response
+end
+OAD -> PMS: return create reservation response
+PMS -> R: return create reservation response
+R -> BSK: POST /v1/baskets/{resNo}/items
+BSK --> R: OK 200
+
+
+R --> RE: OK 200
+RE --> FE: OK 200
+
+@enduml

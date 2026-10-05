@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/address_form_title"
+        style="@style/Header3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_4"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:text="@string/guest_details_address_section_title"
+        android:textColor="?attr/colorPrimary" />
+
+    <com.whitbread.premierinn.common.view.ToggleButtonView
+        android:id="@+id/address_form_home_work_toggle"
+        style="@style/Header3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address_form_title"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        app:tbv_start_selected="true"
+        app:tbv_text_left="@string/guest_details_address_toggle_button_home"
+        app:tbv_text_right="@string/guest_details_address_toggle_button_work" />
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/address_form_countries_spinner"
+        style="@style/CountySpinnerStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address_form_home_work_toggle"
+        android:layout_marginTop="@dimen/generic_margin_8" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/address_form_lookup_postcode_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address_form_countries_spinner"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:layout_toStartOf="@+id/address_form_find_address_button"
+        android:autofillHints="postalCode"
+        android:hint="@string/address_form_postcode"
+        android:imeOptions="actionNext"
+        android:inputType="textCapCharacters"
+        app:editTextId="@+id/et_address_form_postcode"
+        app:required="true" />
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/address_form_find_address_button"
+        style="@style/Button2"
+        android:layout_width="134dp"
+        android:layout_height="44dp"
+        android:layout_below="@id/address_form_countries_spinner"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/generic_margin_24"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:text="@string/postcode_finder_find_address_label"
+        app:cab_background_color="@color/premier_inn_purple_light"
+        app:cab_text_color="@android:color/white" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/address_form_company_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address_form_lookup_postcode_input"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:hint="@string/address_form_company"
+        android:imeOptions="actionNext"
+        android:inputType="textCapSentences"
+        android:visibility="gone"
+        app:editTextId="@+id/et_address_form_company"
+        app:required="true" />
+
+    <TextView
+        android:id="@+id/address_form_manual_address_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address_form_company_input"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/address_form_enter_address_manual"
+        android:textColor="?attr/colorPrimary"
+        style="@style/BodySmall"/>
+
+    <RelativeLayout
+        android:id="@+id/address_form_manual_address_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address_form_company_input"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:visibility="gone">
+
+        <com.whitbread.premierinn.common.view.FormEditTextView
+            android:id="@+id/address_form_line1_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="streetAddress"
+            android:hint="@string/address_form_address_line1"
+            android:imeOptions="actionNext"
+            android:inputType="textCapSentences"
+            app:editTextId="@+id/et_address_form_address_line1"
+            app:required="true" />
+
+        <com.whitbread.premierinn.common.view.FormEditTextView
+            android:id="@+id/address_form_line2_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/address_form_line1_input"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:autofillHints="extendedAddress"
+            android:hint="@string/address_form_address_line2"
+            android:imeOptions="actionNext"
+            android:inputType="textCapSentences"
+            app:editTextId="@+id/et_address_form_address_line2" />
+
+        <com.whitbread.premierinn.common.view.FormEditTextView
+            android:id="@+id/address_form_town_city_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/address_form_line2_input"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:autofillHints="addressLocality"
+            android:hint="@string/address_form_address_line3"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences"
+            app:editTextId="@+id/et_address_form_address_line3" />
+
+        <com.whitbread.premierinn.common.view.FormEditTextView
+            android:id="@+id/address_form_postcode_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/address_form_town_city_input"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:autofillHints="postalCode"
+            android:hint="@string/address_form_postcode"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences"
+            app:editTextId="@+id/et_address_form_postcode2" />
+    </RelativeLayout>
+</merge>

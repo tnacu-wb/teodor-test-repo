@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inside MockInstaller</title>
+<style>
+  :root {
+    --paper: #FFF0E5;
+    --surface: #FFFFFF;
+    --surface-2: #F6E5D5;
+    --ink: #10162F;
+    --ink-soft: #585E74;
+    --line: #E8D5C3;
+    --border: #10162F;
+    --accent: #3A10E5;
+    --accent-soft: #FFFAE5;
+    --java: #6E4A00;
+    --java-soft: #FFD300;
+    --code-bg: #10162F;
+    --code-ink: #EDEFFB;
+    --code-kw: #FFD300;
+    --code-str: #6FE0B2;
+    --code-type: #A8C3FF;
+    --code-cmt: #7E86A5;
+    --on-accent: #FFFFFF;
+    --good: #2E6B3E;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #10162F;
+      --surface: #1A2141;
+      --surface-2: #262E55;
+      --ink: #EFF1FB;
+      --ink-soft: #9AA1C0;
+      --line: #2A3158;
+      --border: #4A528F;
+      --accent: #A09CFF;
+      --accent-soft: #2B2508;
+      --java: #E8C05A;
+      --java-soft: #5C4D00;
+      --code-bg: #0A0E24;
+      --code-ink: #E8EBF8;
+      --on-accent: #10162F;
+      --good: #7FBE8F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0C102A;
+    --surface: #151A3A;
+    --surface-2: #232A56;
+    --ink: #EFF1FB;
+    --ink-soft: #9AA1C0;
+    --line: #262D58;
+    --border: #454E8F;
+    --accent: #8D9CFF;
+    --accent-soft: #232B63;
+    --java: #E8C05A;
+    --java-soft: #3A3113;
+    --code-bg: #0A0E24;
+    --code-ink: #E8EBF8;
+    --good: #7FBE8F;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  .sans { font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  code, pre {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.86em;
+  }
+  p > code, li > code, td > code, h2 > code, h3 > code, dt > code {
+    background: var(--surface-2);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .wrap {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 46rem);
+    gap: 3rem;
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+  @media (max-width: 58rem) {
+    .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    nav.toc { display: none; }
+  }
+  header.masthead {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 2.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  h1 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    text-wrap: balance;
+    margin-top: 0.5rem;
+  }
+  .standfirst {
+    margin-top: 0.9rem;
+    max-width: 46rem;
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+  }
+  nav.toc {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    padding-top: 2.5rem;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.85rem;
+  }
+  nav.toc .toc-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.6rem;
+  }
+  nav.toc ol { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+  nav.toc a {
+    display: block;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 0.22rem 0.6rem;
+    border-left: 2px solid var(--line);
+  }
+  nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-left-color: var(--accent); }
+  nav.toc ol ol a { padding-left: 1.4rem; font-size: 0.8rem; }
+  main { padding-top: 2.5rem; min-width: 0; }
+  main > section + section { margin-top: 3.5rem; }
+  h2 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    padding-top: 0.5rem;
+  }
+  h2 .index {
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    margin-right: 0.4rem;
+  }
+  h3 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+  section > p, section > ul, section > ol { margin-top: 0.9rem; }
+  section li + li { margin-top: 0.35rem; }
+  a { color: var(--accent); }
+  .panel {
+    margin-top: 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--code-bg);
+  }
+  .panel-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.4rem 0.6rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .panel-bar .file {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    margin-left: auto;
+    padding-left: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tab {
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    background: none;
+    color: var(--ink-soft);
+    padding: 0.28rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .tab[aria-selected="true"].kt { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .tab[aria-selected="true"].jv { background: var(--java-soft); color: var(--ink); border-color: var(--border); border-radius: 999px; }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .panel pre {
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    color: var(--code-ink);
+    line-height: 1.55;
+  }
+  .panel pre[hidden] { display: none; }
+  .k { color: var(--code-kw); font-weight: 600; }
+  .s { color: var(--code-str); }
+  .t { color: var(--code-type); }
+  .c { color: var(--code-cmt); font-style: italic; }
+  article.feature {
+    margin-top: 2.2rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--line);
+  }
+  .feature-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem; }
+  .kw-chip {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--java-soft);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+  }
+  .java-analogy {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+  .java-analogy::before { content: "Java nearest thing: "; font-weight: 600; }
+  article.feature > p { margin-top: 0.8rem; }
+  details.without {
+    margin-top: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  details.without > summary {
+    cursor: pointer;
+    padding: 0.6rem 0.9rem;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    list-style: none;
+  }
+  details.without > summary::-webkit-details-marker { display: none; }
+  details.without > summary::before { content: "▸ "; color: var(--ink-soft); }
+  details.without[open] > summary::before { content: "▾ "; }
+  details.without > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  details.without .inner { padding: 0 0.9rem 0.9rem; }
+  details.without .inner p { margin-top: 0.5rem; }
+  details.without .panel { margin-top: 0.6rem; }
+  .frame {
+    margin-top: 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.82rem;
+  }
+  .frame-row { display: flex; align-items: center; gap: 0.8rem; padding: 0.55rem 0.9rem; }
+  .frame-row + .frame-row { border-top: 1px solid var(--line); }
+  .frame-row.supplied { background: var(--accent-soft); }
+  .frame-row.yours { background: var(--surface); }
+  .frame-row .who {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex: 0 0 6.5rem;
+  }
+  .frame-row.supplied .who { color: var(--java); }
+  .frame-row.yours .who { color: var(--ink-soft); }
+  .frame-row .what { min-width: 0; overflow-x: auto; white-space: nowrap; }
+  table {
+    margin-top: 1rem;
+    border-collapse: collapse;
+    width: 100%;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.88rem;
+  }
+  th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+  .table-scroll { overflow-x: auto; }
+  .callout {
+    margin-top: 1.1rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--java-soft);
+    background: var(--surface);
+    border-radius: 8px;
+  }
+  .callout.warn { border-left-color: var(--java-soft); }
+  .callout p + p { margin-top: 0.5rem; }
+  footer.colophon {
+    margin-top: 4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="eyebrow">integration-tests-kotlin · docs for Java developers</p>
+  <h1>Inside MockInstaller</h1>
+  <p class="standfirst">
+    <code>MockInstaller</code> owns dynamic WireMock state for one scenario.
+    It installs scoped mappings, counts scoped calls, and removes scoped state.
+    This page follows the class from top to bottom. It explains each function,
+    each cleanup branch, and each Kotlin feature in Java terms.
+  </p>
+</header>
+
+<div class="wrap">
+<nav class="toc sans" aria-label="Contents">
+  <p class="toc-title">Contents</p>
+  <ol>
+    <li><a href="#why">Why it exists</a></li>
+    <li><a href="#use">How to use it</a></li>
+    <li><a href="#anatomy">Class map</a></li>
+    <li><a href="#lifecycle">Implementation walkthrough</a>
+      <ol>
+        <li><a href="#install">Select and install</a></li>
+        <li><a href="#count">Count calls</a></li>
+        <li><a href="#cleanup">Remove state</a></li>
+      </ol>
+    </li>
+    <li><a href="#kotlin">Kotlin, feature by feature</a>
+      <ol>
+        <li><a href="#f-extension">Extension + copy</a></li>
+        <li><a href="#f-null">Nullable sink + safe call</a></li>
+        <li><a href="#f-operator">Operator get + entries</a></li>
+        <li><a href="#f-suspend">suspend + NonCancellable</a></li>
+        <li><a href="#f-local">Local function + mutable result</a></li>
+        <li><a href="#f-catch">Typed catch + smart cast</a></li>
+      </ol>
+    </li>
+    <li><a href="#cheatsheet">Cheat sheet</a></li>
+  </ol>
+</nav>
+
+<main>
+<section id="why">
+  <h2><span class="index">1</span>Why it exists</h2>
+  <p>
+    Journeys share four WireMock instances. Each scenario needs isolated state.
+    <code>MockInstaller</code> applies one test-ID matcher to every installed mapping.
+    It uses the same matcher to count calls and remove state.
+  </p>
+  <p>
+    This ownership rule is more important than the mapping shape. A failed service can send a
+    request that no stub matches. The request journal can still contain that call. Cleanup must
+    also remove unused mappings. The test ID connects both types of state to the scenario.
+  </p>
+  <div class="frame" role="img" aria-label="Diagram: the scenario test ID scopes installation, counting, and cleanup">
+    <div class="frame-row yours"><span class="who sans">scenario</span><span class="what">testId = testIdFor(featureName, scenarioName)</span></div>
+    <div class="frame-row supplied"><span class="who sans">install</span><span class="what">mapping request header ← exact test-ID matcher</span></div>
+    <div class="frame-row supplied"><span class="who sans">count</span><span class="what">one target journal ← ANY method + .* URL + same matcher</span></div>
+    <div class="frame-row supplied"><span class="who sans">cleanup</span><span class="what">all target mappings and journal events ← same matcher</span></div>
+  </div>
+  <div class="callout">
+    <p><strong>Core invariant:</strong> installation and recovery use the same ownership marker.</p>
+  </div>
+</section>
+
+<section id="use">
+  <h2><span class="index">2</span>How to use it</h2>
+  <p>
+    Journey authors do not construct this class. <code>ScenarioScope</code> creates one installer.
+    Its helper methods supply the scenario test ID. Authors call the short forms below.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real API)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/JourneySpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code>installFor(booking)
+installFor(booking, excluded = setOf(stubId))
+installStub(customStub)   <span class="c">// override: excluded default's ID above, own ID here</span>
+
+expect(<span class="s">"AEM was not called"</span>) {
+    callCount(<span class="t">Upstream</span>.AEM) shouldBeExactly <span class="s">0</span>
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="c">// Java would usually expose a scenario facade with the test ID as state.</span>
+scenario.installFor(booking);
+scenario.installFor(booking, Set.of(stubId));
+scenario.installStub(customStub);
+
+assertEquals(<span class="s">0</span>, scenario.callCount(<span class="t">Upstream</span>.AEM));</code></pre>
+  </div>
+  <div class="table-scroll"><table>
+    <tr><th>Operation</th><th>Purpose</th><th>Target scope</th></tr>
+    <tr><td><code>installFor</code></td><td>Select and install the Booking plan.</td><td>Each planned stub chooses its target.</td></tr>
+    <tr><td><code>installStub</code></td><td>Install one direct planned stub.</td><td>The planned stub chooses its target.</td></tr>
+    <tr><td><code>callCount</code></td><td>Count all calls owned by this scenario.</td><td>One requested upstream.</td></tr>
+    <tr><td><code>removeFor</code></td><td>Remove owned mappings and journal events.</td><td>Every <code>WireMockTarget</code>.</td></tr>
+  </table></div>
+  <p>
+    The lifecycle calls <code>removeFor</code> after the scenario. Provisioning also calls it when
+    a client deletes a mock session. Both paths use the same recovery operation.
+  </p>
+</section>
+
+<section id="anatomy">
+  <h2><span class="index">3</span>Class map</h2>
+  <p>
+    <code>MockInstaller</code> has six methods. Each row links to one dedicated explanation below.
+  </p>
+  <div class="table-scroll"><table>
+    <tr><th>Class method</th><th>Input</th><th>Output or effect</th><th>Dedicated explanation</th></tr>
+    <tr><td><code>installFor</code></td><td>A Booking, test ID, and exclusions.</td><td>Selected mappings registered in order.</td><td><a href="#install">Select and install</a></td></tr>
+    <tr><td><code>countCallsFor</code></td><td>One target and test ID.</td><td>The number of owned request events on that target.</td><td><a href="#count">Count calls</a></td></tr>
+    <tr><td><code>removeFor</code></td><td>A test ID.</td><td>A complete result, or an aggregate cleanup exception.</td><td><a href="#cleanup-entry">Protect cleanup</a></td></tr>
+    <tr><td><code>removeScopedStateFor</code></td><td>A test ID.</td><td>The private exhaustive cleanup algorithm.</td><td><a href="#cleanup-algorithm">Cleanup algorithm</a></td></tr>
+    <tr><td><code>anyScopedRequest</code></td><td>A test ID.</td><td>A broad request-journal query.</td><td><a href="#count-query">Journal query</a></td></tr>
+    <tr><td><code>installStub</code></td><td>One planned stub and test ID.</td><td>Scoped mapping registration and success evidence.</td><td><a href="#install-stub">Register mappings</a></td></tr>
+  </table></div>
+
+  <p>
+    The file also has the file-level <code>PlannedStub.scopedTo</code> extension function.
+    It has a <a href="#f-extension">dedicated explanation</a> below.
+    The constructor has a <a href="#constructor">dedicated explanation</a> next.
+    The local <code>recordFailure</code> function belongs to
+    <code>removeScopedStateFor</code>. Its explanation is inside that method's section.
+  </p>
+
+  <div class="panel" id="constructor">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">internal class</span> <span class="t">MockInstaller</span>(
+    <span class="k">private val</span> wiremock: <span class="t">WireMockInstances</span>,
+    <span class="k">private val</span> evidenceSink: <span class="t">StubInstallEvidenceSink</span>? = <span class="k">null</span>,
+)</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">final class</span> <span class="t">MockInstaller</span> {
+    <span class="k">private final</span> <span class="t">WireMockInstances</span> wiremock;
+    <span class="k">private final</span> @Nullable <span class="t">StubInstallEvidenceSink</span> evidenceSink;
+
+    <span class="t">MockInstaller</span>(<span class="t">WireMockInstances</span> wiremock) {
+        <span class="k">this</span>(wiremock, <span class="k">null</span>);
+    }
+}</code></pre>
+  </div>
+  <p>
+    Constructor parameters marked <code>private val</code> become private final properties.
+    The default null value gives Kotlin callers a one-argument constructor call.
+    The installer stores no scenario state. Concurrent calls can use different test IDs safely.
+  </p>
+</section>
+
+<section id="lifecycle">
+  <h2><span class="index">4</span>Implementation walkthrough</h2>
+  <h3 id="install"><code>installFor</code></h3>
+  <p>
+    <code>installFor</code> asks <code>selectedStubs</code> for the legal plan. An empty plan records
+    evidence and performs no WireMock call: empty-plan evidence when the Booking selected nothing,
+    fully-excluded-plan evidence when exclusions emptied a plan that did select stubs. A non-empty
+    plan goes through <code>installStub</code>. This method overwrites any old ownership matcher
+    before registration.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">suspend fun</span> installFor(
+    booking: <span class="t">Booking</span>,
+    testId: <span class="t">String</span>,
+    excluded: <span class="t">Set</span>&lt;<span class="t">String</span>&gt; = emptySet(),
+) {
+    <span class="k">val</span> selected = selectedStubs(booking, excluded)
+
+    <span class="k">if</span> (selected.isEmpty()) {
+        <span class="k">if</span> (excluded.isEmpty()) {
+            evidenceSink?.recordEmptyPlan(<span class="s">"Booking"</span>, testId)
+        } <span class="k">else</span> {
+            evidenceSink?.recordFullyExcludedPlan(<span class="s">"Booking"</span>, excluded, testId)
+        }
+        <span class="k">return</span>
+    }
+
+    <span class="k">for</span> (stub <span class="k">in</span> selected) {
+        installStub(stub, testId)
+    }
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">void</span> installFor(<span class="t">Booking</span> booking, <span class="t">String</span> testId,
+                <span class="t">Set</span>&lt;<span class="t">String</span>&gt; excluded) {
+    <span class="t">List</span>&lt;<span class="t">PlannedStub</span>&gt; selected = selectedStubs(booking, excluded);
+    <span class="k">if</span> (selected.isEmpty()) {
+        <span class="k">if</span> (evidenceSink != <span class="k">null</span>) {
+            <span class="k">if</span> (excluded.isEmpty()) {
+                evidenceSink.recordEmptyPlan(<span class="s">"Booking"</span>, testId);
+            } <span class="k">else</span> {
+                evidenceSink.recordFullyExcludedPlan(<span class="s">"Booking"</span>, excluded, testId);
+            }
+        }
+        <span class="k">return</span>;
+    }
+    <span class="k">for</span> (<span class="t">PlannedStub</span> stub : selected) installStub(stub, testId);
+}</code></pre>
+  </div>
+  <p>
+    Selection happens before WireMock I/O. <code>selectedStubs</code> rejects excluded IDs the
+    Booking did not select. Therefore an invalid plan installs nothing.
+    The empty-plan branch is a successful no-op. It records why no mapping evidence exists.
+  </p>
+  <h3 id="install-stub"><code>installStub</code></h3>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">internal suspend fun</span> installStub(
+    stub: <span class="t">PlannedStub</span>,
+    testId: <span class="t">String</span>,
+) {
+    <span class="k">val</span> scoped = stub.scopedTo(testId)
+    <span class="k">for</span> (mapping <span class="k">in</span> scoped.mappings) {
+        wiremock[scoped.target].stub(mapping)
+        evidenceSink?.recordInstalledStub(scoped.id, mapping, testId)
+    }
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">void</span> installStub(<span class="t">PlannedStub</span> stub, <span class="t">String</span> testId) {
+    <span class="t">PlannedStub</span> scoped = ScopedStubs.scopedTo(stub, testId);
+    <span class="k">for</span> (<span class="t">StubMapping</span> mapping : scoped.mappings()) {
+        wiremock.get(scoped.target()).stub(mapping);
+        <span class="k">if</span> (evidenceSink != <span class="k">null</span>) {
+            evidenceSink.recordInstalledStub(scoped.id(), mapping, testId);
+        }
+    }
+}</code></pre>
+  </div>
+  <p>
+    Evidence comes after a successful Admin call. A failed registration does not create success
+    evidence. Earlier mappings can still exist after a later failure. Cleanup can find them by
+    their ownership matcher.
+  </p>
+
+  <h3 id="count"><code>countCallsFor</code></h3>
+  <p>
+    <code>countCallsFor</code> queries one request journal. The query accepts every method and URL.
+    It only restricts the target and test ID. This broad shape catches calls that match no installed
+    stub. It makes an absence assertion useful.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">suspend fun</span> countCallsFor(
+    target: <span class="t">WireMockTarget</span>,
+    testId: <span class="t">String</span>,
+): <span class="t">Int</span> = wiremock[target].countRequests(anyScopedRequest(testId))</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">int</span> countCallsFor(<span class="t">WireMockTarget</span> target, <span class="t">String</span> testId) {
+    <span class="k">return</span> wiremock.get(target).countRequests(anyScopedRequest(testId));
+}</code></pre>
+  </div>
+  <p>
+    The expression body returns the Admin count directly. It performs one request against one
+    target. It does not require prior stub installation. The WireMock adapter rejects a disabled
+    request journal. This prevents a false zero result.
+  </p>
+
+  <h3 id="count-query"><code>anyScopedRequest</code></h3>
+  <p>
+    This private method creates the request pattern used by <code>countCallsFor</code>.
+    It accepts every HTTP method and every URL. It then restricts the query with the exact
+    test-ID baggage matcher. The method returns data only. It performs no I/O.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">private fun</span> anyScopedRequest(testId: <span class="t">String</span>): <span class="t">RequestPattern</span> =
+    <span class="t">RequestPattern</span>(
+        method = <span class="s">"ANY"</span>,
+        urlPattern = <span class="s">".*"</span>,
+        headers = mapOf(<span class="t">BAGGAGE_HEADER</span> to testIdHeaderMatcher(testId)),
+    )</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">private</span> <span class="t">RequestPattern</span> anyScopedRequest(<span class="t">String</span> testId) {
+    <span class="k">return new</span> <span class="t">RequestPattern</span>(
+        <span class="s">"ANY"</span>,
+        <span class="s">".*"</span>,
+        Map.of(BAGGAGE_HEADER, testIdHeaderMatcher(testId))
+    );
+}</code></pre>
+  </div>
+
+  <h3 id="cleanup">Cleanup overview</h3>
+  <p>
+    Cleanup visits every enum target in order. It lists mappings first. It selects mappings with
+    the exact test-ID matcher. It then deletes each selected mapping by its WireMock ID. Journal
+    cleanup runs even when listing or deletion fails.
+  </p>
+  <div class="frame" role="img" aria-label="Cleanup sequence repeated for every WireMock target">
+    <div class="frame-row supplied"><span class="who sans">for target</span><span class="what">WireMockTarget.entries</span></div>
+    <div class="frame-row supplied"><span class="who sans">list</span><span class="what">GET /__admin/mappings → select exact owner</span></div>
+    <div class="frame-row supplied"><span class="who sans">delete</span><span class="what">DELETE /__admin/mappings/{id} for each owned mapping</span></div>
+    <div class="frame-row supplied"><span class="who sans">journal</span><span class="what">POST /__admin/requests/remove with exact owner criteria</span></div>
+    <div class="frame-row yours"><span class="who sans">result</span><span class="what">counts + all failures → CleanupResult.orThrow()</span></div>
+  </div>
+
+  <h3 id="cleanup-entry"><code>removeFor</code></h3>
+  <p>
+    <code>removeFor</code> is the public entry point. It changes only the coroutine context.
+    The private method owns the cleanup algorithm. This split keeps the cancellation policy at
+    the boundary.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java idea</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">suspend fun</span> removeFor(testId: <span class="t">String</span>): <span class="t">CleanupResult</span> =
+    withContext(<span class="t">NonCancellable</span>) {
+        removeScopedStateFor(testId)
+    }</code></pre>
+    <pre data-lang="jv" hidden><code><span class="c">// Java has no direct NonCancellable equivalent.</span>
+<span class="t">CleanupResult</span> removeFor(<span class="t">String</span> testId) {
+    <span class="k">return</span> cleanupScope.run(() -&gt; removeScopedStateFor(testId));
+}</code></pre>
+  </div>
+
+  <h3 id="cleanup-algorithm"><code>removeScopedStateFor</code></h3>
+  <p>
+    <code>removeScopedStateFor</code> owns steps 2 through 7. It attempts every reachable
+    operation. It returns one aggregate result after the target loop finishes.
+  </p>
+  <div class="callout">
+    <p>
+      <code>private suspend fun removeScopedStateFor(testId: String): CleanupResult</code>
+      is private because callers must enter through the <code>NonCancellable</code>
+      <code>removeFor</code> boundary.
+    </p>
+  </div>
+
+  <h3 id="record-failure">2. Create one aggregate result</h3>
+  <p>
+    The private method creates counters and a failure list for one attempt. Its local helper adds
+    the target name, URL, operation, optional mapping ID, and original cause. This structure keeps
+    enough data for reports and stack traces.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">val</span> failures = mutableListOf&lt;<span class="t">CleanupFailure</span>&gt;()
+<span class="k">var</span> removedMappings = <span class="s">0</span>
+<span class="k">var</span> removedRequestEvents = <span class="s">0</span>
+
+<span class="k">fun</span> recordFailure(
+    target: <span class="t">WireMockTarget</span>,
+    admin: <span class="t">WireMockAdmin</span>,
+    operation: <span class="t">CleanupOperation</span>,
+    cause: <span class="t">Throwable</span>,
+    mappingId: <span class="t">String</span>? = <span class="k">null</span>,
+) {
+    failures += <span class="t">CleanupFailure</span>(
+        wireMockName = target.displayName,
+        wireMockUrl = admin.baseUrl,
+        operation = operation,
+        mappingId = mappingId,
+        cause = cause,
+    )
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="t">List</span>&lt;<span class="t">CleanupFailure</span>&gt; failures = <span class="k">new</span> <span class="t">ArrayList</span>&lt;&gt;();
+<span class="k">int</span> removedMappings = <span class="s">0</span>;
+<span class="k">int</span> removedRequestEvents = <span class="s">0</span>;
+
+<span class="c">// Java cannot declare a named local method.</span>
+<span class="c">// Use a private method, lambda, or small local collaborator.</span></code></pre>
+  </div>
+
+  <h3>3. Build one exact journal criterion</h3>
+  <p>
+    Cleanup builds the request-journal criterion once. The URL pattern accepts all paths.
+    The baggage matcher limits ownership to the exact test ID. Every target receives the same
+    criterion.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">val</span> requestCriteria =
+    <span class="t">RequestJournalCriteria</span>(
+        urlPattern = <span class="s">".*"</span>,
+        headers = mapOf(<span class="t">BAGGAGE_HEADER</span> to testIdHeaderMatcher(testId)),
+    )</code></pre>
+    <pre data-lang="jv" hidden><code><span class="t">RequestJournalCriteria</span> requestCriteria = <span class="k">new</span> <span class="t">RequestJournalCriteria</span>(
+    <span class="s">".*"</span>, Map.of(BAGGAGE_HEADER, testIdHeaderMatcher(testId))
+);</code></pre>
+  </div>
+
+  <h3>4. List mappings without stopping recovery</h3>
+  <p>
+    The loop resolves one Admin adapter for each enum target. A successful list produces a list.
+    A cancellation propagates. Another exception records <code>LIST_MAPPINGS</code> and produces
+    null. Null means that mapping deletion is not reachable for this target.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">for</span> (target <span class="k">in</span> <span class="t">WireMockTarget</span>.entries) {
+    <span class="k">val</span> admin = wiremock[target]
+    <span class="k">val</span> stubs =
+        <span class="k">try</span> {
+            admin.listStubs()
+        } <span class="k">catch</span> (failure: <span class="t">CancellationException</span>) {
+            <span class="k">throw</span> failure
+        } <span class="k">catch</span> (failure: <span class="t">Exception</span>) {
+            recordFailure(
+                target = target,
+                admin = admin,
+                operation = <span class="t">CleanupOperation</span>.LIST_MAPPINGS,
+                cause = failure,
+            )
+            <span class="k">null</span>
+        }
+    <span class="c">// deletion and journal cleanup continue below</span>
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">for</span> (<span class="t">WireMockTarget</span> target : <span class="t">WireMockTarget</span>.values()) {
+    <span class="t">WireMockAdmin</span> admin = wiremock.get(target);
+    <span class="t">List</span>&lt;<span class="t">StubMapping</span>&gt; stubs;
+    <span class="k">try</span> {
+        stubs = admin.listStubs();
+    } <span class="k">catch</span> (<span class="t">CancellationException</span> failure) {
+        <span class="k">throw</span> failure;
+    } <span class="k">catch</span> (<span class="t">Exception</span> failure) {
+        recordFailure(target, admin, LIST_MAPPINGS, failure, <span class="k">null</span>);
+        stubs = <span class="k">null</span>;
+    }
+}</code></pre>
+  </div>
+  <p>
+    The catch block is an expression branch. Its final <code>null</code> becomes the value of
+    <code>stubs</code>. Kotlin infers <code>List&lt;StubMapping&gt;?</code> for the variable.
+  </p>
+
+  <h3>5. Select and delete owned mappings</h3>
+  <p>
+    A non-null list permits deletion. The filter reads the baggage header matcher from each
+    mapping. Missing headers, a missing baggage entry, and a different test ID all produce false.
+    Only an exact owner match produces true.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">if</span> (stubs != <span class="k">null</span>) {
+    <span class="k">val</span> ownedStubs =
+        stubs.filter { stub -&gt;
+            stub.request.headers
+                ?.get(<span class="t">BAGGAGE_HEADER</span>)
+                ?.matchesTestId(testId) == <span class="k">true</span>
+        }
+
+    <span class="k">for</span> (stub <span class="k">in</span> ownedStubs) {
+        <span class="k">try</span> {
+            admin.removeStub(checkNotNull(stub.id) {
+                <span class="s">"Matching mapping has no ID"</span>
+            })
+            removedMappings++
+        } <span class="k">catch</span> (failure: <span class="t">CancellationException</span>) {
+            <span class="k">throw</span> failure
+        } <span class="k">catch</span> (failure: <span class="t">Exception</span>) {
+            recordFailure(
+                target = target,
+                admin = admin,
+                operation = <span class="t">CleanupOperation</span>.DELETE_MAPPING,
+                mappingId = stub.id,
+                cause = failure,
+            )
+        }
+    }
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">if</span> (stubs != <span class="k">null</span>) {
+    <span class="k">for</span> (<span class="t">StubMapping</span> stub : stubs) {
+        <span class="k">if</span> (!matchesTestId(stub, testId)) <span class="k">continue</span>;
+        <span class="k">try</span> {
+            admin.removeStub(Objects.requireNonNull(
+                stub.id(), <span class="s">"Matching mapping has no ID"</span>));
+            removedMappings++;
+        } <span class="k">catch</span> (<span class="t">CancellationException</span> failure) {
+            <span class="k">throw</span> failure;
+        } <span class="k">catch</span> (<span class="t">Exception</span> failure) {
+            recordFailure(target, admin, DELETE_MAPPING, failure, stub.id());
+        }
+    }
+}</code></pre>
+  </div>
+  <p>
+    WireMock assigns the mapping ID during registration. Cleanup obtains it from
+    <code>listStubs</code>. <code>checkNotNull</code> turns a missing ID into a recorded delete
+    failure. The counter increases only after a successful delete. A failed delete does not stop
+    later mappings or targets.
+  </p>
+
+  <h3>6. Remove journal events independently</h3>
+  <p>
+    Journal cleanup sits after the nullable mapping block. Therefore it runs when mapping listing
+    fails. It also runs after any individual delete failure. Its return value is the number of
+    removed events for this target.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">try</span> {
+    removedRequestEvents += admin.removeRequests(requestCriteria)
+} <span class="k">catch</span> (failure: <span class="t">CancellationException</span>) {
+    <span class="k">throw</span> failure
+} <span class="k">catch</span> (failure: <span class="t">Exception</span>) {
+    recordFailure(
+        target = target,
+        admin = admin,
+        operation = <span class="t">CleanupOperation</span>.REMOVE_REQUEST_EVENTS,
+        cause = failure,
+    )
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">try</span> {
+    removedRequestEvents += admin.removeRequests(requestCriteria);
+} <span class="k">catch</span> (<span class="t">CancellationException</span> failure) {
+    <span class="k">throw</span> failure;
+} <span class="k">catch</span> (<span class="t">Exception</span> failure) {
+    recordFailure(target, admin, REMOVE_REQUEST_EVENTS, failure, <span class="k">null</span>);
+}</code></pre>
+  </div>
+
+  <h3>7. Return success or throw one aggregate failure</h3>
+  <p>
+    Cleanup constructs one result after all reachable work. <code>orThrow</code> returns the same
+    result when the failure list is empty. Otherwise it throws <code>CleanupException</code> with
+    that result. The exception attaches each original cause as a suppressed exception.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/mocks/MockInstaller.kt · framework/wiremock/Cleanup.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">return</span> <span class="t">CleanupResult</span>(
+    testId = testId,
+    removedMappings = removedMappings,
+    removedRequestEvents = removedRequestEvents,
+    failures = failures.toList(),
+).orThrow()</code></pre>
+    <pre data-lang="jv" hidden><code><span class="t">CleanupResult</span> result = <span class="k">new</span> <span class="t">CleanupResult</span>(
+    testId, removedMappings, removedRequestEvents, List.copyOf(failures));
+<span class="k">if</span> (!result.completed()) <span class="k">throw new</span> <span class="t">CleanupException</span>(result);
+<span class="k">return</span> result;</code></pre>
+  </div>
+  <p>
+    Ordinary failures become <code>CleanupFailure</code> values. Cleanup continues after them.
+    The final <code>CleanupException</code> contains the complete result and suppressed causes.
+    A cancellation is different. It stops cleanup immediately and stays a cancellation.
+  </p>
+  <div class="callout warn">
+    <p>
+      <strong>Exact means literal.</strong> A test ID such as <code>A.+[1]</code> does not own
+      <code>Axx1</code>, <code>A.+[1]-suffix</code>, or another near match.
+    </p>
+  </div>
+</section>
+
+<section id="kotlin">
+  <h2><span class="index">5</span>Kotlin, feature by feature</h2>
+  <p>These features carry the lifecycle contract. Each feature has a Java anchor.</p>
+
+  <article class="feature" id="f-extension">
+    <div class="feature-head">
+      <h3><span class="kw-chip">fun T.f()</span> <span class="kw-chip">copy</span></h3>
+      <span class="java-analogy sans">static helper plus record withers or builders</span>
+    </div>
+    <p>
+      <code>scopedTo</code> is an extension function on <code>PlannedStub</code>. It does not change
+      the class. Kotlin compiles it as a static function. The call reads like an instance method.
+    </p>
+    <p>
+      The models are data classes. Their <code>copy</code> functions keep all fields except named
+      changes. Three nested copies replace the mappings, request, and headers. The original stub
+      stays unchanged. Every mapping receives the new matcher.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">internal fun</span> <span class="t">PlannedStub</span>.scopedTo(testId: <span class="t">String</span>): <span class="t">PlannedStub</span> =
+    copy(mappings = mappings.map { mapping -&gt;
+        mapping.copy(request = mapping.request.copy(
+            headers = mapping.request.headers.orEmpty() +
+                (<span class="t">BAGGAGE_HEADER</span> to testIdHeaderMatcher(testId)),
+        ))
+    })</code></pre>
+      <pre data-lang="jv" hidden><code><span class="k">static</span> <span class="t">PlannedStub</span> scopedTo(<span class="t">PlannedStub</span> stub, <span class="t">String</span> testId) {
+    <span class="t">List</span>&lt;<span class="t">StubMapping</span>&gt; mappings = stub.mappings().stream()
+        .map(mapping -&gt; mapping.withRequest(
+            mapping.request().withHeaders(overlayTestId(mapping, testId))))
+        .toList();
+    <span class="k">return</span> stub.withMappings(mappings); <span class="c">// hand-written wither</span>
+}</code></pre>
+    </div>
+    <details class="without">
+      <summary>What breaks without the central scope operation?</summary>
+      <div class="inner"><p>
+        Each builder must add the header. One builder can omit it. The mapping can serve traffic,
+        but cleanup cannot find it. One post-builder operation prevents this state.
+      </p></div>
+    </details>
+  </article>
+
+  <article class="feature" id="f-null">
+    <div class="feature-head">
+      <h3><span class="kw-chip">T?</span> <span class="kw-chip">?.</span> <span class="kw-chip">orEmpty</span></h3>
+      <span class="java-analogy sans">@Nullable plus null checks and an empty default</span>
+    </div>
+    <p>
+      <code>StubInstallEvidenceSink?</code> can be null. Provisioning uses no evidence sink.
+      <code>evidenceSink?.recordInstalledStub(...)</code> calls the method only when the sink exists.
+    </p>
+    <p>
+      Mapping headers can also be null. <code>orEmpty()</code> changes a null map to an empty map.
+      The <code>+</code> operation creates a new map. The new entry replaces an old entry with the
+      same key.
+    </p>
+  </article>
+
+  <article class="feature" id="f-operator">
+    <div class="feature-head">
+      <h3><span class="kw-chip">operator get</span> <span class="kw-chip">entries</span></h3>
+      <span class="java-analogy sans">get method with bracket syntax; Enum.values()</span>
+    </div>
+    <p>
+      <code>WireMockInstances</code> defines <code>operator fun get</code>. This permits
+      <code>wiremock[target]</code>. Java calls the same idea as <code>wiremock.get(target)</code>.
+    </p>
+    <p>
+      <code>WireMockTarget.entries</code> is the typed list of all enum constants. Cleanup uses it
+      as the single target inventory. A new enum constant becomes part of cleanup automatically.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">for</span> (target <span class="k">in</span> <span class="t">WireMockTarget</span>.entries) {
+    <span class="k">val</span> admin = wiremock[target]
+    <span class="c">// clean this target</span>
+}</code></pre>
+      <pre data-lang="jv" hidden><code><span class="k">for</span> (<span class="t">WireMockTarget</span> target : <span class="t">WireMockTarget</span>.values()) {
+    <span class="t">WireMockAdmin</span> admin = wiremock.get(target);
+    <span class="c">// clean this target</span>
+}</code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-suspend">
+    <div class="feature-head">
+      <h3><span class="kw-chip">suspend</span> <span class="kw-chip">withContext</span></h3>
+      <span class="java-analogy sans">async I/O with direct control flow; a protected cleanup section</span>
+    </div>
+    <p>
+      WireMock Admin operations perform HTTP I/O. A <code>suspend</code> function can pause without
+      blocking its thread. Its code still reads from top to bottom.
+    </p>
+    <p>
+      <code>removeFor</code> enters <code>NonCancellable</code> before cleanup starts. A scenario
+      cancellation cannot prevent recovery from starting. The inner catches still rethrow a
+      <code>CancellationException</code> if an Admin call reports one.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java idea</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">suspend fun</span> removeFor(testId: <span class="t">String</span>): <span class="t">CleanupResult</span> =
+    withContext(<span class="t">NonCancellable</span>) {
+        removeScopedStateFor(testId)
+    }</code></pre>
+      <pre data-lang="jv" hidden><code><span class="c">// Java has no direct NonCancellable equivalent.</span>
+<span class="c">// A lifecycle owner must run cleanup in a scope that outlives cancellation.</span>
+<span class="t">CleanupResult</span> removeFor(<span class="t">String</span> testId) {
+    <span class="k">return</span> cleanupExecutor.run(() -&gt; removeScopedStateFor(testId));
+}</code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-local">
+    <div class="feature-head">
+      <h3><span class="kw-chip">local fun</span> <span class="kw-chip">mutableListOf</span></h3>
+      <span class="java-analogy sans">private helper near one method plus ArrayList</span>
+    </div>
+    <p>
+      <code>recordFailure</code> exists only inside <code>removeScopedStateFor</code>. It can use the
+      local <code>failures</code> list without a field or extra parameter. This keeps aggregation
+      state inside one cleanup attempt.
+    </p>
+    <p>
+      <code>mutableListOf</code> creates a mutable list. The <code>+=</code> operation appends one
+      failure. The method sends <code>failures.toList()</code> to the result. Callers receive a
+      read-only list view.
+    </p>
+  </article>
+
+  <article class="feature" id="f-catch">
+    <div class="feature-head">
+      <h3><span class="kw-chip">catch (x: Type)</span> <span class="kw-chip">?.</span></h3>
+      <span class="java-analogy sans">ordered catch clauses and guarded member access</span>
+    </div>
+    <p>
+      Kotlin catch clauses work like Java catch clauses. Order matters. The code catches
+      <code>CancellationException</code> first and rethrows it. It then catches ordinary
+      <code>Exception</code> values and records them.
+    </p>
+    <p>
+      A failed list operation sets <code>stubs</code> to null. The <code>if (stubs != null)</code>
+      check smart-casts it to a non-null list inside the block. Journal cleanup stays outside that
+      block. It still runs after a list failure.
+    </p>
+    <details class="without">
+      <summary>Why not use runCatching?</summary>
+      <div class="inner"><p>
+        <code>runCatching</code> catches <code>Throwable</code>. It can turn cancellation into an
+        ordinary result. Explicit catch clauses show that cancellation must propagate.
+      </p></div>
+    </details>
+  </article>
+</section>
+
+<section id="cheatsheet">
+  <h2><span class="index">6</span>Cheat sheet</h2>
+  <div class="table-scroll"><table>
+    <tr><th>Kotlin</th><th>Meaning here</th><th>Java nearest thing</th></tr>
+    <tr><td><code>internal</code></td><td>Visible inside this compiled module.</td><td>Package-private, but module-wide.</td></tr>
+    <tr><td><code>private val x</code> in a constructor</td><td>Create and assign a private read-only property.</td><td>A private final field plus constructor assignment.</td></tr>
+    <tr><td><code>val</code> / <code>var</code></td><td>Read-only or reassigned local reference.</td><td><code>final</code> local / normal local.</td></tr>
+    <tr><td><code>x: T = default</code></td><td>Let a caller omit the argument.</td><td>Constructor or method overload.</td></tr>
+    <tr><td><code>T?</code></td><td>The value can be null.</td><td><code>@Nullable T</code>.</td></tr>
+    <tr><td><code>x?.f()</code></td><td>Call only when <code>x</code> is not null.</td><td><code>if (x != null) x.f()</code>.</td></tr>
+    <tr><td><code>x.orEmpty()</code></td><td>Use an empty collection when <code>x</code> is null.</td><td>Null check plus <code>Map.of()</code>.</td></tr>
+    <tr><td><code>a to b</code></td><td>Create a pair for a map entry.</td><td><code>Map.entry(a, b)</code>.</td></tr>
+    <tr><td><code>copy(x = y)</code></td><td>Copy a data class and change one named field.</td><td>Record wither or builder.</td></tr>
+    <tr><td><code>map { }</code></td><td>Transform each list item.</td><td><code>stream().map(...).toList()</code>.</td></tr>
+    <tr><td><code>filter { }</code></td><td>Keep matching list items.</td><td><code>stream().filter(...)</code>.</td></tr>
+    <tr><td><code>?.f() == true</code></td><td>Accept only an explicit true after a nullable call chain.</td><td><code>Boolean.TRUE.equals(...)</code>.</td></tr>
+    <tr><td><code>try { a } catch { b }</code></td><td>Return a value from either branch.</td><td>Assign inside each Java branch.</td></tr>
+    <tr><td><code>failures += failure</code></td><td>Add one item to a mutable collection.</td><td><code>failures.add(failure)</code>.</td></tr>
+    <tr><td><code>count++</code></td><td>Increase a mutable number after success.</td><td>The same Java operator.</td></tr>
+    <tr><td><code>fun f(): T = expression</code></td><td>Use one expression as the function body and result.</td><td>A method with <code>return expression</code>.</td></tr>
+    <tr><td><code>wiremock[target]</code></td><td>Call an operator <code>get</code> function.</td><td><code>wiremock.get(target)</code>.</td></tr>
+    <tr><td><code>Enum.entries</code></td><td>Get all enum constants.</td><td><code>Enum.values()</code>.</td></tr>
+    <tr><td><code>suspend fun</code></td><td>Permit suspending I/O.</td><td><code>CompletableFuture</code> or virtual thread code.</td></tr>
+    <tr><td><code>withContext(NonCancellable)</code></td><td>Start cleanup in a context that ignores parent cancellation.</td><td>No direct equivalent.</td></tr>
+    <tr><td><code>checkNotNull(x) { message }</code></td><td>Return non-null <code>x</code> or throw.</td><td><code>Objects.requireNonNull(x, message)</code>.</td></tr>
+    <tr><td><code>result.orThrow()</code></td><td>Return success or throw the aggregate failure.</td><td>A validation method on a result object.</td></tr>
+  </table></div>
+  <div class="callout">
+    <p>
+      <strong>Real contracts:</strong>
+      <code>src/main/kotlin/uk/co/whitbread/integrationtests/testkit/mocks/MockInstaller.kt</code>,
+      <code>src/main/kotlin/uk/co/whitbread/integrationtests/framework/wiremock/Cleanup.kt</code>,
+      <code>src/main/kotlin/uk/co/whitbread/integrationtests/framework/wiremock/WireMockAdmin.kt</code>, and
+      <code>src/main/kotlin/uk/co/whitbread/integrationtests/framework/wiremock/WireMockInstances.kt</code>.
+      Tests pin the behavior in <code>MockInstallerTest.kt</code>,
+      <code>MockInstallerCountTest.kt</code>, and <code>MockInstallerCleanupTest.kt</code>.
+    </p>
+  </div>
+</section>
+
+<footer class="colophon">
+  <p>integration-tests-kotlin · docs/kotlin-for-java-devs · self-contained page, no external assets. Update it when MockInstaller, CleanupResult, WireMockAdmin, or WireMockTarget changes.</p>
+</footer>
+</main>
+</div>
+
+<script>
+  document.querySelectorAll('.panel').forEach(panel => {
+    const tabs = panel.querySelectorAll('.tab');
+    const pres = panel.querySelectorAll('pre[data-lang]');
+    if (tabs.length < 2) return;
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(item => item.setAttribute('aria-selected', 'false'));
+        tab.setAttribute('aria-selected', 'true');
+        const lang = tab.classList.contains('kt') ? 'kt' : 'jv';
+        pres.forEach(pre => { pre.hidden = pre.dataset.lang !== lang; });
+      });
+    });
+  });
+</script>
+</body>
+</html>

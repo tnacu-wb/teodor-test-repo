@@ -1,0 +1,24 @@
+@startuml
+actor User as User
+entity "Front End App" as FE
+entity "AppSync"
+entity "Address Lookup Entity Service" as ALS
+entity "Experian QAS" as QAS
+
+User -> FE: Get addresses by postcode
+FE -> AppSync: graphql AddressSearchCriteria
+AppSync -> ALS: GET v1/addresses?searchTerm={{searchTerm}}
+ALS -> QAS: DoSearch - **postcode**
+note right
+    DoSearch properties:
+    country=GBR,
+    engine=singleline,
+    flatten=true,
+    promptset=default
+end note
+
+ALS <- QAS: SearchResult containing list of **partial addresses, moniker**
+AppSync <- ALS: List of partial addresses and monikers
+FE <- AppSync: List of partial addresses and monikers
+User <- FE: Display list of partial addresses
+@enduml

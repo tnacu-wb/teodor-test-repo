@@ -1,0 +1,264 @@
+server:
+  port: 9064
+  shutdown: graceful
+
+spring:
+  cache:
+    type: ${CACHE_TYPE}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  cloud:
+    #needed for Feign fallback
+    openfeign:
+          circuitbreaker:
+            enabled: true
+    config:
+      enabled: false
+
+swagger:
+  api:
+    version: 1.0.0
+
+info:
+  build:
+    groupId: 'uk.co.whitbread'
+    artifact: 'piba-account-service-opera'
+    description: 'Whitbread Piba User account Micro-Service'
+    version: '1.0.0'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /piba-account-service/actuator
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  health:
+    redis:
+      enabled: false
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+logging:
+  level:
+    brave: WARN
+    org.apache.poi.hpsf.Section: ERROR
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+
+worldline:
+  clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+  cultureCode: en-GB
+  piba:
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    service:
+      url: ${PIBA_ACCOUNT_WORLDLINE_SERVICE_URL}
+  gb:
+    clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+    cultureCode: en-GB
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    url: ${PIBA_ACCOUNT_WORLDLINE_GB_URL}
+  de:
+    clientMessageId: ${WORLDLINE_DE_CLIENT_MESSAGE_ID}
+    cultureCode: de-DE
+    username: ${WORLDLINE_DE_USERNAME}
+    password: ${WORLDLINE_DE_PASSWORD}
+    url: ${PIBA_ACCOUNT_WORLDLINE_DE_URL}
+  tetheringPlus:
+    enabled: ${PIBA_ACCOUNT_WORLDLINE_TETHERING_PLUS_ENABLED}
+
+  rest:
+    name: worldline
+    gb:
+      culture-code: ${WORLDLINE_CULTURE_CODE_GB:en-GB}
+      username: ${WORLDLINE_REST_USERNAME_GB}
+      password: ${WORLDLINE_REST_PASSWORD_GB}
+      companyNumber: ${WORLDLINE_COMPANY_NUMBER_GB:35}
+    de:
+      culture-code: ${WORLDLINE_CULTURE_CODE_DE:de-DE}
+      username: ${WORLDLINE_REST_USERNAME_DE}
+      password: ${WORLDLINE_REST_PASSWORD_DE}
+      companyNumber: ${WORLDLINE_COMPANY_NUMBER_DE:91}
+    url: ${WORLDLINE_HOST}/PIRestAPI
+    account-info-endpoint: "/api/v1/account/info"
+    default-ip-address: "1.1.1.1"
+
+feign:
+  pibaguid:
+    name: pibaguid
+    url: http://${PIBA_GUID_URL:localhost:9063}
+
+auth:
+  tenants:
+    - name: auth0
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+  domain: ${AUTH_MNGMT_DOMAIN}
+  clientId: ${AUTH0_CLIENTID}
+  clientSecret: ${AUTH0_CLIENTSECRET}
+  audience: ${AUTH_MNGMT_AUDIENCE}
+  connection: ${AUTH_MNGMT_CONNECTION}
+
+
+
+
+cdh:
+  enableBbDataFetch: ${CDH_ENABLE_BB_DATA_FETCH}
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT_TYPE}
+    enabled: ${CDH_OAUTH_IS_ENABLED}
+  api:
+    host: ${CDH_API_HOST}
+    is-oauth: ${CDH_API_IS_OAUTH}
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: ${INN_BUSINESS_OAUTH_SUBSCRIPTION_KEY}
+
+threadpool:
+  worldline:
+    coreSize: ${WL_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${WL_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${WL_EXECUTOR_QUEUE_SIZE:50}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-dev
+        - opera-dit
+        - opera-sit
+        - opera-uat
+        - opera-demo
+        - opera-qa
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing: trace
+    org.apache.poi.hpsf.Section: INFO
+
+worldline:
+  clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+  cultureCode: en-GB
+  piba:
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    service:
+      url: https://test-premierinn.atosb2b.com/b2b.pi.v1.1/b2bpiapi.svc
+  tetheringPlus:
+    enabled: true
+  gb:
+    clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+    cultureCode: en-GB
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    url: https://test-premierinn.atosb2b.com/b2b.pi.v1.1/b2bpiapi.svc
+
+  de:
+    clientMessageId: ${WORLDLINE_DE_CLIENT_MESSAGE_ID}
+    cultureCode: de-DE
+    username: ${WORLDLINE_DE_USERNAME}
+    password: ${WORLDLINE_DE_PASSWORD}
+    url: https://test-premierinn.atosb2b.com/b2b.pi.v1.1/b2bpiapi.svc
+
+  rest:
+    url: https://test-premierinn.worldline.global/PIRestAPI
+
+cdh:
+  enableBbDataFetch: true
+  oauth-client:
+    host: http://localhost:${wiremock.server.port:0}
+    token-url: /oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: http://localhost:${wiremock.server.port:1}
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: 88134dec7f304a
+
+auth:
+  token:
+    providers:
+        # UAT
+      - domain: testingDomain
+        host: TestingHost
+        # The slash here seems to be required to match auth0 generated token
+        issuer: TestingIssuer

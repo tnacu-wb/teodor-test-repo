@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/leadBookerContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/generic_margin_16"
+    android:layout_marginEnd="@dimen/generic_margin_16">
+
+    <TextView
+        android:id="@+id/label"
+        style="@style/BodyMediumSemiBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pre_stay_confirm_lead_booker"
+        android:textColor="@color/full_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/clickable_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/clickable_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/generic_padding_20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/label"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/value"
+            style="@style/BodyMediumRegular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_dark"
+            android:layout_marginEnd="@dimen/generic_margin_8"
+            android:ellipsize="end"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:textAlignment="textEnd"
+            android:paddingStart="@dimen/generic_padding_20"/>
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_chevron_rounded_corners_right"
+            android:visibility="gone"/>
+    </LinearLayout>
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:background="@color/grey_light"
+        app:layout_constraintTop_toBottomOf="@id/clickable_layout"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

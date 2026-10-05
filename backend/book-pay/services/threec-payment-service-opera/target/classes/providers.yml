@@ -1,0 +1,539 @@
+provider:
+  accounts:
+    - # Pay now GBP ecommerce transactions via iPage
+      bookingType: "PAY_NOW"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "ECOMM" ]
+      configuration:
+        serviceAction: "3dspay"
+        newCardTemplate: "wb_newcard_pn_v15.xml"
+        savedCardTemplate: "wb_savedcard_pn_v15.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+    - # Pay now EUR ecommerce transactions via iPage
+      bookingType: "PAY_NOW"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "ECOMM" ]
+      configuration:
+        serviceAction: "3dspay"
+        newCardTemplate: "wb_newcard_pn_v15.xml"
+        savedCardTemplate: "wb_savedcard_pn_v15.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+    - # Pay on arrival GBP ecommerce transactions via iPage
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "ECOMM" ]
+      configuration:
+        serviceAction: "3dsauthorise"
+        newCardTemplate: "wb_newcard_poa_v15.xml"
+        savedCardTemplate: "wb_savedcard_poa_v15.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+    - # Pay on arrival EUR ecommerce transactions via iPage
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "ECOMM" ]
+      configuration:
+        serviceAction: "3dsauthorise"
+        newCardTemplate: "wb_newcard_poa_v15.xml"
+        savedCardTemplate: "wb_savedcard_poa_v15.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+    - # Pay on arrival GBP PIBA ecommerce transactions via iPage
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "PIBA"
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "ECOMM" ]
+      configuration:
+        serviceAction: "authorise"
+        newCardTemplate: "wb_newcard_poa_piba_v15.xml"
+        savedCardTemplate: "wb_savedcard_poa_piba_v15.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        newCardCnpTemplate: "wb_newcard_poa_cnp_piba_placeholder.xml"
+        savedCardCnpTemplate: "wb_savedcard_poa_cnp_piba_placeholder.xml"
+        fraudScreened: false
+    - # Pay now GBP MOTO CCC transactions
+      bookingType: "PAY_NOW"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "CCC" ]
+      paymentSubTypes: [ "MOTO","ECOMM" ]
+      configuration:
+        serviceAction: "payrequestnocardread"
+        fraudScreened: true
+        fraudProfile: Call Centre profile
+        cardOnFileIndicator: ""
+    - # Pay now GBP MOTO GDS, FRONT_DESK transactions
+      bookingType: "PAY_NOW"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "GDS","FRONT_DESK" ]
+      paymentSubTypes: [ "MOTO","ECOMM" ]
+      configuration:
+        serviceAction: "payrequestnocardread"
+        fraudScreened: false
+    - # Pay now EUR c CCC transactions
+      bookingType: "PAY_NOW"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "CCC" ]
+      paymentSubTypes: [ "MOTO","ECOMM" ]
+      configuration:
+        serviceAction: "payrequestnocardread"
+        fraudScreened: true
+        fraudProfile: Call Centre profile
+        cardOnFileIndicator: ""
+    - # Pay now EUR MOTO GDS,FRONT_DESK transactions
+      bookingType: "PAY_NOW"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "GDS", "FRONT_DESK" ]
+      paymentSubTypes: [ "MOTO","ECOMM" ]
+      configuration:
+        serviceAction: "payrequestnocardread"
+        fraudScreened: false
+    - # Pay on arrival GBP MOTO CCC transactions
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "CCC" ]
+      paymentSubTypes: [ "MOTO","ECOMM" ]
+      configuration:
+        serviceAction: "EftAuthorization"
+        fraudScreened: true
+        fraudProfile: Call Centre profile
+        cardOnFileIndicator: ""
+    - # Pay on arrival GBP MOTO GDS and front desk transactions
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "GDS","FRONT_DESK" ]
+      paymentSubTypes: [ "MOTO","ECOMM" ]
+      configuration:
+        serviceAction: "EftAuthorization"
+        fraudScreened: false
+    - # Pay on arrival EUR MOTO CCC transactions
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "CCC" ]
+      paymentSubTypes: [ "MOTO","ECOMM" ]
+      configuration:
+        serviceAction: "EftAuthorization"
+        fraudScreened: true
+        fraudProfile: Call Centre profile
+        cardOnFileIndicator: ""
+    - # Pay on arrival EUR MOTO GDS and front desk transactions
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "GDS","FRONT_DESK" ]
+      paymentSubTypes: [ "MOTO","ECOMM" ]
+      configuration:
+        serviceAction: "EftAuthorization"
+        fraudScreened: false
+    - # Pay on arrival PIBA MOTO transactions - GBP
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "PIBA"
+      currency: "GBP"
+      channelTypes: [ "CCC", "GDS", "FRONT_DESK" ]
+      paymentSubTypes: [ "MOTO","ECOMM" ]
+      configuration:
+        serviceAction: "EftAuthorization"
+        fraudScreened: false
+
+    - # Pay on arrival PIBA MOTO transactions - EUR
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "PIBA"
+      currency: "EUR"
+      channelTypes: [ "CCC", "GDS", "FRONT_DESK" ]
+      paymentSubTypes: [ "MOTO","ECOMM" ]
+      configuration:
+        serviceAction: "EftAuthorization"
+        fraudScreened: false
+
+    - # Pay now PIBA front desk transactions - GBP
+      bookingType: "PAY_NOW"
+      paymentType: "PIBA"
+      currency: "GBP"
+      channelTypes: [ "FRONT_DESK" ]
+      paymentSubTypes: [ "MOTO" ]
+      configuration:
+        serviceAction: "payrequestnocardread"
+        fraudScreened: false
+
+    - # ECKOH
+      paymentSubTypes: [ "ECKOH" ]
+      paymentType: "CARD"
+      currency: "GBP"
+      configuration:
+        newCardTemplate: "N/A"
+
+    - #Pay On Arrival Distribution - GBP
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "DISTR" ]
+      paymentSubTypes: [ "MOTO" ]
+      configuration:
+        serviceAction: "EftAuthorization"
+        fraudScreened: false
+
+    - #Pay On Arrival Distribution - EUR
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "DISTR" ]
+      paymentSubTypes: [ "MOTO" ]
+      configuration:
+        serviceAction: "EftAuthorization"
+        fraudScreened: false
+
+    - #Pay On Arrival Distribution - GBP
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "PIBA"
+      currency: "GBP"
+      channelTypes: [ "DISTR" ]
+      paymentSubTypes: [ "MOTO" ]
+      configuration:
+        serviceAction: "EftAuthorization"
+        fraudScreened: false
+
+    - #Pay On Arrival Distribution - EUR
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "PIBA"
+      currency: "EUR"
+      channelTypes: [ "DISTR" ]
+      paymentSubTypes: [ "MOTO" ]
+      configuration:
+        serviceAction: "EftAuthorization"
+        fraudScreened: false
+
+    - # Pay now GBP ecommerce transactions via iPage (IOS)
+      bookingType: "PAY_NOW"
+      paymentType: "WALLET_APPLE"
+      currency: "GBP"
+      channelTypes: [ "PI","BB","APPS_IOS" ]
+      paymentSubTypes: [ "ECOMM", "SECURE_BOOKING" ]
+      configuration:
+        serviceAction: "3dspay"
+        newCardTemplate: "wb_newcard_pn_v14_APGP.xml"
+        savedCardTemplate: "wb_newcard_pn_v14_APGP.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - #Pay now GBP ecommerce transactions via iPage (ANDROID)
+      bookingType: "PAY_NOW"
+      paymentType: "WALLET_GOOGLE"
+      currency: "GBP"
+      channelTypes: [ "PI","BB","APPS_ANDROID" ]
+      paymentSubTypes: [ "ECOMM", "SECURE_BOOKING" ]
+      configuration:
+        serviceAction: "3dspay"
+        newCardTemplate: "wb_newcard_pn_v14_APGP.xml"
+        savedCardTemplate: "wb_newcard_pn_v14_APGP.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - # Pay now EUR ecommerce transactions via iPage (IOS)
+      bookingType: "PAY_NOW"
+      paymentType: "WALLET_APPLE"
+      currency: "EUR"
+      channelTypes: [ "PI","BB","APPS_IOS" ]
+      paymentSubTypes: [ "ECOMM", "SECURE_BOOKING" ]
+      configuration:
+        serviceAction: "3dspay"
+        newCardTemplate: "wb_newcard_pn_v14_APGP.xml"
+        savedCardTemplate: "wb_newcard_pn_v14_APGP.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - #Pay now EUR ecommerce transactions via iPage (ANDROID)
+      bookingType: "PAY_NOW"
+      paymentType: "WALLET_GOOGLE"
+      currency: "EUR"
+      channelTypes: [ "PI","BB","APPS_ANDROID" ]
+      paymentSubTypes: [ "ECOMM", "SECURE_BOOKING" ]
+      configuration:
+        serviceAction: "3dspay"
+        newCardTemplate: "wb_newcard_pn_v14_APGP.xml"
+        savedCardTemplate: "wb_newcard_pn_v14_APGP.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - # Pay now GBP PayPal transactions
+      bookingType: "PAY_NOW"
+      paymentType: "PAYPAL"
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "MIT" ]
+      configuration:
+        serviceAction: ""
+        newCardTemplate: ""
+        savedCardTemplate: ""
+        newCardTrxOption: ""
+        savedCardTrxOption: ""
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - # Pay on arrival GBP PayPal transactions
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "PAYPAL"
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "MIT" ]
+      configuration:
+        serviceAction: ""
+        newCardTemplate: ""
+        savedCardTemplate: ""
+        newCardTrxOption: ""
+        savedCardTrxOption: ""
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - # Pay now EUR PayPal transactions
+      bookingType: "PAY_NOW"
+      paymentType: "PAYPAL"
+      currency: "EUR"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "MIT" ]
+      configuration:
+        serviceAction: ""
+        newCardTemplate: ""
+        savedCardTemplate: ""
+        newCardTrxOption: ""
+        savedCardTrxOption: ""
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - # Pay on arrival EUR PayPal transactions
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "PAYPAL"
+      currency: "EUR"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "MIT" ]
+      configuration:
+        serviceAction: ""
+        newCardTemplate: ""
+        savedCardTemplate: ""
+        newCardTrxOption: ""
+        savedCardTrxOption: ""
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - # Pay on arrival EUR ecommerce transactions via iPage
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "PIBA"
+      currency: "EUR"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "ECOMM" ]
+      configuration:
+        serviceAction: "authorise"
+        newCardTemplate: "wb_newcard_poa_piba_euro_v9.xml"
+        savedCardTemplate: "wb_savedcard_poa_piba_euro_v9.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        newCardCnpTemplate: "wb_newcard_poa_cnp_piba_euro_placeholder.xml"
+        savedCardCnpTemplate: "wb_savedcard_poa_cnp_piba_euro_placeholder.xml"
+        fraudScreened: false
+
+    - # PIBA Save card
+      paymentType: "PIBA"
+      paymentSubTypes: [ "SAVE_CARD" ]
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      configuration:
+        serviceAction: "authorise"
+        newCardTemplate: "wb_addcard_pci_piba_v6.xml"
+        newCardTrxOption: "G"
+        cardOnFileIndicator: "S"
+        newCardCnpTemplate: "wb_addcard_pci_cnp_piba_placeholder.xml"
+
+    - # CREDIT/DEBIT Save card
+      paymentType: "CARD"
+      paymentSubTypes: [ "SAVE_CARD" ]
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      configuration:
+        serviceAction: "3DSAuthorise"
+        newCardTemplate: "wb_addcard_pci_v6.xml"
+        newCardTrxOption: "G"
+        cardOnFileIndicator: "S"
+
+    - # CARD authentication
+      paymentType: "CARD"
+      paymentSubTypes: [ "AUTHORIZE_CARD" ]
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      configuration:
+        serviceAction: "3DSAuthorise"
+        newCardTemplate: "wb_newcard_sca_v5.xml"
+        newCardTrxOption: "G"
+        cardOnFileIndicator: "S"
+
+    - # Pay now GBP Secure Booking transactions via iPage
+      bookingType: "PAY_NOW"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "SECURE_BOOKING" ]
+      configuration:
+        serviceAction: "3dspay"
+        newCardTemplate: "wb_newcard_pn_v11.xml"
+        savedCardTemplate: "wb_savedcard_pn_v11.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - # Pay now EUR Secure Booking transactions via iPage
+      bookingType: "PAY_NOW"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "SECURE_BOOKING" ]
+      configuration:
+        serviceAction: "3dspay"
+        newCardTemplate: "wb_newcard_pn_v11.xml"
+        savedCardTemplate: "wb_savedcard_pn_v11.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - # Pay on arrival GBP Secure Booking transactions via iPage
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "SECURE_BOOKING" ]
+      configuration:
+        serviceAction: "3dsauthorise"
+        newCardTemplate: "wb_newcard_poa_v10.xml"
+        savedCardTemplate: "wb_savedcard_poa_v10.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - # Pay on arrival EUR Secure Booking transactions via iPage
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "SECURE_BOOKING" ]
+      configuration:
+        serviceAction: "3dsauthorise"
+        newCardTemplate: "wb_newcard_poa_v10.xml"
+        savedCardTemplate: "wb_savedcard_poa_v10.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        fraudScreened: true
+        fraudProfile: Web profile
+
+    - # Pay on arrival GBP PIBA Secure Booking transactions via iPage
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "PIBA"
+      currency: "GBP"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "SECURE_BOOKING" ]
+      configuration:
+        serviceAction: "authorise"
+        newCardTemplate: "wb_newcard_poa_piba_v10.xml"
+        savedCardTemplate: "wb_savedcard_poa_piba_v10.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        newCardCnpTemplate: "wb_newcard_poa_cnp_piba_placeholder.xml"
+        savedCardCnpTemplate: "wb_savedcard_poa_cnp_piba_placeholder.xml"
+        fraudScreened: false
+
+    - # Pay on arrival EUR PIBA Secure Booking transactions via iPage
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "PIBA"
+      currency: "EUR"
+      channelTypes: [ "PI", "BB", "APPS_IOS", "APPS_ANDROID" ]
+      paymentSubTypes: [ "SECURE_BOOKING" ]
+      configuration:
+        serviceAction: "authorise"
+        newCardTemplate: "wb_newcard_poa_piba_v10.xml"
+        savedCardTemplate: "wb_savedcard_poa_piba_v10.xml"
+        newCardTrxOption: "G"
+        savedCardTrxOption: "P"
+        newCardCnpTemplate: "wb_newcard_poa_cnp_piba_euro_placeholder.xml"
+        savedCardCnpTemplate: "wb_savedcard_poa_cnp_piba_euro_placeholder.xml"
+        fraudScreened: false
+
+    - # Pay now EUR MIT_CC APPS transactions
+      bookingType: "PAY_NOW"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "APPS_IOS", "APPS_ANDROID", "PI","BB" ]
+      paymentSubTypes: [ "MIT_CC" ]
+      configuration:
+        serviceAction: "payrequestnocardread"
+        fraudScreened: false
+        cardOnFileIndicator: "C"
+        transInitiator: "M"
+
+    - # Pay now GBP MIT_CC APPS transactions
+      bookingType: "PAY_NOW"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "APPS_IOS", "APPS_ANDROID", "PI", "BB"]
+      paymentSubTypes: [ "MIT_CC" ]
+      configuration:
+        serviceAction: "payrequestnocardread"
+        fraudScreened: false
+        cardOnFileIndicator: "C"
+        transInitiator: "M"
+
+    - # Pay on arrival EUR MIT_CC for APP transactions
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "EUR"
+      channelTypes: [ "APPS_IOS", "APPS_ANDROID", "PI","BB" ]
+      paymentSubTypes: [ "MIT_CC" ]
+      configuration:
+        serviceAction: "payrequestnocardread"
+        fraudScreened: false
+        cardOnFileIndicator: "C"
+        transInitiator: "M"
+
+    - # Pay on arrival GBP MIT_CC for APP transactions
+      bookingType: "PAY_ON_ARRIVAL"
+      paymentType: "CARD"
+      currency: "GBP"
+      channelTypes: [ "APPS_IOS", "APPS_ANDROID", "PI", "BB" ]
+      paymentSubTypes: [ "MIT_CC" ]
+      configuration:
+        serviceAction: "payrequestnocardread"
+        fraudScreened: false
+        cardOnFileIndicator: "C"
+        transInitiator: "M"

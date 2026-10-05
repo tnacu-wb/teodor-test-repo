@@ -1,0 +1,21 @@
+@startuml
+entity "OHIP Adapter Service" as OHIP
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as WebClient
+entity Opera as Opera
+
+OHIP -> Controller: POST /v1/reservations/cancellations
+Controller -> InboundPort: cancelReservation
+InboundPort -> OutboundPort: cancelReservation
+OutboundPort -> WebClient: cancelReservation
+
+WebClient -> Opera: POST /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/cancellations
+WebClient <- Opera: CancelReservationDetails
+
+OutboundPort <- WebClient: CancelReservationResponse
+InboundPort <- OutboundPort: CancelReservationResponse
+Controller <- InboundPort: CancelReservationResponse
+OHIP <- Controller: CancelReservationResponseDto
+@enduml

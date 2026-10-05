@@ -1,0 +1,126 @@
+name: Matrix Deploy
+
+on:
+  workflow_call:
+    inputs:
+      service-name:
+        description: 'Name of the service to build (e.g. basket-async-order-processor)'
+        required: true
+        type: string
+      image-tag:
+        description: 'Tag pushed by the docker-build job (format: pr-<number>-<merge-sha> or <version>-<branch>-<sha>-<timestamp>)'
+        required: true
+        type: string
+      image-repository:
+        description: >-
+          Fully-qualified ECR repository, including the registry host. Required:
+          docker-build pushes to ECR only, so a values.yaml carrying a bare
+          DockerHub name like whitbreaddigital/<service> resolves to an image
+          that was never published and the rollout fails on ImagePullBackOff.
+        required: true
+        type: string
+
+jobs:
+  generate-and-deploy:
+    name: Generate helm values for ${{ inputs.service-name }} and deploy
+    runs-on: dev-default-runner-scale-set
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      id-token: write
+
+    env:
+      SERVICE_NAME: ${{ inputs.service-name }}
+
+    steps:
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.PIPELINE_APP_ID }}
+          private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+          path: digital-monorepo
+
+      - name: Locate service helm values
+        id: helm-values
+        run: |
+          VALUES_FILE=$(find digital-monorepo -type f -path "*/${SERVICE_NAME}/infrastructure/helm/values.yaml" -print -quit)
+          if [ -n "${VALUES_FILE}" ]; then
+            echo "Found helm values for ${SERVICE_NAME} at ${VALUES_FILE}"
+            echo "found=true" >> "${GITHUB_OUTPUT}"
+            echo "values-file=${VALUES_FILE}" >> "${GITHUB_OUTPUT}"
+          else
+            echo "No helm values found for ${SERVICE_NAME}, falling back to Flux conversion"
+            echo "found=false" >> "${GITHUB_OUTPUT}"
+            echo "values-file=values.yaml" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Checkout microservices-gitops Repo
+        if: steps.helm-values.outputs.found != 'true'
+        uses: actions/checkout@v7
+        with:
+          repository: whitbread-eos/microservices-gitops
+          ref: main
+          token: ${{ steps.generate-token.outputs.token }}
+          path: microservices-gitops
+
+      - name: Checkout helm-central-charts Repo
+        uses: actions/checkout@v7
+        with:
+          repository: whitbread-eos/helm-central-charts
+          ref: main
+          token: ${{ steps.generate-token.outputs.token }}
+          path: shared-charts
+
+      - name: Set up Python
+        if: steps.helm-values.outputs.found != 'true'
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+
+      - name: Install PyYAML
+        if: steps.helm-values.outputs.found != 'true'
+        run: pip install PyYAML
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v5
+
+      - name: Convert Flux to helm values
+        if: steps.helm-values.outputs.found != 'true'
+        run: |
+          python digital-monorepo/.github/workflows/scripts/flux-to-helm-values.py microservices-gitops/opera-dev/apps/${{ inputs.service-name }}.yaml -o values.yaml
+          cat values.yaml
+
+      - name: Deploy to Kubernetes with Helm
+        env:
+          VALUES_FILE: ${{ steps.helm-values.outputs.values-file }}
+          IMAGE_TAG: ${{ inputs.image-tag }}
+          IMAGE_REPOSITORY: ${{ inputs.image-repository }}
+        run: |
+          set -euo pipefail
+          # image.repository is forced to the ECR address the docker-build job
+          # actually pushed to. Several values.yaml files still carry a bare
+          # DockerHub name, and nothing publishes there any more.
+          #
+          # service.name is set alongside applicationName because the chart names
+          # the Service after applicationName but points the VirtualService at
+          # service.name — leaving them to drift silently misroutes traffic.
+          helm upgrade --install "${{ inputs.service-name }}" shared-charts/charts/opera-app-chart \
+            --namespace opera-be \
+            --values "$VALUES_FILE" \
+            --set applicationName="${{ inputs.service-name }}" \
+            --set service.name="${{ inputs.service-name }}" \
+            --set namespace="opera-be" \
+            --set image.repository="$IMAGE_REPOSITORY" \
+            --set image.tag="$IMAGE_TAG" \
+            --set imageAutomation.create=false \
+            --wait \
+            --timeout 10m \
+            --cleanup-on-fail

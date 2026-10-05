@@ -1,0 +1,2710 @@
+openapi: 3.0.1
+info:
+  description: "<p>The basket feature will be modeled as a distinct micro-service\
+    \ that will interact mainly with the Reservation Entity micro-service to manage\
+    \ any interactions performed by the end-users against a stay definition. Based\
+    \ on the user’s selection, the Reservation entity will be responsible for creating\
+    \ the necessary number of cart items in the basket (i.e. one Opera reservation\
+    \ for each room). The same Reservation micro-service must provide all the details\
+    \ that are relevant for the items placed in the basket.</p>"
+  title: Basket Service API Documentation
+  version: 2.0.0
+servers:
+  - description: Generated server url
+    url: http://localhost:9104
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  /v1/baskets:
+    get:
+      operationId: getBasketByBookingReference
+      parameters:
+        - in: query
+          name: bookingReference
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketDto'
+          description: OK
+      tags:
+        - basket-controller
+    post:
+      operationId: createBasket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBasketRequestDto'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBasketResponseDto'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: "Creates a new empty basket entity, assigns a new, unique, random reference\
+        \ or a migrated reference, persists the Basket and returns an empty basket\
+        \ model to the caller."
+      tags:
+        - basket-controller
+  /v1/baskets/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+          description: OK
+      summary: Actuator root web endpoint
+      tags:
+        - Actuator
+  /v1/baskets/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'health'
+      tags:
+        - Actuator
+  /v1/baskets/actuator/health/**:
+    get:
+      operationId: health-path
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'health-path'
+      tags:
+        - Actuator
+  /v1/baskets/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'info'
+      tags:
+        - Actuator
+  /v1/baskets/actuator/metrics:
+    get:
+      operationId: metrics
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'metrics'
+      tags:
+        - Actuator
+  /v1/baskets/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metrics-requiredMetricName
+      parameters:
+        - in: path
+          name: requiredMetricName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+        - Actuator
+  /v1/baskets/ccui/discount:
+    put:
+      operationId: updateDiscount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDiscountRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update discount.
+      tags:
+        - ccui-payment-controller
+  /v1/baskets/ccui/{basket-reference}/eckoh:
+    get:
+      operationId: getEckohRecordingStatus
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentStatusResponseDto'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Endpoint for polling Eckoh card details recording status.
+      tags:
+        - ccui-eckoh-controller
+    post:
+      operationId: initiateEckohPayment
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EckohPaymentRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EckohPaymentResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Initiate a call to Eckoh payment.
+      tags:
+        - ccui-eckoh-controller
+  /v1/baskets/ccui/{basket-reference}/pay:
+    post:
+      operationId: initiatePaymentProcess_1
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CcuiPaymentRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentCcuiResponseDto'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Initiate payment.
+      tags:
+        - ccui-payment-controller
+  /v1/baskets/deposit-folios:
+    post:
+      operationId: saveCharges
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrepaidDepositsRequestDto'
+        required: true
+      responses:
+        "201":
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Takes the charges of a list of reservations and saves them in the DB
+      tags:
+        - basket-deposit-folio-controller
+  /v1/baskets/deposit-folios/{reservationId}:
+    get:
+      operationId: getCharges
+      parameters:
+        - in: path
+          name: reservationId
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PrepaidDepositsDto'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Takes the charges for a reservation by reservation id from DB
+      tags:
+        - basket-deposit-folio-controller
+  /v1/baskets/email:
+    post:
+      operationId: triggerEmailNotificationProcess
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailRequestDto'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json: {}
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Initiate email trigger notification process.
+      tags:
+        - email-notification-controller
+  /v1/baskets/reservations/update:
+    put:
+      operationId: updateReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateReservationSingleCallRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationByBasketRefResponse'
+          description: OK
+      tags:
+        - basket-controller
+  /v1/baskets/{basket-reference}:
+    delete:
+      operationId: deleteBasket
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: If-Match
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketDto'
+          description: Removed
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "412":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Precondition failed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Delete an existing basket.
+      tags:
+        - basket-controller
+    get:
+      operationId: getBasket
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Returns the content of a Basket resource identified by the supplied
+        unique basket reference.
+      tags:
+        - basket-controller
+  /v1/baskets/{basket-reference}/allowances:
+    put:
+      operationId: updateAllowances
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: If-Match
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAllowancesRequestDto'
+        required: true
+      responses:
+        "204":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "412":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Precondition failed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Updates the business allowances.
+      tags:
+        - basket-controller
+  /v1/baskets/{basket-reference}/cancel:
+    put:
+      operationId: cancelBasket
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelBasketDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Cancels Basket resource identified by the supplied unique basket reference.
+        Basket status is updated to CANCELLED and an email is sent to the user.
+      tags:
+        - basket-controller
+  /v1/baskets/{basket-reference}/emailNotifications:
+    put:
+      operationId: sendEmailOption
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+      tags:
+        - basket-controller
+  /v1/baskets/{basket-reference}/erroredBooking:
+    put:
+      operationId: setErroredBooking
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErroredBookingDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+      tags:
+        - basket-controller
+  /v1/baskets/{basket-reference}/items:
+    post:
+      operationId: addItem
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: If-Match
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddBasketItemRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "412":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Precondition failed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Adds an item to a basket.
+      tags:
+        - basket-controller
+  /v1/baskets/{basket-reference}/items/{itemId}:
+    delete:
+      operationId: removeItem
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: If-Match
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "412":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Precondition failed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Remove an item from an existing basket.
+      tags:
+        - basket-controller
+  /v1/baskets/{basket-reference}/items/{itemId}/acks:
+    post:
+      operationId: confirmItem
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmItemProcessingRequestDto'
+        required: true
+      responses:
+        "204":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketDto'
+          description: Updated
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Confirm the processing of an item.
+      tags:
+        - basket-controller
+  /v1/baskets/{basket-reference}/linkAmendReservations:
+    post:
+      operationId: linkAmendReservations
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: If-Match
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAmendedReservationsRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketDto'
+          description: OK
+      tags:
+        - basket-controller
+  /v1/baskets/{basket-reference}/preAuthCharges:
+    put:
+      operationId: setPreAuthCharges
+      parameters:
+        - in: path
+          name: basket-reference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreAuthChargesDto'
+        required: true
+      responses:
+        "204":
+          content:
+            application/json: {}
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Updates A2C Pre Auth Charges
+      tags:
+        - basket-controller
+  /v1/baskets/{basketReference}/checkStatus:
+    get:
+      operationId: checkStatus
+      parameters:
+        - in: path
+          name: basketReference
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketStatusResponseDto'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Returns the content of a BasketStatusResponse resource identified by
+        the supplied unique basket reference.
+      tags:
+        - basket-controller
+  /v1/baskets/{basketReference}/pay:
+    post:
+      operationId: initiatePaymentProcess
+      parameters:
+        - in: path
+          name: basketReference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequestDto'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitiatePaymentResponseDto'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Initiate payment process.
+      tags:
+        - payment-controller
+  /v1/baskets/{basketReference}/pp-pay:
+    post:
+      operationId: initiatePaypalPaymentProcess
+      parameters:
+        - in: path
+          name: basketReference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequestDto'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitiatePaymentResponseDto'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Initiate paypal payment process.
+      tags:
+        - payment-controller
+  /v1/baskets/{basketReference}/refund:
+    post:
+      operationId: refund
+      parameters:
+        - in: path
+          name: basketReference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequestDto'
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponseDto'
+          description: Accepted
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Initiate refund payment process.
+      tags:
+        - payment-controller
+  /v1/baskets/{reference}/payment-webhook:
+    post:
+      operationId: paymentWebhook
+      parameters:
+        - in: path
+          name: reference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentsConfirmationDto'
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketDto'
+          description: Accepted
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Confirm the processing of a payment.
+      tags:
+        - payment-controller
+  /v1/baskets/{reference}/process-amend:
+    post:
+      operationId: processAmend
+      parameters:
+        - in: path
+          name: reference
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessAmendRequestDto'
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketDto'
+          description: Accepted
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Initiate the process of an amend.
+      tags:
+        - payment-controller
+components:
+  schemas:
+    AccountCompanyItems:
+      type: object
+      properties:
+        charges:
+          type: string
+        companyId:
+          type: string
+        companyNumber:
+          type: string
+    AccountCompanyItemsDto:
+      type: object
+      properties:
+        charges:
+          type: string
+        companyId:
+          type: string
+        companyNumber:
+          type: string
+    AddAmendedReservationsRequestDto:
+      type: object
+      properties:
+        channel:
+          type: string
+        linkAmendReservations:
+          type: object
+          additionalProperties:
+            type: string
+      required:
+        - channel
+        - linkAmendReservations
+    AddBasketItemDto:
+      type: object
+      properties:
+        details:
+          type: object
+          additionalProperties:
+            type: string
+        sourceId:
+          type: string
+        type:
+          type: string
+      required:
+        - sourceId
+        - type
+    AddBasketItemRequestDto:
+      type: object
+      properties:
+        itemTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddBasketItemTypeDto'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddBasketItemDto'
+        lockingTime:
+          type: string
+        migratedReservation:
+          type: boolean
+        reference:
+          type: string
+      required:
+        - itemTypes
+        - items
+        - reference
+    AddBasketItemTypeDto:
+      type: object
+      properties:
+        confirmationData:
+          type: array
+          items:
+            type: string
+        type:
+          type: string
+    Address:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        cityName:
+          type: string
+        country:
+          type: string
+        postalCode:
+          type: string
+    AddressCcuiDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          maxLength: 35
+          minLength: 0
+          pattern: "^[ a-zA-Z0-9-ÖØ-ʒͰ-ͳͶ-ͷͻ-ͽvΑ-Ͽἀ-ῼЀ-ӿễấßÜÖÄüöä/'.,-]*$"
+        addressLine2:
+          type: string
+          maxLength: 35
+          minLength: 0
+          pattern: "^[ a-zA-Z0-9-ÖØ-ʒͰ-ͳͶ-ͷͻ-ͽvΑ-Ͽἀ-ῼЀ-ӿễấßÜÖÄüöä/'.,-]*$"
+        addressLine3:
+          type: string
+          maxLength: 35
+          minLength: 0
+          pattern: "^[ a-zA-Z0-9-ÖØ-ʒͰ-ͳͶ-ͷͻ-ͽvΑ-Ͽἀ-ῼЀ-ӿễấßÜÖÄüöä/'.,-]*$"
+        addressLine4:
+          type: string
+          maxLength: 35
+          minLength: 0
+          pattern: "^[ a-zA-Z0-9-ÖØ-ʒͰ-ͳͶ-ͷͻ-ͽvΑ-Ͽἀ-ῼЀ-ӿễấßÜÖÄüöä/'.,-]*$"
+        addressType:
+          type: string
+        cityName:
+          type: string
+        companyName:
+          type: string
+        country:
+          type: string
+        postalCode:
+          type: string
+    AddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          maxLength: 100
+          minLength: 0
+        addressLine2:
+          type: string
+          maxLength: 100
+          minLength: 0
+        addressLine3:
+          type: string
+          maxLength: 100
+          minLength: 0
+        addressLine4:
+          type: string
+          maxLength: 100
+          minLength: 0
+        addressType:
+          type: string
+        channel:
+          type: string
+        cityName:
+          type: string
+        companyName:
+          type: string
+        country:
+          type: string
+        postalCode:
+          type: string
+      required:
+        - addressLine1
+    AmountDto:
+      type: object
+      properties:
+        currency:
+          type: string
+        minorUnits:
+          type: number
+    BasketDto:
+      type: object
+      properties:
+        basketError:
+          $ref: '#/components/schemas/BasketError'
+        bookingAllowances:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingAllowanceDto'
+        bookingReference:
+          type: string
+        ccuiExtraItems:
+          $ref: '#/components/schemas/CcuiExtraItems'
+        channel:
+          type: string
+        createdAt:
+          type: string
+        hotelId:
+          type: string
+        isErroredBooking:
+          type: boolean
+        itemTypes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasketItemDto'
+        lastModifiedAt:
+          type: string
+        linkAmendReservations:
+          type: object
+          additionalProperties:
+            type: string
+        lockingTime:
+          type: string
+        originalBasketId:
+          type: string
+        paymentID:
+          type: string
+        paymentOption:
+          type: string
+        paymentStatus:
+          type: string
+          enum:
+            - COMPLETED
+            - REFUNDING
+            - REFUNDED
+            - FAILED_REFUND
+        reference:
+          type: string
+        sendMail:
+          type: boolean
+        status:
+          type: string
+          enum:
+            - OPEN
+            - PROCESSING
+            - AMENDING
+            - COMPLETED
+            - AMENDED
+            - CANCELLED
+            - PAY_PENDING
+            - AMEND_FAILED
+            - FAILED
+        userId:
+          type: string
+      required:
+        - bookingReference
+        - createdAt
+        - hotelId
+        - itemTypes
+        - items
+        - reference
+        - status
+    BasketError:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+            - PAYMENT
+            - CONFIRMATION
+            - TIMEOUT
+            - AMEND_CONFIRM
+            - AMEND_DEPOSIT_FOLIOS
+            - AMEND_REFUND
+            - AMEND_REVERT
+    BasketErrorDto:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+            - PAYMENT
+            - CONFIRMATION
+            - TIMEOUT
+            - AMEND_CONFIRM
+            - AMEND_DEPOSIT_FOLIOS
+            - AMEND_REFUND
+            - AMEND_REVERT
+    BasketItemDto:
+      type: object
+      properties:
+        details:
+          type: object
+          additionalProperties:
+            type: string
+        sourceId:
+          type: string
+        type:
+          type: string
+      required:
+        - sourceId
+        - type
+    BasketStatusResponseDto:
+      type: object
+      properties:
+        basketError:
+          $ref: '#/components/schemas/BasketErrorDto'
+        basketReference:
+          type: string
+        basketStatus:
+          type: string
+          enum:
+            - OPEN
+            - PROCESSING
+            - AMENDING
+            - COMPLETED
+            - AMENDED
+            - CANCELLED
+            - PAY_PENDING
+            - AMEND_FAILED
+            - FAILED
+        createdAt:
+          type: string
+        retryPayment:
+          type: boolean
+      required:
+        - basketReference
+        - basketStatus
+        - createdAt
+    Billing:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        telephone:
+          type: string
+        title:
+          type: string
+    BillingCcuiDto:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AddressCcuiDto'
+        differentBillingAddress:
+          type: boolean
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        telephone:
+          type: string
+        title:
+          type: string
+    BillingDto:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        bookerIsNotGuest:
+          type: boolean
+        differentBillingAddress:
+          type: boolean
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        telephone:
+          type: string
+        title:
+          type: string
+    BookerAddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressType:
+          type: string
+        cityName:
+          type: string
+        companyName:
+          type: string
+        countryCode:
+          type: string
+        postalCode:
+          type: string
+    BookerDetailsDto:
+      type: object
+      properties:
+        acceptFutureMailing:
+          type: boolean
+        address:
+          $ref: '#/components/schemas/BookerAddressDto'
+        emailAddress:
+          type: string
+          example: john.carry@email.com
+        firstName:
+          type: string
+          example: John
+        landline:
+          type: string
+          example: "+3905678754"
+        language:
+          type: string
+          example: en
+        lastName:
+          type: string
+          example: Carry
+        mobile:
+          type: string
+          example: "+3905678754"
+        title:
+          type: string
+          example: Mrs
+      required:
+        - firstName
+        - lastName
+    BookingAllowanceDto:
+      type: object
+      properties:
+        allowance:
+          type: string
+        budget:
+          type: number
+      required:
+        - allowance
+    BookingDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+        bookingReference:
+          type: string
+        businessSite:
+          $ref: '#/components/schemas/BusinessSiteDto'
+        channel:
+          type: string
+        departureDate:
+          type: string
+        journey:
+          type: string
+        language:
+          type: string
+        leadGuest:
+          $ref: '#/components/schemas/GuestDto'
+        reference:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomTypeDto'
+        type:
+          type: string
+      required:
+        - businessSite
+        - channel
+        - journey
+        - type
+    BusinessAccountDto:
+      type: object
+      properties:
+        alcoholAllowed:
+          type: string
+        breakfastCodeReq:
+          type: integer
+          format: int32
+        carParkingAllowed:
+          type: string
+        cardNotPresentAuth:
+          type: string
+        customerReference:
+          type: string
+        dinnerAllowance:
+          type: number
+        otherChargesAllowed:
+          type: string
+        purchaseOrder:
+          type: string
+        wifiAllowed:
+          type: string
+    BusinessAllowance:
+      type: object
+      properties:
+        allowance:
+          type: string
+        budget:
+          type: number
+        isAuthorised:
+          type: boolean
+    BusinessAllowanceCcuiDto:
+      type: object
+      properties:
+        allowance:
+          type: string
+        budget:
+          type: number
+        isAuthorised:
+          type: boolean
+    BusinessAllowanceDto:
+      type: object
+      properties:
+        allowance:
+          type: string
+        budget:
+          type: number
+        isAuthorised:
+          type: boolean
+    BusinessItems:
+      type: object
+      properties:
+        businessAllowances:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessAllowance'
+        businessNotes:
+          type: string
+        customReferenceNumber:
+          type: string
+        purchaseOrderNumber:
+          type: string
+    BusinessItemsCcuiDto:
+      type: object
+      properties:
+        businessAllowances:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessAllowanceCcuiDto'
+        businessNotes:
+          type: string
+        customReferenceNumber:
+          type: string
+        purchaseOrderNumber:
+          type: string
+    BusinessItemsDto:
+      type: object
+      properties:
+        businessAllowances:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessAllowanceDto'
+        businessNotes:
+          type: string
+        customReferenceNumber:
+          type: string
+        purchaseOrderNumber:
+          type: string
+    BusinessSiteDto:
+      type: object
+      properties:
+        identifier:
+          type: string
+        location:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+      required:
+        - identifier
+        - type
+    CancelBasketDto:
+      type: object
+      properties:
+        deposits:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositsDto'
+        isFailed:
+          type: boolean
+        sendEmail:
+          type: boolean
+    CardCcuiDto:
+      type: object
+      properties:
+        cardHolderAddress:
+          $ref: '#/components/schemas/AddressCcuiDto'
+        cardHolderFirstName:
+          type: string
+        cardHolderLastName:
+          type: string
+      required:
+        - cardHolderAddress
+        - cardHolderFirstName
+        - cardHolderLastName
+    CardDto:
+      type: object
+      properties:
+        cardType:
+          type: string
+        cardholderName:
+          type: string
+        cnpRequired:
+          type: boolean
+        expiryMonth:
+          type: string
+        expiryYear:
+          type: string
+        last4Digits:
+          type: string
+        logoUrl:
+          type: string
+        token:
+          type: string
+        type:
+          type: string
+    CcuiExtraItems:
+      type: object
+      properties:
+        accountCompanyItems:
+          $ref: '#/components/schemas/AccountCompanyItems'
+        addressCompanyName:
+          type: string
+        businessItems:
+          $ref: '#/components/schemas/BusinessItems'
+        cardPresent:
+          type: boolean
+        nonguaranteedItems:
+          $ref: '#/components/schemas/NonguaranteedItems'
+    CcuiExtraItemsDto:
+      type: object
+      properties:
+        accountCompanyItems:
+          $ref: '#/components/schemas/AccountCompanyItemsDto'
+        addressCompanyName:
+          type: string
+        businessItems:
+          $ref: '#/components/schemas/BusinessItemsCcuiDto'
+        cardPresent:
+          type: boolean
+        nonguaranteedItems:
+          $ref: '#/components/schemas/NonguaranteedItemsDto'
+        sendMail:
+          type: boolean
+    CcuiPaymentRequestDto:
+      type: object
+      properties:
+        ccuiExtraItems:
+          $ref: '#/components/schemas/CcuiExtraItemsDto'
+        paymentOption:
+          type: string
+        paymentRequest:
+          $ref: '#/components/schemas/PaymentCcuiRequestDto'
+        subPaymentType:
+          type: string
+    ChargeAmountDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currencyCode:
+          type: string
+    ChargeDto:
+      type: object
+      properties:
+        chargeAmount:
+          $ref: '#/components/schemas/ChargeAmountDto'
+        postingQuantity:
+          type: integer
+          format: int32
+        postingReference:
+          type: string
+        transactionCode:
+          type: string
+    CompanyQuestionAndAnswerDetailsDto:
+      type: object
+      properties:
+        customerReferenceQuestionAndAnswer:
+          $ref: '#/components/schemas/CompanyQuestionAndAnswerDto'
+        purchaseOrderQuestionAndAnswer:
+          $ref: '#/components/schemas/CompanyQuestionAndAnswerDto'
+        userDefinedQuestionAndAnswers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyQuestionAndAnswerDto'
+    CompanyQuestionAndAnswerDto:
+      type: object
+      properties:
+        answer:
+          type: string
+        question:
+          type: string
+        questionHeader:
+          type: string
+    ConfirmItemProcessingRequestDto:
+      type: object
+      properties:
+        description:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
+        reported_at:
+          type: string
+        reqAction:
+          type: string
+        status:
+          type: integer
+          format: int32
+    CreateBasketRequestDto:
+      type: object
+      properties:
+        basketStatus:
+          type: string
+          enum:
+            - OPEN
+            - PROCESSING
+            - AMENDING
+            - COMPLETED
+            - AMENDED
+            - CANCELLED
+            - PAY_PENDING
+            - AMEND_FAILED
+            - FAILED
+        channel:
+          type: string
+        hotelId:
+          type: string
+        linkAmendReservations:
+          type: object
+          additionalProperties:
+            type: string
+        migratedResNo:
+          type: string
+        originalBasketId:
+          type: string
+        paymentId:
+          type: string
+        paymentOption:
+          type: string
+          enum:
+            - PAY_NOW
+            - PAY_ON_ARRIVAL
+            - RESERVE_WITHOUT_CARD
+            - ACCOUNT_COMPANY
+        userId:
+          type: string
+      required:
+        - hotelId
+    CreateBasketResponseDto:
+      type: object
+      properties:
+        bookingReference:
+          type: string
+        channel:
+          type: string
+        createdAt:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasketItemDto'
+        itemsTypes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+        originalBasketId:
+          type: string
+        reference:
+          type: string
+        status:
+          type: string
+        userId:
+          type: string
+    CurrencyAmountType:
+      type: object
+      properties:
+        amount:
+          type: number
+        currencyCode:
+          type: string
+    CurrencyAmountTypeDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currencyCode:
+          type: string
+    DepositPolicies:
+      type: object
+      properties:
+        amountDue:
+          $ref: '#/components/schemas/CurrencyAmountType'
+        amountPaid:
+          $ref: '#/components/schemas/CurrencyAmountType'
+        policyCode:
+          type: string
+    DepositsDto:
+      type: object
+      properties:
+        paymentReference:
+          type: string
+        postedAmount:
+          $ref: '#/components/schemas/CurrencyAmountTypeDto'
+    EckohAddressDto:
+      type: object
+      properties:
+        countryCode:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        postalCode:
+          type: string
+    EckohAgentDto:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+      required:
+        - email
+        - name
+    EckohAmountDto:
+      type: object
+      properties:
+        currency:
+          type: string
+        minorUnits:
+          type: integer
+          format: int32
+    EckohBillingDto:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/EckohAddressDto'
+    EckohBookingDto:
+      type: object
+      properties:
+        agent:
+          $ref: '#/components/schemas/EckohAgentDto'
+        businessSite:
+          $ref: '#/components/schemas/EckohBusinessSiteDto'
+        channel:
+          type: string
+        journey:
+          type: string
+        language:
+          type: string
+        type:
+          type: string
+      required:
+        - agent
+        - businessSite
+        - channel
+        - journey
+        - language
+        - type
+    EckohBusinessSiteDto:
+      type: object
+      properties:
+        country:
+          type: string
+        identifier:
+          type: string
+        location:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+      required:
+        - country
+        - identifier
+        - location
+        - name
+        - type
+    EckohPaymentDto:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/EckohAmountDto'
+        billing:
+          $ref: '#/components/schemas/EckohBillingDto'
+        environment:
+          type: string
+        subType:
+          type: string
+        type:
+          type: string
+      required:
+        - type
+    EckohPaymentRequestDto:
+      type: object
+      properties:
+        booking:
+          $ref: '#/components/schemas/EckohBookingDto'
+        payment:
+          $ref: '#/components/schemas/EckohPaymentDto'
+        requestId:
+          type: string
+      required:
+        - booking
+        - payment
+        - requestId
+    EckohPaymentResponseDto:
+      type: object
+      properties:
+        paymentId:
+          type: string
+    EmailRequestDto:
+      type: object
+      properties:
+        bookingReference:
+          type: string
+        deposits:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositsDto'
+        email:
+          type: string
+        emailRequestType:
+          type: string
+        failedRefund:
+          type: boolean
+      required:
+        - bookingReference
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    ErroredBookingDto:
+      type: object
+      properties:
+        basketError:
+          $ref: '#/components/schemas/BasketError'
+        isErroredBooking:
+          type: boolean
+      required:
+        - isErroredBooking
+    Guest:
+      type: object
+      properties:
+        givenName:
+          type: string
+        surName:
+          type: string
+    GuestDto:
+      type: object
+      properties:
+        name:
+          type: string
+        previousBookings:
+          type: integer
+          format: int32
+        registered:
+          type: boolean
+        registeredSince:
+          type: string
+          format: date
+    InitiatePaymentResponseDto:
+      type: object
+      properties:
+        paymentRequiredDetails:
+          $ref: '#/components/schemas/PaymentRequiredDetails'
+        status:
+          type: string
+          enum:
+            - NOT_REQUIRED
+            - PAYMENT_REQUIRED
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    NonguaranteedItems:
+      type: object
+      properties:
+        typeOfCaller:
+          type: string
+    NonguaranteedItemsDto:
+      type: object
+      properties:
+        typeOfCaller:
+          type: string
+    PackagesSelectionDto:
+      type: object
+      properties:
+        id:
+          type: string
+        noOfSelections:
+          type: integer
+          format: int32
+    PaymentCard:
+      type: object
+      properties:
+        cardHolderName:
+          type: string
+        cardNumberMasked:
+          type: string
+        cardType:
+          type: string
+        expirationDate:
+          type: string
+        token:
+          type: string
+    PaymentCcuiDto:
+      type: object
+      properties:
+        billing:
+          $ref: '#/components/schemas/BillingCcuiDto'
+        card:
+          $ref: '#/components/schemas/CardCcuiDto'
+        subType:
+          type: string
+        type:
+          type: string
+      required:
+        - subType
+        - type
+    PaymentCcuiRequestDto:
+      type: object
+      properties:
+        booking:
+          $ref: '#/components/schemas/BookingDto'
+        payment:
+          $ref: '#/components/schemas/PaymentCcuiDto'
+        requestId:
+          type: string
+    PaymentCcuiResponseDto:
+      type: object
+      properties:
+        reference:
+          type: string
+        status:
+          type: string
+          enum:
+            - OPEN
+            - PROCESSING
+            - AMENDING
+            - COMPLETED
+            - AMENDED
+            - CANCELLED
+            - PAY_PENDING
+            - AMEND_FAILED
+            - FAILED
+    PaymentDto:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/AmountDto'
+        billing:
+          $ref: '#/components/schemas/BillingDto'
+        businessItems:
+          $ref: '#/components/schemas/BusinessItemsDto'
+        card:
+          $ref: '#/components/schemas/CardDto'
+        environment:
+          type: string
+        paypalDeviceData:
+          type: string
+        paypalNonce:
+          type: string
+        pibaCardPresent:
+          type: boolean
+        sca:
+          $ref: '#/components/schemas/ScaDto'
+        subType:
+          type: string
+        type:
+          type: string
+      required:
+        - subType
+        - type
+    PaymentErrorDto:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+      required:
+        - code
+        - description
+    PaymentRequestDto:
+      type: object
+      properties:
+        booking:
+          $ref: '#/components/schemas/BookingDto'
+        bookingNotes:
+          type: array
+          items:
+            type: string
+        businessAccount:
+          $ref: '#/components/schemas/BusinessAccountDto'
+        companyQuestionAndAnswerDetails:
+          $ref: '#/components/schemas/CompanyQuestionAndAnswerDetailsDto'
+        payment:
+          $ref: '#/components/schemas/PaymentDto'
+        requestId:
+          type: string
+        specialRequests:
+          type: array
+          items:
+            type: string
+        tmpBasketRef:
+          type: string
+    PaymentRequiredDetails:
+      type: object
+      properties:
+        paymentRedirect:
+          type: string
+        providerUrl:
+          type: string
+        sessionId:
+          type: string
+        template:
+          type: string
+    PaymentStatusResponseDto:
+      type: object
+      properties:
+        status:
+          type: string
+    PaymentsConfirmationDto:
+      type: object
+      properties:
+        bookingReference:
+          type: string
+        cardSchemeId:
+          type: string
+        channel:
+          type: string
+        countryCode:
+          type: string
+        expiry:
+          type: string
+        firstName:
+          type: string
+        fraudCheckDecision:
+          type: string
+        language:
+          type: string
+        last4Digits:
+          type: string
+        lastName:
+          type: string
+        paymentError:
+          $ref: '#/components/schemas/PaymentErrorDto'
+        paymentId:
+          type: string
+        paymentStatus:
+          type: string
+        reference:
+          type: string
+        token:
+          type: string
+      required:
+        - bookingReference
+        - channel
+        - countryCode
+        - language
+        - paymentId
+        - paymentStatus
+        - reference
+    PreAuthChargesDto:
+      type: object
+      properties:
+        preAuthCharges:
+          type: string
+    PrepaidDepositDto:
+      type: object
+      properties:
+        charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChargeDto'
+        paymentNo:
+          type: integer
+          format: int64
+        reservationId:
+          type: string
+    PrepaidDepositsDto:
+      type: object
+      properties:
+        prepaidDepositsDto:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrepaidDepositDto'
+    PrepaidDepositsRequestDto:
+      type: object
+      properties:
+        prepaidDeposits:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrepaidDepositDto'
+    ProcessAmendRequestDto:
+      type: object
+      properties:
+        channel:
+          type: string
+        emailAddress:
+          type: string
+        language:
+          type: string
+        paymentOptionSelected:
+          type: string
+      required:
+        - channel
+        - language
+    RatePerNight:
+      type: object
+      properties:
+        cityTaxAmountBeforeTax:
+          type: number
+        cityTaxPerNight:
+          type: number
+        cityTaxVat:
+          type: number
+        grossPricePerNight:
+          type: number
+        pricePerNight:
+          type: number
+        startDate:
+          type: string
+        vatRate:
+          type: number
+    RefundDto:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/AmountDto'
+        card:
+          $ref: '#/components/schemas/CardDto'
+        reason:
+          type: string
+          enum:
+            - CANCEL
+            - AMEND
+            - ROLLBACK
+        type:
+          type: string
+          enum:
+            - CARD
+            - PIBA
+            - PIBA_EU
+            - PAYPAL
+    RefundRequestDto:
+      type: object
+      properties:
+        booking:
+          $ref: '#/components/schemas/BookingDto'
+        hotelCode:
+          type: string
+        refund:
+          $ref: '#/components/schemas/RefundDto'
+        refundType:
+          type: string
+          enum:
+            - FULL
+            - PARTIAL
+      required:
+        - booking
+        - hotelCode
+        - refund
+        - refundType
+    RefundResponseDto:
+      type: object
+      properties:
+        paymentId:
+          type: string
+        refundId:
+          type: string
+        refunded:
+          type: boolean
+        requestId:
+          type: string
+    Reservation:
+      type: object
+      properties:
+        billing:
+          $ref: '#/components/schemas/Billing'
+        depositPolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositPolicies'
+        paymentCard:
+          $ref: '#/components/schemas/PaymentCard'
+        reservationGuestList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Guest'
+        reservationId:
+          type: string
+        reservationPackageList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReservationPackagesDetails'
+        roomStay:
+          $ref: '#/components/schemas/RoomStay'
+    ReservationByBasketRefResponse:
+      type: object
+      properties:
+        balanceOutstanding:
+          type: number
+        bookingReference:
+          type: string
+        companyId:
+          type: string
+        currencyCode:
+          type: string
+        discount:
+          type: number
+        hotelId:
+          type: string
+        newTotal:
+          type: number
+        policyCode:
+          type: string
+        previousTotal:
+          type: number
+        reservationByIdList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reservation'
+        totalCost:
+          type: number
+    ReservationGuestRequestDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+        booker:
+          $ref: '#/components/schemas/BookerDetailsDto'
+        bookerProfileId:
+          type: string
+        companyProfileId:
+          type: string
+        hotelId:
+          type: string
+        reasonForStay:
+          type: string
+        sendEmailConfirmation:
+          type: boolean
+        sendEmailInvoice:
+          type: boolean
+        stayingGuests:
+          type: array
+          items:
+            $ref: '#/components/schemas/StayingGuestDto'
+    ReservationPackagesDetails:
+      type: object
+      properties:
+        computedPrice:
+          type: number
+        description:
+          type: string
+        packageCode:
+          type: string
+        totalQuantity:
+          type: integer
+          format: int32
+        unitPrice:
+          type: number
+        vatTax:
+          type: number
+    ReservationPackagesRequestDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+        basketReferenceId:
+          type: string
+        departureDate:
+          type: string
+        hotelId:
+          type: string
+        previousRoomsSelections:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomsSelectionsDto'
+        reservationsId:
+          type: array
+          items:
+            type: string
+        roomsSelections:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomsSelectionsDto'
+    RoomStay:
+      type: object
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+        arrivalDate:
+          type: string
+        childrenNumber:
+          type: integer
+          format: int32
+        departureDate:
+          type: string
+        ratePlanCode:
+          type: string
+        ratesPerNight:
+          type: array
+          items:
+            $ref: '#/components/schemas/RatePerNight'
+        roomType:
+          type: string
+    RoomTypeDto:
+      type: object
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+        rate:
+          type: string
+        type:
+          type: string
+    RoomsSelectionsDto:
+      type: object
+      properties:
+        packagesSelection:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagesSelectionDto'
+        reservationId:
+          type: string
+    ScaDto:
+      type: object
+      properties:
+        authorisedAmount:
+          type: number
+          format: float
+        captureMethod:
+          type: string
+        cavv:
+          type: integer
+          format: int32
+        dsTransactionID:
+          type: string
+        eci:
+          type: integer
+          format: int32
+        protocolVersion:
+          type: string
+        transStatus:
+          type: string
+        xid:
+          type: string
+    SendEmailDto:
+      type: object
+      properties:
+        sendEmail:
+          type: boolean
+      required:
+        - sendEmail
+    StayingGuestAddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressType:
+          type: string
+        cityName:
+          type: string
+        companyName:
+          type: string
+        countryCode:
+          type: string
+        postalCode:
+          type: string
+        valid:
+          type: boolean
+    StayingGuestDetailsDto:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/StayingGuestAddressDto'
+        emailAddress:
+          type: string
+          example: debbie.doe@whitbread.com
+        employeeAccountId:
+          type: string
+        firstName:
+          type: string
+          example: Debbie
+        lastName:
+          type: string
+          example: Doe
+        title:
+          type: string
+          example: Mrs
+      required:
+        - firstName
+        - lastName
+    StayingGuestDto:
+      type: object
+      properties:
+        language:
+          type: string
+        reservationId:
+          type: string
+          example: "132484"
+        sameAsBooker:
+          type: boolean
+        stayingGuestDetails:
+          $ref: '#/components/schemas/StayingGuestDetailsDto'
+      required:
+        - sameAsBooker
+        - stayingGuestDetails
+    UpdateAllowancesRequestDto:
+      type: object
+      properties:
+        bookingAllowances:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingAllowanceDto'
+      required:
+        - bookingAllowances
+    UpdateDiscountRequestDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+        discountAmount:
+          type: number
+          exclusiveMinimum: false
+          minimum: 0.0
+      required:
+        - basketReference
+    UpdateReservationSingleCallRequestDto:
+      type: object
+      properties:
+        ancillaries:
+          $ref: '#/components/schemas/ReservationPackagesRequestDto'
+        basketReference:
+          type: string
+        createPayment:
+          $ref: '#/components/schemas/PaymentRequestDto'
+        hotelId:
+          type: string
+        priceBreakdownNeeded:
+          type: string
+        requestId:
+          type: string
+        reservationGuest:
+          $ref: '#/components/schemas/ReservationGuestRequestDto'
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string

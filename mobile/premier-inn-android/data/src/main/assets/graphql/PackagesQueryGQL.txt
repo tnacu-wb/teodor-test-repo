@@ -1,0 +1,77 @@
+query packages($packagesCriteria: PackagesCriteria!) {
+           packages(packagesCriteria: $packagesCriteria) {
+           packages {
+             meals {
+               name
+               id
+               price
+               freeBreakfastOption
+               freeBreakfastCode
+               freeBreakfastMaxPerMeal
+               imageSrc
+               description
+               shortDescription
+               allergyInfoSrc
+               allergyInfoLabel
+               currency
+               bartId
+             }
+             mealsKids {
+                name
+                id
+                imageSrc
+                description
+                allergyInfoSrc
+                allergyInfoLabel
+                price
+                currency
+             }
+             extrasItems {
+                name
+                id
+                description
+                price
+                imageSrc
+                currency
+                order
+                available
+             }
+           roomSelection {
+             reservationId
+             packagesSelection {
+                     id
+                     noOfSelections
+             }
+           }
+           }
+           restaurant {
+            logoSrc
+            restaurantNotFound
+            noMealsFound
+            messageHeader
+            messageDescription
+             menus{
+                name
+                description
+                imageSrc
+                menuSrc
+                menuLabel
+                disclaimer
+             }
+           }
+           privacyPolicy {
+             name
+             description
+             linkLabel
+             linkSrc
+             moreInfoLabel
+             moreInfo{
+                image
+                description
+             }
+           }
+           hotelHasCityTaxForLeisure
+           hotelHasCityTaxForBusiness
+         }
+
+}

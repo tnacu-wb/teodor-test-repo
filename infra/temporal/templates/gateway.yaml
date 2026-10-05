@@ -1,0 +1,31 @@
+{{- if .Values.temporalUI.gateway.enabled }}
+# TLS is terminated at the AWS ALB (load balancer) level, not by Istio.
+# Port 443 uses protocol HTTP because the ALB forwards decrypted traffic
+# to the Istio ingress gateway. This matches the pattern used by other
+# internal tools (e.g. wb-unleash-ui).
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .Release.Name }}-ui
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+spec:
+  selector:
+    istio: ingress-tools-istio-ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - {{ .Values.temporalUI.gateway.host | quote }}
+      tls:
+        httpsRedirect: true
+    - port:
+        number: 443
+        name: https-443
+        protocol: HTTP
+      hosts:
+        - {{ .Values.temporalUI.gateway.host | quote }}
+{{- end }}

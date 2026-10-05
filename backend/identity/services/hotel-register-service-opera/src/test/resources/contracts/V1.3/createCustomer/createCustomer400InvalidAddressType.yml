@@ -1,0 +1,110 @@
+description: Should throw http 400 - Invalid Address Type
+request:
+  method: POST
+  url: /customers/hotels?business=false
+  headers:
+    Content-Type: application/json
+  queryParameters: {
+        "business": "true"
+  }
+  body:
+    {
+        "acceptFutureMailing": false,
+        "additionalGuests": [
+          {
+            "address": {
+              "companyName": "Whitbread",
+              "countryCode": "GB",
+              "line1": "120 Holborn",
+              "line2": "string",
+              "line3": "string",
+              "line4": "string",
+              "line5": "string",
+              "postCode": "EC1N 2TD",
+              "type": "INVALID"
+            },
+            "carRegistration": "string",
+            "email": "stub-create-success@amadeus.com",
+            "firstName": "Bob",
+            "lastName": "Smith",
+            "mobile": "07770123456",
+            "nationality": "UK",
+            "telephone": "07770123456",
+            "title": "Mr"
+          }
+        ],
+        "alternativeName": "string",
+        "approxAnnualUKHotelSpend": "1",
+        "bookingPreference": {
+          "foodPreference": 0,
+          "reason": "string",
+          "roomRequirements": {
+            "adults": 1,
+            "children": 0,
+            "cotRequired": false,
+            "hotelBrand": "PI",
+            "lettingType": "string",
+            "roomNumber": 0,
+            "smoking": false,
+            "type": "DB"
+          },
+          "wantSmsConfirmations": false
+        },
+        "companyId": "string",
+        "companyName": "string",
+        "contactDetail": {
+          "dialingCode": "52",
+          "address": {
+            "companyName": "Whitbread",
+            "countryCode": "BR",
+            "line1": "9 New Bright Street",
+            "line2": "Testing",
+            "line3": "Testing777777",
+            "line4": "Reading",
+            "postCode": "SE3 9XX",
+            "type": "HOME"
+          },
+          "carRegistration": "string",
+          "email": "stub_create_success@amadeus.com",
+          "firstName": "Bob",
+          "lastName": "Smith",
+          "mobile": "7777777777",
+          "nationality": "UK",
+          "passport": {
+            "number": "ABCDEFGHI",
+            "countryOfIssue": "BR"
+          },
+          "telephone": "07789776665",
+          "mobile": "07770123456",
+          "title": "Mr"
+        },
+        "guestHistoryNumber": "string",
+        "guestId": 0,
+        "loyalties": [
+          {
+            "code": "string",
+            "dateEnrolled": "2015-01-01",
+            "status": true
+          }
+        ],
+        "nextDestination": "string",
+        "password": "abcd",
+        "paymentPreference": {
+          "electronicInvoiceRequired": false,
+          "paymentCard": {
+            "cardHolderName": "string",
+            "cardNumber": "string",
+            "cardType": "string",
+            "expiryDate": "string",
+            "issueNumber": "string",
+            "startDate": "string"
+          }
+        },
+        "roomId": "string",
+        "roomNumber": 0
+      }
+response:
+  status: 400
+  headers:
+    Content-Type: application/json
+

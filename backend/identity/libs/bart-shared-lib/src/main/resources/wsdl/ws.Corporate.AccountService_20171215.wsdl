@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:bb="http://corporate.micros.com/1.0"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://corporate.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             targetNamespace="http://corporate.micros.com/1.0">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://corporate.micros.com/1.0">
+            <s:include schemaLocation="../xsd/bart-business-10.xsd"/>
+            <s:complexType name="ClientHeader">
+                <s:sequence>
+                    <s:element name="languageCode" type="s:string" minOccurs="1" />
+                    <s:element name="countryCode" type="s:string" minOccurs="1" />
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Login">
+                <s:sequence>
+                    <s:element name="username" type="s:string" minOccurs="1" />
+                    <s:element name="password" type="s:string" minOccurs="1" />
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Source">
+                <s:sequence>
+                    <s:element name="bookingChannel" type="s:string" minOccurs="1" />
+                </s:sequence>
+            </s:complexType>            
+
+            <s:element name="AccountActivation">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:AccountActivationRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="AccountActivationRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="activationKey" type="s:string"/>
+                    <s:element name="personalDetails" type="bb:ProfilePersonalDetails"/>
+                    <s:element name="password" type="s:string"/>
+                    <s:element name="newsletterPreferences" type="bb:ProfileNewsletterPreferences"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="AccountActivationResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="AccountActivationResult" type="s0:AccountActivationResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="AccountActivationResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetActivationDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:AccountActivationDetailsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="AccountActivationDetailsRequest">
+                <s:sequence>
+                    <s:element name="activationKey" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetActivationDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="GetActivationDetailsResult" type="s0:AccountActivationDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="AccountActivationDetailsResponse">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="contact" type="s0:Contact"/>
+                    <s:element minOccurs="0" name="address" type="s0:Address"/>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="profileLocked" type="s:boolean"/>
+                    <s:element minOccurs="0" name="MIPOAnswer" type="s:string"/>
+                    <s:element minOccurs="0" name="MICRAnswer" type="s:string"/>
+                    <s:element minOccurs="0" name="MIUDAnswers" type="s0:ArrayOfListItemListItem"/>
+                    <s:element minOccurs="0" name="changeCompanyName" type="s:boolean"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfListItemListItem">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="ListItem" nillable="true" type="s0:ListItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ListItem">
+                <s:sequence>
+                    <s:element name="code" type="s:string"/>
+                    <s:element name="description" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </types>
+	<message name="AuthorizationRequestSoapIn">
+        <part name="ClientHeader" type="s0:ClientHeader"/>
+        <part name="Login" type="s0:Login"/>
+    </message>
+    <message name="SourceRequestSoapIn">
+        <part name="Source" type="s0:Source"/>
+    </message>
+    <message name="AccountActivationSoapIn">
+        <part name="parameters" element="s0:AccountActivation"/>
+    </message>
+    <message name="AccountActivationSoapOut">
+        <part name="parameters" element="s0:AccountActivationResponse"/>
+    </message>
+    <message name="GetActivationDetailsSoapIn">
+        <part name="parameters" element="s0:GetActivationDetails"/>
+    </message>
+    <message name="GetActivationDetailsSoapOut">
+        <part name="parameters" element="s0:GetActivationDetailsResponse"/>
+    </message>
+    <portType name="AccountActivationSoap">
+        <operation name="AccountActivation">
+            <input message="s0:AccountActivationSoapIn"/>
+            <output message="s0:AccountActivationSoapOut"/>
+        </operation>
+        <operation name="GetActivationDetails">
+            <input message="s0:GetActivationDetailsSoapIn"/>
+            <output message="s0:GetActivationDetailsSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="AccountActivationSoap" type="s0:AccountActivationSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="AccountActivation">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.AccountActivationService.AccountActivation" style="document"/>
+            <input>
+            	<soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+				<soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+				<soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="GetActivationDetails">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.AccountActivationService.GetActivationDetails" style="document"/>
+            <input>
+				<soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+				<soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+				<soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="AccountActivation">
+        <port name="AccountActivationSoap" binding="s0:AccountActivationSoap">
+            <soap:address location="http://inntouch.slough.microsdc.com/csp/sql/ws.Corporate.AccountActivationService.cls"/>
+        </port>
+    </service>
+</definitions>

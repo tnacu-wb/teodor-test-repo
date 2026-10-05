@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>uk.co.whitbread</groupId>
+    <artifactId>digital-monorepo-service-parent</artifactId>
+    <version>${revision}</version>
+    <relativePath>../../../parents/service-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>digital-key-service</artifactId>
+  <packaging>jar</packaging>
+
+  <properties>
+    <application.port>9169</application.port>
+    <sonar.coverage.exclusions>
+      **/model/**,
+      **/properties/**,
+      **/config/**,
+      **/mapper/**,
+      **/exception/**,
+      **/exceptions/**,
+      **/properties/**,
+      **/generated/**,
+      **DigitalKeyServiceApplication*
+    </sonar.coverage.exclusions>
+  </properties>
+
+  <name>digital-key-service</name>
+  <description>Handles integration with digital key providers</description>
+
+  <dependencies>
+
+    <!-- Whitbread -->
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-exceptions</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-entity-exceptions</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webservices</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-bootstrap</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+    </dependency>
+
+    <!-- Micrometer tracing - needed for Tracer class, version managed by Spring Boot -->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-tracing-bridge-brave</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>common-auth0</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>uk.co.whitbread.shared</groupId>
+          <artifactId>commons-entity-exceptions</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-webmvc-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-logging</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread</groupId>
+      <artifactId>coding-convention-rules</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.gatling.highcharts</groupId>
+      <artifactId>gatling-charts-highcharts</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!--spring-boot-maven-plugin is needed by springdoc-openapi-maven-plugin to generate OpenAPI yaml description -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+        </configuration>
+        <executions>
+          <execution>
+            <id>pre-integration-test</id>
+            <goals>
+              <goal>start</goal>
+            </goals>
+            <configuration>
+              <profiles>
+                <profile>integration</profile>
+              </profiles>
+              <wait>1000</wait>
+            </configuration>
+          </execution>
+          <execution>
+            <id>post-integration-test</id>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>io.gatling</groupId>
+        <artifactId>gatling-maven-plugin</artifactId>
+        <version>${gatling-maven-plugin.version}</version>
+      </plugin>
+      <!--Used to generate OpenAPI yaml description -->
+      <plugin>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <apiDocsUrl>http://localhost:${application.port}/v3/api-docs.yaml</apiDocsUrl>
+          <outputFileName>${project.name}-openApi.yaml</outputFileName>
+          <outputDir>${basedir}/docs/openApi</outputDir>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/uk/co/whitbread/sample/DigitalKeyServiceApplication*</exclude>
+            <exclude>**/uk/co/whitbread/**/model/**</exclude>
+            <exclude>**/uk/co/whitbread/**/config/**</exclude>
+            <exclude>**/uk/co/whitbread/**/mapper/**</exclude>
+            <exclude>**/uk/co/whitbread/**/exception/**</exclude>
+            <exclude>**/uk/co/whitbread/**/exceptions/**</exclude>
+            <exclude>**/uk/co/whitbread/**/properties/**</exclude>
+            <exclude>**/uk/co/whitbread/**/generated/**</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>controller-integration</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>merge</goal>
+            </goals>
+            <configuration>
+              <fileSets>
+                <fileSet>
+                  <directory>${basedir}/target/</directory>
+                  <includes>
+                    <include>jacoco-it.exec</include>
+                  </includes>
+                </fileSet>
+              </fileSets>
+              <destFile>${basedir}/target/jacoco-controller.exec</destFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>after-integration-test-execution</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <includes>
+                <include>**/uk/co/whitbread/**/controller/**/*Controller.class</include>
+              </includes>
+              <dataFile>${basedir}/target/jacoco-controller.exec</dataFile>
+              <outputDirectory>${basedir}/target/site/jacoco-controller/</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>merge-unit-and-integration</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>merge</goal>
+            </goals>
+            <configuration>
+              <fileSets>
+                <fileSet>
+                  <directory>${basedir}/target/</directory>
+                  <includes>
+                    <include>jacoco.exec</include>
+                    <include>jacoco-controller.exec</include>
+                  </includes>
+                </fileSet>
+              </fileSets>
+              <destFile>${basedir}/target/jacoco-all.exec</destFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>create-merged-report</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <dataFile>${basedir}/target/jacoco-all.exec</dataFile>
+              <outputDirectory>${basedir}/target/site/jacoco-all/</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <configLocation>google-checkstyle.xml</configLocation>
+          <consoleOutput>true</consoleOutput>
+          <inputEncoding>UTF-8</inputEncoding>
+          <failsOnError>true</failsOnError>
+          <linkXRef>false</linkXRef>
+          <violationSeverity>warning</violationSeverity>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <id>validate</id>
+            <phase>validate</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>ohip</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+
+            <configuration>
+              <skipValidateSpec>true</skipValidateSpec>
+              <inputSpec>${project.basedir}/src/main/resources/openapi/ohip-adapter-service-openApi.yaml</inputSpec>
+              <generatorName>spring</generatorName>
+              <modelPackage>uk.co.whitbread.hotel.ohip.adapter.generated.models</modelPackage>
+              <typeMappings>
+                <typeMapping>instant=Instant</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>Instant=java.time.Instant</importMapping>
+              </importMappings>
+              <configOptions>
+                <useSpringBoot3>true</useSpringBoot3>
+                <useJakartaEe>true</useJakartaEe>
+                <containerDefaultToNull>true</containerDefaultToNull>
+              </configOptions>
+              <generateApis>false</generateApis>
+              <generateApiDocumentation>false</generateApiDocumentation>
+              <generateModelDocumentation>false</generateModelDocumentation>
+              <generateSupportingFiles>false</generateSupportingFiles>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+</project>

@@ -1,0 +1,30 @@
+{
+  "id" : "d0e63a7b-d2dd-40fe-a998-b6c0d68c7ef2",
+  "request" : {
+    "urlPath" : "/v1/reservations/amendStayDates",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['tempBookingRef'] == 'AKU-40d698a2-b56a-481f-89a7-754148c5865e')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['newStartDate'] == '2099-02-20')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['newEndDate'] == '2099-02-20')]"
+    }, {
+      "matchesJsonPath" : "$.['bookingChannel'][?(@.['channel'] == 'PI')]"
+    }, {
+      "matchesJsonPath" : "$.['bookingChannel'][?(@.['subchannel'] == 'WEB')]"
+    }, {
+      "matchesJsonPath" : "$.['bookingChannel'][?(@.['language'] == 'EN')]"
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "d0e63a7b-d2dd-40fe-a998-b6c0d68c7ef2"
+}

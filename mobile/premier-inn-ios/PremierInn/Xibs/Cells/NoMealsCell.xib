@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="PremierInnSans-Regular.ttf">
+            <string>PremierInnSans</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="134" id="KGk-i7-Jjw" customClass="NoMealsCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="134"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="134"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aCj-Za-xSE" customClass="RadioButtonView" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="255" y="20" width="40" height="40"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="I8q-Jg-Y0n"/>
+                            <constraint firstAttribute="width" secondItem="aCj-Za-xSE" secondAttribute="height" multiplier="1:1" id="rAq-Xg-owc"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No meals" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MUw-6X-suH">
+                        <rect key="frame" x="20" y="20" width="227" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="SUy-mL-fin"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="16"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can add meals later" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lUS-V8-3ic">
+                        <rect key="frame" x="20" y="50" width="227" height="16.5"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="14"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="lUS-V8-3ic" firstAttribute="top" secondItem="MUw-6X-suH" secondAttribute="bottom" constant="10" id="0YO-LF-C9l"/>
+                    <constraint firstItem="aCj-Za-xSE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="7mV-dB-Smy"/>
+                    <constraint firstItem="MUw-6X-suH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="LOW-6e-cAW"/>
+                    <constraint firstItem="aCj-Za-xSE" firstAttribute="leading" secondItem="lUS-V8-3ic" secondAttribute="trailing" constant="8" id="PaZ-e6-1cs"/>
+                    <constraint firstAttribute="trailing" secondItem="aCj-Za-xSE" secondAttribute="trailing" constant="25" id="ULU-nC-qAZ"/>
+                    <constraint firstItem="aCj-Za-xSE" firstAttribute="leading" secondItem="MUw-6X-suH" secondAttribute="trailing" constant="8" id="Zov-ht-Wx6"/>
+                    <constraint firstItem="MUw-6X-suH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="dsB-GU-ykw"/>
+                    <constraint firstItem="lUS-V8-3ic" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="gGh-cE-xLD"/>
+                    <constraint firstAttribute="bottom" secondItem="aCj-Za-xSE" secondAttribute="bottom" priority="999" constant="40" id="sGY-uB-Yl1"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="descriptionLabel" destination="lUS-V8-3ic" id="CyC-Ck-jMw"/>
+                <outlet property="radioButton" destination="aCj-Za-xSE" id="FIf-Fh-EMq"/>
+                <outlet property="titleLabel" destination="MUw-6X-suH" id="3zR-Li-JPD"/>
+            </connections>
+            <point key="canvasLocation" x="25.600000000000001" y="51.27436281859071"/>
+        </tableViewCell>
+    </objects>
+</document>

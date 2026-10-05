@@ -1,0 +1,30 @@
+@startuml
+actor User #red
+
+User -> μS: Hotel Search
+μS -> BART: Hotel Search
+BART -> μS: Hotel Search response
+μS -> User: Hotel Search response
+User -> μS: Hold
+μS -> BART: Hold
+BART -> μS: Hold response
+μS -> User: Hold response
+User -> μS: Validate BIN \n(when frontend identify a valid credit card format is entered)
+μS -> BART: Validate BIN
+BART -> μS: Validate BIN response
+μS -> User: Validate BIN response
+User -> μS: 3DS validation
+μS -> BART: 3DS Validation
+BART -> DataCash: 3DS Validation
+DataCash -> BART: pareq
+BART -> μS: pareq + redirect + 3DSRequired
+μS -> User: html ???
+User -> DataCash: pareq form
+DataCash -> User: html form + pares
+User -> μS: html with automatic post
+User -> μS: MakeABooking with pares
+μS -> BART: MakeABooking with pares
+BART -> μS: booking response
+μS -> User: booking response
+
+@enduml

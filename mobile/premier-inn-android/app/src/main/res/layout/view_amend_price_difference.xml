@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/price_view"
+    android:visibility="invisible"
+    android:clickable="true"
+    android:animateLayoutChanges="true"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/white"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineMiddle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/amend_price_difference_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Header2"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guidelineMiddle"
+        app:layout_constraintBottom_toTopOf="@id/amend_price_difference_label"
+        />
+
+    <TextView
+        android:id="@+id/amend_price_difference_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/amend_calendar_price_difference"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        style="@style/Body"
+        android:textColor="@color/premier_inn_purple"
+        app:layout_constraintEnd_toEndOf="@id/guidelineMiddle"
+        app:layout_constraintStart_toStartOf="@id/amend_price_difference_text"
+        app:layout_constraintTop_toBottomOf="@id/amend_price_difference_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/review_amends_btn"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/cta_button_height"
+        style="@style/Button1"
+        android:gravity="center"
+        android:text="@string/review_amends_title"
+        android:visibility="visible"
+        app:cab_text_color="@color/white"
+        app:cab_spinner_color="@color/white"
+        app:cab_background_color="@color/premier_inn_purple"
+        android:backgroundTint="@color/premier_inn_purple"
+        tools:visibility="visible"
+        android:layout_margin="@dimen/generic_margin_8"
+        app:layout_constraintStart_toStartOf="@id/guidelineMiddle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+ />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

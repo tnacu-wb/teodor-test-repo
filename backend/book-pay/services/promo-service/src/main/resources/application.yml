@@ -1,0 +1,242 @@
+server:
+  port: "@application.port@"
+  shutdown: graceful
+
+spring:
+  datasource:
+    username: ${Database_User_Name}
+    password: ${Database_Password}
+    url: jdbc:postgresql://${Cluster_Write_End_Point}/${Database_Name}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: POSTGRESQL
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:sql/liquibase/db.changelog-master.xml
+    enabled: true
+    default-schema: promotions
+    contexts: non-prod
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+copy-datasource:
+  enabled: true
+  username: ${Database_User_Name}
+  password: ${Database_Password}
+  url: jdbc:postgresql://${Cluster_Write_End_Point}/${Database_Name}
+  hikari:
+    maximum-pool-size: ${COPY_DATASOURCE_MAXIMUM_POOL_SIZE:40}
+    minimum-idle: ${COPY_DATASOURCE_MINIMUM_IDLE:20}
+    connection-timeout: ${COPY_DATASOURCE_CONNECTION_TIMEOUT:120000}
+    idle-timeout: ${COPY_DATASOURCE_IDLE_TIMEOUT:600000}
+    max-lifetime: ${COPY_DATASOURCE_MAX_LIFETIME:1800000}
+    leak-detection-threshold: ${COPY_DATASOURCE_LEAK_DETECTION_THRESHOLD:600000}
+
+config:
+  httpClient:
+    connectionTimeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+    responseTimeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  service:
+    ohip:
+      host: http://${OHIP_HOST:localhost:9100}/ohip
+      promotionsEndpoint: "/promotions"
+
+
+
+app:
+  batch-recovery:
+    enabled: true
+
+swagger:
+  api:
+    version: "@project.version@"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+irsa:
+  enabled: true
+
+aws:
+  s3:
+    maxRetry: ${AWS_S3_MAX_RETRY:2}
+    validForMinutes: ${AWS_S3_VALID_FOR_MINUTES:5}
+    promoBucketName: ${AWS_S3_PROMO_BUCKET_NAME:promotion-code-dev}
+    region: ${AWS_REGION:eu-west-1}
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+  endpoints:
+    web:
+      base-path: /v1/promo/actuator
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+logging:
+  level:
+    io:
+      getunleash: TRACE
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - hotelCode
+        - hotelName
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+auth:
+  rulesEngineHost: rules-agent-entity-service
+  isAllowedAccessForRoleIdsEndpoint: /v1/rules/ccui/rbac
+  tenants:
+    - name: "CCUI Tenant"
+      audience: ${CCUI_TENANT_AUDIENCE}
+      namespace: ${CCUI_TENANT_NAMESPACE}
+      issuer: ${CCUI_TENANT_ISSUER}
+      jwkUri: ${CCUI_TENANT_JWK_URI}
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+
+feature-flags:
+  batch-eligibility-check:
+    key: "release_batch_eligibility_check"
+    fallback: false
+
+promo:
+  canary:
+    log:
+      errorRate: 0.01
+      warnRate: 0.05
+    delay:
+      p50: 200
+      p95: 500
+      p99: 1000
+    successRate: 0.95
+
+promo-service:
+  batch:
+    # daily at 1 am
+    refresh: "0 0 1 * * ?"
+  scheduler:
+    enabled: true
+
+---
+spring.config.activate.on-profile: local
+
+auth:
+  rulesEngineHost: ${RULES_ENGINE_HOST}
+  tenants:
+    - name: "CCUI Tenant"
+      audience: dummy
+      namespace: dummy
+      issuer: dummy
+      jwkUri: https://dummy/.well-known/jwks.json
+    - name: "PI BB Tenant"
+      audience: dummy
+      namespace: dummy
+      issuer: dummy
+      jwkUri: https://dummy/.well-known/jwks.json
+
+logging:
+  configuration:
+    logger: default
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - phoneNumber
+        - cardNumber
+
+promo-config:
+  prefix-length: ${PREFIX_LENGTH:4}
+  min-code-suffix-length: ${MIN_CODE_LENGTH:8}
+  max-code-suffix-length: ${MAX_CODE_LENGTH:12}
+  max-batch-size: ${BATCH_SIZE:1000000}
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'test-token'
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-dev
+        - opera-qa
+        - opera-perf
+        - local

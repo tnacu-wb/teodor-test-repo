@@ -1,0 +1,33 @@
+{
+  "id" : "e8621670-a4ba-4052-a8f2-bac3627cd1bb",
+  "request" : {
+    "url" : "/piba/account/balance",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "session-id" : {
+        "equalTo" : "13245312321345"
+      },
+      "company-id" : {
+        "equalTo" : "123"
+      },
+      "employee-id" : {
+        "equalTo" : "33"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value5"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"currentBalances\":[{\"schemeCustomerId\":782810,\"outstanding\":{\"amount\":8653.44,\"currencyCode\":\"GBP\"},\"newTransactions\":{\"amount\":507.53,\"currencyCode\":\"GBP\"},\"available\":{\"amount\":97.98,\"currencyCode\":\"GBP\"},\"creditLimit\":{\"amount\":3000.0,\"currencyCode\":\"GBP\"},\"currentBalance\":{\"amount\":2902.02,\"currencyCode\":\"GBP\"},\"interimPayments\":{\"amount\":0.0,\"currencyCode\":\"GBP\"},\"tetheredGuid\":\"CE3C22D3-D413-4FB2-8219-1160FEE0FC21\",\"accountName\":\"100216\",\"accountNumber\":\"3089503200100301\",\"registrationRoles\":[\"ACCOUNT_HOLDER\"]}],\"totalRecordCount\":1}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "e8621670-a4ba-4052-a8f2-bac3627cd1bb"
+}

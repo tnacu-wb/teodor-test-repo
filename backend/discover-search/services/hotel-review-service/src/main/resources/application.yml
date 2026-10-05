@@ -1,0 +1,141 @@
+server:
+  port: "@application.port@"
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "@project.version@"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  endpoints:
+    web:
+      base-path: /v1/hotel-review/actuator
+      exposure:
+        include: health, info, caches, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    redis:
+      enabled: false
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+
+logging:
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+      response:
+        body: false
+  level:
+    brave: warn
+    org.springframework.cache: trace
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      key-prefix: "Hotel-Review-Service"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+config:
+  service:
+    tripadvisor:
+      host: "https://api.tripadvisor.com"
+      apiKey: ${TRIPADVISOR_API_KEY}
+      url: "/api/partner/2.0/location/{hotelCode}"
+      params: "?key={key}&lang={lang}&all_shared=true&limit={limit}"
+      dataUrl: "${config.service.tripadvisor.url}/"
+      reviewsUrl: "${config.service.tripadvisor.url}/reviews"
+      connectionTimeout: "5000"
+      readTimeout: "2000"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, caches, prometheus
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-prod

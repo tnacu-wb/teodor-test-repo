@@ -1,0 +1,55 @@
+@startuml
+entity "Reservations Manager Entity Service (Opera)" as ES
+participant BookingController as Controller
+participant BookingInPort as BookingInPort
+
+participant MigrationStatusOutPort as MigrationStatusOutPort
+participant MigrationStatusClient as MigrationStatusClient
+participant BookingOutPort as BookingOutPort
+participant ReservationOutPort as ReservationOutPort
+participant BookingClient as BookingClient
+participant ReservationClient as ReservationClient
+
+entity "hotel-reservation-service" as HRS
+entity "basket-service" as BS
+entity AccountServices as AS
+
+ES -> Controller: GET /v1/bookings/information?\nhotelId={hotelId}&\narrival={arrival}&\nbookingReference={bookingReference}&\nsurname={surname}&\nsourceSystem={sourceSystem}
+Controller -> BookingInPort: getBookingInformation
+
+alt sourceSystem is not present
+  BookingInPort -> MigrationStatusOutPort
+  MigrationStatusOutPort -> MigrationStatusClient
+  MigrationStatusOutPort <- MigrationStatusClient: BART
+  BookingInPort <- MigrationStatusOutPort
+end
+alt sourceSystem is BART
+  BookingInPort -> BookingOutPort: getBookingInformation
+  BookingOutPort -> BookingClient: getBookingInformation
+  BookingClient -> AS: GET /reservation/hotels/{reservation-id}
+  BookingClient <- AS
+  BookingOutPort <- BookingClient
+  BookingInPort <- BookingOutPort
+end
+alt sourceSystem is OPERA
+  BookingInPort -> ReservationOutPort: getOperaBookingInformation
+  alt BOOKING_CHANNEL is PI
+    ReservationOutPort -> ReservationClient: getReservationInformation
+    ReservationClient -> HRS: GET /v1/reservations/basket/{basketReference}
+    ReservationClient <- HRS
+    ReservationOutPort <- ReservationClient
+  end
+  alt BOOKING_CHANNEL is Not PI
+    ReservationOutPort -> ReservationClient: getReservationInformationAuth
+    ReservationClient -> HRS: GET /v1/reservations/basket/{basketReference}/authenticated
+    ReservationClient <- HRS
+    ReservationClient -> BS: GET /v1/baskets/{basketReference}
+    ReservationClient <- BS
+    ReservationOutPort <- ReservationClient
+  end
+  BookingInPort <- ReservationOutPort
+end
+
+Controller <- BookingInPort
+ES <- Controller
+@endum

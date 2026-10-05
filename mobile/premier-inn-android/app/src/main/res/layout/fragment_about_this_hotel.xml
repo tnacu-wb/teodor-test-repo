@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/generic_padding_16">
+
+    <ImageView
+        android:id="@+id/close_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:contentDescription="@null"
+        android:padding="@dimen/generic_padding_8"
+        android:src="@drawable/ic_close_icon_grey" />
+
+    <TextView
+        android:id="@+id/pageTitle"
+        style="@style/Header2Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/generic_margin_24"
+        android:text="@string/hotel_details_activity_about_this_hotel_title" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/Header2Bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="0sp"
+                android:textColor="@color/grey_dark" />
+
+            <TextView
+                android:id="@+id/description"
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/generic_margin_16"
+                android:lineSpacingExtra="@dimen/h1_line_spacing_extra"
+                android:textColor="@color/dark_grey" />
+
+            <TextView
+                style="@style/Header3Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/generic_margin_24"
+                android:lineSpacingExtra="0sp"
+                android:text="@string/hotel_details_full_description_directions_title"
+                android:textColor="@color/grey_dark" />
+
+            <TextView
+                android:id="@+id/directions"
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/generic_margin_8"
+                android:lineSpacingExtra="@dimen/h1_line_spacing_extra"
+                android:paddingBottom="@dimen/generic_padding_30"
+                android:textColor="@color/grey_dark" />
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

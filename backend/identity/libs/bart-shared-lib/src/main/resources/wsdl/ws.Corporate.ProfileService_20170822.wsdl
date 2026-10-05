@@ -1,0 +1,407 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:bb="http://corporate.micros.com/1.0"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://corporate.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             targetNamespace="http://corporate.micros.com/1.0">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://corporate.micros.com/1.0">
+            <s:include schemaLocation="../xsd/bart-business-10.xsd"/>
+            <s:element name="BookingPreference">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:BookingPreferenceRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="BookingPreferenceRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element name="bookingPreferences" type="s0:BookingPreferences"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="BookingPreferences">
+                <s:sequence>
+                    <s:element name="numberOfAdults" type="s:decimal"/>
+                    <s:element name="numberOfChildren" type="s:decimal"/>
+                    <s:element name="numberOfInfants" type="s:decimal"/>
+                    <s:element name="roomType" type="s:string"/>
+                    <s:element name="premierBreakfast" type="s:boolean"/>
+                    <s:element name="continentalBreakfast" type="s:boolean"/>
+                    <s:element name="mealDeal" type="s:boolean"/>
+                    <s:element name="preselectWifi" type="s:boolean"/>
+                    <s:element name="electronicInvoice" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="BookingPreferenceResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="BookingPreferenceResult" type="s0:BookingPreferenceResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="BookingPreferenceResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="ChangePassword">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:ChangePasswordRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ChangePasswordRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element name="currentPassword" type="s:string"/>
+                    <s:element name="newPassword" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="ChangePasswordResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="ChangePasswordResult" type="s0:ChangePasswordResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ChangePasswordResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="NewsletterPreferences">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:NewsletterPreferencesRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="NewsletterPreferencesRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element name="newsletterPreferences" type="bb:ProfileNewsletterPreferences"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="NewsletterPreferencesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="NewsletterPreferencesResult" type="s0:NewsletterPreferencesResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="NewsletterPreferencesResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="PaymentOptions">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:PaymentOptionsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="PaymentOptionsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element name="paymentOption" type="s0:ProfilePaymentOption"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ProfilePaymentOption">
+                <s:complexContent>
+                    <s:extension base="s0:PaymentCard">
+                        <s:sequence>
+                            <s:element name="prepay" type="s:boolean"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="PaymentCard">
+                <s:sequence>
+                    <s:element minOccurs="0" name="cardID" type="s:decimal"/>
+                    <s:element name="cardLabel" type="s:string"/>
+                    <s:element name="cardType" type="s:string"/>
+                    <s:element name="cardNumber" type="s:decimal"/>
+                    <s:element name="nameOnCard" type="s:string"/>
+                    <s:element minOccurs="0" name="startDate" type="s:string"/>
+                    <s:element name="endDate" type="s:string"/>
+                    <s:element minOccurs="0" name="issueNumber">
+                        <s:simpleType>
+                            <s:restriction base="s:decimal">
+                                <s:maxInclusive value="99"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="billingAddress" type="bb:Address"/>
+                    <s:element name="cardNotPresentRequired" type="s:boolean"/>
+                    <s:element minOccurs="0" name="cardNotPresent" type="s0:CardNotPresent"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CardNotPresent">
+                <s:sequence>
+                    <s:element name="businessAccountUsername" type="s:string"/>
+                    <s:element name="businessAccountPassword" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="PaymentOptionsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="PaymentOptionsResult" type="s0:PaymentOptionsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="PaymentOptionsResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="PersonalDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:PersonalDetailsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="PersonalDetailsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element name="personalDetails" type="bb:ProfilePersonalDetails"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="PersonalDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="PersonalDetailsResult" type="s0:PersonalDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="PersonalDetailsResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="ProfileDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:ProfileDetailsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ProfileDetailsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="ProfileDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="ProfileDetailsResult" type="s0:ProfileDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ProfileDetailsResponse">
+                <s:sequence>
+                    <s:element name="profileDetails" type="s0:ProfileDetails"/>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ProfileDetails">
+                <s:sequence>
+                    <s:element name="personalDetails" type="bb:ProfilePersonalDetails"/>
+                    <s:element name="bookingPreferences" type="s0:BookingPreferences"/>
+                    <s:element name="paymentOption" type="s0:ProfilePaymentOption"/>
+                    <s:element name="newsletterPreferences" type="bb:ProfileNewsletterPreferences"/>
+                    <s:element name="profileLocked" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="RemovePaymentCard">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:RemovePaymentCardRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="RemovePaymentCardRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element minOccurs="0" name="employeeID" type="s:string"/>
+                    <s:element name="cardID" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="RemovePaymentCardResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="RemovePaymentCardResult" type="s0:RemovePaymentCardResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="RemovePaymentCardResponse">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </types>
+    <message name="BookingPreferenceSoapIn">
+        <part name="parameters" element="s0:BookingPreference"/>
+    </message>
+    <message name="BookingPreferenceSoapOut">
+        <part name="parameters" element="s0:BookingPreferenceResponse"/>
+    </message>
+    <message name="ChangePasswordSoapIn">
+        <part name="parameters" element="s0:ChangePassword"/>
+    </message>
+    <message name="ChangePasswordSoapOut">
+        <part name="parameters" element="s0:ChangePasswordResponse"/>
+    </message>
+    <message name="NewsletterPreferencesSoapIn">
+        <part name="parameters" element="s0:NewsletterPreferences"/>
+    </message>
+    <message name="NewsletterPreferencesSoapOut">
+        <part name="parameters" element="s0:NewsletterPreferencesResponse"/>
+    </message>
+    <message name="PaymentOptionsSoapIn">
+        <part name="parameters" element="s0:PaymentOptions"/>
+    </message>
+    <message name="PaymentOptionsSoapOut">
+        <part name="parameters" element="s0:PaymentOptionsResponse"/>
+    </message>
+    <message name="PersonalDetailsSoapIn">
+        <part name="parameters" element="s0:PersonalDetails"/>
+    </message>
+    <message name="PersonalDetailsSoapOut">
+        <part name="parameters" element="s0:PersonalDetailsResponse"/>
+    </message>
+    <message name="ProfileDetailsSoapIn">
+        <part name="parameters" element="s0:ProfileDetails"/>
+    </message>
+    <message name="ProfileDetailsSoapOut">
+        <part name="parameters" element="s0:ProfileDetailsResponse"/>
+    </message>
+    <message name="RemovePaymentCardSoapIn">
+        <part name="parameters" element="s0:RemovePaymentCard"/>
+    </message>
+    <message name="RemovePaymentCardSoapOut">
+        <part name="parameters" element="s0:RemovePaymentCardResponse"/>
+    </message>
+    <portType name="ProfileSoap">
+        <operation name="BookingPreference">
+            <input message="s0:BookingPreferenceSoapIn"/>
+            <output message="s0:BookingPreferenceSoapOut"/>
+        </operation>
+        <operation name="ChangePassword">
+            <input message="s0:ChangePasswordSoapIn"/>
+            <output message="s0:ChangePasswordSoapOut"/>
+        </operation>
+        <operation name="NewsletterPreferences">
+            <input message="s0:NewsletterPreferencesSoapIn"/>
+            <output message="s0:NewsletterPreferencesSoapOut"/>
+        </operation>
+        <operation name="PaymentOptions">
+            <input message="s0:PaymentOptionsSoapIn"/>
+            <output message="s0:PaymentOptionsSoapOut"/>
+        </operation>
+        <operation name="PersonalDetails">
+            <input message="s0:PersonalDetailsSoapIn"/>
+            <output message="s0:PersonalDetailsSoapOut"/>
+        </operation>
+        <operation name="ProfileDetails">
+            <input message="s0:ProfileDetailsSoapIn"/>
+            <output message="s0:ProfileDetailsSoapOut"/>
+        </operation>
+        <operation name="RemovePaymentCard">
+            <input message="s0:RemovePaymentCardSoapIn"/>
+            <output message="s0:RemovePaymentCardSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="ProfileSoap" type="s0:ProfileSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="BookingPreference">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.ProfileService.BookingPreference" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="ChangePassword">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.ProfileService.ChangePassword" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="NewsletterPreferences">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.ProfileService.NewsletterPreferences" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="PaymentOptions">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.ProfileService.PaymentOptions" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="PersonalDetails">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.ProfileService.PersonalDetails" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="ProfileDetails">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.ProfileService.ProfileDetails" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="RemovePaymentCard">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.ProfileService.RemovePaymentCard" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="Profile">
+        <port name="ProfileSoap" binding="s0:ProfileSoap">
+            <soap:address location="https://alpha2.bookings.premierinn.com:443/csp/sql/ws.Corporate.ProfileService.cls"/>
+        </port>
+    </service>
+</definitions>

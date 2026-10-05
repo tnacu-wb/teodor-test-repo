@@ -1,0 +1,31 @@
+{
+  "id" : "f3563852-2653-4653-869d-8e161669b73e",
+  "request" : {
+    "url" : "/marketing/hotels/newsletter/customer-id-test",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "authenticationKey" : {
+        "equalTo" : "auth-key-test"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['correlationId'] == '1984000')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptions'][*][?(@.['contactType'] == 'Email')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptions'][*][?(@.['contactValue'] == 'test@gmail.com')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptions'][*][?(@.['subscribe'] == 'false')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptions'][*][?(@.['brandCode'] == 'PINN')]"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "f3563852-2653-4653-869d-8e161669b73e"
+}

@@ -1,0 +1,40 @@
+{
+  "id" : "c882b53e-90c9-46c4-97a0-3f203f470394",
+  "request" : {
+    "url" : "/piba/account/invoices",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "session-id" : {
+        "equalTo" : "13245312321345"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value10"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['schemeCustomerId'] == '9876543')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['tetheredUserGuid'] == 'trwtes-7cf-bcf3-asda-9f7f-84068f15571a')]"
+    }, {
+      "matchesJsonPath" : "$.['searchCriteria'][?(@.['dateFrom'] == '2020-05-05')]"
+    }, {
+      "matchesJsonPath" : "$.['searchCriteria'][?(@.['dateTo'] == '2021-03-15')]"
+    }, {
+      "matchesJsonPath" : "$.['pagingRequest'][?(@.['page'] == 5)]"
+    }, {
+      "matchesJsonPath" : "$.['pagingRequest'][?(@.['maximumDisplayRows'] == 10)]"
+    } ]
+  },
+  "response" : {
+    "status" : 500,
+    "body" : "{\"code\":\"SchemaError\",\"details\":[\"SchemaError\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "c882b53e-90c9-46c4-97a0-3f203f470394"
+}

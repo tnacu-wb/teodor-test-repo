@@ -1,0 +1,27 @@
+server:
+  port: 9020
+
+swagger:
+  api:
+    version: 1.0.0
+
+rules-engine:
+  scheduler:
+    enabled: false
+
+spring:
+  datasource:
+    username: sa
+    password: sa
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+      default_schema: rules_engine
+  liquibase:
+    enabled: true
+    change-log: classpath:sql/liquibase/changelog/db.changelog-master.xml
+    default-schema: rules_engine
+    liquibase-schema: rules_engine

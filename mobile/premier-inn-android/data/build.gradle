@@ -1,0 +1,126 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.kapt'
+}
+
+android {
+    compileSdkVersion Versions.androidCompileSdk
+    defaultConfig {
+
+        minSdkVersion Versions.androidMinSdk
+        targetSdkVersion Versions.androidTargetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders = [auth0Domain: "", auth0Scheme: ""]
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString(), "room.incremental":"true"]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        String sharedJsonDir = 'src/test/resources'
+
+        test {
+            resources.srcDirs sharedJsonDir
+        }
+
+        androidTest {
+            assets.srcDirs = [sharedJsonDir, "$projectDir/schemas".toString()]
+        }
+        main {
+            assets {
+                srcDirs 'src/main/assets'
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+    namespace 'com.whitbread.premierinn.data'
+    lint {
+        abortOnError false
+        disable 'InvalidPackage', 'OldTargetApi'
+        ignoreWarnings true
+        quiet true
+    }
+
+}
+
+dependencies {
+    implementation project(path: ':domain')
+
+    api Libs.retrofit
+
+    api Libs.androidktx
+    api Libs.gson
+    api Libs.room
+    api Libs.roomRxJava
+    kapt Libs.roomCompiler // TODO: Once Room is updated try and switch to ksp - ksp Libs.roomCompiler (faster builds)
+
+    api Libs.supportAnnotations
+
+    implementation Libs.auth0
+    implementation Libs.kotlinStdlib
+    implementation Libs.javaxInject
+    implementation platform(Libs.firebaseBOM)
+    api Libs.firebaseRemoteConfig
+    implementation Libs.firebaseCrashlytics
+
+    // Coroutines
+    implementation Libs.coroutinesCore
+
+    // QR Codes
+    implementation Libs.zxingCore
+    implementation Libs.zxingJavaSe
+
+    testImplementation Libs.jUnit
+    testImplementation Libs.kotlinTestlib
+    testImplementation Libs.coroutinesTest
+    testImplementation Libs.mockito
+    testImplementation Libs.mockitoKotlin
+    testImplementation Libs.mockK
+    testImplementation Libs.jUnitParams
+    testImplementation Libs.thruth
+    testImplementation Libs.robolectric
+    testImplementation Libs.androidXTestCore
+    testImplementation Libs.archCoreTesting
+
+    androidTestImplementation Libs.androidTestRunner
+    androidTestImplementation Libs.espressoCore
+    androidTestImplementation Libs.thruth
+
+    androidTestImplementation Libs.roomTesting
+    androidTestImplementation Libs.archCoreTesting
+
+    implementation Libs.threetenabp
+    testImplementation Libs.threetenbp
+
+    implementation platform(Libs.adobeBOM)
+    implementation Libs.adobeCampaign
+
+}

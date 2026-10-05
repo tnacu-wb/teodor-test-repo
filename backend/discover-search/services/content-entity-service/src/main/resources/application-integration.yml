@@ -1,0 +1,84 @@
+server:
+  port: @application.port@
+
+swagger:
+  api:
+    version: @project.version@
+
+wiremock:
+  server:
+    httpsPort: -1 # Fix for M1 macs as described here https://stackoverflow.com/questions/60074168/java-lang-illegalstateexception-no-server-alpnprocessors-wiremock
+
+config:
+  service:
+    aem:
+      webclientMetricsEnabled: true
+      host: http://localhost:${wiremock.server.port:0}
+      hostMock: http://localhost:${wiremock.server.port:0} #TODO remove when AEMClient is finished
+      username: us
+      password: pa
+      labelsEndpoint: "etc/designs/global/dictionaries/labels/i18n.jsondict.{language}"
+      indexHeaderDataEndpoint: "/{country}/{language}/index.header.data"
+      hotelInformationEndpoint: "{country}/{language}/hoteldirectory/{hotelDirectory}/{hotelId}.complete.data"
+      bookingInformationEndpoint: "/{country}/{language}/content-service.booking-flow.detail/bookingId/{bookingFlowId}.json"
+      extrasLabelsEndpoint: "etc/designs/global/dictionaries/extras/i18n.jsondict.{language}"
+      upsellItemsEndpoint: "/{country}/{language}/hoteldirectory/{initialCharacter}/{hotelId}.upsellitems.data"
+      rateInformationEndpoint: "{country}/{language}/content-service.rates.detail/site/leisure/brand/{brand}.json"
+      bbRateInformationEndpoint: "{country}/{language}/content-service.rates.detail/site/business-booker/brand/{brand}.json"
+      rateInformationForHotelEndpoint: "{country}/{language}/content-service.rates.detail/site/leisure/brand/{brand}/hotelCode/{hotelId}.json"
+      bbRateInformationForHotelEndpoint: "{country}/{language}/content-service.rates.detail/site/business-booker/brand/{brand}/hotelCode/{hotelId}.json"
+      allHotelDetailsEndpoint: "{country}/{language}/hoteldirectory/list.hotels.data"
+      footerEndpoint: "{country}/{language}/index.footer.data/site/{site}.json"
+      searchResultsDataEndpoint: "/{country}/{language}/search.searchresults.data"
+      roomTypeEndpoint: "{country}/{language}/content-service.room-types.detail/brand/{brand}.json"
+      countriesEndpoint: "/{country}/{language}/content-service.countries.detail/site/{site}.json"
+      cookiePoliciesEndpoint: "/{country}/{language}/content-service.cookie-policies.detail/brand/{brand}.json"
+      bbIndexHeaderDataEndpoint: "/{country}/{language}/business-booker/index.header.data"
+      ratesOverrideEndpoint: "/{country}/{language}/content-service.rates-override.detail/site/leisure/brand/{brand}.json"
+      bbRatesOverrideEndpoint: "/{country}/{language}/content-service.rates-override.detail/site/business-booker/brand/{brand}.json"
+      businessNotesEndpoint: "etc/designs/global/dictionaries/allowances/i18n.jsondict.{language}"
+    ohip:
+      host: http://localhost:${wiremock.server.port:0}
+      ratePlansEndpoint: "/ratePlans"
+      hotelInfoEndpoint: "/hotels/{hotelId}/info"
+    hotelreviewservice:
+      host: http://localhost:${wiremock.server.port:0}
+      reviewsForSingleHotelEndpoint: "/v1/hotel-review/reviews/{hotelCode}"
+spring:
+  cache:
+    type: none
+
+jobs:
+  hotel-information-updater:
+    # every Monday at 6 am
+    schedule: "0 0 6 * * MON"
+
+content-entity:
+  hotels:
+    information:
+      processing:
+        thread:
+          count: 10
+    filters:
+      # every Monday at 6 am
+      refresh: "0 0 6 * * MON"
+      facilityCodes:
+        - "CPF"
+        - "CPP"
+        - "COP"
+        - "ACO"
+        - "LFT"
+        - "MEE"
+        - "EAT"
+        - "PRR"
+        - "EVC"
+        - "ICR"
+        - "HLG"
+        - "LUG"
+        - "LWB"
+        - "WET"
+        - "COC"
+        - "HAC"
+        - "HUL"
+  scheduler:
+    enabled: false

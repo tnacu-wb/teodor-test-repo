@@ -1,0 +1,46 @@
+server:
+  port: 9024
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1
+
+
+config:
+  service:
+    host: http://localhost:${wiremock.server.port:0}
+    prefix: "/adp"
+    allocate:
+      getVacantRoomsEndpoint: "/v1/rooms/getVacant"
+      allocateRoomEndpoint: "/v1/rooms/allocate"
+    checkIn:
+      createProfileEndpoint: "/v1/profile/createProfile"
+      checkInEndpoint: "/v1/kiosk/checkIn"
+    makeDeposit: "/v1/reservations/confirm"
+
+payment:
+  type:
+    VS: KVA
+    MC: KMC
+    AX: KAX
+    DC: KDI
+    SW: KMG
+    BU: KBU
+    BD: KBD
+    BI: KBI
+
+auth:
+  tenants:
+    - name: "test-tenant"
+      audience: ${DISTR_TENANT_AUDIENCE:test-audience}
+      namespace: ${DISTR_TENANT_NAMESPACE:https://test.namespace/}
+      issuer: ${DISTR_TENANT_ISSUER:https://test.auth0.com/}
+      jwkUri: ${DISTR_TENANT_JWK_URI:https://test.auth0.com/.well-known/jwks.json}

@@ -1,0 +1,1193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inside JourneySpec</title>
+<style>
+  :root {
+    --paper: #FFF0E5;
+    --surface: #FFFFFF;
+    --surface-2: #F6E5D5;
+    --ink: #10162F;
+    --ink-soft: #585E74;
+    --line: #E8D5C3;
+    --border: #10162F;
+    --accent: #3A10E5;
+    --accent-soft: #FFFAE5;
+    --java: #6E4A00;
+    --java-soft: #FFD300;
+    --code-bg: #10162F;
+    --code-ink: #EDEFFB;
+    --code-kw: #FFD300;
+    --code-str: #6FE0B2;
+    --code-type: #A8C3FF;
+    --code-cmt: #7E86A5;
+    --on-accent: #FFFFFF;
+    --good: #2E6B3E;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #10162F;
+      --surface: #1A2141;
+      --surface-2: #262E55;
+      --ink: #EFF1FB;
+      --ink-soft: #9AA1C0;
+      --line: #2A3158;
+      --border: #4A528F;
+      --accent: #A09CFF;
+      --accent-soft: #2B2508;
+      --java: #E8C05A;
+      --java-soft: #5C4D00;
+      --code-bg: #0A0E24;
+      --code-ink: #E8EBF8;
+      --on-accent: #10162F;
+      --good: #7FBE8F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0C102A;
+    --surface: #151A3A;
+    --surface-2: #232A56;
+    --ink: #EFF1FB;
+    --ink-soft: #9AA1C0;
+    --line: #262D58;
+    --border: #454E8F;
+    --accent: #8D9CFF;
+    --accent-soft: #232B63;
+    --java: #E8C05A;
+    --java-soft: #3A3113;
+    --code-bg: #0A0E24;
+    --code-ink: #E8EBF8;
+    --good: #7FBE8F;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  .sans { font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  code, pre {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.86em;
+  }
+  p > code, li > code, td > code, h2 > code, h3 > code, dt > code {
+    background: var(--surface-2);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .wrap {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 46rem);
+    gap: 3rem;
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+  @media (max-width: 58rem) {
+    .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    nav.toc { display: none; }
+  }
+
+  header.masthead {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 2.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  h1 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    text-wrap: balance;
+    margin-top: 0.5rem;
+  }
+  .standfirst {
+    margin-top: 0.9rem;
+    max-width: 46rem;
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    padding-top: 2.5rem;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.85rem;
+  }
+  nav.toc .toc-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.6rem;
+  }
+  nav.toc ol { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+  nav.toc a {
+    display: block;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 0.22rem 0.6rem;
+    border-left: 2px solid var(--line);
+  }
+  nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-left-color: var(--accent); }
+  nav.toc ol ol a { padding-left: 1.4rem; font-size: 0.8rem; }
+
+  main { padding-top: 2.5rem; min-width: 0; }
+  main > section + section { margin-top: 3.5rem; }
+  h2 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    padding-top: 0.5rem;
+  }
+  h2 .index {
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    margin-right: 0.4rem;
+  }
+  h3 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+  section > p, section > ul, section > ol { margin-top: 0.9rem; }
+  section li + li { margin-top: 0.35rem; }
+  a { color: var(--accent); }
+
+  /* code panels */
+  .panel {
+    margin-top: 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--code-bg);
+  }
+  .panel-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.4rem 0.6rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .panel-bar .file {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    margin-left: auto;
+    padding-left: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tab {
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    background: none;
+    color: var(--ink-soft);
+    padding: 0.28rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .tab[aria-selected="true"].kt { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .tab[aria-selected="true"].jv { background: var(--java-soft); color: var(--ink); border-color: var(--border); border-radius: 999px; }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .panel pre {
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    color: var(--code-ink);
+    line-height: 1.55;
+  }
+  .panel pre[hidden] { display: none; }
+  .k { color: var(--code-kw); font-weight: 600; }
+  .s { color: var(--code-str); }
+  .t { color: var(--code-type); }
+  .c { color: var(--code-cmt); font-style: italic; }
+  .hl { background: rgba(255, 211, 0, 0.10); display: inline-block; width: 100%; }
+
+  /* feature cards */
+  article.feature {
+    margin-top: 2.2rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--line);
+  }
+  .feature-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem; }
+  .kw-chip {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--java-soft);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+  }
+  .java-analogy {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+  .java-analogy::before { content: "Java nearest thing: "; font-weight: 600; }
+  article.feature > p { margin-top: 0.8rem; }
+
+  details.without {
+    margin-top: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  details.without > summary {
+    cursor: pointer;
+    padding: 0.6rem 0.9rem;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    list-style: none;
+  }
+  details.without > summary::-webkit-details-marker { display: none; }
+  details.without > summary::before { content: "▸ "; color: var(--ink-soft); }
+  details.without[open] > summary::before { content: "▾ "; }
+  details.without > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  details.without .inner { padding: 0 0.9rem 0.9rem; }
+  details.without .inner p { margin-top: 0.5rem; }
+  details.without .panel { margin-top: 0.6rem; }
+
+  /* frame diagram */
+  .frame {
+    margin-top: 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.82rem;
+  }
+  .frame-row { display: flex; align-items: center; gap: 0.8rem; padding: 0.55rem 0.9rem; }
+  .frame-row + .frame-row { border-top: 1px solid var(--line); }
+  .frame-row.supplied { background: var(--accent-soft); }
+  .frame-row.yours { background: var(--surface); }
+  .frame-row .who {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex: 0 0 6.5rem;
+  }
+  .frame-row.supplied .who { color: var(--java); }
+  .frame-row.yours .who { color: var(--ink-soft); }
+  .frame-row .what { min-width: 0; overflow-x: auto; white-space: nowrap; }
+
+  table {
+    margin-top: 1rem;
+    border-collapse: collapse;
+    width: 100%;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.88rem;
+  }
+  th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+  .table-scroll { overflow-x: auto; }
+
+  .callout {
+    margin-top: 1.1rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--java-soft);
+    background: var(--surface);
+    border-radius: 8px;
+  }
+  .callout.warn { border-left-color: var(--java-soft); }
+  .callout p + p { margin-top: 0.5rem; }
+
+  footer.colophon {
+    margin-top: 4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="eyebrow">integration-tests-kotlin · docs for Java developers</p>
+  <h1>Inside JourneySpec</h1>
+  <p class="standfirst">
+    Every journey extends one base class. This page explains what a scenario inherits from
+    it — identity, stubs, cleanup, and evidence — why a shared base class is the right
+    tool, and the Kotlin features that make the journey DSL work. No Kotlin experience
+    assumed.
+  </p>
+</header>
+
+<div class="wrap">
+
+<nav class="toc sans" aria-label="Contents">
+  <p class="toc-title">Contents</p>
+  <ol>
+    <li><a href="#why">Why this class exists</a></li>
+    <li><a href="#writing">Writing a journey</a></li>
+    <li><a href="#class-maps">Class maps</a></li>
+    <li><a href="#methods">Method walkthrough</a>
+      <ol>
+        <li><a href="#m-scenario">scenario</a></li>
+        <li><a href="#m-install-for">installFor</a></li>
+        <li><a href="#m-install-stub">installStub</a></li>
+        <li><a href="#m-call-count">callCount</a></li>
+        <li><a href="#m-expect">expect</a></li>
+        <li><a href="#m-attach-evidence">attachEvidence</a></li>
+      </ol>
+    </li>
+    <li><a href="#lifecycle">The scenario lifecycle</a></li>
+    <li><a href="#kotlin">Kotlin, feature by feature</a>
+      <ol>
+        <li><a href="#f-abstract">abstract class + init</a></li>
+        <li><a href="#f-dsl">The DSL-shaped parameter</a></li>
+        <li><a href="#f-infix">infix + named arguments</a></li>
+        <li><a href="#f-delegate">Interface delegation (by)</a></li>
+        <li><a href="#f-context">Coroutine context elements</a></li>
+        <li><a href="#f-memberext">Member extension functions</a></li>
+        <li><a href="#f-internalctor">internal constructor</a></li>
+      </ol>
+    </li>
+    <li><a href="#cheatsheet">Cheat sheet</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section id="why">
+  <h2><span class="index">1</span>Why this class exists</h2>
+  <p>
+    Journeys run concurrently — up to four specifications, four scenarios each — against
+    shared services and shared WireMock instances. A scenario can only survive that
+    environment if four things are guaranteed, every time:
+  </p>
+  <ul>
+    <li><strong>Identity.</strong> Each scenario needs a unique <code>testId</code>.
+        Stubs carry it, requests carry it, and cleanup finds scenario-owned state by it.
+        Two scenarios sharing an ID would consume each other's stubs.</li>
+    <li><strong>Scoped stubs.</strong> Installed mappings must match only requests from
+        this scenario. The installer stamps the test-ID matcher onto every mapping.</li>
+    <li><strong>Strict cleanup.</strong> Scenario-owned mappings and journal events must
+        be removed even when the test fails — otherwise every red run poisons the shared
+        WireMocks for the runs after it.</li>
+    <li><strong>Evidence.</strong> When a scenario fails in CI, the triage material — what
+        stubs were installed, what was sent, what came back, what failed — must exist as a
+        file, because nobody can re-run the moment.</li>
+  </ul>
+  <p>
+    <code>JourneySpec</code> owns all four. A journey class declares scenarios and writes
+    only booking data, service calls, and expectations. Everything below the dotted line
+    of "what am I actually testing" is supplied:
+  </p>
+
+  <div class="frame" role="img" aria-label="Diagram: JourneySpec supplies identity, evidence, and cleanup; your scenario supplies only stubs, calls, and expectations">
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">testId = "get-company-by-id-…-ci6fdr"   ← unique per scenario run</span></div>
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">evidence sink → build/test-evidence/&lt;testId&gt;/evidence.txt</span></div>
+    <div class="frame-row yours"><span class="who sans">you write</span><span class="what">installFor(booking)                     ← stubs, auto-scoped to testId</span></div>
+    <div class="frame-row yours"><span class="who sans">you write</span><span class="what">val result = CompanyEntityApi().getCompanyById(id, testId)</span></div>
+    <div class="frame-row yours"><span class="who sans">you write</span><span class="what">expect("returns the company") { … }</span></div>
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">cleanup: every mapping + journal event owned by testId removed — pass or fail</span></div>
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">evidence file written: PASSED / FAILED + the failure message</span></div>
+  </div>
+
+  <p>
+    The Java instinct here would be a <code>@BeforeEach</code>/<code>@AfterEach</code>
+    pair plus a utilities class. The base-class approach is stronger for the same reason
+    <code>ServiceApiClient</code> is: the lifecycle is not a convention a journey follows,
+    it is the only way a scenario can exist. You cannot declare a scenario without
+    receiving a fresh <code>testId</code>, and you cannot skip cleanup, because both live
+    in code you never write.
+  </p>
+</section>
+
+<section id="writing">
+  <h2><span class="index">2</span>Writing a journey</h2>
+  <p>
+    A journey is a class with no body of its own: it passes a description and a block of
+    scenarios to the <code>JourneySpec</code> constructor. Inside <code>scenario</code>,
+    the helpers below are in scope.
+  </p>
+
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">The JUnit shape it replaces</button>
+      <span class="file">journeys/companyentity/GetCompanyByIdSpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">class</span> <span class="t">GetCompanyByIdSpec</span> :
+    <span class="t">JourneySpec</span>(
+        <span class="s">"get company by id"</span>,
+        {
+            scenario(<span class="s">"GET /v1/companies/id/{id} returns company when id is a corporate id"</span>) {
+                <span class="k">val</span> company = <span class="t">Companies</span>.NEILL_TECHNICAL_SERVICES
+                <span class="k">val</span> booking = <span class="t">Booking</span>(companies = listOf(company))
+
+                installFor(booking)
+
+                <span class="k">val</span> result =
+                    <span class="t">CompanyEntityApi</span>().getCompanyById(
+                        id = company.corpId,
+                        testId = testId,
+                    )
+
+                result.attachEvidence(<span class="s">"Get Company By Id"</span>)
+
+                expect(<span class="s">"returns the company with negotiated rates"</span>) {
+                    result.response.status.value shouldBe <span class="s">200</span>
+                    result.body.shouldMatch(company)
+                }
+            }
+        },
+    )</code></pre>
+    <pre data-lang="jv" hidden><code><span class="c">// The JUnit 5 equivalent. The lifecycle is split across annotations and</span>
+<span class="c">// fields; each piece is individually forgettable.</span>
+<span class="k">class</span> <span class="t">GetCompanyByIdTest</span> {
+    <span class="k">private</span> <span class="t">String</span> testId;
+    <span class="k">private</span> <span class="t">EvidenceSink</span> evidence;
+
+    <span class="k">@BeforeEach</span> <span class="k">void</span> setUp() {
+        testId = <span class="t">TestIds</span>.newId(<span class="s">"get company by id"</span>, …);  <span class="c">// forgettable</span>
+        evidence = <span class="k">new</span> <span class="t">EvidenceSink</span>(testId);              <span class="c">// forgettable</span>
+    }
+
+    <span class="k">@Test</span> <span class="k">void</span> returnsCompany() { <span class="c">/* stubs, call, assertions */</span> }
+
+    <span class="k">@AfterEach</span> <span class="k">void</span> tearDown() {
+        mocks.removeFor(testId);   <span class="c">// forgettable — and must run even on failure</span>
+        evidence.write();
+    }
+}</code></pre>
+  </div>
+
+  <p>What is in scope inside a <code>scenario</code> block:</p>
+  <div class="table-scroll"><table>
+    <tr><th>Helper</th><th>What it does</th></tr>
+    <tr><td><code>testId</code></td><td>This scenario's unique ID. Pass it to every typed-client call.</td></tr>
+    <tr><td><code>installFor(booking)</code></td><td>Installs every default stub the <code>Booking</code> data selects, scoped to <code>testId</code>. Optional <code>excluded</code> drops defaults from the plan. An excluded ID the Booking did not select throws before any WireMock call, naming the plan's actual IDs.</td></tr>
+    <tr><td><code>installStub(stub)</code></td><td>Installs one self-contained stub, scoped the same way.</td></tr>
+    <tr><td><code>callCount(upstream)</code></td><td>Counts the requests this scenario sent to one upstream — for asserting a call happened, or did not.</td></tr>
+    <tr><td><code>expect(name) { … }</code></td><td>Runs one named assertion block. The name labels <em>any</em> failure in the block — including non-assertion exceptions — in the report and the evidence file.</td></tr>
+    <tr><td><code>result.attachEvidence(prefix)</code></td><td>Adds the call's bounded request/response pair to the evidence artifact.</td></tr>
+  </table></div>
+</section>
+
+<section id="class-maps">
+  <h2><span class="index">3</span>Class maps</h2>
+  <p>
+    <code>JourneySpec</code> declares no methods. Its constructor and <code>init</code> block
+    register the feature. The <a href="#f-abstract">abstract class and init</a> section explains
+    that constructor behavior.
+  </p>
+
+  <h3><code>JourneySpecScope</code></h3>
+  <p>This nested class declares one method.</p>
+  <div class="table-scroll"><table>
+    <tr><th>Class method</th><th>Input</th><th>Output or effect</th><th>Dedicated explanation</th></tr>
+    <tr><td><code>scenario</code></td><td>A scenario name and a suspending <code>ScenarioScope</code> block.</td><td>Registers one isolated Kotest scenario with identity, evidence, mocks, and cleanup.</td><td><a href="#m-scenario">scenario</a></td></tr>
+  </table></div>
+
+  <h3><code>ScenarioScope</code></h3>
+  <p>This nested class declares five methods.</p>
+  <div class="table-scroll"><table>
+    <tr><th>Class method</th><th>Input</th><th>Output or effect</th><th>Dedicated explanation</th></tr>
+    <tr><td><code>installFor</code></td><td>A Booking and optional plan changes.</td><td>Installs every selected mapping for this scenario.</td><td><a href="#m-install-for">installFor</a></td></tr>
+    <tr><td><code>installStub</code></td><td>One planned stub.</td><td>Installs every mapping in that stub for this scenario.</td><td><a href="#m-install-stub">installStub</a></td></tr>
+    <tr><td><code>callCount</code></td><td>One upstream.</td><td>Returns this scenario's request count for that upstream.</td><td><a href="#m-call-count">callCount</a></td></tr>
+    <tr><td><code>expect</code></td><td>An expectation name and a suspending assertion block.</td><td>Runs the block with a failure label. It preserves genuine cancellation.</td><td><a href="#m-expect">expect</a></td></tr>
+    <tr><td><code>attachEvidence</code></td><td>An <code>ApiResult</code> receiver and optional prefix.</td><td>Records bounded HTTP request and response evidence.</td><td><a href="#m-attach-evidence">attachEvidence</a></td></tr>
+  </table></div>
+
+  <p>
+    <code>testIdFor</code> is a private file-level function. It is not a class method.
+    It has a <a href="#support-test-id">separate explanation</a> after the class methods.
+    The <code>ScenarioScope</code> constructor is also not a method. The
+    <a href="#f-internalctor">internal constructor</a> section explains it.
+  </p>
+</section>
+
+<section id="methods">
+  <h2><span class="index">4</span>Method walkthrough</h2>
+  <p>
+    The headings below use the exact source names. Each section explains one declared method.
+  </p>
+
+  <h3 id="m-scenario"><code>scenario</code></h3>
+  <p>
+    This is the only method on <code>JourneySpecScope</code>. It registers one Kotest scenario.
+    It creates the test ID, evidence sink, mock installer, and author scope before it runs the
+    author block.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/JourneySpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">suspend fun</span> scenario(
+    name: <span class="t">String</span>,
+    test: <span class="k">suspend</span> <span class="t">ScenarioScope</span>.() -&gt; <span class="t">Unit</span>,
+) = featureScope.scenario(name) {
+    <span class="k">val</span> testId = testIdFor(featureName, name)
+    <span class="k">val</span> evidenceSink = <span class="t">ScenarioEvidenceSink</span>(testId)
+    <span class="k">val</span> mockInstaller =
+        <span class="t">MockInstaller</span>(<span class="t">IntegrationTestConfig</span>.wiremock, evidenceSink)
+    <span class="k">val</span> scenarioScope =
+        <span class="t">ScenarioScope</span>(testId, mockInstaller, <span class="k">this</span>, evidenceSink)
+    <span class="k">var</span> primaryFailure: <span class="t">Throwable</span>? = <span class="k">null</span>
+    <span class="k">var</span> outcome = <span class="t">ScenarioEvidenceOutcome</span>.PASSED
+
+    <span class="k">try</span> {
+        withContext(<span class="t">HttpEvidenceContext</span>(evidenceSink)) {
+            runWithCleanup(
+                test = { scenarioScope.test() },
+                cleanup = {
+                    <span class="k">try</span> {
+                        evidenceSink.recordCleanup(mockInstaller.removeFor(testId))
+                    } <span class="k">catch</span> (cleanupFailure: <span class="t">CleanupException</span>) {
+                        evidenceSink.recordCleanup(cleanupFailure.result)
+                        <span class="k">throw</span> cleanupFailure
+                    }
+                },
+            )
+        }
+    } <span class="k">catch</span> (failure: <span class="t">Throwable</span>) {
+        primaryFailure = failure
+        outcome = <span class="t">ScenarioEvidenceOutcome</span>.FAILED
+        evidenceSink.recordScenarioFailure(failure)
+        <span class="k">throw</span> failure
+    } <span class="k">finally</span> {
+        finalizeScenarioEvidence(evidenceSink, outcome, primaryFailure)
+    }
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">void</span> scenario(<span class="t">String</span> name, <span class="t">ScenarioTest</span> test) {
+    featureScope.scenario(name, kotestScope -&gt; {
+        <span class="t">String</span> testId = testIdFor(featureName, name);
+        <span class="t">ScenarioEvidenceSink</span> sink = <span class="k">new</span> <span class="t">ScenarioEvidenceSink</span>(testId);
+        <span class="t">MockInstaller</span> mocks = <span class="k">new</span> <span class="t">MockInstaller</span>(wiremock, sink);
+        <span class="t">ScenarioScope</span> scope = <span class="k">new</span> <span class="t">ScenarioScope</span>(testId, mocks, kotestScope, sink);
+        <span class="k">try</span> {
+            runWithCleanup(() -&gt; test.run(scope), () -&gt; sink.recordCleanup(mocks.removeFor(testId)));
+        } <span class="k">catch</span> (<span class="t">Throwable</span> failure) {
+            sink.recordScenarioFailure(failure);
+            <span class="k">throw</span> failure;
+        } <span class="k">finally</span> {
+            finalizeScenarioEvidence(sink);
+        }
+    });
+}</code></pre>
+  </div>
+  <p>
+    <code>runWithCleanup</code> always attempts cleanup. A cleanup failure is recorded before it
+    propagates. The outer catch records the final scenario failure and rethrows it. The finally
+    block writes evidence for every outcome. Cancellation also passes through this path as a
+    <code>Throwable</code>. The method records it and rethrows the same value.
+  </p>
+
+  <h3 id="m-install-for"><code>installFor</code></h3>
+  <p>
+    This method forwards the Booking plan to <code>MockInstaller</code>. It supplies the current
+    scope's test ID. The default empty exclusion set keeps the normal call short. Selection
+    validation and WireMock failures propagate to the scenario.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/JourneySpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">suspend fun</span> installFor(
+    booking: <span class="t">Booking</span>,
+    excluded: <span class="t">Set</span>&lt;<span class="t">String</span>&gt; = emptySet(),
+) {
+    mockInstaller.installFor(
+        booking = booking,
+        testId = testId,
+        excluded = excluded,
+    )
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">void</span> installFor(<span class="t">Booking</span> booking,
+                <span class="t">Set</span>&lt;<span class="t">String</span>&gt; excluded) {
+    mockInstaller.installFor(booking, testId, excluded);
+}</code></pre>
+  </div>
+  <p>
+    The method returns <code>Unit</code>. Its effect is remote WireMock registration and evidence.
+    It does not catch failures. The surrounding <code>scenario</code> method owns failure recording
+    and cleanup.
+  </p>
+
+  <h3 id="m-install-stub"><code>installStub</code></h3>
+  <p>
+    This method forwards one direct planned stub. It injects the scenario test ID. The installer
+    scopes every mapping before registration and records successful registrations.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/JourneySpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">suspend fun</span> installStub(stub: <span class="t">PlannedStub</span>) {
+    mockInstaller.installStub(stub, testId)
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">void</span> installStub(<span class="t">PlannedStub</span> stub) {
+    mockInstaller.installStub(stub, testId);
+}</code></pre>
+  </div>
+  <p>
+    The method returns <code>Unit</code>. It performs no local validation or error handling.
+    Registration failures propagate to <code>scenario</code>.
+  </p>
+
+  <h3 id="m-call-count"><code>callCount</code></h3>
+  <p>
+    This method converts an author-facing <code>Upstream</code> to its
+    <code>WireMockTarget</code>. It asks the installer for the count that matches this test ID.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/JourneySpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">suspend fun</span> callCount(upstream: <span class="t">Upstream</span>): <span class="t">Int</span> =
+    mockInstaller.countCallsFor(upstream.target, testId)</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">int</span> callCount(<span class="t">Upstream</span> upstream) {
+    <span class="k">return</span> mockInstaller.countCallsFor(upstream.target(), testId);
+}</code></pre>
+  </div>
+  <p>
+    The method returns the remote journal count without changing it. It can return zero without
+    prior installation. Admin or protocol failures propagate to the assertion block.
+  </p>
+
+  <h3 id="m-expect"><code>expect</code></h3>
+  <p>
+    This method gives one assertion block a readable label. <code>withClue</code> adds the label to
+    assertion failures. It can also wrap a non-assertion throwable in an
+    <code>AssertionError</code>.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/JourneySpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">suspend fun</span> expect(
+    name: <span class="t">String</span>,
+    block: <span class="k">suspend</span> () -&gt; <span class="t">Unit</span>,
+) {
+    <span class="k">try</span> {
+        withClue(name) { block() }
+    } <span class="k">catch</span> (labelled: <span class="t">AssertionError</span>) {
+        <span class="k">val</span> cause = labelled.cause
+        <span class="k">if</span> (cause <span class="k">is</span> <span class="t">CancellationException</span> &amp;&amp;
+            cause !<span class="k">is</span> <span class="t">TimeoutCancellationException</span>
+        ) {
+            <span class="k">throw</span> cause
+        }
+        <span class="k">throw</span> labelled
+    }
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">void</span> expect(<span class="t">String</span> name, <span class="t">ThrowingBlock</span> block) {
+    <span class="k">try</span> {
+        withClue(name, block);
+    } <span class="k">catch</span> (<span class="t">AssertionError</span> labelled) {
+        <span class="t">Throwable</span> cause = labelled.getCause();
+        <span class="k">if</span> (cause <span class="k">instanceof</span> <span class="t">CancellationException</span> &amp;&amp;
+            !(cause <span class="k">instanceof</span> <span class="t">TimeoutCancellationException</span>)) {
+            <span class="k">throw</span> (<span class="t">CancellationException</span>) cause;
+        }
+        <span class="k">throw</span> labelled;
+    }
+}</code></pre>
+  </div>
+  <p>
+    Genuine scenario cancellation is control flow. The method unwraps and rethrows it without a
+    clue label. A timeout is a test finding, so it stays wrapped and labeled. All other assertion
+    failures also keep the label.
+  </p>
+
+  <h3 id="m-attach-evidence"><code>attachEvidence</code></h3>
+  <p>
+    This is a member extension method. Its dispatch receiver is <code>ScenarioScope</code>.
+    Its extension receiver is <code>ApiResult&lt;T&gt;</code>. This combination gives the method access
+    to both the result response and the scenario evidence sink.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/JourneySpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">fun</span> &lt;<span class="t">T</span>&gt; <span class="t">ApiResult</span>&lt;<span class="t">T</span>&gt;.attachEvidence(prefix: <span class="t">String</span>? = <span class="k">null</span>) {
+    evidenceSink.recordHttp(prefix, response.httpEvidence())
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">static</span> &lt;<span class="t">T</span>&gt; <span class="k">void</span> attachEvidence(
+        <span class="t">ApiResult</span>&lt;<span class="t">T</span>&gt; result,
+        @Nullable <span class="t">String</span> prefix,
+        <span class="t">ScenarioEvidenceSink</span> evidenceSink) {
+    evidenceSink.recordHttp(prefix, httpEvidence(result.response()));
+}</code></pre>
+  </div>
+  <p>
+    The method returns <code>Unit</code>. A null prefix is valid. The sink creates an unprefixed
+    evidence entry. Response evidence is bounded before the sink records it. Recording failures
+    propagate to <code>scenario</code>.
+  </p>
+
+  <h3 id="support-test-id"><code>testIdFor</code> — file-level support function</h3>
+  <p>
+    This function is not a class method. <code>scenario</code> calls it to create a matcher-safe
+    owner ID. It normalizes the feature and scenario names, limits the base to 90 characters, and
+    adds six random lowercase letters or digits.
+  </p>
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java shape</button>
+      <span class="file">testkit/JourneySpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">private fun</span> testIdFor(featureName: <span class="t">String</span>, scenarioName: <span class="t">String</span>): <span class="t">String</span> {
+    <span class="k">val</span> base =
+        <span class="s">"$featureName $scenarioName"</span>
+            .lowercase()
+            .replace(<span class="t">Regex</span>(<span class="s">"[^a-z0-9]+"</span>), <span class="s">"-"</span>)
+            .trim(<span class="s">'-'</span>)
+            .take(<span class="s">90</span>)
+            .trim(<span class="s">'-'</span>)
+    <span class="k">val</span> suffix =
+        (<span class="s">1</span>..<span class="s">6</span>).map { ((<span class="s">'a'</span>..<span class="s">'z'</span>) + (<span class="s">'0'</span>..<span class="s">'9'</span>)).random() }
+            .joinToString(<span class="s">""</span>)
+
+    <span class="k">return</span> <span class="s">"$base-$suffix"</span>
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">private static</span> <span class="t">String</span> testIdFor(<span class="t">String</span> feature, <span class="t">String</span> scenario) {
+    <span class="t">String</span> base = normalizeAndLimit(feature + <span class="s">" "</span> + scenario, <span class="s">90</span>);
+    <span class="t">String</span> suffix = randomLowercaseLettersAndDigits(<span class="s">6</span>);
+    <span class="k">return</span> base + <span class="s">"-"</span> + suffix;
+}</code></pre>
+  </div>
+  <p>
+    The random suffix reduces collisions between repeated or concurrent runs. The function does
+    not guarantee deterministic output. It returns a new value on each call.
+  </p>
+</section>
+
+<section id="lifecycle">
+  <h2><span class="index">5</span>The scenario lifecycle</h2>
+  <p>
+    The interesting part is failure handling. <code>scenario(...)</code> wraps your block
+    in this real sequence:
+  </p>
+
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code, condensed)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Same logic in Java terms</button>
+      <span class="file">testkit/JourneySpec.kt · testkit/ScenarioLifecycle.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">val</span> testId = testIdFor(featureName, name)          <span class="c">// mint identity</span>
+<span class="k">val</span> evidenceSink = <span class="t">ScenarioEvidenceSink</span>(testId)     <span class="c">// open the artifact</span>
+<span class="k">val</span> mockInstaller = <span class="t">MockInstaller</span>(<span class="t">IntegrationTestConfig</span>.wiremock, evidenceSink)
+
+<span class="k">try</span> {
+    withContext(<span class="t">HttpEvidenceContext</span>(evidenceSink)) {  <span class="c">// see the withContext card below</span>
+        runWithCleanup(
+            test = { scenarioScope.test() },           <span class="c">// your block</span>
+            cleanup = { evidenceSink.recordCleanup(mockInstaller.removeFor(testId)) },
+        )
+    }
+} <span class="k">catch</span> (failure: <span class="t">Throwable</span>) {
+    evidenceSink.recordScenarioFailure(failure)        <span class="c">// message into evidence.txt</span>
+    <span class="k">throw</span> failure
+} <span class="k">finally</span> {
+    finalizeScenarioEvidence(evidenceSink, outcome, primaryFailure)  <span class="c">// always write the file</span>
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="c">// The rules runWithCleanup encodes, in Java exception vocabulary:</span>
+<span class="k">try</span> {
+    test.run();
+} <span class="k">catch</span> (<span class="t">Throwable</span> testFailure) {
+    <span class="k">try</span> { cleanup.run(); }
+    <span class="k">catch</span> (<span class="t">Throwable</span> cleanupFailure) {
+        testFailure.addSuppressed(cleanupFailure);   <span class="c">// red test stays the headline</span>
+    }
+    <span class="k">throw</span> testFailure;
+}
+cleanup.run();   <span class="c">// green test + failed cleanup → the cleanup failure fails the test</span></code></pre>
+  </div>
+
+  <p>Three rules fall out of that shape, and they are worth knowing when reading a red build:</p>
+  <ul>
+    <li><strong>Cleanup always runs</strong>, pass or fail. A failing scenario does not
+        leave stubs behind for the next run to trip over.</li>
+    <li><strong>The test failure stays the headline.</strong> If cleanup also fails, its
+        exception is attached as <em>suppressed</em> — Java's
+        <code>addSuppressed</code>, same meaning — never replacing the real failure.</li>
+    <li><strong>A green test with failed cleanup is a failure.</strong> Leaked WireMock
+        state is a bug even when the assertions passed.</li>
+  </ul>
+  <p>
+    The evidence file is written in the <code>finally</code>, so it exists for every
+    outcome. That file — <code>build/test-evidence/&lt;testId&gt;/evidence.txt</code> —
+    holds the installed stubs, attached HTTP exchanges, cleanup counts, and the failure
+    message. It is the first thing to open when CI is red.
+  </p>
+</section>
+
+<section id="kotlin">
+  <h2><span class="index">6</span>Kotlin, feature by feature</h2>
+  <p>
+    Each card explains one feature: what it is, the nearest Java concept, and what the
+    code would look like without it. The everyday basics the examples also use —
+    <code>val</code>, default arguments, <code>suspend</code>, nullable types — get
+    one-line Java anchors in the cheat sheet at the end.
+  </p>
+
+  <article class="feature" id="f-abstract">
+    <div class="feature-head">
+      <h3><span class="kw-chip">abstract</span> + <span class="kw-chip">init</span> the class body is registration</h3>
+      <span class="java-analogy sans">an abstract base whose constructor does the wiring; instance initializer block</span>
+    </div>
+    <p>
+      An <code>init</code> block runs as part of the constructor. <code>JourneySpec</code>
+      uses it to hand your scenario block to Kotest the moment the journey class is
+      instantiated. The consequence reads strangely to Java eyes: a journey class has
+      <em>no methods at all</em> — declaring the class <em>is</em> registering its
+      scenarios.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">abstract class</span> <span class="t">JourneySpec</span>(
+    <span class="k">private val</span> description: <span class="t">String</span>,
+    body: <span class="k">suspend</span> <span class="t">JourneySpecScope</span>.() -&gt; <span class="t">Unit</span>,
+) : <span class="t">FeatureSpec</span>() {
+    <span class="k">init</span> {
+        feature(description) {
+            <span class="t">JourneySpecScope</span>(description, <span class="k">this</span>).body()
+        }
+    }
+}</code></pre>
+      <pre data-lang="jv" hidden><code><span class="k">public abstract class</span> <span class="t">JourneySpec</span> <span class="k">extends</span> <span class="t">FeatureSpec</span> {
+    <span class="k">protected</span> <span class="t">JourneySpec</span>(<span class="t">String</span> description, <span class="t">ScenarioBlock</span> body) {
+        <span class="c">// same idea: the constructor registers the scenarios with the framework</span>
+        feature(description, scope -&gt; body.declare(<span class="k">new</span> <span class="t">JourneySpecScope</span>(description, scope)));
+    }
+}</code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-dsl">
+    <div class="feature-head">
+      <h3><span class="kw-chip">suspend T.() -&gt; Unit</span> the DSL-shaped parameter</h3>
+      <span class="java-analogy sans">Consumer&lt;Scope&gt;, but this <em>is</em> the scope, and it may pause at I/O</span>
+    </div>
+    <p>
+      The <code>body</code> parameter is a <em>suspending lambda with receiver</em>. The
+      receiver type decides what is callable inside the braces: inside the journey block
+      <code>this</code> is a <code>JourneySpecScope</code>, so <code>scenario(...)</code>
+      is in scope; inside a scenario block <code>this</code> is a
+      <code>ScenarioScope</code>, so <code>installFor</code>, <code>expect</code>, and
+      <code>testId</code> are in scope. This is the whole mechanism behind "it looks like
+      a language, but it is just classes": the compiler enforces which helpers exist at
+      which nesting level.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="c">// the scope type at each level decides the vocabulary:</span>
+<span class="t">JourneySpec</span>(<span class="s">"get company by id"</span>, {        <span class="c">// this: JourneySpecScope</span>
+    scenario(<span class="s">"…"</span>) {                          <span class="c">// this: ScenarioScope</span>
+        installFor(booking)                  <span class="c">// resolves on ScenarioScope</span>
+        expect(<span class="s">"…"</span>) { … }
+    }
+})</code></pre>
+      <pre data-lang="jv" hidden><code><span class="c">// Java's nearest shape — explicit scope variables at every level:</span>
+<span class="k">new</span> <span class="t">JourneySpec</span>(<span class="s">"get company by id"</span>, journey -&gt; {
+    journey.scenario(<span class="s">"…"</span>, scenario -&gt; {
+        scenario.installFor(booking);
+        scenario.expect(<span class="s">"…"</span>, () -&gt; { … });
+    });
+});</code></pre>
+    </div>
+    <details class="without">
+      <summary>Why suspend on the lambda type?</summary>
+      <div class="inner">
+        <p>
+          Everything inside a scenario does I/O: installing stubs is an HTTP call, typed
+          clients are suspend functions, <code>callCount</code> queries WireMock. Declaring
+          the block <code>suspend</code> lets scenario code call all of them directly, in
+          plain top-to-bottom style, with no futures and no <code>.join()</code>.
+        </p>
+      </div>
+    </details>
+  </article>
+
+  <article class="feature" id="f-infix">
+    <div class="feature-head">
+      <h3><span class="kw-chip">infix</span> + <span class="kw-chip">name =</span> how the example reads</h3>
+      <span class="java-analogy sans">assertEquals(expected, actual); /* comment */ argument labels</span>
+    </div>
+    <p>
+      Two small syntaxes make the §2 example read the way it does. First,
+      <code>result.response.status.value shouldBe 200</code> is an ordinary method call:
+      <code>shouldBe</code> is declared <code>infix</code>, which lets a one-parameter
+      function drop the dot and parentheses. Kotest's matchers use it so assertions read
+      as sentences. Second, <code>getCompanyById(id = company.corpId, testId = testId)</code>
+      uses <em>named arguments</em>: the caller labels each value with its parameter name,
+      checked by the compiler — what Java approximates with <code>/* id= */</code>
+      comments or a builder.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="c">// infix — these two lines are the same call:</span>
+result.response.status.value shouldBe <span class="s">200</span>
+result.response.status.value.shouldBe(<span class="s">200</span>)
+
+<span class="c">// named arguments — labels are checked by the compiler:</span>
+runWithCleanup(test = { scenarioScope.test() }, cleanup = { … })</code></pre>
+      <pre data-lang="jv" hidden><code><span class="c">// the Java shapes these replace:</span>
+assertEquals(<span class="s">200</span>, result.response().status().value());
+
+runWithCleanup(<span class="c">/* test= */</span> () -&gt; scope.test(), <span class="c">/* cleanup= */</span> () -&gt; { … });
+<span class="c">// the comments are unchecked; swap the arguments and it still compiles</span></code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-delegate">
+    <div class="feature-head">
+      <h3><span class="kw-chip">by</span> interface delegation</h3>
+      <span class="java-analogy sans">hand-written forwarding methods, generated by the compiler</span>
+    </div>
+    <p>
+      <code>ScenarioScope</code> declares
+      <code>: TestScope by kotestScope</code>. Read it as: "this class implements
+      <code>TestScope</code>, and every method I do not override forwards to the
+      <code>kotestScope</code> field". One line replaces a page of boilerplate, and it is
+      why scenario blocks can use Kotest utilities directly — the scope you are standing
+      in <em>is</em> a real Kotest <code>TestScope</code>, not a wrapper you must unwrap.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">class</span> <span class="t">ScenarioScope</span> <span class="k">internal constructor</span>(
+    <span class="k">val</span> testId: <span class="t">String</span>,
+    <span class="k">private val</span> mockInstaller: <span class="t">MockInstaller</span>,
+    <span class="k">private val</span> kotestScope: <span class="t">TestScope</span>,
+    <span class="k">private val</span> evidenceSink: <span class="t">ScenarioEvidenceSink</span>,
+) : <span class="t">TestScope</span> <span class="k">by</span> kotestScope</code></pre>
+      <pre data-lang="jv" hidden><code><span class="k">public final class</span> <span class="t">ScenarioScope</span> <span class="k">implements</span> <span class="t">TestScope</span> {
+    <span class="k">private final</span> <span class="t">TestScope</span> kotestScope;
+    <span class="c">// … other fields, constructor …</span>
+
+    <span class="c">// then one forwarding method per TestScope member, by hand:</span>
+    <span class="k">@Override public</span> <span class="t">TestCase</span> testCase() { <span class="k">return</span> kotestScope.testCase(); }
+    <span class="k">@Override public</span> <span class="t">CoroutineScope</span> …    { <span class="k">return</span> kotestScope.…; }
+    <span class="c">// …and it silently breaks when TestScope gains a method</span>
+}</code></pre>
+    </div>
+    <details class="without">
+      <summary>What breaks without it?</summary>
+      <div class="inner">
+        <p>
+          Either <code>ScenarioScope</code> stops being a <code>TestScope</code> — and
+          scenario blocks lose direct access to Kotest's test utilities — or someone
+          maintains the forwarding methods by hand and re-syncs them on every Kotest
+          upgrade. Delegation keeps the compiler responsible for that sync.
+        </p>
+      </div>
+    </details>
+  </article>
+
+  <article class="feature" id="f-context">
+    <div class="feature-head">
+      <h3><span class="kw-chip">withContext</span> coroutine context elements</h3>
+      <span class="java-analogy sans">ThreadLocal-like context that survives thread hops</span>
+    </div>
+    <p>
+      Scenarios run concurrently — up to four specifications, four scenarios each — each
+      with its own evidence sink. When response decoding
+      deep inside <code>ApiResult</code> needs to record a malformed body, how does it find
+      <em>this scenario's</em> sink without every function passing it along? Java's answer
+      is a <code>ThreadLocal</code> — but coroutines hop threads at every suspension, so a
+      thread-local set on one thread is gone after the next HTTP call. A coroutine context
+      element is the coroutine-safe version: it travels with the coroutine, not the thread.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="c">// JourneySpec puts the sink into the context for the scenario's duration:</span>
+withContext(<span class="t">HttpEvidenceContext</span>(evidenceSink)) {
+    runWithCleanup(test = { scenarioScope.test() }, cleanup = { … })
+}
+
+<span class="c">// the element is ~4 lines; Key is a companion object — Kotlin's "static" holder:</span>
+<span class="k">internal class</span> <span class="t">HttpEvidenceContext</span>(
+    <span class="k">val</span> recorder: <span class="t">HttpEvidenceRecorder</span>,
+) : <span class="t">AbstractCoroutineContextElement</span>(<span class="t">Key</span>) {
+    <span class="k">companion object</span> <span class="t">Key</span> : <span class="t">CoroutineContext</span>.<span class="t">Key</span>&lt;<span class="t">HttpEvidenceContext</span>&gt;
+}</code></pre>
+      <pre data-lang="jv" hidden><code><span class="c">// the ThreadLocal shape this replaces — correct only on one thread:</span>
+<span class="k">static final</span> <span class="t">ThreadLocal</span>&lt;<span class="t">EvidenceSink</span>&gt; SINK = <span class="k">new</span> <span class="t">ThreadLocal</span>&lt;&gt;();
+
+SINK.set(evidenceSink);
+<span class="k">try</span> { test.run(); }
+<span class="k">finally</span> { SINK.remove(); }
+<span class="c">// breaks silently once the work moves to another thread mid-test</span></code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-memberext">
+    <div class="feature-head">
+      <h3><span class="kw-chip">fun T.f() in a class</span> member extension functions</h3>
+      <span class="java-analogy sans">a static helper(result, sink) — but callable only where both exist</span>
+    </div>
+    <p>
+      <code>attachEvidence</code> is declared <em>inside</em> <code>ScenarioScope</code>
+      as an extension on <code>ApiResult&lt;T&gt;</code>. That gives it two receivers at
+      once: the result it is called on, and the enclosing scope whose
+      <code>evidenceSink</code> it uses. The payoff is precise availability —
+      <code>result.attachEvidence(…)</code> reads naturally, needs no sink argument, and
+      does not compile outside a scenario block, because only there do both receivers
+      exist.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">class</span> <span class="t">ScenarioScope</span> … {
+    <span class="k">fun</span> &lt;<span class="t">T</span>&gt; <span class="t">ApiResult</span>&lt;<span class="t">T</span>&gt;.attachEvidence(prefix: <span class="t">String</span>? = <span class="k">null</span>) {
+        evidenceSink.recordHttp(prefix, response.httpEvidence())
+    }
+}
+
+<span class="c">// in a scenario — no sink in sight, the scope supplies it:</span>
+result.attachEvidence(<span class="s">"Get Company By Id"</span>)</code></pre>
+      <pre data-lang="jv" hidden><code><span class="c">// the static-helper shape — caller must fetch and pass the sink:</span>
+<span class="t">Evidence</span>.attach(result, evidenceSink, <span class="s">"Get Company By Id"</span>);
+<span class="c">// nothing stops calling it with the wrong scenario's sink</span></code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-internalctor">
+    <div class="feature-head">
+      <h3><span class="kw-chip">internal constructor</span> public type, restricted creation</h3>
+      <span class="java-analogy sans">public class with a package-private constructor, module-wide</span>
+    </div>
+    <p>
+      <code>ScenarioScope</code>'s <em>type</em> is public — every journey block has one
+      as its receiver — but its <em>constructor</em> is <code>internal</code>: only this
+      module can create one. That is the point of the whole design: a scenario's identity
+      must be minted by <code>JourneySpec</code>, with a fresh <code>testId</code>, a
+      fresh evidence sink, and cleanup wired in. Code that could build a
+      <code>ScenarioScope</code> by hand could fake all three.
+    </p>
+  </article>
+</section>
+
+<section id="cheatsheet">
+  <h2><span class="index">7</span>Cheat sheet</h2>
+  <div class="table-scroll"><table>
+    <tr><th>Kotlin</th><th>One-line meaning</th><th>Java nearest thing</th></tr>
+    <tr><td><code>val x: T</code></td><td>final field/variable</td><td><code>final T x</code></td></tr>
+    <tr><td><code>fun f(x: T = default)</code></td><td>caller may omit x</td><td>telescoping overloads</td></tr>
+    <tr><td><code>suspend</code></td><td>can pause at I/O, non-blocking</td><td>CompletableFuture / virtual threads</td></tr>
+    <tr><td><code>String?</code></td><td>type that admits null, compiler-enforced</td><td><code>@Nullable</code>, unchecked</td></tr>
+    <tr><td><code>f { … }</code></td><td>last lambda argument moves outside the parens</td><td>lambda as last argument</td></tr>
+    <tr><td><code>init { }</code></td><td>runs as part of the constructor</td><td>instance initializer block</td></tr>
+    <tr><td><code>infix fun</code></td><td>one-parameter call without dot/parens: <code>x shouldBe y</code></td><td><code>assertEquals(y, x)</code></td></tr>
+    <tr><td><code>f(id = x)</code></td><td>argument labeled with its parameter name, compiler-checked</td><td><code>/* id= */ x</code> comment, unchecked</td></tr>
+    <tr><td><code>object O</code></td><td>a singleton the language guarantees (<code>IntegrationTestConfig</code>)</td><td>static holder / enum singleton</td></tr>
+    <tr><td><code>: I by field</code></td><td>implement I by forwarding to field</td><td>hand-written forwarding methods</td></tr>
+    <tr><td><code>suspend T.() -&gt; Unit</code></td><td>pausable lambda where <code>this</code> is a T</td><td><code>Consumer&lt;T&gt;</code> + explicit scope variable</td></tr>
+    <tr><td><code>withContext(element)</code></td><td>run block with an element in the coroutine context</td><td><code>ThreadLocal</code> set/remove (not thread-hop-safe)</td></tr>
+    <tr><td><code>companion object</code></td><td>the class's single static-like holder</td><td><code>static</code> members</td></tr>
+    <tr><td><code>fun T.f()</code> in a class</td><td>extension needing both T and the enclosing class</td><td>static helper taking both as parameters</td></tr>
+    <tr><td><code>internal constructor</code></td><td>type public, creation module-only</td><td>package-private constructor</td></tr>
+    <tr><td><code>addSuppressed</code></td><td>same as Java — secondary failure attached, not replacing</td><td><code>Throwable.addSuppressed</code></td></tr>
+  </table></div>
+
+  <div class="callout">
+    <p>
+      <strong>Where to read next:</strong> the real code —
+      <code>src/integrationTest/.../testkit/JourneySpec.kt</code>,
+      <code>src/main/.../testkit/ScenarioLifecycle.kt</code>,
+      <code>src/main/.../framework/reporting/ScenarioEvidenceSink.kt</code>, and
+      <code>src/main/.../testkit/mocks/MockInstaller.kt</code>. The request side of a
+      scenario lives in <code>src/main/.../framework/http/ServiceApiClient.kt</code>; for
+      the prose contract, <code>docs/TEST_FRAMEWORK_GUIDE.md</code> and the
+      <code>framework-journey-authoring</code> spec.
+    </p>
+  </div>
+</section>
+
+<footer class="colophon">
+  <p>integration-tests-kotlin · docs/kotlin-for-java-devs · self-contained page, no external assets. Update it when the scenario lifecycle or the ScenarioScope helpers change.</p>
+</footer>
+
+</main>
+</div>
+
+<script>
+  document.querySelectorAll('.panel').forEach(panel => {
+    const tabs = panel.querySelectorAll('.tab');
+    const pres = panel.querySelectorAll('pre[data-lang]');
+    if (tabs.length < 2) return;
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+        tab.setAttribute('aria-selected', 'true');
+        const lang = tab.classList.contains('kt') ? 'kt' : 'jv';
+        pres.forEach(pre => { pre.hidden = pre.dataset.lang !== lang; });
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

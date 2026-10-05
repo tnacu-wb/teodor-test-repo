@@ -1,0 +1,17 @@
+{
+  "request": {
+    "urlPath": "/v1/reservations",
+    "method": "PUT",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.['reservations'][*][?(@.['reservationId'] == 12345)]"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

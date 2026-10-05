@@ -1,0 +1,318 @@
+openapi: 3.0.1
+info:
+  description: <p>TBU</p>
+  title: Sample API Documentation
+  version: 1.0.0
+servers:
+  - description: Generated server url
+    url: http://localhost:9103
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  /v1/reservations/basket/{basketReference}:
+    get:
+      operationId: getAllReservationsJustByBasketReference
+      parameters:
+        - in: path
+          name: basketReference
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ReservationByBasketRefResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+          description: Internal Server Error
+      summary: Get all reservations just by basket reference
+      tags:
+        - hotel-reservation-controller
+components:
+  schemas:
+    BillingResponseDto:
+      type: object
+      example: null
+      properties:
+        address:
+          $ref: '#/components/schemas/AddressResponseDto'
+        email:
+          type: string
+          example: null
+        firstName:
+          type: string
+          example: null
+        lastName:
+          type: string
+          example: null
+        telephone:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+    CurrencyAmountTypeDto:
+      type: object
+      example: null
+      properties:
+        amount:
+          type: number
+          example: null
+        currencyCode:
+          type: string
+          example: null
+    DepositPoliciesDto:
+      type: object
+      example: null
+      properties:
+        amountDue:
+          $ref: '#/components/schemas/CurrencyAmountTypeDto'
+        amountPaid:
+          $ref: '#/components/schemas/CurrencyAmountTypeDto'
+        policyCode:
+          type: string
+          example: null
+    ExceptionResponse:
+      type: object
+      example: null
+      properties:
+        debugMessage:
+          type: string
+          example: null
+        errorCode:
+          type: string
+          example: null
+        message:
+          type: string
+          example: null
+        status:
+          type: string
+          enum:
+            - 100 CONTINUE
+            - 101 SWITCHING_PROTOCOLS
+            - 102 PROCESSING
+            - 103 CHECKPOINT
+            - 200 OK
+            - 201 CREATED
+            - 202 ACCEPTED
+            - 203 NON_AUTHORITATIVE_INFORMATION
+            - 204 NO_CONTENT
+            - 205 RESET_CONTENT
+            - 206 PARTIAL_CONTENT
+            - 207 MULTI_STATUS
+            - 208 ALREADY_REPORTED
+            - 226 IM_USED
+            - 300 MULTIPLE_CHOICES
+            - 301 MOVED_PERMANENTLY
+            - 302 FOUND
+            - 302 MOVED_TEMPORARILY
+            - 303 SEE_OTHER
+            - 304 NOT_MODIFIED
+            - 305 USE_PROXY
+            - 307 TEMPORARY_REDIRECT
+            - 308 PERMANENT_REDIRECT
+            - 400 BAD_REQUEST
+            - 401 UNAUTHORIZED
+            - 402 PAYMENT_REQUIRED
+            - 403 FORBIDDEN
+            - 404 NOT_FOUND
+            - 405 METHOD_NOT_ALLOWED
+            - 406 NOT_ACCEPTABLE
+            - 407 PROXY_AUTHENTICATION_REQUIRED
+            - 408 REQUEST_TIMEOUT
+            - 409 CONFLICT
+            - 410 GONE
+            - 411 LENGTH_REQUIRED
+            - 412 PRECONDITION_FAILED
+            - 413 PAYLOAD_TOO_LARGE
+            - 413 REQUEST_ENTITY_TOO_LARGE
+            - 414 URI_TOO_LONG
+            - 414 REQUEST_URI_TOO_LONG
+            - 415 UNSUPPORTED_MEDIA_TYPE
+            - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+            - 417 EXPECTATION_FAILED
+            - 418 I_AM_A_TEAPOT
+            - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+            - 420 METHOD_FAILURE
+            - 421 DESTINATION_LOCKED
+            - 422 UNPROCESSABLE_ENTITY
+            - 423 LOCKED
+            - 424 FAILED_DEPENDENCY
+            - 425 TOO_EARLY
+            - 426 UPGRADE_REQUIRED
+            - 428 PRECONDITION_REQUIRED
+            - 429 TOO_MANY_REQUESTS
+            - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+            - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+            - 500 INTERNAL_SERVER_ERROR
+            - 501 NOT_IMPLEMENTED
+            - 502 BAD_GATEWAY
+            - 503 SERVICE_UNAVAILABLE
+            - 504 GATEWAY_TIMEOUT
+            - 505 HTTP_VERSION_NOT_SUPPORTED
+            - 506 VARIANT_ALSO_NEGOTIATES
+            - 507 INSUFFICIENT_STORAGE
+            - 508 LOOP_DETECTED
+            - 509 BANDWIDTH_LIMIT_EXCEEDED
+            - 510 NOT_EXTENDED
+            - 511 NETWORK_AUTHENTICATION_REQUIRED
+          example: null
+        timestamp:
+          type: string
+          format: date-time
+          example: null
+    RatePerNightDto:
+      type: object
+      example: null
+      properties:
+        pricePerNight:
+          type: number
+          example: null
+        startDate:
+          type: string
+          example: null
+    ReservationByBasketRefResponseDto:
+      type: object
+      example: null
+      properties:
+        balanceOutstanding:
+          type: number
+          example: null
+        currencyCode:
+          type: string
+          example: null
+        hotelId:
+          type: string
+          example: null
+        newTotal:
+          type: number
+          example: null
+        policyCode:
+          type: string
+          example: null
+        previousTotal:
+          type: number
+          example: null
+        discount:
+          type: number
+          example: null
+        reservationByIdList:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ReservationByIdDto'
+        totalCost:
+          type: number
+          example: null
+    ReservationByIdDto:
+      type: object
+      example: null
+      properties:
+        billing:
+          $ref: '#/components/schemas/BillingResponseDto'
+        depositPolicies:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/DepositPoliciesDto'
+        reservationGuestList:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ReservationByIdGuestsDto'
+        reservationPackageList:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ReservationPackagesDetailsResponseDto'
+        roomStay:
+          $ref: '#/components/schemas/RoomStayByIdDto'
+    ReservationByIdGuestsDto:
+      type: object
+      example: null
+      properties:
+        givenName:
+          type: string
+          example: null
+        surName:
+          type: string
+          example: null
+    ReservationPackagesDetailsResponseDto:
+      type: object
+      example: null
+      properties:
+        computedPrice:
+          type: number
+          example: null
+        description:
+          type: string
+          example: null
+        totalQuantity:
+          type: integer
+          format: int32
+          example: null
+        unitPrice:
+          type: number
+          example: null
+    RoomStayByIdDto:
+      type: object
+      example: null
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+          example: null
+        arrivalDate:
+          type: string
+          example: null
+        childrenNumber:
+          type: integer
+          format: int32
+          example: null
+        cot:
+          type: boolean
+          example: null
+        departureDate:
+          type: string
+          example: null
+        ratePlanCode:
+          type: string
+          example: null
+        ratesPerNight:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RatePerNightDto'
+        roomPrice:
+          type: number
+          example: null
+        roomType:
+          type: string
+          example: null

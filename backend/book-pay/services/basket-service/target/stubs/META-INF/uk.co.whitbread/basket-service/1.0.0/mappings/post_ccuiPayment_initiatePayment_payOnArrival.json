@@ -1,0 +1,102 @@
+{
+  "id" : "f48ee648-1db3-4640-aee6-e176d8d35acd",
+  "request" : {
+    "urlPath" : "/v1/baskets/ccui/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/pay",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['paymentOption'] == 'NEW_PIBA')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['subPaymentType'] == 'PIBAGB')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['businessItems'][?(@.['purchaseOrderNumber'] == '1234521345')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['businessItems'][?(@.['customReferenceNumber'] == 'ABC123456')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['businessItems'].['businessAllowances'][*][?(@.['allowance'] == 'carParking')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['businessItems'].['businessAllowances'][*][?(@.['budget'] == '10.0')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['businessItems'].['businessAllowances'][*][?(@.['isAuthorised'] == true)]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['businessItems'].['businessAllowances'][*][?(@.['allowance'] == 'dinner')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['businessItems'].['businessAllowances'][*][?(@.['budget'] == '30.0')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['businessItems'].['businessAllowances'][*][?(@.['allowance'] == 'alcohol')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'][?(@.['cardPresent'] == true)]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'][?(@.['addressCompanyName'] == 'soft')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['accountCompanyItems'][?(@.['companyNumber'] == '1234567')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['accountCompanyItems'][?(@.['charges'] == 'park;breakfeast')]"
+    }, {
+      "matchesJsonPath" : "$.['ccuiExtraItems'].['nonguaranteedItems'][?(@.['typeOfCaller'] == 'text')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'][?(@.['requestId'] == '')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'][?(@.['type'] == 'PIBA')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'][?(@.['subType'] == 'MOTO')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['billing'][?(@.['firstName'] == 'test')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['billing'][?(@.['lastName'] == 'test2')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['billing'].['address'][?(@.['addressLine1'] == 'blah')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['billing'].['address'][?(@.['addressLine2'] == 'blah2')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['billing'].['address'][?(@.['addressLine3'] == 'blah3')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['billing'].['address'][?(@.['postalCode'] == 'SG89ES')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['billing'].['address'][?(@.['country'] == 'GB')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['billing'].['address'][?(@.['state'] == 'Hertfordshire')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['card'].['cardHolderAddress'][?(@.['line1'] == 'blah3')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['card'].['cardHolderAddress'][?(@.['postalCode'] == 'SG89ES')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['card'].['cardHolderAddress'][?(@.['country'] == 'GB')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['card'].['cardHolderAddress'][?(@.['state'] == 'Hertfordshire')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['payment'].['card'].['cardHolderAddress'][?(@.['addressType'] == 'HOME')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['booking'][?(@.['language'] == 'en')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['booking'][?(@.['type'] == 'PAY_ON_ARRIVAL')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['booking'][?(@.['journey'] == 'BOOKING')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['booking'][?(@.['channel'] == 'CCC')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['booking'].['businessSite'][?(@.['identifier'] == 'LONHOL')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['booking'].['businessSite'][?(@.['type'] == 'HOTEL')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['booking'].['businessSite'][?(@.['location'] == 'LONHOL')]"
+    }, {
+      "matchesJsonPath" : "$.['paymentRequest'].['booking'].['businessSite'][?(@.['name'] == 'London Hotel')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['useCache'] == false)]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"reference\":\"LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7\",\"status\":\"PROCESSING\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "f48ee648-1db3-4640-aee6-e176d8d35acd"
+}

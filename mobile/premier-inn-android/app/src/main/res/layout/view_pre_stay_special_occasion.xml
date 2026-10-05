@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/specialOccasionContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/generic_margin_16"
+    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+
+    <TextView
+        android:id="@+id/specialOccasionTextView"
+        style="@style/BodyMediumSemiBold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/generic_margin_10"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        android:text="@string/pre_stay_special_occasion"
+        android:textColor="@color/full_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/selectOccasionSwitchCompat"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/selectOccasionSwitchCompat"
+        android:layout_width="wrap_content"
+        android:layout_height="31dp"
+        android:layout_marginVertical="7dp"
+        android:thumb="@drawable/ic_switch_thumb"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:track="@drawable/ic_switch_track" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/selectOccasionLayout"
+        style="@style/PreStayTextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:hint="@string/pre_stay_select_occasion"
+        android:visibility="gone"
+        app:endIconDrawable="@drawable/ic_chevron_down_dropdown"
+        app:endIconMode="custom"
+        app:errorIconDrawable="@null"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        app:layout_constraintTop_toBottomOf="@id/specialOccasionTextView"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/selectOccasionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+        android:id="@+id/selectOccasionErrorBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_4"
+        android:background="@drawable/shape_error_red_background"
+        android:paddingHorizontal="@dimen/generic_padding_12"
+        android:paddingVertical="@dimen/generic_padding_8"
+        android:src="@drawable/ic_info"
+        android:text="@string/pre_stay_missing_occasion"
+        android:textColor="@color/grey_dark"
+        android:visibility="gone"
+        app:iconTintColor="@color/new_error_red"
+        app:layout_constraintTop_toBottomOf="@id/selectOccasionLayout"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

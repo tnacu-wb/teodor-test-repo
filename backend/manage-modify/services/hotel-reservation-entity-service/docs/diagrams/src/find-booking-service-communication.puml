@@ -1,0 +1,24 @@
+@startuml
+entity "AppSync" as A
+entity "Reservation Entity Service" as RES
+entity "Basket Service" as BSK
+entity "OHIP Adapter Service" as OHIP
+entity "OHIP Adapter Service" as OHIP
+entity "OPERA" as OPERA
+
+A -> RES: graphql find booking
+alt resNo is basket reference case
+    RES -> BSK: GET /v1/find/{resNo}
+    RES <- BSK: DTO with reservationIds, hotelId
+
+else resNo is Opera id
+    RES -> OHIP: POST /v1/reservations/external?externalId=={resNo}
+    OHIP -> OHIP: POST /v1/reservations/external?externalId=={resNo}
+    OHIP -> OPERA: OPERA: GET {host}/rsv/v1/reservations\n?externalReferenceIds={{resNo}}\n&fetchInstructions=Reservation
+    OHIP <- OPERA:  Reservations Details  200
+    OHIP <- OHIP: Reservation Details 200
+    RES <- OHIP: Reservation Details 200
+end
+
+A <- RES: FindBookingDto 200
+@enduml

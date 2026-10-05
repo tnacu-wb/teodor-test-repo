@@ -1,0 +1,4 @@
+export enum TypeOfCaller {
+  ANY_CUSTOMER = 'ANY_CUSTOMER',
+  ACCESIBLE_CUSTOMER = 'ACCESIBLE_CUSTOMER',
+}

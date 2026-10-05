@@ -1,0 +1,15 @@
+rootProject.name = 'premier-inn-holborn-android'
+
+include ':app', ':domain', ':data'
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        flatDir{
+            dirs 'libs'
+        }
+    }
+}

@@ -1,0 +1,41 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+    bus:
+      enabled: false
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+    bus:
+      enabled: false
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+---

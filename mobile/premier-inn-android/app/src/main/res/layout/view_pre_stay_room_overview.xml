@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/roomOverviewContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/firstGuest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:layout_marginBottom="19dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/roomLabel"
+            style="@style/BodyMediumSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/full_black"
+            android:layout_gravity="center"
+            android:text="@string/pre_stay_confirm_room_guests"
+            tools:text="Room guests" />
+
+        <TextView
+            android:id="@+id/guestName"
+            style="@style/BodyMediumRegular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginEnd="@dimen/generic_margin_10"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:textColor="@color/grey_dark"
+            android:maxLines="1"
+            android:paddingStart="@dimen/generic_padding_20"
+            android:textAlignment="textEnd"
+            tools:text="Guest name" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_chevron_rounded_corners_right" />
+
+    </LinearLayout>
+
+    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+        android:id="@+id/leadGuestNationalityWarningBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/generic_margin_20"
+        android:paddingStart="@dimen/generic_padding_12"
+        android:paddingEnd="@dimen/generic_padding_8"
+        android:textColor="@color/grey_dark"
+        android:paddingVertical="@dimen/generic_padding_8"
+        android:background="@drawable/shape_error_red_background"
+        android:backgroundTint="@color/orange_sunrise"
+        android:src="@drawable/notifications_alert"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:iconTintColor="@color/new_error_red" />
+
+    <LinearLayout
+        android:id="@+id/secondGuest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/firstGuest">
+
+        <TextView
+            android:id="@+id/guestNameSecond"
+            style="@style/BodyMediumRegular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginEnd="@dimen/generic_margin_10"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingStart="@dimen/generic_padding_20"
+            android:text="@string/pre_stay_add"
+            android:textAlignment="textEnd"
+            android:textColor="@color/teal_dark"
+            tools:text="@string/pre_stay_add" />
+
+        <ImageView
+            android:id="@+id/iconSecondGuest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_chevron_rounded_corners_right" />
+
+    </LinearLayout>
+
+    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+        android:id="@+id/accompanyingGuestNationalityErrorBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_22"
+        android:paddingStart="@dimen/generic_padding_12"
+        android:paddingEnd="@dimen/generic_padding_8"
+        android:textColor="@color/grey_dark"
+        android:paddingVertical="@dimen/generic_padding_8"
+        android:background="@drawable/shape_error_red_background"
+        android:backgroundTint="@color/orange_sunrise"
+        android:src="@drawable/notifications_alert"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:iconTintColor="@color/new_error_red" />
+
+    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+        android:id="@+id/preStayErrorBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_22"
+        android:layout_marginBottom="@dimen/generic_margin_4"
+        android:paddingHorizontal="@dimen/generic_padding_12"
+        android:textColor="@color/grey_dark"
+        android:paddingVertical="@dimen/generic_padding_8"
+        android:background="@drawable/shape_error_red_background"
+        android:src="@drawable/ic_info"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:iconTintColor="@color/new_error_red" />
+
+    <LinearLayout
+        android:id="@+id/childContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/secondGuest">
+
+        <TextView
+            android:id="@+id/child"
+            style="@style/BodyMediumRegular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/generic_margin_10"
+            android:layout_weight="1"
+            android:text="@string/pre_stay_one_child"
+            android:textAlignment="textEnd" />
+
+        <ImageView
+            android:id="@+id/iconChildGuest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_chevron_rounded_corners_right"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:background="@color/grey_light"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/childContainer" />
+
+</LinearLayout>

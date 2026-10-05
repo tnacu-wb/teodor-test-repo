@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/privacy_changes_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Header1"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:text="@string/gdpr_message_title"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/gdpr_interstitial_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.69"
+        tools:text="@string/gdpr_message_title"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/interstitial_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        app:layout_constraintBottom_toTopOf="@+id/privacy_changes_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        android:src="@drawable/ic_security_white_24dp"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/gdpr_how_we_use_data_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Body"
+        android:layout_margin="@dimen/generic_margin_8"
+        android:text="@string/gdpr_use_data_button_text"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/gdpr_accept_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gdpr_interstitial_message"
+        app:layout_constraintVertical_bias="0.19999999"
+        tools:text="How we use your data"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/gdpr_privacy_policy_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Body"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:text="@string/gdpr_view_policy_button_text"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/gdpr_accept_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gdpr_how_we_use_data_button"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="View privacy policy"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:id="@+id/gdpr_accept_button"
+        android:layout_width="wrap_content"
+        android:layout_height="68dp"
+        android:layout_marginBottom="@dimen/generic_margin_70"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:background="@drawable/boxed_button_border"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/gdpr_accept_button_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Header3"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingBottom="@dimen/generic_padding_8"
+            android:paddingStart="@dimen/generic_padding_24"
+            android:paddingEnd="@dimen/generic_padding_24"
+            android:paddingTop="@dimen/generic_padding_8"
+            android:text="@string/gdpr_accept_button_text" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/gdpr_interstitial_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Body"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.38"
+        tools:text="We use various technologies in this booking App. Read more by clicking the links below to find out how we process your personal data. You’ll find contact details too."
+        tools:visibility="visible" />
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/gdpr_progress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/white"
+        android:layout_margin="@dimen/generic_margin_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

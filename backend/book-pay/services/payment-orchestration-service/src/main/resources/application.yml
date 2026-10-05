@@ -1,0 +1,203 @@
+server:
+  port: 9200
+  shutdown: graceful
+
+spring:
+  application:
+    name: payment-orchestration-service
+  threads:
+    virtual:
+      enabled: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      acks: all
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:payment-orchestration-service}
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+
+info:
+  build:
+    groupId: '@project.groupId@'
+    artifact: '@project.artifactId@'
+    description: '@project.description@'
+    version: '@project.version@'
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /payment-orchestrator/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [0.95, 0.99]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+temporal:
+  namespace: ${TEMPORAL_NAMESPACE:default}
+  server:
+    host: ${TEMPORAL_HOST:localhost}
+    port: ${TEMPORAL_PORT:7233}
+  task-queue: payment-workflows
+  tracing:
+    update-with-start:
+      # Registers the client interceptor that carries trace and baggage across
+      # Update-With-Start, which the baggage-scoped WireMock stubs need to match.
+      # Used for Integration Testing
+      enabled: ${TEMPORAL_TRACING_UPDATE_WITH_START_ENABLED:false}
+
+integrations:
+  payment:
+    workflow:
+      # Maximum duration a payment workflow stays open before expiring abandoned baskets.
+      # After timeout, the workflow awaits !authorizationInProgress (safety guard) before
+      # transitioning to EXPIRED and cancelling any active transaction. Applies BEFORE
+      # authorization only — once authorized, cancelling could void a confirmed booking.
+      timeout: ${PAYMENT_WORKFLOW_TIMEOUT:30m}
+      # How long POST /api/payments/authorize waits for the authorize update before replying
+      # 202 "still processing". The update is durably accepted first, so the workflow carries
+      # on regardless — this only bounds how long a request thread is held. Must stay UNDER
+      # the shortest idle timeout in front of this service (load balancer, ingress, browser
+      # fetch); above it the proxy cuts the connection before the honest 202 can be sent.
+      authorize-wait: ${PAYMENT_AUTHORIZE_WAIT:30s}
+      settlement:
+        # Settlement runs after the booking is confirmed and the funds are held, so giving up
+        # early means a stay nobody paid for. Retries are durable and measured in days.
+        retry-horizon: ${PAYMENT_SETTLEMENT_RETRY_HORIZON:72h}
+        # Cap on the exponential backoff, so a long horizon does not stretch the gap between
+        # attempts into hours and delay recovery after the gateway returns.
+        backoff-cap: ${PAYMENT_SETTLEMENT_BACKOFF_CAP:15m}
+        # Per-attempt timeout for one settle call.
+        attempt-timeout: ${PAYMENT_SETTLEMENT_ATTEMPT_TIMEOUT:30s}
+      publish:
+        # Publishing PaymentAuthorisedEvent is what triggers the booking, and the customer is
+        # on a pending screen while it retries. On exhaustion the authorization is cancelled
+        # and the payment fails, which the customer can retry.
+        retry-horizon: ${PAYMENT_PUBLISH_RETRY_HORIZON:3m}
+      booking-poll:
+        # Safety net behind the bookingCompleted Kafka signal: each interval without a signal,
+        # ask the Basket Service what happened to the basket.
+        interval: ${PAYMENT_BOOKING_POLL_INTERVAL:60s}
+        # After this, an undecided booking is parked as BOOKING_PENDING_TIMEOUT for operations
+        # rather than cancelled (the booking may still complete) or settled (it may not).
+        horizon: ${PAYMENT_BOOKING_POLL_HORIZON:45m}
+  datatrans:
+    base-url: ${DATATRANS_BASE_URL:https://api.sandbox.datatrans.com}
+    merchant-password: ${DATATRANS_MERCHANT_PASSWORD:}
+    connect-timeout: 5s
+    read-timeout: 10s
+    merchant-id:
+      prefix: "deWB-"
+      default-merchant-id: "deWB-default"
+      provisioned-hotels:
+        - HARHOR
+        - GRESOU
+        - HAVFOR
+    webhook:
+      # Public base URL Datatrans calls back on; basketId is appended as a query param at init
+      callback-base-url: ${DATATRANS_WEBHOOK_BASE_URL:}
+      # Hex HMAC sign key from the Datatrans merchant config; verifies Datatrans-Signature
+      hmac-key: ${DATATRANS_WEBHOOK_HMAC_KEY:}
+      # Escape hatch for local/integration only; MUST be true in deployed environments
+      validation-enabled: ${DATATRANS_WEBHOOK_VALIDATION_ENABLED:true}
+    reconciliation:
+      initial-delay: ${DATATRANS_RECONCILIATION_INITIAL_DELAY:2m}
+      poll-interval: ${DATATRANS_RECONCILIATION_POLL_INTERVAL:30s}
+      max-duration: ${DATATRANS_RECONCILIATION_MAX_DURATION:30m}
+      enabled: ${DATATRANS_RECONCILIATION_ENABLED:true}
+  reservation:
+    host: ${RESERVATION_HOST:localhost:9103}
+    reservation-endpoint: "/v1/reservations/basket/{basketReference}"
+    connect-timeout: 5s
+    read-timeout: 10s
+  payment-method-service:
+    host: ${PAYMENT_METHOD_SERVICE_HOST:localhost:9107}
+    payment-methods-endpoint: "/v1/payment-methods"
+    connect-timeout: 5s
+    read-timeout: 10s
+  basket:
+    host: ${BASKET_SERVICE_HOST:localhost:9104}
+    change-status-endpoint: "/v1/baskets/{bookingReference}/changeStatus"
+    basket-endpoint: "/v1/baskets/{basketReference}"
+    connect-timeout: 5s
+    read-timeout: 10s
+
+payment:
+  security:
+    allowed-return-url-hosts:
+      - "premierinn.com"
+      - "www.premierinn.com"
+      - "premierinn.digital"
+  events:
+    topics:
+      payment-authorised: ${PAYMENT_AUTHORISED_TOPIC:payment-authorised}
+      booking-completed: ${BOOKING_COMPLETED_TOPIC:booking-completed}
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    logger: fluentd
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+logging:
+  level:
+    uk.co.whitbread: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  configuration:
+    logger: default
+  level:
+    uk.co.whitbread: DEBUG

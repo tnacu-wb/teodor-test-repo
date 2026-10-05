@@ -1,0 +1,131 @@
+schema {
+  query: Query
+}
+
+# Query root below
+
+type Query {
+  getLowestRatesByLocation(
+    locationId: String!
+    arrival: String!
+    daysRange: Int!
+    showMinimumNights: Boolean
+  ): PriceFinderAvailabilities
+    @deprecated(
+      reason: "Use getLowestRatesByLocationId with PriceFinderLocationSearchInput instead"
+    )
+  getLowestRatesByLocationId(criteria: PriceFinderLocationSearchInput!): PriceFinderAvailabilities
+  getLowestRatesByHotel(
+    hotelCodes: [String]!
+    rooms: Int
+    arrival: String!
+    country: String
+    language: String
+    showMinimumNights: Boolean
+  ): PriceFinderAvailabilities
+  getLowestPricesByLocationForCalendar (
+    locationId: String!
+    milesRadius: Int!
+    month: Int!
+  ): CalendarPriceFinderHotelAvailabilities
+}
+
+# Input types below
+
+input PriceFinderLocationSearchInput {
+  locationId: String!
+  arrival: String!
+  daysRange: Int!
+  page: Int!
+  initialPageSize: Int!
+  lazyLoadPageSize: Int!
+  """
+  The country code ('gb' or 'de') to fetch the link for that specific country/locale.
+  This must be mandatorily sent from the frontend/any UI in order to derive tha `links-->detailsPage`. Else, it's `null`
+  """
+  country: String
+  """
+  The language code ('en' or 'de') to fetch the link for that specific locale/language - for localization of results.
+  This must be mandatorily sent from the frontend/any UI in order to derive tha `links-->detailsPage`. Else, it's `null`
+  """
+  language: String
+  showMinimumNights: Boolean
+  sortDate: String
+  sortBy: SortingOption
+  """
+  Filter results by room type. Allowed values: SB, DB, FAM, TWIN, DIS. Accepts multiple values.
+  If it's just one, pass it as a single string - Added it for convinience.
+  """
+  filterByRoomType: [RoomTypeFilter!]
+}
+"Enum for optional filtering by room type in PriceFinderLocationSearchInput"
+enum RoomTypeFilter {
+  SB # Single room types
+  DB # Double room
+  FAM # Family room
+  TWIN # Twin room
+  DIS # Accessible room
+}
+
+enum SortingOption {
+  DISTANCE
+  PRICE
+}
+
+# Main types below
+
+type PriceFinderAvailabilities {
+  priceFinderOperaHotelAvailabilitiesDtoList: [PriceFinderOperaHotelAvailabilitiesDto]
+  page: Int
+  pageSize: Int
+  total: Int
+  lowestMonthlyRate: PriceFinderRate!
+}
+
+type PriceFinderOperaHotelAvailabilitiesDto {
+  hotelCode: String
+  hotelName: String
+  links: LinkDetails
+  availabilities: [AvailabilitiesDto]
+}
+
+type AvailabilitiesDto {
+  availableDate: String
+  currency: String
+  minimumRate: Float
+  finalPrice: Float
+  rateCode: String
+  rateClassification: String
+  roomType: String
+  roomCategory: String
+  quantity: Int
+  hasMlosRestriction: Boolean
+  hasClosedRestriction: Boolean
+  minimumNights: Int
+}
+
+type CalendarPriceFinderHotelAvailabilities {
+    calendarPriceFinderOperaHotelAvailabilitiesDtoList: CalendarPriceFinderOperaHotelAvailabilitiesDto
+}
+
+type CalendarPriceFinderOperaHotelAvailabilitiesDto {
+    locationId: String,
+    milesRadius: Int,
+    month: Int,
+    currency: String,
+    lowestRates: [LowestRatesDto]
+}
+
+type LowestRatesDto {
+    availableDate: String,
+    minimumRate: Float
+}
+
+type PriceFinderRate {
+  price: Float!
+  currency: String!
+}
+"This link is used to redirect to the HDP from Price Finder (individual priced) for the specific hotel"
+type LinkDetails {
+  detailsPage: String
+}

@@ -1,0 +1,368 @@
+server:
+  port: "@application.port@"
+  shutdown: graceful
+
+swagger:
+  api:
+    version: @project.version@
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: |
+          @git.commit.message.short@
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /on-demand-refresh-service/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    enable:
+      all: true
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  level:
+    brave: WARN
+    io:
+      getunleash: TRACE
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+feature-flags:
+  city-tax-uk:
+    key: "release_pi_ccui_city_tax_uk"
+    fallback: false
+  city-tax-uk-fallback:
+    key: "release_pi_ccui_city_tax_uk_fallback"
+    fallback: false
+  use-token-refresh-skew:
+    key: "release_ohip_use_token_refresh_skew"
+    fallback: false
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  tracing:
+    propagation:
+      type: aws
+  cloud:
+    config:
+      enabled: false
+  jackson:
+    time-zone: ${SPRING_JACKSON_TIME_ZONE}
+    deserialization:
+      fail-on-unknown-properties: false
+      fail-on-null-for-primitives: false
+  datasource:
+    reader:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://${AVAILABILITY_CACHE_POSTGRES_DB_HOST_READER}:${AVAILABILITY_CACHE_POSTGRES_DB_PORT}/${AVAILABILITY_CACHE_POSTGRES_DB_NAME}
+      username: ${AVAILABILITY_CACHE_POSTGRES_DB_USERNAME}
+      password: ${AVAILABILITY_CACHE_POSTGRES_DB_PASSWORD}
+    writer:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://${AVAILABILITY_CACHE_POSTGRES_DB_HOST_WRITER}:${AVAILABILITY_CACHE_POSTGRES_DB_PORT}/${AVAILABILITY_CACHE_POSTGRES_DB_NAME}
+      username: ${AVAILABILITY_CACHE_POSTGRES_DB_USERNAME}
+      password: ${AVAILABILITY_CACHE_POSTGRES_DB_PASSWORD}
+    hikari:
+      maxPoolSize: ${HIKARI_MAXPOOLSIZE}
+  jpa:
+    database: POSTGRESQL
+    show-sql: ${SPRING_JPA_SHOW_SQL}
+    generate-ddl: ${SPRING_JPA_GENERATE_DDL}
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+
+ondemandrefresh:
+  interval: ${ON_DEMAND_REFRESH_INTERVAL}
+  #Quartz cron expression: second min hrs dayofmonth month dayofweek year
+  scheduledRefreshCronJob: 0 1 0 ? * * *
+  #below expression only for testing purposes
+  #scheduledRefreshCronJob: 0 0 2 ? * * *
+  maxDays: ${ON_DEMAND_REFRESH_MAX_DAYS}
+  maxRange: ${ON_DEMAND_REFRESH_MAX_RANGE}
+  jobDelay: ${ON_DEMAND_REFRESH_JOB_DELAY}
+
+migrationstatusrefresh:
+  #below expression only for testing purposes
+  scheduledRefreshCronJob: 0 0/15 * ? * * *
+  #At every 3rd minute only for testing
+  #scheduledRefreshCronJob: 0 0/5 * ? * * *
+
+encrypt:
+  failOnError: ${ENCRYPT_FAIL_ON_ERROR}
+
+db:
+  # Number of sql blocks to be executed each time
+  batchSize: ${DB_BATCH_SIZE}
+  maxRetryLimit: ${DB_MAX_RETRY_LIMIT}
+
+# Whitbread Specific
+config:
+  httpClient:
+    connectionTimeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+    responseTimeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  service:
+    content-entity:
+      baseOrigin: ${CONTENT_SERVICE_HOST}
+      globalConfigEndpoint: "/v1/content/global-config"
+    ocd-adapter:
+      host: ${OCD_ADAPTER_SERVICE_HOST}
+      offerEndpoint: "/ocd/v1/hotels/{hotelCode}/offer"
+    opera:
+      host: https://${OPERA_HOST}
+      username: ${OPERA_USERNAME}
+      password: ${OPERA_PASSWORD}
+      appKey: ${OPERA_APP_KEY}
+      clientId: ${OPERA_CLIENT_ID}
+      clientSecret: ${OPERA_CLIENT_SECRET}
+      isClientCredentialsEnabled: ${ENABLE_CLIENT_CREDENTIALS:false}
+      wireTapAccessToken: ${WIRE_TAP_ACCESS_TOKEN:false}
+      authEndpoint: ${OPERA_AUTH_ENDPOINT:oauth/v1/tokens}
+      enterpriseId: ${ENTERPRISE_ID}
+      scope: ${OPERA_SCOPE:}
+      tokenRefreshClockSkew: ${OPERA_TOKEN_REFRESH_SKEW:15}
+      dailyRatePlansEndpoint: "/rtp/v1/hotels/{HotelId}/ratePlans/{RatePlanCode}/schedules"
+      hotelInventoryEndpoint: "/inv/v1/hotels/{HotelId}/hotelInventory"
+      hotelMigrationStatusEndpoint: "/ent/config/v1/hotels/{HotelId}/hotelDetails"
+      searchRateRestrictionCriteriaEndpoint: "/par/v1/hotels/{HotelId}/restrictions"
+
+async-thread-config:
+  corePoolSize: ${ASYNC_THREAD_CONFIG_CORE_POOL_SIZE}
+  maxPoolSize: ${ASYNC_THREAD_CONFIG_MAX_POOL_SIZE}
+  queueCapacity: ${ASYNC_THREAD_CONFIG_QUEUE_CAPACITY}
+
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 10s
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - opera-uat
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+logging:
+  level:
+    uk.co.whitbread: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+  datasource:
+    reader:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: postgres
+    writer:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: postgres
+
+  jackson:
+    time-zone: "Europe/London"
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    properties:
+      org:
+        scheduler:
+          instanceName: OnDemandRefreshScheduler
+          instanceId: AUTO
+          skipUpdateCheck: true
+          jobFactory:
+            class: org.quartz.simpl.SimpleJobFactory
+        threadPool:
+          class: org.quartz.simpl.SimpleThreadPool
+          threadPriority: 5
+          threadCount: 13
+          threadsInheritContextClassLoaderOfInitializingThread: true
+        jobStore:
+          class: org.quartz.impl.jdbcjobstore.JobStoreTX
+          driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+          dataSource: quartzDataSource
+          useProperties: true
+          isClustered: true
+          clusterCheckinInterval: 5000
+
+config:
+  service:
+    content-entity:
+      baseOrigin: ${CONTENT_SERVICE_HOST:http://localhost:9106}
+      globalConfigEndpoint: "/v1/content/global-config"
+    ocd-adapter:
+      host: ${OCD_ADAPTER_SERVICE_HOST:http://localhost:9134}
+      offerEndpoint: "/ocd/v1/hotels/{hotelCode}/offer"
+    opera:
+      host: https://${OPERA_HOST:host}
+      username: ${OPERA_USERNAME:user}
+      password: ${OPERA_PASSWORD:password}
+      appKey: ${OPERA_APP_KEY:appKey}
+      clientId: ${OPERA_CLIENT_ID:client}
+      clientSecret: ${OPERA_CLIENT_SECRET:secret}
+      isClientCredentialsEnabled: ${ENABLE_CLIENT_CREDENTIALS:false}
+      wireTapAccessToken: ${WIRE_TAP_ACCESS_TOKEN:false}
+      authEndpoint: ${OPERA_AUTH_ENDPOINT:oauth/v1/tokens}
+      enterpriseId: ${ENTERPRISE_ID:}
+      scope: ${OPERA_SCOPE:}
+      tokenRefreshClockSkew: ${OPERA_TOKEN_REFRESH_SKEW:15}
+
+ondemandrefresh:
+  interval: 30
+  #Quartz cron expression: second min hrs dayofmonth month dayofweek year
+  scheduledRefreshCronJob: 0 1 0 ? * * *
+  #below expression only for testing purposes
+  #scheduledRefreshCronJob: 0 0 2 ? * * *
+  maxDays: 90
+  maxRange: 365
+  jobDelay: 120
+
+migrationstatusrefresh:
+  #below expression only for testing purposes
+  scheduledRefreshCronJob: 0 0/15 * ? * * *
+  #At every 3rd minute only for testing
+  #scheduledRefreshCronJob: 0 0/5 * ? * * *
+
+async-thread-config:
+  corePoolSize: 2
+  maxPoolSize: 2
+  queueCapacity: 16
+
+db:
+  # Number of sql blocks to be executed each time
+  batchSize: 50
+  maxRetryLimit: 2
+
+encrypt:
+  failOnError: false
+
+server:
+  port: 9099
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:postgresql://db:5432/postgres
+
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "!integration"
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: ${SPRING_QUARTZ_JDBC_INIT_SCHEMA}
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: OnDemandRefreshScheduler
+            instanceId: ${SPRING_QUARTZ_PROP_SCHED_INSTANCE_ID}
+            skipUpdateCheck: ${SPRING_QUARTZ_PROP_SCHED_SKIP_UPDATE_CHECK}
+            jobFactory:
+              class: org.quartz.simpl.SimpleJobFactory
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadPriority: ${SPRING_QUARTZ_PROP_THREAD_POOL_THREAD_PRIORITY}
+            threadCount: ${SPRING_QUARTZ_PROP_THREAD_POOL_THREAD_COUNT}
+            threadsInheritContextClassLoaderOfInitializingThread: ${SPRING_QUARTZ_PROP_THREAD_POOL_THREADS_INHERIT}
+          jobStore:
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+            dataSource: ${SPRING_QUARTZ_PROP_JOB_STORE_DATA_SOURCE}
+            useProperties: ${SPRING_QUARTZ_PROP_JOB_STORE_USE_PROP}
+            isClustered: ${SPRING_QUARTZ_PROP_JOB_STORE_IS_CLUSTERED}
+            clusterCheckinInterval: ${SPRING_QUARTZ_PROP_JOB_STORE_CLUSTER_CHECKIN_INTERVAL}
+

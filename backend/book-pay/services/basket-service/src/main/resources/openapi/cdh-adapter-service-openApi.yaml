@@ -1,0 +1,1526 @@
+openapi: 3.0.1
+info:
+  description: <p>CDH Api Documentation</p>
+  title: CDH API Documentation
+  version: 2.1.0
+servers:
+- description: Generated server url
+  url: http://localhost:9119
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /v1/cdh/account/companies:
+    post:
+      operationId: getCompanies
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/CompanySearchCriteriaDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/CompanySearchResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Search companies from CDH Account Services API V2
+      tags:
+      - company-controller
+  /v1/cdh/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+                  example: null
+                example: null
+          description: OK
+        "400":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/cdh/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+        "400":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/cdh/actuator/health/**:
+    get:
+      operationId: health-path
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+        "400":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health-path'
+      tags:
+      - Actuator
+  /v1/cdh/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+        "400":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/cdh/reservation/search:
+    post:
+      operationId: getReservationSearch
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/CdhReservationSearchCriteriaDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/CdhReservationSearchDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Search bookings from CDH Booking Services API V2
+      tags:
+      - cdh-reservation-search-controller
+components:
+  schemas:
+    AddressDto:
+      type: object
+      example: null
+      properties:
+        addressLine1:
+          type: string
+          example: null
+        addressLine2:
+          type: string
+          example: null
+        addressLine3:
+          type: string
+          example: null
+        addressLine4:
+          type: string
+          example: null
+        addressLine5:
+          type: string
+          example: null
+        companyName:
+          type: string
+          example: null
+        countryCode:
+          type: string
+          example: null
+        postCode:
+          type: string
+          example: null
+        type:
+          type: string
+          example: null
+    AnswersDto:
+      type: object
+      example: null
+      properties:
+        answerValues:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        type:
+          type: string
+          example: null
+    BillingAddressDto:
+      type: object
+      example: null
+      properties:
+        addressLine1:
+          type: string
+          example: null
+        addressLine2:
+          type: string
+          example: null
+        addressLine3:
+          type: string
+          example: null
+        addressLine4:
+          type: string
+          example: null
+        addressLine5:
+          type: string
+          example: null
+        companyName:
+          type: string
+          example: null
+        countryCode:
+          type: string
+          example: null
+        postCode:
+          type: string
+          example: null
+        type:
+          type: string
+          example: null
+    BookerDto:
+      type: object
+      example: null
+      properties:
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        companyName:
+          type: string
+          example: null
+        emailAddress:
+          type: string
+          example: null
+        firstName:
+          type: string
+          example: null
+        lastName:
+          type: string
+          example: null
+        mobileNumber:
+          type: string
+          example: null
+        telephoneNumber:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+    BookingAlertsDto:
+      type: object
+      example: null
+      properties:
+        bookingAlertHotels:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        dayOfArrival:
+          type: boolean
+          example: null
+        frequency:
+          type: string
+          example: null
+        passThroughWeekend:
+          type: boolean
+          example: null
+        rateCaps:
+          $ref: '#/components/schemas/RateCapsDto'
+        recipientEmailAddresses:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        weekendArrival:
+          type: boolean
+          example: null
+    BookingAllowancesDto:
+      type: object
+      example: null
+      properties:
+        allowAdditionalCosts:
+          type: boolean
+          example: null
+        allowAlcohol:
+          type: boolean
+          example: null
+        allowCarParking:
+          type: boolean
+          example: null
+        allowIndividualCards:
+          type: boolean
+          example: null
+        allowPremierSaverRates:
+          type: boolean
+          example: null
+        extrasCodes:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        maxDinnerBudgets:
+          $ref: '#/components/schemas/MaxDinnerBudgetsDto'
+        maxNumberOfNights:
+          type: integer
+          format: int32
+          example: null
+        upsellItemsAllowed:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+    BookingPreferenceDto:
+      type: object
+      example: null
+      properties:
+        continentalBreakfast:
+          type: boolean
+          example: null
+        electronicInvoiceRequired:
+          type: boolean
+          example: null
+        mealDeal:
+          type: boolean
+          example: null
+        premierBreakfast:
+          type: boolean
+          example: null
+        preselectWifi:
+          type: boolean
+          example: null
+        reason:
+          type: string
+          example: null
+        roomRequirements:
+          $ref: '#/components/schemas/RoomRequirementsDto'
+    BusinessDto:
+      type: object
+      example: null
+      properties:
+        dismissMPILink:
+          type: boolean
+          example: null
+        miSetupRequired:
+          type: boolean
+          example: null
+        myPILink:
+          type: string
+          example: null
+        tethered:
+          type: boolean
+          example: null
+    CardNotPresentDto:
+      type: object
+      example: null
+      properties:
+        businessAccountPassword:
+          type: string
+          example: null
+        businessAccountUsername:
+          type: string
+          example: null
+    CdhReservationSearchCriteriaDto:
+      type: object
+      example: null
+      properties:
+        arrivalDateFrom:
+          type: string
+          example: null
+        arrivalDateTo:
+          type: string
+          example: null
+        bartGuestHistoryNumber:
+          type: string
+          example: null
+        bookingDate:
+          type: string
+          example: null
+        bookingReference:
+          type: string
+          example: null
+        bookingsDatabaseSearch:
+          type: boolean
+          example: null
+        cancellationDate:
+          type: string
+          example: null
+        companyAccountId:
+          type: string
+          example: null
+        companyName:
+          type: string
+          example: null
+        continuationToken:
+          type: string
+          example: null
+        customerAccountId:
+          type: string
+          example: null
+        customerReference:
+          type: string
+          example: null
+        emailAddress:
+          type: string
+          example: null
+        employeeAccountId:
+          type: string
+          example: null
+        hotelCode:
+          type: string
+          example: null
+        hotelName:
+          type: string
+          example: null
+        lastName:
+          type: string
+          example: null
+        pageNumber:
+          type: integer
+          format: int32
+          example: null
+        pageSize:
+          type: integer
+          format: int32
+          example: null
+        postalCode:
+          type: string
+          example: null
+        purchaseOrder:
+          type: string
+          example: null
+        reservationId:
+          type: integer
+          format: int32
+          example: null
+        status:
+          type: string
+          example: null
+        telephone:
+          type: string
+          example: null
+        thirdPartyReference:
+          type: string
+          example: null
+    CdhReservationSearchDto:
+      type: object
+      example: null
+      properties:
+        continuationToken:
+          type: string
+          example: null
+        results:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ResultsDto'
+        searchResults:
+          type: integer
+          format: int32
+          example: null
+        totalResults:
+          type: integer
+          format: int32
+          example: null
+        totalSize:
+          type: integer
+          format: int32
+          example: null
+        totals:
+          $ref: '#/components/schemas/TotalsDto'
+    CellCodeDto:
+      type: object
+      example: null
+      properties:
+        cellCode:
+          type: string
+          example: null
+        id:
+          type: integer
+          format: int32
+          example: null
+    CompaniesDto:
+      type: object
+      example: null
+      properties:
+        accountToCompany:
+          type: boolean
+          example: null
+        allowCentralCreditCard:
+          type: boolean
+          example: null
+        alternateCompanyName:
+          type: string
+          example: null
+        bookingAlerts:
+          $ref: '#/components/schemas/BookingAlertsDto'
+        bookingAllowances:
+          $ref: '#/components/schemas/BookingAllowancesDto'
+        cellCodes:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/CellCodeDto'
+        companyAccountId:
+          type: string
+          example: null
+        companyAddress:
+          $ref: '#/components/schemas/CompanyAddressDto'
+        companyCellCodes:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/CompanyCellCodeDto'
+        companyLockedForEditing:
+          type: boolean
+          example: null
+        companyManagementDetails:
+          $ref: '#/components/schemas/CompanyManagementDetailsDto'
+        companyName:
+          type: string
+          example: null
+        companyType:
+          type: string
+          example: null
+        crmCompanyId:
+          type: string
+          example: null
+        globalCompanyId:
+          type: integer
+          format: int32
+          example: null
+        mainContact:
+          $ref: '#/components/schemas/MainContactDto'
+        managedAccount:
+          type: boolean
+          example: null
+        manualValidationRequired:
+          type: boolean
+          example: null
+        manuallyValidated:
+          type: boolean
+          example: null
+        marketingAllowed:
+          type: boolean
+          example: null
+        numberOfEmployees:
+          type: integer
+          format: int32
+          example: null
+        status:
+          type: string
+          example: null
+    CompanyAddressDto:
+      type: object
+      example: null
+      properties:
+        addressLine1:
+          type: string
+          example: null
+        addressLine2:
+          type: string
+          example: null
+        addressLine3:
+          type: string
+          example: null
+        addressLine4:
+          type: string
+          example: null
+        addressLine5:
+          type: string
+          example: null
+        countryCode:
+          type: string
+          example: null
+        postCode:
+          type: string
+          example: null
+    CompanyAnswersDto:
+      type: object
+      example: null
+      properties:
+        answer:
+          type: string
+          example: null
+        questionId:
+          type: string
+          example: null
+    CompanyCellCodeDto:
+      type: object
+      example: null
+      properties:
+        code:
+          type: string
+          example: null
+        id:
+          type: string
+          example: null
+    CompanyManagementDetailsDto:
+      type: object
+      example: null
+      properties:
+        customerReferenceManagement:
+          $ref: '#/components/schemas/CustomerReferenceManagementDto'
+        paymentDetails:
+          $ref: '#/components/schemas/PaymentDetailsDto'
+        purchaseOrderManagement:
+          $ref: '#/components/schemas/PurchaseOrderManagementDto'
+        questions:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/QuestionsDto'
+        restrictedHotelCodes:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RestrictedHotelCodeDto'
+        restrictedRatePlans:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RestrictedRatePlanDto'
+    CompanySearchCriteriaDto:
+      type: object
+      example: null
+      properties:
+        accessContext:
+          type: string
+          example: null
+        accessedBy:
+          type: string
+          example: null
+        addressLine1:
+          type: string
+          example: null
+        addressLine2:
+          type: string
+          example: null
+        addressLine3:
+          type: string
+          example: null
+        addressLine4:
+          type: string
+          example: null
+        addressLine5:
+          type: string
+          example: null
+        cellCode:
+          type: string
+          example: null
+        companyName:
+          type: string
+          example: null
+        companyType:
+          type: string
+          example: null
+        countryCode:
+          type: string
+          example: null
+        globalCompanyId:
+          type: integer
+          format: int32
+          example: null
+        pageNumber:
+          type: integer
+          format: int32
+          example: null
+        pageSize:
+          type: integer
+          format: int32
+          example: null
+        postCode:
+          type: string
+          example: null
+        sortBy:
+          type: string
+          example: null
+        sortDirection:
+          type: string
+          example: null
+      required:
+      - accessContext
+      - accessedBy
+    CompanySearchResponseDto:
+      type: object
+      example: null
+      properties:
+        continuationToken:
+          type: string
+          example: null
+        results:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/CompaniesDto'
+        searchResults:
+          type: integer
+          format: int32
+          example: null
+        totalResults:
+          type: integer
+          format: int32
+          example: null
+    CustomerReferenceManagementDto:
+      type: object
+      example: null
+      properties:
+        active:
+          type: boolean
+          example: null
+        answers:
+          $ref: '#/components/schemas/AnswersDto'
+        header:
+          type: string
+          example: null
+        id:
+          type: string
+          example: null
+        label:
+          type: string
+          example: null
+        location:
+          type: string
+          example: null
+        mandatory:
+          type: boolean
+          example: null
+        type:
+          type: string
+          example: null
+    EmployeeAnswersDto:
+      type: object
+      example: null
+      properties:
+        companyAnswers:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/CompanyAnswersDto'
+        customerReferenceAnswer:
+          type: string
+          example: null
+        purchaseOrderAnswer:
+          type: string
+          example: null
+    ErrorResponse:
+      type: object
+      example: null
+      properties:
+        code:
+          type: string
+          example: null
+        details:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+      required:
+      - code
+      - details
+    GreaterLondonDto:
+      type: object
+      example: null
+      properties:
+        amount:
+          type: number
+          example: null
+        currency:
+          type: string
+          example: null
+        netAmount:
+          type: number
+          example: null
+    GuestsDto:
+      type: object
+      example: null
+      properties:
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        bartEmployeeId:
+          type: string
+          example: null
+        bartGuestHistoryNumber:
+          type: string
+          example: null
+        companyName:
+          type: string
+          example: null
+        emailAddress:
+          type: string
+          example: null
+        employeeAccountId:
+          type: string
+          example: null
+        firstName:
+          type: string
+          example: null
+        globalCompanyId:
+          type: string
+          example: null
+        initials:
+          type: string
+          example: null
+        lastName:
+          type: string
+          example: null
+        leadGuest:
+          type: boolean
+          example: null
+        mobileNumber:
+          type: string
+          example: null
+        nationality:
+          type: string
+          example: null
+        passport:
+          $ref: '#/components/schemas/PassportDto'
+        telephoneNumber:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+    IrelandDto:
+      type: object
+      example: null
+      properties:
+        amount:
+          type: number
+          example: null
+        currency:
+          type: string
+          example: null
+        netAmount:
+          type: number
+          example: null
+    Link:
+      type: object
+      example: null
+      properties:
+        href:
+          type: string
+          example: null
+        templated:
+          type: boolean
+          example: null
+    MainContactDto:
+      type: object
+      example: null
+      properties:
+        accessLevel:
+          type: string
+          example: null
+        activationKey:
+          type: string
+          example: null
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        approxAnnualUKHotelSpend:
+          type: string
+          example: null
+        awaitingApproval:
+          type: boolean
+          example: null
+        bartEmployeeId:
+          type: integer
+          format: int32
+          example: null
+        bartGuestHistoryCreation:
+          type: string
+          example: null
+        bartGuestHistoryNumber:
+          type: string
+          example: null
+        bookingPreference:
+          $ref: '#/components/schemas/BookingPreferenceDto'
+        business:
+          $ref: '#/components/schemas/BusinessDto'
+        carRegistration:
+          type: string
+          example: null
+        centralCardId:
+          type: integer
+          format: int32
+          example: null
+        companyAccountId:
+          type: string
+          example: null
+        emailAddress:
+          type: string
+          example: null
+        employeeAccountId:
+          type: string
+          example: null
+        employeeAnswers:
+          $ref: '#/components/schemas/EmployeeAnswersDto'
+        firstName:
+          type: string
+          example: null
+        globalCompanyId:
+          type: string
+          example: null
+        lastName:
+          type: string
+          example: null
+        lockedForEditing:
+          type: boolean
+          example: null
+        mainEmployee:
+          type: boolean
+          example: null
+        mobileNumber:
+          type: string
+          example: null
+        paymentPreference:
+          $ref: '#/components/schemas/PaymentPreferenceDto'
+        phoneNumber:
+          type: string
+          example: null
+        position:
+          type: string
+          example: null
+        status:
+          type: string
+          example: null
+        textConfirmation:
+          type: boolean
+          example: null
+        title:
+          type: string
+          example: null
+    MaxDinnerBudgetsDto:
+      type: object
+      example: null
+      properties:
+        greaterLondon:
+          $ref: '#/components/schemas/GreaterLondonDto'
+        ireland:
+          $ref: '#/components/schemas/IrelandDto'
+        ukWide:
+          $ref: '#/components/schemas/UkWideDto'
+    PassportDto:
+      type: object
+      example: null
+      properties:
+        passportNumber:
+          type: string
+          example: null
+        placeOfIssue:
+          type: string
+          example: null
+    PaymentCardDto:
+      type: object
+      example: null
+      properties:
+        billingAddress:
+          $ref: '#/components/schemas/BillingAddressDto'
+        cardId:
+          type: string
+          example: null
+        cardLabel:
+          type: string
+          example: null
+        cardNotPresent:
+          $ref: '#/components/schemas/CardNotPresentDto'
+        cardNotPresentRequired:
+          type: boolean
+          example: null
+        cardNumber:
+          type: string
+          example: null
+        cardType:
+          type: string
+          example: null
+        created:
+          type: string
+          example: null
+        dateDeleted:
+          type: string
+          format: date
+          example: null
+        deleted:
+          type: boolean
+          example: null
+        expiryDate:
+          type: string
+          example: null
+        modified:
+          type: string
+          example: null
+        nameOnCard:
+          type: string
+          example: null
+        position:
+          type: integer
+          format: int32
+          example: null
+        token:
+          type: string
+          example: null
+    PaymentDetailsDto:
+      type: object
+      example: null
+      properties:
+        allowIndividualCards:
+          type: boolean
+          example: null
+        paymentCards:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/PaymentCardDto'
+        profileLocked:
+          type: boolean
+          example: null
+    PaymentPreferenceDto:
+      type: object
+      example: null
+      properties:
+        paymentCard:
+          $ref: '#/components/schemas/PaymentPreferencePaymentCardDto'
+    PaymentPreferencePaymentCardDto:
+      type: object
+      example: null
+      properties:
+        billingAddress:
+          $ref: '#/components/schemas/BillingAddressDto'
+        cardHolderName:
+          type: string
+          example: null
+        cardNumber:
+          type: string
+          example: null
+        cardType:
+          type: string
+          example: null
+        cnpBusinessAccountPassword:
+          type: string
+          example: null
+        cnpBusinessAccountUsername:
+          type: string
+          example: null
+        cnpRequired:
+          type: boolean
+          example: null
+        expiryDate:
+          type: string
+          example: null
+        token:
+          type: string
+          example: null
+    PriceDto:
+      type: object
+      example: null
+      properties:
+        amount:
+          type: number
+          example: null
+        currency:
+          type: string
+          example: null
+        netAmount:
+          type: number
+          example: null
+    PurchaseOrderManagementDto:
+      type: object
+      example: null
+      properties:
+        active:
+          type: boolean
+          example: null
+        answers:
+          $ref: '#/components/schemas/AnswersDto'
+        header:
+          type: string
+          example: null
+        id:
+          type: string
+          example: null
+        label:
+          type: string
+          example: null
+        location:
+          type: string
+          example: null
+        mandatory:
+          type: boolean
+          example: null
+        type:
+          type: string
+          example: null
+    QuestionsDto:
+      type: object
+      example: null
+      properties:
+        answers:
+          $ref: '#/components/schemas/AnswersDto'
+        header:
+          type: string
+          example: null
+        id:
+          type: string
+          example: null
+        label:
+          type: string
+          example: null
+        location:
+          type: string
+          example: null
+        mandatory:
+          type: boolean
+          example: null
+        position:
+          type: string
+          example: null
+    RateCapsDto:
+      type: object
+      example: null
+      properties:
+        greaterLondon:
+          $ref: '#/components/schemas/GreaterLondonDto'
+        ireland:
+          $ref: '#/components/schemas/IrelandDto'
+        ukWide:
+          $ref: '#/components/schemas/UkWideDto'
+    RestrictedHotelCodeDto:
+      type: object
+      example: null
+      properties:
+        code:
+          type: string
+          example: null
+    RestrictedRatePlanDto:
+      type: object
+      example: null
+      properties:
+        code:
+          type: string
+          example: null
+    ResultsDto:
+      type: object
+      example: null
+      properties:
+        accountType:
+          type: string
+          example: null
+        amendable:
+          type: boolean
+          example: null
+        arrivalDate:
+          type: string
+          example: null
+        bartEmployeeId:
+          type: integer
+          format: int64
+          example: null
+        bartGuestHistoryNumber:
+          type: string
+          example: null
+        booker:
+          $ref: '#/components/schemas/BookerDto'
+        bookingDate:
+          type: string
+          example: null
+        bookingMethod:
+          type: string
+          example: null
+        bookingMethodDescription:
+          type: string
+          example: null
+        bookingReference:
+          type: string
+          example: null
+        bookingType:
+          type: string
+          example: null
+        cancellable:
+          type: boolean
+          example: null
+        cancellationDate:
+          type: string
+          example: null
+        cancellationId:
+          type: string
+          example: null
+        cellCode:
+          type: string
+          example: null
+        cellCodeId:
+          type: integer
+          format: int32
+          example: null
+        companyAccountId:
+          type: string
+          example: null
+        crmCompanyId:
+          type: string
+          example: null
+        customerAccountId:
+          type: string
+          example: null
+        customerReference:
+          type: string
+          example: null
+        dctmcUserName:
+          type: string
+          example: null
+        departureDate:
+          type: string
+          example: null
+        employeeAccountId:
+          type: string
+          example: null
+        employeeAnswers:
+          $ref: '#/components/schemas/EmployeeAnswersDto'
+        globalCompanyId:
+          type: integer
+          format: int64
+          example: null
+        hotelCode:
+          type: string
+          example: null
+        hotelName:
+          type: string
+          example: null
+        iataNumber:
+          type: string
+          example: null
+        id:
+          type: string
+          example: null
+        package:
+          type: boolean
+          example: null
+        partitionKey:
+          type: string
+          example: null
+        paymentCard:
+          $ref: '#/components/schemas/PaymentCardDto'
+        prePaid:
+          type: boolean
+          example: null
+        prePaidAmount:
+          $ref: '#/components/schemas/PriceDto'
+        purchaseOrder:
+          type: string
+          example: null
+        rateCategory:
+          type: string
+          example: null
+        rateCategoryCode:
+          type: string
+          example: null
+        rateClass:
+          type: string
+          example: null
+        ratePlan:
+          type: string
+          example: null
+        rooms:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RoomsDto'
+        sourceSystem:
+          type: string
+          example: null
+        status:
+          type: string
+          example: null
+        statusSortOrder:
+          type: string
+          example: null
+        thirdPartyReference:
+          type: string
+          example: null
+        totalCost:
+          $ref: '#/components/schemas/PriceDto'
+        upsellTotalCost:
+          $ref: '#/components/schemas/PriceDto'
+        walkIn:
+          type: boolean
+          example: null
+    RoomRequirementsDto:
+      type: object
+      example: null
+      properties:
+        adults:
+          type: integer
+          format: int32
+          example: null
+        children:
+          type: integer
+          format: int32
+          example: null
+        cotRequired:
+          type: boolean
+          example: null
+        hotelBrand:
+          type: string
+          example: null
+        lettingType:
+          type: string
+          example: null
+        type:
+          type: string
+          example: null
+    RoomsDto:
+      type: object
+      example: null
+      properties:
+        carDetails:
+          type: boolean
+          example: null
+        cot:
+          type: boolean
+          example: null
+        guests:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/GuestsDto'
+        invoiceNumber:
+          type: string
+          example: null
+        noOfAdults:
+          type: string
+          example: null
+        noOfChildren:
+          type: string
+          example: null
+        paymentCards:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/PaymentCardDto'
+        reservationId:
+          type: string
+          example: null
+        roomCost:
+          $ref: '#/components/schemas/PriceDto'
+        roomId:
+          type: string
+          example: null
+        roomNumber:
+          type: string
+          example: null
+        roomType:
+          type: string
+          example: null
+        status:
+          type: string
+          example: null
+        totalCost:
+          $ref: '#/components/schemas/PriceDto'
+        upsellTotalCost:
+          $ref: '#/components/schemas/PriceDto'
+    TotalsDto:
+      type: object
+      example: null
+      properties:
+        cancelled:
+          type: integer
+          format: int32
+          example: null
+        checkedIn:
+          type: integer
+          format: int32
+          example: null
+        past:
+          type: integer
+          format: int32
+          example: null
+        upcoming:
+          type: integer
+          format: int32
+          example: null
+    UkWideDto:
+      type: object
+      example: null
+      properties:
+        amount:
+          type: number
+          example: null
+        currency:
+          type: string
+          example: null
+        netAmount:
+          type: number
+          example: null

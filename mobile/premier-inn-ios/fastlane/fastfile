@@ -1,0 +1,73 @@
+default_platform(:ios)
+
+platform :ios do
+
+	## LINES
+
+	# Test
+
+	desc "Unit tests"
+	lane :unit_tests do
+		scan(project: File.absolute_path('../PremierInn.xcodeproj'),
+			scheme: "PremierInn (Development)",
+			clean: true,
+			code_coverage: true,
+			output_directory: "fastlane/reports/unit-tests")
+	end
+
+	desc "UI Tests Mock & Live"
+	lane :ui_tests do
+		scan(project: File.absolute_path('../PremierInn.xcodeproj'),
+			scheme: "PremierInn UI Tests",
+			clean: true,
+			code_coverage: true,
+			output_directory: "fastlane/reports/ui-tests")
+	end
+
+	desc "UI Tests Mock"
+	lane :ui_tests_mock do
+
+		live_tests = get_RegressionPack_ui_tests_names()
+		
+		scan(project: File.absolute_path('../PremierInn.xcodeproj'),
+			scheme: "PremierInn UI Tests",
+			clean: true,
+			code_coverage: true,
+			skip_testing: live_tests,
+			output_directory: "fastlane/reports/ui-tests")
+	end
+
+	desc "UI Tests Regression Pack"
+	lane :ui_tests_regression_pack do
+
+		live_tests = get_RegressionPack_ui_tests_names()
+		
+		scan(project: File.absolute_path('../PremierInn.xcodeproj'),
+			scheme: "PremierInn UI Tests",
+			clean: true,
+			code_coverage: true,
+			only_testing: live_tests,
+			output_directory: "fastlane/reports/ui-tests-live")
+	end
+
+	## UTILS
+
+	desc "Finds all tests class name with prefix 'RegressionPack_'"
+	def get_RegressionPack_ui_tests_names()
+
+		# List of tests class name with prefix 'RegressionPack_'
+		list_testnames = sh("grep -R  \"RegressionPack_\" ../PremierInnDEVEarlGreyTests | sed 's/^.*class //g' | sed 's/:.*//g'").split("\n")
+		
+		# Add 'PremierInnDEVEarlGreyTests/' to test names
+		matching_testnames = []
+		list_testnames.each do |testname|
+			matching_testnames.push("PremierInnDEVEarlGreyTests/" + testname)
+		end
+
+		# eg: ["PremierInnDEVEarlGreyTests/BookingEarlGreyTests", ...]
+		UI.message("matching_testnames: #{matching_testnames}") 
+
+		return matching_testnames
+	end
+
+end

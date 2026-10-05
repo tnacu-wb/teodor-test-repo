@@ -1,0 +1,19 @@
+package uk.co.whitbread.content.domain.model.inn.business.cardmanagement.in;
+
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import uk.co.whitbread.content.domain.model.validation.SelfValidation;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CardManagementRequest implements SelfValidation<CardManagementRequest> {
+
+  @NotEmpty
+  private String language;
+
+}

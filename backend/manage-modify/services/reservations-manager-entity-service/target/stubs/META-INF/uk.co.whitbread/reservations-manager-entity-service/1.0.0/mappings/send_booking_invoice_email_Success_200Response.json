@@ -1,0 +1,29 @@
+{
+  "id" : "76e09f23-4436-45e6-a2f9-617550ec7c49",
+  "request" : {
+    "urlPath" : "/v1/bookings/invoice",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "WB-Authorization" : {
+        "equalTo" : "Bearer dummy-token"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['email'] == 'test@mail.com')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'LONMON')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['invoiceRecordNumber'] == '15')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['bookingReference'] == 'bookingReference')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "76e09f23-4436-45e6-a2f9-617550ec7c49"
+}

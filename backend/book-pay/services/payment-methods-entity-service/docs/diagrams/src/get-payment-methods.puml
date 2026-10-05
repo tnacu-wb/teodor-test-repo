@@ -1,0 +1,45 @@
+@startuml
+entity "Experience Service" as ES
+participant PaymentMethodsController as Controller
+participant PaymentMethodsPort as InboundPort
+
+participant ReservationsPort as ReservationsOutboundPort
+participant ReservationsClient
+
+participant HotelInfoPort as HotelOutboundPort
+participant ContentDetailsClient
+
+participant CustomerAccountPort as AccountsOutboundPort
+participant AccountsClient
+
+entity "Hotel Reservation Entity Service (Opera)" as RSV
+entity "Content Entity Service (AEM)" as CONTENT
+entity "Accounts Service (CDH)" as ACCOUNTS
+
+ES -> Controller: GET /v1/payment-methods/?\nbasketReference={basketReference}&\ncountry={country}&\nlanguage={language}&\nuserId={userId}&\nuserType={userType}
+Controller -> InboundPort: getPaymentMethods
+
+InboundPort -> ReservationsOutboundPort: findReservations
+ReservationsOutboundPort -> ReservationsClient: findReservations
+ReservationsClient -> RSV: GET /reservations/basket/{basketReference}
+ReservationsClient <- RSV
+ReservationsOutboundPort <- ReservationsClient
+InboundPort <- ReservationsOutboundPort
+
+InboundPort -> HotelOutboundPort: findHotelPaymentDetails
+HotelOutboundPort -> ContentDetailsClient: findHotelInfoDetails
+ContentDetailsClient -> CONTENT: GET /hotels/{hotelId}/information?\nhotelId={hotelId}&\nlanguage={language}&\ncountry={country}
+ContentDetailsClient <- CONTENT
+HotelOutboundPort <- ContentDetailsClient
+InboundPort <- HotelOutboundPort
+
+InboundPort -> AccountsOutboundPort: findCustomerSavedCards
+AccountsOutboundPort -> AccountsClient: findCustomerAccount
+AccountsClient -> ACCOUNTS: GET /customers/hotels/{customerId}?business={business}
+AccountsClient <- ACCOUNTS
+AccountsOutboundPort <- AccountsClient
+InboundPort <- AccountsOutboundPort
+
+Controller <- InboundPort
+ES <- Controller
+@endum

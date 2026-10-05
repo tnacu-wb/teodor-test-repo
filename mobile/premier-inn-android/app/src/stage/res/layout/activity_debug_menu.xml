@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".debugmenu.DebugMenuActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="@dimen/toolbar_elevation"
+        android:background="?attr/colorPrimary"
+        app:title="Debug menu"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:paddingBottom="30dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            style="@style/Header2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/premier_inn_purple"
+            android:text="@string/api_configuration"/>
+
+        <RadioGroup
+            android:id="@+id/globalApiRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/qaRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end|center"
+                android:padding="@dimen/generic_padding_2"
+                android:text="@string/qa"/>
+
+            <RadioButton
+                android:id="@+id/stagingRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:gravity="center"
+                android:padding="@dimen/generic_padding_2"
+                android:text="@string/staging"/>
+
+            <RadioButton
+                android:id="@+id/wandaRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end|center"
+                android:padding="@dimen/generic_padding_2"
+                android:text="@string/wanda"/>
+
+            <RadioButton
+                android:id="@+id/hulkRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end|center"
+                android:padding="@dimen/generic_padding_2"
+                android:text="@string/hulk"/>
+
+            <RadioButton
+                android:id="@+id/liveRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end|center"
+                android:padding="@dimen/generic_padding_2"
+                android:text="@string/live"/>
+        </RadioGroup>
+
+
+        <TextView
+            style="@style/Header2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:text="@string/ms_domain_url"
+            android:textColor="@color/premier_inn_purple"/>
+
+        <EditText
+            android:id="@+id/domainUrlEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/SubtextSmall"
+            android:hint="@string/http"/>
+
+        <TextView
+            style="@style/Header2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:text="@string/graphGL_domain_url"
+            android:textColor="@color/premier_inn_purple"/>
+
+        <RadioGroup
+            android:id="@+id/graphQlRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/graphQLDitRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:text="@string/graphQL_dit"/>
+
+            <RadioButton
+                android:id="@+id/graphQLSitRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:text="@string/graphQL_sit"/>
+
+            <RadioButton
+                android:id="@+id/graphQLDemoRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:text="@string/graphQL_demo"/>
+
+            <RadioButton
+                android:id="@+id/graphQLPreProdRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:text="@string/graphQL_pre_prod"/>
+
+            <RadioButton
+                android:id="@+id/graphQLPerfRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:text="@string/graphQL_perf"/>
+
+            <RadioButton
+                android:id="@+id/graphQLUATRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:text="@string/graphQL_uat"/>
+
+            <RadioButton
+                android:id="@+id/graphQlManualRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:text="@string/custom"/>
+        </RadioGroup>
+
+
+        <EditText
+            android:id="@+id/graphQlDomainUrlEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/SubtextSmall"
+            android:enabled="false"
+            android:hint="@string/http"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/generic_margin_10"
+            android:background="@android:color/white"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/apolloSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:checked="true"
+            android:padding="@dimen/generic_padding_16"
+            android:text="@string/switch_to_apollo"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/white"/>
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sslPinningSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:checked="true"
+            android:padding="@dimen/generic_padding_16"
+            android:text="@string/ssl_pinning"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/white"/>
+
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/cacheSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:checked="true"
+            android:padding="@dimen/generic_padding_16"
+            android:text="@string/http_cache"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/employeeOfferSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:checked="true"
+            android:padding="@dimen/generic_padding_16"
+            android:text="@string/debug_menu_employee_offer" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/white"/>
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

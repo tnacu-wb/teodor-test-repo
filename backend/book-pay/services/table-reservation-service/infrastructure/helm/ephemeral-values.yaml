@@ -1,0 +1,146 @@
+# Ephemeral (per-PR) values for table-reservation-service.
+#
+# ci-matrix-deploy-eph.yaml layers this file OVER the backend stack defaults at
+# backend/infrastructure/helm/ephemeral-values.yaml:
+#
+#   opera-app-chart/values.yaml  <  stack ephemeral defaults  <  THIS FILE  <  --set
+#
+# Everything generic to a PR release — canary/autoscaling/pdb/istio/prometheus off,
+# replicaCount 1, the trimmed lifecycle and grace period, ndots, probe TIMINGS,
+# imagePullSecrets, namespace — is inherited and is not repeated here.
+#
+# Overridden per-deploy by ci-matrix-deploy-eph.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create, ephemeral
+#
+# ── This service's PR release is degraded by construction ────────────────────
+#
+# table-reservation-service runs in `restaurant-be` under GitOps, and that is where its
+# two secrets live. ci-matrix-deploy-eph.yaml hardcodes `--namespace opera-be`, so a PR
+# release lands in a namespace where restaurant-zonal-secrets and aem-credentials do not
+# exist. Both refs below are therefore `optional: true`, which means the pod boots and
+# serves, but every Zonal and AEM call is unauthenticated and fails.
+#
+# That is enough to exercise routing, validation, caching and the service's own logic.
+# It is NOT enough to test a booking end to end. Fixing it properly means either giving
+# the ephemeral workflow a namespace input, or mirroring the two secrets into opera-be.
+#
+# The rest of the environment is inlined rather than read from
+# `table-reservation-service-configmap`: the chart names its ConfigMap
+# `{{ applicationName }}-configmap` and applicationName is the PR release name here, so
+# a hard-coded configMapKeyRef could never resolve — and in opera-be the shared one is
+# absent anyway.
+
+applicationName: table-reservation-service
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/table-reservation-service
+
+deployment:
+  containerPorts:
+    - containerPort: 9121
+      protocol: TCP
+      name: http
+    # Not published through the Service — reach it with
+    # `kubectl port-forward -n opera-be deploy/<release> 5005:5005`.
+    - containerPort: 5005
+      protocol: TCP
+      name: debug
+
+  containerEnvs:
+    # No SPRING_PROFILES_ACTIVE: this service's application.yml has no opera-* profile
+    # block, so setting one would do nothing.
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=70 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # ── Zonal (the restaurant booking provider) ──────────────────────────────
+    # Lowercase names are what application.yml reads; Spring's relaxed binding is doing
+    # the work. See the header for why both are optional.
+    - name: ZONAL_URL
+      value: https://api-staging.liveres.co.uk
+    - name: username
+      valueFrom:
+        secretKeyRef:
+          name: restaurant-zonal-secrets
+          key: username
+          optional: true
+    - name: Password
+      valueFrom:
+        secretKeyRef:
+          name: restaurant-zonal-secrets
+          key: Password
+          optional: true
+
+    # ── AEM (restaurant content and labels) ──────────────────────────────────
+    - name: AEM_URL
+      value: https://restaurantname.dev.premierinn.digital/en-gb
+    - name: UNBRANDED_AEM_URL
+      value: https://www.dev.premierinn.digital/gb/en/restaurants.locations.json
+    - name: LABEL_URL
+      value: https://www.dev.premierinn.digital/etc/designs/global/dictionaries/restaurants/i18n.jsondict.en
+    - name: AEM_CREDENTIALS_ENV_USER
+      valueFrom:
+        secretKeyRef:
+          name: aem-credentials
+          key: user
+          optional: true
+    - name: AEM_CREDENTIALS_ENV_PASS
+      valueFrom:
+        secretKeyRef:
+          name: aem-credentials
+          key: password
+          optional: true
+
+    # ── Auth tenant ──────────────────────────────────────────────────────────
+    # CCUI only — this service is not exposed to the Premier Inn / Business Booker
+    # issuer. AUDIENCE and NAMESPACE have no defaults in application.yml, so omitting
+    # them would fail startup.
+    - name: CCUI_TENANT_AUDIENCE
+      value: https://api.dev.whitbread.digital
+    - name: CCUI_TENANT_ISSUER
+      value: https://dev-whitbread-digital.eu.auth0.com/
+    - name: CCUI_TENANT_JWK_URI
+      value: https://dev-whitbread-digital.eu.auth0.com/.well-known/jwks.json
+    - name: CCUI_TENANT_NAMESPACE
+      value: https://ccui.opera.whitbread.digital
+
+    # ── HTTP client and cache ────────────────────────────────────────────────
+    - name: HTTP_CONNECTION_TIMEOUT
+      value: '10000'
+    - name: HTTP_RESPONSE_TIMEOUT
+      value: '30'
+    # The dev MemoryDB cluster, shared with the dev deployment — the cache is not per-PR.
+    # A change to a cached value's shape has to stay readable by dev.
+    - name: CACHE_TYPE
+      value: redis
+    - name: REDIS_ENDPOINT
+      value: clustercfg.opera-dev.jynzd4.memorydb.eu-west-1.amazonaws.com:6379
+
+  # `/v1/sample` is the actuator base-path this service actually ships with — a leftover
+  # from the service template that has never been renamed. It has to match
+  # management.endpoints.web.base-path in application.yml or every probe fails.
+  readinessProbe:
+    httpGet:
+      path: /v1/sample/actuator/health/readiness
+      port: 9121
+
+  livenessProbe:
+    httpGet:
+      path: /v1/sample/actuator/health/liveness
+      port: 9121
+
+  # Only memory is stated; requests.cpu (50m) merges through from the stack defaults.
+  # requests.memory is pinned to limits.memory because the heap is sized off the limit.
+  resources:
+    requests:
+      memory: 1024Mi
+    limits:
+      memory: 1024Mi
+
+service:
+  name: table-reservation-service
+  ports:
+    - port: 80
+      targetPort: 9121
+      protocol: TCP
+      name: port9121

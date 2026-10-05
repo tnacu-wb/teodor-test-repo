@@ -1,0 +1,55 @@
+@startuml
+actor GraphQL
+participant "PriceFinderController" as Controller
+participant "PriceFinderService" as Service
+participant "PriceFinderLocationAvailabilitiesPort" as OutPort
+participant "PostProcessorPort" as PostProcessor
+participant "RedisCache" as Cache
+participant "Snowdrop" as Snowdrop
+participant "PriceFinderHotelAvailabilitiesRepository" as Repository
+
+GraphQL -> Controller: GET /search/price-finder/location\n(PriceFinderLocationSearchCriteria)
+Controller -> Service: getLowestPricesByLocation(criteria)
+Service -> OutPort: getLowestPricesByLocation(criteria)
+
+OutPort -> Cache: getAvailabilitiesByLocation(criteria)
+alt AvailabilitiesByLocation cache hit
+    Cache --> OutPort: PriceFinderHotelAvailabilities (cached)
+else Cache miss
+    OutPort -> Cache: get(hotelsByLocationCriteria)
+    alt HotelsByLocation cache hit
+        Cache --> OutPort: HotelsByLocation (cached)
+    else HotelsByLocation cache miss
+        OutPort -> Snowdrop: fetch from external source
+        Snowdrop --> OutPort: HotelsByLocation (external)
+    end
+    OutPort -> Repository: findLowestPrices(criteria, HotelsByLocation)
+    Repository --> OutPort: PriceFinderHotelAvailabilities (from DB)
+    OutPort -> PostProcessor: process(PriceFinderHotelAvailabilities)
+    PostProcessor --> OutPort: PriceFinderHotelAvailabilities (processed)
+end
+OutPort -> Cache: getLowestMonthlyPrice(monthlyPriceCriteria)
+    alt MonthlyPrice cache hit
+        Cache --> OutPort: LowestPricePerMonth (cached)
+        OutPort --> OutPort: PriceFinderHotelAvailabilities (with lowestPricePerMonth)
+    else MonthlyPrice cache miss
+        OutPort -> Cache: get(hotelsByLocationCriteria)
+        alt HotelsByLocation cache hit
+            Cache --> OutPort: HotelsByLocation (cached)
+        else HotelsByLocation cache miss
+            OutPort -> Snowdrop: fetch from external source
+            Snowdrop --> OutPort: HotelsByLocation (external)
+        end
+        OutPort -> Repository: findLowestPrices(criteria, HotelsByLocation)
+        Repository --> OutPort: PriceFinderHotelAvailabilities (from DB)
+        OutPort -> PostProcessor: process(PriceFinderHotelAvailabilities)
+        PostProcessor --> OutPort: PriceFinderHotelAvailabilities (processed)
+        OutPort -> OutPort: calculateLowestPricePerMonth(PriceFinderHotelAvailabilities)
+        OutPort --> OutPort: LowestPricePerMonth (calculated)
+    end
+
+OutPort --> Service: PriceFinderHotelAvailabilities
+Service --> Service: apply sorting & pagination
+Service --> Controller: PriceFinderHotelAvailabilities
+Controller -> GraphQL: ResponseEntity<PriceFinderHotelAvailabilitiesDto>\nHTTP 200 OK
+@enduml

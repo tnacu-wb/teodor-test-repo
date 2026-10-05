@@ -1,0 +1,94 @@
+{
+  "id" : "999865f4-2d69-4224-912a-9cc7ecc3666f",
+  "request" : {
+    "urlPath" : "/v1/baskets/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/pay",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['requestId'] == 'cfb312f7-c1cd-42cb-8670-b39eb166dfc6')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'][?(@.['type'] == 'CARD')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'][?(@.['subType'] == 'ECOMM')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'][?(@.['environment'] == 'https://premier-inn.poc.opera.whitbread.digital')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'][?(@.['firstName'] == 'John')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'][?(@.['lastName'] == 'Smith')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'][?(@.['title'] == 'Mr')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'][?(@.['email'] == 'john@smith.com')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'][?(@.['telephone'] == '40764702111')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'][?(@.['sameAsBookerAddress'] == false)]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'].['address'][?(@.['addressLine1'] == 'Mount Pleasant Mail Centre')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'].['address'][?(@.['addressLine2'] == 'Farringdon Road')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'].['address'][?(@.['addressLine3'] == '')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'].['address'][?(@.['addressLine4'] == '')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'].['address'][?(@.['postalCode'] == 'EC1A 1BB')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'].['address'][?(@.['state'] == 'LONDON')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'].['address'][?(@.['country'] == 'GB')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'].['address'][?(@.['companyName'] == '')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'].['billing'].['address'][?(@.['addressType'] == 'HOME')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'][?(@.['type'] == 'RESERVE_WITHOUT_CARD')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'][?(@.['language'] == 'en')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'][?(@.['journey'] == 'BOOKING')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'][?(@.['channel'] == 'PI')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'][?(@.['arrivalDate'] == '2022-09-01')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'][?(@.['departureDate'] == '2022-09-03')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['businessSite'][?(@.['identifier'] == 'LONHOL')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['businessSite'][?(@.['type'] == 'HOTEL')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['businessSite'][?(@.['location'] == 'LONHOL')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['businessSite'][?(@.['name'] == 'London Hotel')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['leadGuest'][?(@.['name'] == 'Mr John Smith')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['leadGuest'][?(@.['registered'] == true)]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['leadGuest'][?(@.['registeredSince'] == '2021-02-05')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['leadGuest'][?(@.['previousBookings'] == 0)]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['rooms'][*][?(@.['rate'] == 'FLEXRATE')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['rooms'][*][?(@.['type'] == 'DOUBLE')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['rooms'][*][?(@.['adultsNumber'] == 1)]"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "body" : "{\"status\":\"NOT_REQUIRED\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "999865f4-2d69-4224-912a-9cc7ecc3666f"
+}

@@ -1,0 +1,66 @@
+name: Kiro Jira Issue Resolver
+
+on:
+  workflow_dispatch:
+    inputs:
+      jira_key:
+        description: "Jira ticket key (e.g., PROJ-123)"
+        required: true
+        type: string
+      jira_title:
+        description: "Jira ticket title/summary"
+        required: true
+        type: string
+      jira_description:
+        description: "Jira ticket description"
+        required: false
+        type: string
+      jira_labels:
+        description: "Jira ticket labels (comma-separated)"
+        required: false
+        type: string
+      jira_priority:
+        description: "Jira ticket priority"
+        required: false
+        type: string
+      jira_comment:
+        description: "Jira ticket comment body (for comment-triggered runs)"
+        required: false
+        type: string
+      jira_comment_author:
+        description: "Author of the Jira comment"
+        required: false
+        type: string
+
+  # Webhook triggers for Jira Automation
+  # GitHub can receive webhooks and trigger workflows with repository_dispatch
+  repository_dispatch:
+    types: 
+      - jira-ticket-created
+      - jira-ticket-commented
+      - jira-ticket-updated
+
+# The reusable workflow needs these to push a branch and open the PR.
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+# One run per Jira ticket; don't cancel an in-progress resolution.
+concurrency:
+  group: kiro-jira-${{ github.event.client_payload.jira_key || github.event.inputs.jira_key }}
+  cancel-in-progress: false
+
+jobs:
+  resolve-jira-issue:
+    uses: ./.github/workflows/ci-jira-issue-resolver.yaml
+    secrets: inherit
+    with:
+      jira_key: ${{ github.event.client_payload.jira_key || github.event.inputs.jira_key }}
+      jira_title: ${{ github.event.client_payload.jira_title || github.event.inputs.jira_title }}
+      jira_description: ${{ github.event.client_payload.jira_description || github.event.inputs.jira_description }}
+      jira_labels: ${{ github.event.client_payload.jira_labels || github.event.inputs.jira_labels }}
+      jira_priority: ${{ github.event.client_payload.jira_priority || github.event.inputs.jira_priority }}
+      jira_comment: ${{ github.event.client_payload.jira_comment || github.event.inputs.jira_comment || '' }}
+      jira_comment_author: ${{ github.event.client_payload.jira_comment_author || github.event.inputs.jira_comment_author || '' }}
+      jira_event_type: ${{ github.event.action || 'manual' }}

@@ -1,0 +1,20 @@
+export enum PageName {
+  HOME = 'home',
+  SRP = 'SRP',
+  HDP = 'HDP',
+  CYB = 'CYB',
+  CYT = 'CYT', //choose your twin
+  DLP = 'DLP',
+  ANCILLARIES = 'ancillaries',
+  GUEST_DETAILS = 'gdp',
+  PAYMENT = 'payment',
+  CONFIRMATION = 'confirmation',
+  AMEND = 'amend',
+  DASHBOARD = 'dashboard',
+  REGISTER = 'register',
+  GROUP_BOOKINGS = 'groupBookings',
+  PRICE_FINDER = 'priceFinder',
+  STAY_DATES = 'stayDates',
+  ROOMS_AND_GUESTS = 'roomsAndGuests',
+  ADD_TO_WALLET = 'addToWallet',
+}

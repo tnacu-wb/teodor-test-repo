@@ -1,0 +1,22 @@
+{
+  "id" : "51084b48-c972-46ca-aa58-d53ec4ba979a",
+  "request" : {
+    "urlPath" : "/v1/baskets/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/cancel",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['isFailed'] == true)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['sendEmail'] == false)]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "51084b48-c972-46ca-aa58-d53ec4ba979a"
+}

@@ -1,0 +1,225 @@
+server:
+  port: 9065
+
+swagger:
+  api:
+    version: 1.0.0
+
+info:
+  build:
+    groupId: 'uk.co.whitbread'
+    artifact: 'piba-registration-service-opera'
+    description: 'Whitbread Piba User Registration Micro-Service'
+    version: '1.0.0'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+spring:
+  cloud:
+    config:
+      enabled: false
+  cache:
+    type: ${CACHE_TYPE:redis}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+threadpool:
+  reg:
+    coreSize: ${REG_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${REG_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${REG_EXECUTOR_QUEUE_SIZE:50}
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /piba-registration-service/actuator
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+cdh:
+  enableBbDataFetch: ${CDH_ENABLE_BB_DATA_FETCH}
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT_TYPE}
+    enabled: ${CDH_OAUTH_IS_ENABLED}
+  api:
+    host: ${CDH_API_HOST}
+    is-oauth: ${CDH_API_IS_OAUTH}
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: ${INN_BUSINESS_OAUTH_SUBSCRIPTION_KEY}
+
+worldline:
+  clientMessageId: ${WORLDLINE_CLIENT_MESSAGE_ID}
+  cultureCode: en-GB
+  piba:
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    service:
+      url: ${WORLDLINE_SERVICE_URL}
+
+  gb:
+    clientMessageId: ${WORDLINE_DE_CLIENT_MESSAGE_ID}
+    cultureCode: en-GB
+    username: ${WORLDLINE_USERNAME}
+    password: ${WORLDLINE_PASSWORD}
+    url: ${WORLDLINE_GB_URL}
+
+  de:
+    clientMessageId: ${WORDLINE_DE_CLIENT_MESSAGE_ID}
+    cultureCode: de-DE
+    username: ${WORLDLINE_DE_USERNAME}
+    password: ${WORLDLINE_DE_PASSWORD}
+    url: ${WORLDLINE_DE_URL}
+
+  tetheringPlus:
+    enabled: ${WORLDLINE_TETHERING_PLUS_ENABLED}
+
+feign:
+  pibaguid:
+    name: pibaguid
+    url: http://${PIBA_GUID_URL:localhost:9063}
+  client:
+    config:
+      pibaguid:
+        connectTimeout: 10000
+        readTimeout: 10000
+
+config:
+  service:
+    piba-account-service:
+      name: pibaaccountserviceclient
+      host: ${PIBA_ACCOUNT_SERVICE_URL:https://restapi.dit.premierinn.digital}
+      registerTetheredUserEndpoint: "/piba/account/register/tetheredUser"
+
+auth:
+  tenants:
+    - name: default
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      audience: ${PI_BB_TENANT_AUDIENCE}
+  domain: ${AUTH_MNGMT_DOMAIN}
+  clientId: ${AUTH0_CLIENTID}
+  clientSecret: ${AUTH0_CLIENTSECRET}
+  audience: ${AUTH_MNGMT_AUDIENCE}
+  connection: ${AUTH_MNGMT_CONNECTION}
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing: trace
+
+auth:
+  tenants:
+    # QA
+    - name: wbmigrationtest
+      issuer: https://wbmigrationtest.eu.auth0.com/
+      jwkUri: https://wbmigrationtest.eu.auth0.com/.well-known/jwks.json
+      namespace: https://premierinn.com
+      audience: https://wbodetest.eu.auth0.com/api/v2/
+    # UAT
+    - name: wbodetest
+      issuer: https://auth0.premierinn.digital/
+      jwkUri: https://wbodetest.eu.auth0.com/.well-known/jwks.json
+      namespace: https://premierinn.com
+      audience: https://wbodetest.eu.auth0.com/api/v2/
+
+cdh:
+  enableBbDataFetch: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-dev
+        - opera-qa
+        - opera-uat
+        - opera-sit
+        - opera-demo
+        - opera-preprod
+
+management.security.enabled: false
+
+logging:
+  level:
+    uk.co.whitbread: debug
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    openfeign: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-hulk
+        - opera-wanda
+
+management.security.enabled: false
+
+logging:
+  level:
+    uk.co.whitbread: error
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE

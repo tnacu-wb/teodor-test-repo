@@ -1,0 +1,20 @@
+@startuml
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OHIP
+entity "Rules Agent Service" as RAS
+entity OPERA
+
+PMS -> OHIP: GET /ohip//hotels/{hotelId}/availabilities
+loop for each roomType
+        OHIP -> RAS: GET /v1/rules/room-substitutions?pms=OP&adults={adults}]&children=0&roomType=Double
+        RAS -> OHIP: Room Substitutions
+end
+OHIP -> OPERA: GET /par/v1/hotels/{hotelId}/availability?roomStayStartDate={currentdate}&roomType={roomType}&roomStayEndDate={currentdateplus2}&roomStayQuantity={quantity}
+OPERA -> OHIP: Availabilities
+loop for each rate plan
+        OHIP -> OPERA: GET /rsv/v1/hotels/{hotelId}/reservations/rateInfo
+        OHIP <- OPERA: Rate Info PriceBreakdown
+end
+OHIP -> PMS: Availabilities
+@enduml
+

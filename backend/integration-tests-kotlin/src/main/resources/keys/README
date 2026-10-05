@@ -1,0 +1,29 @@
+This folder does not contain any production keys.
+
+integration-test-signing-key.json is a test-only RSA key pair used to sign the JWTs that
+integration tests send to services protected by common-auth0. It exists solely so those tests can
+produce a token whose signature the mocked JWKS endpoint can verify.
+
+It is safe to keep in version control, and it is not a finding if a secret scanner reports it:
+
+  - it signs nothing outside the disposable local integration stack, and no deployed environment
+    trusts it. Real environments resolve their JWKS from Auth0, not from WireMock;
+  - the data it grants access to is synthetic fixture data created by the tests themselves;
+  - the private half never leaves the test JVM. AuthTokens publishes only rsaKey.toPublicJWK(),
+    so WireMock and every service receive public key material only;
+  - the stack it is used against is destroyed and recreated routinely.
+
+It is checked in rather than generated because the key must be identical across JVMs. A key
+generated per process meant a Gradle test worker and the local provisioning server published
+different JWKS documents to the same shared WireMock, where the most recently installed mapping
+wins and the other process's tokens then failed signature validation. See
+docs/FRAMEWORK_REVIEW_2026-07-25.md section 2 for the measured behaviour.
+
+To rotate it, generate a replacement with Nimbus and overwrite this file; nothing pins the key
+value except the characterization golden, which is regenerated the same way as any other change:
+
+  RSAKeyGenerator(2048)
+      .keyID("integration-test-auth-key")
+      .keyUse(KeyUse.SIGNATURE)
+      .algorithm(JWSAlgorithm.RS256)
+      .generate()

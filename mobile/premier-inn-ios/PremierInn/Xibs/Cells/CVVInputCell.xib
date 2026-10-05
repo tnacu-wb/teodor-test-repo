@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CVVInputCell" customModule="PremierInn" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CVVInputCell" rowHeight="126" id="3bu-h3-fXk" customClass="CVVInputCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="312" height="126"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3bu-h3-fXk" id="Gyr-tf-LSV">
+                <rect key="frame" x="0.0" y="0.0" width="312" height="125.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="CVV" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2SS-qm-CLW">
+                        <rect key="frame" x="20" y="10" width="120" height="60"/>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="6SU-Ka-w8q"/>
+                            <constraint firstAttribute="height" constant="60" id="jA6-om-M3d"/>
+                        </constraints>
+                        <color key="textColor" red="0.34509803919999998" green="0.34901960780000002" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                        <textInputTraits key="textInputTraits"/>
+                        <connections>
+                            <outlet property="delegate" destination="3bu-h3-fXk" id="vSD-aH-Hwz"/>
+                        </connections>
+                    </textField>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cvvIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Vri-tt-8eF">
+                        <rect key="frame" x="155" y="10" width="36.5" height="20.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="37" id="igM-hD-rXR"/>
+                            <constraint firstAttribute="height" constant="20" id="xEN-QC-VId"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is the last digit number on the back of your card" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Sr-JU-BdN">
+                        <rect key="frame" x="155" y="38" width="125.5" height="44"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="12"/>
+                        <color key="textColor" red="0.34509803921568627" green="0.34901960784313724" blue="0.35686274509803922" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FWF-gk-RIx">
+                        <rect key="frame" x="20" y="78" width="42" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.92156862750000001" green="0.098039215690000001" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="2SS-qm-CLW" firstAttribute="top" secondItem="Gyr-tf-LSV" secondAttribute="top" constant="10" id="5Hd-RR-aBA"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="4Sr-JU-BdN" secondAttribute="trailing" constant="20" id="6OQ-BW-BSP"/>
+                    <constraint firstItem="FWF-gk-RIx" firstAttribute="leading" secondItem="2SS-qm-CLW" secondAttribute="leading" id="PLh-Sw-QaA"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="FWF-gk-RIx" secondAttribute="trailing" constant="20" id="S5C-H1-M31"/>
+                    <constraint firstItem="Vri-tt-8eF" firstAttribute="leading" secondItem="4Sr-JU-BdN" secondAttribute="leading" id="ZZP-Ze-oFp"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="4Sr-JU-BdN" secondAttribute="bottom" priority="750" constant="10" id="b84-og-e1J"/>
+                    <constraint firstItem="Vri-tt-8eF" firstAttribute="top" secondItem="Gyr-tf-LSV" secondAttribute="top" constant="10" id="c2q-SV-rMX"/>
+                    <constraint firstItem="2SS-qm-CLW" firstAttribute="leading" secondItem="Gyr-tf-LSV" secondAttribute="leading" constant="20" id="c7h-qz-H7o"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="FWF-gk-RIx" secondAttribute="bottom" priority="751" constant="20" id="fxe-SP-Lze"/>
+                    <constraint firstItem="4Sr-JU-BdN" firstAttribute="leading" secondItem="2SS-qm-CLW" secondAttribute="trailing" constant="15" id="pmf-ZZ-iQb"/>
+                    <constraint firstItem="FWF-gk-RIx" firstAttribute="top" secondItem="2SS-qm-CLW" secondAttribute="bottom" constant="8" id="w1h-F8-GMT"/>
+                    <constraint firstItem="4Sr-JU-BdN" firstAttribute="top" secondItem="Vri-tt-8eF" secondAttribute="bottom" constant="8" id="ygL-rc-ubi"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="cvvErrorLabel" destination="FWF-gk-RIx" id="vqC-S1-UZE"/>
+                <outlet property="cvvInfoLabel" destination="4Sr-JU-BdN" id="2QS-N5-ZB2"/>
+                <outlet property="cvvTextField" destination="2SS-qm-CLW" id="TAn-sJ-KCc"/>
+            </connections>
+            <point key="canvasLocation" x="-23" y="-43"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="cvvIcon" width="94" height="53"/>
+    </resources>
+</document>

@@ -1,0 +1,52 @@
+server:
+  port: 9117
+
+meta-updater:
+  scheduler:
+    availabilities:
+      refresh: "30 * * * * *"
+      full-sync: "0 0 2 * * *"
+      delta-sync: "0 0 * * * *"
+
+spring:
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      enabled: false
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:meta-updater;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+
+hotel:
+  codes: ABETIR,ABECOC
+  hotelProcessingThreads: 1
+
+config:
+  rules:
+    host: http://localhost:1
+  availability:
+    host: http://localhost:1
+
+amazon:
+  dynamodb:
+    tableName: integration-availabilities
+    syncStateTableName: integration-sync-state
+    endpoint: http://localhost:1
+    accessKey: integration-key
+    secretKey: integration-secret
+    region: eu-west-1
+    irsa: false
+
+io:
+  getunleash:
+    environment: integration
+    api-url: http://localhost:1/api
+    api-token: integration-placeholder

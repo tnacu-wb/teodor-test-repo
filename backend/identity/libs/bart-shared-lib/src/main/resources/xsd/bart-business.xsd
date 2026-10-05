@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://corporate.micros.com"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+            elementFormDefault="qualified"
+            targetNamespace="http://corporate.micros.com"
+            jaxb:version="2.1">
+
+    <xsd:complexType name="BasicCompanyDetails">
+        <xsd:sequence>
+            <xsd:element name="companyName" type="xsd:string"/>
+            <xsd:element name="companyAddress" type="Address"/>
+            <xsd:element name="mainContact" type="MainContact"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Address">
+        <xsd:sequence>
+            <xsd:element name="addressLine1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="35"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="addressLine2">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="35"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="addressLine3">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="35"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="addressLine4">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="35"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="addressLine5">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="35"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="postCode" type="xsd:string"/>
+            <xsd:element name="country">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="30"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Person">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" name="title">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="Mr"/>
+                        <xsd:enumeration value="Mrs"/>
+                        <xsd:enumeration value="Ms"/>
+                        <xsd:enumeration value="Miss"/>
+                        <xsd:enumeration value="Master"/>
+                        <xsd:enumeration value="Dr"/>
+                        <xsd:enumeration value="Lord"/>
+                        <xsd:enumeration value="Lady"/>
+                        <xsd:enumeration value="Sir"/>
+                        <xsd:enumeration value="Col"/>
+                        <xsd:enumeration value="Prof"/>
+                        <xsd:enumeration value="Rev"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="firstName" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="lastName" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Contact">
+        <xsd:complexContent>
+            <xsd:extension base="Person">
+                <xsd:sequence>
+                    <xsd:element name="emailAddress" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="phoneNumber" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="mobileNumber" type="xsd:string"/>
+                    <xsd:element minOccurs="0" name="textConfirmation" type="xsd:boolean"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="Administrator">
+        <xsd:complexContent>
+            <xsd:extension base="Contact">
+                <xsd:sequence>
+                    <xsd:element name="position" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="ArrayOferrorError">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="Error"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Error">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" name="errorCode">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="5"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="errorDescription" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="UDFAnswers">
+        <xsd:sequence>
+            <xsd:element name="miID" type="xsd:decimal"/>
+            <xsd:element name="miAnswer" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ArrayOfUDFAnswersUDFAnswers">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="UDFAnswers" nillable="true" type="UDFAnswers"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ArrayOfUpcomingBookingSummaryUpcomingBookingSummary">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="UpcomingBookingSummary" nillable="true" type="UpcomingBookingSummary"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="UpcomingBookingSummary">
+        <xsd:sequence>
+            <xsd:element name="arrivalDate" type="xsd:string"/>
+            <xsd:element name="hotelName" type="xsd:string"/>
+            <xsd:element name="guestName" type="xsd:string"/>
+            <xsd:element name="bookingID" type="xsd:string"/>
+            <xsd:element name="surname" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="amendable" type="xsd:boolean"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="MainContact">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" name="employeeID" type="xsd:string"/>
+            <xsd:element name="contact" type="Contact"/>
+            <xsd:element minOccurs="0" name="position" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="CompanySetupDetails">
+        <xsd:sequence>
+            <xsd:element name="alternateCompanyName" type="xsd:string"/>
+            <xsd:element name="dashboardMessage">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="400"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Employee">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" name="employeeID" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="ghNumber" type="xsd:string"/>
+            <xsd:element name="contact" type="Contact"/>
+            <xsd:element minOccurs="0" name="address" type="Address"/>
+            <xsd:element minOccurs="0" name="centralCard" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="customerReferenceAnswer" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="purchaseOrderAnswer" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="userDefinedAnswers" type="ArrayOfUDFAnswersUDFAnswers"/>
+            <xsd:element minOccurs="0" name="accessLevel">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="STAYER"/>
+                        <xsd:enumeration value="SELF"/>
+                        <xsd:enumeration value="BOOKER"/>
+                        <xsd:enumeration value="SUPER"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ProfilePersonalDetails">
+        <xsd:sequence>
+            <xsd:element name="contact" type="Contact"/>
+            <xsd:element name="address" type="Address"/>
+            <xsd:element minOccurs="0" name="carReg" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="nationality" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="passportNumber" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="userDefinedAnswers" type="ArrayOfUDFAnswersUDFAnswers"/>
+            <xsd:element minOccurs="0" name="customerReference" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="purchaseOrder" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ProfileNewsletterPreferences">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" name="newsletterUK" type="xsd:boolean"/>
+            <xsd:element minOccurs="0" name="newsletterDubai" type="xsd:boolean"/>
+            <xsd:element minOccurs="0" name="newsletterIndia" type="xsd:boolean"/>
+            <xsd:element minOccurs="0" name="restaurant" type="xsd:boolean"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

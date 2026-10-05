@@ -1,0 +1,86 @@
+name: Validate Helm Chart
+
+on:
+  workflow_call:
+    inputs:
+      chart-name:
+        required: true
+        type: string
+        description: 'Name of the Helm chart to validate (e.g., temporal)'
+      namespace:
+        required: false
+        type: string
+        default: ''
+        description: 'Kubernetes namespace (defaults to chart-name)'
+      target-environment:
+        required: false
+        type: string
+        default: 'dev'
+        description: 'Target environment for validation (default: dev)'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  HELM_VERSION: '3.12.0'
+
+jobs:
+  helm-lint:
+    name: Lint ${{ inputs.chart-name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Setup Helm
+        uses: ./.github/actions/setup-helm
+        with:
+          chart-path: infra/${{ inputs.chart-name }}
+          helm-version: ${{ env.HELM_VERSION }}
+
+      - name: Helm Lint
+        run: |
+          cd infra/${{ inputs.chart-name }}
+          ENV="${{ inputs.target-environment }}"
+          
+          # Layer values: base → nonprod/prod → env-specific (if file exists)
+          if [ "$ENV" = "hulk" ] || [ "$ENV" = "wanda" ]; then
+            helm lint . --values values/values.yaml --values values/prod.yaml
+          else
+            ARGS="--values values/values.yaml --values values/nonprod.yaml"
+            [ -f "values/${ENV}.yaml" ] && ARGS="$ARGS --values values/${ENV}.yaml"
+            helm lint . $ARGS
+          fi
+
+  helm-template:
+    name: Template ${{ inputs.chart-name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Setup Helm
+        uses: ./.github/actions/setup-helm
+        with:
+          chart-path: infra/${{ inputs.chart-name }}
+          helm-version: ${{ env.HELM_VERSION }}
+
+      - name: Test template rendering
+        run: |
+          cd infra/${{ inputs.chart-name }}
+          NAMESPACE="${{ inputs.namespace || inputs.chart-name }}"
+          ENV="${{ inputs.target-environment }}"
+          
+          if [ "$ENV" = "hulk" ] || [ "$ENV" = "wanda" ]; then
+            helm template ${{ inputs.chart-name }} . \
+              --namespace "$NAMESPACE" \
+              --values values/values.yaml \
+              --values values/prod.yaml
+          else
+            ARGS="--values values/values.yaml --values values/nonprod.yaml"
+            [ -f "values/${ENV}.yaml" ] && ARGS="$ARGS --values values/${ENV}.yaml"
+            helm template ${{ inputs.chart-name }} . \
+              --namespace "$NAMESPACE" \
+              $ARGS
+          fi

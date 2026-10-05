@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="KGk-i7-Jjw" customClass="SimpleSubtitleCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="97.5"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="97.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fnp-sW-0QN">
+                        <rect key="frame" x="20" y="10" width="280" height="26"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="26" id="yGv-xQ-aFg"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PRR-ae-gYe">
+                        <rect key="frame" x="20" y="42" width="280" height="19.5"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6NI-T8-tGe">
+                        <rect key="frame" x="20" y="96.5" width="280" height="1"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="Rl1-hn-BBo"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="PRR-ae-gYe" secondAttribute="trailing" constant="20" id="M7V-fX-zMe"/>
+                    <constraint firstAttribute="trailing" secondItem="fnp-sW-0QN" secondAttribute="trailing" constant="20" id="ZuT-Kh-7Pg"/>
+                    <constraint firstItem="6NI-T8-tGe" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="bVe-Hl-qsa"/>
+                    <constraint firstItem="PRR-ae-gYe" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="bly-X0-1Vm"/>
+                    <constraint firstItem="fnp-sW-0QN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="c1d-3t-d0y"/>
+                    <constraint firstAttribute="bottom" secondItem="6NI-T8-tGe" secondAttribute="bottom" id="dO7-jA-4yu"/>
+                    <constraint firstAttribute="trailing" secondItem="6NI-T8-tGe" secondAttribute="trailing" constant="20" id="esV-h6-vfc"/>
+                    <constraint firstAttribute="bottom" secondItem="PRR-ae-gYe" secondAttribute="bottom" constant="36" id="jR4-6x-IOW"/>
+                    <constraint firstItem="fnp-sW-0QN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="lOh-F1-eDJ"/>
+                    <constraint firstItem="PRR-ae-gYe" firstAttribute="top" secondItem="fnp-sW-0QN" secondAttribute="bottom" constant="6" id="tYF-NR-DPh"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="bottomConstraint" destination="jR4-6x-IOW" id="ZFd-cP-UQJ"/>
+                <outlet property="solidSeparator" destination="6NI-T8-tGe" id="r9R-m7-qwi"/>
+                <outlet property="subtitle" destination="PRR-ae-gYe" id="jTW-po-ua0"/>
+                <outlet property="subtitleLeadingConstraint" destination="bly-X0-1Vm" id="hbS-Xm-xan"/>
+                <outlet property="title" destination="fnp-sW-0QN" id="tGQ-Xm-msU"/>
+                <outlet property="titleLeadingConstraint" destination="c1d-3t-d0y" id="MVX-oC-zhU"/>
+                <outlet property="titleSubtitleGapConstraint" destination="tYF-NR-DPh" id="vDx-kt-v5g"/>
+                <outlet property="topConstraint" destination="lOh-F1-eDJ" id="xXh-Fh-dMF"/>
+            </connections>
+            <point key="canvasLocation" x="25" y="52"/>
+        </tableViewCell>
+    </objects>
+</document>

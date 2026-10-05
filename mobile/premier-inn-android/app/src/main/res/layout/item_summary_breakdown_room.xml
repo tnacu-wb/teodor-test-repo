@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/generic_margin_8"
+    android:layout_marginTop="@dimen/generic_margin_16"
+    android:layout_marginEnd="@dimen/generic_margin_8"
+    android:clipToPadding="false"
+    app:cardCornerRadius="@dimen/generic_corner_radius_2"
+    app:cardElevation="@dimen/generic_elevation_2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/generic_padding_16">
+
+        <TextView
+            android:id="@+id/tv_summary_breakdown_item_rooms_and_dates"
+            style="@style/Header2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:textColor="?attr/colorPrimary"
+            tools:text="Room 1 (12 Sep - 17 Sep)" />
+
+        <TextView
+            style="@style/Header3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:text="@string/summary_breakdown_item_room_type_heading" />
+
+        <TextView
+            android:id="@+id/tv_summary_breakdown_item_room_description"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:textColor="?attr/colorPrimary"
+            tools:text="Double room (with cot)" />
+
+        <TextView
+            style="@style/Header3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:text="@string/summary_breakdown_item_guests_heading" />
+
+        <TextView
+            android:id="@+id/tv_summary_breakdown_item_adults_and_children"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:textColor="?attr/colorPrimary"
+            tools:text="1 Adult, 2 children" />
+
+        <LinearLayout
+            android:id="@+id/ll_summary_breakdown_price_by_night"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/divider_empty"
+            android:orientation="vertical"
+            android:showDividers="middle"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/Header3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/generic_margin_16"
+                android:layout_marginBottom="@dimen/generic_margin_12"
+                android:text="@string/summary_breakdown_price_by_night_heading"
+                android:textColor="@color/teal" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_summary_breakdown_item_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:id="@+id/tv_summary_breakdown_item_total"
+                style="@style/Header1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/generic_margin_8"
+                android:layout_toStartOf="@+id/iv_summary_breakdown_item_total"
+                android:gravity="end"
+                tools:text="£1020.00" />
+
+            <ImageView
+                android:id="@id/iv_summary_breakdown_item_total"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:src="@drawable/ic_chevron_down"
+                android:tint="?attr/colorPrimary" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

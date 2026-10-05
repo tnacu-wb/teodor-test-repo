@@ -1,0 +1,48 @@
+{{- if .Values.networkPolicy.enabled }}
+# NOTE: There is no in-cluster database NetworkPolicy anymore. The datastore is
+# external Serverless Aurora, so there is no PostgreSQL pod in this namespace to
+# restrict. Aurora reachability is handled by security-group/routing config plus
+# Istio egress (the namespace has no default-deny egress).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-frontend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: frontend
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow gRPC from any pod in the cluster (workers connect here)
+    - ports:
+        - protocol: TCP
+          port: 7233
+    # Allow internal Temporal inter-service communication
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-web
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: web
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow HTTP on port 8080 from any source (Istio gateway routes here)
+    - ports:
+        - protocol: TCP
+          port: 8080
+{{- end }}

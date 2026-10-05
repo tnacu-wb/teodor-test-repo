@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:elevation="@dimen/generic_elevation_1"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/hotel_location_title"
+            style="@style/Header2Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:lineSpacingExtra="0sp"
+            android:text="@string/hotel_details_activity_location"
+            android:textColor="@color/grey_dark"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/open_in_map_button"
+            style="@style/Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:layout_marginBottom="@dimen/generic_margin_8"
+            android:background="?selectableItemBackground"
+            android:lineSpacingExtra="0sp"
+            android:text="@string/hotel_details_activity_open_in_map"
+            android:textColor="@color/premier_inn_purple"
+            map:layout_constraintBottom_toTopOf="@+id/hotel_address"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/hotel_address"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            android:lineSpacingExtra="@dimen/h1_line_spacing_extra"
+            android:textColor="@color/grey_dark"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toBottomOf="@+id/hotel_location_title"
+            tools:text="Red Lion Street, Holborn, London, WC1R" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/map_view_height">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/hotel_details_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            map:liteMode="true"
+            map:mapType="none" />
+
+        <View
+            android:id="@+id/mapViewClick"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/view_triangle_base_down" />
+    </FrameLayout>
+</LinearLayout>

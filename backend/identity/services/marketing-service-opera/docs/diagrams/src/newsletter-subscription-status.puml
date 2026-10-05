@@ -1,0 +1,12 @@
+@startuml
+actor Client
+box "Subscription status"
+    boundary "Newsletter Status" as S
+end box
+entity BART
+
+Client -> S: FE sends customer email (customerId)
+S -> BART: Sends email to ws.ElectronicMagazine.ElectronicMagazineService2015.cls
+BART -> S: Returns true or false for newsletter subscription
+Client <- S: Returns true or false for newsletter subscription
+@enduml

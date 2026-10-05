@@ -1,0 +1,97 @@
+schema {
+  mutation: Mutation
+  query: Query
+}
+scalar Date
+scalar DateTime
+scalar Void
+
+type Mutation {
+  createPromoBatch(createPromoBatchInput: CreatePromoBatchInput!): PromoBatch!
+}
+
+type Query {
+  getBatchById(batchId: ID!): PromoBatch!
+  getBatchSummary(page: Int!, size: Int!, sort: String): PromoBatchPage
+  markPromoBatchAsDownloaded(batchId: String!): Boolean
+  promoKind(promoCode: String!
+    country: String
+    channel: String
+    subChannel: String): PromoKindResponse
+}
+
+type PromoKindResponse {
+  promoKind: String,
+  operaPromoCode: String,
+  uniquePromoCodeStatus: String
+}
+
+input CreatePromoBatchInput {
+  operaPromoCode: String
+  batchCount: Int!
+  codeLength: Int!
+  expiryDate: Date
+  notes: String
+  prefix: String
+  hotelId: String!
+  requestedBy: String
+  campaignName: String
+  batchEligibilities: [BatchEligibilityInput!]
+  isMultiple: Boolean
+  maxRedemptionLimit: Int
+}
+
+type PromoBatch {
+  batchId: ID!
+  operaPromoCode: String
+  prefix: String
+  batchCount: Int
+  codeLength: Int
+  status: BatchStatus!
+  s3Key: String
+  notes: String
+  downloaded: Boolean
+  password: String
+  requestedBy: String
+  createdAt: DateTime!
+  expiryDate: Date
+  updatedAt: DateTime
+  completedAt: DateTime
+  campaignName: String
+  batchEligibilities: [BatchEligibility]
+  isMultiple: Boolean
+  maxRedemptionLimit: Int
+}
+
+enum BatchStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+  EXPIRED
+}
+
+type PromoBatchPage {
+  items: [PromoBatch!]!
+  page: Int!
+  size: Int!
+  totalElements: Int!
+  totalPages: Int!
+  hasNext: Boolean!
+  startIndex: Int!
+  endIndex: Int!
+}
+
+input BatchEligibilityInput {
+  region: String!
+  channel: String!
+  platforms: [String!]!
+}
+
+type BatchEligibility {
+  region: String!
+  channel: String!
+  platforms: [String!]!
+}
+ 

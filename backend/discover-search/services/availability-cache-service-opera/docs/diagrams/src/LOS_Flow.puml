@@ -1,0 +1,38 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor Customer
+box "Infrastructure Services" #LightGrey
+entity HotelAvailabilitiesController
+end box
+box "Domain Logic Services" #LightBlue
+entity HotelAvailabilitiesService
+end box
+box "Infrastructure Services" #LightGrey
+entity HotelAvailabilitiesPersistenceAdapter
+entity HotelJpaRepository
+end box
+box "External Services" #LightGreen
+database AuroraPostgres
+end box
+box "Infrastructure Services" #LightGrey
+entity HotelAvailabilitiesPostProcessorService
+entity LOSRestrictionRulesEvaluator
+end box
+Customer -> HotelAvailabilitiesController : Http Get  /availabilities \n Inputs :: SearchCriteria
+HotelAvailabilitiesController -> HotelAvailabilitiesService : Method : getHotelAvailabilities \n Inputs : SearchCriteria
+HotelAvailabilitiesService -> HotelAvailabilitiesPersistenceAdapter : Method : getHotelsByCodeAndAvailDateBetween \n Inputs : SearchCriteria
+HotelAvailabilitiesPersistenceAdapter -> HotelJpaRepository : Method : findByHotelCodesAndMultiRoomType \n Inputs : List<String> hotelCodes, \n LocalDate arrivalDate, LocalDate departureDate,\n long daysBetween,Set<String> roomTypeList);
+HotelJpaRepository -> AuroraPostgres : Exec sql req \n against DB
+AuroraPostgres -> HotelJpaRepository : Hotel Availabilities \n from DB
+HotelJpaRepository -> HotelAvailabilitiesPersistenceAdapter : Return List<HotelAvailabilitiesResultSet>
+HotelAvailabilitiesPersistenceAdapter -> HotelAvailabilitiesPostProcessorService : Method : processHotelResultSetToHotel \n Inputs: SearchCriteria , List<HotelAvailabilitiesResultSet>
+HotelAvailabilitiesPostProcessorService -> HotelAvailabilitiesPostProcessorService : Method : applyLOSRestrictions \n Inputs : SearchCriteria, List<Hotel> \n List<HotelAvailabilitiesResultSet>
+HotelAvailabilitiesPostProcessorService -> LOSRestrictionRulesEvaluator : Method : evaluateRestrictionRules \n Inputs : HotelAvailabilitiesResultSet
+LOSRestrictionRulesEvaluator -> HotelAvailabilitiesPostProcessorService : Return : LOSRestriction \n Outputs Fields : LOSRestrictionRule \n \t \t \t int minNights \n \t \t \t int maxNights \n \t \t \t int[] noNightsAllowed
+HotelAvailabilitiesPostProcessorService -> HotelAvailabilitiesPersistenceAdapter : Return : List<Hotel> availableHotels
+HotelAvailabilitiesPersistenceAdapter -> HotelAvailabilitiesService : Return : List<Hotel> availableHotels
+HotelAvailabilitiesService -> HotelAvailabilitiesController : Return : List<Hotel> availableHotels
+HotelAvailabilitiesController -> Customer : Return : List<Hotel> availableHotels
+@enduml

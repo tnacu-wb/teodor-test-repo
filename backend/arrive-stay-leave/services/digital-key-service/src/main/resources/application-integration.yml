@@ -1,0 +1,23 @@
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: dummy
+      namespace: dummy
+      issuer: https://dummy/.well-known/
+      jwkUri: https://dummy/.well-known/jwks.json
+
+config:
+  service:
+    axp:
+      host: http://localhost:9300
+      apiKey: dummy
+      brandId: dummy
+    kiosk:
+      host: http://localhost:9200
+
+management:
+  endpoints:
+    web:
+      base-path: /v1/digital-key/actuator
+      exposure:
+        include: health, info, prometheus

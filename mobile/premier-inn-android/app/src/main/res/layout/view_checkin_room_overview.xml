@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+    <TextView
+        android:id="@+id/checkin_overview_roomid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Header2"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        app:layout_constraintEnd_toStartOf="@+id/checkin_overview_change"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Room 1: lead guest" />
+
+    <TextView
+        android:id="@+id/checkin_overview_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Body"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        android:gravity="center_vertical"
+        android:text="@string/change"
+        android:textColor="@color/premier_inn_purple_light"
+        app:layout_constraintBaseline_toBaselineOf="@+id/checkin_overview_roomid"
+        app:layout_constraintBottom_toBottomOf="@+id/checkin_overview_roomid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/checkin_overview_roomid" />
+
+    <TextView
+        android:id="@+id/checkin_overview_guest_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        style="@style/Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkin_overview_roomid"
+        tools:text="Mr Frodo Baggins" />
+
+    <TextView
+        android:id="@+id/checkin_overview_guest_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        style="@style/Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkin_overview_guest_name"
+        tools:text="frodo@theshire.com" />
+
+    <TextView
+        android:id="@+id/checkin_overview_nationality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:ellipsize="end"
+        android:maxLines="1"
+        style="@style/Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkin_overview_phonenumber"
+        tools:text="Nationality: United Kingdom" />
+
+    <TextView
+        android:id="@+id/checkin_overview_passportnum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        style="@style/Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkin_overview_address"
+        tools:text="Passport no: 3854734432" />
+
+    <TextView
+        android:id="@+id/checkin_overview_nextdestination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:ellipsize="end"
+        android:maxLines="1"
+        style="@style/Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkin_overview_passportnum"
+        tools:text="Next destination: United States" />
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/checkin_overview_add_details_button"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        style="@style/Button1"
+        android:layout_marginStart="@dimen/generic_margin_20"
+        android:layout_marginTop="@dimen/generic_margin_25"
+        android:layout_marginEnd="@dimen/generic_margin_20"
+        android:text="@string/checkin_overview_adddetails"
+        app:cab_is_secondary="true"
+        app:cab_text_color="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkin_overview_adult2" />
+
+    <TextView
+        android:id="@+id/checkin_overview_phonenumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:ellipsize="end"
+        android:lines="1"
+        style="@style/Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkin_overview_guest_email"
+        tools:text="0782939444" />
+
+    <TextView
+        android:id="@+id/checkin_overview_carreg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        style="@style/Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkin_overview_nextdestination"
+        tools:text="Car reg: MK56 3UG" />
+
+    <TextView
+        android:id="@+id/checkin_overview_adult2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        style="@style/Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkin_overview_carreg"
+        tools:text="Adult 2: Mrs Frankie Baggins" />
+
+    <TextView
+        android:id="@+id/checkin_overview_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:ellipsize="end"
+        android:maxLines="1"
+        style="@style/Body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkin_overview_nationality"
+        tools:text="Address: 127 Pinewood Place, London, EC1N 2TD" />
+
+</merge>

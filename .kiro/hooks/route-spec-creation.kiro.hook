@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Route Spec Creation to Agent",
+  "description": "When a user submits a prompt that asks to create, generate, or write a spec, automatically delegate the work to the spec-generator agent so they don't need to invoke it explicitly.",
+  "version": "1",
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check if the user's message is asking to create, generate, or write a spec (requirements, design, or tasks). Look for keywords like \"create spec\", \"generate spec\", \"write spec\", \"new spec\", \"spec for\", \"requirements for\", \"design doc for\", \"tasks for\", or mentions of writing to .kiro/specs/. If the message IS a spec-creation request, delegate it to the spec-generator agent by invoking it with the user's full message as the prompt. If the message is NOT about creating a spec, ignore this hook and proceed normally."
+  }
+}

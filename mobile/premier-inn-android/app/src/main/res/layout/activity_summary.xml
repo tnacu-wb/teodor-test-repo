@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:paddingBottom="@dimen/generic_padding_90">
+
+                <RelativeLayout
+                    android:id="@+id/v_summary_banner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground">
+
+                    <com.whitbread.premierinn.common.view.NetworkImageView
+                        android:id="@+id/iv_summary_banner_image"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:padding="@dimen/generic_padding_16"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/tv_summary_banner_hotel_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/generic_margin_16"
+                        android:layout_marginBottom="@dimen/generic_margin_4"
+                        android:layout_toEndOf="@id/iv_summary_banner_image"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        style="@style/Header3"
+                        tools:text="Hotel Title" />
+
+                    <LinearLayout
+                        android:id="@+id/tv_summary_banner_date_guest_wrapper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_summary_banner_hotel_title"
+                        android:layout_marginBottom="@dimen/generic_margin_4"
+                        android:layout_toEndOf="@id/iv_summary_banner_image"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_summary_banner_date_and_night"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/generic_margin_8"
+                            style="@style/Body"
+                            tools:text="date and nights" />
+
+                        <TextView
+                            android:id="@+id/tv_summary_banner_guest_and_room"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Body"
+                            tools:text="guest and room" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/v_summary_divider_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/v_summary_banner"
+                    android:background="@color/light_grey" />
+
+                <TextView
+                    android:id="@+id/tv_approved_meals"
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/v_summary_divider_line"
+                    android:layout_marginStart="@dimen/generic_padding_16"
+                    android:layout_marginTop="@dimen/generic_padding_12"
+                    android:layout_marginBottom="@dimen/generic_margin_16"
+                    tools:text="Meals below have been approved for your stay by your travel manager."
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <com.whitbread.premierinn.common.view.gallery.infinite.implementations.SimpleInfiniteGallery
+                    android:id="@+id/ivp_summary_restaurant_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/tv_approved_meals"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    app:ivp_pageMarginInDp="10"
+                    tools:visibility="visible" />
+
+                <RelativeLayout
+                    android:id="@+id/rl_summary_breakfast"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:layout_below="@id/ivp_summary_restaurant_images"
+                    android:visibility="visible"
+                    android:orientation="vertical"
+                    tools:visibility="visible">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_summary_rooms_meals"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="1"
+                        android:elevation="1dp"
+                        tools:listitem="@layout/view_summary_room_meals_item" />
+
+                    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                        android:id="@+id/restaurant_unavailable_infoBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/generic_margin_16"
+                        android:layout_marginTop="@dimen/generic_margin_30"
+                        android:layout_marginEnd="@dimen/generic_margin_16"
+                        android:layout_marginBottom="@dimen/generic_margin_10"
+                        android:animateLayoutChanges="true"
+                        android:background="@drawable/information_notification_background"
+                        android:elevation="1dp"
+                        android:padding="@dimen/generic_padding_16"
+                        android:src="@drawable/ic_info"
+                        android:visibility="gone"
+                        app:iconTintColor="@color/information_blue"
+                        tools:itemCount="1"
+                        tools:text="We're sorry, the restaurant at this hotel is closed on your selected dates."
+                        tools:visibility="visible" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_menu_allergy_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rl_summary_breakfast"
+                    android:orientation="horizontal"
+                    android:background="@color/white">
+
+                        <TextView
+                            android:id="@+id/tv_view_menus"
+                            style="@style/Body"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/generic_margin_8"
+                            android:layout_marginBottom="@dimen/generic_margin_10"
+                            android:text="@string/summary_view_menus"
+                            android:textColor="?attr/colorPrimary" />
+
+                        <View
+                            android:id="@+id/view_vertical_divider"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/generic_margin_10"
+                            android:layout_marginBottom="@dimen/generic_margin_10"
+                            android:background="@color/light_grey" />
+
+                        <TextView
+                            android:id="@+id/tv_allergy_info"
+                            style="@style/Body"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/generic_margin_8"
+                            android:layout_marginBottom="@dimen/generic_margin_10"
+                            android:text="@string/summary_allergy_info"
+                            android:textColor="?attr/colorPrimary" />
+                    </LinearLayout>
+
+
+
+                <RelativeLayout
+                    android:id="@+id/rl_summary_extras"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:layout_below="@id/ll_menu_allergy_info"
+                    android:visibility="visible"
+                    android:orientation="vertical"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tv_summary_select_extras_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/generic_padding_16"
+                        android:layout_marginBottom="@dimen/generic_margin_16"
+                        android:layout_marginTop="@dimen/generic_margin_30"
+                        android:text="@string/summary_select_extras_title"
+                        android:background="@null"
+                        style="@style/Header1" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_summary_rooms_extras"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_summary_select_extras_title"
+                        tools:itemCount="1"
+                        android:elevation="1dp"
+                        tools:listitem="@layout/view_summary_room_extras_item" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <include
+            android:id="@+id/continue_layout"
+            layout="@layout/view_summary_continue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            tools:visibility="visible"/>
+
+        <FrameLayout
+            android:id="@+id/summaries_progress_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:clickable="true"
+            android:focusable="true"
+            android:elevation="10dp">
+
+            <ProgressBar
+                android:id="@+id/loadingIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+    </FrameLayout>
+</LinearLayout>

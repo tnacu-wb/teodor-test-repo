@@ -1,0 +1,18 @@
+description: Should fail with an exception indicating the key ID was not provided
+request:
+  method: GET
+  url: /customers/hotels/customer@test.com?business=false
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer dummy_missing_value
+response:
+  status: 401
+  headers:
+    Content-Type: application/json
+  body:
+    {
+      "code": "035",
+      "details": [
+          "Provided token was invalid or expired"
+        ]
+    }

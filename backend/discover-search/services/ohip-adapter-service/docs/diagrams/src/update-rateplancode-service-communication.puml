@@ -1,0 +1,35 @@
+@startuml
+!pragma teoz true
+
+
+entity "AppSync" as A
+entity "Reservation Entity Service" as R
+entity "BASKET" as BSK
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OAD
+entity "OPERA" as OPERA
+
+
+
+A -> R: graphql save reservations
+
+
+R -> BSK: GET /bsk/v1/baskets/{basketReference}
+R <- BSK: DTO with reservationIds, hotelId
+R -> PMS: PUT /v1/reservation/rate-code
+PMS -> OAD: PUT /v1/reservation/rate-code
+
+loop for each reservationId
+    OAD -> OPERA: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/\n?fetchInstructions=Reservation&fetchInstructions=InventoryItems\n&fetchInstructions=ReservationPolicies&fetchInstructions=Packages
+    OAD <- OPERA: Reservation
+end
+OAD -> OPERA: GET /rsv/v1/hotels/{{HotelId}}/reservations/rateInfo
+OPERA -> OAD: RateCodePricingRsDto
+OAD -> OPERA: PUT /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}
+OPERA -> OAD: OK 200
+OAD -> PMS:  OK 200
+PMS -> R: OK 200
+
+R -> A: basketReference
+
+@enduml

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/searchCountryEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_padding_16"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@id/cancelSearchButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/cancelSearchButton"
+        style="@style/TransparentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel_dialog"
+        app:layout_constraintBottom_toBottomOf="@id/searchCountryEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/searchCountryEditText" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/grey_88_transparency"
+        app:layout_constraintStart_toStartOf="@id/searchCountryEditText"
+        app:layout_constraintTop_toBottomOf="@id/searchCountryEditText">
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/selectNationalityProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/generic_margin_8" />
+
+        <TextView
+            android:id="@+id/selectNationalityDescriptionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:layout_marginStart="@dimen/generic_margin_16" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/selectNationalityRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/generic_padding_16"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

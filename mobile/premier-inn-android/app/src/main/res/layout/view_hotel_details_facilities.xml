@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/about_hotel_title"
+        style="@style/Header2Bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_32"
+        android:lineSpacingExtra="0sp"
+        android:text="@string/hotel_details_activity_about_this_hotel_title"
+        android:textColor="@color/grey_dark"
+        tools:text="@string/hotel_details_activity_about_this_hotel_title" />
+
+    <TextView
+        android:id="@+id/hotel_details"
+        style="@style/Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:lineSpacingExtra="@dimen/h1_line_spacing_extra"
+        android:textColor="@color/grey_dark" />
+
+    <TextView
+        android:id="@+id/read_more_button"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_4"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:lineSpacingExtra="0sp"
+        android:background="?selectableItemBackground"
+        android:text="@string/hotel_details_activity_read_more_button"
+        android:textColor="@color/premier_inn_purple"
+        tools:text="@string/hotel_details_activity_read_more_button" />
+
+
+    <com.whitbread.premierinn.common.view.FacilitiesGridView
+        android:id="@+id/hotel_details_facilities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        app:fgv_bottomMargin="@dimen/generic_margin_4"
+        />
+</LinearLayout>

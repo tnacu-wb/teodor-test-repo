@@ -1,0 +1,14 @@
+@startuml
+title Retrieve hotel payment details from AEM
+
+entity "Experience Layer GraphQL API" as EXP
+entity "payment-methods-entity-service" as OHIP
+entity "content-entity-service" as CES
+entity AEM
+
+EXP -> OHIP: GET /payment-methods
+OHIP -> CES++: GET /hotels/{hotel-id}/payment-information?language=en&country=gb
+CES -> AEM: GET /{country}/{language}/hoteldirectory/{hotelDirectory}/{hotelId}.complete.data
+OHIP <- CES--: return payment information
+OHIP -> EXP: return hotel payment methods
+@enduml

@@ -1,0 +1,42 @@
+{
+  "id" : "38d44eac-a919-4525-a301-6330c6b06051",
+  "request" : {
+    "url" : "/piba/account/transactions",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "session-id" : {
+        "equalTo" : "13245312321345"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value10"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['schemeCustomerId'] == '782215')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['tetheredUserGuid'] == 'f6e317cf-bcf3-4859-9f7f-84068f15571b')]"
+    }, {
+      "matchesJsonPath" : "$.['searchCriteria'].['dateSearch'][?(@.['dateFrom'] == '2020-01-01')]"
+    }, {
+      "matchesJsonPath" : "$.['searchCriteria'].['dateSearch'][?(@.['dateTo'] == '2021-03-15')]"
+    }, {
+      "matchesJsonPath" : "$.['searchCriteria'].['dateSearch'][?(@.['transactionTypes'] == 'Both')]"
+    }, {
+      "matchesJsonPath" : "$.['pagingRequest'][?(@.['page'] == 5)]"
+    }, {
+      "matchesJsonPath" : "$.['pagingRequest'][?(@.['maximumDisplayRows'] == 10)]"
+    } ]
+  },
+  "response" : {
+    "status" : 500,
+    "body" : "{\"code\":\"ValidationError\",\"details\":[\"UserNotFoundForSystem\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "38d44eac-a919-4525-a301-6330c6b06051"
+}

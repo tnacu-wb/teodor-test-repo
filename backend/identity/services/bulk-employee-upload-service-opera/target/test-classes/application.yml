@@ -1,0 +1,61 @@
+server:
+  port: 9048
+
+swagger:
+  api:
+    version: 1.3
+    path: https://api.swaggerhub.com/apis/whitbread/Bulk-Employee-Upload-API/${swagger.api.version}/swagger.yaml
+    token: eaaab7b2-ab2e-4471-b01f-ed3d901c144f
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: http://localhost/api/v2/
+      namespace: http://localhost
+      issuer: http://localhost/
+      jwkUri: http://localhost/.well-known/jwks.json
+  management:
+    domain: http://localhost:${wiremock.server.port:1}
+    clientId: clientId_test
+    clientSecret: clientSecret_test
+    audience: http://mock-audience/api/v2/
+    connection: Connection-Test
+    lazyMigrationEnabled: true
+  encryption:
+    key: test
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: http://localhost/oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: https://localhost/AccountServices/V1
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: dummy
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing: trace
+    uk.co.whitbread: debug
+
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    api-url: 'http://localhost:4242/api'
+    api-token: 'dummy-value'
+    environment: unit-test
+
+---
+spring:
+  config:
+    activate:
+      on-profile: testCdh

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AdultsSelectorCell" rowHeight="68" id="yZD-Kt-aJS" customClass="AdultsSelectorCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="68"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yZD-Kt-aJS" id="wDo-SB-O4f">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="67.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 adult" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ga9-Ss-UvL">
+                        <rect key="frame" x="20" y="22" width="63.5" height="24"/>
+                        <accessibility key="accessibilityConfiguration" identifier="totalAdultsAcc"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="20"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HZ7-2e-Phe" customClass="SeparatedStepperButton" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="200" y="14" width="40" height="40"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <accessibility key="accessibilityConfiguration" label="Remove an adult button"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <inset key="titleEdgeInsets" minX="0.0" minY="-3" maxX="0.0" maxY="0.0"/>
+                        <state key="normal" image="minus">
+                            <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <state key="disabled">
+                            <color key="titleColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="minusButtonDidTap:" destination="yZD-Kt-aJS" eventType="touchUpInside" id="oPk-f8-zoR"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OMe-VI-M7K" customClass="SeparatedStepperButton" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="260" y="14" width="40" height="40"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <accessibility key="accessibilityConfiguration" label="Add an adult button"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="R2O-kh-2nU"/>
+                            <constraint firstAttribute="width" secondItem="OMe-VI-M7K" secondAttribute="height" multiplier="1:1" id="Yuf-5v-Tuc"/>
+                        </constraints>
+                        <color key="tintColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <inset key="titleEdgeInsets" minX="0.0" minY="-3" maxX="0.0" maxY="0.0"/>
+                        <state key="normal" image="plus">
+                            <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <state key="disabled">
+                            <color key="titleColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="plusButtonDidTap:" destination="yZD-Kt-aJS" eventType="touchUpInside" id="Cyd-iC-Ilh"/>
+                        </connections>
+                    </button>
+                    <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="AEl-WO-fMZ" userLabel="Error View" customClass="ErrorViewInCell" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="54" width="320" height="0.0"/>
+                        <accessibility key="accessibilityConfiguration" identifier="totalAdultsErrorAcc"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="998" id="WC7-Ek-NGo"/>
+                        </constraints>
+                    </view>
+                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FMT-If-Avt" userLabel="Separator Line">
+                        <rect key="frame" x="20" y="66.5" width="280" height="1"/>
+                        <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="6AK-2U-XpK"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Ga9-Ss-UvL" firstAttribute="centerY" secondItem="HZ7-2e-Phe" secondAttribute="centerY" id="11U-Zr-7Lq"/>
+                    <constraint firstItem="HZ7-2e-Phe" firstAttribute="height" secondItem="OMe-VI-M7K" secondAttribute="height" id="1Nz-26-yfe"/>
+                    <constraint firstItem="AEl-WO-fMZ" firstAttribute="leading" secondItem="wDo-SB-O4f" secondAttribute="leading" id="1Zu-5o-2vU"/>
+                    <constraint firstItem="Ga9-Ss-UvL" firstAttribute="leading" secondItem="wDo-SB-O4f" secondAttribute="leading" constant="20" id="1df-XL-s6D"/>
+                    <constraint firstItem="OMe-VI-M7K" firstAttribute="top" secondItem="wDo-SB-O4f" secondAttribute="top" constant="14" id="9Dl-2t-4s8"/>
+                    <constraint firstAttribute="trailing" secondItem="OMe-VI-M7K" secondAttribute="trailing" constant="20" id="9F3-f0-e5A"/>
+                    <constraint firstItem="HZ7-2e-Phe" firstAttribute="width" secondItem="OMe-VI-M7K" secondAttribute="width" id="D0W-E6-gva"/>
+                    <constraint firstItem="OMe-VI-M7K" firstAttribute="leading" secondItem="HZ7-2e-Phe" secondAttribute="trailing" constant="20" id="FxB-cT-z7g"/>
+                    <constraint firstItem="AEl-WO-fMZ" firstAttribute="top" secondItem="OMe-VI-M7K" secondAttribute="bottom" id="Hu8-wW-UoU"/>
+                    <constraint firstItem="FMT-If-Avt" firstAttribute="leading" secondItem="Ga9-Ss-UvL" secondAttribute="leading" id="Oak-03-bfN"/>
+                    <constraint firstItem="FMT-If-Avt" firstAttribute="trailing" secondItem="OMe-VI-M7K" secondAttribute="trailing" id="Qm1-kl-LlS"/>
+                    <constraint firstItem="HZ7-2e-Phe" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ga9-Ss-UvL" secondAttribute="trailing" priority="999" constant="20" id="ga8-V3-StF"/>
+                    <constraint firstAttribute="bottom" secondItem="FMT-If-Avt" secondAttribute="bottom" id="iLV-y1-Iyk"/>
+                    <constraint firstItem="HZ7-2e-Phe" firstAttribute="centerY" secondItem="OMe-VI-M7K" secondAttribute="centerY" id="nnF-8d-9NP"/>
+                    <constraint firstAttribute="bottom" secondItem="AEl-WO-fMZ" secondAttribute="bottom" priority="999" constant="14" id="vlP-b4-4nW"/>
+                    <constraint firstAttribute="trailing" secondItem="AEl-WO-fMZ" secondAttribute="trailing" id="xu2-9n-vFx"/>
+                </constraints>
+            </tableViewCellContentView>
+            <accessibility key="accessibilityConfiguration" identifier="adultSelectorCellAcc">
+                <bool key="isElement" value="NO"/>
+            </accessibility>
+            <connections>
+                <outlet property="errorView" destination="AEl-WO-fMZ" id="bO0-Nv-2Ud"/>
+                <outlet property="errorViewHeightConstraint" destination="WC7-Ek-NGo" id="vN6-c1-AfB"/>
+                <outlet property="label" destination="Ga9-Ss-UvL" id="Iog-hM-Lbc"/>
+                <outlet property="minusButton" destination="HZ7-2e-Phe" id="dLc-wi-VMq"/>
+                <outlet property="plusButton" destination="OMe-VI-M7K" id="hG9-ch-kZh"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="minus" width="44" height="44"/>
+        <image name="plus" width="44" height="44"/>
+    </resources>
+</document>

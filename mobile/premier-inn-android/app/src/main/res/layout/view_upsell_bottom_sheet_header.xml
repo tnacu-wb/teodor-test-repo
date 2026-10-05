@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.whitbread.premierinn.common.view.ShapeableNetworkImageView
+        android:id="@+id/upsellImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_map_hotel_head" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/upsellImageView"
+        app:layout_constraintEnd_toStartOf="@id/upsellCloseImageView"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/upsellImageView"
+        app:layout_constraintTop_toTopOf="@id/upsellImageView">
+
+        <TextView
+            android:id="@+id/upsellTitleTextView"
+            style="@style/Header4SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_8"
+            android:ellipsize="end"
+            android:lines="1"
+            app:layout_constraintBottom_toBottomOf="@id/upsellImageView"
+            app:layout_constraintStart_toEndOf="@id/upsellImageView"
+            app:layout_constraintTop_toTopOf="@id/upsellImageView"
+            tools:text="Meal Deal" />
+
+        <TextView
+            android:id="@+id/upsellPriceInfoTextView"
+            style="@style/BodySmallRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_8"
+            android:ellipsize="end"
+            android:lines="1"
+            app:layout_constraintBottom_toBottomOf="@id/upsellImageView"
+            app:layout_constraintStart_toEndOf="@id/upsellImageView"
+            app:layout_constraintTop_toTopOf="@id/upsellImageView"
+            tools:text="£24.99 per adult/day" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/upsellCloseImageView"
+        android:layout_width="@dimen/parking_details_close_image_view_size"
+        android:layout_height="@dimen/parking_details_close_image_view_size"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:background="@drawable/roundel_base"
+        android:backgroundTint="@color/grey_88_transparency"
+        android:src="@drawable/ic_cross"
+        app:layout_constraintBottom_toBottomOf="@id/upsellImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/upsellImageView"
+        app:tint="@color/eclipse" />
+
+    <View
+        android:id="@+id/upsellDetailsSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:background="@color/grey_lavender"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/upsellImageView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,29 @@
+mutation createReservation(
+  $reservations: [RoomReservation!]!, 
+  $bookingChannel: BookingChannelCriteria!,
+  $bookingFlowId: String
+  ) 
+  {
+    createReservation(createReservationCriteria: { 
+      getReservationsByIds: true,
+      reservations: $reservations, 
+      bookingChannel: $bookingChannel,
+      bookingFlowId: $bookingFlowId
+    }) {
+    basketReference
+    reservations {
+      createDateTime
+      roomStay {
+        adultsNumber
+        childrenNumber
+        arrivalDate
+        departureDate
+        ratePlanCode
+        pmsRoomType
+      }
+    }
+    hotelId
+    totalCost
+    currencyCode
+  }
+}

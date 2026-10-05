@@ -1,0 +1,973 @@
+openapi: 3.1.0
+info:
+  description: <p>TBU</p>
+  title: Sample API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9121
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /event/v1/book-page:
+    get:
+      operationId: getBookPageContent
+      parameters:
+      - in: query
+        name: restaurant
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: location
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: subLocation
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BookPageDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - aem-controller
+  /event/v1/cookie-consent:
+    get:
+      operationId: getCookieContentResponseDto
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AemCookieContentResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - aem-controller
+  /event/v1/enquiry:
+    post:
+      operationId: enquiry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventOrEquiryRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: enquiries
+      tags:
+      - table-reservation-controller
+  /event/v1/enquiry/{enquiryId}:
+    get:
+      operationId: getEnquiry
+      parameters:
+      - in: path
+        name: enquiryId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: enquiryById
+      tags:
+      - table-reservation-controller
+  /event/v1/events:
+    post:
+      operationId: events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventOrEquiryRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: events
+      tags:
+      - table-reservation-controller
+  /event/v1/events/{eventId}:
+    get:
+      operationId: getEvent
+      parameters:
+      - in: path
+        name: eventId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: eventById
+      tags:
+      - table-reservation-controller
+  /event/v1/footers:
+    get:
+      operationId: getFooters
+      parameters:
+      - in: query
+        name: restaurant
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AemFooterResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - aem-controller
+  /event/v1/headers:
+    get:
+      operationId: getHeaders
+      parameters:
+      - in: query
+        name: restaurant
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AemHeaderResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - aem-controller
+  /event/v1/label-data:
+    get:
+      operationId: getLabel
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LabelDataDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - aem-controller
+  /event/v1/locations:
+    get:
+      operationId: locations
+      parameters:
+      - in: query
+        name: restaurant
+        required: true
+        schema:
+          type: string
+          pattern: "^[a-zA-Z0-9-]+$"
+      - in: query
+        name: location
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: subLocation
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ZonalUuidResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - aem-controller
+  /event/v1/menus:
+    get:
+      operationId: getMenu
+      parameters:
+      - in: query
+        name: siteId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: from
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: until
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: time
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: ocassionId
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: menu
+      tags:
+      - table-reservation-controller
+  /event/v1/occasions:
+    get:
+      operationId: occasions
+      parameters:
+      - in: query
+        name: from
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: until
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: siteId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: occasions
+      tags:
+      - table-reservation-controller
+  /event/v1/outlets:
+    get:
+      operationId: outlets
+      parameters:
+      - in: query
+        name: location
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Outlets
+      tags:
+      - table-reservation-controller
+  /event/v1/slots:
+    get:
+      operationId: slots
+      parameters:
+      - in: query
+        name: from
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: until
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: time
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: adult
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: children
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: siteId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Slots
+      tags:
+      - table-reservation-controller
+  /v1/sample/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/sample/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/sample/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+components:
+  schemas:
+    AemCookieContentResponseDto:
+      type: object
+      properties:
+        cookiePolicies:
+          $ref: "#/components/schemas/CookiePoliciesDto"
+    AemFooterResponseDto:
+      type: object
+      properties:
+        copyrightInfo:
+          type: string
+        legalCopyRightLabel:
+          type: string
+        socialMediaIcons:
+          type: array
+          items:
+            $ref: "#/components/schemas/SocialMediaIconDto"
+        tabs:
+          type: array
+          items:
+            $ref: "#/components/schemas/TabDto"
+    AemHeaderResponseDto:
+      type: object
+      properties:
+        homeAltSrc:
+          type: string
+        locationSrc:
+          type: array
+          items:
+            type: string
+        logoAlt:
+          type: string
+        logoSrc:
+          type: string
+        moreLocationName:
+          type: string
+        navbar:
+          type: array
+          items:
+            $ref: "#/components/schemas/NavbarItemDto"
+    BookPageDto:
+      type: object
+      properties:
+        heroBackgroundImageSrc:
+          type: string
+        heroImageSrc:
+          type: string
+        name:
+          type: string
+        subtitleName:
+          type: string
+    ColumnDto:
+      type: object
+      properties:
+        linkItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/LinkItemDto"
+        name:
+          type: string
+    Consent:
+      type: object
+      properties:
+        consentStatement:
+          type: boolean
+        email:
+          type: boolean
+        phone:
+          type: boolean
+        postal:
+          type: boolean
+        privacyStatement:
+          type: boolean
+        profiling:
+          type: boolean
+        pushNotification:
+          type: boolean
+        sms:
+          type: boolean
+        termsAndConditions:
+          type: boolean
+    CookieGroupDto:
+      type: object
+      properties:
+        alwaysActive:
+          type: boolean
+        cookieName:
+          type: string
+        description:
+          type: string
+        title:
+          type: string
+        toggleLabel:
+          type: string
+    CookiePoliciesDto:
+      type: object
+      properties:
+        brand:
+          type: string
+        introView:
+          $ref: "#/components/schemas/IntroViewDto"
+        manageView:
+          $ref: "#/components/schemas/ManageViewDto"
+        version:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "001"
+          minLength: 1
+        details:
+          type: array
+          example:
+          - Error message
+          items:
+            type: string
+      required:
+      - code
+      - details
+    EventOrEquiryRequest:
+      type: object
+      properties:
+        adults:
+          type: integer
+          format: int32
+        children:
+          type: integer
+          format: int32
+        consent:
+          $ref: "#/components/schemas/Consent"
+        date:
+          type: string
+        emailAddress:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        menuIds:
+          type: array
+          items:
+            type: string
+        occasionId:
+          type: string
+        siteId:
+          type: string
+        specialRequest:
+          type: string
+        telephoneNumber:
+          type: string
+        time:
+          type: string
+    IntroViewDto:
+      type: object
+      properties:
+        acceptAllButtonText:
+          type: string
+        description:
+          type: string
+        manageButtonText:
+          type: string
+        necessaryOnlyButtonText:
+          type: string
+        title:
+          type: string
+    LabelDataDto:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    LinkItemDto:
+      type: object
+      properties:
+        linkSrc:
+          type: string
+        name:
+          type: string
+        openInNewTab:
+          type: boolean
+    ManageViewDto:
+      type: object
+      properties:
+        alwaysActiveText:
+          type: string
+        cookieGroup:
+          type: array
+          items:
+            $ref: "#/components/schemas/CookieGroupDto"
+        description:
+          type: string
+        saveSettingsButtonText:
+          type: string
+        title:
+          type: string
+    NavbarItemDto:
+      type: object
+      properties:
+        linkItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/LinkItemDto"
+        name:
+          type: string
+    SocialMediaIconDto:
+      type: object
+      properties:
+        label:
+          type: string
+        linkSrc:
+          type: string
+        visible:
+          type: boolean
+    TabDto:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/ColumnDto"
+        name:
+          type: string
+    ZonalUuidResponseDto:
+      type: object
+      properties:
+        address1:
+          type: string
+        address2:
+          type: string
+        address3:
+          type: string
+        address4:
+          type: string
+        bookingHeroBackgroundImage:
+          type: string
+        bookingHeroImage:
+          type: string
+        contactInfo:
+          type: string
+        externalSourceSystem:
+          type: string
+        externalSystemIdentifier:
+          type: string
+        googleMapURL:
+          type: string
+        id:
+          type: string
+        latitude:
+          type: string
+        longitude:
+          type: string
+        path:
+          type: string
+        title:
+          type: string

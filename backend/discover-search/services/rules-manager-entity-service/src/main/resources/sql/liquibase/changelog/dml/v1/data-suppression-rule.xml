@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet author="octavian.salcianu" id="init_data_suppression_rule" runOnChange="true">
+    <preConditions onFail="MARK_RAN">
+      <and>
+        <tableExists tableName="suppression_rule"/>
+
+        <sqlCheck expectedResult="0">select count(*) from rules_engine.suppression_rule</sqlCheck>
+      </and>
+    </preConditions>
+
+    <loadData tableName="suppression_rule" file="sql/liquibase/data/suppression_rule_data.csv"/>
+  </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,1931 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- description: Generated server url
+  url: http://localhost:9030
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /companies/admin/{companyId}/cards:
+    post:
+      description: This endpoint creates a new company payment card
+      operationId: createCompanyPaymentCard
+      parameters:
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentCard"
+        required: true
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              description: Provides an identifier for the primary resource created
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Create Company Card
+      tags:
+      - Company Cards operations
+  /companies/admin/{companyId}/cards/{card-id}:
+    delete:
+      description: This endpoint deletes a company payment card
+      operationId: deleteCompanyPaymentCard
+      parameters:
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: card-id
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Delete Company Card
+      tags:
+      - Company Cards operations
+    post:
+      description: This endpoint deletes a company payment card using POST HTTP method
+        as a workaround for Appsync integration
+      operationId: removeCompanyPaymentCard
+      parameters:
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: card-id
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Delete Company Card
+      tags:
+      - Company Cards operations
+    put:
+      description: This endpoint updates a new company payment card
+      operationId: updateCompanyPaymentCard
+      parameters:
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: card-id
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentCard"
+        required: true
+      responses:
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Not Found: card not found for the given company-id and card-id"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Update Company Card
+      tags:
+      - Company Cards operations
+  /companies/{companyId}/cards:
+    get:
+      description: This endpoint provides the functionality to retrieve all payment
+        cards for an existing company
+      operationId: getCompanyPaymentCards
+      parameters:
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentCard"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentCard"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentCard"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Get all Company Payment Cards
+      tags:
+      - Company Cards operations
+  /customers/hotels/{customer-id}/cards:
+    post:
+      description: This endpoint creates a new payment card
+      operationId: createPaymentCard
+      parameters:
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentCard"
+        required: true
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              description: Provides an identifier for the primary resource created
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Create Card
+      tags:
+      - Hotel Cards operations
+  /customers/hotels/{customer-id}/cards/{card-id}:
+    delete:
+      description: This endpoint deletes an existing payment card
+      operationId: deletePaymentCard
+      parameters:
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: card-id
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+      responses:
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Delete Card
+      tags:
+      - Hotel Cards operations
+    get:
+      description: 'This endpoint retrieves an existing card. '
+      operationId: getPaymentCard
+      parameters:
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: card-id
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: unmaskCardNumber
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentCard"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Not Found: card not found for given customer-id, card-id"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Get Card
+      tags:
+      - Hotel Cards operations
+    put:
+      description: This endpoint updates an existing payment card
+      operationId: updatePaymentCard
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: card-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentCard"
+        required: true
+      responses:
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Not Found: card not found for given customer-id, card-id"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Update Card
+      tags:
+      - Hotel Cards operations
+  /hotel-card-service/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /hotel-card-service/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /hotel-card-service/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /hotel-card-service/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /hotel-card-service/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /innb/account/{tetheredUserGuid}/card/{cardId}/replace:
+    put:
+      description: This endpoint provides the functionality to replace a card for
+        the tethered user
+      operationId: replaceCard
+      parameters:
+      - in: path
+        name: tetheredUserGuid
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: cardId
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - in: query
+        name: scheme
+        required: true
+        schema:
+          type: string
+          enum:
+          - DE
+          - GB
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorldlineReplaceCardRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Replace a card for the tethered user
+      tags:
+      - InnBusiness PIBA Cards operations
+  /innb/account/{tetheredUserGuid}/cards/{cardId}/invite:
+    post:
+      description: This endpoint provides the functionality to invite someone to be
+        a registered card holder
+      operationId: inviteCardHolder
+      parameters:
+      - in: path
+        name: tetheredUserGuid
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: cardId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorldlineAccountCardInviteRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Invite someone to be a registered card holder
+      tags:
+      - InnBusiness PIBA Cards operations
+  /innb/account/{tetheredUserGuid}/costCentreDetails:
+    get:
+      description: This endpoint provides the functionality to retrieve cost centre
+        details for the tethered user
+      operationId: getCostCentreDetails
+      parameters:
+      - in: path
+        name: tetheredUserGuid
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CostCentreData"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CostCentreData"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CostCentreData"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Get cost centre details for the tethered user
+      tags:
+      - InnBusiness PIBA Cards operations
+  /innb/account/{tetheredUserId}/card:
+    post:
+      description: This endpoint provides the functionality to add a PIBA card for
+        the tethered user
+      operationId: addPIBACard
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: tetheredUserId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: countryCode
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorldlineAccountCardAddRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineCardDetails"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineCardDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineCardDetails"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Add a PIBA card for the tethered user
+      tags:
+      - InnBusiness PIBA Cards operations
+  /innb/account/{tetheredUserId}/cards:
+    post:
+      description: This endpoint provides the functionality to retrieve all PIBA cards
+        for an existing PIBA account
+      operationId: getAllPIBACards
+      parameters:
+      - in: path
+        name: tetheredUserId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: countryCode
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorldlineAccountCardRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineAccountCardsResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineAccountCardsResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineAccountCardsResponse"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Get all PIBA cards of an user for a PIBA tethered user
+      tags:
+      - InnBusiness PIBA Cards operations
+  /innb/account/{tetheredUserId}/cards/{card-id}:
+    get:
+      description: This endpoint provides the functionality to retrieve a single PIBA
+        card for the tethered user
+      operationId: getPIBACard
+      parameters:
+      - in: path
+        name: tetheredUserId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: card-id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: countryCode
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineCardDetails"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineCardDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineCardDetails"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Get a single PIBA card for the tethered user
+      tags:
+      - InnBusiness PIBA Cards operations
+    put:
+      description: This endpoint provides the functionality to update a single PIBA
+        card for the tethered user
+      operationId: updatePIBACard
+      parameters:
+      - in: path
+        name: tetheredUserId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: card-id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: countryCode
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorldlineAccountCardUpdateRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineCardDetails"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineCardDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineCardDetails"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Update a single PIBA card for the tethered user
+      tags:
+      - InnBusiness PIBA Cards operations
+  /innb/account/{tetheredUserId}/cards/{card-id}/activate:
+    post:
+      description: This endpoint provides the functionality to activate a single PIBA
+        card for the tethered user
+      operationId: activatePIBACard
+      parameters:
+      - in: path
+        name: tetheredUserId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: card-id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: countryCode
+        required: true
+        schema:
+          type: string
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Activate a single PIBA card for the tethered user
+      tags:
+      - InnBusiness PIBA Cards operations
+  /innb/account/{tetheredUserId}/cards/{card-id}/cancel-replace:
+    post:
+      description: This endpoint provides the functionality to cancel and replace
+        a single PIBA card for the tethered user
+      operationId: cancelAndReplacePIBACard
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: tetheredUserId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: card-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorldlineAccountCardCancelAndReplaceRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineAccountCardCancelAndReplaceResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineAccountCardCancelAndReplaceResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldlineAccountCardCancelAndReplaceResponse"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Cancel and replace a single PIBA card for the tethered user
+      tags:
+      - InnBusiness PIBA Cards operations
+  /innb/account/{tetheredUserId}/users:
+    get:
+      description: This endpoint provides the functionality to retrieve all payment
+        cards for an existing PIBA account
+      operationId: getPIBARegisteredUsers
+      parameters:
+      - in: path
+        name: tetheredUserId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: countryCode
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorldlineRegisteredUser"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorldlineRegisteredUser"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorldlineRegisteredUser"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Get all registered users for a PIBA tethered user
+      tags:
+      - InnBusiness PIBA Cards operations
+  /v2/customers/cards:
+    put:
+      description: This endpoint creates a new payment card or updates an existing
+        payment card
+      operationId: createOrUpdatePaymentCard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentCardDTO"
+        required: true
+      responses:
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Not Found: card not found for given customer"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Create or Update Payment Card
+      tags:
+      - Customer Cards operations
+  /v2/customers/cards/sca:
+    post:
+      description: This endpoint starts a new session with Strong Customer Authentication
+        (SCA) for card storage.
+      operationId: initiateAuthorizeScaIframeSession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorizeScaRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentRequiredDetails"
+          description: SCA Session Initiated Successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: Please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Forbidden: Access Denied"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Unrecoverable error on the server-side"
+      summary: Initiate SCA session
+      tags:
+      - Customer Cards operations
+  /v2/customers/cards/session:
+    post:
+      description: This endpoint starts a new card storage session for the customer.
+      operationId: initiateIframeSession
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveCardRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentRequiredDetails"
+          description: Initiated
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: unrecoverable error server-side"
+      summary: Initiate card storage session
+      tags:
+      - Customer Cards operations
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        companyName:
+          type: string
+          example: Whitbread
+        countryCode:
+          type: string
+          example: GB
+        line1:
+          type: string
+          example: 120 Holborn
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        line5:
+          type: string
+        postCode:
+          type: string
+          example: EC1N 2TD
+        type:
+          type: string
+          enum:
+          - "HOME, BUSINESS"
+          example: BUSINESS
+      required:
+      - companyName
+      - countryCode
+      - line1
+      - postCode
+      - type
+    AddressDTO:
+      type: object
+      properties:
+        companyName:
+          type: string
+          example: Whitbread
+        country:
+          type: string
+        countryCode:
+          type: string
+          example: GB
+        line1:
+          type: string
+          example: 120 Holborn
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        line5:
+          type: string
+        postCode:
+          type: string
+          example: EC1N 2TD
+        type:
+          type: string
+          enum:
+          - "HOME, BUSINESS"
+          example: BUSINESS
+      required:
+      - countryCode
+      - line1
+      - postCode
+    AuthorizeScaRequest:
+      type: object
+      description: The JSON payload to initiate SCA session
+      properties:
+        bookingReference:
+          type: string
+        country:
+          type: string
+        environment:
+          type: string
+          pattern: "^(https?://)([\\w.-]+)(:\\d+)?$"
+        language:
+          type: string
+          pattern: "^[a-zA-Z]{2,3}$"
+        requestId:
+          type: string
+      required:
+      - environment
+      - language
+      - requestId
+    CostCentreData:
+      type: object
+      properties:
+        accountUniqueCustomerId:
+          type: integer
+          format: int32
+        costCentreCode:
+          type: string
+        costCentreName:
+          type: string
+        costCentreUniqueCustomerId:
+          type: integer
+          format: int32
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+      required:
+      - code
+      - details
+    InnBusinessCorrespondenceAddress:
+      type: object
+      properties:
+        associateAddressWithFutureCardholder:
+          type: boolean
+        countryCodeISO:
+          type: string
+        forename:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        postCode:
+          type: string
+        surname:
+          type: string
+        title:
+          type: string
+    InnBusinessPayCard:
+      type: object
+      properties:
+        cardHolderName:
+          type: string
+        cardId:
+          type: string
+        cardNumber:
+          type: string
+        cardRegistration:
+          type: string
+        cardRegistrationCount:
+          type: integer
+          format: int32
+        cardStatus:
+          type: string
+          enum:
+          - PENDING
+          - NOT_ACTIVATED
+          - CANCELLED
+          - CURRENT
+          - HOT
+        isActivated:
+          type: boolean
+        myCard:
+          type: boolean
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    PaymentCard:
+      type: object
+      description: The PaymentCard JSON payload
+      properties:
+        billingAddress:
+          $ref: "#/components/schemas/Address"
+        cardHolderName:
+          type: string
+        cardId:
+          type: string
+        cardLabel:
+          type: string
+        cardNumber:
+          type: string
+        cardToken:
+          type: string
+        cardType:
+          type: string
+        cnpBusinessAccountPassword:
+          type: string
+        cnpBusinessAccountUsername:
+          type: string
+        cnpRequired:
+          type: boolean
+        expiryDate:
+          type: string
+        issueNumber:
+          type: string
+        startDate:
+          type: string
+    PaymentCardDTO:
+      type: object
+      description: The PaymentCard JSON payload
+      properties:
+        billingAddress:
+          $ref: "#/components/schemas/AddressDTO"
+        business:
+          type: boolean
+        cardHolderName:
+          type: string
+        cardId:
+          type: string
+        cardLabel:
+          type: string
+        cardNumberLast4Digits:
+          type: string
+        cardToken:
+          type: string
+        cardType:
+          type: string
+        cnpBusinessAccountPassword:
+          type: string
+        cnpBusinessAccountUsername:
+          type: string
+        cnpRequired:
+          type: boolean
+        companyAccountId:
+          type: string
+        customerAccountId:
+          type: string
+        employeeAccountId:
+          type: string
+        expiryDate:
+          type: string
+        personalCard:
+          type: boolean
+        userEmail:
+          type: string
+      required:
+      - business
+      - cardHolderName
+      - cardNumberLast4Digits
+      - cardToken
+      - cardType
+      - expiryDate
+      - personalCard
+      - userEmail
+    PaymentRequiredDetails:
+      type: object
+      properties:
+        paymentRedirect:
+          type: string
+        providerUrl:
+          type: string
+        sessionId:
+          type: string
+        template:
+          type: string
+    SaveCardDetails:
+      type: object
+      properties:
+        business:
+          type: boolean
+        cardId:
+          type: string
+        cardLabel:
+          type: string
+        cardType:
+          type: string
+          enum:
+          - PIBA
+          - CARD
+          - NONE
+        cnpRequired:
+          type: boolean
+        memorableWord:
+          type: string
+        personalCard:
+          type: boolean
+      required:
+      - cardType
+    SaveCardRequest:
+      type: object
+      description: The Initiate PaymentCard JSON payload
+      properties:
+        billingAddress:
+          $ref: "#/components/schemas/Address"
+        cardDetails:
+          $ref: "#/components/schemas/SaveCardDetails"
+        country:
+          type: string
+        environment:
+          type: string
+          pattern: "^(https?://)([\\w.-]+)(:\\d+)?$"
+        language:
+          type: string
+          pattern: "^[a-zA-Z]{2,3}$"
+        requestId:
+          type: string
+      required:
+      - billingAddress
+      - cardDetails
+      - environment
+      - language
+      - requestId
+    WorldlineAccountCardAddRequest:
+      type: object
+      properties:
+        apiUserGuid:
+          type: string
+        cardCorrespondenceAddress:
+          $ref: "#/components/schemas/InnBusinessCorrespondenceAddress"
+        cardDeliveryAddressType:
+          type: string
+          enum:
+          - COMPANY_REGISTERED_ADDRESS
+          - COMPANY_CORRESPONDENCE_ADDRESS
+          - CARDHOLDER_ALTERNATIVE_ADDRESS
+        cardLimit:
+          type: integer
+          format: int32
+        companyAccountId:
+          type: string
+        displayName:
+          type: string
+        employeeAccountId:
+          type: string
+        primarySchemeCustomerId:
+          type: integer
+          format: int32
+        restrictCardUsage:
+          type: boolean
+        restrictionEnd:
+          type: string
+        restrictionStart:
+          type: string
+        schemeCustomerId:
+          type: integer
+          format: int32
+    WorldlineAccountCardCancelAndReplaceRequest:
+      type: object
+      properties:
+        apiUserGuid:
+          type: string
+        cardCorrespondenceAddress:
+          $ref: "#/components/schemas/InnBusinessCorrespondenceAddress"
+        cardDeliveryAddressType:
+          type: string
+          enum:
+          - COMPANY_REGISTERED_ADDRESS
+          - COMPANY_CORRESPONDENCE_ADDRESS
+          - CARDHOLDER_ALTERNATIVE_ADDRESS
+        issueReplacement:
+          type: boolean
+        scheme:
+          type: string
+          enum:
+          - DE
+          - GB
+    WorldlineAccountCardCancelAndReplaceResponse:
+      type: object
+      properties:
+        cancelledCardDetails:
+          $ref: "#/components/schemas/WorldlineCancelAndReplaceCardDetails"
+        newCardDetails:
+          $ref: "#/components/schemas/WorldlineCancelAndReplaceCardDetails"
+    WorldlineAccountCardInviteRequest:
+      type: object
+      properties:
+        registrationInfoEmailAddress:
+          type: string
+        registrationInfoForename:
+          type: string
+        registrationInfoSurname:
+          type: string
+        registrationInfoTitle:
+          type: string
+        scheme:
+          type: string
+          enum:
+          - DE
+          - GB
+        sendMeCopyOfInvite:
+          type: boolean
+    WorldlineAccountCardRequest:
+      type: object
+      properties:
+        includeCancelledCards:
+          type: boolean
+        maxRows:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        showMyCards:
+          type: boolean
+        userId:
+          type: string
+    WorldlineAccountCardUpdateRequest:
+      type: object
+      properties:
+        apiUserGuid:
+          type: string
+        cardLimit:
+          type: integer
+          format: int32
+        displayName:
+          type: string
+        restrictCardUsage:
+          type: boolean
+        restrictionEnd:
+          type: string
+        restrictionStart:
+          type: string
+    WorldlineAccountCardsResponse:
+      type: object
+      properties:
+        from:
+          type: integer
+          format: int32
+        innBusinessPayCardList:
+          type: array
+          items:
+            $ref: "#/components/schemas/InnBusinessPayCard"
+        lastPage:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int32
+    WorldlineAddress:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        countryCode:
+          type: string
+        postcode:
+          type: string
+    WorldlineCancelAndReplaceCardDetails:
+      type: object
+      properties:
+        activated:
+          type: boolean
+        cardHolderName:
+          type: string
+        cardId:
+          type: string
+        cardRestriction:
+          $ref: "#/components/schemas/WorldlineCardRestriction"
+        email:
+          type: string
+        expiryDate:
+          type: string
+          format: date-time
+        firstName:
+          type: string
+        lastName:
+          type: string
+        myCard:
+          type: boolean
+        pan:
+          type: string
+        primarySchemeCustomerId:
+          type: string
+        registeredUsers:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorldlineRegisteredUser"
+        status:
+          type: string
+        title:
+          type: string
+    WorldlineCardAmountSpend:
+      type: object
+      properties:
+        amount:
+          type: number
+        currencyCode:
+          type: string
+    WorldlineCardDetails:
+      type: object
+      properties:
+        activated:
+          type: boolean
+        amountSpend:
+          $ref: "#/components/schemas/WorldlineCardAmountSpend"
+        cardAction:
+          type: string
+        cardHolderName:
+          type: string
+        cardId:
+          type: integer
+          format: int32
+        cardLimit:
+          type: integer
+          format: int32
+        cardNumber:
+          type: string
+        cardRestriction:
+          $ref: "#/components/schemas/WorldlineCardRestriction"
+        email:
+          type: string
+        expiryDate:
+          type: string
+          format: date-time
+        firstName:
+          type: string
+        lastName:
+          type: string
+        myCard:
+          type: boolean
+        primaryUserId:
+          type: integer
+          format: int32
+        registeredUsers:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorldlineRegisteredUser"
+        status:
+          type: string
+        title:
+          type: string
+        userId:
+          type: integer
+          format: int32
+    WorldlineCardRestriction:
+      type: object
+      properties:
+        endDate:
+          type: string
+          format: date-time
+        restrictCardUsage:
+          type: boolean
+        startDate:
+          type: string
+          format: date-time
+    WorldlineContactDetails:
+      type: object
+      properties:
+        email:
+          type: string
+        foreName:
+          type: string
+        lastName:
+          type: string
+        mobile:
+          type: string
+        position:
+          type: string
+        telephone:
+          type: string
+        title:
+          type: string
+    WorldlineRegisteredUser:
+      type: object
+      properties:
+        apiUserGuid:
+          type: string
+        displayName:
+          type: object
+        emailAddress:
+          type: string
+        hasAddress:
+          type: boolean
+    WorldlineReplaceCardRequest:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/WorldlineAddress"
+        cancelCard:
+          type: boolean
+        contactDetails:
+          $ref: "#/components/schemas/WorldlineContactDetails"
+        shouldDespatchToCardholder:
+          type: boolean
+        uniqueCustomerCardId:
+          type: integer
+          format: int32

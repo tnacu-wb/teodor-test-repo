@@ -1,0 +1,10 @@
+@startuml
+entity "Experience Service" as A
+entity "Hotel Entity Service" as AES
+entity "OHIP Adapter Service" as OHIP
+
+A -> AES: GET /hotels/{hotelId}/availabilities
+AES -> OHIP: GET /hotels/{hotelId}/availabilities
+OHIP <- AES: Hotel Room Rates
+A <- AES: Hotel Room Rates
+@enduml

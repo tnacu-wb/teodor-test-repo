@@ -1,0 +1,102 @@
+swagger:
+  api:
+    version: 2.21
+    path: https://api.swaggerhub.com/apis/whitbread/Company-API/${swagger.api.version}/swagger.yaml
+
+upsellItemsAllowances:
+  premierBreakfast: 11,15
+  continentalBreakfast: 12
+  mealDeal: 17,15
+  wiFi: 135,136,137
+  hubBreakfast: 18
+
+hotelaccount:
+  ribbon:
+    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+    listOfServers: localhost:${wiremock.server.port:0}
+
+feign:
+  client:
+    config:
+      hotelaccount:
+        connectTimeout: 5000
+        readTimeout: 5000
+  hotelaccount:
+    name: hotelaccount
+    url: http://localhost:9020
+
+cache:
+  default:
+    ttl: 0
+
+hotel:
+  company:
+    cache:
+      hotelCompany:
+        name: hotelCompany
+        ttl: 0
+
+auth:
+  management:
+    domain: http://localhost:${wiremock.server.port:1}
+    clientId: clientId_test
+    clientSecret: clientSecret_test
+    audience: http://mock-audience/api/v2/
+    connection: Connection-Test
+    lazyMigrationEnabled: true
+  tenants:
+    - name: "PI BB Tenant"
+      audience: http://localhost/api/v2/
+      namespace: http://localhost
+      issuer: http://localhost/
+      jwkUri: http://localhost/.well-known/jwks.json
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing: trace
+    uk.co.whitbread: debug
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: http://localhost/oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: https://localhost/AccountServices/V1
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: 88134dec7f304a
+
+feature-flags:
+  company-name-validation:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false
+  cdh-api-deprecation:
+    key: "release_pi_cdh_api_deprecation"
+    fallback: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'default:production.unleash-insecure-api-token'
+
+---
+spring:
+  config:
+    activate:
+      on-profile: testCdh
+  main:
+    allow-bean-definition-overriding: true

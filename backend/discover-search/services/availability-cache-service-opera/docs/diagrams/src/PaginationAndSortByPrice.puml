@@ -1,0 +1,45 @@
+@startuml
+
+package uk.co.whitbread.availabilitycacheservice.infrastructure.rest.controller{
+ class HotelAvailabilitiesController
+}
+
+package uk.co.whitbread.availabilitycacheservice.domain.logic{
+ class HotelAvailabilitiesService
+ class PaginationAndSortingByPriceService
+}
+
+package uk.co.whitbread.availabilitycacheservice.domain.ports.primary {
+ interface HotelAvailabilitiesPort
+ interface PaginationAndSortingByPricePort
+}
+
+class HotelAvailabilitiesController {
+  ResponseEntity<HotelAvailabilitiesDto> getHotelAvailabilities(SearchCriteria searchCriteria)
+}
+
+interface HotelAvailabilitiesPort {
+List<Hotel> getHotelAvailabilities(SearchCriteria searchCriteria)
+}
+
+interface PaginationAndSortingByPricePort {
+  List<Hotel> sortHotelsByPrice(List<Hotel> hotels);
+  List<Hotel> paginateHotels(SearchCriteria searchCriteria, List<Hotel> hotels);
+}
+
+class HotelAvailabilitiesService {
+ List<Hotel> getHotelAvailabilities(SearchCriteria searchCriteria)
+}
+
+class PaginationAndSortingByPriceService {
+ List<Hotel> sortHotelsByPrice(List<Hotel> hotels);
+ List<Hotel> paginateHotels(SearchCriteria searchCriteria, List<Hotel> hotels);
+
+}
+
+HotelAvailabilitiesController --> HotelAvailabilitiesPort
+HotelAvailabilitiesService <|-- HotelAvailabilitiesPort
+HotelAvailabilitiesService --> PaginationAndSortingByPricePort
+PaginationAndSortingByPricePort <|-- PaginationAndSortingByPriceService
+
+@enduml

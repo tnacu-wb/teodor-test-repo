@@ -1,0 +1,97 @@
+package uk.co.whitbread.hotel.ohip.adapter.generated.models;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.lang.Nullable;
+import uk.co.whitbread.hotel.ohip.adapter.generated.models.HotelAvailabilityResultV2Dto;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * MultiAvailabilityResponseV2Dto
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-08-27T18:50:34.031950+03:00[Europe/Bucharest]", comments = "Generator version: 7.12.0")
+public class MultiAvailabilityResponseV2Dto {
+
+  @Valid
+  private @Nullable List<@Valid HotelAvailabilityResultV2Dto> hotelAvailabilityResults;
+
+  public MultiAvailabilityResponseV2Dto hotelAvailabilityResults(List<@Valid HotelAvailabilityResultV2Dto> hotelAvailabilityResults) {
+    this.hotelAvailabilityResults = hotelAvailabilityResults;
+    return this;
+  }
+
+  public MultiAvailabilityResponseV2Dto addHotelAvailabilityResultsItem(HotelAvailabilityResultV2Dto hotelAvailabilityResultsItem) {
+    if (this.hotelAvailabilityResults == null) {
+      this.hotelAvailabilityResults = new ArrayList<>();
+    }
+    this.hotelAvailabilityResults.add(hotelAvailabilityResultsItem);
+    return this;
+  }
+
+  /**
+   * Get hotelAvailabilityResults
+   * @return hotelAvailabilityResults
+   */
+  @Valid 
+  @Schema(name = "hotelAvailabilityResults", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("hotelAvailabilityResults")
+  public List<@Valid HotelAvailabilityResultV2Dto> getHotelAvailabilityResults() {
+    return hotelAvailabilityResults;
+  }
+
+  public void setHotelAvailabilityResults(List<@Valid HotelAvailabilityResultV2Dto> hotelAvailabilityResults) {
+    this.hotelAvailabilityResults = hotelAvailabilityResults;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    MultiAvailabilityResponseV2Dto multiAvailabilityResponseV2Dto = (MultiAvailabilityResponseV2Dto) o;
+    return Objects.equals(this.hotelAvailabilityResults, multiAvailabilityResponseV2Dto.hotelAvailabilityResults);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(hotelAvailabilityResults);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class MultiAvailabilityResponseV2Dto {\n");
+    sb.append("    hotelAvailabilityResults: ").append(toIndentedString(hotelAvailabilityResults)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+

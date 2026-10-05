@@ -1,0 +1,22 @@
+@startuml
+title Unsubscribe
+
+entity ACE_Email_System
+actor Client
+actor Permission_Centre
+box "Hotel Marketing Service"
+    boundary "DELETE marketing/newsletter/channel/{contactChannelId}" as UNSUBSCRIBE
+end box
+entity Permission_Management_API
+
+
+
+ACE_Email_System -> Client: Send marketing email
+Client -> Client: Clicks on unsubscribe link
+Client -> Permission_Centre: Link opens in permissions centre
+Permission_Centre -> UNSUBSCRIBE: Send unsubscribe in request
+UNSUBSCRIBE -> Permission_Management_API: Unsubscribe
+Permission_Management_API -> UNSUBSCRIBE: 202 accepted
+UNSUBSCRIBE -> Permission_Centre: 204 no content
+Permission_Centre -> Client: Confirmation of unsubscribe
+@enduml

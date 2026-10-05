@@ -1,0 +1,31 @@
+{
+  "id" : "1194b7de-8d86-41b0-b379-c697c32bad29",
+  "request" : {
+    "urlPath" : "/v1/rules/room-substitutions",
+    "method" : "GET",
+    "queryParameters" : {
+      "adults" : {
+        "equalTo" : "2"
+      },
+      "children" : {
+        "equalTo" : "0"
+      },
+      "pms" : {
+        "equalTo" : "OP"
+      },
+      "roomType" : {
+        "equalTo" : ""
+      }
+    }
+  },
+  "response" : {
+    "status" : 422,
+    "body" : "{\"errCode\":401,\"globalErrTextTemplate\":\"validation.error.form\",\"details\":[{\"elementId\":\"roomType\",\"errTextTemplate\":\"must not be empty\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "1194b7de-8d86-41b0-b379-c697c32bad29",
+  "priority" : 1
+}

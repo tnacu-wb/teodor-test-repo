@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/account_titles_spinner"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/account_first_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:autofillHints="personGivenName"
+        android:hint="@string/guest_details_form_first_name"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords|textNoSuggestions"
+        app:editTextId="@+id/create_account_first_name_edit_text"
+        app:required="true" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/account_last_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:autofillHints="personFamilyName"
+        android:hint="@string/guest_details_form_last_name"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords|textNoSuggestions"
+        app:editTextId="@+id/create_account_last_name_edit_text"
+        app:required="true" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/account_contact_number_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:autofillHints="phoneNumberDevice|phoneNumber|phoneNational"
+        android:hint="@string/guest_details_form_contact_number"
+        android:imeOptions="actionNext"
+        android:inputType="number|text"
+        app:editTextId="@+id/create_account_contact_number_edit_text"
+        app:required="true" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/account_email_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:autofillHints="emailAddress"
+        android:hint="@string/email_address"
+        android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
+        app:editTextId="@+id/create_account_email_edit_text"
+        app:required="true" />
+
+</merge>

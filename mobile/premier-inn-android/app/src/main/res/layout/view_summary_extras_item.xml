@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_extra_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_extras_legend"
+        style="@style/Header3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_20"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        app:layout_constraintEnd_toStartOf="@+id/sc_extras_toggle_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Early check-in" />
+
+    <TextView
+        android:id="@+id/tv_extras_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_extras_legend"
+        android:layout_marginTop="@dimen/generic_margin_6"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_below="@id/tv_extras_legend"
+        style="@style/Header4"
+        tools:text="£10.00"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sc_extras_toggle_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/generic_margin_25"
+        android:layout_marginEnd="@dimen/generic_margin_24"
+        app:showText="false"
+        app:switchMinWidth="60dp" />
+
+    <TextView
+        android:id="@+id/tv_extras_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_extras_price"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_20"
+        android:layout_marginBottom="@dimen/generic_margin_20"
+        style="@style/BodySmall"
+        tools:text="Check in any time from 11am (normal check-in time is 3pm)."/>
+
+
+    <View
+        android:id="@+id/itemDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/line_divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

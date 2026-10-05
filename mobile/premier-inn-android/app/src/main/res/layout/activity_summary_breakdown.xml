@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsv_criteria_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.whitbread.premierinn.common.view.NetworkImageView
+                    android:id="@+id/iv_summary_breakdown_banner_image"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_margin="@dimen/generic_margin_16"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/tv_summary_breakdown_hotel_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Header1"
+                    android:layout_marginTop="@dimen/generic_margin_16"
+                    android:layout_marginEnd="@dimen/generic_margin_16"
+                    android:layout_toEndOf="@id/iv_summary_breakdown_banner_image"
+                    android:textColor="?attr/colorPrimary"
+                    tools:text="London Heathrow Airport Terminal 4"/>
+
+                <TextView
+                    android:id="@+id/tv_summary_breakdown_hotel_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Body"
+                    android:layout_below="@id/tv_summary_breakdown_hotel_name"
+                    android:layout_marginBottom="@dimen/generic_margin_4"
+                    android:layout_marginEnd="@dimen/generic_margin_16"
+                    android:layout_marginTop="@dimen/generic_margin_4"
+                    android:layout_toEndOf="@id/iv_summary_breakdown_banner_image"
+                    android:textColor="?attr/colorPrimary"
+                    tools:text="1-2 Dorset Rise, Grange Hill London, ST3 8JK"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/dividerColor"/>
+
+            <com.whitbread.premierinn.common.view.PriceBreakdownView
+                android:id="@+id/pbv_summary_breakdown_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <include
+                android:id="@+id/breakdown_extras_layout"
+                layout="@layout/layout_breakdown_extras" />
+
+            <com.whitbread.premierinn.common.view.TotalPriceView
+                android:id="@+id/summary_total_price_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginBottom="@dimen/generic_margin_24"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

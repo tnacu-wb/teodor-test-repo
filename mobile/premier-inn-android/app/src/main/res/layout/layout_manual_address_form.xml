@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <com.whitbread.premierinn.common.view.ToggleButtonView
+        android:id="@+id/address_form_home_work_toggle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        app:tbv_start_selected="true"
+        android:visibility="gone"
+        app:tbv_text_left="@string/guest_details_address_toggle_button_home"
+        app:tbv_text_right="@string/guest_details_address_toggle_button_work"
+        android:layout_below="@id/sc_payment_details_same_address"/>
+
+    <com.whitbread.premierinn.common.view.AddressFormView
+        android:id="@+id/afv_payment_details_address_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:visibility="gone"
+        android:layout_below="@id/address_form_home_work_toggle"
+        android:layout_marginTop="@dimen/generic_margin_20" />
+
+
+</LinearLayout>

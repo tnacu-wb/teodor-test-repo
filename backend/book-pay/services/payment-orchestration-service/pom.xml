@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>payment-orchestration-service</artifactId>
+    <packaging>jar</packaging>
+
+    <name>payment-orchestration-service</name>
+    <description>Whitbread Payment Orchestration Microservice</description>
+
+    <parent>
+        <groupId>uk.co.whitbread</groupId>
+        <artifactId>digital-monorepo-service-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../../parents/service-parent/pom.xml</relativePath>
+    </parent>
+
+    <properties>
+        <application.port>9200</application.port>
+        <temporal-sdk.version>1.35.0</temporal-sdk.version>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <!--
+          Coverage exclusions are limited to code that carries no behaviour worth asserting.
+          Everything else is measured: the previous list excluded logic, controller, client,
+          kafka, temporal and the workflow implementations, which between them are most of the
+          service, so the coverage gate was reporting on almost nothing. Those packages all
+          have tests and JaCoCo instruments them fine — Temporal's TestWorkflowEnvironment and
+          MockWebServer both run in the Surefire JVM the agent is attached to.
+        -->
+        <sonar.coverage.exclusions>
+            **/uk/co/whitbread/payment/orchestrator/PaymentOrchestrationServiceApplication*,
+            **/generated/**,
+            **/model/**,
+            **/exceptions/**,
+            **/ports/**
+        </sonar.coverage.exclusions>
+    </properties>
+
+    <dependencies>
+        <!-- Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!-- The starter (not bare spring-kafka) so Boot's KafkaProperties is on the classpath:
+             the factories in infrastructure/kafka build from it, which is what makes every
+             spring.kafka.* property (TLS/SASL, client-id, tuning) actually take effect. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-kafka</artifactId>
+        </dependency>
+
+        <!-- Observability -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+        </dependency>
+
+        <!-- Code Generation -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <!-- Documentation -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+
+        <!-- Temporal Workflow Orchestration -->
+        <dependency>
+            <groupId>io.temporal</groupId>
+            <artifactId>temporal-sdk</artifactId>
+            <version>${temporal-sdk.version}</version>
+        </dependency>
+
+        <!--
+          Trace and baggage propagation across the Temporal task-queue boundary.
+
+          The OpenTelemetry Java agent does not instrument the Temporal SDK, so without these
+          interceptors an activity starts a fresh root trace and loses the inbound W3C
+          `traceparent` and `baggage`. Temporal's only Java tracing hook is the OpenTracing
+          module, bridged to OpenTelemetry through the opentracing shim; a native
+          OpenTelemetry module does not exist yet. Version tracks temporal-sdk, which the
+          module is published in lockstep with. The shim and API versions come from the
+          OpenTelemetry BOM that Spring Boot imports.
+        -->
+        <dependency>
+            <groupId>io.temporal</groupId>
+            <artifactId>temporal-opentracing</artifactId>
+            <version>${temporal-sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-opentracing-shim</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-api</artifactId>
+        </dependency>
+
+        <!-- Test -->
+        <dependency>
+            <groupId>io.temporal</groupId>
+            <artifactId>temporal-testing</artifactId>
+            <version>${temporal-sdk.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- @WebMvcTest lives in its own module since Boot 4; the plain starter-test does not
+             bring it. Used by the advice-ordering web test, which must load the
+             @RestControllerAdvice beans the way a running application does. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Spring Boot Maven Plugin (start/stop for OpenAPI generation) -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <configuration>
+                            <profiles>
+                                <profile>integration</profile>
+                            </profiles>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- OpenAPI YAML generation -->
+            <plugin>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <apiDocsUrl>http://localhost:${application.port}/v3/api-docs.yaml</apiDocsUrl>
+                    <outputFileName>${project.name}-openApi.yaml</outputFileName>
+                    <outputDir>${basedir}/docs/openApi</outputDir>
+                </configuration>
+            </plugin>
+
+            <!-- JaCoCo Code Coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <!--
+                      Only code with no behaviour to assert is excluded. The list used to cover
+                      logic, controller, client, kafka, temporal and the workflow
+                      implementations on the stated grounds that Temporal's test environment and
+                      MockWebServer were "invisible to the JaCoCo agent". They are not: both run
+                      in the same Surefire JVM the agent is attached to, and removing those
+                      entries produces coverage for all of them. Keep this list short — an
+                      exclusion here is a claim that the code cannot be tested, not a place to
+                      park code that merely is not.
+                    -->
+                    <excludes>
+                        <exclude>**/uk/co/whitbread/payment/orchestrator/PaymentOrchestrationServiceApplication*</exclude>
+                        <!-- Generated sources -->
+                        <exclude>**/uk/co/whitbread/**/generated/**</exclude>
+                        <!-- Domain records and enums: data carriers, no branching to cover -->
+                        <exclude>**/uk/co/whitbread/**/model/**</exclude>
+                        <!-- Exception types: constructors delegating to RuntimeException -->
+                        <exclude>**/uk/co/whitbread/**/exceptions/**</exclude>
+                        <!-- Port interfaces have no executable code -->
+                        <exclude>**/uk/co/whitbread/**/ports/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Surefire -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>@{argLine} -Duser.language=en -Duser.country=GB</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

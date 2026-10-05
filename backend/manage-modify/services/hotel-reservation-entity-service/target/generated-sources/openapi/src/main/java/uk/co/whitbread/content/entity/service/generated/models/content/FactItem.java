@@ -1,0 +1,120 @@
+package uk.co.whitbread.content.entity.service.generated.models.content;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import org.springframework.lang.Nullable;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
+
+/**
+ * FactItem
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-08-27T18:51:28.563902+03:00[Europe/Bucharest]", comments = "Generator version: 7.12.0")
+public class FactItem {
+
+  private String description;
+
+  private String title;
+
+  public FactItem() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public FactItem(String description, String title) {
+    this.description = description;
+    this.title = title;
+  }
+
+  public FactItem description(String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   * @return description
+   */
+  @NotNull 
+  @Schema(name = "description", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("description")
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public FactItem title(String title) {
+    this.title = title;
+    return this;
+  }
+
+  /**
+   * Get title
+   * @return title
+   */
+  @NotNull 
+  @Schema(name = "title", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("title")
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    FactItem factItem = (FactItem) o;
+    return Objects.equals(this.description, factItem.description) &&
+        Objects.equals(this.title, factItem.title);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(description, title);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class FactItem {\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    title: ").append(toIndentedString(title)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+

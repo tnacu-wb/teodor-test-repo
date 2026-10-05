@@ -1,0 +1,26 @@
+{
+  "request": {
+    "url": "/PermissionManagement/V1/ConfirmDoubleOptIn",
+    "method": "POST",
+    "headers" : {
+      "Content-Type" : {
+        "contains" : "application/json"
+      },
+      "Ocp-Apim-Subscription-Key": {
+        "contains": "dummyValue"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matches": ".*CHNL401.*"
+      }
+    ]
+  },
+  "response": {
+    "status": 401,
+      "bodyFileName": "customer-hub-permissions-401-response.json",
+    "headers": {
+      "Content-Type": "text/html; charset=utf-8"
+    }
+  }
+}

@@ -1,0 +1,3 @@
+export enum SEARCH_ACCOUNT_ERROR_CODES {
+  TOO_MANY_RESULTS = 413,
+}

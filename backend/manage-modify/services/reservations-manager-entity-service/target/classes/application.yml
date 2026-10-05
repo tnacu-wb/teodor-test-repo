@@ -1,0 +1,308 @@
+server:
+  port: 9116
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "reservations-manager-entity-service"
+    description: "Whitbread Reservations Manager Entity Microservice"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+irsa:
+  enabled: true
+
+aws:
+  s3:
+    maxRetry: ${AWS_S3_MAX_RETRY:2}
+    validForMinutes: ${AWS_S3_VALID_FOR_MINUTES:5}
+    bucket:
+      region: ${AWS_REGION:eu-west-1}
+      invoiceReportName: ${AWS_S3_INVOICE_BUCKET_NAME:opera-booking-invoices-dev}
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+ribbon:
+  eureka:
+    enabled: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /v1/bookings/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    redis:
+      enabled: false
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - firstName
+        - lastName
+        - surname
+        - email
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    brave: warn
+    io:
+      getunleash: TRACE
+
+
+spring:
+  cache:
+    type: ${CACHE_TYPE}
+    redis:
+      key-prefix: "Reservation-Entity-Manager"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 30000
+        readTimeout: 30000
+        loggerLevel: basic
+
+config:
+  service:
+    hotel-account:
+      host: http://${HOTEL_ACCOUNT_HOST:localhost:9020}
+      bookingsEndpoint: "/customers/hotels/customerId/stays"
+    accounts:
+      url: ${ACCOUNTS_URL}
+      singleBookingEndpoint: "/reservation/hotels/{reservation-id}"
+      cancelBookingEndpoint: "/reservation/hotels/{reservation-id}"
+      sendConfirmationEmailEndpoint: "/notification/booking/confirmation"
+      sendInvoiceEmailEndpoint: "/reservation/hotels/invoice/resend"
+    hotel-reservation:
+      host: ${HOTEL_RESERVATION_URL}
+      operaBasketInformationAuthEndpoint: "/v1/reservations/basket/{basketReference}/authenticated"
+      operaBasketInformationEndpoint: "/v1/reservations/basket/{basketReference}"
+      operaCancelReservationInformationEndpoint: "/v1/reservations/cancel"
+      operaCancelReservationEndpoint: "/v1/reservations/cancellations"
+      operaDinnerAllowanceEndpoint: "/v1/reservations/basket/{basketReference}/allowances"
+      operaFindBookingEndpoint: "/v1/reservations/find"
+    basket:
+      host: ${BASKET_SERVICE_HOST}
+      operaBasketOptionInformationEndpoint: "/v1/baskets/{basketReference}"
+      operaBasketInformationByBookingEndpoint: "/v1/baskets"
+      operaResendEmailEndpoint: "/v1/baskets/email"
+      getBasketsForBookingRefs: "/v1/baskets/bookingReferences"
+    content:
+      host: ${CONTENT_SERVICE_HOST}
+      hotelRateInformationEndpoint: "/v1/content/booking/hotelRateInformation"
+      operaReservationRateInformationEndpoint: "/v1/content/booking/rateInformation"
+      aemMealsInfoEndpoint: "/v1/content/meals"
+      hotelInfoEndpoint: "/v1/content/hotels/{hotelId}/information"
+    ohip:
+      host: ${OHIP_HOST:localhost:9100}/ohip
+      hotelInfoEndpoint: "/hotels/{hotelId}/info"
+      lightweightReservationsByIdsEndpoint: "/v1/reservations/ids"
+      reservationsPaymentTypeByReservationIds: "/v1/reservations/paymentType"
+      packageGroupsEndpoint: "/hotels/packages/groups"
+    cdh:
+      host: http://${CDH_HOST:localhost:9119}
+      bookingInvoicesEndpoint: "/v1/cdh/reservation/invoices"
+
+ciol:
+  rules:
+    maxRooms: ${CIOL_MAX_ROOMS:1}
+    daysWithinArrival: ${DAYS_WITHIN_ARRIVAL:2}
+    ciolRatesExcluded: ${CIOL_RATES:}
+    ciolHotels: ${CIOL_HOTELS:FRAMTI}
+    ciolCountryCodes: ${CIOL_COUNTRY_CODES:GB}
+    ciolEmails: ${CIOL_EMAILS:test@test.com}
+    deRegCardRooms: ${DE_REG_CARD_ROOMS:1}
+    deRegCardHotels: ${DE_REG_CARD_HOTELS:FRAWES}
+
+digitalkey:
+  rules:
+    maxRooms: ${DK_MAX_ROOMS:1}
+    dkHotels: ${DK_HOTELS:LINMIL,FRAMTI}
+
+reservations-manager:
+  old-booking-threshold: ${OLD_BOOKING_THRESHOLD:24}
+
+feature-flags:
+  pi-bb-mobile-check-in-online:
+    key: "pi_bb_mobile_check-in-online"
+    fallback: false
+  release_pi_bb_mobile_de_reg_card:
+    key: "release_pi_bb_mobile_de_reg_card"
+    fallback: false
+  mobile_ciol_piba:
+    key: "mobile_ciol_piba"
+    fallback: false
+  mobile_ciol_piba_cnp:
+    key: "mobile_ciol_piba_cnp"
+    fallback: false
+  mobile_digital_key:
+    key: "mobile_digital_key"
+    fallback: false
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+    - name: "CCUI Tenant"
+      audience: ${CCUI_TENANT_AUDIENCE}
+      namespace: ${CCUI_TENANT_NAMESPACE}
+      issuer: ${CCUI_TENANT_ISSUER}
+      jwkUri: ${CCUI_TENANT_JWK_URI}
+  management:
+      domain: ${AUTH_MNGMT_DOMAIN}
+      clientId: ${AUTH0_CLIENT_ID}
+      clientSecret: ${AUTH0_CLIENT_SECRET}
+      audience: ${AUTH_MNGMT_AUDIENCE}
+      connection: ${AUTH_MNGMT_CONNECTION}
+      lazyMigrationEnabled: ${AUTH_MNGMT_IS_LAZY_MIGRATION_ENABLED}
+
+cdh:
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT_TYPE}
+    enabled: ${CDH_OAUTH_IS_ENABLED}
+  api:
+    host: ${CDH_API_HOST}
+    is-oauth: ${CDH_API_IS_OAUTH}
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: ${INN_BUSINESS_OAUTH_SUBSCRIPTION_KEY}
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+logging:
+  configuration:
+    logger: default
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+irsa:
+  enabled: false
+
+aws:
+  s3:
+    maxRetry: ${AWS_S3_MAX_RETRY:2}
+    endpoint: http://localhost.localstack.cloud:4566
+    validForMinutes: ${AWS_S3_VALID_FOR_MINUTES:5}
+    bucket:
+      region: ${AWS_REGION:eu-west-1}
+      accessKey: foo
+      secretAccessKey: bar
+      invoiceReportName: ${AWS_S3_INVOICE_BUCKET_NAME:booking-invoice-local}

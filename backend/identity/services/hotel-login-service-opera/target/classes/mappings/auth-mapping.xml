@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozermapper.github.io/schema/bean-mapping"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping http://dozermapper.github.io/schema/bean-mapping.xsd">
+
+    <!--
+
+     Mapping file to transform REST interface's input type to BART's input type.
+
+     Some of the List decorators defined in the WSDL file are generated as protected fields without setter method.
+     The modifier is-accessible="true" is necessary in those cases to be able to write in those fields.
+
+     -->
+
+    <mapping>
+        <class-a>uk.co.whitbread.hotel.account.model.LoginRequest</class-a>
+        <class-b>uk.co.whitbread.bart.registeredguest.api.RegisteredGuestLoginRequest</class-b>
+        <field>
+            <a>username</a>
+            <b>registeredGuestLoginDetails.emailAddress</b>
+        </field>
+        <field>
+            <a>password</a>
+            <b>registeredGuestLoginDetails.password</b>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>uk.co.whitbread.hotel.account.model.LoginRequest</class-a>
+        <class-b>uk.co.whitbread.bart.business.api.UserLogin</class-b>
+        <field>
+            <a>username</a>
+            <b>request.userName</b>
+        </field>
+        <field>
+            <a>password</a>
+            <b>request.password</b>
+        </field>
+    </mapping>
+</mappings>

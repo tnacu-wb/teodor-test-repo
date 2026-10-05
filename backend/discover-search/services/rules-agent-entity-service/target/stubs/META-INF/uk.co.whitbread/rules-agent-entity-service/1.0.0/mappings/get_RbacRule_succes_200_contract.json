@@ -1,0 +1,25 @@
+{
+  "id" : "16668e8c-2e49-4841-b6c9-8db56b2b1ca9",
+  "request" : {
+    "urlPath" : "/v1/rules/ccui/rbac",
+    "method" : "GET",
+    "queryParameters" : {
+      "resourceId" : {
+        "equalTo" : "CC_Role01"
+      },
+      "roleIdList" : {
+        "equalTo" : "AGENT_ROLE"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"hasAccess\":true}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "16668e8c-2e49-4841-b6c9-8db56b2b1ca9",
+  "priority" : 1
+}

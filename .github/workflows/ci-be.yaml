@@ -1,0 +1,492 @@
+name: BE CI Orchestrator
+
+# Two deploy paths, both routed through build-service.yaml:
+#   * pull_request  — on a PR opted in with the `ephemeral-active-be` label, every commit
+#                     (re)builds and redeploys the WHOLE deployable stack
+#                     so the deploy set is all deployable, independent of
+#                     change detection. Changed services get full validation (tests/CodeQL/Prisma);
+#                     unchanged deployable ones are built + redeployed WITHOUT the heavy scans.
+#                     An unlabelled PR stays changed-only (build/CI, no deploy).
+#                     detect-changed-eph.sh still supplies the changed set that drives both the
+#                     validation gate and the changed OR deployable build matrix.
+#   * main          — once the PR is merged, ci-main-versioning.yaml tags the merge
+#                     commit and calls this workflow with that version; the main-line
+#                     process then builds and deploys that version. A push to
+#                     main does not trigger this workflow directly.
+
+on:
+  push:
+    branches:
+      - 'release/*'
+      - 'hotfix/release*'
+  pull_request:
+    # opened/reopened cover the PR being raised; synchronize fires on each new commit.
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+  workflow_call:
+    inputs:
+      semantic-version:
+        description: X.Y.Z version that ci-main-versioning.yaml just tagged on github.sha.
+        required: true
+        type: string
+
+# Literal name, not github.workflow: when called, github.workflow is the caller's
+# name, which would put this and the frontend pipeline in one group.
+concurrency:
+  group: BE CI Orchestrator-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  # Main-line work runs only when ci-main-versioning.yaml calls this workflow with
+  # the version it just tagged. This gate proves that tag points at github.sha
+  # before any job uses it; release/hotfix and PR behavior bypasses it unchanged.
+  main-deployment-gate:
+    name: Resolve production main deployment context
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: tooling-default-runner-scale-set
+    outputs:
+      semantic-version: ${{ steps.version-tag.outputs.semantic-version }}
+      checkout-sha: ${{ steps.version-tag.outputs.checkout-sha }}
+    steps:
+      - name: Checkout tagged commit with tags
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+
+      - name: Validate semantic version and tag
+        id: version-tag
+        env:
+          SEMANTIC_VERSION: ${{ inputs.semantic-version }}
+          CHECKOUT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$SEMANTIC_VERSION" ]]; then
+            echo "::error::Production main builds run only when ci-main-versioning.yaml calls this workflow with a semantic-version."
+            exit 1
+          fi
+          if [[ ! "$SEMANTIC_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::semantic-version must use X.Y.Z format; got '$SEMANTIC_VERSION'."
+            exit 1
+          fi
+          if [[ ! "$CHECKOUT_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::github.sha must be an immutable 40-character commit SHA; got '$CHECKOUT_SHA'."
+            exit 1
+          fi
+          tag_sha="$(git rev-parse -q --verify "refs/tags/${SEMANTIC_VERSION}^{commit}" || true)"
+          if [[ "$tag_sha" != "$CHECKOUT_SHA" ]]; then
+            echo "::error::Tag '${SEMANTIC_VERSION}' does not point to ${CHECKOUT_SHA} (got '${tag_sha:-<missing>}'); refusing to build an unversioned deployment."
+            exit 1
+          fi
+          echo "semantic-version=${SEMANTIC_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "checkout-sha=${CHECKOUT_SHA}" >> "$GITHUB_OUTPUT"
+  dependabot-gate:
+    name: Dependency gate
+    if: false
+    # if: |
+    #   github.event_name == 'pull_request' &&
+    #   !contains(github.event.pull_request.labels.*.name, 'dependencies')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.PIPELINE_APP_ID }}
+          private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Check dependabot PRs and alerts
+        id: gate
+        env:
+          # App token required: dependabot alerts are not readable with the
+          # default GITHUB_TOKEN.
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          REPO: ${{ github.repository }}
+        run: bash .github/workflows/scripts/dependabot-gate.sh
+
+      - name: Comment dependency gate result on PR
+        if: always() && steps.gate.outputs.should-comment == 'true'
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" \
+            --body-file dependabot-gate-comment.md
+
+  # -------------------------------------------------------------------------
+  # PR path — detect the services this PR changed, then (for an opted-in PR) union them with
+  # all deployable services so the whole stack is (re)built/redeployed each commit;
+  # the changed set alone still gates full validation. Runs instead of detect-all on pull_request.
+  # -------------------------------------------------------------------------
+  detect-changed:
+    name: Detect changed modules (PR)
+    if: github.event_name == 'pull_request'
+    runs-on: tooling-default-runner-scale-set
+    outputs:
+      services: ${{ steps.filter.outputs.services }}
+      has-backend: ${{ steps.filter.outputs.has-backend }}
+      deployable: ${{ steps.filter.outputs.deployable }}
+      changed: ${{ steps.changed.outputs.backend_services }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Detect changed backend services
+        id: changed
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          bash .github/workflows/scripts/detect-changed-eph.sh
+
+      # The checkout above is the head-inclusive merge commit, so the detector runs
+      # PR-authored code and its output is untrusted. Each name flows into
+      # build-service.yaml's matrix and shell; fail closed unless it is a strict service
+      # slug ([a-z0-9-]), closing a command-injection path into the OIDC/ECR-privileged
+      # build. Mirrors the gate in ci-be-ephemeral-comment.yaml.
+      - name: Validate detected service names
+        env:
+          SERVICES: ${{ steps.changed.outputs.backend_services }}
+        run: |
+          set -euo pipefail
+          echo "$SERVICES" | jq -e 'type == "array"' >/dev/null
+          while IFS= read -r svc; do
+            [[ -z "$svc" ]] && continue
+            if [[ ! "$svc" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+              echo "::error::Rejected service name '$svc' from change detection (allowed: lowercase letters, digits, hyphens)."
+              exit 1
+            fi
+          done < <(echo "$SERVICES" | jq -r '.[]')
+
+      - name: Determine build + deploy sets
+        id: filter
+        env:
+          CHANGED: ${{ steps.changed.outputs.backend_services }}
+          OPTED_IN: ${{ contains(github.event.pull_request.labels.*.name, 'ephemeral-active-be') }}
+        run: |
+          set -euo pipefail
+          if [[ "$OPTED_IN" == "true" ]]; then
+            # SERVICES unset → helper lists ALL deployable services in the tree.
+            deployable=$(bash .github/workflows/scripts/helper-scripts/list-deployable-eph.sh)
+            services=$(jq -c -n --argjson a "$CHANGED" --argjson b "$deployable" '($a + $b) | unique')
+          else
+            deployable='[]'
+            services="$CHANGED"
+          fi
+          echo "services=$services" >> "$GITHUB_OUTPUT"
+          echo "deployable=$deployable" >> "$GITHUB_OUTPUT"
+          echo "has-backend=$([ "$(jq 'length' <<<"$services")" -gt 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "Opted-in:          $OPTED_IN"
+          echo "Changed:           $CHANGED"
+          echo "Deployable (all):  $deployable"
+          echo "Build matrix (∪):  $services"
+
+  # -------------------------------------------------------------------------
+  # Main-line path — detect all services for push-to-main / release builds.
+  # Skipped on pull_request events.
+  # -------------------------------------------------------------------------
+  detect-all:
+    name: Detect all modules (main-line)
+    needs: main-deployment-gate
+    if: |
+      always() &&
+      github.event_name != 'pull_request' &&
+      (github.ref != 'refs/heads/main' ||
+      needs.main-deployment-gate.result == 'success')
+    runs-on: tooling-default-runner-scale-set
+    outputs:
+      services: ${{ steps.all.outputs.all_services }}
+      libraries: ${{ steps.all.outputs.all_libraries }}
+      new_services: ${{ steps.all.outputs.new_services }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Detect all modules
+        id: all
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          bash .github/workflows/scripts/detect-all.sh
+
+  # Populates the one shared ~/.m2/repository for the whole reactor.
+  #
+  # The matrix jobs below are restore-only. Without this job, whichever service
+  # finished first would win the race to write the shared key and every other job
+  # would log "Cache already exists" and skip saving — freezing a cache
+  # that holds one service's dependencies until the next pom change. Resolving the
+  # whole reactor once, here, is what makes a single shared cache actually useful.
+  seed-maven-cache:
+    name: Seed Maven cache
+    needs: main-deployment-gate
+    if: |
+      always() &&
+      (github.ref != 'refs/heads/main' ||
+      needs.main-deployment-gate.result == 'success')
+    runs-on: tooling-default-runner-scale-set
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      # lookup-only costs nothing when the cache is already present
+      - name: Probe for an existing cache
+        id: probe
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('backend/**/pom.xml') }}
+          lookup-only: true
+
+      - name: Set up JDK
+        if: steps.probe.outputs.cache-hit != 'true'
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5
+        with:
+          distribution: 'temurin'
+          # matches <java.version> in backend/parents/service-parent/pom.xml
+          java-version: '25'
+
+      - name: Write settings.xml
+        if: steps.probe.outputs.cache-hit != 'true'
+        env:
+          SETTINGS_XML: ${{ vars.SETTINGS_XML }}
+        run: echo "$SETTINGS_XML" | base64 -d > backend/settings.xml
+
+      # Resolves third-party dependencies for every module in one pass.
+      # excludeGroupIds stops go-offline trying to fetch our own modules from Nexus
+      # before they have been built. Allowed to fail: a partial resolve must not be
+      # saved, but it also must not block the matrix, which can still fall back to
+      # restore-keys and download what it needs.
+      - name: Resolve dependencies for the whole reactor
+        id: resolve
+        if: steps.probe.outputs.cache-hit != 'true'
+        continue-on-error: true
+        env:
+          MAVEN_CLI_OPTS: ${{ vars.MAVEN_CLI_OPTS }}
+        working-directory: backend/
+        run: |
+          set -o pipefail
+          # artifact.threads parallelises the downloads, which is where the time
+          # goes. Deliberately NOT using -T: parallel module builds write to the
+          # same local repository concurrently, and a corrupted artifact here
+          # would be saved once and then served to all 49 services until the next
+          # pom change. Module iteration is cheap when nothing is compiled.
+          #
+          # excludeGroupIds stops go-offline trying to pull our own 64 modules
+          # from Nexus before they have been built.
+          mvn $MAVEN_CLI_OPTS dependency:go-offline \
+            -Dmaven.artifact.threads=8 \
+            -DexcludeGroupIds=uk.co.whitbread \
+            2>&1 | tee /tmp/seed.log
+
+      - name: Report seeded cache
+        if: steps.probe.outputs.cache-hit != 'true' && always()
+        run: |
+          # grep -c prints the count AND exits 1 when it is zero, so `|| echo ?`
+          # would append a second line to the value.
+          modules=$(grep -c "^\[INFO\] Building " /tmp/seed.log 2>/dev/null || true)
+          modules=${modules:-0}
+          jars=$(find ~/.m2/repository -name '*.jar' 2>/dev/null | wc -l | tr -d ' ')
+          size=$(du -sm ~/.m2/repository 2>/dev/null | cut -f1 || true)
+          size=${size:-0}
+          {
+            echo "### Seeded Maven cache"
+            echo ""
+            echo "| metric | value |"
+            echo "|---|---|"
+            echo "| modules resolved | $modules |"
+            echo "| jars in repository | $jars |"
+            echo "| repository size | ${size}MB |"
+            echo "| resolve outcome | ${{ steps.resolve.outcome }} |"
+            echo ""
+            echo "One shared cache serves every service. Compare against the"
+            echo "per-service download counts in the Build Services jobs."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Save cache
+        if: steps.probe.outputs.cache-hit != 'true' && steps.resolve.outcome == 'success'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('backend/**/pom.xml') }}
+
+  # Ensure ECR repositories exist before any image is pushed.
+  # Only runs on push events so ECR repos are never created from an open PR. 
+  # Existing services already have their repos, so their ephemeral PR deploys are not affected; 
+  # only a new service must merge before it can deploy.
+  # All newly-added services are batched in a single devops-terraform PR, 
+  # which avoids repositories.yaml append conflicts of concurrent per-service PRs.
+  request-ecr-repos:
+    name: Request ECR repos
+    needs: detect-all
+    # always(): main-deployment-gate is skipped off main, and a skipped job
+    # anywhere upstream would otherwise skip this job too.
+    if: ${{ always() && needs.detect-all.result == 'success' && github.event_name == 'push' && needs.detect-all.outputs.new_services != '' && needs.detect-all.outputs.new_services != '[]' }}
+    permissions:
+      contents: read
+    uses: ./.github/workflows/ecr-request-repos.yaml
+    with:
+      repo-names: ${{ needs.detect-all.outputs.new_services }}
+    secrets: inherit
+
+  # -------------------------------------------------------------------------
+  # PR build matrix - only backend services with changes, carries pr-number so the
+  # ephemeral deploy gets a correctly named Helm release.
+  ###
+  # Label-gated ephemeral auto-deploy (optional), mirroring Frontend
+  # (ci-fe.yaml gate-ephemeral, CTECH-13440/PR 316).
+  #
+  # Every PR still builds + pushes the pr-<n>-<sha7> image. The deploy is gated by
+  # `deploy-eph`, which is true ONLY when the PR carries the `ephemeral-active-be` label. 
+  #
+  # A developer opts in once with an "Ephemeral UP" comment (the
+  # ci-be-ephemeral-comment workflow deploys and adds the label).
+  # After that, every commit redeploys this PR's ephemeral env. 
+  # Load stays controlled — unlabelled PRs never deploy on push. 
+  #
+  # On-demand one-off deploys remain via deploy-eph-manual.yaml.
+  # -------------------------------------------------------------------------
+  build-services-pr:
+    name: Build Services (PR)
+    # Only run when there is at least one changed backend service to build.
+    # always() is required because detect-changed is the only needed job and
+    # its `if` already filters to pull_request events.
+    if: |
+      always() &&
+      needs.detect-changed.result == 'success' &&
+      needs.detect-changed.outputs.has-backend == 'true'
+    needs: [detect-changed, seed-maven-cache]
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      id-token: write
+      pull-requests: write
+      issues: write
+    concurrency:
+      group: eph-deploy-${{ github.event.pull_request.number }}-${{ matrix.service }}
+      cancel-in-progress: false
+    strategy:
+      fail-fast: false
+      matrix:
+        service: ${{ fromJson(needs.detect-changed.outputs.services) }}
+    uses: ./.github/workflows/build-service.yaml
+    with:
+      service-name: ${{ matrix.service }}
+      pr-number: ${{ github.event.pull_request.number }}
+      # Deploy only when: same-repo PR, the ephemeral-active-be label is present, AND this
+      # matrix service is ephemerally deployable. Matrix builds every changed service;
+      # this per-service gate keeps a non-deployable change from hard-failing Helm job.
+      deploy-eph: ${{ github.event.pull_request.head.repo.full_name == github.repository && contains(github.event.pull_request.labels.*.name, 'ephemeral-active-be') && contains(fromJson(needs.detect-changed.outputs.deployable), matrix.service) }}
+      changed: ${{ contains(fromJson(needs.detect-changed.outputs.changed), matrix.service) }}
+      verify-pr-open: true
+    secrets: inherit
+
+  # -------------------------------------------------------------------------
+  # Main-line build matrix — all services, no pr-number needed.
+  # -------------------------------------------------------------------------
+  build-services:
+    name: Build Services
+    needs: [main-deployment-gate, detect-all, seed-maven-cache, request-ecr-repos]
+    if: |
+      always() &&
+      needs.detect-all.result == 'success' &&
+      needs.seed-maven-cache.result == 'success' &&
+      needs.request-ecr-repos.result != 'failure' &&
+      needs.request-ecr-repos.result != 'cancelled' &&
+      (github.ref != 'refs/heads/main' ||
+      needs.main-deployment-gate.result == 'success')
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      id-token: write
+      pull-requests: write
+      issues: write
+    strategy:
+      fail-fast: false
+      matrix:
+        service: ${{ fromJson(needs.detect-all.outputs.services) }}
+    uses: ./.github/workflows/build-service.yaml
+    with:
+      service-name: ${{ matrix.service }}
+      semantic-version: ${{ github.ref == 'refs/heads/main' && needs.main-deployment-gate.outputs.semantic-version || '' }}
+      checkout-ref: ${{ github.ref == 'refs/heads/main' && needs.main-deployment-gate.outputs.checkout-sha || '' }}
+    secrets: inherit
+
+  dit-sync:
+    name: Update development GitOps tag (${{ matrix.service }})
+    if: github.event_name == 'push' && github.ref_name == 'main'
+    needs: [detect-all, build-services]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    strategy:
+      max-parallel: 1
+      matrix:
+        service: ${{ fromJson(needs.detect-all.outputs.services) }}
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Download deployment metadata
+        uses: actions/download-artifact@v8
+        with:
+          name: be-dit-deployment-${{ matrix.service }}
+          path: deployment-metadata
+
+      - name: Read deployment metadata
+        id: metadata
+        env:
+          METADATA_FILE: deployment-metadata/${{ matrix.service }}.json
+          EXPECTED_SERVICE: ${{ matrix.service }}
+        run: bash .github/workflows/scripts/read-be-deployment-metadata.sh
+
+      - name: Update development GitOps tag
+        uses: ./.github/actions/gitops-tag-update
+        with:
+          app-name: ${{ matrix.service }}
+          image-tag: ${{ steps.metadata.outputs.image-tag }}
+          github-app-id: ${{ vars.PIPELINE_APP_ID }}
+          github-app-private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+
+
+  # build-libraries:
+  #   name: Build Libraries
+  #   needs: detect-all
+  #   permissions:
+  #     actions: read
+  #     contents: read
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       library: ${{ fromJson(needs.detect-all.outputs.libraries) }}
+  #   uses: ./.github/workflows/build-library.yaml
+  #   with:
+  #     library-name: ${{ matrix.library }}

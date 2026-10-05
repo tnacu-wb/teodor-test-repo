@@ -1,0 +1,228 @@
+server:
+  port: 9058
+  shutdown: graceful
+  compression.enabled: ${SERVER_COMPRESSION_ENABLED}
+  compression.mime-types: application/json
+
+swagger:
+  api:
+    version: '@project.version@'
+
+info:
+  build:
+    groupId: '@project.groupId@'
+    artifact: '@project.artifactId@'
+    description: '@project.description@'
+    version: '@project.version@'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+
+spring:
+  application:
+    name: content-service-opera
+  cache:
+    type: ${CACHE_TYPE:redis}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    config:
+      enabled: false
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /content-service/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    redis:
+      enabled: false
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+cache:
+  default:
+    ttl: ${CACHE_DEFAULT_TTL}
+
+content-service:
+  cache:
+    contentService-allRoomTypes:
+      name: allRoomTypes
+      ttl: 86400
+    contentService-roomTypesForCode:
+      name: roomTypesForCode
+      ttl: 86400
+    contentService-allRateClassifications:
+      name: allRateClassifications
+      ttl: 86400
+    contentService-rateClassificationsForRate:
+      name: rateClassificationsForRate
+      ttl: 86400
+    contentService-cookiePolicies:
+      name: cookiePolicies
+      ttl: 86400
+
+basic:
+  authentication:
+    enabled: ${BASIC_AUTH_ENABLED}
+    username: ${AEM_USERNAME}
+    password: ${AEM_PASSWORD}
+
+feign-clients:
+  aem:
+    url: ${AEM_URL}
+    resource: content-service/room-types
+    ratesresource: content-service/rate-classifications
+    cookiePoliciesResource: content-service/cookie-policies
+    bookingNotificationsResource: content-service/booking-info-messages
+    username: ${AEM_USERNAME}
+    password: ${AEM_PASSWORD}
+
+encrypt:
+  failOnError: false
+
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 30000
+        readTimeout: 30000
+        loggerLevel: BASIC
+  httpclient:
+    max-connections-per-route: 200
+    connection-timeout: 30000
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        ignoreExceptions:
+          - uk.co.whitbread.contentservice.roomtypes.exception.FeignNonServerException
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - opera-uat
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+logging:
+  level:
+    uk.co.whitbread: debug
+    openfeign: debug
+    org.springframework.cache: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: disable-caching
+  cache:
+    type: none
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+cache:
+  default:
+    ttl: 86400
+
+feign-clients:
+  aem:
+    url: https://www.dev.premierinn.digital
+
+server:
+  compression.enabled: false

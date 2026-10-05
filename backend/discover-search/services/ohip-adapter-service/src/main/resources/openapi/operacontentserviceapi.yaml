@@ -1,0 +1,1819 @@
+openapi: 3.0.1
+info:
+  title: OPERA Cloud Content Service
+  description: "Opera Content Service offers capability to manage large content such\
+    \ as images and files.<br /><br />Compatible with OPERA Cloud release 23.5.<br\
+    \ /><br /><p>This document and all content within is available under the Universal\
+    \ Permissive License v 1.0 (https://oss.oracle.com/licenses/upl). Copyright (c)\
+    \ 2020,2023 Oracle and/or its affiliates.</p><br /><br /> Compatible with OPERA\
+    \ Cloud release 23.5.<br /><br /><p> This document and all content within is available\
+    \ under the Universal Permissive License v 1.0 (https://oss.oracle.com/licenses/upl).\
+    \ Copyright (c) 2020, 2023 Oracle and/or its affiliates.</p>"
+  termsOfService: https://www.oracle.com/legal/terms.html
+  contact:
+    email: hospitality-integrations_ww@oracle.com
+  license:
+    name: UPL
+    url: https://opensource.org/licenses/upl
+  version: "23.5"
+externalDocs:
+  description: Find out more about Oracle Hospitality
+  url: https://docs.oracle.com/en/industries/hospitality/integration_platforms.html
+servers:
+  - url: /med/config/v1
+tags:
+  - name: OperaContent
+    description: Opera Content Service offers capability to manage big content using
+      MTOM
+paths:
+  /customizedLetter/{letterId}:
+    get:
+      tags:
+        - OperaContent
+      summary: Get customized letter
+      description: "Use this API to return a customized letter based on search criteria\
+        \ such as letterId, letterIdContext, letterIdtype. <p><strong>OperationId:</strong>getCustomizedLetter</p>"
+      operationId: getCustomizedLetter
+      parameters:
+        - name: letterId
+          in: path
+          required: true
+          schema:
+            maxLength: 2000
+            minLength: 1
+            type: string
+        - name: letterIdContext
+          in: query
+          description: "Used to identify the source of the identifier (e.g., IATA, ABTA)."
+          schema:
+            type: string
+        - name: letterIdtype
+          in: query
+          description: A reference to the type of object defined by the UniqueID element.
+          schema:
+            type: string
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response object for retrieving customized letter.
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/customizedLetter'
+        "204":
+          description: CustomizedLetter not found.
+          content: {}
+  /emailFile/{emailId}:
+    get:
+      tags:
+        - OperaContent
+      summary: Get Email Blob File
+      description: Use this API to retrieve email Blob File Stored in File Storage
+        Schema.Its used in  Profiles to fetch Email and Open in an end user's mail
+        client. <p><strong>OperationId:</strong>getEmailFile</p>
+      operationId: getEmailFile
+      parameters:
+        - name: emailId
+          in: path
+          description: Unique OPERA Email ID which is used to find an Email BLOB File
+            from OPERA. This ID is a primary identification of an email file in OPERA.
+          required: true
+          schema:
+            maxLength: 2000
+            minLength: 1
+            type: string
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response to fetch an email file
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/emailFile'
+        "204":
+          description: EmailFile not found.
+          content: {}
+  /fileAttachments:
+    get:
+      tags:
+        - OperaContent
+      summary: Get file attachment
+      description: "Use this API to return file attachments based on search criteria\
+        \ such as id, idContext, idType. <p><strong>OperationId:</strong>getFileAttachment</p>"
+      operationId: getFileAttachment
+      parameters:
+        - name: id
+          in: query
+          description: A unique identifying value assigned by the creating system. The
+            ID attribute may be used to reference a primary-key value within a database
+            or in a particular implementation.
+          schema:
+            type: string
+        - name: idContext
+          in: query
+          description: "Used to identify the source of the identifier (e.g., IATA, ABTA)."
+          schema:
+            type: string
+        - name: idType
+          in: query
+          description: A reference to the type of object defined by the UniqueID element.
+          schema:
+            type: string
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response to fetch file attachment
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/file'
+        "204":
+          description: FileAttachment not found.
+          content: {}
+    post:
+      tags:
+        - OperaContent
+      summary: Upload a file attachment
+      description: Use this API to create a file attachment. <p><strong>OperationId:</strong>uploadFileAttachment</p>
+      operationId: uploadFileAttachment
+      parameters:
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      requestBody:
+        description: Request to upload a file attachment.
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/fileToUpload'
+        required: true
+      responses:
+        "201":
+          description: HATEOAS links which help the consumer to navigate to resources
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+            Location:
+              description: Location of newly created resource
+              schema:
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/status'
+      x-codegen-request-body-name: fileToUpload
+  /folioReports/email:
+    post:
+      tags:
+        - OperaContent
+      summary: Email folio report
+      description: Use this APU to email folio report. <p><strong>OperationId:</strong>emailFolioReport</p>
+      operationId: emailFolioReport
+      parameters:
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      requestBody:
+        description: Request to generate and email a folio report.
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/folioReportToEmail'
+        required: true
+      responses:
+        "201":
+          description: HATEOAS links which help the consumer to navigate to resources
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+            Location:
+              description: Location of newly created resource
+              schema:
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/status'
+      x-codegen-request-body-name: folioReportToEmail
+  /hotels/{hotelId}/reservations/{reservationId}/customizedLetter:
+    put:
+      tags:
+        - OperaContent
+      summary: Set customized letter
+      description: "Use this API to set a customized letter for a specific reservation\
+        \ based on the hotelId, reservationId, customizedLetter. <p><strong>OperationId:</strong>setCustomizedLetter</p>"
+      operationId: setCustomizedLetter
+      parameters:
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            maxLength: 2000
+            minLength: 1
+            type: string
+        - name: hotelId
+          in: path
+          required: true
+          schema:
+            maxLength: 2000
+            minLength: 1
+            type: string
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      requestBody:
+        description: Request to save customized letter.
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/customizedLetter'
+        required: true
+      responses:
+        "200":
+          description: Response Body.
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+            Location:
+              description: Location of newly created resource
+              schema:
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/customizedLetterStatus'
+      x-codegen-request-body-name: customizedLetter
+  /hotels/{hotelId}/reservations/{reservationId}/folioReports:
+    get:
+      tags:
+        - OperaContent
+      summary: Get folio report
+      description: This API will get a folio report for a reservation. <p><strong>OperationId:</strong>getFolioReport</p>
+      operationId: getFolioReport
+      parameters:
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            maxLength: 2000
+            minLength: 1
+            type: string
+        - name: hotelId
+          in: path
+          required: true
+          schema:
+            maxLength: 2000
+            minLength: 1
+            type: string
+        - name: reservationIdContext
+          in: query
+          description: "Used to identify the source of the identifier (e.g., IATA, ABTA)."
+          schema:
+            type: string
+        - name: reservationIdType
+          in: query
+          description: A reference to the type of object defined by the UniqueID element.
+          schema:
+            type: string
+        - name: folioWindowNo
+          in: query
+          description: Folio window number to generate (defaults to view 1).
+          schema:
+            type: integer
+        - name: billNumber
+          in: query
+          description: Optional bill number to generate.
+          schema:
+            type: number
+        - name: folioType
+          in: query
+          description: Optional folio type.
+          schema:
+            type: string
+        - name: folioDate
+          in: query
+          description: Optional folio generation date - defaults to hotel business date.
+          schema:
+            type: string
+            format: date
+        - name: referenceCurrency
+          in: query
+          description: Folio currency code.
+          schema:
+            type: string
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response object for folio report.
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/folioReport'
+        "204":
+          description: FolioReport not found.
+          content: {}
+  /hotels/{hotelId}/reservations/{reservationId}/registrationCard:
+    get:
+      tags:
+        - OperaContent
+      summary: Get registration card
+      description: "Use this API to return a registration card for a reservation based\
+        \ on search criteria such as reservationId, hotelId, reservationIdContext,\
+        \ reservationIdType, regenerate, signedOnly, language, template.  <p><strong>OperationId:</strong>getRegistrationCard</p>"
+      operationId: getRegistrationCard
+      parameters:
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            maxLength: 2000
+            minLength: 1
+            type: string
+        - name: hotelId
+          in: path
+          required: true
+          schema:
+            maxLength: 2000
+            minLength: 1
+            type: string
+        - name: reservationIdContext
+          in: query
+          description: "Used to identify the source of the identifier (e.g., IATA, ABTA)."
+          schema:
+            type: string
+        - name: reservationIdType
+          in: query
+          description: A reference to the type of object defined by the UniqueID element.
+          schema:
+            type: string
+        - name: regenerate
+          in: query
+          description: Flag indicating whether a new registration card should be generated
+            even if a signed card already exists.
+          schema:
+            type: boolean
+        - name: signedOnly
+          in: query
+          description: Flag indicating whether return only the signed registrationCard
+            if present.
+          schema:
+            type: boolean
+        - name: language
+          in: query
+          description: Optional language code to use for registration card generation.
+            Default guest language will be applied if not specified.
+          schema:
+            type: string
+        - name: template
+          in: query
+          description: Optional registration card template code to use for registration
+            card generation. Default template will be applied if not specified.
+          schema:
+            type: string
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response object for registration card.
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/registrationCard'
+        "204":
+          description: RegistrationCard not found.
+          content: {}
+  /images:
+    get:
+      tags:
+        - OperaContent
+      summary: Get image
+      description: "Use this API to return an image based on search criteria such\
+        \ as linkId, linkIdContext, linkIdType, imageCode, imageParameterCode, imageParameterValue,\
+        \ languageCode, imageStyle, imageId, imageIdContext, imageIdType, base64.\
+        \  <p><strong>OperationId:</strong>getImage</p>"
+      operationId: getImage
+      parameters:
+        - name: linkId
+          in: query
+          description: A unique identifying value assigned by the creating system. The
+            ID attribute may be used to reference a primary-key value within a database
+            or in a particular implementation.
+          schema:
+            type: string
+        - name: linkIdContext
+          in: query
+          description: "Used to identify the source of the identifier (e.g., IATA, ABTA)."
+          schema:
+            type: string
+        - name: linkIdType
+          in: query
+          description: A reference to the type of object defined by the UniqueID element.
+          schema:
+            type: string
+        - name: imageCode
+          in: query
+          schema:
+            type: string
+            enum:
+              - LogoChain
+              - Logo
+              - Profile
+              - Nationality
+              - User
+              - ToolbarItemCode
+              - Chain
+              - MembershipType
+              - MembershipLevel
+              - Resort
+              - RoomTypeChain
+              - RoomType
+              - RoomNumber
+              - OooReasonChain
+              - OooReason
+              - RoomMaintChain
+              - RoomMaintenance
+              - RoomMaintIssue
+              - FloorPlan
+              - SiteLayout
+              - Attraction
+              - PropertyMap
+              - InvItemChain
+              - InvItem
+              - PackageChain
+              - Package
+              - Pool
+              - RoomConditionChain
+              - RoomCondition
+              - FunctionSpace
+              - FunctionSetupStyle
+              - TrackItTypeChain
+              - TrackItType
+              - Height
+              - Width
+        - name: imageParameterCode
+          in: query
+          style: form
+          explode: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: string
+              enum:
+                - LogoChain
+                - Logo
+                - Profile
+                - Nationality
+                - User
+                - ToolbarItemCode
+                - Chain
+                - MembershipType
+                - MembershipLevel
+                - Resort
+                - RoomTypeChain
+                - RoomType
+                - RoomNumber
+                - OooReasonChain
+                - OooReason
+                - RoomMaintChain
+                - RoomMaintenance
+                - RoomMaintIssue
+                - FloorPlan
+                - SiteLayout
+                - Attraction
+                - PropertyMap
+                - InvItemChain
+                - InvItem
+                - PackageChain
+                - Package
+                - Pool
+                - RoomConditionChain
+                - RoomCondition
+                - FunctionSpace
+                - FunctionSetupStyle
+                - TrackItTypeChain
+                - TrackItType
+                - Height
+                - Width
+        - name: imageParameterValue
+          in: query
+          description: Image parameter value.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: languageCode
+          in: query
+          schema:
+            type: string
+        - name: imageStyle
+          in: query
+          description: An enumeration of image styles.
+          schema:
+            type: string
+            enum:
+              - Full
+              - Thumbnail
+              - Icon
+              - Square
+              - Banner
+              - Button
+              - Lowres
+              - Highres
+        - name: imageId
+          in: query
+          description: A unique identifying value assigned by the creating system. The
+            ID attribute may be used to reference a primary-key value within a database
+            or in a particular implementation.
+          schema:
+            type: string
+        - name: imageIdContext
+          in: query
+          description: "Used to identify the source of the identifier (e.g., IATA, ABTA)."
+          schema:
+            type: string
+        - name: imageIdType
+          in: query
+          description: A reference to the type of object defined by the UniqueID element.
+          schema:
+            type: string
+        - name: base64
+          in: query
+          description: True if the image to be returned as a base64String else if the
+            image to be returned as the binary in MTOM attachment then false .
+          schema:
+            type: boolean
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response to fetch image(s)
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/image'
+        "204":
+          description: Image not found.
+          content: {}
+    post:
+      tags:
+        - OperaContent
+      summary: Use this API to Upload an image
+      description: You can use this API to upload an image. <p><strong>OperationId:</strong>uploadImage</p>
+      operationId: uploadImage
+      parameters:
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      requestBody:
+        description: Request to upload an image.
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/imageToUpload'
+        required: true
+      responses:
+        "201":
+          description: HATEOAS links which help the consumer to navigate to resources
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+            Location:
+              description: Location of newly created resource
+              schema:
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/status'
+      x-codegen-request-body-name: imageToUpload
+    delete:
+      tags:
+        - OperaContent
+      summary: Use this API to Delete image
+      description: This API will delete an image. <p><strong>OperationId:</strong>removeImage</p>
+      operationId: removeImage
+      parameters:
+        - name: imageCode
+          in: query
+          schema:
+            type: string
+            enum:
+              - LogoChain
+              - Logo
+              - Profile
+              - Nationality
+              - User
+              - ToolbarItemCode
+              - Chain
+              - MembershipType
+              - MembershipLevel
+              - Resort
+              - RoomTypeChain
+              - RoomType
+              - RoomNumber
+              - OooReasonChain
+              - OooReason
+              - RoomMaintChain
+              - RoomMaintenance
+              - RoomMaintIssue
+              - FloorPlan
+              - SiteLayout
+              - Attraction
+              - PropertyMap
+              - InvItemChain
+              - InvItem
+              - PackageChain
+              - Package
+              - Pool
+              - RoomConditionChain
+              - RoomCondition
+              - FunctionSpace
+              - FunctionSetupStyle
+              - TrackItTypeChain
+              - TrackItType
+              - Height
+              - Width
+        - name: imageSet
+          in: query
+          description: "Used for Character Strings, length 0 to 800."
+          schema:
+            type: string
+        - name: imageId
+          in: query
+          description: A unique identifying value assigned by the creating system. The
+            ID attribute may be used to reference a primary-key value within a database
+            or in a particular implementation.
+          schema:
+            type: string
+        - name: imageIdContext
+          in: query
+          description: "Used to identify the source of the identifier (e.g., IATA, ABTA)."
+          schema:
+            type: string
+        - name: imageIdType
+          in: query
+          description: A reference to the type of object defined by the UniqueID element.
+          schema:
+            type: string
+        - name: authorization
+          in: header
+          description: Bearer token that needs to be passed which is generated post
+            user authentication
+          required: true
+          schema:
+            type: string
+        - name: x-app-key
+          in: header
+          description: Client or Partner's Application Key
+          required: true
+          schema:
+            pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+            type: string
+        - name: x-hotelid
+          in: header
+          description: Mandatory parameter to identify the hotel code where the end
+            user is logged in
+          required: true
+          schema:
+            type: string
+        - name: x-externalsystem
+          in: header
+          description: External system code.
+          schema:
+            maxLength: 80
+            type: string
+        - name: Accept-Language
+          in: header
+          description: Language code
+          schema:
+            type: string
+      responses:
+        "200":
+          description: HATEOAS links which help the consumer to navigate to resources
+          headers:
+            Content-Language:
+              description: Audience language
+              schema:
+                pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+                type: string
+            Location:
+              description: Location of newly created resource
+              schema:
+                type: string
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/status'
+components:
+  schemas:
+    customizedLetter:
+      type: object
+      properties:
+        customizedLetterDetails:
+          $ref: '#/components/schemas/customizedLetterType'
+        links:
+          $ref: '#/components/schemas/links'
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+      description: Response object for retrieving customized letter.
+    customizedLetterType:
+      type: object
+      properties:
+        hotelId:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: Hotel code that the customized letter belongs to.
+        reservationId:
+          $ref: '#/components/schemas/uniqueID_Type'
+        customizedLetter:
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+          description: Customized letter in HTML or RTF format.
+          format: byte
+        url:
+          type: string
+          description: URL that identifies the location associated with the record
+            identified by the UniqueID.
+        type:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: A reference to the type of object defined by the UniqueID element.
+        instance:
+          maxLength: 80
+          minLength: 0
+          type: string
+          description: The identification of a record as it exists at a point in time.
+            An instance is used in update messages where the sender must assure the
+            server that the update sent refers to the most recent modification level
+            of the object being updated.
+        idContext:
+          maxLength: 80
+          minLength: 0
+          type: string
+          description: "Used to identify the source of the identifier (e.g., IATA,\
+            \ ABTA)."
+        id:
+          maxLength: 80
+          minLength: 0
+          type: string
+          description: A unique identifying value assigned by the creating system.
+            The ID attribute may be used to reference a primary-key value within a
+            database or in a particular implementation.
+        idExtension:
+          type: integer
+          description: Additional identifying value assigned by the creating system.
+      description: Details about customized letter.
+    uniqueID_Type:
+      type: object
+      properties:
+        id:
+          maxLength: 80
+          minLength: 0
+          type: string
+          description: A unique identifying value assigned by the creating system.
+            The ID attribute may be used to reference a primary-key value within a
+            database or in a particular implementation.
+        type:
+          maxLength: 40
+          minLength: 0
+          type: string
+          description: A reference to the type of object defined by the UniqueID element.
+      description: "An identifier used to uniquely reference an object in a system\
+        \ (e.g. an airline reservation reference, customer profile reference, booking\
+        \ confirmation number, or a reference to a previous availability quote)."
+    links:
+      type: array
+      items:
+        $ref: '#/components/schemas/instanceLink'
+    instanceLink:
+      type: object
+      properties:
+        href:
+          type: string
+          description: "URI [RFC3986] or URI Template [RFC6570]. If the value is set\
+            \ to URI Template, then the \"templated\" property must be set to true."
+        rel:
+          type: string
+          description: "Name of the link relation that, in addition to the type property,\
+            \ can be used to retrieve link details. For example, href or profile."
+        templated:
+          type: boolean
+          description: "Boolean flag that specifies that \"href\" property is a URI\
+            \ or URI Template. If the property is a URI template, set this value to\
+            \ true. By default, this value is false."
+          default: false
+        method:
+          type: string
+          description: HTTP method for requesting the target of the link.
+          enum:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+            - PATCH
+            - OPTIONS
+            - HEAD
+        targetSchema:
+          type: string
+          description: "Link to the metadata of the resource, such as JSON-schema,\
+            \ that describes the resource expected when dereferencing the target resource.."
+        operationId:
+          type: string
+          description: "The operationId of the path you can call to follow this link.\
+            \  This allows you to look up not only the path and method, but the description\
+            \ of that path and any parameters you need to supply."
+        title:
+          type: string
+          description: Exact copy of the "summary" field on the linked operation.
+      description: Metadata describing link description objects that MAY appear in
+        the JSON instance representation.
+    warningsType:
+      maxItems: 4000
+      type: array
+      description: Used in conjunction with the Success element to define a business
+        error.
+      items:
+        $ref: '#/components/schemas/warningType'
+    warningType:
+      type: object
+      properties:
+        value:
+          type: string
+          description: Property Value
+        shortText:
+          maxLength: 2000
+          type: string
+          description: An abbreviated version of the error in textual format.
+        code:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: "If present, this refers to a table of coded values exchanged\
+            \ between applications to identify errors or warnings."
+        docURL:
+          maxLength: 2000
+          type: string
+          description: "If present, this URL refers to an online description of the\
+            \ error that occurred."
+        status:
+          maxLength: 2000
+          type: string
+          description: "If present, recommended values are those enumerated in the\
+            \ ErrorRS, (NotProcessed Incomplete Complete Unknown) however, the data\
+            \ type is designated as string data, recognizing that trading partners\
+            \ may identify additional status conditions not included in the enumeration."
+        tag:
+          maxLength: 2000
+          type: string
+          description: "If present, this attribute may identify an unknown or misspelled\
+            \ tag that caused an error in processing. It is recommended that the Tag\
+            \ attribute use XPath notation to identify the location of a tag in the\
+            \ event that more than one tag of the same name is present in the document.\
+            \ Alternatively, the tag name alone can be used to identify missing data\
+            \ [Type=ReqFieldMissing]."
+        recordId:
+          maxLength: 2000
+          type: string
+          description: "If present, this attribute allows for batch processing and\
+            \ the identification of the record that failed amongst a group of records.\
+            \ This value may contain a concatenation of a unique failed transaction\
+            \ ID with specific record(s) associated with that transaction."
+        type:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: The Warning element MUST contain the Type attribute that uses
+            a recommended set of values to indicate the warning type. The validating
+            XSD can expect to accept values that it has NOT been explicitly coded
+            for and process them by using Type ="Unknown".
+        language:
+          pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+          type: string
+          description: Language identification.
+        rph:
+          maxLength: 8
+          minLength: 1
+          type: string
+          description: Reference Place Holder used as an index for this warning.
+      description: Used when a message has been successfully processed to report any
+        warnings or business errors that occurred.
+    exceptionDetailType:
+      title: Error Detail
+      required:
+        - title
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: "Absolute URI [RFC3986] that identifies the problem type. \
+            \ When dereferenced, it SHOULD provide a human-readable summary of the\
+            \ problem (for example, using HTML)."
+        title:
+          type: string
+          description: "Short, human-readable summary of the problem.  The summary\
+            \ SHOULD NOT change for subsequent occurrences of the problem, except\
+            \ for purposes of localization."
+        status:
+          type: integer
+          description: "HTTP status code for this occurrence of the problem, set by\
+            \ the origin server."
+        detail:
+          type: string
+          description: Human-readable description specific to this occurrence of the
+            problem.
+        instance:
+          type: string
+          description: Absolute URI that identifies the specific occurrence of the
+            problem.  It may or may not provide additional information if dereferenced.
+        o:errorCode:
+          type: string
+          description: "Application error code, which is different from HTTP error\
+            \ code."
+        o:errorPath:
+          type: string
+          description: Path to the problem at the resource or property level.
+        o:errorDetails:
+          type: array
+          description: "Details of the error message, consisting of a hierarchical\
+            \ tree structure."
+          items:
+            $ref: '#/components/schemas/errorInstance'
+        links:
+          $ref: '#/components/schemas/links'
+      description: Complex type that contains error details for a REST call.
+    errorInstance:
+      title: Error Instance Details
+      required:
+        - title
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: "Absolute URI [RFC3986] that identifies the problem type. \
+            \ When dereferenced, it SHOULD provide a human-readable summary of the\
+            \ problem (for example, using HTML)."
+        title:
+          type: string
+          description: "Short, human-readable summary of the problem.  The summary\
+            \ SHOULD NOT change for subsequent occurrences of the problem, except\
+            \ for purposes of localization."
+        status:
+          type: integer
+          description: "HTTP status code for this occurrence of the problem, set by\
+            \ the origin server."
+        detail:
+          type: string
+          description: Human-readable description specific to this occurrence of the
+            problem.
+        instance:
+          type: string
+          description: Absolute URI that identifies the specific occurrence of the
+            problem.  It may or may not provide additional information if dereferenced.
+        o:errorCode:
+          type: string
+          description: "Application error code, which is different from HTTP error\
+            \ code."
+        o:errorPath:
+          type: string
+          description: Path to the problem at the resource or property level.
+      description: Complex type that contains error instance details for a REST call.
+    emailFile:
+      type: object
+      properties:
+        file:
+          $ref: '#/components/schemas/emailFileType'
+        links:
+          $ref: '#/components/schemas/links'
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+      description: Response object for Fetch Email Blob File Operation.
+    emailFileType:
+      type: object
+      properties:
+        emailID:
+          $ref: '#/components/schemas/uniqueID_Type'
+        emailFile:
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+          description: File attachment in base64 binary format
+          format: byte
+        emailFileName:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name of the attachment
+      description: ID that uniquely defines an email object
+    file:
+      type: object
+      properties:
+        fileDetails:
+          $ref: '#/components/schemas/fileAttachmentType'
+        links:
+          $ref: '#/components/schemas/links'
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+      description: Response to fetch file attachment
+    fileAttachmentType:
+      type: object
+      properties:
+        attachmentId:
+          $ref: '#/components/schemas/uniqueID_Type'
+        fileAttachment:
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+          description: File attachment in base64 binary format
+          format: byte
+        fileName:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name of the attachment
+      description: ID that uniquely determines file attachment
+    fileToUpload:
+      type: object
+      properties:
+        linkId:
+          $ref: '#/components/schemas/stringLength200'
+        linkType:
+          $ref: '#/components/schemas/stringLength200'
+        fileName:
+          $ref: '#/components/schemas/stringLength1000'
+        description:
+          $ref: '#/components/schemas/stringLength2000'
+        userName:
+          $ref: '#/components/schemas/stringLength200'
+        hotelId:
+          $ref: '#/components/schemas/stringLength200'
+        globalYN:
+          $ref: '#/components/schemas/stringLength10'
+        fileAttachment:
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+          description: Attachment file in base64 binary format.
+          format: byte
+        overwriteExistingFileYN:
+          $ref: '#/components/schemas/stringLength10'
+        links:
+          $ref: '#/components/schemas/links'
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+      description: Request to upload a file attachment.
+    stringLength200:
+      maxLength: 200
+      minLength: 0
+      type: string
+      description: "Used for Character Strings, length 0 to 200."
+    stringLength1000:
+      maxLength: 1000
+      minLength: 0
+      type: string
+      description: "Used for Character Strings, length 0 to 1000."
+    stringLength2000:
+      maxLength: 2000
+      minLength: 0
+      type: string
+      description: "Used for Character Strings, length 0 to 2000."
+    stringLength10:
+      maxLength: 10
+      minLength: 0
+      type: string
+      description: "Used for Character Strings, length 0 to 10."
+    status:
+      type: object
+      properties:
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+        links:
+          $ref: '#/components/schemas/links'
+      description: Response Body.
+    folioReportToEmail:
+      type: object
+      properties:
+        folioInfo:
+          $ref: '#/components/schemas/folioReportCriteriaType'
+        emailRecipients:
+          $ref: '#/components/schemas/emailRecipientsType'
+        links:
+          $ref: '#/components/schemas/links'
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+      description: Request to generate and email a folio report.
+    folioReportCriteriaType:
+      type: object
+      properties:
+        hotelId:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: Hotel code for the folio.
+        reservationId:
+          $ref: '#/components/schemas/uniqueID_Type'
+        folioWindowNo:
+          type: integer
+          description: Folio window number to generate (defaults to view 1).
+        billNumber:
+          type: number
+          description: Optional bill number to generate.
+        folioType:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Optional folio type.
+        folioDate:
+          type: string
+          description: Optional folio generation date - defaults to hotel business
+            date.
+          format: date
+        referenceCurrency:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: Folio currency code.
+      description: Criteria required to generate or retrieve a folio for a reservation.
+    emailRecipientsType:
+      maxItems: 4000
+      type: array
+      items:
+        $ref: '#/components/schemas/emailRecipientType'
+    emailRecipientType:
+      type: object
+      properties:
+        emailAddress:
+          maxLength: 200
+          minLength: 0
+          type: string
+    customizedLetterStatus:
+      type: object
+      properties:
+        links:
+          $ref: '#/components/schemas/links'
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+      description: Response Body.
+    folioReport:
+      type: object
+      properties:
+        folio:
+          $ref: '#/components/schemas/folioReportResultType'
+        links:
+          $ref: '#/components/schemas/links'
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+      description: Response object for folio report.
+    folioReportResultType:
+      type: object
+      properties:
+        hotelId:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: Hotel code for the folio.
+        reservationId:
+          $ref: '#/components/schemas/uniqueID_Type'
+        folio:
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+          description: Folio PDF report.
+          format: byte
+      description: "Folio card details, including PDF report."
+    registrationCard:
+      type: object
+      properties:
+        registrationCard:
+          $ref: '#/components/schemas/registrationCardType'
+        links:
+          $ref: '#/components/schemas/links'
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+      description: Response object for registration card.
+    registrationCardType:
+      type: object
+      properties:
+        hotelId:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: Hotel code for the registration card.
+        reservationId:
+          $ref: '#/components/schemas/uniqueID_Type'
+        registrationCard:
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+          description: Registration card PDF.
+          format: byte
+      description: "Registration card details, including PDF report."
+    imageToUpload:
+      type: object
+      properties:
+        images:
+          $ref: '#/components/schemas/imageUploadInfoType'
+        links:
+          $ref: '#/components/schemas/links'
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+      description: Request to upload an image.
+    imageUploadInfoType:
+      maxItems: 10
+      type: array
+      description: List of Image details to upload including image to upload.
+      items:
+        $ref: '#/components/schemas/imageUploadType'
+    imageUploadType:
+      type: object
+      properties:
+        imageCode:
+          $ref: '#/components/schemas/imageCodeType'
+        fileExtension:
+          maxLength: 10
+          minLength: 0
+          type: string
+          description: "File extension of the Image, e.g. JPG, PNG, BMP, etc."
+        imageParameters:
+          $ref: '#/components/schemas/imageParametersType'
+        languageCode:
+          $ref: '#/components/schemas/languageType'
+        imageStyle:
+          $ref: '#/components/schemas/imageStyleType'
+        linkId:
+          $ref: '#/components/schemas/uniqueID_Type'
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: Description of the image.
+        image:
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+          description: Image file to upload.
+          format: byte
+        imageId:
+          $ref: '#/components/schemas/uniqueID_Type'
+      description: Image upload details
+    imageCodeType:
+      type: string
+      enum:
+        - LogoChain
+        - Logo
+        - Profile
+        - Nationality
+        - User
+        - ToolbarItemCode
+        - Chain
+        - MembershipType
+        - MembershipLevel
+        - Resort
+        - RoomTypeChain
+        - RoomType
+        - RoomNumber
+        - OooReasonChain
+        - OooReason
+        - RoomMaintChain
+        - RoomMaintenance
+        - RoomMaintIssue
+        - FloorPlan
+        - SiteLayout
+        - Attraction
+        - PropertyMap
+        - InvItemChain
+        - InvItem
+        - PackageChain
+        - Package
+        - Pool
+        - RoomConditionChain
+        - RoomCondition
+        - FunctionSpace
+        - FunctionSetupStyle
+        - TrackItTypeChain
+        - TrackItType
+        - Height
+        - Width
+    imageParametersType:
+      maxItems: 500
+      type: array
+      description: Collection of image parameters code / value pairs.
+      items:
+        $ref: '#/components/schemas/imageParameterType'
+    imageParameterType:
+      type: object
+      properties:
+        imageParameterCode:
+          $ref: '#/components/schemas/imageCodeType'
+        imageParameterValue:
+          maxLength: 40
+          minLength: 0
+          type: string
+          description: Image parameter value.
+      description: Image parameter code/value pair
+    languageType:
+      maxLength: 40
+      minLength: 0
+      type: string
+    imageStyleType:
+      type: string
+      description: An enumeration of image styles.
+      enum:
+        - Full
+        - Thumbnail
+        - Icon
+        - Square
+        - Banner
+        - Button
+        - Lowres
+        - Highres
+    image:
+      type: object
+      properties:
+        images:
+          $ref: '#/components/schemas/imageResultsType'
+        links:
+          $ref: '#/components/schemas/links'
+        warnings:
+          $ref: '#/components/schemas/warningsType'
+      description: Response to fetch image(s)
+    imageResultsType:
+      maxItems: 4000
+      type: array
+      description: Collection of image results.
+      items:
+        $ref: '#/components/schemas/imageResultType'
+    imageResultType:
+      type: object
+      properties:
+        imageSet:
+          maxLength: 800
+          minLength: 0
+          type: string
+          description: Image set describing path of image.
+        mimeType:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: Mime type of the Image.
+        image:
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+          description: Image file to upload.
+          format: byte
+        imageId:
+          $ref: '#/components/schemas/uniqueID_Type'
+        linkId:
+          $ref: '#/components/schemas/uniqueID_Type'
+        imageLinkId:
+          $ref: '#/components/schemas/uniqueID_Type'
+        base64Image:
+          type: string
+          description: Base64Image image content of the file.
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/exceptionDetailType'
+    "401":
+      description: Unauthorized
+      content: {}
+    "403":
+      description: Forbidden
+      content: {}
+    "404":
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/exceptionDetailType'
+    "405":
+      description: Method not allowed
+      content: {}
+    "406":
+      description: Not acceptable.
+      content: {}
+    "413":
+      description: Request Entity Too Large
+      content: {}
+    "414":
+      description: Request URI Too Large
+      content: {}
+    "415":
+      description: Unsupported Media Type
+      content: {}
+    "500":
+      description: System Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/exceptionDetailType'
+    "502":
+      description: Bad Gateway
+      content: {}
+    "503":
+      description: Service Unavailable
+      content: {}
+  parameters:
+    authKey:
+      name: authorization
+      in: header
+      description: Bearer token that needs to be passed which is generated post user
+        authentication
+      required: true
+      schema:
+        type: string
+    x-app-key:
+      name: x-app-key
+      in: header
+      description: Client or Partner's Application Key
+      required: true
+      schema:
+        pattern: "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$"
+        type: string
+    x-hotelid:
+      name: x-hotelid
+      in: header
+      description: Mandatory parameter to identify the hotel code where the end user
+        is logged in
+      required: true
+      schema:
+        type: string
+    x-externalsystem:
+      name: x-externalsystem
+      in: header
+      description: External system code.
+      schema:
+        maxLength: 80
+        type: string
+      example: EXTERNALSYSTEMCODE
+    Accept-Language:
+      name: Accept-Language
+      in: header
+      description: Language code
+      schema:
+        type: string
+    x-hubid:
+      name: x-hubid
+      in: header
+      description: x-hubid is a logical grouping of multiple properties that allows
+        api consumers to manage data from a group of properties. This x-hubid is a
+        valid list of hub codes configured in OPERA to which the user has access.
+        Rest APIs without hotelId in the operation path can support hub level integration
+        using x-hubid
+      schema:
+        type: string

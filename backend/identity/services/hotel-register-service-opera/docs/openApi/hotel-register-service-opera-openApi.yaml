@@ -1,0 +1,919 @@
+openapi: 3.1.0
+info:
+  description: API Documentation
+  title: Hotel register Microservice API Documentation
+  version: 1.10.0
+servers:
+- description: Generated server url
+  url: http://localhost:9027
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /customers/hotels:
+    post:
+      description: Create Customer
+      operationId: createCustomer
+      parameters:
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerResponse"
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to create a new customer resource
+      tags:
+      - Hotel Register operations
+  /cypher:
+    post:
+      deprecated: true
+      description: Cypher a plain text
+      operationId: cypherPlainText
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EncryptRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EncryptResponse"
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to create a new customer resource
+      tags:
+      - Endpoint created to cypher emails. Random endpoint name to mask its purpose
+  /v1/hotel-register/accounts/register:
+    post:
+      description: Register Account
+      operationId: registerAccount_1
+      parameters:
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppsCustomer"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerResponse"
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides App register functionality
+      tags:
+      - Apps Register operations
+  /v1/hotel-register/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/hotel-register/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/hotel-register/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/hotel-register/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /v1/hotel-register/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /v1/hotel-register/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /v1/hotel-register/innbusiness/registration/step-one:
+    post:
+      description: InnBusiness Register Step One
+      operationId: registerInnBStepOne
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InnBRegistrationStepOneRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerResponse"
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides InnBusiness register first step functionality
+      tags:
+      - InnBusiness Register operations
+  /v1/hotel-register/innbusiness/registration/step-two:
+    post:
+      description: InnBusiness Register Step Two
+      operationId: registerInnBStepTwo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InnBRegistrationStepTwoRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerResponse"
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides InnBusiness register second step functionality
+      tags:
+      - InnBusiness Register operations
+  /v1/hotel-register/universal-login/leisure/accounts:
+    post:
+      description: Register Account
+      operationId: registerAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterAccountRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterAccountResponse"
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Invalid input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Something went wrong"
+      summary: This endpoint registers a new account in CDH
+      tags:
+      - Universal Login operations
+  /va3PkOkJNTUf76oe3UDoIqrA:
+    post:
+      description: Cypher a plain text
+      operationId: cypherBase64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EncryptRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EncryptResponse"
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to create a new customer resource
+      tags:
+      - Endpoint created to cypher emails. Random endpoint name to mask its purpose
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        companyName:
+          type: string
+        countryCode:
+          type: string
+          minLength: 1
+        line1:
+          type: string
+          minLength: 1
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        line5:
+          type: string
+        postCode:
+          type: string
+        type:
+          type: string
+          enum:
+          - HOME
+          - BUSINESS
+      required:
+      - countryCode
+      - line1
+      - type
+    AppsContactDetail:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+      required:
+      - email
+      - firstName
+      - lastName
+    AppsCustomer:
+      type: object
+      description: The Customer JSON payload
+      properties:
+        captcha:
+          type: string
+        contactDetail:
+          $ref: "#/components/schemas/AppsContactDetail"
+        password:
+          type: string
+      required:
+      - contactDetail
+      - password
+    BookingPreference:
+      type: object
+      properties:
+        foodPreference:
+          type: integer
+          format: int64
+        reason:
+          type: string
+          enum:
+          - LEISURE
+          - BUSINESS
+        roomRequirements:
+          $ref: "#/components/schemas/RoomCriteria"
+        wantSmsConfirmations:
+          type: boolean
+    ContactDetail:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/Address"
+        carRegistration:
+          type: string
+        dialingCode:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        mobile:
+          type: string
+        nationality:
+          type: string
+        passport:
+          $ref: "#/components/schemas/Passport"
+        telephone:
+          type: string
+        title:
+          type: string
+          minLength: 1
+      required:
+      - address
+      - email
+      - firstName
+      - lastName
+      - title
+    Customer:
+      type: object
+      description: The Customer JSON payload
+      properties:
+        additionalGuests:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContactDetail"
+        alternativeName:
+          type: string
+        approxAnnualUKHotelSpend:
+          type: string
+        basketReference:
+          type: string
+        bookingPreference:
+          $ref: "#/components/schemas/BookingPreference"
+        captcha:
+          type: string
+        companyId:
+          type: string
+        companyName:
+          type: string
+        contactDetail:
+          $ref: "#/components/schemas/ContactDetail"
+        guestHistoryNumber:
+          type: string
+        guestId:
+          type: integer
+          format: int64
+        password:
+          type: string
+        paymentPreference:
+          $ref: "#/components/schemas/PaymentPreference"
+      required:
+      - contactDetail
+      - password
+    CustomerResponse:
+      type: object
+      properties:
+        customerId:
+          type: string
+        existingCompany:
+          type: boolean
+        existingEmployee:
+          type: boolean
+        sessionId:
+          type: string
+        success:
+          type: boolean
+    EncryptRequest:
+      type: object
+      description: The plainText to be cyphered
+      properties:
+        plainText:
+          type: string
+          deprecated: true
+        r07ff4EmmB9YU2pouslyuBG4bOgqKXbp8xah1UAGbTlUut2U:
+          type: string
+    EncryptResponse:
+      type: object
+      properties:
+        am7VLjo2qMes8BT4PAMBLkNEKVCYPvMMcfSUlbihxZsvlC4w:
+          type: string
+        encrypted:
+          type: string
+          deprecated: true
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "001"
+          minLength: 1
+        details:
+          type: array
+          example:
+          - Error message
+          items:
+            type: string
+      required:
+      - code
+      - details
+    InnBCompanyAddress:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          minLength: 1
+          pattern: "^[A-Z]{1,3}$"
+        line1:
+          type: string
+          minLength: 1
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        line5:
+          type: string
+        postCode:
+          type: string
+      required:
+      - countryCode
+      - line1
+    InnBRegistrationStepOneRequest:
+      type: object
+      description: The Customer JSON payload
+      properties:
+        address:
+          $ref: "#/components/schemas/InnBCompanyAddress"
+        companyName:
+          type: string
+          minLength: 1
+        companyType:
+          type: string
+          enum:
+          - BB
+          - INNB
+          - BP
+        email:
+          type: string
+          format: email
+          minLength: 1
+        language:
+          type: string
+          minLength: 1
+          pattern: en|de
+        socialMediaId:
+          type: string
+        socialMediaType:
+          type: string
+        uniqueTaxpayerReference:
+          type: string
+        updatePreferencesRequest:
+          $ref: "#/components/schemas/UpdatePreferencesRequest"
+      required:
+      - address
+      - companyName
+      - email
+      - language
+    InnBRegistrationStepTwoRequest:
+      type: object
+      description: The Customer JSON payload
+      properties:
+        activationKey:
+          type: string
+          minLength: 1
+        averageMonthlyBooking:
+          type: string
+        companySector:
+          type: string
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        numberOfEmployee:
+          type: string
+        password:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+        title:
+          type: string
+          minLength: 1
+        updatePreferencesRequest:
+          $ref: "#/components/schemas/UpdatePreferencesRequest"
+      required:
+      - activationKey
+      - firstName
+      - lastName
+      - password
+      - title
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    MarketingCustomer:
+      type: object
+      properties:
+        countryOfResidence:
+          type: string
+        customerId:
+          type: string
+        firstName:
+          type: string
+        language:
+          type: string
+        lastName:
+          type: string
+        nationality:
+          type: string
+        title:
+          type: string
+        userId:
+          type: string
+    Passport:
+      type: object
+      properties:
+        countryOfIssue:
+          type: string
+        number:
+          type: string
+          minLength: 1
+      required:
+      - number
+    PaymentCard:
+      type: object
+      properties:
+        cardHolderName:
+          type: string
+        cardNumber:
+          type: string
+        cardType:
+          type: string
+        expiryDate:
+          type: string
+        issueNumber:
+          type: string
+        startDate:
+          type: string
+    PaymentPreference:
+      type: object
+      properties:
+        electronicInvoiceRequired:
+          type: boolean
+        paymentCard:
+          $ref: "#/components/schemas/PaymentCard"
+      required:
+      - paymentCard
+    RegisterAccountRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        updatePreferencesRequest:
+          $ref: "#/components/schemas/UpdatePreferencesRequest"
+      required:
+      - email
+      - firstName
+      - lastName
+    RegisterAccountResponse:
+      type: object
+      properties:
+        customerId:
+          type: string
+    RoomCriteria:
+      type: object
+      properties:
+        adults:
+          type: integer
+          format: int32
+          minimum: 0
+        children:
+          type: integer
+          format: int32
+          minimum: 0
+        cotRequired:
+          type: boolean
+        hotelBrand:
+          type: string
+        lettingType:
+          type: string
+        type:
+          type: string
+          enum:
+          - FAM
+          - DB
+          - TWIN
+          - DIS
+          - SB
+      required:
+      - adults
+      - children
+      - cotRequired
+      - type
+    SourceDetails:
+      type: object
+      properties:
+        channel:
+          type: string
+        journey:
+          type: string
+        locale:
+          type: string
+    UpdatePreferencesRequest:
+      type: object
+      properties:
+        brandCodes:
+          type: array
+          items:
+            type: string
+        contactSubType:
+          type: string
+          enum:
+          - mobile
+          - landline
+        contactType:
+          type: string
+        contactValue:
+          type: string
+        customer:
+          $ref: "#/components/schemas/MarketingCustomer"
+        doubleOptIn:
+          type: boolean
+        optIn:
+          type: boolean
+        secondPartyOptIn:
+          type: boolean
+        sourceDetails:
+          $ref: "#/components/schemas/SourceDetails"
+        thirdPartyVendorsOptIn:
+          type: boolean

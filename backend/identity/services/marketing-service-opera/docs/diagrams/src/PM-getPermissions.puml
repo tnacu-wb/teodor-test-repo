@@ -1,0 +1,20 @@
+@startuml
+title Get Marketing Permissions
+actor Client
+box "Hotel Marketing Service"
+    boundary "GET marketing/newsletter/{contactType}/{contactValue}?brandCodes=PINN" as GET
+end box
+entity Oauth
+entity Redis
+entity Permission_Management_API
+Client -> GET: FE sends email/phone
+GET <-> Redis: retrieve bearer token from cache
+
+alt if token not in cache
+    GET <-> Oauth: generate new bearer token
+    GET -> Redis: Cache bearer token for 1 hour
+end
+
+GET <-> Permission_Management_API: retrieve permissions with token
+GET -> Client: Returns newsletter permissions
+@enduml

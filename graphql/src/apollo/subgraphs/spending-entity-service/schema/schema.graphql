@@ -1,0 +1,107 @@
+schema {
+    query: Query
+}
+
+type Query {
+    getCompanySpending(searchCompanySpending: SearchCompanySpendingCriteria!): CompanySpendingResponse
+    getAccountSpending(accountSpendingCriteria: AccountSpendingCriteria!): AccountSpendingResponse
+    getAccountUpcomingSpending(accountId: String!,tetheredUserGuid: String): AccountUpcomingSpendingResponse
+    getPaymentInfo(paymentInfoCriteria: PaymentInfoCriteria): PaymentInfoResponse
+    getEmployeeSpend(employeeSpendCriteria: EmployeeSpendCriteria!): EmployeeSpendResponse
+}
+
+input EmployeeSpendCriteria {
+  fromMonthYear: String!
+  toMonthYear: String!
+}
+
+input AccountSpendingCriteria {
+    fromMonthYear: String!
+    toMonthYear: String!
+    pibaAccountId: String!
+    tetheredUserGuid: String
+}
+
+type AccountSpendingResponse {
+    accountSpendingDtoList: [AccountSpendingDto]
+}
+
+type AccountSpendingDto {
+    pibaAccountId: String
+    year: Int
+    month: Int
+    noOfBookings: Int
+    bookingValue: Float
+}
+
+input SearchCompanySpendingCriteria {
+    fromMonthYear: String!
+    toMonthYear: String!
+}
+
+type CompanySpendingResponse {
+    companySpendingDtoList: [CompanySpendingDto]
+}
+
+type CompanySpendingDto {
+    companyAccountId: String
+    year: Int
+    month: Int
+    noOfBookings: Int
+    bookingValue: Float
+    bookingCurrency: String
+}
+
+type AccountUpcomingSpendingResponse {
+    expectedSpendTodayDate: String
+    expectedSpendToday: Float
+    expectedNextBillingStartDate: String
+    expectedNextBillingEndDate: String
+    expectedNextBilling: Float
+    expectedNextPeriodStartDate: String
+    expectedNextPeriodEndDate: String
+    expectedNextPeriod: Float
+    currency: String
+    accountStatus: String
+}
+
+type EmployeeSpendResponse {
+  employeeSpendDtoList: [EmployeeSpendDto]
+}
+
+type EmployeeSpendDto {
+  companyAccountId: String
+  employeeAccountId: String
+  year: Int
+  month: Int
+  noOfBookings: Int
+  bookingValue: Float
+  bookingCurrency: String
+}
+
+input PaymentInfoCriteria {
+    accountId: String!
+    page: Int!
+    size: Int!
+    nonInvoiceOnly: Boolean!
+    tetheredUserGuid: String
+}
+
+type PaymentInfoResponse {
+    payments: [Payments]
+    errors: String
+}
+
+type Payments {
+    paymentDate: String
+    paymentDescription: String
+    failureReason: String
+    paymentFailed: Boolean
+    paymentValue: PaymentValue
+}
+
+type PaymentValue {
+    value: String
+    currencyCode: String
+    currencySymbol: String
+}

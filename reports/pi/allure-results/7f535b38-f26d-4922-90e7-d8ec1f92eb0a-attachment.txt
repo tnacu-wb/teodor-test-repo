@@ -1,0 +1,131 @@
+Starting test worker 4
+https://whitbread.yourzephyr.com/flex/html5/tcr/467;testcaseId=1282640;viewType=list;pageSize=50;pageView=search;offset=0;searchText=testcaseId%20%3D%20380779;searchType=zql;inRelease=true;currentIndex=1;usageHistoryGridSize=50
+-> Given I want to book a room as a PI guest user
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_web_push_notifications=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_pi_bb_booking_history_redesign=false,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_datatrans_integration=false,release_ib_user_pilot=false
+Navigating to localized path: home.html
+Pre-setting consent cookies
+Dismissing notification popup if present
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_pi_bb_booking_history_redesign=false,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_datatrans_integration=false,release_ib_user_pilot=false,release_pi_web_push_notifications=true
+Get reservations for hotel id "HEAPTI", surname "Testersons", arrivalStartDate "Thu Sep 17 2026 12:46:56 GMT+0300 (Eastern European Summer Time)", limit "1000", offset "0".
+Switch to default content from IFrame
+Room found for the period: 2026-10-02 - 2026-10-03
+-> When I navigate to Destination landing page (DLP)
+Navigating to DLP: hotels/england/west-midlands/birmingham.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+Validating DLP page loaded
+-> Then I should see that the DLP page is displayed with its elements
+Dismissing notification popup if present
+Getting DLP path from URL
+Validate Dlp Content Service against API
+Validate Hotel title, description and picture
+Validate Seo section
+Validating DLP page elements
+-> When I check the custom notification prompt
+                        And I click “Allow”
+-> Then the custom prompt closes, the close count is increased by one and the last closed time is updated
+-> When I check Trip Advisor on Grid view
+-> Then I can click on reviews link & a new tab will open with HDP focused on reviews section.
+Validating TripAdvisor section with 12 reviews
+Validating TripAdvisor review link opens to: /de/de/hotels/england/west-midlands/birmingham/birmingham-city-centre-exchange-square.html
+Clicking TripAdvisor review link
+Navigating to DLP: hotels/england/west-midlands/birmingham.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+-> When I click on "Map View"
+-> Then the page should change from a list view to a map view
+Switching to map view
+-> When I check hotel card pins from the Map view
+-> Then each hotel will display:   
+                        - hotel image
+                        - hotel name
+                        - distance from the location
+                        - facilities
+                        - TripAdvisor rating
+                        - option to go to the hotel detail page
+Validating map view cards for 14 hotels
+-> When I click on a map pin
+                        And I click on the hotel card details
+-> Then I am redirected to the Hotel detail page for that hotel
+                        And "Back" action from HDP brings me back on DLP - Map view
+Clicking map marker at hotel index 0
+Clicking view hotel button on map card
+Validating hotel details page loaded
+Validating DLP page loaded
+Verifying map view is active
+Switching to grid view
+-> When I check the search results in map view, after loading more hotels
+-> Then I should see that the extended list of hotels from "Show more" - Grid view, are visible on the Map view also
+Validating hotel list elements in grid view
+Validating hotel distance is displayed
+Validating all hotel cards show distance
+-> When I check the hotels list from Grid view, after loading more hotels
+-> Then I should see all hotels displayed in the list
+Clicking show more until all hotels loaded
+Clicking show more button
+Get hotels list for Destination landing page from Dictionary
+Validating hotel list elements in grid view
+Getting hotel card count
+Validating map pins match grid cards
+Getting hotel card count
+Switching to map view
+Validating map pins count: 14
+Switching to grid view
+-> When I go to another Destination landing page where Distance from search is not available (restricted from AEM)
+-> Then I should see that the Distance from search is not displayed on hotel cards, on both Grid and Map view
+Navigating to DLP: hotels/england/bedfordshire/luton.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+Validating DLP page loaded
+Dismissing notification popup if present
+Getting DLP path from URL
+Validating all hotel cards hide distance
+Switching to map view
+Validating map view hides hotel distance
+-> When I search for a specific PI brand Hotel for 1 room for 2 adults for 1 night and click on the Search button.
+Opening hotel details page: /hotels/england/greater-london/london/london-heathrow-airport-m4j4.html
+Navigating to localized path: /hotels/england/greater-london/london/london-heathrow-airport-m4j4.html?ARRdd=17&ARRmm=9&ARRyyyy=2026&NIGHTS=2&ROOMS=1&ADULT1=1&CHILD1=0&COT1=0&INTTYP1=DB
+Pre-setting consent cookies
+Dismissing notification popup if present
+Clearing location input field
+Clear location input
+Expand search console if collapsed
+Searching hotels: London Heathrow Airport (M4/J4) (2026-10-02 to 2026-10-03)
+Perform search hotelName=London Heathrow Airport (M4/J4) checkIn=2026-10-02 checkOut=2026-10-03
+Clear location input
+Expand search console if collapsed
+Search for hotel=London Heathrow Airport (M4/J4)
+Set dates checkIn=2026-10-02 checkOut=2026-10-03
+Select date=2026-10-02
+Select date=2026-10-02
+Go to date=2026-10-02 from current=2026-08-31
+Click calendar next month button
+Select date=2026-10-03
+Select date=2026-10-03
+Go to date=2026-10-03 from current=2026-09-30
+Set rooms=[{"adults":2,"children":0}]
+Select 2 adults for room index=0
+Select 0 children for room index=0
+Click search submit button
+Validating hotel details page loaded
+Validating navigated to hotel with slug: /hotels/england/greater-london/london/london-heathrow-airport-m4j4.html
+-> Then I should be directed to Hotel details page of my selected hotel.
+Validating hotel title: London Heathrow Airport (M4/J4) Hotel
+-> When I select FLEX rate available and check the Booking summary panel
+Selecting flex rate option
+Getting selected room name
+-> Then it should be populated with the selected rate and room class information
+Getting selected rate name
+Validating booking summary rate plan: Flex
+Validating total price rate
+Clicking see breakdown link
+Extracting prices and dates per night
+Getting total room price from HDP breakdown
+Extracting prices and dates per night
+Validating prices per night in HDP breakdown
+Failed page URL: https://www.uat.premierinn.digital/de/de/hotels/england/greater-london/london/london-heathrow-airport-m4j4.html?ARRdd=02&ARRmm=10&ARRyyyy=2026&NIGHTS=1&ROOMS=1&ADULT1=2&CHILD1=0&COT1=0&INTTYP1=DB
+The current page feature toggles: [{"name":"release_dynatrace_rum_cookie_consent","value":true},{"name":"release_one_trust_cookie_consent","value":false},{"name":"release_pi_analytics_debounce","value":false},{"name":"release_pi_redis_rq_cache","value":false},{"name":"release_semantic_typography_tokenization","value":false},{"name":"release_pi_bb_ccui_white_trip_advisor_review","value":true},{"name":"release_pi_group_booking_form","value":true},{"name":"release_pi_web_push_notifications","value":true},{"name":"release_pi_hreflang_attribute","value":false},{"name":"release_pi_breakfast_promo_code","value":true},{"name":"kill_switch_pi_meta_search","value":true},{"name":"release_pi_discount_rate","value":true},{"name":"release_pi_new_dlp_filters","value":true},{"name":"release_pi_bb_ccui_nonsilent_substitution_per_roomclass","value":true},{"name":"release_pi_bb_ccui_premier_plus_accessible_room","value":true},{"name":"release_pi_promo_code_landing_page","value":true},{"name":"release_pi_promo_code_site_wide","value":false},{"name":"release_pi_bb_ccui_rooms_disclaimer","value":true},{"name":"release_pi_sort_order_dropdown","value":true},{"name":"release_pi_bb_ccui_choose_room_type","value":true},{"name":"release_pi_bb_ccui_barrier_free_label","value":false},{"name":"release_pi_price_per_night","value":true},{"name":"release_pi_room_upgrade_popup","value":false},{"name":"kill_switch_hide_chat_bot_pi","value":false},{"name":"release_show_chat_bot_all_pages_pi","value":false},{"name":"release_pi_summer_sale_promotion_banner","value":false},{"name":"release_pi_signup_in_header","value":true},{"name":"release_pi_bb_ccui_hdp_image_gallery_redesign","value":false},{"name":"release_pi_ccui_bb_promotion_box_code_cookie","value":true},{"name":"release_pi_no_room_type_search","value":true},{"name":"release_pi_two_month_search","value":true},{"name":"release_pi_display_soft_bundles","value":true},{"name":"release_pi_pib_ccui_city_tax_breakdown","value":false},{"name":"release_pi_auth0_login","value":false},{"name":"release_pib_login_redirect","value":true},{"name":"release_promotions_in_hotelavailability","value":true},{"name":"release_pi_bb_show_google_static_map","value":true},{"name":"release_pi_room_details_drawer","value":true},{"name":"release_pi_free_fnb_and_extras","value":true},{"name":"kill_switch_enable_urgency_banner","value":true},{"name":"release_pi_show_promotion_box","value":true}]
+Stopping test worker 4

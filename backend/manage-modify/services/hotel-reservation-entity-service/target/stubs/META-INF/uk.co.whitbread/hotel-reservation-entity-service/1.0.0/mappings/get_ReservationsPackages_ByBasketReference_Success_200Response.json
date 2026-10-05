@@ -1,0 +1,29 @@
+{
+  "id" : "e9a5cb8d-31fb-41e6-aebd-4e7b692b2a74",
+  "request" : {
+    "urlPath" : "/v1/reservations/ancillaries",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "queryParameters" : {
+      "hotelId" : {
+        "equalTo" : "HOTELTEST"
+      },
+      "basketReferenceId" : {
+        "equalTo" : "TestPackages123"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"roomsSelections\":[{\"packagesSelection\":[{\"id\":\"MTEST\",\"noOfSelections\":1}]}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "e9a5cb8d-31fb-41e6-aebd-4e7b692b2a74"
+}

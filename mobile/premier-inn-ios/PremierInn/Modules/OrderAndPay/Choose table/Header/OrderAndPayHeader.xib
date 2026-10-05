@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="mOz-Bx-abz" customClass="OrderAndPayHeader" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="450" height="182"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zxo-Tk-EMm">
+                    <rect key="frame" x="0.0" y="0.0" width="450" height="182"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="P1S-cT-KWi">
+                            <rect key="frame" x="0.0" y="0.0" width="450" height="182"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="88l-2p-Mxs">
+                                    <rect key="frame" x="0.0" y="0.0" width="450" height="100"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="restaurant_header" translatesAutoresizingMaskIntoConstraints="NO" id="z33-n8-Ott">
+                                            <rect key="frame" x="0.0" y="0.0" width="450" height="100"/>
+                                        </imageView>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="brewers_fayre_logo" translatesAutoresizingMaskIntoConstraints="NO" id="ypU-ZI-ZmC">
+                                            <rect key="frame" x="200" y="25" width="50" height="50"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="50" id="8rr-nf-f8B"/>
+                                                <constraint firstAttribute="width" constant="50" id="N5l-lF-qBP"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstItem="z33-n8-Ott" firstAttribute="top" secondItem="88l-2p-Mxs" secondAttribute="top" id="2gK-X7-Zqy"/>
+                                        <constraint firstItem="ypU-ZI-ZmC" firstAttribute="centerX" secondItem="88l-2p-Mxs" secondAttribute="centerX" id="5Up-RW-yep"/>
+                                        <constraint firstAttribute="trailing" secondItem="z33-n8-Ott" secondAttribute="trailing" id="8Xt-rO-1h3"/>
+                                        <constraint firstAttribute="bottom" secondItem="z33-n8-Ott" secondAttribute="bottom" id="9hN-oF-8bF"/>
+                                        <constraint firstAttribute="height" constant="100" id="YkF-G3-Fs3"/>
+                                        <constraint firstItem="z33-n8-Ott" firstAttribute="leading" secondItem="88l-2p-Mxs" secondAttribute="leading" id="s53-2M-fwV"/>
+                                        <constraint firstItem="ypU-ZI-ZmC" firstAttribute="centerY" secondItem="88l-2p-Mxs" secondAttribute="centerY" id="xVj-64-E6M"/>
+                                    </constraints>
+                                </view>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OBh-ON-0Su">
+                                    <rect key="frame" x="0.0" y="108" width="450" height="15"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="SAc-zi-KgG">
+                                    <rect key="frame" x="0.0" y="131" width="450" height="51"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="51" id="4ZB-nS-5CY"/>
+                                    </constraints>
+                                    <textInputTraits key="textInputTraits"/>
+                                </searchBar>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="SAc-zi-KgG" firstAttribute="leading" secondItem="P1S-cT-KWi" secondAttribute="leading" id="6iU-xO-AxC"/>
+                                <constraint firstItem="OBh-ON-0Su" firstAttribute="top" secondItem="88l-2p-Mxs" secondAttribute="bottom" constant="8" symbolic="YES" id="E5I-5B-xT5"/>
+                                <constraint firstItem="OBh-ON-0Su" firstAttribute="leading" secondItem="P1S-cT-KWi" secondAttribute="leading" id="RwS-Zr-bnn"/>
+                                <constraint firstAttribute="trailing" secondItem="88l-2p-Mxs" secondAttribute="trailing" id="XWX-ZE-CcZ"/>
+                                <constraint firstAttribute="trailing" secondItem="SAc-zi-KgG" secondAttribute="trailing" id="bgJ-fg-Ger"/>
+                                <constraint firstAttribute="trailing" secondItem="OBh-ON-0Su" secondAttribute="trailing" id="q8l-Rw-ieq"/>
+                                <constraint firstItem="88l-2p-Mxs" firstAttribute="leading" secondItem="P1S-cT-KWi" secondAttribute="leading" id="vTG-sI-ycX"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="P1S-cT-KWi" firstAttribute="leading" secondItem="zxo-Tk-EMm" secondAttribute="leading" id="IUx-Zk-RLj"/>
+                        <constraint firstAttribute="bottom" secondItem="P1S-cT-KWi" secondAttribute="bottom" id="QNW-nZ-bVL"/>
+                        <constraint firstAttribute="trailing" secondItem="P1S-cT-KWi" secondAttribute="trailing" id="dwX-68-ly7"/>
+                        <constraint firstItem="P1S-cT-KWi" firstAttribute="top" secondItem="zxo-Tk-EMm" secondAttribute="top" id="uOn-6a-buK"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="6Kj-Sf-IML"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="zxo-Tk-EMm" firstAttribute="leading" secondItem="6Kj-Sf-IML" secondAttribute="leading" id="33f-Pr-0dl"/>
+                <constraint firstAttribute="bottom" secondItem="zxo-Tk-EMm" secondAttribute="bottom" id="FOq-Ng-Jve"/>
+                <constraint firstItem="zxo-Tk-EMm" firstAttribute="trailing" secondItem="6Kj-Sf-IML" secondAttribute="trailing" id="UWs-19-QNu"/>
+                <constraint firstItem="zxo-Tk-EMm" firstAttribute="top" secondItem="mOz-Bx-abz" secondAttribute="top" id="VHk-AO-SQ5"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="contentView" destination="zxo-Tk-EMm" id="qJa-1I-Rh3"/>
+                <outlet property="imageViewBanner" destination="z33-n8-Ott" id="5xZ-mu-b0q"/>
+                <outlet property="label" destination="OBh-ON-0Su" id="j7Z-uj-hl9"/>
+                <outlet property="searchBar" destination="SAc-zi-KgG" id="Cwt-Fv-aPr"/>
+            </connections>
+            <point key="canvasLocation" x="-123.18840579710145" y="-277.23214285714283"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="brewers_fayre_logo" width="243" height="243"/>
+        <image name="restaurant_header" width="1382" height="302"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

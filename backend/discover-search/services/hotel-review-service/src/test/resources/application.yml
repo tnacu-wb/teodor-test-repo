@@ -1,0 +1,102 @@
+spring:
+  profiles:
+    active: test
+---
+server:
+  port: 9126
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+config:
+  service:
+    tripadvisor:
+      host: "https://api.tripadvisor.com"
+      apiKey: ${TRIPADVISOR_API_KEY:CC686CD859C84BDDAA547EED8F0C9A3A}
+      url: "/api/partner/2.0/location/{hotelCode}"
+      params: "?key={key}&lang={lang}&all_shared=true&limit={limit}"
+      dataUrl: "${config.service.tripadvisor.url}/"
+      reviewsUrl: "${config.service.tripadvisor.url}/reviews"
+      connectionTimeout: "5000"
+      readTimeout: "2000"
+
+spring:
+  config:
+    activate:
+      on-profile:
+        - test
+  cache:
+    type: none
+---
+server:
+  port: 9126
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+config:
+  service:
+    tripadvisor:
+      host: "https://api.tripadvisor.com"
+      apiKey: ${TRIPADVISOR_API_KEY:CC686CD859C84BDDAA547EED8F0C9A3A}
+      url: "/api/partner/2.0/location/{hotelCode}"
+      params: "?key={key}&lang={lang}&all_shared=true&limit={limit}"
+      dataUrl: "${config.service.tripadvisor.url}/"
+      reviewsUrl: "${config.service.tripadvisor.url}/reviews"
+      connectionTimeout: "5000"
+      readTimeout: "2000"
+
+spring:
+  config:
+    activate:
+      on-profile:
+        - cachePrefixConfigured
+  cache:
+    type: redis
+    redis:
+      key-prefix: "Hotel-Review-Service"
+      use-key-prefix: true
+---
+server:
+  port: 9126
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+config:
+  service:
+    tripadvisor:
+      host: "https://api.tripadvisor.com"
+      apiKey: ${TRIPADVISOR_API_KEY:CC686CD859C84BDDAA547EED8F0C9A3A}
+      url: "/api/partner/2.0/location/{hotelCode}"
+      params: "?key={key}&lang={lang}&all_shared=true&limit={limit}"
+      dataUrl: "${config.service.tripadvisor.url}/"
+      reviewsUrl: "${config.service.tripadvisor.url}/reviews"
+      connectionTimeout: "5000"
+      readTimeout: "2000"
+
+spring:
+  config:
+    activate:
+      on-profile:
+        - noCachePrefix
+  cache:
+    type: redis
+    redis:
+      key-prefix: "Hotel-Review-Service"
+      use-key-prefix: false

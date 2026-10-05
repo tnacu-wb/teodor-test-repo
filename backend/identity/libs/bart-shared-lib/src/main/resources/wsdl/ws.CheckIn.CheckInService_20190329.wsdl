@@ -1,0 +1,824 @@
+<definitions targetNamespace="http://bartws.micros.com/1.0" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://bartws.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://bartws.micros.com/1.0">
+			<s:element name="PaymentRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="paymentRequest" type="s0:PaymentRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="PaymentRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="confirmationNumber" type="s:string"/>
+					<s:element minOccurs="0" name="paymentCard" type="s0:PaymentCard"/>
+					<s:element minOccurs="0" name="donation" type="s0:Donation"/>
+					<s:element minOccurs="0" name="paymentConfirmationEmail" type="s:string"/>
+					<s:element minOccurs="0" name="ezineSubscribtion" type="s0:SubscriptionRequest"/>
+					<s:element name="browserAccept">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="1000"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="browserUserAgent">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="1000"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="IPAddress" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="PaymentCard">
+				<s:sequence>
+					<s:element name="cardType" type="s:string"/>
+					<s:element name="cardNumber" type="s:string"/>
+					<s:element name="expiryDate" type="s:string"/>
+					<s:element minOccurs="0" name="startDate" type="s:string"/>
+					<s:element minOccurs="0" name="issueNumber" type="s:string"/>
+					<s:element name="cardholderName" type="s:string"/>
+					<s:element minOccurs="0" name="cscCode" type="s:string"/>
+					<s:element minOccurs="0" name="PARes">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="99999"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="prepaymentRequired" type="s:boolean"/>
+					<s:element minOccurs="0" name="businessAccountDetails" type="s0:BusinessAccount"/>
+					<s:element minOccurs="0" name="useExistingCard" type="s:boolean"/>
+					<s:element minOccurs="0" name="billingAddress" type="s0:Address"/>
+					<s:element minOccurs="0" name="cbtCentralCardId" type="s:string"/>
+					<s:element minOccurs="0" name="cbtEmployeeCardId" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="BusinessAccount">
+				<s:sequence>
+					<s:element minOccurs="0" name="purchaseOrder" type="s:string"/>
+					<s:element minOccurs="0" name="customerReference" type="s:string"/>
+					<s:element minOccurs="0" name="cardNotPresentAuth" type="s:boolean"/>
+					<s:element minOccurs="0" name="atosUsername" type="s:string"/>
+					<s:element minOccurs="0" name="atosPassword" type="s:string"/>
+					<s:element minOccurs="0" name="breakfastCodeRequired" type="s:long"/>
+					<s:element minOccurs="0" name="dinnerAllowance" type="s0:Price"/>
+					<s:element minOccurs="0" name="alcoholAllowed" type="s:boolean"/>
+					<s:element minOccurs="0" name="carParkingAllowed" type="s:boolean"/>
+					<s:element minOccurs="0" name="wifiAccessAllowed" type="s:boolean"/>
+					<s:element minOccurs="0" name="otherChargesAllowed" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Price">
+				<s:sequence>
+					<s:element name="amount" type="s:decimal"/>
+					<s:element name="currency" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Address">
+				<s:sequence>
+					<s:element name="addressLine1" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine2" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine3" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine4" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine5" type="s:string"/>
+					<s:element minOccurs="0" name="countryCode" type="s:string"/>
+					<s:element minOccurs="0" name="postCode" type="s:string"/>
+					<s:element minOccurs="0" name="companyName" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Donation">
+				<s:sequence>
+					<s:element minOccurs="0" name="donationAmount" type="s0:Price"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="SubscriptionRequest">
+				<s:sequence>
+					<s:element minOccurs="0" name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="firstName" type="s:string"/>
+					<s:element minOccurs="0" name="lastName" type="s:string"/>
+					<s:element minOccurs="0" name="emailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="countryCode" type="s:string"/>
+					<s:element minOccurs="0" name="isBusinessTravel" type="s:boolean"/>
+					<s:element minOccurs="0" name="receiveRestaurantInfo" type="s:boolean"/>
+					<s:element minOccurs="0" name="regions" type="s0:ArrayOfregionsItemLong"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfregionsItemLong">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="regionsItem" nillable="true" type="s:long"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="PaymentRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="PaymentRequestResult" type="s0:PaymentResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="PaymentResponse">
+				<s:sequence>
+					<s:element minOccurs="0" name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="checkInComplete" type="s:boolean"/>
+					<s:element minOccurs="0" name="checkInReadback" type="s0:Readback"/>
+					<s:element minOccurs="0" name="nextMessage">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="ThreeDSecureRequest"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="threeDSecure" type="s0:ThreeDSecure"/>
+					<s:element minOccurs="0" name="paymentDetailsError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_NUMBER_OF_DIGITS_IN_CREDIT_CARD_NUMBER"/>
+								<s:enumeration value="INVALID_LUHN_CHECK_DIGIT"/>
+								<s:enumeration value="CARD_TYPE_NOT_ACCEPTED_AT_PROPERTY"/>
+								<s:enumeration value="CARD_TYPE_CANNOT_BE_ESTABLISHED"/>
+								<s:enumeration value="CARD_NOT_VALID_ON_DAY_OF_ARRIVAL"/>
+								<s:enumeration value="CARD_NOT_VALID_ON_DAY_OF_DEPARTURE"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="SITE_END_OF_DAY_IN_PROGRESS"/>
+								<s:enumeration value="BUSINESS_ACCOUNT_DATA_NOT_ALLOWED_FOR_NON_BUSINESS_ACCOUNT_CARD_TYPE"/>
+								<s:enumeration value="CNP_VALIDATION_FAILED_USER_NAME_NOT_FOUND"/>
+								<s:enumeration value="CNP_VALIDATION_FAILED_INCORRECT_PASSWORD"/>
+								<s:enumeration value="CNP_VALIDATION_FAILED_USER_NAME_NOT_AUTHORIZED_FOR_THIS_CARD"/>
+								<s:enumeration value="CNP_VALIDATION_FAILED_ACCOUNT_ON_HOLD"/>
+								<s:enumeration value="CNP_VALIDATION_FAILED_VALIDATION_UNAVAILABLE"/>
+								<s:enumeration value="CNP_VALIDATION_FAILED_DINNER_AND_MEALDEAL"/>
+								<s:enumeration value="CNP_AUTHORIZATION_REQUIRED"/>
+								<s:enumeration value="BREAKFAST_NOT_AVAILABLE_IN_THIS_HOTEL"/>
+								<s:enumeration value="DINNER_NOT_AVAILABLE_IN_THIS_HOTEL"/>
+								<s:enumeration value="ALCOHOL_ALLOWED_FIELD_PASSED_WITHOUT_DINNER_ALLOWANCE"/>
+								<s:enumeration value="CHARITABLE_DONATIONS_NOT_ALLOWED_IN_THIS_HOTEL"/>
+								<s:enumeration value="REQUESTED_BREAKFAST_NOT_AVAILABLE"/>
+								<s:enumeration value="SESSION_NO_LONGER_VALID"/>
+								<s:enumeration value="PREPAYMENT_FAILED_DECLINE"/>
+								<s:enumeration value="PREPAYMENT_FAILED_SYSTEM"/>
+								<s:enumeration value="CNP_VALIDATION_FAILED_ACCOUNT_ON_HOLD"/>
+								<s:enumeration value="CNP_VALIDATION_FAILED_AUTHENTICATION_UNAVAILABLE"/>
+								<s:enumeration value="PREPAYMENT_NOT_ALLOWED_FOR_THIS_CARD_TYPE"/>
+								<s:enumeration value="FRAUD_CHECK_FAILED"/>
+								<s:enumeration value="INVALID_MESSAGE_SEQUENCE"/>
+								<s:enumeration value="CHANGES_TO_SETTLEMENT_METHOD_NOT_ALLOWED"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Readback">
+				<s:sequence>
+					<s:element minOccurs="0" name="bookingDetails" type="s0:BookingDetails"/>
+					<s:element minOccurs="0" name="specialEvents" type="s0:ArrayOfEventEvent"/>
+					<s:element minOccurs="0" name="transaction" type="s0:Transaction"/>
+					<s:element minOccurs="0" name="paymentEmail" type="s:string"/>
+					<s:element minOccurs="0" name="confirmationEmails" type="s0:ArrayOfconfirmationEmailsItemString"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="BookingDetails">
+				<s:sequence>
+					<s:element minOccurs="0" name="confirmationNumber" type="s:string"/>
+					<s:element name="hotelCode" type="s:string"/>
+					<s:element name="arrivalDate" type="s:date"/>
+					<s:element name="departureDate" type="s:date"/>
+					<s:element minOccurs="0" name="arrivalTime" type="s:long"/>
+					<s:element minOccurs="0" name="cellCode" type="s:string"/>
+					<s:element minOccurs="0" name="cellCodeLegend" type="s:string"/>
+					<s:element name="ratePlan" type="s:string"/>
+					<s:element minOccurs="0" name="rateClass" type="s:string"/>
+					<s:element minOccurs="0" name="isPackage" type="s:boolean"/>
+					<s:element minOccurs="0" name="upsellBreakdown" type="s0:UpsellBreakdown"/>
+					<s:element minOccurs="0" name="payment" type="s0:PaymentCard"/>
+					<s:element name="rooms" type="s0:ArrayOfRoomRoom"/>
+					<s:element minOccurs="0" name="packageItems" type="s0:ArrayOfpackageItemPackageItem"/>
+					<s:element minOccurs="0" name="roomBreakdown" type="s0:ArrayOfroomCostRoomBreakdown"/>
+					<s:element name="bookerDetails" type="s0:BookerDetails"/>
+					<s:element minOccurs="0" name="address" type="s0:Address"/>
+					<s:element name="totalCost" type="s0:Price"/>
+					<s:element minOccurs="0" name="prepaid" type="s:boolean"/>
+					<s:element minOccurs="0" name="prepaidAmount" type="s0:Price"/>
+					<s:element minOccurs="0" name="promotionText" type="s:string"/>
+					<s:element minOccurs="0" name="dinnerUpsell" type="s0:ArrayOfdinnerDinnerUpsell"/>
+					<s:element minOccurs="0" name="bookingType" type="s:string"/>
+					<s:element minOccurs="0" name="cancelable" type="s:boolean"/>
+					<s:element minOccurs="0" name="cancelableText" type="s:string"/>
+					<s:element minOccurs="0" name="amendable" type="s:boolean"/>
+					<s:element minOccurs="0" name="amendableText" type="s:string"/>
+					<s:element minOccurs="0" name="amendOnline" type="s:boolean"/>
+					<s:element minOccurs="0" name="amendOnlineText">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="BOOKING_RULES_APPLY"/>
+								<s:enumeration value="NON-ACTIVE_BOOKING"/>
+								<s:enumeration value="NO_CREDIT_CARD"/>
+								<s:enumeration value="NO_EMAIL_ADDRESS"/>
+								<s:enumeration value="EXCEEDS_MAXIMUM_NIGHTS"/>
+								<s:enumeration value="EXCEEDS_MAXIMUM_ROOMS"/>
+								<s:enumeration value="NON-INTERNET_UPSELL"/>
+								<s:enumeration value="NON-INTERNET_DEPOSIT"/>
+								<s:enumeration value="NON-INTERNET_PROMOTION"/>
+								<s:enumeration value="GROUP_BOOKING"/>
+								<s:enumeration value="3RD_PARTY_CHANNEL"/>
+								<s:enumeration value="OTHER"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="checkInOnline" type="s:boolean"/>
+					<s:element minOccurs="0" name="checkInText" type="s:string"/>
+					<s:element minOccurs="0" name="checkInDate" type="s:date"/>
+					<s:element minOccurs="0" name="electronicInvoiceRequired" type="s:boolean"/>
+					<s:element minOccurs="0" name="isBusinessTrip" type="s:boolean"/>
+					<s:element minOccurs="0" name="smsConfirmationRequired" type="s:boolean"/>
+					<s:element minOccurs="0" name="emailConfirmationSent" type="s:boolean"/>
+					<s:element minOccurs="0" name="optionalCNP" type="s:boolean"/>
+					<s:element minOccurs="0" name="changeCard" type="s:boolean"/>
+					<s:element minOccurs="0" name="cardFeeApplies" type="s:boolean"/>
+					<s:element minOccurs="0" name="carData" type="s0:CarData"/>
+					<s:element minOccurs="0" name="wifiRecommend" type="s0:ArrayOfWifiRecommendWifiRecommend"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="UpsellBreakdown">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="upsellItem" nillable="true" type="s0:UpsellUnit"/>
+					<s:element minOccurs="0" name="totalCost" type="s0:Price"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfUpsellItemsUpsellUnit">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="UpsellItems" nillable="true" type="s0:UpsellUnit"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="UpsellUnit">
+				<s:sequence>
+					<s:element minOccurs="0" name="postingDate" type="s:date"/>
+					<s:element minOccurs="0" name="quantity" type="s:long"/>
+					<s:element minOccurs="0" name="code" type="s:long"/>
+					<s:element minOccurs="0" name="legend" type="s:string"/>
+					<s:element minOccurs="0" name="roomID" type="s:string"/>
+					<s:element minOccurs="0" name="roomNumber" type="s:string"/>
+					<s:element minOccurs="0" name="category" type="s:string"/>
+					<s:element minOccurs="0" name="unitCost" type="s0:Price"/>
+					<s:element minOccurs="0" name="subtotal" type="s0:Price"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfRoomRoom">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Room" nillable="true" type="s0:Room"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Room">
+				<s:sequence>
+					<s:element name="roomType">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="DB"/>
+								<s:enumeration value="TWIN"/>
+								<s:enumeration value="FAM"/>
+								<s:enumeration value="DIS"/>
+								<s:enumeration value="SB"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="roomID" type="s:string"/>
+					<s:element name="guestName" type="s0:GuestName"/>
+					<s:element name="adults" type="s:long"/>
+					<s:element minOccurs="0" name="children" type="s:long"/>
+					<s:element minOccurs="0" name="cot" type="s:boolean"/>
+					<s:element minOccurs="0" name="guestDetails" type="s0:CheckInGuest"/>
+					<s:element minOccurs="0" name="carDataPresent" type="s:boolean"/>
+					<s:element minOccurs="0" name="carDetails" type="s0:CarDetails"/>
+					<s:element name="bookingStatus">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="UNARRIVED"/>
+								<s:enumeration value="ARRIVED"/>
+								<s:enumeration value="CANCELLED"/>
+								<s:enumeration value="RELEASED"/>
+								<s:enumeration value="CHECKEDIN"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="GuestName">
+				<s:sequence>
+					<s:element name="title" type="s:string"/>
+					<s:element minOccurs="0" name="firstName" type="s:string"/>
+					<s:element name="lastName" type="s:string"/>
+					<s:element minOccurs="0" name="guestHistoryNumber" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CheckInGuest">
+				<s:sequence>
+					<s:element minOccurs="0" name="roomID" type="s:string"/>
+					<s:element minOccurs="0" name="guestID" type="s:long"/>
+					<s:element minOccurs="0" name="title" type="s:string"/>
+					<s:element minOccurs="0" name="firstName" type="s:string"/>
+					<s:element minOccurs="0" name="lastName" type="s:string"/>
+					<s:element minOccurs="0" name="telephoneNumber" type="s:string"/>
+					<s:element minOccurs="0" name="mobileNumber" type="s:string"/>
+					<s:element minOccurs="0" name="emailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="address" type="s0:Address"/>
+					<s:element minOccurs="0" name="guestHistoryNumber" type="s:string"/>
+					<s:element minOccurs="0" name="carRegistration" type="s:string"/>
+					<s:element minOccurs="0" name="nationality" type="s:string"/>
+					<s:element minOccurs="0" name="passport" type="s0:Passport"/>
+					<s:element minOccurs="0" name="nextDestination">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="25"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="additionalGuests" type="s0:ArrayOfAdditionalGuestAdditionalGuest"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Passport">
+				<s:sequence>
+					<s:element minOccurs="0" name="passportNumber">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="15"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="placeOfIssue">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="25"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfAdditionalGuestAdditionalGuest">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="AdditionalGuest" nillable="true" type="s0:AdditionalGuest"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="AdditionalGuest">
+				<s:sequence>
+					<s:element minOccurs="0" name="title" type="s:string"/>
+					<s:element minOccurs="0" name="firstName" type="s:string"/>
+					<s:element minOccurs="0" name="lastName" type="s:string"/>
+					<s:element minOccurs="0" name="carRegistration" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CarDetails">
+				<s:sequence>
+					<s:element name="carRegistration" type="s:string"/>
+					<s:element minOccurs="0" name="carMake" type="s:string"/>
+					<s:element minOccurs="0" name="carModel" type="s:string"/>
+					<s:element minOccurs="0" name="carColour" type="s:string"/>
+					<s:element minOccurs="0" name="numberPassengers" type="s:long"/>
+					<s:element minOccurs="0" name="departureDate" type="s:date"/>
+					<s:element minOccurs="0" name="departureTime" type="s:string"/>
+					<s:element minOccurs="0" name="departureFlightNumber" type="s:string"/>
+					<s:element minOccurs="0" name="departureTerminal" type="s:string"/>
+					<s:element minOccurs="0" name="returnDate" type="s:date"/>
+					<s:element minOccurs="0" name="returnTime" type="s:string"/>
+					<s:element minOccurs="0" name="returnFlightNumber" type="s:string"/>
+					<s:element minOccurs="0" name="returnTerminal" type="s:string"/>
+					<s:element minOccurs="0" name="mobileNumber" type="s:string"/>
+					<s:element minOccurs="0" name="telephoneNumber" type="s:string"/>
+					<s:element minOccurs="0" name="emailAddress" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfpackageItemPackageItem">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="packageItem" nillable="true" type="s0:PackageItem"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="PackageItem">
+				<s:sequence>
+					<s:element minOccurs="0" name="elementDescription" type="s:string"/>
+					<s:element minOccurs="0" name="elementNights" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfroomCostRoomBreakdown">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="roomCost" nillable="true" type="s0:RoomBreakdown"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RoomBreakdown">
+				<s:sequence>
+					<s:element minOccurs="0" name="roomID" type="s:string"/>
+					<s:element minOccurs="0" name="totalRoomCost" type="s0:Price"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="BookerDetails">
+				<s:sequence>
+					<s:element name="title" type="s:string"/>
+					<s:element name="firstName" type="s:string"/>
+					<s:element name="lastName" type="s:string"/>
+					<s:element name="contactAddress" type="s0:Address"/>
+					<s:element name="emailAddress" type="s:string"/>
+					<s:element name="telephoneNumber" type="s:string"/>
+					<s:element name="mobileNumber" type="s:string"/>
+					<s:element minOccurs="0" name="guestHistoryNumber" type="s:string"/>
+					<s:element minOccurs="0" name="acceptFutureMailing" type="s:boolean"/>
+					<s:element minOccurs="0" name="companyName" type="s:string"/>
+					<s:element minOccurs="0" name="companyID" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfdinnerDinnerUpsell">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="dinner" nillable="true" type="s0:DinnerUpsell"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="DinnerUpsell">
+				<s:sequence>
+					<s:element minOccurs="0" name="dinnerDate" type="s:date"/>
+					<s:element minOccurs="0" name="dinnerDiners" type="s:long"/>
+					<s:element minOccurs="0" name="dinnerTime" type="s0:Time"/>
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="Time">
+				<s:restriction base="s:time"/>
+			</s:simpleType>
+			<s:complexType name="CarData">
+				<s:sequence>
+					<s:element minOccurs="0" name="carDataRequired" type="s:boolean"/>
+					<s:element minOccurs="0" name="carParkOperator">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="10"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="hotelCode">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="6"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="stayLength">
+						<s:simpleType>
+							<s:restriction base="s:long">
+								<s:maxInclusive value="99"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfWifiRecommendWifiRecommend">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="WifiRecommend" nillable="true" type="s0:WifiRecommend"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="WifiRecommend">
+				<s:sequence>
+					<s:element minOccurs="0" name="code" type="s:string"/>
+					<s:element minOccurs="0" name="quantity" type="s:long"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfEventEvent">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Event" nillable="true" type="s0:Event"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Event">
+				<s:sequence>
+					<s:element minOccurs="0" name="date" type="s:date"/>
+					<s:element minOccurs="0" name="detail" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Transaction">
+				<s:sequence>
+					<s:element minOccurs="0" name="transactionAttempted" type="s:boolean"/>
+					<s:element minOccurs="0" name="transactionSuccessful" type="s:boolean"/>
+					<s:element minOccurs="0" name="type">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="REFUND"/>
+								<s:enumeration value="PAYMENT"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="transactionAmount" type="s0:Price"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfconfirmationEmailsItemString">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="confirmationEmailsItem" nillable="true" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ThreeDSecure">
+				<s:sequence>
+					<s:element minOccurs="0" name="PAReq">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="99999"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="redirectURL" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ErrorDetails">
+				<s:sequence>
+					<s:element minOccurs="0" name="errorMessage" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="RoomDetailsRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="roomDetailsRequest" type="s0:RoomDetailsRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="RoomDetailsRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="confirmationNumber" type="s:string"/>
+					<s:element name="isBusinessTrip" type="s:boolean"/>
+					<s:element minOccurs="0" name="guests" type="s0:ArrayOfCheckInGuestCheckInGuest"/>
+					<s:element minOccurs="0" name="bookerDetails" type="s0:BookerDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfCheckInGuestCheckInGuest">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="CheckInGuest" nillable="true" type="s0:CheckInGuest"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="RoomDetailsRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="RoomDetailsRequestResult" type="s0:RoomDetailsResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="RoomDetailsResponse">
+				<s:sequence>
+					<s:element minOccurs="0" name="roomUpdateErrors" type="s0:ArrayOfRoomUpdateErrorRoomUpdateError"/>
+					<s:element minOccurs="0" name="roomDetailsUpdateSuccessful" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfRoomUpdateErrorRoomUpdateError">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="RoomUpdateError" nillable="true" type="s0:RoomUpdateError"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RoomUpdateError">
+				<s:sequence>
+					<s:element minOccurs="0" name="roomID" type="s:string"/>
+					<s:element minOccurs="0" name="guestNumber" type="s:long"/>
+					<s:element minOccurs="0" name="bookerError" type="s:boolean"/>
+					<s:element minOccurs="0" name="field">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="ROOMID"/>
+								<s:enumeration value="TITLE"/>
+								<s:enumeration value="FIRSTNAME"/>
+								<s:enumeration value="LASTNAME"/>
+								<s:enumeration value="TELEPHONENUMBER"/>
+								<s:enumeration value="MOBILENUMBER"/>
+								<s:enumeration value="EMAILADDRESS"/>
+								<s:enumeration value="ADDRESSLINE1"/>
+								<s:enumeration value="ADDRESSLINE2"/>
+								<s:enumeration value="ADDRESSLINE3"/>
+								<s:enumeration value="ADDRESSLINE4"/>
+								<s:enumeration value="ADDRESSLINE5"/>
+								<s:enumeration value="COUNTRYCODE"/>
+								<s:enumeration value="POSTCODE"/>
+								<s:enumeration value="COMPANYNAME"/>
+								<s:enumeration value="COMPANYID"/>
+								<s:enumeration value="GUESTHISTORYNUMBER"/>
+								<s:enumeration value="CARREGISTRATION"/>
+								<s:enumeration value="NATIONALITY"/>
+								<s:enumeration value="PASSPORTNUMBER"/>
+								<s:enumeration value="PLACEOFISSUE"/>
+								<s:enumeration value="NEXTDESTINATION"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="guestUpdateError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="SITE_END_OF_DAY_IN_PROGRESS"/>
+								<s:enumeration value="INVALID_MESSAGE_SEQUENCE"/>
+								<s:enumeration value="INVALID_CONFIRMATION_NUMBER"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+					<s:element minOccurs="0" name="displayToGuest" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="ThreeDSecureRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="threeDSecureRequest" type="s0:ThreeDSecureRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="ThreeDSecureRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="PARes">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="99999"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="ThreeDSecureRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="ThreeDSecureRequestResult" type="s0:ThreeDSecureResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="ThreeDSecureResponse">
+				<s:sequence>
+					<s:element minOccurs="0" name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="checkInComplete" type="s:boolean"/>
+					<s:element minOccurs="0" name="checkInReadback" type="s0:Readback"/>
+					<s:element minOccurs="0" name="threeDSecureError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="PREPAYMENT_FAILED_SYSTEM"/>
+								<s:enumeration value="PREPAYMENT_FAILED_DECLINE"/>
+								<s:enumeration value="FRAUD_CHECK_FAILED"/>
+								<s:enumeration value="MISSING_PARES"/>
+								<s:enumeration value="SITE_END_OF_DAY_IN_PROGRESS"/>
+								<s:enumeration value="INVALID_MESSAGE_SEQUENCE"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetails" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="UpsellRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="upsellRequest" type="s0:UpsellRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="UpsellRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="confirmationNumber" type="s:string"/>
+					<s:element minOccurs="0" name="upsellItems" type="s0:ArrayOfUpsellItemsUpsellUnit"/>
+					<s:element minOccurs="0" name="dinnerUpsell" type="s0:ArrayOfdinnerDinnerUpsell"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="UpsellRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="UpsellRequestResult" type="s0:UpsellResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="UpsellResponse">
+				<s:sequence>
+					<s:element minOccurs="0" name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="upsellErrors" type="s0:ArrayOfUpsellErrorUpsellError"/>
+					<s:element minOccurs="0" name="upsellRequestSuccessful" type="s:boolean"/>
+					<s:element minOccurs="0" name="checkInComplete" type="s:boolean"/>
+					<s:element minOccurs="0" name="cnpAuthRequired" type="s:boolean"/>
+					<s:element minOccurs="0" name="nextRequest">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="PaymentDetailsRequest"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="checkInReadback" type="s0:Readback"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfUpsellErrorUpsellError">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="UpsellError" nillable="true" type="s0:UpsellError"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="UpsellError">
+				<s:sequence>
+					<s:element minOccurs="0" name="roomID" type="s:string"/>
+					<s:element minOccurs="0" name="postingDate" type="s:date"/>
+					<s:element minOccurs="0" name="field">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="ROOMID"/>
+								<s:enumeration value="POSTINGDATE"/>
+								<s:enumeration value="QUANTITY"/>
+								<s:enumeration value="CODE"/>
+								<s:enumeration value="ROOMNUMBER"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="upsellUnitError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_CONFIRMATION_NUMBER"/>
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="SITE_END_OF_DAY_IN_PROGRESS"/>
+								<s:enumeration value="INVALID_MESSAGE_SEQUENCE"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+		</s:schema>
+	</types>
+	<message name="PaymentRequestSoapIn">
+		<part element="s0:PaymentRequest" name="parameters"/>
+	</message>
+	<message name="PaymentRequestSoapOut">
+		<part element="s0:PaymentRequestResponse" name="parameters"/>
+	</message>
+	<message name="RoomDetailsRequestSoapIn">
+		<part element="s0:RoomDetailsRequest" name="parameters"/>
+	</message>
+	<message name="RoomDetailsRequestSoapOut">
+		<part element="s0:RoomDetailsRequestResponse" name="parameters"/>
+	</message>
+	<message name="ThreeDSecureRequestSoapIn">
+		<part element="s0:ThreeDSecureRequest" name="parameters"/>
+	</message>
+	<message name="ThreeDSecureRequestSoapOut">
+		<part element="s0:ThreeDSecureRequestResponse" name="parameters"/>
+	</message>
+	<message name="UpsellRequestSoapIn">
+		<part element="s0:UpsellRequest" name="parameters"/>
+	</message>
+	<message name="UpsellRequestSoapOut">
+		<part element="s0:UpsellRequestResponse" name="parameters"/>
+	</message>
+	<portType name="CheckInSoap">
+		<operation name="PaymentRequest">
+			<input message="s0:PaymentRequestSoapIn"/>
+			<output message="s0:PaymentRequestSoapOut"/>
+		</operation>
+		<operation name="RoomDetailsRequest">
+			<input message="s0:RoomDetailsRequestSoapIn"/>
+			<output message="s0:RoomDetailsRequestSoapOut"/>
+		</operation>
+		<operation name="ThreeDSecureRequest">
+			<input message="s0:ThreeDSecureRequestSoapIn"/>
+			<output message="s0:ThreeDSecureRequestSoapOut"/>
+		</operation>
+		<operation name="UpsellRequest">
+			<input message="s0:UpsellRequestSoapIn"/>
+			<output message="s0:UpsellRequestSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="CheckInSoap" type="s0:CheckInSoap">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="PaymentRequest">
+			<soap:operation soapAction="http://bartws.micros.com/1.0/ws.CheckIn.CheckInService.PaymentRequest" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="RoomDetailsRequest">
+			<soap:operation soapAction="http://bartws.micros.com/1.0/ws.CheckIn.CheckInService.RoomDetailsRequest" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="ThreeDSecureRequest">
+			<soap:operation soapAction="http://bartws.micros.com/1.0/ws.CheckIn.CheckInService.ThreeDSecureRequest" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="UpsellRequest">
+			<soap:operation soapAction="http://bartws.micros.com/1.0/ws.CheckIn.CheckInService.UpsellRequest" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="CheckIn">
+		<port binding="s0:CheckInSoap" name="CheckInSoap">
+			<soap:address location="https://bookings.premierinn.com:443/csp/sql/ws.CheckIn.CheckInService.cls"/>
+		</port>
+	</service>
+</definitions>

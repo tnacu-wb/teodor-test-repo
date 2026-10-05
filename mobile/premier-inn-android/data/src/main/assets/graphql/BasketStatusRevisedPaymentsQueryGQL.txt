@@ -1,0 +1,11 @@
+query basketStatusRevisedPayments ($basketReference: String!) {
+    basketStatus (basketReference: $basketReference) {
+        basketStatus
+        createdAt
+        basketError {
+          code
+          description
+          type
+        }
+    }
+}

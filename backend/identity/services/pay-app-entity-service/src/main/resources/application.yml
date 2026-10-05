@@ -1,0 +1,239 @@
+server:
+  port: "@application.port@"
+
+swagger:
+  api:
+    version: "@project.version@"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+  endpoints:
+    web:
+      base-path: /v1/pay-app/actuator
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+logging:
+  level:
+    brave: WARN
+    io.micrometer.observation.contextpropagation.ObservationThreadLocalAccessor: ERROR
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - Password
+        - IPAddress
+        - X-Forwarded-For
+        - True-Client-IP
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+config:
+  service:
+    company:
+      host: http://${COMPANY_HOST:localhost:9022}
+      getCompanyDetailsEndpoint: "/company/{companyId}"
+    cdh:
+      host: http://${CDH_ADAPTER_HOST:localhost:9119}
+      getEmployeesEndpoint: "/v1/cdh/account/employees"
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri:  ${PI_BB_TENANT_JWK_URI}
+
+cdh:
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT_TYPE}
+    enabled: ${CDH_OAUTH_IS_ENABLED}
+  api:
+    host: ${CDH_API_HOST}
+    is-oauth: ${CDH_API_IS_OAUTH}
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: ${INN_BUSINESS_OAUTH_SUBSCRIPTION_KEY}
+
+worldline:
+  rest:
+    gb:
+      culture-code: ${WORLDLINE_CULTURE_CODE_GB:en-GB}
+      company-number: ${WORLDLINE_COMPANY_NUMBER_GB:35}
+      username: ${WORLDLINE_USERNAME_GB}
+      password: ${WORLDLINE_PASSWORD_GB}
+    de:
+      culture-code: ${WORLDLINE_CULTURE_CODE_DE:de-DE}
+      company-number: ${WORLDLINE_COMPANY_NUMBER_DE:91}
+      username: ${WORLDLINE_USERNAME_DE}
+      password: ${WORLDLINE_PASSWORD_DE}
+    url: ${WORLDLINE_HOST}/PIRestAPI
+    appInit-endpoint: "/api/v1/app/init"
+    application-details-endpoint: "/api/v1/app/{applicationGUID}/details"
+    appContactDetails-endpoint: "/api/v1/app/contactDetails/{applicationGUID}"
+    appCompanyDetails-endpoint: "/api/v1/app/companyDetails/{applicationGUID}"
+    appCancel-endpoint: "/api/v1/app/cancel/{applicationGUID}"
+    appLookup-endpoint: "/api/v1/app/lookup/{lookupName}"
+    appCompanyDetailsLookup-endpoint: "/api/v1/app/companyDetailsLookup/{companyRegistrationNumber}"
+    userPreferencesEndpoint: "/api/v1/user/preference/{tetheredUserGuid}"
+    appCard-delete-endpoint: "/api/v1/app/{applicationGuid}/card/{cardGuid}"
+    appCard-add-endpoint: "/api/v1/app/{applicationGUID}/card"
+    appCardList-endpoint: "/api/v1/app/{applicationGuid}/cards"
+    appSubmit-endpoint: "/api/v1/app/submit"
+    appPreCheck-endpoint: "/api/v1/app/preCheck"
+    hostedPageAppInit-endpoint: "/api/v1/app/{applicationGUID}/hostedPage/init"
+    bankDetailsStatus-endpoint: "/api/v1/app/BankDetailsStatus/{hostedPageGuid}"
+    default-ip-address: "1.1.1.1"
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  cache:
+    type: ${CACHE_TYPE:none}
+    redis:
+      key-prefix: "Pay-App-Entity-Service"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  cloud:
+    #needed for Feign fallback
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    config:
+      enabled: false
+
+email:
+  topics:
+    notifications: ${TOPICS_NOTIFICATIONS:notifications}
+
+threadpool:
+  worldline:
+    coreSize: ${WORLDLINE_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${WORLDLINE_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${WORLDLINE_EXECUTOR_QUEUE_SIZE:50}
+
+---
+spring:
+  config.activate.on-profile: local
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: https://wbodetest.eu.auth0.com/api/v2/
+      namespace: https://premierinn.com
+      issuer: https://auth0.premierinn.digital/
+      jwkUri:  https://auth0.premierinn.digital/.well-known/jwks.json
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: /oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: http://localhost:${wiremock.server.port:1}
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: dummy-key
+
+worldline:
+  rest:
+    url: https://test-premierinn.worldline.global/PIRestAPI
+
+logging:
+  configuration:
+    logger: default
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+
+---
+spring:
+  config.activate.on-profile: opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

@@ -1,0 +1,436 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.kapt' // TODO: After updating all libraries, check if 'kotlin-kapt' can be replaced with Kotlin Symbol Processing (KSP) com.google.devtools.ksp
+    id 'org.jetbrains.kotlin.plugin.parcelize'
+    id 'org.jetbrains.kotlin.plugin.compose'
+    id 'com.getkeepsafe.dexcount'
+    id 'com.github.ben-manes.versions'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.firebase-perf'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.dagger.hilt.android'
+}
+
+apply from: "config/jacoco/jacoco.gradle"
+apply from: "config/common/common.gradle"
+
+def packageName = "com.whitbread.premierinn"
+def versionMajor = 4
+def versionMinor = 37
+def versionPatch = 0
+
+def googlePlayRelease = System.getenv("GOOGLE_PLAY_RELEASE")
+def buildFlavor = System.getenv("BUILD_FLAVOR")
+def isGooglePlayRelease = googlePlayRelease != null
+
+android {
+    compileSdkVersion Versions.androidCompileSdk
+
+    defaultConfig {
+        minSdkVersion Versions.androidMinSdk
+        targetSdkVersion Versions.androidTargetSdk
+
+        applicationId "${packageName}"
+        versionCode calculateVersionCode(versionMajor, versionMinor, versionPatch, isGooglePlayRelease)
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        setProperty("archivesBaseName", "pi-app-$versionName($versionCode)-[" + (envBranch() ?: localBranch())
+                + "-" + commitHash() + "]")
+
+        testInstrumentationRunner "${applicationId}.utils.CustomTestRunner"
+
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        manifestPlaceholders = [screenOrientation: "unspecified", auth0Domain: "", auth0Scheme: ""]
+
+        resValue("string", "map_api_key", "AIzaSyAnypeeSxBGtETDvpSqAR5sijtZ47QhU0c")
+        resourceConfigurations += ['en', 'de']
+    }
+
+    signingConfigs {
+        stage {
+            // Having a shared debug keystore means that the app only needs to be configured for
+            // APIs like Google Maps, Facebook etc with one key hash
+            storeFile rootProject.file("app/config/signing/debug.keystore")
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+
+        production {
+            storeFile rootProject.file("app/config/signing/upload.keystore")
+            keyAlias 'upload'
+            storePassword System.getenv("STORE_PASSWORD")
+            keyPassword System.getenv("KEY_PASSWORD")
+
+            // NOTE: We use the upload key above for signing the APK before we submit to Google Play. Google Play then re-signs using a different key.
+            // Therefore be aware that if you want to test an APK signed with the same key as the public APK then you need to use the below keystore:
+
+//            storeFile rootProject.file("app/config/signing/com-grapple-android.store")
+//            keyAlias 'apps-key'
+        }
+    }
+
+    buildTypes {
+        debug {
+            resValue("string", "places_api_key", "AIzaSyDp3R1tXrg04Z8LUaiz6Eoo6pqUF-6r_cY")
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+        }
+
+        release {
+            resValue("string", "places_api_key", "AIzaSyAVZ06NHPlfhHAB-lEwvEc_GLi2z6OmmEo")
+            minifyEnabled true
+            shrinkResources true
+            manifestPlaceholders = [screenOrientation: 'portrait']
+            // Enable Crashlytics mapping file upload
+            firebaseCrashlytics {
+                mappingFileUploadEnabled true
+            }
+        }
+    }
+
+    lint {
+        htmlReport true
+        htmlOutput file('lint-report.html')
+        abortOnError false
+        disable("CoroutineCreationDuringComposition")
+    }
+
+    flavorDimensions "mode"
+
+    productFlavors {
+        //Build for distribution
+        stage {
+            isDefault.set(true)
+
+            buildConfigField "String", "FCM_TOPIC_REMOTE_CONFIG_PURGE", "\"REMOTE_CONFIG_PURGE_ANDROID_STAGE\""
+            buildConfigField "String", "ADOBE_APP_ID", "\"launch-ENcff3a5708b18474f91f196e6d2bd7742-staging\""
+
+            buildConfigField "String", "APPSFLYER_KEY", "\"fBLb5YoVLGfgmMTxfY5RNU\""
+            ext.betaDistributionGroupAliases = "pi-internal-testers"
+
+            if (project.hasProperty("BETA_RELEASE_NOTES")) {
+                ext.betaDistributionReleaseNotes = project.property('BETA_RELEASE_NOTES')
+            }
+
+            dimension "mode"
+            applicationIdSuffix ".stage"
+            signingConfig signingConfigs.stage
+            buildConfigField "boolean", "STAGING", "true"
+            // located at Android/sdk/tools/proguard/proguard-android-optimize.txt
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'config/proguard/proguard-rules.pro',
+                    'config/proguard/proguard-square-retrofit2.pro',
+                    'config/proguard/proguard-square-okhttp3.pro',
+                    'config/proguard/proguard-auto-value.pro'
+
+            sourceSets {
+                String sharedJsonDir = 'src/test/resources'
+
+                test {
+                    java.srcDirs += ["testStage/java"]
+                    //resources.srcDirs += ["src/main/assets"]
+                    resources.srcDirs sharedJsonDir
+                }
+
+                androidTest {
+                    assets.srcDirs sharedJsonDir
+                }
+            }
+        }
+
+        //GooglePlay Build Only
+        production {
+            buildConfigField "String", "FCM_TOPIC_REMOTE_CONFIG_PURGE", "\"REMOTE_CONFIG_PURGE_ANDROID_PROD\""
+            buildConfigField "String", "ADOBE_APP_ID", "\"launch-EN4bd5615a389d488abe5f55dfc5d4791b\""
+
+            dimension "mode"
+            applicationId "${packageName}"
+
+            signingConfig isGooglePlayRelease ? signingConfigs.production : signingConfigs.stage
+
+            // Both keys are same for prod and dev and also same across ios and android
+            buildConfigField "String", "APPSFLYER_KEY", "\"fBLb5YoVLGfgmMTxfY5RNU\""
+
+            buildConfigField "boolean", "STAGING", "false"
+
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'config/proguard/proguard-rules.pro',
+                    'config/proguard/proguard-square-retrofit2.pro',
+                    'config/proguard/proguard-square-okhttp3.pro',
+                    'config/proguard/proguard-auto-value.pro',
+                    'config/proguard/proguard-logs.pro'
+
+            sourceSets {
+                test {
+                    java.srcDirs += ["testProduction/java"]
+                    resources.srcDirs += ["src/main/assets"]
+                }
+            }
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+        compose true
+    }
+
+
+    variantFilter { variant ->
+        variant.getFlavors().each { flavor ->
+            if (buildFlavor != null && flavor.name != buildFlavor) {
+                variant.setIgnore(true)
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+        }
+    }
+
+    kapt {
+        correctErrorTypes = true
+    }
+    packagingOptions {
+        resources {
+            excludes += ['LICENSE.txt', 'META-INF/rxjava.properties']
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            useJUnitPlatform()
+        }
+        //for robolectric http://robolectric.org/migrating/#migrating-to-40
+        animationsDisabled = true
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    }
+
+    sourceSets {
+        //test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+
+    apply from: rootProject.file('app/config/checkstyle/checkstyle.gradle')
+    namespace 'com.whitbread.premierinn'
+
+}
+
+jacoco {
+    toolVersion "0.8.8"
+}
+
+dependencyUpdates.resolutionStrategy {
+    componentSelection { rules ->
+        rules.all { ComponentSelection selection ->
+            boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'preview'].any { qualifier ->
+                selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+            }
+            if (rejected) {
+                selection.reject('Release candidate')
+            }
+        }
+    }
+}
+
+dependencies {
+    api project(path: ':domain')
+    api project(path: ':data')
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation Libs.auth0
+    implementation Libs.androidktx
+    implementation Libs.fragmentKtx
+    implementation Libs.emoji2
+    implementation Libs.emoji2Views
+    implementation Libs.supportDesign
+    implementation Libs.supportWebkit
+    implementation Libs.supportCardview
+    implementation Libs.supportAppCompat
+    implementation Libs.supportAnnotations
+    implementation Libs.supportGridlayout
+    implementation Libs.supportConstraintLayout
+
+    implementation Libs.room
+    implementation Libs.roomRxJava
+    kapt Libs.roomCompiler
+    implementation Libs.lifecycleViewModel
+    implementation Libs.lifecycleRuntime
+    implementation Libs.lifecycleLiveData
+
+    implementation Libs.retrofit
+    implementation Libs.retrofitGsonConverter
+    implementation Libs.retrofitScalars
+    implementation Libs.retrofitRxAdapter
+    implementation Libs.okhttp3Logging
+
+    implementation Libs.rxJava
+    implementation Libs.rxRelay
+    implementation Libs.rxAndroid
+    implementation Libs.rxBindings
+    implementation Libs.rxBindingMaterial
+    implementation Libs.rxLocation
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation(name: 'rxpermissions_2.x.v0.9.3', ext: 'aar')
+    implementation(name: 'AkamaiBMP-4.0.6', ext: 'aar')
+
+    implementation Libs.gson
+    implementation Libs.apacheCommons
+
+    implementation Libs.fragmentKtx
+    implementation Libs.dagger
+    kapt Libs.daggerCompiler
+    compileOnly Libs.javaxAnnotation
+    implementation Libs.javaxAnnotationApi
+    implementation Libs.calendarView
+    implementation Libs.newCalendarView
+    implementation Libs.glide
+    implementation Libs.glideCompose
+    implementation Libs.androidSVG
+    implementation(Libs.glideOkhttpIntegration) {
+        exclude group: 'glide-parent'
+    }
+    implementation Libs.glideOkhttpIntegrationAnnotation
+    kapt Libs.glideOkhttpIntegrationAnnotationProcessor
+
+    implementation Libs.flexboxLayout
+
+    compileOnly Libs.autoValue// needed for Android Studio
+    kapt Libs.autoValue
+    kapt Libs.autoValueGson
+    implementation Libs.autoValueGsonRuntime
+
+    compileOnly Libs.autoValueGson
+    kapt Libs.autoValueParcel
+
+    implementation platform(Libs.firebaseBOM)
+    implementation Libs.firebaseCrashlytics
+    implementation Libs.firebaseAnalytics
+    implementation Libs.firebasePerformance
+    implementation Libs.firebaseMessaging
+    implementation Libs.firebaseRemoteConfig
+    implementation Libs.customTab
+
+    implementation platform(Libs.composeBOM)
+    implementation Libs.composeUiToolingPreview
+    debugImplementation Libs.composeUiTooling
+    implementation Libs.composeUi
+    implementation Libs.coposeUiGraphics
+    debugImplementation Libs.composeUiTest
+    implementation Libs.composeMaterialDesign
+    implementation Libs.composeMaterialIconsCore
+    implementation Libs.composeActivity
+    implementation Libs.composeSaveable
+
+
+    implementation Libs.playServicesLocation
+    implementation Libs.playServicesMaps
+
+    implementation Libs.securePreferences
+    implementation Libs.securePreferencesGoogle
+    implementation Libs.identityCredentialGoogle
+    implementation Libs.confetti
+
+    implementation Libs.adapterDelegate
+
+    implementation Libs.threetenabp
+    testImplementation(Libs.threetenbp) {
+        exclude module: Libs.threetenabp
+    }
+    androidTestImplementation(Libs.threetenbp) {
+        exclude module: Libs.threetenabp
+    }
+    stageImplementation Libs.processPhoenix
+
+    // Adobe analytics
+    implementation platform(Libs.adobeBOM)
+    implementation Libs.adobeUserProfile
+    implementation Libs.adobeCore
+    implementation Libs.adobeAnalytics
+    implementation Libs.adobeAudience
+    implementation Libs.adobeTarget
+    implementation Libs.adobeCampaign
+    implementation Libs.adobePlaces
+    implementation Libs.adobeAssurance
+    implementation Libs.adobeSignal
+    implementation Libs.adobeIdentity
+    implementation Libs.adobeLifecycle
+
+    // AppsFlyer
+    implementation Libs.appsFlyer
+    implementation Libs.installReferer
+
+    // Hilt
+    implementation Libs.hiltAndroid
+    kapt Libs.hiltCompiler
+    implementation Libs.androidxHiltAndroid
+    kapt Libs.androidxHiltCompiler
+
+    testImplementation Libs.jUnit
+    testImplementation Libs.jUnit5
+    testImplementation Libs.jUnitVintageEngine
+    testImplementation Libs.jUnitPlatformLauncher
+    testImplementation Libs.mockito
+    testImplementation Libs.mockitoKotlin
+    testImplementation Libs.mockK
+    testImplementation Libs.thruth
+    testImplementation Libs.okhttp3MockWebServer
+    testImplementation Libs.jUnitParams
+
+    testImplementation Libs.archCoreTesting
+
+    testImplementation Libs.guava
+
+    androidTestImplementation Libs.roomTesting
+    androidTestImplementation Libs.archCoreTesting
+
+    kaptTest Libs.autoValue
+    kaptTest Libs.autoValueGson
+    kaptTest Libs.autoValueParcel
+
+    androidTestImplementation Libs.espressoCore
+    androidTestImplementation Libs.espressoIntents
+    androidTestImplementation Libs.androidTestRunner
+    androidTestImplementation Libs.espressoContrib
+    androidTestUtil Libs.espressoOrchestrator
+
+    androidTestImplementation Libs.restMock
+    androidTestImplementation Libs.okhttp3IdlingResource
+    androidTestImplementation Libs.rx2Idler
+    androidTestImplementation Libs.falcon
+
+    implementation Libs.kotlinStdlib
+    testImplementation Libs.kotlinStdlib
+    testImplementation Libs.kotlinTestlib
+
+    implementation Libs.coroutinesCore
+    implementation Libs.coroutinesAndroid
+    implementation Libs.coroutinesRxJava
+    testImplementation Libs.coroutinesTest
+
+    // Turbine - Testing Kotlin StateFlow
+    testImplementation Libs.turbine
+
+
+    // Paypal
+    implementation Libs.payPal
+    implementation Libs.payPalDataCollector
+
+    // ContentSquare
+    implementation Libs.contentSquare
+}

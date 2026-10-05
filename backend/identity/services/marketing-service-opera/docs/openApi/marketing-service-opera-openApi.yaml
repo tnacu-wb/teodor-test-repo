@@ -1,0 +1,1344 @@
+openapi: 3.1.0
+info:
+  description: API Documentation
+  title: Marketing Api Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9025
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /internal/marketing/newsletter:
+    put:
+      description: Newsletter Subscription - updates newsletter preferences or creates
+        new preferences for a customer.
+      operationId: updatePermissions_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePreferencesRequestV2"
+        required: true
+      responses:
+        "204":
+          description: Success. No content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Preferences Create/Update Service
+      tags:
+      - Permission Management API Controller
+  /marketing-service/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /marketing-service/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /marketing/hotels/newsletter:
+    post:
+      deprecated: true
+      description: sign up to marketing newsletters
+      operationId: subscribe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketingSubscriptionRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketingSubscriptionResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: subscribe
+      tags:
+      - Marketing API Controller
+  /marketing/hotels/newsletter/edit:
+    put:
+      deprecated: true
+      description: Newsletter Subscription - editNewsletterPreferences method
+      operationId: editNewsletterPreferences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsletterPreferencesEditRequest"
+        required: true
+      responses:
+        "204":
+          description: Success. No content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Preferences Edit Service
+      tags:
+      - Marketing API Controller
+  /marketing/hotels/newsletter/get:
+    post:
+      deprecated: true
+      description: Newsletter Subscription - getNewsletterPreferences method
+      operationId: getNewsletterPreferences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsletterPreferencesGetRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsletterPreferencesGetResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Get Newsletter Preferences
+      tags:
+      - Marketing API Controller
+  /marketing/hotels/newsletter/{customerId}:
+    get:
+      deprecated: true
+      description: Newsletter Subscription - user info method
+      operationId: subscriptionInfo
+      parameters:
+      - in: path
+        name: customerId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketingSubscriptionInfoResponse"
+          description: All good
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Subscription Info Service
+      tags:
+      - Marketing API Controller
+    put:
+      deprecated: true
+      description: Newsletter Subscription - updateNewsletterPreferences method
+      operationId: updateNewsletterPreferences
+      parameters:
+      - in: path
+        name: customerId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsletterPreferencesUpdateRequest"
+        required: true
+      responses:
+        "204":
+          description: Success. No content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Preferences Update Service
+      tags:
+      - Marketing API Controller
+  /marketing/hotels/newsletter/{customerId}/status:
+    get:
+      deprecated: true
+      description: Newsletter Subscription - subscriptionInfo method
+      operationId: status
+      parameters:
+      - in: path
+        name: customerId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketingSubscriptionInfoResponse"
+          description: All good
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Status Service
+      tags:
+      - Marketing API Controller
+  /marketing/hotels/regions:
+    get:
+      deprecated: true
+      description: Returns all regions hotels are active in.
+      operationId: getRegions
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegionsResponse"
+          description: All good
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Gets all regions
+      tags:
+      - Marketing API Controller
+  /marketing/newsletter/channel/{contactChannelId}:
+    put:
+      description: 'Newsletter Subscription - updates newsletter preferences or creates
+        new preferences for a customer. '
+      operationId: updatePermissionsByContactChannelId
+      parameters:
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: CHNL97722_8415a943-6800-4fbb-808d-0ce878554e64
+        description: Value of contactType
+        example: CHNL97722_8415a943-6800-4fbb-808d-0ce878554e64
+        in: path
+        name: contactChannelId
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePreferencesRequest"
+        required: true
+      responses:
+        "204":
+          description: Success. No content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Preferences Create/Update Service by contact channel id
+      tags:
+      - Permission Management API Controller
+  /marketing/newsletter/channel/{contactChannelId}/confirm:
+    post:
+      description: 'Customer will receive an email to confirm they are opting into
+        newsletters. This email will contain a link to the permission centre which
+        will call this endpoint. '
+      operationId: confirmDoubleOptIn
+      parameters:
+      - content:
+          '*/*':
+            schema:
+              type: string
+        description: Value of contactChannelId
+        example: CHNL39288_28a5d984-7782-4e93-99a5-b2e9f8a746f3
+        in: path
+        name: contactChannelId
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfirmDoubleOptInRequest"
+        required: true
+      responses:
+        "204":
+          description: Success. No content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Preferences Confirm Double Opt In Service
+      tags:
+      - Permission Management API Controller
+  /marketing/newsletter/channel/{contactChannelId}/unsubscribe:
+    delete:
+      description: 'Customer will receive marketing emails that they have signed up
+        to. This email will contain a link to the permission centre for unsubscribing
+        which will call this endpoint. '
+      operationId: unsubscribe
+      parameters:
+      - content:
+          '*/*':
+            schema:
+              type: string
+        description: Value of contactChannelId
+        example: CHNL39288_28a5d984-7782-4e93-99a5-b2e9f8a746f3
+        in: path
+        name: contactChannelId
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnsubscribeRequest"
+        required: true
+      responses:
+        "204":
+          description: Success. No content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Preferences Unsubscribe Service
+      tags:
+      - Permission Management API Controller
+  /marketing/newsletter/email:
+    put:
+      description: Newsletter Subscription - updates newsletter preferences
+      operationId: updateEmailPermissions
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePreferencesRequest"
+        required: true
+      responses:
+        "204":
+          description: Success. No content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Preferences Create/Update Service
+      tags:
+      - Permission Management API Controller
+  /marketing/newsletter/{contactType}/channel/{contactChannelId}:
+    get:
+      description: Newsletter Subscription - Used to retrieve newsletter preferences
+        using the contact channel id.
+      operationId: getPermissionsUsingContactChannelId
+      parameters:
+      - in: query
+        name: request
+        required: true
+        schema:
+          $ref: "#/components/schemas/PreferencesGetRequest"
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: email
+              enum:
+              - email
+              - phone
+        in: path
+        name: contactType
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: CHNL1880_ed84b98a-59c5-40e0-be5a-10544c289ea5
+        description: CHNL1880_ed84b98a-59c5-40e0-be5a-10544c289ea5
+        in: path
+        name: contactChannelId
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreferencesGetResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Get Newsletter Preferences using channel id
+      tags:
+      - Permission Management API Controller
+  /marketing/newsletter/{contactType}/{contactValue}:
+    get:
+      description: Get Newsletter Preferences Authenticated
+      operationId: getPermissions
+      parameters:
+      - in: header
+        name: hotel-brand
+        required: false
+        schema:
+          type: string
+          default: PI
+          enum:
+          - HUB
+          - PI
+          - PID
+          - CBT
+          - ZIP
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: Bearer sdfghjdfgh
+        in: header
+        name: Authentication
+        required: true
+      - in: header
+        name: Origin
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: request
+        required: true
+        schema:
+          $ref: "#/components/schemas/PreferencesGetRequest"
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: email
+              enum:
+              - email
+              - phone
+        in: path
+        name: contactType
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: test@validemail.com
+        in: path
+        name: contactValue
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: string
+              enum:
+              - BARB
+              - BEEF
+              - BREW
+              - COOK
+              - PGER
+              - PHUB
+              - PINN
+              - PZIP
+              - TABL
+              - TAYB
+              - WINN
+        description: Array of brand codes.
+        in: query
+        name: brandCodes
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: gb
+        description: The country of residence of the guest
+        in: query
+        name: countryOfResidence
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: en
+        description: Language
+        in: query
+        name: language
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreferencesGetResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Subscription - Used to retrieve newsletter preferences using
+        the contact channel value.This endpoint is authenticated to prevent access
+        of another customers newsletter persmissions using their email or phone.
+      tags:
+      - Permission Management API Controller
+    put:
+      description: Newsletter Subscription - updates newsletter preferences or creates
+        new preferences for a customer. If contactType = phone then contactSubType
+        is mandatory.
+      operationId: updatePermissions
+      parameters:
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: test@validemail.com
+        description: Value of contactType
+        example: test@validemail.com|07777777777
+        in: path
+        name: contactValue
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: email
+              enum:
+              - email
+              - phone
+        in: path
+        name: contactType
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePreferencesRequest"
+        required: true
+      responses:
+        "204":
+          description: Success. No content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Preferences Create/Update Service
+      tags:
+      - Permission Management API Controller
+  /marketing/newsletter/{emailAddress}:
+    get:
+      description: Get Newsletter Preferences Non-authenticated
+      operationId: getPermissionsAnonymous
+      parameters:
+      - in: query
+        name: request
+        required: true
+        schema:
+          $ref: "#/components/schemas/PreferencesAnonymousGetRequest"
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: test@validemail.com
+        in: path
+        name: emailAddress
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: string
+              enum:
+              - BARB
+              - BEEF
+              - BREW
+              - COOK
+              - PGER
+              - PHUB
+              - PINN
+              - PZIP
+              - TABL
+              - TAYB
+              - WINN
+        description: Brand code value
+        in: query
+        name: brandCode
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: gb
+        description: The country of residence of the guest
+        in: query
+        name: countryOfResidence
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: en
+        description: Language
+        in: query
+        name: language
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreferencesGetResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: You did something wrong check your input"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Newsletter Subscription - Used to retrieve newsletter preferences using
+        the email address value.
+      tags:
+      - Permission Management API Controller
+components:
+  schemas:
+    BrandPermission:
+      type: object
+      properties:
+        "2ndOptIn":
+          type: boolean
+        "2ndOptInReq":
+          type: boolean
+        brand:
+          type: string
+        brandCode:
+          type: string
+        contentPermission:
+          $ref: "#/components/schemas/ContentPermissionData"
+        countriesOfResidence:
+          type: array
+          items:
+            type: string
+        lastModifiedBy:
+          type: string
+        lastOptInDate:
+          type: string
+        lastOptOutDate:
+          type: string
+        lastSourceBusinessKey:
+          type: string
+        lastSourceCustomerId:
+          type: string
+        optIn:
+          type: boolean
+        sharedBy:
+          type: array
+          items:
+            type: string
+    ConfirmDoubleOptInRequest:
+      type: object
+      properties:
+        brandCodes:
+          type: array
+          items:
+            type: string
+        contactSubType:
+          type: string
+          enum:
+          - mobile
+          - landline
+        contactType:
+          type: string
+          enum:
+          - email
+          - phone
+          - email_contact_channel_id
+        customerId:
+          type: string
+      required:
+      - brandCodes
+      - contactType
+    ContactChannel:
+      type: object
+      properties:
+        contactChannelId:
+          type: string
+        contactChannelType:
+          type: string
+          enum:
+          - Email
+          - Telephone
+          minLength: 1
+        contactChannelValue:
+          type: string
+      required:
+      - contactChannelType
+    ContentPermission:
+      type: object
+      properties:
+        secondParty:
+          type: boolean
+        thirdParty:
+          type: boolean
+    ContentPermissionData:
+      type: object
+      properties:
+        "2ndParty":
+          type: boolean
+        "3rdParty":
+          type: boolean
+    Customer:
+      type: object
+      properties:
+        countryOfResidence:
+          type: string
+        customerId:
+          type: string
+        firstName:
+          type: string
+        language:
+          type: string
+          description: ISO code for language which the customer would like to receive
+            marketing.
+          example: en
+        lastName:
+          type: string
+        nationality:
+          type: string
+        title:
+          type: string
+        userId:
+          type: string
+      required:
+      - countryOfResidence
+      - language
+    EditSubscription:
+      type: object
+      properties:
+        brandCodes:
+          type: array
+          items:
+            type: string
+        contactChannelId:
+          type: string
+        contactChannelPermission:
+          type: boolean
+        contactChannelSubType:
+          type: string
+        contactChannelType:
+          type: string
+          enum:
+          - Email
+          - Telephone
+          minLength: 1
+        contactChannelValue:
+          type: string
+        contentPermission:
+          $ref: "#/components/schemas/ContentPermission"
+      required:
+      - brandCodes
+      - contactChannelPermission
+      - contactChannelType
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "001"
+          minLength: 1
+        details:
+          type: array
+          example:
+          - Error message
+          items:
+            type: string
+      required:
+      - code
+      - details
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    LoyaltyAccount:
+      type: object
+      properties:
+        loyaltyBrand:
+          type: string
+        loyaltySystemId:
+          type: string
+    MarketingSubscriptionInfoResponse:
+      type: object
+      properties:
+        businessClient:
+          type: boolean
+        countryCode:
+          type: string
+        emailAddress:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        regionSubscriptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/RegionSubscription"
+        regions:
+          type: array
+          items:
+            type: string
+        restaurantNewsletter:
+          type: boolean
+        sessionId:
+          type: string
+        subscribedStatus:
+          type: boolean
+    MarketingSubscriptionRequest:
+      type: object
+      properties:
+        businessClient:
+          type: boolean
+        countryCode:
+          type: string
+        customerId:
+          type: string
+        emailAddress:
+          type: string
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        regionSubscriptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/RegionSubscription"
+        regions:
+          type: array
+          items:
+            type: string
+        restaurantNewsletter:
+          type: boolean
+        sessionId:
+          type: string
+      required:
+      - firstName
+      - lastName
+    MarketingSubscriptionResponse:
+      type: object
+      properties:
+        customerId:
+          type: string
+        emailAddress:
+          type: string
+        success:
+          type: boolean
+    NewsletterPreferencesEditRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+        subscriptionData:
+          type: array
+          items:
+            $ref: "#/components/schemas/EditSubscription"
+          minItems: 1
+        userId:
+          type: string
+      required:
+      - subscriptionData
+    NewsletterPreferencesGetRequest:
+      type: object
+      properties:
+        brandCodes:
+          type: array
+          items:
+            type: string
+          maxItems: 2147483647
+          minItems: 1
+        contactChannel:
+          $ref: "#/components/schemas/ContactChannel"
+        requestId:
+          type: string
+          minLength: 1
+      required:
+      - requestId
+    NewsletterPreferencesGetResponse:
+      type: object
+      properties:
+        brandPermissions:
+          type: array
+          items:
+            $ref: "#/components/schemas/BrandPermission"
+        contactChannelId:
+          type: string
+        contactChannelValue:
+          type: string
+        deleted:
+          type: boolean
+        doNotContact:
+          type: string
+        doNotContactAppliedDate:
+          type: string
+        isValid:
+          type: boolean
+        lastQuarantineDate:
+          type: string
+        loyaltyAccounts:
+          type: array
+          items:
+            $ref: "#/components/schemas/LoyaltyAccount"
+        modified:
+          type: string
+        shared:
+          type: boolean
+        sharedBy:
+          type: array
+          items:
+            type: string
+        valid:
+          type: boolean
+    NewsletterPreferencesUpdateRequest:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          minLength: 1
+        subscriptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subscription"
+          minItems: 1
+      required:
+      - correlationId
+      - subscriptions
+    Permission:
+      type: object
+      properties:
+        "2ndOptIn":
+          type: boolean
+        "2ndOptInReq":
+          type: boolean
+        brand:
+          type: string
+        brandCode:
+          type: string
+        optIn:
+          type: boolean
+        secondPartyOptIn:
+          type: boolean
+        suppressMarketingCheckbox:
+          type: boolean
+        thirdPartyVendorsOptIn:
+          type: boolean
+    PreferencesAnonymousGetRequest:
+      type: object
+      properties:
+        brandCode:
+          type: string
+        countryOfResidence:
+          type: string
+        emailAddress:
+          type: string
+        language:
+          type: string
+      required:
+      - brandCode
+    PreferencesGetRequest:
+      type: object
+      properties:
+        brandCodes:
+          type: array
+          items:
+            type: string
+        business:
+          type: boolean
+        contactChannelId:
+          type: string
+        contactType:
+          type: string
+          enum:
+          - email
+          - phone
+          - email_contact_channel_id
+        contactValue:
+          type: string
+        countryOfResidence:
+          type: string
+        language:
+          type: string
+      required:
+      - brandCodes
+    PreferencesGetResponse:
+      type: object
+      properties:
+        contactChannelId:
+          type: string
+        contactChannelValue:
+          type: string
+        deleted:
+          type: boolean
+        loyaltyAccounts:
+          type: array
+          items:
+            $ref: "#/components/schemas/LoyaltyAccount"
+        permissions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Permission"
+        valid:
+          type: boolean
+    Region:
+      type: object
+      properties:
+        active:
+          type: boolean
+        description:
+          type: string
+        id:
+          type: string
+    RegionSubscription:
+      type: object
+      properties:
+        regionId:
+          type: string
+        subscribed:
+          type: boolean
+      required:
+      - regionId
+      - subscribed
+    RegionsResponse:
+      type: object
+      properties:
+        regions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Region"
+    SourceDetails:
+      type: object
+      properties:
+        channel:
+          type: string
+          description: Channel is the source from where Opt-In/Opt-Out requested
+          example: WEB/BB/APPS_IOS/APPS_ANDROID
+        journey:
+          type: string
+          description: Journey is User flow from where Opt-In/Opt-Out requested
+          example: PERMISSIONCENTRE/SIGNUP/NEWSLETTERSIGNUP/NEWSLETTERSIGNUP
+        locale:
+          type: string
+          description: Locale is the logical location from Opt-In/Opt-Out requested
+          example: UK/DE
+    Subscription:
+      type: object
+      properties:
+        brandCode:
+          type: string
+          enum:
+          - BARB
+          - BEEF
+          - BREW
+          - COOK
+          - PGER
+          - PHUB
+          - PINN
+          - PZIP
+          - TABL
+          - TAYB
+          - WINN
+        contactType:
+          type: string
+          enum:
+          - Email
+          - Telephone
+        contactValue:
+          type: string
+          minLength: 1
+        subscribe:
+          type: boolean
+      required:
+      - brandCode
+      - contactType
+      - contactValue
+      - subscribe
+    UnsubscribeRequest:
+      type: object
+      properties:
+        brandCodes:
+          type: array
+          items:
+            type: string
+        contactSubType:
+          type: string
+          enum:
+          - mobile
+          - landline
+        contactType:
+          type: string
+          enum:
+          - email
+          - phone
+          - email_contact_channel_id
+        customerId:
+          type: string
+      required:
+      - brandCodes
+      - contactType
+    UpdatePreferencesRequest:
+      type: object
+      properties:
+        brandCodes:
+          type: array
+          items:
+            type: string
+        contactSubType:
+          type: string
+          enum:
+          - mobile
+          - landline
+        customer:
+          $ref: "#/components/schemas/Customer"
+        doubleOptIn:
+          type: boolean
+        optIn:
+          type: boolean
+        secondPartyOptIn:
+          type: boolean
+        sourceDetails:
+          $ref: "#/components/schemas/SourceDetails"
+        thirdPartyVendorsOptIn:
+          type: boolean
+      required:
+      - brandCodes
+      - customer
+    UpdatePreferencesRequestV2:
+      type: object
+      properties:
+        brandCodes:
+          type: array
+          items:
+            type: string
+        contactSubType:
+          type: string
+          enum:
+          - mobile
+          - landline
+        contactValue:
+          type: string
+          minLength: 1
+        customer:
+          $ref: "#/components/schemas/Customer"
+        doubleOptIn:
+          type: boolean
+        optIn:
+          type: boolean
+        secondPartyOptIn:
+          type: boolean
+        sourceDetails:
+          $ref: "#/components/schemas/SourceDetails"
+        thirdPartyVendorsOptIn:
+          type: boolean
+      required:
+      - brandCodes
+      - contactValue
+      - customer

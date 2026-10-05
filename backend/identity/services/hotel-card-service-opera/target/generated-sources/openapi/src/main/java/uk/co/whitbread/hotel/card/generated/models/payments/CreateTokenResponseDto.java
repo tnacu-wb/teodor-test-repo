@@ -1,0 +1,122 @@
+package uk.co.whitbread.hotel.card.generated.models.payments;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.springframework.lang.Nullable;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * CreateTokenResponseDto
+ */
+
+@JsonTypeName("CreateTokenResponse")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-08-25T07:52:52.919417+03:00[Europe/Bucharest]", comments = "Generator version: 7.12.0")
+public class CreateTokenResponseDto {
+
+  private String cardType;
+
+  private String token;
+
+  public CreateTokenResponseDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public CreateTokenResponseDto(String cardType, String token) {
+    this.cardType = cardType;
+    this.token = token;
+  }
+
+  public CreateTokenResponseDto cardType(String cardType) {
+    this.cardType = cardType;
+    return this;
+  }
+
+  /**
+   * Card type
+   * @return cardType
+   */
+  @NotNull 
+  @Schema(name = "cardType", description = "Card type", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("cardType")
+  public String getCardType() {
+    return cardType;
+  }
+
+  public void setCardType(String cardType) {
+    this.cardType = cardType;
+  }
+
+  public CreateTokenResponseDto token(String token) {
+    this.token = token;
+    return this;
+  }
+
+  /**
+   * Created token
+   * @return token
+   */
+  @NotNull 
+  @Schema(name = "token", description = "Created token", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("token")
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    CreateTokenResponseDto createTokenResponse = (CreateTokenResponseDto) o;
+    return Objects.equals(this.cardType, createTokenResponse.cardType) &&
+        Objects.equals(this.token, createTokenResponse.token);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(cardType, token);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class CreateTokenResponseDto {\n");
+    sb.append("    cardType: ").append(toIndentedString(cardType)).append("\n");
+    sb.append("    token: ").append(toIndentedString(token)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+

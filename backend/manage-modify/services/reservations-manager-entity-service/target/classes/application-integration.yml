@@ -1,0 +1,123 @@
+server:
+  port: 9116
+
+swagger:
+  api:
+    version: 1.0.0
+
+logging:
+  configuration:
+    logger: default
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+
+config:
+  service:
+    hotel-account:
+      host: http://localhost:${wiremock.server.port:0}
+      bookingsEndpoint: "/customers/hotels/customerId/stays"
+    accounts:
+      url: http://localhost:${wiremock.server.port:0}
+      singleBookingEndpoint: "/reservation/hotels/{reservation-id}"
+      cancelBookingEndpoint: "/reservation/hotels/{reservation-id}"
+      sendConfirmationEmailEndpoint: "/notification/booking/confirmation"
+      sendInvoiceEmailEndpoint: "/reservation/hotels/invoice/resend"
+    hotel-reservation:
+      host: http://localhost:${wiremock.server.port:0}
+      operaBasketInformationAuthEndpoint: "/v1/reservations/basket/{basketReference}/authenticated"
+      operaBasketInformationEndpoint: "/v1/reservations/basket/{basketReference}"
+      operaCancelReservationInformationEndpoint: "/v1/reservations/cancel"
+      operaCancelReservationEndpoint: "/v1/reservations/cancellations"
+      operaDinnerAllowanceEndpoint: "/v1/reservations/basket/{basketReference}/allowances"
+    basket:
+      host: http://localhost:${wiremock.server.port:0}
+      operaBasketOptionInformationEndpoint: "/v1/baskets/{basketReference}"
+      operaBasketInformationByBookingEndpoint: "/v1/baskets"
+      operaResendEmailEndpoint: "/v1/baskets/email"
+    content:
+      host: http://localhost:${wiremock.server.port:0}
+      hotelRateInformationEndpoint: "/v1/content/booking/hotelRateInformation"
+      operaReservationRateInformationEndpoint: "/v1/content/booking/rateInformation"
+    ohip:
+      host: http://localhost:${wiremock.server.port:0}
+      hotelInfoEndpoint: "/hotels/{hotelId}/info"
+      packageGroupsEndpoint: "/hotels/packages/groups"
+
+auth:
+  management:
+    domain: http://localhost:${wiremock.server.port:1}
+    clientId: clientId_test
+    clientSecret: clientSecret_test
+    audience: http://mock-audience/api/v2/
+    lazyMigrationEnabled: true
+  tenants:
+  - name: "PI BB Tenant"
+    audience: http://localhost:${wiremock.server.port:0}
+    namespace: http://localhost:${wiremock.server.port:0}
+    issuer: http://localhost:${wiremock.server.port:0}
+    jwkUri: http://localhost:${wiremock.server.port:0}/.well-known/jwks.json
+  - name: "CCUI Tenant"
+    audience: http://localhost:${wiremock.server.port:0}
+    namespace: http://localhost:${wiremock.server.port:0}
+    issuer: http://localhost:${wiremock.server.port:0}
+    jwkUri: http://localhost:${wiremock.server.port:0}/.well-known/jwks.json
+
+feature-flags:
+  pi-bb-mobile-check-in-online:
+    key: "pi_bb_mobile_check-in-online"
+    fallback: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'default:dummy-api-token'
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: /oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: http://localhost:${wiremock.server.port:0}
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: subscriptionKey
+      booking-subscription-key: bookingSubscriptionKey
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:none}
+    redis:
+      key-prefix: "Reservation-Entity-Manager-Service"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m

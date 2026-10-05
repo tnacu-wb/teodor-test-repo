@@ -1,0 +1,20 @@
+schema {
+    query: Query
+}
+
+type Query {
+    paymentInfoMessages(bookingFlowCriteria: BookingFlowCriteria!): [PaymentInfoMessage]
+}
+
+input BookingFlowCriteria {
+    bookingChannel:String
+    hotelId: String!
+    language: String!
+    country: String!
+    rateCode: String!
+}
+
+type PaymentInfoMessage {
+    paymentType: String
+    messages: [String]
+}

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/hotel_details_last_sold_out"
+        style="@style/BodySmallBold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        android:text="@string/hotel_details_fully_booked"
+        android:textColor="@color/new_error_red" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fullyBookedContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/error_notification_background"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/hotel_details_full_booked_message_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="@dimen/generic_margin_12"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:contentDescription="@string/information_banner_info_txt"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_notifications_info"
+            android:tint="@color/new_error_red"
+            app:layout_constraintEnd_toStartOf="@+id/hotel_details_full_booked_message_text"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/hotel_details_full_booked_message_text"
+            style="@style/BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_8"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            android:text="@string/hotel_details_hotel_fully_booked_message"
+            android:textColor="@color/grey_dark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/hotel_details_full_booked_message_icon"
+            app:layout_constraintTop_toTopOf="@id/hotel_details_full_booked_message_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/hotel_details_hotel_nearby_button"
+        style="@style/Button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:paddingHorizontal="@dimen/generic_padding_32"
+        android:paddingVertical="@dimen/generic_padding_12"
+        android:text="@string/hotel_details_show_me_hotels_nearby" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/edit_date_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:background="@drawable/edit_button_background"
+        android:paddingVertical="@dimen/generic_padding_8">
+
+        <ImageView
+            android:id="@+id/icon_change_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_8"
+            android:contentDescription="@string/hotel_details_top_guests"
+            android:src="@drawable/ic_calendar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/change_date_button"
+            style="@style/BodySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/generic_margin_12"
+            android:text="@string/hotel_details_fully_booked_change_dates"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/icon_change_date"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/hotel_details_check_availability_button"
+        style="@style/Button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/generic_margin_16"
+        android:paddingHorizontal="@dimen/generic_padding_32"
+        android:paddingVertical="@dimen/generic_padding_12"
+        android:text="@string/hotel_details_cab_check_availability"
+        android:visibility="gone"
+        tools:visibility="visible" />
+</LinearLayout>

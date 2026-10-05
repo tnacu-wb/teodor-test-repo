@@ -1,0 +1,32 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant BasketOutboundPort as BasketOutboundPort
+participant BasketWebClient as BasketWebclient
+participant HotelReservationOutboundPort as HotelReservationOutboundPort
+participant HotelReservationWebClient as HotelReservationWebclient
+entity "Basket Service" as BSK
+entity "OHIP Adapter Service" as OHIPAdapter
+
+A -> Controller: POST /v1/reservations/cancellations
+Controller -> InboundPort: cancelReservation
+InboundPort -> BasketOutboundPort: getBasketByReference
+BasketOutboundPort -> BasketWebclient: getBasketByReference
+BasketWebclient -> BSK: GET /v1/baskets/{basket-reference}
+BasketWebclient <- BSK: Basket with reservationIds, hotelId
+BasketOutboundPort <- BasketWebclient: Basket with reservationIds, hotelId
+InboundPort <- BasketOutboundPort: Basket with reservationIds, hotelId
+InboundPort -> HotelReservationOutboundPort: cancelReservation
+HotelReservationOutboundPort -> HotelReservationWebclient: cancelReservation
+HotelReservationWebclient -> OHIPAdapter: POST v1/reservations/cancellations
+
+HotelReservationWebclient <- OHIPAdapter: CancelReservationResponseDto
+HotelReservationOutboundPort <- HotelReservationWebclient: CancelReservationResponse
+InboundPort <- HotelReservationOutboundPort: CancelReservationResponse
+InboundPort -> BasketOutboundPort: cancelBasket
+BasketOutboundPort -> BasketWebclient: sendCancelBasket
+BasketWebclient -> BSK: PUT /v1/baskets/{basket-reference}/cancel
+Controller <- InboundPort: CancelReservationResponse
+A <- Controller: CancelReservationResponseDto
+@enduml

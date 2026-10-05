@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_grey_3" />
+
+        <include
+            android:id="@+id/newCardHolder"
+            layout="@layout/view_new_card_option" />
+
+        <include
+            android:id="@+id/savedCardHolder"
+            layout="@layout/view_saved_card_option" />
+
+        <include
+            android:id="@+id/businessAccountCardHolder"
+            layout="@layout/view_business_card_option" />
+
+        <include
+            android:id="@+id/payPalCardHolder"
+            layout="@layout/view_paypal_card_option" />
+
+        <include
+            android:id="@+id/reserveWithoutCardHolder"
+            layout="@layout/view_reserve_without_card_option" />
+
+        <include
+            android:id="@+id/googlePlayCardHolder"
+            layout="@layout/view_google_pay_card_option" />
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/paymentTypeRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:duplicateParentState="true"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:visibility="gone"
+        app:buttonTint="@color/grey_dark"
+        tools:visibility="visible" />
+</merge>

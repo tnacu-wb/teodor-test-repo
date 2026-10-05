@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".calendar.maincalendar.BaseCalendarActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_dark"
+        android:orientation="vertical"
+        android:id="@+id/appBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/teal_deep_dark"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/ToolbarThemeOverlay">
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <include
+            android:id="@+id/calendar_header"
+            layout="@layout/calendar_header" />
+
+        <com.whitbread.premierinn.common.view.calendar.DateRangeSelectionView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_done"
+        android:layout_width="match_parent"
+        android:elevation="@dimen/generic_elevation_10"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/done_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Header3"
+            android:layout_marginStart="@dimen/generic_margin_24"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:layout_marginEnd="@dimen/generic_margin_24"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            android:background="@drawable/calendar_btn"
+            android:layout_gravity="bottom|center_horizontal"
+            android:padding="@dimen/generic_padding_5"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:duplicateParentState="true"
+            tools:text="Done\n(2 nights)" />
+    </FrameLayout>
+
+</FrameLayout>

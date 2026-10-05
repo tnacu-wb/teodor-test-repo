@@ -1,0 +1,32 @@
+@startuml
+entity "Reservations Manager Service" as Service
+participant BookingInPort as BookingInPort
+participant MigrationStatusOutPort as MigrationPort
+participant BookingOutPort as BookingOutPort
+
+entity AccountServices as AS
+
+Service -> Controller: POST /v1/bookings/confirmation
+Controller -> BookingInPort: sendConfirmationEmail
+alt sourceSystem is not present
+  BookingInPort -> MigrationPort: getMigrationStatus
+  MigrationPort -> BookingInPort: status with PMS source
+end
+alt PMS source is OPERA case
+  BookingInPort -> ReservationOutPort: sendConfirmationEmail
+  ReservationOutPort -> ReservationClient: sendConfirmationEmail
+  ReservationClient -> BasketService: POST /v1/baskets/email
+  BasketService -> ReservationClient: success
+  ReservationClient -> ReservationOutPort: success
+  ReservationOutPort -> BookingInPort: success
+else PMS source is BART case
+  BookingInPort -> BookingOutPort: sendConfirmationEmail
+  BookingOutPort -> ASClient: sendConfirmationEmail
+  ASClient -> AS: POST /notification/booking/confirmation
+  AS -> ASClient: success
+  ASClient -> BookingOutPort: success
+  BookingOutPort -> BookingInPort: success
+end
+BookingInPort -> Controller: success
+Controller -> Service: Email sent
+@enduml

@@ -1,0 +1,31 @@
+[GraphQLClient] [2026-09-03T09:32:32.866Z] Request failed: {
+  url: 'https://api.uat.premierinn.digital/graphql',
+  operation: 'createPaymentMutation',
+  variables: {
+    reservationInfo: {
+      reservationDetails: [CreateReservation],
+      guestDetails: [Object],
+      bookingFlowId: 'booking-a1',
+      ratePlanCode: 'SEMIFLEX'
+    },
+    hotel: {
+      id: 'HEAPTI',
+      name: 'London Heathrow Airport (M4/J4)',
+      slug: '/hotels/england/greater-london/london/london-heathrow-airport-m4j4.html',
+      location: '51.496015,-0.447979',
+      type: 'PI',
+      countryCode: 'gb',
+      threeLetterId: 'AQN',
+      cityKey: 'LONDON'
+    },
+    paymentOption: 'PAY_NOW',
+    charityPackageCode: '',
+    isPiba: false,
+    businessItems: undefined,
+    card: '[REDACTED]'
+  },
+  status: 400,
+  responseBody: { errors: [ [Object], [Object] ] },
+  errors: undefined,
+  message: 'HTTP 400 (client error, non-retryable) for query "createPaymentMutation"'
+}

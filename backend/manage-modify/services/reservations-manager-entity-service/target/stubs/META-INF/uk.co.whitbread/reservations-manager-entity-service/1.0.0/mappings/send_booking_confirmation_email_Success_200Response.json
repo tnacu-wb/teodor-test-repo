@@ -1,0 +1,25 @@
+{
+  "id" : "195acd84-e0d2-459f-9e56-9e2ee0c5433c",
+  "request" : {
+    "urlPath" : "/v1/bookings/confirmation",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "WB-Authorization" : {
+        "equalTo" : "Bearer dummy-token"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['email'] == 'test@mail.com')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'LONMON')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "195acd84-e0d2-459f-9e56-9e2ee0c5433c"
+}

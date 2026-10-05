@@ -1,0 +1,1251 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 21,
+    "identityHash": "d856c14ac0dc24c14ec23892e8ac3af2",
+    "entities": [
+      {
+        "tableName": "recent_search",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`search_term` TEXT NOT NULL, `lat` REAL NOT NULL, `lon` REAL NOT NULL, `date_created` INTEGER NOT NULL, `hotel_id` TEXT, `hotel_brand` TEXT, PRIMARY KEY(`search_term`))",
+        "fields": [
+          {
+            "fieldPath": "searchTerm",
+            "columnName": "search_term",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "lat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lon",
+            "columnName": "lon",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date_created",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hotelId",
+            "columnName": "hotel_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hotelBrand",
+            "columnName": "hotel_brand",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "search_term"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "booking",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`booking_reference` TEXT NOT NULL, `lead_guest_surname` TEXT NOT NULL, `arrival_date` INTEGER NOT NULL, `departure_date` INTEGER NOT NULL, `hotel_code` TEXT NOT NULL, `hotel_name` TEXT NOT NULL, `num_of_rooms` INTEGER NOT NULL, `lead_guest_full_name` TEXT NOT NULL, `rate_class` TEXT NOT NULL, `check_in_online_opened` INTEGER NOT NULL, `checked_in` INTEGER NOT NULL, `canceled` INTEGER NOT NULL, `amendable` INTEGER NOT NULL, `cancellable` INTEGER NOT NULL, `linked_to_account` INTEGER NOT NULL, `last_modified` INTEGER NOT NULL, `business_booker` INTEGER NOT NULL, `booking_status` TEXT NOT NULL, `is_check_in_online_available` INTEGER NOT NULL, `is_check_out_online_available` INTEGER NOT NULL, `basket_status` TEXT, `hotel_country` TEXT, `employee_booking` INTEGER NOT NULL, `is_third_party_booking` INTEGER NOT NULL, `total_cost_amount` REAL, `total_cost_currency` TEXT, `prepaid_cost_amount` REAL, `prepaid_cost_currency` TEXT, `amend_restriction_nights` INTEGER NOT NULL, `amend_restriction_rooms` INTEGER NOT NULL, `amend_restriction_guest_names` INTEGER NOT NULL, `amend_restriction_upsell` INTEGER NOT NULL, `amend_restriction_restricted` INTEGER NOT NULL, PRIMARY KEY(`booking_reference`))",
+        "fields": [
+          {
+            "fieldPath": "bookingReference",
+            "columnName": "booking_reference",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leadGuestSurname",
+            "columnName": "lead_guest_surname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "arrivalDate",
+            "columnName": "arrival_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "departureDate",
+            "columnName": "departure_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hotelCode",
+            "columnName": "hotel_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hotelName",
+            "columnName": "hotel_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numberOfRooms",
+            "columnName": "num_of_rooms",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leadGuestFullName",
+            "columnName": "lead_guest_full_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rateClass",
+            "columnName": "rate_class",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "checkInOnlineOpened",
+            "columnName": "check_in_online_opened",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "checkedIn",
+            "columnName": "checked_in",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isCanceled",
+            "columnName": "canceled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amendable",
+            "columnName": "amendable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cancellable",
+            "columnName": "cancellable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isLinkedToAccount",
+            "columnName": "linked_to_account",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastModified",
+            "columnName": "last_modified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "businessBooking",
+            "columnName": "business_booker",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bookingStatus",
+            "columnName": "booking_status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isCheckInOnlineAvailable",
+            "columnName": "is_check_in_online_available",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isCheckOutOnlineAvailable",
+            "columnName": "is_check_out_online_available",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "basketStatus",
+            "columnName": "basket_status",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hotelCountry",
+            "columnName": "hotel_country",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "employeeBooking",
+            "columnName": "employee_booking",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isThirdPartyBooking",
+            "columnName": "is_third_party_booking",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalCost.amount",
+            "columnName": "total_cost_amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalCost.currency",
+            "columnName": "total_cost_currency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prePaidAmount.amount",
+            "columnName": "prepaid_cost_amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prePaidAmount.currency",
+            "columnName": "prepaid_cost_currency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amendRestrictions.nights",
+            "columnName": "amend_restriction_nights",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amendRestrictions.rooms",
+            "columnName": "amend_restriction_rooms",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amendRestrictions.guestNames",
+            "columnName": "amend_restriction_guest_names",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amendRestrictions.upsell",
+            "columnName": "amend_restriction_upsell",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amendRestrictions.restricted",
+            "columnName": "amend_restriction_restricted",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "booking_reference"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "room",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`booking_reference` TEXT NOT NULL, `roomId` TEXT NOT NULL, `roomType` TEXT NOT NULL, `lettingType` TEXT NOT NULL, `numberOfAdults` INTEGER NOT NULL, `numberOfChildren` INTEGER NOT NULL, `title` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, PRIMARY KEY(`booking_reference`, `roomId`))",
+        "fields": [
+          {
+            "fieldPath": "bookingReference",
+            "columnName": "booking_reference",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roomId",
+            "columnName": "roomId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roomType",
+            "columnName": "roomType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lettingType",
+            "columnName": "lettingType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numberOfAdults",
+            "columnName": "numberOfAdults",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numberOfChildren",
+            "columnName": "numberOfChildren",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leadGuest.title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leadGuest.firstName",
+            "columnName": "firstName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leadGuest.lastName",
+            "columnName": "lastName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "booking_reference",
+            "roomId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "reservation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`reservation_reference` TEXT NOT NULL, `reservation_arrival_date` INTEGER NOT NULL, `reservation_departure_date` INTEGER NOT NULL, `reservation_hotel_code` TEXT NOT NULL, `reservation_cancelable` INTEGER NOT NULL, PRIMARY KEY(`reservation_reference`))",
+        "fields": [
+          {
+            "fieldPath": "reservation.reservationReference",
+            "columnName": "reservation_reference",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservation.arrivalDate",
+            "columnName": "reservation_arrival_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservation.departureDate",
+            "columnName": "reservation_departure_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservation.hotelCode",
+            "columnName": "reservation_hotel_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservation.cancelable",
+            "columnName": "reservation_cancelable",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "reservation_reference"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "amended_reservation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`session_id` TEXT NOT NULL, `amended_reservation_reference` TEXT NOT NULL, `amended_reservation_arrival_date` INTEGER NOT NULL, `amended_reservation_departure_date` INTEGER NOT NULL, `amended_reservation_hotel_code` TEXT NOT NULL, `amended_reservation_cancelable` INTEGER NOT NULL, PRIMARY KEY(`amended_reservation_reference`))",
+        "fields": [
+          {
+            "fieldPath": "sessionId",
+            "columnName": "session_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservation.reservationReference",
+            "columnName": "amended_reservation_reference",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservation.arrivalDate",
+            "columnName": "amended_reservation_arrival_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservation.departureDate",
+            "columnName": "amended_reservation_departure_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservation.hotelCode",
+            "columnName": "amended_reservation_hotel_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservation.cancelable",
+            "columnName": "amended_reservation_cancelable",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "amended_reservation_reference"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "room_criteria",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `room_id` TEXT NOT NULL, `room_type` TEXT NOT NULL, `adults_count` INTEGER NOT NULL, `children_count` INTEGER NOT NULL, `cot` INTEGER NOT NULL, `fk_reservation_reference` TEXT, `fk_amended_reservation_reference` TEXT, FOREIGN KEY(`fk_amended_reservation_reference`) REFERENCES `amended_reservation`(`amended_reservation_reference`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`fk_reservation_reference`) REFERENCES `reservation`(`reservation_reference`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roomId",
+            "columnName": "room_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roomType",
+            "columnName": "room_type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numberOfAdults",
+            "columnName": "adults_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numberOfChildren",
+            "columnName": "children_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cot",
+            "columnName": "cot",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservationReference",
+            "columnName": "fk_reservation_reference",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amendedReservationReference",
+            "columnName": "fk_amended_reservation_reference",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_room_criteria_fk_reservation_reference",
+            "unique": false,
+            "columnNames": [
+              "fk_reservation_reference"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_room_criteria_fk_reservation_reference` ON `${TABLE_NAME}` (`fk_reservation_reference`)"
+          },
+          {
+            "name": "index_room_criteria_fk_amended_reservation_reference",
+            "unique": false,
+            "columnNames": [
+              "fk_amended_reservation_reference"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_room_criteria_fk_amended_reservation_reference` ON `${TABLE_NAME}` (`fk_amended_reservation_reference`)"
+          },
+          {
+            "name": "index_room_criteria_fk_reservation_reference_room_id",
+            "unique": true,
+            "columnNames": [
+              "fk_reservation_reference",
+              "room_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_room_criteria_fk_reservation_reference_room_id` ON `${TABLE_NAME}` (`fk_reservation_reference`, `room_id`)"
+          },
+          {
+            "name": "index_room_criteria_fk_amended_reservation_reference_room_id",
+            "unique": true,
+            "columnNames": [
+              "fk_amended_reservation_reference",
+              "room_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_room_criteria_fk_amended_reservation_reference_room_id` ON `${TABLE_NAME}` (`fk_amended_reservation_reference`, `room_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "amended_reservation",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "fk_amended_reservation_reference"
+            ],
+            "referencedColumns": [
+              "amended_reservation_reference"
+            ]
+          },
+          {
+            "table": "reservation",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "fk_reservation_reference"
+            ],
+            "referencedColumns": [
+              "reservation_reference"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "room_guest",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `room_id` TEXT NOT NULL, `title` TEXT NOT NULL, `first_name` TEXT NOT NULL, `last_name` TEXT NOT NULL, `guest_history_number` TEXT, `email_address` TEXT, `fk_reservation_reference` TEXT, `fk_amended_reservation_reference` TEXT, FOREIGN KEY(`fk_amended_reservation_reference`) REFERENCES `amended_reservation`(`amended_reservation_reference`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`fk_reservation_reference`) REFERENCES `reservation`(`reservation_reference`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roomId",
+            "columnName": "room_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "first_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "last_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "guestHistoryNumber",
+            "columnName": "guest_history_number",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "emailAddress",
+            "columnName": "email_address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reservationReference",
+            "columnName": "fk_reservation_reference",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amendedReservationReference",
+            "columnName": "fk_amended_reservation_reference",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_room_guest_fk_reservation_reference",
+            "unique": false,
+            "columnNames": [
+              "fk_reservation_reference"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_room_guest_fk_reservation_reference` ON `${TABLE_NAME}` (`fk_reservation_reference`)"
+          },
+          {
+            "name": "index_room_guest_fk_amended_reservation_reference",
+            "unique": false,
+            "columnNames": [
+              "fk_amended_reservation_reference"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_room_guest_fk_amended_reservation_reference` ON `${TABLE_NAME}` (`fk_amended_reservation_reference`)"
+          },
+          {
+            "name": "index_room_guest_fk_reservation_reference_room_id",
+            "unique": true,
+            "columnNames": [
+              "fk_reservation_reference",
+              "room_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_room_guest_fk_reservation_reference_room_id` ON `${TABLE_NAME}` (`fk_reservation_reference`, `room_id`)"
+          },
+          {
+            "name": "index_room_guest_fk_amended_reservation_reference_room_id",
+            "unique": true,
+            "columnNames": [
+              "fk_amended_reservation_reference",
+              "room_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_room_guest_fk_amended_reservation_reference_room_id` ON `${TABLE_NAME}` (`fk_amended_reservation_reference`, `room_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "amended_reservation",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "fk_amended_reservation_reference"
+            ],
+            "referencedColumns": [
+              "amended_reservation_reference"
+            ]
+          },
+          {
+            "table": "reservation",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "fk_reservation_reference"
+            ],
+            "referencedColumns": [
+              "reservation_reference"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "room_upsell",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `room_id` TEXT NOT NULL, `legend` TEXT NOT NULL, `code` TEXT NOT NULL, `category` TEXT NOT NULL, `quantity` INTEGER NOT NULL, `posting_date` INTEGER NOT NULL, `fk_reservation_reference` TEXT, `fk_amended_reservation_reference` TEXT, `unit_cost_amount` REAL NOT NULL, `unit_cost_currency` TEXT NOT NULL, FOREIGN KEY(`fk_amended_reservation_reference`) REFERENCES `amended_reservation`(`amended_reservation_reference`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`fk_reservation_reference`) REFERENCES `reservation`(`reservation_reference`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roomId",
+            "columnName": "room_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legend",
+            "columnName": "legend",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "postingDate",
+            "columnName": "posting_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservationReference",
+            "columnName": "fk_reservation_reference",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amendedReservationReference",
+            "columnName": "fk_amended_reservation_reference",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unitCost.amount",
+            "columnName": "unit_cost_amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unitCost.currency",
+            "columnName": "unit_cost_currency",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_room_upsell_fk_reservation_reference",
+            "unique": false,
+            "columnNames": [
+              "fk_reservation_reference"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_room_upsell_fk_reservation_reference` ON `${TABLE_NAME}` (`fk_reservation_reference`)"
+          },
+          {
+            "name": "index_room_upsell_fk_amended_reservation_reference",
+            "unique": false,
+            "columnNames": [
+              "fk_amended_reservation_reference"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_room_upsell_fk_amended_reservation_reference` ON `${TABLE_NAME}` (`fk_amended_reservation_reference`)"
+          },
+          {
+            "name": "index_room_upsell_fk_reservation_reference_room_id_code_posting_date",
+            "unique": true,
+            "columnNames": [
+              "fk_reservation_reference",
+              "room_id",
+              "code",
+              "posting_date"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_room_upsell_fk_reservation_reference_room_id_code_posting_date` ON `${TABLE_NAME}` (`fk_reservation_reference`, `room_id`, `code`, `posting_date`)"
+          },
+          {
+            "name": "index_room_upsell_fk_amended_reservation_reference_room_id_code_posting_date",
+            "unique": true,
+            "columnNames": [
+              "fk_amended_reservation_reference",
+              "room_id",
+              "code",
+              "posting_date"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_room_upsell_fk_amended_reservation_reference_room_id_code_posting_date` ON `${TABLE_NAME}` (`fk_amended_reservation_reference`, `room_id`, `code`, `posting_date`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "amended_reservation",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "fk_amended_reservation_reference"
+            ],
+            "referencedColumns": [
+              "amended_reservation_reference"
+            ]
+          },
+          {
+            "table": "reservation",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "fk_reservation_reference"
+            ],
+            "referencedColumns": [
+              "reservation_reference"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "room_breakdown",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `room_id` TEXT NOT NULL, `fk_reservation_reference` TEXT, `fk_amended_reservation_reference` TEXT, `unit_cost_amount` REAL NOT NULL, `unit_cost_currency` TEXT NOT NULL, FOREIGN KEY(`fk_amended_reservation_reference`) REFERENCES `amended_reservation`(`amended_reservation_reference`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`fk_reservation_reference`) REFERENCES `reservation`(`reservation_reference`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roomId",
+            "columnName": "room_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservationReference",
+            "columnName": "fk_reservation_reference",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amendedReservationReference",
+            "columnName": "fk_amended_reservation_reference",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unitCost.amount",
+            "columnName": "unit_cost_amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unitCost.currency",
+            "columnName": "unit_cost_currency",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_room_breakdown_fk_reservation_reference",
+            "unique": false,
+            "columnNames": [
+              "fk_reservation_reference"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_room_breakdown_fk_reservation_reference` ON `${TABLE_NAME}` (`fk_reservation_reference`)"
+          },
+          {
+            "name": "index_room_breakdown_fk_amended_reservation_reference",
+            "unique": false,
+            "columnNames": [
+              "fk_amended_reservation_reference"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_room_breakdown_fk_amended_reservation_reference` ON `${TABLE_NAME}` (`fk_amended_reservation_reference`)"
+          },
+          {
+            "name": "index_room_breakdown_fk_reservation_reference_room_id",
+            "unique": true,
+            "columnNames": [
+              "fk_reservation_reference",
+              "room_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_room_breakdown_fk_reservation_reference_room_id` ON `${TABLE_NAME}` (`fk_reservation_reference`, `room_id`)"
+          },
+          {
+            "name": "index_room_breakdown_fk_amended_reservation_reference_room_id",
+            "unique": true,
+            "columnNames": [
+              "fk_amended_reservation_reference",
+              "room_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_room_breakdown_fk_amended_reservation_reference_room_id` ON `${TABLE_NAME}` (`fk_amended_reservation_reference`, `room_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "amended_reservation",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "fk_amended_reservation_reference"
+            ],
+            "referencedColumns": [
+              "amended_reservation_reference"
+            ]
+          },
+          {
+            "table": "reservation",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "fk_reservation_reference"
+            ],
+            "referencedColumns": [
+              "reservation_reference"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "upsell_item_available",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `description` TEXT NOT NULL, `foodUpsell` INTEGER NOT NULL, `freeBreakfastTrigger` INTEGER NOT NULL, `availableForChildren` INTEGER NOT NULL, `code` TEXT NOT NULL, `freeBreakfastCode` TEXT NOT NULL, `legend` TEXT NOT NULL, `freeBreakfastOption` INTEGER NOT NULL, `attachments` TEXT NOT NULL, `unit_cost_amount` REAL NOT NULL, `unit_cost_currency` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "foodUpsell",
+            "columnName": "foodUpsell",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "freeBreakfastTrigger",
+            "columnName": "freeBreakfastTrigger",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "availableForChildren",
+            "columnName": "availableForChildren",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "freeBreakfastCode",
+            "columnName": "freeBreakfastCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legend",
+            "columnName": "legend",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "freeBreakfastOption",
+            "columnName": "freeBreakfastOption",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attachments",
+            "columnName": "attachments",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unitCost.amount",
+            "columnName": "unit_cost_amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unitCost.currency",
+            "columnName": "unit_cost_currency",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "dashboard",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `content_hotel_image` TEXT, `content_hotel_name` TEXT, `content_hotel_code` TEXT, `content_checked_in` INTEGER, `content_confirmation_number` TEXT, `content_arrival_date` INTEGER, `content_departure_date` INTEGER, `content_rooms` TEXT, `content_guests` INTEGER, `content_actions` TEXT, `content_frequent_bookings` TEXT, `content_map_latitude` REAL, `content_map_longitude` REAL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "content.hotelImage",
+            "columnName": "content_hotel_image",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.hotelName",
+            "columnName": "content_hotel_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.hotelCode",
+            "columnName": "content_hotel_code",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.checkedIn",
+            "columnName": "content_checked_in",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.confirmationNumber",
+            "columnName": "content_confirmation_number",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.arrivalDate",
+            "columnName": "content_arrival_date",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.departureDate",
+            "columnName": "content_departure_date",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.rooms",
+            "columnName": "content_rooms",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.guests",
+            "columnName": "content_guests",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.actions",
+            "columnName": "content_actions",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.frequentBookings",
+            "columnName": "content_frequent_bookings",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.map.latitude",
+            "columnName": "content_map_latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.map.longitude",
+            "columnName": "content_map_longitude",
+            "affinity": "REAL",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "dashboard_recent_search",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`search_term` TEXT NOT NULL, `hotel_code` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `hotel_brand` TEXT NOT NULL, `arrival_date` INTEGER NOT NULL, `departure_date` INTEGER NOT NULL, `rooms_count` INTEGER NOT NULL, `adults` TEXT NOT NULL, `children` TEXT NOT NULL, `infants` TEXT NOT NULL, `cots` TEXT NOT NULL, `room_type_codes` TEXT NOT NULL, `date_created` INTEGER NOT NULL, PRIMARY KEY(`search_term`, `hotel_code`, `latitude`, `longitude`, `hotel_brand`, `arrival_date`, `departure_date`, `rooms_count`, `adults`, `children`, `infants`, `cots`, `room_type_codes`))",
+        "fields": [
+          {
+            "fieldPath": "searchTerm",
+            "columnName": "search_term",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hotelCode",
+            "columnName": "hotel_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hotelBrand",
+            "columnName": "hotel_brand",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "arrivalDate",
+            "columnName": "arrival_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "departureDate",
+            "columnName": "departure_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roomsCount",
+            "columnName": "rooms_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "adults",
+            "columnName": "adults",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "children",
+            "columnName": "children",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "infants",
+            "columnName": "infants",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cots",
+            "columnName": "cots",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roomTypeCodes",
+            "columnName": "room_type_codes",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateCreated",
+            "columnName": "date_created",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "search_term",
+            "hotel_code",
+            "latitude",
+            "longitude",
+            "hotel_brand",
+            "arrival_date",
+            "departure_date",
+            "rooms_count",
+            "adults",
+            "children",
+            "infants",
+            "cots",
+            "room_type_codes"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd856c14ac0dc24c14ec23892e8ac3af2')"
+    ]
+  }
+}

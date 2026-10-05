@@ -1,0 +1,231 @@
+server:
+  port: 9025
+
+swagger:
+  api:
+    version: 1.0.0
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "marketing-service-opera"
+    description: "Whitbread Marketing Micro-Service"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /marketing-service/actuator
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+bart:
+  host: ${BART_HOST}
+  password: ${BART_PASSWORD}
+  username: ${BART_USERNAME}
+  service:
+    marketingService:
+      url: ${bart.host}/csp/sql/ws.ElectronicMagazine.ElectronicMagazineService2015.cls
+    sharedDataService:
+      url: ${bart.host}/csp/sql/ws.UnifiedSystems.UnifiedSystemsDataService.cls
+
+auth:
+  tenants:
+    - name: pi-bb
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+
+hotelaccount:
+  path: /customers/internal/{customer-id}
+
+feign:
+  hotelaccount:
+    name: hotelaccount
+    url: http://${HOTEL_ACCOUNT_URL:localhost:9020}
+  client:
+    config:
+      default:
+        connectTimeout: 20000
+        readTimeout: 10000
+        loggerLevel: basic
+
+spring:
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  cache:
+    redis:
+      # 3540000 = 59 min
+      time-to-live: 3540000
+    type: redis
+
+azure:
+  oauth-client:
+    host: ${CDH_OAUTH_HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}
+    grant-type: ${CDH_OAUTH_GRANT}
+
+customerHub:
+  host: ${CH_HOST}
+  authKeyHeaderName: ${CH_AUTH_HEADER}
+  timeout: ${CH_TIMEOUT}
+  sourceSystem: ${CH_SOURCE_SYSTEM}
+  service:
+    updateMarketingPreferences:
+      url: ${CH_UPDATE_PREFERENCES_URL}
+      authKey: ${MARKETING_SERVICE_UPDATEKEY}
+    editMarketingPreferences:
+      url: ${customerHub.host}/api/editpermissions
+      authKey: ${MARKETING_SERVICE_EDITKEY}
+    getMarketingPreferences:
+      url: ${customerHub.host}/api/getpermissions
+      authKey: ${MARKETING_SERVICE_GETKEY}
+  is-oauth: ${CH_IS_OAUTH}
+  oauth:
+    enabled: ${CH_OAUTH_ENABLED}
+    host: ${CH_OAUTH_HOST}
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: ${OAUTH_SUBSCRIPTION_KEY}
+    subscription-key-v2: ${OAUTH_SUBSCRIPTION_KEY_V2}
+    timeout: 50000
+    source-system: ${CH_OAUTH_SOURCE_SYSTEM}
+    get-marketing-preferences-endpoint: /CustomerHub/V1/GetPermissions
+    get-marketing-preferences-url: ${customerHub.oauth.host}${customerHub.oauth.get-marketing-preferences-endpoint}
+    edit-marketing-preferences-endpoint: /CustomerHub/V1/EditPermissions
+    edit-marketing-preferences-url: ${customerHub.oauth.host}${customerHub.oauth.edit-marketing-preferences-endpoint}
+
+permissionManagementApi:
+  oauth:
+    host: ${PM_OAUTH_HOST}
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: ${OAUTH_PERMISSION_MANAGEMENT_SUBSCRIPTION_KEY}
+    timeout: 50000
+    source-system: Whitbread-Digital
+    get-marketing-preferences-url: ${permissionManagementApi.oauth.host}${PM_GET_MARKETING_PREFERENCES_ENDPOINT}
+    get-marketing-preferences-v2-url: ${permissionManagementApi.oauth.host}${PM_GET_MARKETING_PREFERENCES_V2_ENDPOINT}
+    update-marketing-preferences-url: ${permissionManagementApi.oauth.host}/PermissionManagement/V1/UpdatePermissions
+    confirm-double-opt-in-url: ${permissionManagementApi.oauth.host}/PermissionManagement/V1/ConfirmDoubleOptIn
+    unsubscribe-url: ${permissionManagementApi.oauth.host}/PermissionManagement/V1/Unsubscribe
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  cache:
+    redis:
+      # 3540000 = 59 min
+      time-to-live: 3540000
+    # if developer doesn't have redis, use type: none or type: simple
+    #type: none # cache disabled
+    #type: simple # for simple in-memory cache no ttl applied
+    type: redis
+  data:
+    redis:
+      port: 6379
+      database: 0
+      host: localhost
+
+bart:
+  host: ${BART_HOST}
+  password: ${BART_PASSWORD}
+  username: ${BART_USERNAME}
+
+hotelaccount:
+  path: /customers/internal/{customer-id}
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+logging:
+  level:
+    org.apache.http: DEBUG
+    org.springframework.ws.client.MessageTracing: trace
+    uk.co.whitbread: info
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+
+---
+spring:
+  config:
+    activate:
+      on-profile: disable-caching
+  cache:
+    type: none
+  autoconfigure:
+    exclude: org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration

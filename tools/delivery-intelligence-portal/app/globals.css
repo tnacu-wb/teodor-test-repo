@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-brand: #5c2d82;
+  --color-brand-2: #7b3faf;
+  --color-bg: #f4f6f9;
+  --color-panel: #ffffff;
+  --color-ink: #1c2530;
+  --color-ink-2: #5a6675;
+  --color-ink-3: #8a94a3;
+  --color-good: #1f9d6b;
+  --color-warn: #c8811a;
+  --color-bad: #cf3b45;
+  --color-info: #2f6fed;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-ink antialiased;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-panel rounded-xl shadow-card p-5;
+  }
+
+  .kpi-card {
+    @apply card flex flex-col gap-1;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-ink-3/30 rounded-full;
+  }
+}

@@ -1,0 +1,70 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+package uk.co.whitbread.availabilitycacheservice.adapters.los.rules {
+enum LOSRestrictionRule
+class MinNightRestrictionRule
+class MaxNightRestrictionRule
+class MinMaxNightRestrictionRule
+class CTARestrictionRule
+}
+
+package uk.co.whitbread.availabilitycacheservice.domain.ports.secondary {
+interface LOSRestrictionBaseRule {
+ + boolean isApplicable(HotelAvailabilitiesResultSet resultFrmDB)
+ + LOSRestrictionRule getRuleName()
+}
+interface LOSRestrictionRulesEvaluator {
++ LOSRestriction evaluateRestrictionRules(HotelAvailabilitiesResultSet resultFrmDB)
++ registerRule(LOSRestrictionBaseRule rule)
+}
+}
+
+package uk.co.whitbread.availabilitycacheservice.model.los.rules{
+class LOSRestriction
+}
+
+
+
+package uk.co.whitbread.availabilitycacheservice.adapters {
+class LOSRestrictionRulesEvaluatorSvc
+class HotelAvailabilitiesPostProcessorService {
+- List<Hotel> applyLOSRestrictions(SearchCriteria criteria, List<Hotel> hotels, List<HotelAvailabilitiesResultSet> hoteslFrmDB)
+}
+}
+
+
+
+LOSRestrictionBaseRule <|-- MinNightRestrictionRule
+LOSRestrictionBaseRule <|-- MaxNightRestrictionRule
+LOSRestrictionBaseRule <|-- MinMaxNightRestrictionRule
+LOSRestrictionBaseRule <|-- CTARestrictionRule
+
+LOSRestrictionRulesEvaluator <|-- LOSRestrictionRulesEvaluatorSvc
+
+HotelAvailabilitiesPostProcessorService --> LOSRestrictionRulesEvaluator
+LOSRestrictionRulesEvaluator --> LOSRestrictionBaseRule
+
+class LOSRestriction {
+ - LOSRestrictionRule losRule;
+ 'minNights : hotel has a restriction of minimum number of nights that the customer must book for'
+ 'For Example : Has to stay for 2 nights at a minimum'
+ - int minNights;
+ 'minNights : hotel has a restriction of maximum number of nights that the customer can stay for'
+ 'For Example : Can stay til maximum of 3 nights (i,e 1, 2 or 3 nights stay allowed, 4 nights stay not allowed'
+ - int maxNights;
+ 'minNights : hotel has a restriction of min & max number of nights that the customer can stay for'
+ 'For Example : Customer not allowed to stay for 2 or 3 nights, but can stay for 1 or 4 nights'
+ - int[] noNightsAllowed;
+}
+
+enum LOSRestrictionRule {
+    NO_RESTRICTIONS
+    MIN_NIGHT_RESTRICTIONS
+    MAX_NIGHT_RESTRICTIONS
+    MIN_MAX_NIGHT_RESTRICTIONS
+    CTA_RESTRICTIONS
+}
+
+@enduml

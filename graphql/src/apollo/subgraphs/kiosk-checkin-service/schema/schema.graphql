@@ -1,0 +1,118 @@
+schema {
+    mutation: Mutation
+}
+
+type Mutation {
+    checkIn(checkInCriteria: CheckInCriteria!): CheckIn!
+    roomAllocation(roomAllocationCriteria: RoomAllocationCriteria!): RoomAllocation!
+}
+
+input CheckInCriteria{
+    reservationNumber: String!
+    hotelId: String!
+    roomType: String!
+    roomId: String!
+    paymentDetails: PaymentDetails
+    stayingGuestDetails: [KioskStayingGuestDetails]
+    reservationComments: [KioskReservationComments]
+}
+
+input PaymentDetails {
+    provider: String
+    offline: Boolean
+    amount: Float
+    authCode: String
+    paymentId: String
+    transactionDateTime: String
+    SCATransRef: String
+    card: KioskCardRequest
+}
+
+input KioskCardRequest {
+    cardholderName: String
+    cardType: String
+    expiryMonth: String
+    expiryYear: String
+    token: String
+    cnpRequired: Boolean
+    logoUrl: String
+    type: String
+    cardSchemeId: String
+    cardSchemeName: String
+}
+
+input KioskStayingGuestDetails {
+    title: String
+    firstName: String
+    lastName: String
+    address: KioskGuestAddress
+    nationality: String
+    passport: String
+    placeOfIssue: String
+    nextDestination: String
+}
+
+input KioskGuestAddress {
+    addressType: String
+    postalCode: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    countryCode: String
+    cityName: String
+    companyName: String
+    emailAddress: String
+    telephoneNumber: String
+    mobileNumber: String
+}
+
+input KioskReservationComments {
+    commentType: String
+    comment: String
+}
+
+type CheckIn {
+    numberOfKeys: Int!
+    invoiceNumber: String
+    roomNumber: String!
+    vat: VatDetails
+    transaction: String
+    cardType: String
+    cardNumber: String
+    cardExpiry: String
+    cardStart: String
+    amountPaid: Float
+    entryType: String
+    cvm: String
+    aid: String
+    panSeqNum: String
+    auth: String
+    status: String
+    merchantId: String
+    terminalId: String
+    transactionReferenceNumber: String
+    transactionDate: String
+    transactionTime: String
+}
+
+type VatDetails {
+    vatRate: String
+    gross: Float
+    net: Float
+    vatMessage: String
+    vatNumber: String
+}
+
+input RoomAllocationCriteria{
+    reservationId: String!
+    hotelId: String!
+    roomType: String!
+    roomId: String
+}
+
+type RoomAllocation {
+    roomId: String
+    status: String!
+}
+

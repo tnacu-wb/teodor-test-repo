@@ -1,0 +1,20 @@
+
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as Webclient
+
+A -> Controller: PUT /v1/reservations/preferences
+Controller -> InboundPort: updateReservationPreferences
+InboundPort -> OutboundPort: updateReservationPreferences
+OutboundPort -> Webclient: updateReservationPreferences
+Webclient -> OHIPAdapter: PUT /v1/reservations/preferences
+
+Webclient <- OHIPAdapter: ReservationPreferencesResponse
+OutboundPort <- Webclient: ReservationPreferencesResponse
+InboundPort <- OutboundPort: ReservationPreferencesResponse
+Controller <- InboundPort: ReservationPreferencesResponse
+A <- Controller: Reservation Preferences
+@enduml

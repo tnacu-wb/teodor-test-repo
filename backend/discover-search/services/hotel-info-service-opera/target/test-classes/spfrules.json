@@ -1,0 +1,131 @@
+{
+  "operator": "PURPLELGW",
+  "sections": [
+    {
+      "name": "parking",
+      "labelKey": "parkingDetails",
+      "fields": [
+        {
+          "type": "select",
+          "name": "passengers",
+          "labelKey": "passengers",
+          "options": [
+            {
+              "value": "1"
+            },
+            {
+              "value": "2"
+            },
+            {
+              "value": "3"
+            },
+            {
+              "value": "4"
+            },
+            {
+              "value": "5"
+            },
+            {
+              "value": "6"
+            },
+            {
+              "value": "7"
+            },
+            {
+              "value": "8"
+            }
+          ],
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "departure",
+      "labelKey": "dropoffDesc",
+      "fields": [
+        {
+          "type": "selectDay",
+          "name": "dayDep",
+          "labelKey": "day",
+          "required": true
+        },
+        {
+          "type": "selectMonth",
+          "name": "monthDep",
+          "labelKey": "month",
+          "required": true
+        },
+        {
+          "type": "selectTime",
+          "name": "timeDep",
+          "labelKey": "dropoffTime",
+          "required": true
+        },
+        {
+          "type": "select",
+          "name": "terminal",
+          "labelKey": "depTerminal",
+          "options": [
+            {
+              "value": "North Terminal"
+            },
+            {
+              "value": "South Terminal"
+            }
+          ],
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "arrival",
+      "labelKey": "collectionDesc",
+      "fields": [
+        {
+          "type": "selectDay",
+          "name": "dayArr",
+          "labelKey": "day",
+          "required": true
+        },
+        {
+          "type": "selectMonth",
+          "name": "monthArr",
+          "labelKey": "month",
+          "required": true
+        },
+        {
+          "type": "selectTime",
+          "name": "timeArr",
+          "labelKey": "pickupTime",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "car",
+      "labelKey": "carDetails",
+      "fields": [
+        {
+          "type": "text",
+          "name": "registrationNumber",
+          "labelKey": "registration",
+          "required": true
+        },
+        {
+          "type": "text",
+          "name": "make",
+          "labelKey": "make",
+          "required": true
+        },
+        {
+          "type": "text",
+          "name": "color",
+          "labelKey": "colour",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "earliestTime": "09:00",
+  "latestTime": "21:00"
+}

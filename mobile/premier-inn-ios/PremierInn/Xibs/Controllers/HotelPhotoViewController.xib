@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HotelPhotoViewController" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="activityIndicator" destination="f3D-CR-Uia" id="Iao-ex-EVD"/>
+                <outlet property="imageView" destination="1Hm-PF-uAX" id="geF-0T-lwJ"/>
+                <outlet property="view" destination="iN0-l3-epB" id="OKn-2D-FfU"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Hm-PF-uAX">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                </imageView>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="f3D-CR-Uia">
+                    <rect key="frame" x="177.5" y="323.5" width="20" height="20"/>
+                </activityIndicatorView>
+            </subviews>
+            <gestureRecognizers/>
+            <constraints>
+                <constraint firstItem="f3D-CR-Uia" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="K97-0M-B53"/>
+                <constraint firstItem="1Hm-PF-uAX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="WOe-nC-w5J"/>
+                <constraint firstItem="1Hm-PF-uAX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ciN-Xh-NiM"/>
+                <constraint firstItem="f3D-CR-Uia" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="eUo-V5-lt8"/>
+                <constraint firstAttribute="trailing" secondItem="1Hm-PF-uAX" secondAttribute="trailing" id="gL7-w0-F8r"/>
+                <constraint firstAttribute="bottom" secondItem="1Hm-PF-uAX" secondAttribute="bottom" id="uHx-wj-MO2"/>
+            </constraints>
+            <connections>
+                <outletCollection property="gestureRecognizers" destination="7Kb-bl-XXi" appends="YES" id="BDr-ec-Wcc"/>
+            </connections>
+        </view>
+        <tapGestureRecognizer id="7Kb-bl-XXi">
+            <connections>
+                <action selector="handleTapGesture:" destination="-1" id="mNi-DD-Ksm"/>
+            </connections>
+        </tapGestureRecognizer>
+    </objects>
+</document>

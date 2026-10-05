@@ -1,0 +1,29 @@
+{
+  "request": {
+    "url": "/PermissionManagement/V1/Unsubscribe",
+    "method": "POST",
+    "headers" : {
+      "Content-Type" : {
+        "contains" : "application/json"
+      },
+      "Authorization": {
+        "contains" : "123456.access.token"
+      },
+      "Ocp-Apim-Subscription-Key": {
+        "contains": "dummyValue"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matches": ".*CHNL40088.*"
+      }
+    ]
+  },
+  "response": {
+    "status": 202,
+      "bodyFileName": "customer-hub-success-response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="cristina.manitiu" id="room_upsell_room_substitution_rules">
+    <loadUpdateData tableName="room_substitution_rule"
+      file="sql/liquibase/data/room_substitution_rules_add_room_upsell.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="cristina.manitiu" id="delete_PFAMIL_for_TWIN_substitution">
+  <delete schemaName="rules_engine" tableName="room_substitution_rule">
+    <where>(room_type='TWIN' AND adults=2 AND children=0 AND pms_room_type='PFAMIL')</where>
+  </delete>
+  </changeSet>
+
+</databaseChangeLog>

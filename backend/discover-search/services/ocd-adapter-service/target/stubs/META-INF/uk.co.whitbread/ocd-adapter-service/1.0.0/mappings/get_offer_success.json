@@ -1,0 +1,38 @@
+{
+  "id" : "00b1877e-f73d-45fe-a48f-e8a838021ee1",
+  "request" : {
+    "urlPath" : "/v1/hotels/BERCIT/offer",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json;charset=UTF-8"
+      }
+    },
+    "queryParameters" : {
+      "arrivalDate" : {
+        "equalTo" : "9999-10-01"
+      },
+      "departureDate" : {
+        "equalTo" : "9999-10-02"
+      },
+      "roomType" : {
+        "equalTo" : "DOUBLE"
+      },
+      "adults" : {
+        "equalTo" : "1"
+      },
+      "ratePlanCode" : {
+        "equalTo" : "FLEXRATE"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"roomType\":\"DOUBLE\",\"ratePlanCode\":\"FLEXRATE\",\"total\":{\"amountBeforeTax\":613,\"amountAfterTax\":916.25,\"currencyCode\":\"GBP\",\"taxes\":{\"tax\":[{\"description\":\"Value Added Tax (VAT)\",\"code\":\"36\",\"amount\":61.3,\"currencyCode\":\"GBP\"},{\"description\":\"Occupancy tax\",\"code\":\"10\",\"amount\":30.65,\"currencyCode\":\"GBP\"},{\"description\":\"Resort fee\",\"code\":\"12\",\"amount\":150,\"currencyCode\":\"GBP\"},{\"description\":\"City tax\",\"code\":\"3\",\"amount\":61.3,\"currencyCode\":\"GBP\"}],\"amount\":303.25,\"currencyCode\":\"GBP\"}}}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "00b1877e-f73d-45fe-a48f-e8a838021ee1"
+}

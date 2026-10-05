@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_bookings_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/generic_corner_radius_2"
+    app:cardElevation="@dimen/generic_elevation_2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingTop="@dimen/generic_padding_24">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/my_bookings_lead_guest_name"
+                style="@style/BodySmallBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/rightBadges"
+                android:textColor="@color/dark_grey_2"
+                tools:text="Mr Frodo Baggins" />
+
+            <LinearLayout
+                android:id="@+id/rightBadges"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/my_bookings_business_trip"
+                style="@style/BodySmallBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_light_grey_4_stroke"
+                android:gravity="center_vertical"
+                android:visibility="visible"
+                android:textColor="@color/dark_grey"
+                android:text="@string/business_booker_tag"
+                android:paddingBottom="@dimen/generic_padding_2"
+                android:paddingTop="@dimen/generic_padding_2"
+                android:paddingEnd="@dimen/generic_padding_8"
+                android:paddingStart="@dimen/generic_padding_8"
+                android:drawablePadding="@dimen/generic_padding_4"
+                app:drawableStartCompat="@drawable/ic_business_luggage" />
+
+            <TextView
+                android:id="@+id/booking_status"
+                style="@style/BodySmallBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_light_green_stroke"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="@dimen/generic_padding_8"
+                android:paddingVertical="@dimen/generic_padding_4"
+                android:textColor="@color/success_green"
+                android:visibility="gone"
+                tools:text="Checked-in" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/my_bookings_hotel_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            style="@style/Header1"
+            tools:text="London Kings Cross"/>
+
+        <TextView
+            android:id="@+id/my_bookings_dates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            style="@style/Body"
+            tools:text="Mon 17 Jun -> Sat 22 Jun"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mint_dark_fifty_percent"/>
+
+        <com.whitbread.premierinn.common.view.InfoMessageBoxView
+            android:id="@+id/my_bookings_plan_your_trip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:gravity="center"
+            android:paddingBottom="@dimen/generic_padding_16"
+            android:paddingTop="@dimen/generic_padding_16"
+            android:src="@drawable/ic_plan_trip"
+            android:text="@string/plan_your_trip"
+            app:iconTintColor="?colorPrimary"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mint_dark_fifty_percent"/>
+
+        <com.whitbread.premierinn.common.view.InfoMessageBoxView
+            android:id="@+id/my_bookings_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:gravity="center"
+            android:paddingBottom="@dimen/generic_padding_16"
+            android:paddingTop="@dimen/generic_padding_16"
+            android:src="@drawable/ic_booking_details"
+            android:text="@string/booking_details"
+            app:iconTintColor="?colorPrimary"/>
+
+        <View
+            android:id="@+id/qr_code_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:background="@color/mint_dark_fifty_percent"/>
+
+        <com.whitbread.premierinn.common.view.InfoMessageBoxView
+            android:id="@+id/qr_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:gravity="center"
+            android:paddingTop="@dimen/generic_padding_16"
+            android:paddingBottom="@dimen/generic_padding_16"
+            android:src="@drawable/ic_baseline_qr_code_24"
+            android:text="@string/qr_code_title"
+            app:iconTintColor="?colorPrimary" />
+
+        <View
+            android:id="@+id/room_key_instructions_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:background="@color/mint_dark_fifty_percent"/>
+
+        <com.whitbread.premierinn.common.view.InfoMessageBoxView
+            android:id="@+id/room_key_instructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:gravity="center"
+            android:paddingTop="@dimen/generic_padding_16"
+            android:paddingBottom="@dimen/generic_padding_16"
+            android:src="@drawable/ic_room_key"
+            android:text="@string/booking_details_get_room_key_instructions"
+            android:visibility="gone"
+            app:iconTintColor="?colorPrimary"
+            tools:visibility="visible" />
+
+        <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+            android:id="@+id/booking_details_ciol_button"
+            style="@style/Button1"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            android:text="@string/booking_details_check_in_online"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:cab_text_color="@android:color/white" />
+
+        <FrameLayout
+            android:id="@+id/third_party_booking_info_banner_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            android:background="@color/mint_dark_fifty_percent"
+            android:padding="1dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                android:id="@+id/third_party_booking_info_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="12dp"
+                android:src="@drawable/ic_info"
+                android:text="@string/third_party_booking_upcoming_label"
+                app:iconTintColor="@color/information_blue" />
+        </FrameLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

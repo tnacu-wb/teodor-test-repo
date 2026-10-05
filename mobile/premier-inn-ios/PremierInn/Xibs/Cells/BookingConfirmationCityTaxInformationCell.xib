@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="224" id="cc3-kK-epr" customClass="BookingConfirmationCityTaxInformationCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="470" height="224"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cc3-kK-epr" id="Djg-Ft-eMk">
+                <rect key="frame" x="0.0" y="0.0" width="470" height="223.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="City tax" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yNg-SK-Sib">
+                        <rect key="frame" x="20" y="30" width="430" height="18.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="To qualfiy for a discount on city tax you will have to prove that you are staying for work by presenting a completed form" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bM1-US-mHd">
+                        <rect key="frame" x="20" y="58.5" width="430" height="61"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tXP-A1-PPD" customClass="RoundedCornersTintButton" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="20" y="149.5" width="430" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="NPH-XN-xEH"/>
+                        </constraints>
+                        <state key="normal" title="View City Tax Form"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="bM1-US-mHd" firstAttribute="top" secondItem="yNg-SK-Sib" secondAttribute="bottom" constant="10" id="6Bf-WQ-rSb"/>
+                    <constraint firstItem="yNg-SK-Sib" firstAttribute="leading" secondItem="Djg-Ft-eMk" secondAttribute="leading" constant="20" id="9so-nD-mwy"/>
+                    <constraint firstItem="bM1-US-mHd" firstAttribute="trailing" secondItem="yNg-SK-Sib" secondAttribute="trailing" id="CdD-4x-az9"/>
+                    <constraint firstItem="yNg-SK-Sib" firstAttribute="top" secondItem="Djg-Ft-eMk" secondAttribute="top" constant="30" id="Hts-8M-RYi"/>
+                    <constraint firstItem="tXP-A1-PPD" firstAttribute="top" secondItem="bM1-US-mHd" secondAttribute="bottom" constant="30" id="Itx-Q6-PaU"/>
+                    <constraint firstAttribute="bottom" secondItem="tXP-A1-PPD" secondAttribute="bottom" constant="30" id="NA9-Xs-eyD"/>
+                    <constraint firstAttribute="trailing" secondItem="yNg-SK-Sib" secondAttribute="trailing" constant="20" id="bxm-z8-LZa"/>
+                    <constraint firstAttribute="trailing" secondItem="tXP-A1-PPD" secondAttribute="trailing" constant="20" id="fw9-SF-hUW"/>
+                    <constraint firstItem="bM1-US-mHd" firstAttribute="leading" secondItem="yNg-SK-Sib" secondAttribute="leading" id="g8w-6u-mYN"/>
+                    <constraint firstItem="tXP-A1-PPD" firstAttribute="leading" secondItem="Djg-Ft-eMk" secondAttribute="leading" constant="20" id="wwq-QE-RMe"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="bodyLabel" destination="bM1-US-mHd" id="8Qx-jb-pC5"/>
+                <outlet property="titleLabel" destination="yNg-SK-Sib" id="EZP-Fe-XT0"/>
+                <outlet property="viewFormButton" destination="tXP-A1-PPD" id="qss-e2-cfM"/>
+            </connections>
+            <point key="canvasLocation" x="-113" y="-67"/>
+        </tableViewCell>
+    </objects>
+</document>

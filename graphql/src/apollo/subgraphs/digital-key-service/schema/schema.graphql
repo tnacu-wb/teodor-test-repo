@@ -1,0 +1,82 @@
+schema {
+    mutation: Mutation
+}
+
+type Mutation {
+    digitalKeyGenerateOtp(email: String!) : DigitalKeyGenerateOtpResponse
+    digitalKeyProvision(digitalkeyProvisionRequest: DigitalKeyProvisionRequest!) : DigitalKeyProvisionResponse
+    digitalKeyCheckIn(digitalKeyCheckInCriteria: DigitalKeyCheckInCriteria!): DigitalKeyCheckIn!
+    registerMobileDevice(registerMobileDeviceRequest: RegisterMobileDeviceRequest!) : RegisterMobileDeviceResponse
+    googleWalletProvisioning(googleWalletProvisioningRequest: GoogleWalletProvisioningRequest!) : GoogleWalletProvisioningResponse
+}
+
+type DigitalKeyGenerateOtpResponse {
+    success: Boolean!
+}
+
+input DigitalKeyProvisionRequest {
+    otpCode: String!
+    email: String!
+    bookingReference: String!
+    reservationId: String!
+}
+
+type DigitalKeyProvisionResponse {
+    provisioningCredentialIdentifier: String
+    sharingInstanceIdentifier: String
+    cardConfigurationIdentifier: String
+    cardTemplateIdentifier: String
+    serverEnvironmentIdentifier: String
+    accountHash: String
+    relyingPartyIdentifier: String
+    expiresAt: String
+}
+
+input DigitalKeyCheckInCriteria{
+    hotelId: String!
+    reservationId: String!
+}
+
+type DigitalKeyCheckIn {
+    roomNumber: String!
+    checkInStatus: String
+}
+
+input RegisterMobileDeviceRequest {
+    shortPropertyCode: String!
+    bookingReference: String!
+    firstName: String!
+    lastName: String!
+    deviceId: String!
+    deviceManufacturer: String!
+    deviceModel: String!
+    osVersion: String!
+    appVersion: String!
+}
+
+type RegisterMobileDeviceResponse {
+    mobileDeviceId: String!
+    dormakaba: Dormakaba
+}
+
+type Dormakaba {
+    token: String
+    endpointId: String
+}
+
+input GoogleWalletProvisioningRequest {
+    otpCode: String!
+    otpType: String!
+    otpDestination: String!
+    shortPropertyCode: String!
+    firstName: String!
+    lastName: String!
+    bookingReference: String!
+    linkingToken: String!
+    walletUserId: String!
+}
+
+type GoogleWalletProvisioningResponse {
+    provisioningUrl: String
+    credentialToken: String
+}

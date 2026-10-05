@@ -1,0 +1,23 @@
+@startuml
+entity "PMS Adapter Service" as PMS
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as Webclient
+entity Opera as opera
+
+PMS -> Controller: GET /ohip/hotels/{hotelId}/reservations/basket\n?reservationIds={reservationIds}
+Controller -> InboundPort: getReservationsByIds(String hotelId, Set<String> reservationIds)
+InboundPort -> OutboundPort: getReservationsByIds(String hotelId, Set<String> reservationId)
+OutboundPort -> Webclient: sendGetReservationsByIds(String hotelId, Set<String> reservationIds)
+loop for each reservationId
+    Webclient -> opera: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/\n?fetchInstructions=Reservation&fetchInstructions=InventoryItems\n&fetchInstructions=ReservationPolicies&fetchInstructions=Packages
+    Webclient <- opera: Reservation
+end
+
+Webclient -> Webclient: Aggregate responses
+OutboundPort <- Webclient: List<Reservation>
+InboundPort <- OutboundPort: ReservationByBasketRefResponse
+Controller <- InboundPort: ReservationByBasketRefResponse
+PMS <- Controller: ReservationByBasketRefResponseDto
+@enduml

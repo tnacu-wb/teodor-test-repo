@@ -1,0 +1,77 @@
+Called POST /proposecreditlimit with  SchemeCustomerId:{} TetheredUserGuid:{}
+
+
+<xs:element name="creditProposeNewLimit">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Request" type="data:CreditProposeNewLimitRequestType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="creditProposeNewLimitGetStatus">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Request" type="data:CreditProposeNewLimitGetStatusRequestType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="creditProposeNewLimitGetStatusResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Response" type="data:CreditProposeNewLimitGetStatusResponseType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="creditProposeNewLimitResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Response" type="data:CreditProposeNewLimitResponseType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+<xs:complexType name="CreditProposeNewLimitRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="SchemeCustomerId" type="xs:int" nillable="false"/>
+			<xs:element name="ProposedCreditLimit" type="xs:int" nillable="false"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CreditProposeNewLimitResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="CLIRequestId" type="tns:GuidType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:complexType name="CurrencyType">
+		<xs:sequence>
+			<xs:element name="Amount">
+				<xs:simpleType>
+					<xs:restriction base="xs:decimal">
+						<xs:totalDigits value="19"/>
+						<xs:fractionDigits value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CurrencyCode">
+				<xs:annotation>
+					<xs:documentation>e.g. 826</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="3"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>

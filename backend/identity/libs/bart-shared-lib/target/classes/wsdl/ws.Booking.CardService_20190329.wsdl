@@ -1,0 +1,100 @@
+<definitions targetNamespace="http://bartws.micros.com/1.31" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://bartws.micros.com/1.31" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://bartws.micros.com/1.31">
+			<s:element name="ValidateBin">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="request" type="s0:BinRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="BinRequest">
+				<s:sequence>
+					<s:element name="action">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="VALIDATE"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="sessionID" type="s:string"/>
+					<s:element name="cardBin">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="6"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="property">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="6"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="ValidateBinResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="ValidateBinResult" type="s0:BinResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="BinResponse">
+				<s:sequence>
+					<s:element minOccurs="0" name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="cardType">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="2"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="cardLegend" type="s:string"/>
+					<s:element minOccurs="0" name="startDateRequired" type="s:boolean"/>
+					<s:element minOccurs="0" name="issueNumberRequired" type="s:boolean"/>
+					<s:element minOccurs="0" name="cardFeeApplies" type="s:boolean"/>
+					<s:element minOccurs="0" name="cardFeeAmount" type="s0:Price"/>
+					<s:element minOccurs="0" name="responseCode" type="s:string"/>
+					<s:element minOccurs="0" name="responseText" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Price">
+				<s:sequence>
+					<s:element name="amount" type="s:decimal"/>
+					<s:element name="currency" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+		</s:schema>
+	</types>
+	<message name="ValidateBinSoapIn">
+		<part element="s0:ValidateBin" name="parameters"/>
+	</message>
+	<message name="ValidateBinSoapOut">
+		<part element="s0:ValidateBinResponse" name="parameters"/>
+	</message>
+	<portType name="CardServiceSoap">
+		<operation name="ValidateBin">
+			<input message="s0:ValidateBinSoapIn"/>
+			<output message="s0:ValidateBinSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="CardServiceSoap" type="s0:CardServiceSoap">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="ValidateBin">
+			<soap:operation soapAction="http://bartws.micros.com/1.31/ws.Booking.CardService.ValidateBin" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="CardService">
+		<port binding="s0:CardServiceSoap" name="CardServiceSoap">
+			<soap:address location="https://bookings.premierinn.com:443/csp/sql/ws.Booking.CardService.cls"/>
+		</port>
+	</service>
+</definitions>

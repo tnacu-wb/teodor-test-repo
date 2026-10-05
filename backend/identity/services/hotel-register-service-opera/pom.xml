@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>uk.co.whitbread</groupId>
+        <artifactId>digital-monorepo-service-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../../parents/service-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>hotel-register-service-opera</artifactId>
+    <packaging>jar</packaging>
+
+    <name>hotel-register-service-opera</name>
+    <description>Hotel Register MicroService Opera</description>
+
+    <properties>
+        <sonar.coverage.exclusions>
+            **/model/**,
+            **/properties/**,
+            **HotelRegisterMicroserviceApplication*
+        </sonar.coverage.exclusions>
+
+        <application.port>9027</application.port>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>uk.co.whitbread.shared</groupId>
+            <artifactId>commons-validators</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>uk.co.whitbread.shared</groupId>
+            <artifactId>common-auth0</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>uk.co.whitbread.shared</groupId>
+                    <artifactId>commons-entity-exceptions</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>uk.co.whitbread.shared</groupId>
+            <artifactId>commons-azure-email-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>uk.co.whitbread.shared</groupId>
+            <artifactId>commons-cdh-lib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>uk.co.whitbread.shared</groupId>
+            <artifactId>commons-exceptions</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>uk.co.whitbread.shared</groupId>
+            <artifactId>commons-entity-validators</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-validation</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Spring/SpringBoot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Other Dependencies -->
+        <dependency>
+            <groupId>de.triology.recaptchav2-java</groupId>
+            <artifactId>recaptchav2-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.getunleash</groupId>
+            <artifactId>springboot-unleash-starter</artifactId>
+        </dependency>
+
+        <!--        swagger dependency-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-common</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>jakarta.validation</groupId>
+                    <artifactId>jakarta.validation-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--        test dependencies-->
+        <dependency>
+            <groupId>io.github.benas</groupId>
+            <artifactId>random-beans</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>spring-mock-mvc</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-wiremock</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--spring-boot-maven-plugin is needed by springdoc-openapi-maven-plugin to generate OpenAPI yaml description -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+                    <maxAttempts>240</maxAttempts>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <configuration>
+                            <profiles>
+                                <profile>integration</profile>
+                            </profiles>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--Used to generate OpenAPI yaml description -->
+            <plugin>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <apiDocsUrl>http://localhost:${application.port}/v3/api-docs.yaml</apiDocsUrl>
+                    <outputFileName>${project.name}-openApi.yaml</outputFileName>
+                    <outputDir>${basedir}/docs/openApi</outputDir>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/uk/co/whitbread/hotel/register/model/*</exclude>
+                        <exclude>**/uk/co/whitbread/hotel/register/properties/*</exclude>
+                        <exclude>**/HotelRegisterMicroserviceApplication*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+                <configuration>
+                    <baseClassForTests>uk.co.whitbread.hotel.register.controller.ContractVerifierBaseTest</baseClassForTests>
+                    <baseClassMappings>
+                        <baseClassMapping>
+                            <contractPackageRegex>.*createCustomerAuth0.*</contractPackageRegex>
+                            <baseClassFQN>uk.co.whitbread.hotel.register.controller.Auth0ContractVerifierBaseTest</baseClassFQN>
+                        </baseClassMapping>
+                    </baseClassMappings>
+                    <nameSuffixForTests>IT</nameSuffixForTests>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <configuration>
+                    <excludedClasses>
+                        <param>uk.co.whitbread.hotel.register.HotelRegisterMicroserviceApplication</param>
+                    </excludedClasses>
+                    <excludedTestClasses>
+                        <excludedTestClass>
+                            uk.co.whitbread.reservation.architecture.ArchUnitTests
+                        </excludedTestClass>
+                    </excludedTestClasses>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

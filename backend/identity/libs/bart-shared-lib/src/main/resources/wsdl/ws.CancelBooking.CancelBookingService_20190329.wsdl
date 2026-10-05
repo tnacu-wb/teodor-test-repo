@@ -1,0 +1,149 @@
+<definitions targetNamespace="http://bartws.micros.com/1.2" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://bartws.micros.com/1.2" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://bartws.micros.com/1.2">
+			<s:element name="CancellationRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="CancellationRequest" type="s0:CancellationRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="CancellationRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="confirmation" type="s0:ArrayOfConfirmationConfirmation"/>
+					<s:element minOccurs="0" name="cbtCompanyId">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="10"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="cbtEmployeeId">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="10"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="cbtSalesManager">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="30"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfConfirmationConfirmation">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Confirmation" nillable="true" type="s0:Confirmation"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Confirmation">
+				<s:sequence>
+					<s:element minOccurs="0" name="id" type="s:long"/>
+					<s:element name="type">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="EMAIL"/>
+								<s:enumeration value="SMS"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="destination" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="CancellationRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="CancellationRequestResult" type="s0:CancellationResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="CancellationResponse">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="cancellationNumber" type="s:string"/>
+					<s:element minOccurs="0" name="refund" type="s0:Refund"/>
+					<s:element minOccurs="0" name="confirmationSent" type="s0:ArrayOfconfirmationConfirmationSent"/>
+					<s:element minOccurs="0" name="cancelBookingError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="RESERVATION_NOT_FOUND"/>
+								<s:enumeration value="MISMATCH_OF_DATA"/>
+								<s:enumeration value="RESERVATION_IN_USE"/>
+								<s:enumeration value="RESERVATION_ALREADY_CANCELLED/RELEASED/ARRIVED"/>
+								<s:enumeration value="GROUP_BOOKING"/>
+								<s:enumeration value="DEPOSIT_ACTIVE"/>
+								<s:enumeration value="AFTER_LATEST_TIME_FOR_CANCELLATION_ON_DAY_OF_ARRIVAL"/>
+								<s:enumeration value="CANCELLATION_UNSUCCESSFUL"/>
+								<s:enumeration value="EMAIL_ADDRESS_REQUIRED"/>
+								<s:enumeration value="TOO_MANY_MATCHES_FOUND"/>
+								<s:enumeration value="SESSION_ID_NOT_FOUND"/>
+								<s:enumeration value="END_OF_DAY_IN_PROGRESS"/>
+								<s:enumeration value="INVALID_CONFIRMATION_TYPE"/>
+								<s:enumeration value="INVALID_EMAIL_ADDRESS"/>
+								<s:enumeration value="INVALID_UK_MOBILE_NUMBER"/>
+								<s:enumeration value="BOOKING_RULES_APPLY"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Refund">
+				<s:sequence>
+					<s:element name="refundAttempted" type="s:boolean"/>
+					<s:element minOccurs="0" name="refundSuccessful" type="s:boolean"/>
+					<s:element minOccurs="0" name="refundText" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfconfirmationConfirmationSent">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="confirmation" nillable="true" type="s0:ConfirmationSent"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ConfirmationSent">
+				<s:sequence>
+					<s:element minOccurs="0" name="id" type="s:long"/>
+					<s:element name="success" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ErrorDetails">
+				<s:sequence>
+					<s:element minOccurs="0" name="errorMessage" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+		</s:schema>
+	</types>
+	<message name="CancellationRequestSoapIn">
+		<part element="s0:CancellationRequest" name="parameters"/>
+	</message>
+	<message name="CancellationRequestSoapOut">
+		<part element="s0:CancellationRequestResponse" name="parameters"/>
+	</message>
+	<portType name="CancelBookingSoap">
+		<operation name="CancellationRequest">
+			<input message="s0:CancellationRequestSoapIn"/>
+			<output message="s0:CancellationRequestSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="CancelBookingSoap" type="s0:CancelBookingSoap">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="CancellationRequest">
+			<soap:operation soapAction="http://bartws.micros.com/1.2/ws.CancelBooking.CancelBookingService.CancellationRequest" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="CancelBooking">
+		<port binding="s0:CancelBookingSoap" name="CancelBookingSoap">
+			<soap:address location="https://bookings.premierinn.com:443/csp/sql/ws.CancelBooking.CancelBookingService.cls"/>
+		</port>
+	</service>
+</definitions>

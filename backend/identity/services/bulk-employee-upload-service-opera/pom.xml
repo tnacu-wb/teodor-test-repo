@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>bulk-employee-upload-service-opera</artifactId>
+
+  <parent>
+    <groupId>uk.co.whitbread</groupId>
+    <artifactId>digital-monorepo-service-parent</artifactId>
+    <version>${revision}</version>
+    <relativePath>../../../parents/service-parent/pom.xml</relativePath>
+  </parent>
+
+  <properties>
+    <application.port>9048</application.port>
+    <sonar.coverage.exclusions>
+      **/model/**,
+      **/properties/**,
+      **BulkEmployeeServiceApplication*
+    </sonar.coverage.exclusions>
+  </properties>
+
+  <name>bulk-employee-upload-service-opera</name>
+  <description>Whitbread Bulk Employee Upload Service</description>
+
+  <dependencies>
+    <!-- Whitbread -->
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>common-auth0</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-azure-email-service</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-cdh-lib</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Others -->
+    <dependency>
+      <groupId>com.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.ozlerhakan</groupId>
+      <artifactId>poiji</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-contract-wiremock</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.getunleash</groupId>
+      <artifactId>springboot-unleash-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.github.benas</groupId>
+      <artifactId>random-beans</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!--spring-boot-maven-plugin is needed by springdoc-openapi-maven-plugin to generate OpenAPI yaml description -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+        </configuration>
+        <executions>
+          <execution>
+            <id>pre-integration-test</id>
+            <goals>
+              <goal>start</goal>
+            </goals>
+            <configuration>
+              <profiles>
+                <profile>integration</profile>
+              </profiles>
+            </configuration>
+          </execution>
+          <execution>
+            <id>post-integration-test</id>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!--Used to generate OpenAPI yaml description -->
+      <plugin>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <apiDocsUrl>http://localhost:${application.port}/v3/api-docs.yaml</apiDocsUrl>
+          <outputFileName>${project.name}-openApi.yaml</outputFileName>
+          <outputDir>${basedir}/docs/openApi</outputDir>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>cdh-adapter</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <skipValidateSpec>true</skipValidateSpec>
+              <inputSpec>
+                ${project.basedir}/src/main/resources/openapi/cdh-adapter-service-openApi.yaml
+              </inputSpec>
+              <generatorName>spring</generatorName>
+              <modelPackage>uk.co.whitbread.hotel.cdh.adapter.generated.models</modelPackage>
+              <typeMappings>
+                <typeMapping>OffsetDateTime=Date</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>java.time.OffsetDateTime=java.util.Date</importMapping>
+              </importMappings>
+              <generateApis>false</generateApis>
+              <generateApiDocumentation>false</generateApiDocumentation>
+              <generateModelDocumentation>false</generateModelDocumentation>
+              <generateSupportingFiles>false</generateSupportingFiles>
+              <configOptions>
+                <useJakartaEe>true</useJakartaEe>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <configuration>
+          <excludedClasses>
+            <param>uk.co.whitbread.employee.bulk.BulkEmployeeUploadServiceApplication</param>
+          </excludedClasses>
+          <excludedTestClasses>
+            <excludedTestClass>
+              uk.co.whitbread.reservation.architecture.ArchUnitTests
+            </excludedTestClass>
+          </excludedTestClasses>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

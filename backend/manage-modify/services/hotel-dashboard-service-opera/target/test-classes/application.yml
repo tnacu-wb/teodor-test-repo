@@ -1,0 +1,35 @@
+dashboard:
+  maxDays: 14
+  minToBeFrequent: 2
+  maxFrequent: 3
+  environment: "https://www.beta.premierinn.digital"
+  actionMapping:
+    en:
+      CIOL: Check in
+      UPSELLS: Add meals or extras
+      DIRECTIONS: Show hotel directions
+      BOOKING_DETAILS: View booking details
+    de:
+      CIOL: Check in
+      UPSELLS: Mahlzeiten oder Extras hinzufügen
+      DIRECTIONS: Hotelanfahrt anzeigen
+      BOOKING_DETAILS: Buchungsdetails anzeigen
+
+config:
+  service:
+    hotel-info:
+      host: http://${HOTEL_INFO_HOST}
+      hotelInfoEndpoint: "/hotels/{hotel-code}"
+    cdh-adapter:
+      host: http://${CDH_ADAPTER_HOST}
+      reservationByIdEndpoint: "/v1/cdh/reservation/{reservationId}"
+    hotel-account:
+      host: http://${HOTEL_ACCOUNT_HOST}
+      customerStaysEndpoint: "/customers/hotels/{customer-id}/stays"
+    reservation:
+      host: http://${RESERVATION_HOST}
+      cancelInformationEndpoint: "/v1/reservations/cancel"
+      findBookingEndpoint: "/v1/reservations/find"
+    content:
+      host: https://${CONTENT_HOST}
+      roomTypeEndpoint: "/v1/content/room-type"

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "url": "/customers/hotels/dashboard-user/stays",
+    "headers" : {
+      "Authorization" : {
+        "contains" : "Bearer VALID_TOKEN"
+      }
+    },
+    "bodyPatterns": [{
+      "equalToJson": {
+        "pageIndex": 1,
+        "pageSize": 2147483647,
+        "typeOfBooking": "PAST",
+        "sortOrder": "DEFAULT",
+        "business": false
+      }
+    }],
+    "method": "POST"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "getPastStays11items_4frequent.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

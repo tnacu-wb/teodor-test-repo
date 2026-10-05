@@ -1,0 +1,27 @@
+@startuml
+title Update Marketing Permissions
+actor Client
+box "Hotel Marketing Service"
+    boundary "PUT marketing/newsletter/{contactType}/{contactValue}" as UPDATE
+end box
+entity Oauth
+entity Redis
+entity Permission_Management_API
+entity ACE
+Client -> UPDATE: FE sends email/phone
+UPDATE <-> Redis: retrieve bearer token from cache
+
+alt if token not in cache
+    UPDATE <-> Oauth: generate new bearer token
+    UPDATE -> Redis: Cache bearer token for 1 hour
+end
+
+UPDATE -> Permission_Management_API: UpdatePermissions with token
+
+alt if double opt in required
+Permission_Management_API -> ACE: send email to customer for double opt in
+end
+
+Permission_Management_API -> UPDATE: 202 Accepted
+UPDATE -> Client: Returns 204 status
+@enduml

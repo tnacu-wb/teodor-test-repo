@@ -1,0 +1,83 @@
+{
+  "cxlActivityLog": [
+    {
+      "reason": {
+        "description": "Trip Cancelled",
+        "code": "CXL"
+      },
+      "cxlDate": "2022-09-20",
+      "userId": 5507,
+      "userName": "WHBOC001_AWS-MS-SA-CRED387@IWH",
+      "cancellationIdList": [
+        {
+          "id": "987654",
+          "type": "Cancellation"
+        }
+      ]
+    }
+  ],
+  "reservations": [
+    {
+      "reservationIdList": [
+        {
+          "id": "234567",
+          "type": "Reservation"
+        },
+        {
+          "id": "789676",
+          "type": "Confirmation"
+        },
+        {
+          "id": "987654",
+          "type": "Cancellation"
+        }
+      ],
+      "roomStay": {
+        "arrivalDate": "2022-09-20",
+        "departureDate": "2022-09-21",
+        "roomType": "DOUBLE",
+        "ratePlanCode": "FLEXRATE",
+        "rateAmount": {
+          "amount": 213,
+          "currencyCode": "GBP"
+        },
+        "rateSuppressed": false,
+        "guarantee": {
+          "guaranteeCode": "O9ONHOLD",
+          "onHold": true
+        }
+      },
+      "reservationGuest": {
+        "givenName": "Tester",
+        "surname": "Testerson",
+        "nameTitle": "Mrs",
+        "guestRestricted": false
+      },
+      "hotelId": "MANOLD",
+      "reservationStatus": "Cancelled",
+      "preRegistered": false,
+      "openFolio": false,
+      "allowMobileCheckout": false,
+      "cxlInstr": {
+        "deleteResTraces": true,
+        "status": "OPERA_CXL_NO"
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "https://whitbce4ua.hospitality-api.eu-frankfurt-1.ocs.oc-test.com/rsv/v1/hotels/MANOLD/reservations/234567",
+      "rel": "self",
+      "templated": false,
+      "method": "GET",
+      "operationId": "getReservation"
+    },
+    {
+      "href": "https://whitbce4ua.hospitality-api.eu-frankfurt-1.ocs.oc-test.com/rsv/v1/hotels/MANOLD/reservations/234567/cancellations",
+      "rel": "self",
+      "templated": false,
+      "method": "PUT",
+      "operationId": "putReinstateReservation"
+    }
+  ]
+}

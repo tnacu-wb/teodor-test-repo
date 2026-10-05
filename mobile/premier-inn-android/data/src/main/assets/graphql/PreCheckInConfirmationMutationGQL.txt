@@ -1,0 +1,16 @@
+mutation ConfirmPreCheckIn ($basketReference: String!, $isCiol: Boolean) {
+  confirmPreCheckIn (
+    basketReference: $basketReference,
+    isCiol: $isCiol
+  ) {
+    basketReference
+    basketStatus
+    createdAt
+    basketError {
+        code
+        description
+        type
+    }
+    retryPayment
+  }
+}

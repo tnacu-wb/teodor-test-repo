@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        style="@style/Header3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_28"
+        android:layout_marginBottom="@dimen/generic_margin_18"
+        android:gravity="start"
+        android:text="@string/card_details_form_heading"
+        android:textColor="?attr/colorPrimary" />
+
+    <RelativeLayout
+        android:id="@+id/ll_card_number_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_card_details_form_fee"
+            style="@style/BodySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:gravity="end"
+            android:visibility="invisible"
+            tools:text="£1 fee"
+            tools:visibility="visible" />
+
+        <com.whitbread.premierinn.common.view.NetworkImageView
+            android:id="@+id/iv_card_details_form_card_icon"
+            android:layout_width="32dp"
+            android:layout_height="22dp"
+            android:layout_below="@+id/tv_card_details_form_fee"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/generic_margin_4" />
+
+        <com.whitbread.premierinn.common.view.FormEditTextView
+            android:id="@+id/til_card_details_form_card_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="@dimen/generic_margin_10"
+            android:layout_toEndOf="@id/til_card_details_form_card_number"
+            android:autofillHints="creditCardNumber"
+            android:hint="@string/card_details_form_card_number"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            app:editTextId="@+id/et_card_details_form_card_number"
+            app:required="true" />
+
+    </RelativeLayout>
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/til_card_details_form_name_on_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:autofillHints="personName"
+        android:hint="@string/card_details_form_name_on_card"
+        android:imeOptions="actionNext"
+        android:inputType="textPersonName|textCapWords"
+        app:editTextId="@+id/et_card_details_form_name_on_card"
+        app:required="true" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/til_card_details_form_start_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/card_details_form_start_date"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:visibility="gone"
+        app:editTextId="@+id/et_card_details_form_start_date"
+        app:mask="##/##"
+        app:required="true"
+        tools:visiblity="visible" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/til_card_details_form_expiry_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:autofillHints="creditCardExpirationDate"
+        android:hint="@string/card_details_form_expiry_date"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        app:editTextId="@+id/et_card_details_form_expiry_date"
+        app:mask="##/##"
+        app:required="true" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/til_card_details_form_issue_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/card_details_form_issue_number"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:visibility="gone"
+        app:editTextId="@+id/et_card_details_form_issue_number"
+        app:mask="##"
+        app:required="true"
+        tools:visiblity="visible" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/til_card_details_form_cvv_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/card_details_form_cvv"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:visibility="gone"
+        app:editTextId="@+id/et_card_details_form_cvv_number"
+        app:mask="###"
+        app:required="true"
+        tools:visiblity="visible" />
+</merge>

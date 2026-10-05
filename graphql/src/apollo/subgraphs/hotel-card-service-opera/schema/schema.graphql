@@ -1,0 +1,311 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    getPaymentCards(companyId: String!): [PaymentCardInnB]
+    getAllPIBACards(tetheredUserId: String!, countryCode: String!, pibaCardsCriteria: PIBACardsCriteria!): InnBAccountPIBACards
+    getPIBACardDetails(tetheredUserId: String!, cardId: String!, countryCode: String!): InnBPIBACardDetails
+    getAccountRegisteredUsers(tetheredUserId: String!, countryCode: String!): [InnBAccountRegisteredUser]
+    getCostCentreDetails(tetheredUserGuid: String!): [CostCentreData]
+}
+
+type Mutation {
+    updatePaymentCard(companyId: String!, cardId: String!, updatePaymentCardRequest:UpdatePaymentCardRequest!): String
+    activateInnBPIBACard(tetheredUserId: String!, cardId: String!, countryCode: String!): String
+    updateInnBPIBACard(tetheredUserGuid: String!, cardId: String!, countryCode: String!, updateInnBPIBACardRequest: UpdateInnBPIBACardRequest!): InnBPIBACardDetails
+    saveCard(initiateSaveCardRequest: InitiateSaveCardRequest!): PaymentRequiredDetails
+    addInnBPIBACard(tetheredUserGuid: String!, countryCode: String!, addInnBPIBACardCriteria: AddInnBPIBACardCriteria!): InnBPIBACardDetails
+    authorizeCard(initiateAuthorizeScaRequest: InitiateAuthorizeScaRequest!): PaymentRequiredDetails
+    deleteCompanyCard(companyId: String!, cardId: String!): String
+    cancelAndReplaceInnBPIBACard(tetheredUserId: String!, cardId: String!, cancelAndReplaceInnBCardRequest: CancelAndReplaceInnBCardRequest!): CancelAndReplaceInnBCardResponse
+    inviteCardHolder(tetheredUserGuid: String!, cardId: String!, inviteCardHolderRequest: InviteCardHolderRequest!): String
+    replaceCard(tetheredUserGuid: String!, cardId: String!, scheme: Scheme!, replaceCardRequest: ReplaceCardRequest!): String
+}
+
+input ReplaceCardRequest {
+    shouldDespatchToCardholder: Boolean
+    contactDetails: ReplaceCardContactDetails
+    address: ReplaceCardAddressDetails
+    cancelCard: Boolean
+}
+
+input ReplaceCardContactDetails {
+    title: String!
+    foreName: String!
+    lastName: String!
+    position: String
+    telephone: String
+    mobile: String
+    email: String
+}
+
+input ReplaceCardAddressDetails {
+    addressLine1: String!
+    addressLine2: String!
+    addressLine3: String
+    addressLine4: String
+    postcode: String!
+    countryCode: String!
+}
+
+type CostCentreData {
+    accountUniqueCustomerId: String
+    costCentreUniqueCustomerId: String
+    costCentreCode: String
+    costCentreName: String
+}
+
+input InviteCardHolderRequest {
+    scheme: Scheme!
+    registrationInfoTitle: String!
+    registrationInfoForename: String!
+    registrationInfoSurname: String!
+    registrationInfoEmailAddress: String!
+    sendMeCopyOfInvite: Boolean!
+}
+
+type PaymentCardInnB {
+    cardId: ID!
+    cardLabel: String!
+    cardNumber: String!
+    cardHolderName: String!
+    expiryDate: String!
+    cardType: String!
+}
+
+input PIBACardsCriteria {
+    userId: String!
+    includeCancelledCards: Boolean
+    showMyCards: Boolean
+    pageNumber: Int
+    maxRows: Int
+}
+
+type InnBAccountPIBACards {
+    innBusinessPayCardList: [InnBusinessPayCard]
+    from: Int
+    to: Int
+    totalCount: Int
+    lastPage: Int
+}
+
+type InnBusinessPayCard {
+    myCard: Boolean
+    cardId: String
+    cardHolderName: String
+    cardRegistration: String
+    cardNumber: String
+    cardStatus: CardStatus
+    cardRegistrationCount: Int
+    isActivated: Boolean
+}
+
+enum CardStatus {
+    PENDING
+    NOT_ACTIVATED
+    CANCELLED
+    CURRENT
+    HOT
+}
+
+type InnBPIBACardDetails {
+    cardHolderName: String
+    cardLimit: Int
+    cardId: Int
+    cardNumber: String
+    myCard: Boolean
+    activated: Boolean
+    status: String
+    primaryUserId: Int
+    userId: Int
+    expiryDate: String
+    title: String
+    firstName: String
+    lastName: String
+    email: String
+    cardAction: String
+    registeredUsers: [InnBAccountRegisteredUser]
+    cardRestriction: InnBCardRestriction
+    amountSpend: CurrencyAmountType
+}
+
+type InnBAccountRegisteredUser {
+    apiUserGuid: String
+    displayName: String
+    hasAddress: Boolean
+    emailAddress: String
+}
+
+type InnBCardRestriction {
+    startDate: String
+    endDate: String
+    restrictCardUsage: Boolean
+}
+
+type CurrencyAmountType {
+    amount: Float
+    currencyCode: String
+}
+
+input UpdatePaymentCardRequest {
+    cardId: String!
+    cardLabel: String!
+    cardType: String!
+    cardNumber: String!
+    expiryDate: String!
+    cardHolderName: String!
+    cardToken: String!
+    billingAddress: PaymentCardAddress
+    cnpRequired: Boolean!
+    cnpBusinessAccountUsername: String
+    cnpBusinessAccountPassword: String
+}
+
+input PaymentCardAddress {
+    line1: String!
+    line2: String
+    line3: String
+    line4: String
+    line5: String
+    postCode: String!
+    countryCode: String!
+    type: String!
+    companyName: String
+}
+
+input UpdateInnBPIBACardRequest {
+    displayName: String!
+    cardLimit: Int
+    restrictCardUsage: Boolean
+    restrictionStart: String
+    restrictionEnd: String
+    apiUserGuid: String
+}
+
+input InitiateSaveCardRequest {
+    requestId: String!
+    billingAddress: SaveCardBillingAddress!
+    cardDetails: SaveCardDetails!
+    environment: String!
+    language: String!
+    country: String
+}
+
+input SaveCardBillingAddress {
+    line1: String!
+    line2: String
+    line3: String
+    line4: String
+    line5: String
+    postCode: String!
+    countryCode: String!
+    companyName: String
+    type: AddressType
+}
+
+enum AddressType {
+    HOME
+    BUSINESS
+}
+
+input SaveCardDetails {
+    cardType: CardType!
+    cardId: String
+    cardLabel: String
+    cnpRequired: Boolean
+    personalCard: Boolean
+    business: Boolean
+    memorableWord: String @deprecated(reason: "Memorable word is no longer required")
+}
+
+enum CardType {
+    PIBA,
+    CARD,
+    NONE
+}
+
+type PaymentRequiredDetails {
+    paymentRedirect: String
+    template: String
+    sessionId: String
+    providerUrl: String
+}
+
+input AddInnBPIBACardCriteria {
+    displayName: String!
+    cardLimit: Int
+    restrictCardUsage: Boolean
+    restrictionStart: String
+    restrictionEnd: String
+    primarySchemeCustomerId: Int!
+    schemeCustomerId: Int!
+    apiUserGuid: String
+    employeeAccountId: String
+    companyAccountId: String
+    cardDeliveryAddressType: AddressCorrespondenceEnum!
+    cardCorrespondenceAddress: InnBusinessCorrespondenceAddress
+}
+
+enum AddressCorrespondenceEnum {
+    COMPANY_REGISTERED_ADDRESS
+    COMPANY_CORRESPONDENCE_ADDRESS
+    CARDHOLDER_ALTERNATIVE_ADDRESS
+}
+
+input InnBusinessCorrespondenceAddress {
+    title: String!
+    forename: String!
+    surname: String!
+    line1: String!
+    line2: String
+    line3: String
+    line4: String
+    postCode: String
+    countryCodeISO: String!
+    associateAddressWithFutureCardholder: Boolean!
+}
+
+input InitiateAuthorizeScaRequest {
+    requestId: String!
+    environment: String!
+    language: String!
+    bookingReference: String
+    country: String
+}
+
+input CancelAndReplaceInnBCardRequest {
+    scheme: Scheme!
+    issueReplacement: Boolean!
+    apiUserGuid: String
+    cardDeliveryAddressType: AddressCorrespondenceEnum
+    cardCorrespondenceAddress: InnBusinessCorrespondenceAddress
+}
+
+type CancelAndReplaceInnBCardResponse {
+    newCardDetails: InnBCancelAndReplaceCardDetails
+    cancelledCardDetails: InnBCancelAndReplaceCardDetails
+}
+
+type InnBCancelAndReplaceCardDetails {
+    cardHolderName: String
+    cardRestriction: InnBCardRestriction
+    cardId: Int
+    pan: String
+    primarySchemeCustomerId: String
+    myCard: Boolean
+    status: String
+    activated: Boolean
+    expiryDate: String
+    title: String
+    firstName: String
+    lastName: String
+    email: String
+    registeredUsers: [InnBAccountRegisteredUser]
+}
+
+enum Scheme {
+    GB
+    DE
+}

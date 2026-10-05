@@ -1,0 +1,25 @@
+subscription onNewEvent($input: NewEventInput!) {
+    newEvent(input:$input) {
+        metadata {
+            offset
+            uniqueEventId
+        }
+        moduleName
+        eventName
+        primaryKey
+        timestamp
+        hotelId
+        publisherId
+        actionInstanceId
+        detail {
+            elementName
+            newValue
+            oldValue
+            scopeFrom
+            scopeTo
+            elementSequence
+            elementType
+            elementRole
+        }
+    }
+}

@@ -1,0 +1,34 @@
+query promotionsInformation($promotionsInformationCriteria: PromotionsInformationCriteria!) {
+      promotionsInformation(promotionsInformationCriteria: $promotionsInformationCriteria) {
+            showPromo
+            isWithinPromoWindow
+            promotionCode
+            landingPage
+            promoBannerColour
+            promoBannerIcon
+            termsLink
+            appPromoBannerTitle
+            appPromoBannerSubtitle
+            appPromoInvalidMessage
+            appPromoExpiredMessage
+            appPromoAmendMessage
+            promoBookingInfo {
+                ratePlanCode
+                promotionCode
+            }
+            promoBox {
+                title
+                button
+                whenInvalid
+                whenMultipleRedeem
+                whenSuccess
+                whenEmpty
+                whenCodeAlreadyApplied
+                whenUnavailable
+                whenCodeExpired
+            }
+            promoKind
+            promoBoxStatus
+            promoBoxMessageKey
+      }
+}

@@ -1,0 +1,34 @@
+{
+  "id" : "463f9ef5-077b-46fe-9d4d-6b3c50153800",
+  "request" : {
+    "urlPath" : "/v1/reservations/ancillaries",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['basketReferenceId'] == 'TestId1234567')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['arrivalDate'] == '2022-04-02')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['departureDate'] == '2022-04-03')]"
+    }, {
+      "matchesJsonPath" : "$.['roomsSelections'][*].['packagesSelection'][*][?(@.['id'] == 'PIBTEST')]"
+    }, {
+      "matchesJsonPath" : "$.['roomsSelections'][*].['packagesSelection'][*][?(@.['noOfSelections'] == 1)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'HOTELCODE')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"basketReference\":\"TestId1234567\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "463f9ef5-077b-46fe-9d4d-6b3c50153800"
+}

@@ -1,0 +1,31 @@
+{
+  "id" : "64ec9465-213c-49a7-a72d-3fb63b4b2f5c",
+  "request" : {
+    "url" : "/piba/account/proposecreditlimit",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value10"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['proposedCreditLimit'] == 800)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['schemeCustomerId'] == 783592344)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['tetheredUserGuid'] == '97BBBCF7-C5CA-4F95-57ED-3BE3055E333F')]"
+    } ]
+  },
+  "response" : {
+    "status" : 500,
+    "body" : "{\"code\":\"AuthenticationError\",\"details\":[\"AuthenticationError\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "64ec9465-213c-49a7-a72d-3fb63b4b2f5c"
+}

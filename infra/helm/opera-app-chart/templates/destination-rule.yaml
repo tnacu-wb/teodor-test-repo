@@ -1,0 +1,20 @@
+{{- if and .Values.circuitBreaker (ne (.Values.circuitBreaker).create false) }}
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: {{ .Values.applicationName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  host: {{ .Values.circuitBreaker.host }}
+  {{- if (.Values.circuitBreaker.workloadSelector).matchLabels }}
+  workloadSelector:
+    matchLabels:
+      {{- toYaml .Values.circuitBreaker.workloadSelector.matchLabels | nindent 6 }}
+  {{- end }}
+  trafficPolicy:
+    {{- toYaml .Values.circuitBreaker.trafficPolicy | nindent 4 }}
+  {{- if .Values.circuitBreaker.subsets }}
+  subsets:
+  {{- toYaml .Values.circuitBreaker.subsets | nindent 2 }}
+  {{- end }}
+{{- end -}}

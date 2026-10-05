@@ -1,0 +1,2676 @@
+openapi: 3.0.1
+info:
+  title: Content Entity Service API Documentation
+servers:
+  - description: Generated server url
+    url: http://localhost:9106
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  /v1/content/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+                  example: null
+                example: null
+          description: OK
+      summary: Actuator root web endpoint
+      tags:
+        - Actuator
+  /v1/content/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+      summary: Actuator web endpoint 'health'
+      tags:
+        - Actuator
+  /v1/content/actuator/health/**:
+    get:
+      operationId: health-path
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+      summary: Actuator web endpoint 'health-path'
+      tags:
+        - Actuator
+  /v1/content/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+      summary: Actuator web endpoint 'info'
+      tags:
+        - Actuator
+  /v1/content/booking:
+    get:
+      operationId: getBookingInformation
+      parameters:
+        - in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: bookingFlowId
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/BookingInformationDto'
+          description: OK
+      summary: Retrieves Booking Information
+      tags:
+        - booking-information-controller
+  /v1/content/booking/rateInformation:
+    get:
+      operationId: getRateInformation
+      parameters:
+        - in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: hotelId
+          required: false
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/RateInformationDto'
+          description: OK
+      summary: Retrieves Rate Information
+      tags:
+        - booking-information-controller
+  /v1/content/businessNotes:
+    get:
+      operationId: getBusinessNotes
+      parameters:
+        - example: en
+          in: query
+          name: lang
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/BusinessNotesResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves texts for business notes
+      tags:
+        - business-note-controller
+  /v1/content/cookie-policies:
+    get:
+      operationId: getCookiePolicies
+      parameters:
+        - in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/CookiePoliciesInformationDto'
+          description: OK
+      summary: 'Retrieves Cookie Policies '
+      tags:
+        - cookie-policies-controller
+  /v1/content/countries:
+    get:
+      operationId: getCountries
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: leisure
+          in: query
+          name: site
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/CountriesDto'
+          description: OK
+      summary: Retrieves Countries Info
+      tags:
+        - countries-controller
+  /v1/content/footer:
+    get:
+      operationId: getFooter
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: leisure
+          in: query
+          name: site
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/FooterResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Footer Info
+      tags:
+        - footer-controller
+  /v1/content/header/data:
+    get:
+      operationId: getIndexHeaderData
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: true
+          in: query
+          name: businessBooker
+          required: false
+          schema:
+            type: boolean
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/IndexHeaderDataDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Index Header Data
+      tags:
+        - index-header-data-controller
+  /v1/content/hotels:
+    get:
+      operationId: getHotelInformationBySlug
+      parameters:
+        - example: england/greater-london/london/london-kings-cross
+          in: query
+          name: slug
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/HotelInformationDto'
+          description: OK
+      summary: Retrieves Hotel Information by Slug
+      tags:
+        - hotel-information-controller
+  /v1/content/hotels/facilities/updater/trigger:
+    get:
+      operationId: triggerUpdateHotelsFacilitiesCache
+      responses:
+        "200":
+          description: OK
+      summary: Trigger Hotel Facilities Cache Update
+      tags:
+        - hotel-information-controller
+  /v1/content/hotels/information:
+    get:
+      operationId: getHotelsInformation
+      parameters:
+        - in: query
+          name: hotelIds
+          required: true
+          schema:
+            type: array
+            example: null
+            items:
+              type: string
+              example: null
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                type: array
+                example: null
+                items:
+                  $ref: '#/components/schemas/HotelInformationDto'
+          description: OK
+      summary: Retrieves Hotels Information by list of HotelIds
+      tags:
+        - hotel-information-controller
+  /v1/content/hotels/{hotelId}/information:
+    get:
+      operationId: getHotelInformation
+      parameters:
+        - in: path
+          name: hotelId
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/HotelInformationDto'
+          description: OK
+      summary: Retrieves Hotel Information
+      tags:
+        - hotel-information-controller
+  /v1/content/hotels/{hotelId}/payment-information:
+    get:
+      operationId: getHotelPaymentInformation
+      parameters:
+        - in: path
+          name: hotelId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: requestDto
+          required: true
+          schema:
+            $ref: '#/components/schemas/HotelInformationRequestDto'
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/HotelPaymentInformationDto'
+          description: OK
+      summary: Retrieves Hotel Payment Information
+      tags:
+        - hotel-information-controller
+  /v1/content/labels:
+    get:
+      operationId: getLabels
+      parameters:
+        - in: query
+          name: categories
+          required: true
+          schema:
+            type: array
+            example: null
+            items:
+              type: string
+              enum:
+                - MAIN
+                - PI_BOOKINGS
+                - BOOKING
+              example: null
+            maxItems: 100
+            minItems: 1
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                type: string
+                example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Label Info
+      tags:
+        - labels-controller
+  /v1/content/labels/{category}:
+    get:
+      operationId: getLabels_1
+      parameters:
+        - example: amend
+          in: path
+          name: category
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                type: string
+                example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Label Info by Category
+      tags:
+        - labels-controller
+  /v1/content/meals:
+    get:
+      operationId: getMealsInfo
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: GLASTA
+          in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/MealsInfoResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Meals Info
+      tags:
+        - meals-info-controller
+  /v1/content/room-type:
+    get:
+      operationId: getRoomTypeInformation
+      parameters:
+        - in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: query
+          name: brand
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/RoomTypeDto'
+          description: OK
+      summary: 'Retrieves Room Types '
+      tags:
+        - room-type-controller
+  /v1/content/searchresults/data:
+    get:
+      operationId: getSearchResultsData
+      parameters:
+        - example: gb
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/SearchResultsDataDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Search Results Data
+      tags:
+        - search-results-data-controller
+  /v1/content/seo:
+    get:
+      operationId: getSeo
+      parameters:
+        - example: MANOLD
+          in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: hdp
+          in: query
+          name: page
+          required: true
+          schema:
+            type: string
+            example: null
+            pattern: Home|SRP|HDP|Ancillaries|GuestDetails|Payment|Confirmation|Amend|Dashboard
+        - example: GB
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+            example: null
+        - example: en
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/SeoResponseDto'
+          description: OK
+      summary: Retrieves SEO Info
+      tags:
+        - seo-controller
+components:
+  schemas:
+    AcceptedCreditCardDto:
+      type: object
+      example: null
+      properties:
+        code:
+          type: string
+          example: null
+        code3CP:
+          type: string
+          example: null
+        codeOpera:
+          type: string
+          example: null
+        codeOperaCardType:
+          type: string
+          example: null
+        feeAmount:
+          type: string
+          example: null
+        feeCurrency:
+          type: string
+          example: null
+        listOrder:
+          type: string
+          example: null
+        name:
+          type: string
+          example: null
+        paymentOnly:
+          type: boolean
+          example: null
+        schemeLogo:
+          type: string
+          example: null
+    AccessibilityInfoDto:
+      type: object
+      example: null
+      properties:
+        header:
+          type: string
+          example: null
+        linkText:
+          type: string
+          example: null
+        phoneNumber:
+          type: string
+          example: null
+        text:
+          type: string
+          example: null
+    AccountLinkDto:
+      type: object
+      example: null
+      properties:
+        icon:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+        url:
+          type: string
+          example: null
+    AddressDto:
+      type: object
+      example: null
+      properties:
+        addressLine1:
+          type: string
+          example: null
+        addressLine2:
+          type: string
+          example: null
+        addressLine3:
+          type: string
+          example: null
+        country:
+          type: string
+          example: null
+        postalCode:
+          type: string
+          example: null
+    AnnouncementDto:
+      type: object
+      example: null
+      properties:
+        browserCompatibilityMessage:
+          type: string
+          example: null
+        text:
+          type: string
+          example: null
+        type:
+          type: string
+          example: null
+    ApiDto:
+      type: object
+      example: null
+      properties:
+        bookingChannel:
+          $ref: '#/components/schemas/BookingChannelDto'
+    AttachmentsDto:
+      type: object
+      example: null
+      properties:
+        label:
+          type: string
+          example: null
+        path:
+          type: string
+          example: null
+        type:
+          type: string
+          example: null
+    AuthenticationDto:
+      type: object
+      example: null
+      properties:
+        accountLinks:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/AccountLinkDto'
+        business:
+          $ref: '#/components/schemas/BusinessDto'
+        forgottenPassword:
+          $ref: '#/components/schemas/ForgottenPasswordDto'
+        login:
+          $ref: '#/components/schemas/LoginDto'
+    BookingChannelDto:
+      type: object
+      example: null
+      properties:
+        business:
+          type: string
+          example: null
+        leisure:
+          type: string
+          example: null
+    BookingFlowDto:
+      type: object
+      example: null
+      properties:
+        bookingFlowItems:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/BookingFlowItemDto'
+        targetBookingFlowItems:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/TargetBookingFlowItemDto'
+    BookingFlowItemDto:
+      type: object
+      example: null
+      properties:
+        bookingFlowPath:
+          type: string
+          example: null
+        bookingId:
+          type: string
+          example: null
+        rateCode:
+          type: string
+          example: null
+    BookingFlowStepDto:
+      type: object
+      example: null
+      properties:
+        id:
+          type: string
+          example: null
+        step:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+    BookingInformationDto:
+      type: object
+      example: null
+      properties:
+        bookingFlowSteps:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/BookingFlowStepDto'
+        bookingSpinnerConfig:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/BookingSpinnerConfigDto'
+        brand:
+          type: string
+          example: null
+        donation:
+          $ref: '#/components/schemas/DonationDto'
+        infoMessages:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/InfoMessageDto'
+        mealsNotAvailableMessage:
+          type: string
+          example: null
+        mealsNotAvailableTitle:
+          type: string
+          example: null
+        paymentInfoMessages:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/PaymentInfoMessageDto'
+        privacyPolicy:
+          $ref: '#/components/schemas/PrivacyPolicyDto'
+        promotionPanels:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/PromotionPanelDto'
+        restaurantClosedMessage:
+          type: string
+          example: null
+        restaurantClosedTitle:
+          type: string
+          example: null
+        termsAndConditions:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/TermsAndConditionsDto'
+        upsellItems:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ItemDto'
+    BookingSearchDto:
+      type: object
+      example: null
+      properties:
+        dashboardRedirect:
+          $ref: '#/components/schemas/DashboardRedirectDto'
+        show:
+          type: boolean
+          example: null
+    BookingSpinnerConfigDto:
+      type: object
+      example: null
+      properties:
+        order:
+          type: string
+          example: null
+        seconds:
+          type: string
+          example: null
+        text:
+          type: string
+          example: null
+    BrandDto:
+      type: object
+      example: null
+      properties:
+        hub:
+          type: string
+          example: null
+        hubBadge:
+          type: string
+          example: null
+        hubLogo:
+          type: string
+          example: null
+        pi:
+          type: string
+          example: null
+        piLogo:
+          type: string
+          example: null
+        pid:
+          type: string
+          example: null
+        pidLogo:
+          type: string
+          example: null
+        zip:
+          type: string
+          example: null
+        zipBadge:
+          type: string
+          example: null
+        zipLogo:
+          type: string
+          example: null
+        zipLogoWhite:
+          type: string
+          example: null
+    BusinessAccountLinkDto:
+      type: object
+      example: null
+      properties:
+        subMenuLinks:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/SubMenuLinkDto'
+        title:
+          type: string
+          example: null
+    BusinessDto:
+      type: object
+      example: null
+      properties:
+        businessAccountLinks:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/BusinessAccountLinkDto'
+        emailPlaceholder:
+          type: string
+          example: null
+        formLabel:
+          type: string
+          example: null
+        formTitle:
+          type: string
+          example: null
+        loginButton:
+          type: string
+          example: null
+        submitButton:
+          type: string
+          example: null
+    BusinessNoteDto:
+      type: object
+      example: null
+      properties:
+        allow:
+          type: string
+          example: null
+        deny:
+          type: string
+          example: null
+        id:
+          type: string
+          example: null
+        lang:
+          type: string
+          example: null
+    BusinessNotesResponseDto:
+      type: object
+      example: null
+      properties:
+        businessNotes:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/BusinessNoteDto'
+        footers:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/NoteDto'
+        headers:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/NoteDto'
+        cardTypes:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/NoteDto'
+        packages:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/NoteDto'
+        allowances:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/NoteDto'
+    ConfigDto:
+      type: object
+      example: null
+      properties:
+        api:
+          $ref: '#/components/schemas/ApiDto'
+        authentication:
+          $ref: '#/components/schemas/AuthenticationDto'
+        bookingSearch:
+          $ref: '#/components/schemas/BookingSearchDto'
+        roomCodes:
+          $ref: '#/components/schemas/RoomCodesDto'
+    ContactDetailsDto:
+      type: object
+      example: null
+      properties:
+        email:
+          type: string
+          example: null
+        hotelNationalPhone:
+          type: string
+          example: null
+        phone:
+          type: string
+          example: null
+    ContentDto:
+      type: object
+      example: null
+      properties:
+        authentication:
+          $ref: '#/components/schemas/AuthenticationDto'
+        countries:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/CountryDto'
+        global:
+          $ref: '#/components/schemas/GlobalDto'
+        header:
+          $ref: '#/components/schemas/HeaderDto'
+        menu:
+          $ref: '#/components/schemas/MenuDto'
+        subNav:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/SubNavDto'
+    CookieDto:
+      type: object
+      example: null
+      properties:
+        domain:
+          type: string
+          example: null
+        minutesTillExpiry:
+          type: string
+          example: null
+        name:
+          type: string
+          example: null
+    CookieGroupDto:
+      type: object
+      example: null
+      properties:
+        cookieName:
+          type: string
+          example: null
+        description:
+          type: string
+          example: null
+        isAlwaysActive:
+          type: boolean
+          example: null
+        title:
+          type: string
+          example: null
+        toggleLabel:
+          type: string
+          example: null
+    CookiePoliciesDto:
+      type: object
+      example: null
+      properties:
+        brand:
+          type: string
+          example: null
+        introView:
+          $ref: '#/components/schemas/IntroViewDto'
+        manageView:
+          $ref: '#/components/schemas/ManageViewDto'
+        version:
+          type: string
+          example: null
+    CookiePoliciesInformationDto:
+      type: object
+      example: null
+      properties:
+        cookiePolicies:
+          $ref: '#/components/schemas/CookiePoliciesDto'
+    CoordinatesDto:
+      type: object
+      example: null
+      properties:
+        latitude:
+          type: number
+          format: double
+          example: null
+        longitude:
+          type: number
+          format: double
+          example: null
+    CountriesDto:
+      type: object
+      example: null
+      properties:
+        countries:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/CountryInformationDto'
+    CountryDto:
+      type: object
+      example: null
+      properties:
+        flagUrl:
+          type: string
+          example: null
+        language:
+          type: string
+          example: null
+    CountryInformationDto:
+      type: object
+      example: null
+      properties:
+        countryCode:
+          type: string
+          example: null
+        countryName:
+          type: string
+          example: null
+        dialingCode:
+          type: string
+          example: null
+        flagSrc:
+          type: string
+          example: null
+        passportRequired:
+          type: boolean
+          example: null
+    DashboardRedirectDto:
+      type: object
+      example: null
+      properties:
+        bookingReference:
+          type: string
+          example: null
+        cookie:
+          $ref: '#/components/schemas/CookieDto'
+        operaUrl:
+          type: string
+          example: null
+        url:
+          type: string
+          example: null
+    DatePickerDto:
+      type: object
+      example: null
+      properties:
+        checkOut:
+          type: string
+          example: null
+        invalidDate:
+          type: string
+          example: null
+        reset:
+          type: string
+          example: null
+    DonationDto:
+      type: object
+      example: null
+      properties:
+        charityCodes:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        description:
+          type: string
+          example: null
+        imageSrc:
+          type: string
+          example: null
+        informationBox:
+          type: string
+          example: null
+        name:
+          type: string
+          example: null
+    ErrorResponse:
+      type: object
+      example: null
+      properties:
+        debugMessage:
+          type: string
+          example: null
+        details:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ValidationError'
+        errCode:
+          type: integer
+          format: int32
+          example: null
+        globalErrTextTemplate:
+          type: string
+          example: null
+    FooterResponseDto:
+      type: object
+      example: null
+      properties:
+        copyrightInfo:
+          type: string
+          example: null
+        newsletterSignup:
+          $ref: '#/components/schemas/NewsletterSignupDto'
+        socialMediaIcons:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/SocialLinksDto'
+        tabs:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/LinkTabsDto'
+    ForgottenPasswordDto:
+      type: object
+      example: null
+      properties:
+        business:
+          $ref: '#/components/schemas/BusinessDto'
+        cancel:
+          type: string
+          example: null
+        leisure:
+          $ref: '#/components/schemas/LeisureDto'
+    FormDto:
+      type: object
+      example: null
+      properties:
+        adultsHelperText:
+          type: string
+          example: null
+        arrivalDateLabel:
+          type: string
+          example: null
+        bookingInvalid:
+          type: string
+          example: null
+        bookingReferenceLabel:
+          type: string
+          example: null
+        bookingSurnameLabel:
+          type: string
+          example: null
+        checkout:
+          type: string
+          example: null
+        childrenHelperText:
+          type: string
+          example: null
+        cotLimit:
+          type: string
+          example: null
+        findBookingDescription:
+          type: string
+          example: null
+        findBookingTitle:
+          type: string
+          example: null
+        includeCot:
+          type: string
+          example: null
+        invalidDate:
+          type: string
+          example: null
+        invalidFutureDate:
+          type: string
+          example: null
+        invalidLocation:
+          type: string
+          example: null
+        invalidNights:
+          type: string
+          example: null
+        invalidPastDate:
+          type: string
+          example: null
+        invalidReference:
+          type: string
+          example: null
+        invalidRooms:
+          type: string
+          example: null
+        invalidSurname:
+          type: string
+          example: null
+        removeRoom:
+          type: string
+          example: null
+        roomType:
+          type: string
+          example: null
+        searchBookingError:
+          type: string
+          example: null
+        snowdropError:
+          type: string
+          example: null
+        snowdropErrorRetry:
+          type: string
+          example: null
+        where:
+          type: string
+          example: null
+    GalleryImageDto:
+      type: object
+      example: null
+      properties:
+        alt:
+          type: string
+          example: null
+        caption:
+          type: string
+          example: null
+        iconSrc:
+          type: string
+          example: null
+        imageSrc:
+          type: string
+          example: null
+        thumbnailSrc:
+          type: string
+          example: null
+    GlobalDto:
+      type: object
+      example: null
+      properties:
+        accessible:
+          type: string
+          example: null
+        addRoom:
+          type: string
+          example: null
+        adult:
+          type: string
+          example: null
+        adults:
+          type: string
+          example: null
+        adultsLabel:
+          type: string
+          example: null
+        brand:
+          $ref: '#/components/schemas/BrandDto'
+        child:
+          type: string
+          example: null
+        children:
+          type: string
+          example: null
+        childrenLabel:
+          type: string
+          example: null
+        done:
+          type: string
+          example: null
+        double:
+          type: string
+          example: null
+        family:
+          type: string
+          example: null
+        night:
+          type: string
+          example: null
+        room:
+          type: string
+          example: null
+        roomLabel:
+          type: string
+          example: null
+        rooms:
+          type: string
+          example: null
+        single:
+          type: string
+          example: null
+        today:
+          type: string
+          example: null
+        tomorrow:
+          type: string
+          example: null
+        twin:
+          type: string
+          example: null
+    HeaderDto:
+      type: object
+      example: null
+      properties:
+        image:
+          type: string
+          example: null
+    HotelFacilityDto:
+      type: object
+      example: null
+      properties:
+        code:
+          type: string
+          example: null
+        description:
+          type: string
+          example: null
+        icon:
+          type: string
+          example: null
+        isVisible:
+          type: boolean
+          example: null
+        name:
+          type: string
+          example: null
+        weight:
+          type: integer
+          format: int32
+          example: null
+    HotelInformationDto:
+      type: object
+      example: null
+      properties:
+        accessibilityInfo:
+          $ref: '#/components/schemas/AccessibilityInfoDto'
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        announcement:
+          $ref: '#/components/schemas/AnnouncementDto'
+        bookingFlow:
+          $ref: '#/components/schemas/BookingFlowDto'
+        brand:
+          type: string
+          example: null
+        contactDetails:
+          $ref: '#/components/schemas/ContactDetailsDto'
+        coordinates:
+          $ref: '#/components/schemas/CoordinatesDto'
+        directions:
+          type: string
+          example: null
+        galleryImages:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/GalleryImageDto'
+        headline:
+          type: string
+          example: null
+        hotelDescription:
+          type: string
+          example: null
+        hotelFacilities:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/HotelFacilityDto'
+        hotelId:
+          type: string
+          example: null
+        hotelOpeningDate:
+          type: string
+          example: null
+        importantInfo:
+          $ref: '#/components/schemas/ImportantInfoDto'
+        links:
+          $ref: '#/components/schemas/LinksDto'
+        messagingFlag:
+          $ref: '#/components/schemas/MessagingFlagDto'
+        name:
+          type: string
+          example: null
+        parkingDescription:
+          type: string
+          example: null
+        restaurant:
+          $ref: '#/components/schemas/RestaurantDto'
+        roomConfiguration:
+          $ref: '#/components/schemas/RoomConfigurationDto'
+        satNavDirections:
+          type: string
+          example: null
+        thumbnailImages:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ThumbnailImageDto'
+        topSectionImages:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/TopSectionImageDto'
+        transportInformation:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        whatThreeWords:
+          type: string
+          example: null
+    HotelInformationRequestDto:
+      type: object
+      example: null
+      properties:
+        country:
+          type: string
+          example: null
+        language:
+          type: string
+          example: null
+      required:
+        - country
+        - language
+    HotelPaymentInformationDto:
+      type: object
+      example: null
+      properties:
+        acceptedCreditCards:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/AcceptedCreditCardDto'
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        paymentMethodsOpera:
+          type: object
+          additionalProperties:
+            type: string
+            example: null
+          example: null
+        paymentProviders:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/PaymentProviderDto'
+    IconDto:
+      type: object
+      example: null
+      properties:
+        href:
+          type: string
+          example: null
+        rel:
+          type: string
+          example: null
+        sizes:
+          type: string
+          example: null
+    ImportantInfoDto:
+      type: object
+      example: null
+      properties:
+        infoItems:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/InfoItemDto'
+        title:
+          type: string
+          example: null
+    IndexHeaderDataDto:
+      type: object
+      example: null
+      properties:
+        announcement:
+          $ref: '#/components/schemas/AnnouncementDto'
+        config:
+          $ref: '#/components/schemas/ConfigDto'
+        content:
+          $ref: '#/components/schemas/ContentDto'
+        datePicker:
+          $ref: '#/components/schemas/DatePickerDto'
+        form:
+          $ref: '#/components/schemas/FormDto'
+        results:
+          $ref: '#/components/schemas/ResultsDto'
+    InfoDto:
+      type: object
+      example: null
+      properties:
+        description:
+          type: string
+          example: null
+        image:
+          type: string
+          example: null
+    InfoItemDto:
+      type: object
+      example: null
+      properties:
+        endDate:
+          type: string
+          example: null
+        priority:
+          type: string
+          example: null
+        startDate:
+          type: string
+          example: null
+        text:
+          type: string
+          example: null
+    InfoMessageDto:
+      type: object
+      example: null
+      properties:
+        messages:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/MessageDto'
+        rate:
+          type: string
+          example: null
+    IntroDto:
+      type: object
+      example: null
+      properties:
+        description:
+          type: string
+          example: null
+        name:
+          type: string
+          example: null
+    IntroViewDto:
+      type: object
+      example: null
+      properties:
+        acceptAllButtonText:
+          type: string
+          example: null
+        description:
+          type: string
+          example: null
+        manageButtonText:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+    ItemDto:
+      type: object
+      example: null
+      properties:
+        bartId:
+          type: string
+          example: null
+        code:
+          type: string
+          example: null
+        order:
+          type: string
+          example: null
+    LeisureDto:
+      type: object
+      example: null
+      properties:
+        emailPlaceholder:
+          type: string
+          example: null
+        formLabel:
+          type: string
+          example: null
+        formTitle:
+          type: string
+          example: null
+        loginButton:
+          type: string
+          example: null
+        submitButton:
+          type: string
+          example: null
+    Link:
+      type: object
+      example: null
+      properties:
+        href:
+          type: string
+          example: null
+        templated:
+          type: boolean
+          example: null
+    LinkColumnsDto:
+      type: object
+      example: null
+      properties:
+        linkItems:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/LinkItemsDto'
+        name:
+          type: string
+          example: null
+    LinkItemsDto:
+      type: object
+      example: null
+      properties:
+        linkSrc:
+          type: string
+          example: null
+        name:
+          type: string
+          example: null
+        openInNewTab:
+          type: boolean
+          example: null
+    LinkTabsDto:
+      type: object
+      example: null
+      properties:
+        columns:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/LinkColumnsDto'
+        intro:
+          $ref: '#/components/schemas/IntroDto'
+        name:
+          type: string
+          example: null
+    LinksDto:
+      type: object
+      example: null
+      properties:
+        detailsPage:
+          type: string
+          example: null
+    LoginDto:
+      type: object
+      example: null
+      properties:
+        business:
+          $ref: '#/components/schemas/BusinessDto'
+        forgotPassword:
+          type: string
+          example: null
+        leisure:
+          $ref: '#/components/schemas/LeisureDto'
+        passwordPlaceholder:
+          type: string
+          example: null
+        signupLink:
+          type: string
+          example: null
+        signupMessage:
+          type: string
+          example: null
+    ManageViewDto:
+      type: object
+      example: null
+      properties:
+        alwaysActiveText:
+          type: string
+          example: null
+        cookieGroup:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/CookieGroupDto'
+        description:
+          type: string
+          example: null
+        saveSettingsButtonText:
+          type: string
+          example: null
+        title:
+          type: string
+          example: null
+    MealsInfoResponseDto:
+      type: object
+      example: null
+      properties:
+        upsellItems:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/UpsellItemsDto'
+    MenuDto:
+      type: object
+      example: null
+      properties:
+        agentMemo:
+          type: string
+          example: null
+        bookHotel:
+          type: string
+          example: null
+        business:
+          type: string
+          example: null
+        changeLogs:
+          type: string
+          example: null
+        discoverPI:
+          type: string
+          example: null
+        findBooking:
+          type: string
+          example: null
+        guestAccount:
+          type: string
+          example: null
+        language:
+          type: string
+          example: null
+        languageButton:
+          type: string
+          example: null
+        logIn:
+          type: string
+          example: null
+        mobileMenuButton:
+          type: string
+          example: null
+        tick:
+          type: string
+          example: null
+    MessageDto:
+      type: object
+      example: null
+      properties:
+        message:
+          type: string
+          example: null
+    MessagingFlagDto:
+      type: object
+      example: null
+      properties:
+        color:
+          type: string
+          example: null
+        description:
+          type: string
+          example: null
+        text:
+          type: string
+          example: null
+    MsIconDto:
+      type: object
+      example: null
+      properties:
+        content:
+          type: string
+          example: null
+        name:
+          type: string
+          example: null
+    NavOptionDto:
+      type: object
+      example: null
+      properties:
+        title:
+          type: string
+          example: null
+        url:
+          type: string
+          example: null
+    NewsletterSignupDto:
+      type: object
+      example: null
+      properties:
+        bookStayButtonText:
+          type: string
+          example: null
+        bookStayButtonUrl:
+          type: string
+          example: null
+        confirmationText:
+          type: string
+          example: null
+        countrySelectEmptyFieldError:
+          type: string
+          example: null
+        countrySelectLabel:
+          type: string
+          example: null
+        doubleOptInText:
+          type: string
+          example: null
+        doubleOptInTitle:
+          type: string
+          example: null
+        emailLabel:
+          type: string
+          example: null
+        emailMaxLengthError:
+          type: string
+          example: null
+        emailMinLengthError:
+          type: string
+          example: null
+        emailValidError:
+          type: string
+          example: null
+        firstNameLabel:
+          type: string
+          example: null
+        firstNameMaxLengthError:
+          type: string
+          example: null
+        firstNameMinLengthError:
+          type: string
+          example: null
+        firstNameValidError:
+          type: string
+          example: null
+        introViewText:
+          type: string
+          example: null
+        introViewTitle:
+          type: string
+          example: null
+        lastNameLabel:
+          type: string
+          example: null
+        lastNameMaxLengthError:
+          type: string
+          example: null
+        lastNameMinLengthError:
+          type: string
+          example: null
+        lastNameValidError:
+          type: string
+          example: null
+        newsletterButtonLabel:
+          type: string
+          example: null
+        newsletterText:
+          type: string
+          example: null
+        privacyPolicyText:
+          type: string
+          example: null
+        serverError:
+          type: string
+          example: null
+        signUpButtonText:
+          type: string
+          example: null
+        signupTitle:
+          type: string
+          example: null
+    NoteDto:
+      type: object
+      example: null
+      properties:
+        id:
+          type: string
+          example: null
+        lang:
+          type: string
+          example: null
+        value:
+          type: string
+          example: null
+    NotificationsDto:
+      type: object
+      example: null
+      properties:
+        availabilitiesErrorMessage:
+          type: string
+          example: null
+        ccuiGroupBookingMessage:
+          type: string
+          example: null
+        errorTitle:
+          type: string
+          example: null
+        groupBookingHeader:
+          type: string
+          example: null
+        groupBookingMessage:
+          type: string
+          example: null
+        noResults:
+          type: string
+          example: null
+    PaymentInfoMessageDto:
+      type: object
+      example: null
+      properties:
+        messages:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        paymentType:
+          type: string
+          example: null
+        rate:
+          type: string
+          example: null
+    PaymentMethodDto:
+      type: object
+      example: null
+      properties:
+        code:
+          type: string
+          example: null
+        feeAmount:
+          type: string
+          example: null
+        feeCurrency:
+          type: string
+          example: null
+        listOrder:
+          type: string
+          example: null
+        name:
+          type: string
+          example: null
+        paymentOnly:
+          type: boolean
+          example: null
+        schemeLogo:
+          type: string
+          example: null
+    PaymentProviderDto:
+      type: object
+      example: null
+      properties:
+        paymentMethods:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/PaymentMethodDto'
+        providerId:
+          type: string
+          example: null
+    PrivacyPolicyDto:
+      type: object
+      example: null
+      properties:
+        description:
+          type: string
+          example: null
+        linkLabel:
+          type: string
+          example: null
+        linkSrc:
+          type: string
+          example: null
+        moreInfo:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/InfoDto'
+        moreInfoLabel:
+          type: string
+          example: null
+        name:
+          type: string
+          example: null
+    PromotionPanelDto:
+      type: object
+      example: null
+      properties:
+        description:
+          type: string
+          example: null
+        displayHotels:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        image:
+          type: string
+          example: null
+        linkLabel:
+          type: string
+          example: null
+        linkPath:
+          type: string
+          example: null
+        name:
+          type: string
+          example: null
+    RateClassificationDto:
+      type: object
+      example: null
+      properties:
+        rateClassification:
+          type: string
+          example: null
+        rateDescription:
+          type: string
+          example: null
+        rateLongDescription:
+          type: string
+          example: null
+        rateName:
+          type: string
+          example: null
+        rateNotes:
+          type: string
+          example: null
+        rateOrder:
+          type: string
+          example: null
+    RateInformationDto:
+      type: object
+      example: null
+      properties:
+        rateClassifications:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RateClassificationDto'
+    RestaurantDto:
+      type: object
+      example: null
+      properties:
+        description:
+          type: string
+          example: null
+        logoSrc:
+          type: string
+          example: null
+        menus:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/MenuDto'
+        name:
+          type: string
+          example: null
+    ResultsDto:
+      type: object
+      example: null
+      properties:
+        notifications:
+          $ref: '#/components/schemas/NotificationsDto'
+    RoomCodesDto:
+      type: object
+      example: null
+      properties:
+        accessible:
+          type: string
+          example: null
+        double:
+          type: string
+          example: null
+        family:
+          type: string
+          example: null
+        single:
+          type: string
+          example: null
+        twin:
+          type: string
+          example: null
+    RoomConfigurationDto:
+      type: object
+      example: null
+      properties:
+        tabGroups:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/TabGroupDto'
+        tabItems:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/TabItemDto'
+    RoomTypeDto:
+      type: object
+      example: null
+      properties:
+        roomTypes:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RoomTypeInformationDto'
+    RoomTypeInformationDto:
+      type: object
+      example: null
+      properties:
+        facilities:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        gridImage:
+          type: string
+          example: null
+        groupId:
+          type: string
+          example: null
+        roomCategory:
+          type: string
+          example: null
+        roomDescription:
+          type: string
+          example: null
+        roomImage:
+          type: string
+          example: null
+        roomInfo:
+          type: string
+          example: null
+        roomInfoLabel:
+          type: string
+          example: null
+        roomLabel:
+          type: string
+          example: null
+        roomTypeCode:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+    SearchResultsDataDto:
+      type: object
+      example: null
+      properties:
+        config:
+          $ref: '#/components/schemas/ConfigDto'
+        content:
+          $ref: '#/components/schemas/ContentDto'
+    SeoResponseDto:
+      type: object
+      example: null
+      properties:
+        cardImageUrl:
+          type: string
+          example: null
+        faviconUrl:
+          type: string
+          example: null
+        icons:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/IconDto'
+        msIcons:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/MsIconDto'
+        pageDescription:
+          type: string
+          example: null
+        pageTitle:
+          type: string
+          example: null
+    SocialLinksDto:
+      type: object
+      example: null
+      properties:
+        iconSrc:
+          type: string
+          example: null
+        label:
+          type: string
+          example: null
+        linkSrc:
+          type: string
+          example: null
+    SubMenuLinkDto:
+      type: object
+      example: null
+      properties:
+        title:
+          type: string
+          example: null
+        url:
+          type: string
+          example: null
+    SubNavDto:
+      type: object
+      example: null
+      properties:
+        navOptions:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/NavOptionDto'
+        title:
+          type: string
+          example: null
+    TabGroupDto:
+      type: object
+      example: null
+      properties:
+        groupId:
+          type: string
+          example: null
+        groupName:
+          type: string
+          example: null
+    TabItemDto:
+      type: object
+      example: null
+      properties:
+        facilities:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/HotelFacilityDto'
+        images:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/GalleryImageDto'
+        roomDescription:
+          type: string
+          example: null
+        roomName:
+          type: string
+          example: null
+        roomType:
+          type: string
+          example: null
+    TargetBookingFlowItemDto:
+      type: object
+      example: null
+      properties:
+        bookingFlowPath:
+          type: string
+          example: null
+        id:
+          type: string
+          example: null
+        rateCode:
+          type: string
+          example: null
+    TermsAndConditionsDto:
+      type: object
+      example: null
+      properties:
+        rate:
+          type: string
+          example: null
+        text:
+          type: string
+          example: null
+    ThumbnailImageDto:
+      type: object
+      example: null
+      properties:
+        imageSrc:
+          type: string
+          example: null
+        tags:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+    TopSectionImageDto:
+      type: object
+      example: null
+      properties:
+        alt:
+          type: string
+          example: null
+        caption:
+          type: string
+          example: null
+        iconSrc:
+          type: string
+          example: null
+        imageSrc:
+          type: string
+          example: null
+        tags:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        thumbnailSrc:
+          type: string
+          example: null
+    UpsellItemsDto:
+      type: object
+      example: null
+      properties:
+        additionalInfo:
+          type: string
+          example: null
+        attachments:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/AttachmentsDto'
+        code:
+          type: string
+          example: null
+        description:
+          type: string
+          example: null
+        freeBreakfastCode:
+          type: string
+          example: null
+        freeBreakfastMaxPerMeal:
+          type: integer
+          format: int32
+          example: null
+        freeBreakfastOption:
+          type: boolean
+          example: null
+        freeBreakfastTrigger:
+          type: boolean
+          example: null
+        images:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+        name:
+          type: string
+          example: null
+        order:
+          type: integer
+          format: int32
+          example: null
+        shortDescription:
+          type: string
+          example: null
+        show:
+          type: boolean
+          example: null
+    ValidationError:
+      type: object
+      example: null
+      properties:
+        elementId:
+          type: string
+          example: null
+        errTextTemplate:
+          type: string
+          example: null

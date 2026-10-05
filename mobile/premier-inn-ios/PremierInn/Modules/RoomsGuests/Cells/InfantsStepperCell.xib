@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Semibold.ttf">
+            <string>ProximaNova-Semibold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="InfantsStepperCell" rowHeight="105" id="KGk-i7-Jjw" customClass="InfantsStepperCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="105"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="105"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="0" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oPL-bU-4KJ">
+                        <rect key="frame" x="212" y="11.5" width="14" height="29.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="14" id="haZ-Vg-jPU"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="24"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uI7-JS-iuL" customClass="SeparatedStepperButton" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="246" y="9.5" width="44" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="44" id="gBn-WJ-d11"/>
+                            <constraint firstAttribute="height" constant="44" id="p69-nd-IjG"/>
+                        </constraints>
+                        <state key="normal" image="plus"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="22"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="activeTintColor">
+                                <color key="value" red="0.3803921569" green="0.45882352939999999" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="plusButtonDidTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="CjC-Mz-fig"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yzy-k2-Dq1" customClass="SeparatedStepperButton" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="148" y="9.5" width="44" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="izC-Um-DPm"/>
+                            <constraint firstAttribute="width" constant="44" id="kdf-Yd-vsJ"/>
+                        </constraints>
+                        <state key="normal" image="minus"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="22"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="activeTintColor">
+                                <color key="value" red="0.3803921569" green="0.45882352939999999" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="minusButtonDidTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="a5k-rh-h5H"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Infants (0-3)" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="L92-uA-wVW">
+                        <rect key="frame" x="25" y="19" width="111" height="24.5"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24.5" id="aTp-Fj-dyj"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="20"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="yzy-k2-Dq1" firstAttribute="leading" secondItem="L92-uA-wVW" secondAttribute="trailing" constant="12" id="2fR-Iy-7lL"/>
+                    <constraint firstItem="uI7-JS-iuL" firstAttribute="leading" secondItem="oPL-bU-4KJ" secondAttribute="trailing" constant="20" id="8ld-mg-HGa"/>
+                    <constraint firstItem="uI7-JS-iuL" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="9by-wz-EXv"/>
+                    <constraint firstAttribute="trailing" secondItem="uI7-JS-iuL" secondAttribute="trailing" constant="30" id="FIa-Zg-G6Z"/>
+                    <constraint firstItem="L92-uA-wVW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="25" id="FfT-2h-0mv"/>
+                    <constraint firstItem="yzy-k2-Dq1" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="KZx-7e-P41"/>
+                    <constraint firstItem="oPL-bU-4KJ" firstAttribute="leading" secondItem="yzy-k2-Dq1" secondAttribute="trailing" constant="20" id="Lun-BX-Zl6"/>
+                    <constraint firstItem="L92-uA-wVW" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="P21-bA-nkt"/>
+                    <constraint firstItem="oPL-bU-4KJ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="TIl-4Z-qKl"/>
+                    <constraint firstAttribute="bottom" secondItem="L92-uA-wVW" secondAttribute="bottom" constant="19" id="fWu-KE-UKo"/>
+                    <constraint firstItem="L92-uA-wVW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="19" id="gA5-ir-Q1E"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="label" destination="oPL-bU-4KJ" id="G5u-Qx-gwS"/>
+                <outlet property="minusButton" destination="yzy-k2-Dq1" id="abE-db-bdS"/>
+                <outlet property="plusButton" destination="uI7-JS-iuL" id="jkf-YS-UWx"/>
+                <outlet property="primaryText" destination="L92-uA-wVW" id="COy-uy-i6V"/>
+            </connections>
+            <point key="canvasLocation" x="132.80000000000001" y="179.46026986506749"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="minus" width="44" height="44"/>
+        <image name="plus" width="44" height="44"/>
+    </resources>
+</document>

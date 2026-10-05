@@ -1,0 +1,41 @@
+server:
+  port: @application.port@
+
+swagger:
+  api:
+    version: "@project.version@"
+
+rules-engine:
+  scheduler:
+    enabled: false
+    cron:
+      regex: "*/60 * * * * *"
+
+spring:
+  datasource:
+    username: sa
+    password: sa
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;INIT=create schema IF NOT EXISTS RULES_ENGINE;
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      platform: h2
+      mode: always
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+    version: OPENAPI_3_1
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  configuration:
+    logger: default

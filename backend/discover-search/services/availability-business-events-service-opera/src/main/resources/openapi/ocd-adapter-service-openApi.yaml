@@ -1,0 +1,256 @@
+openapi: 3.0.1
+info:
+  description: "<p>Provides the option to retrieves tax-inclusive prices from the\
+    \ OCD, given a search criteria.</p>"
+  title: OCD Adapter Service API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9134/ocd
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /v1/hotels/{hotelId}/offer:
+    get:
+      operationId: getTaxDetails
+      parameters:
+      - in: path
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - example: 2025-08-30
+        in: query
+        name: arrivalDate
+        required: true
+        schema:
+          type: string
+      - example: 2025-08-30
+        in: query
+        name: departureDate
+        required: true
+        schema:
+          type: string
+      - example: 2
+        in: query
+        name: adults
+        required: true
+        schema:
+          type: integer
+      - example: FLEXRATE
+        in: query
+        name: ratePlanCode
+        required: true
+        schema:
+          type: string
+      - example: DOUBLE
+        in: query
+        name: roomType
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaxResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Tax-inclusive pricing from OCD
+      tags:
+      - tax-controller
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    PriceInfoDto:
+      type: object
+      properties:
+        amountAfterTax:
+          type: number
+        amountBeforeTax:
+          type: number
+        currencyCode:
+          type: string
+        taxes:
+          $ref: "#/components/schemas/TaxDetailsDto"
+    TaxDetailsDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currencyCode:
+          type: string
+        tax:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaxDto"
+    TaxDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        code:
+          type: string
+        currencyCode:
+          type: string
+        description:
+          type: string
+    TaxResponseDto:
+      type: object
+      properties:
+        ratePlanCode:
+          type: string
+        roomType:
+          type: string
+        total:
+          $ref: "#/components/schemas/PriceInfoDto"
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string

@@ -1,0 +1,102 @@
+server:
+  port: 9099
+
+spring:
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      enabled: false
+  datasource:
+    reader:
+      platform: h2
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:ondemandreader;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+      username: sa
+      password: ""
+    writer:
+      platform: h2
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:ondemandwriter;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+      username: sa
+      password: ""
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+  jackson:
+    time-zone: Europe/London
+  quartz:
+    job-store-type: memory
+    jdbc:
+      initialize-schema: never
+
+logging:
+  level:
+    uk.co.whitbread.ondemandrefreshservice: INFO
+
+io:
+  getunleash:
+    app-name: on-demand-refresh-service-opera
+    instance-id: integration
+    environment: integration
+    api-url: http://localhost:1
+    api-token: integration-placeholder
+    disable-metrics: true
+
+config:
+  httpClient:
+    connectionTimeout: 1000
+    responseTimeout: 1
+  service:
+    content-entity:
+      baseOrigin: http://localhost:9106
+      globalConfigEndpoint: /v1/content/global-config
+    ocd-adapter:
+      host: http://localhost:9134
+      offerEndpoint: /ocd/v1/hotels/{hotelCode}/offer
+    opera:
+      host: https://localhost
+      username: integration-user
+      password: integration-password
+      appKey: integration-app-key
+      clientId: integration-client
+      clientSecret: integration-secret
+      isClientCredentialsEnabled: false
+      wireTapAccessToken: false
+      authEndpoint: oauth/v1/tokens
+      enterpriseId: integration-enterprise
+      scope: ""
+      tokenRefreshClockSkew: 15
+      dailyRatePlansEndpoint: /rtp/v1/hotels/{HotelId}/ratePlans/{RatePlanCode}/schedules
+      hotelInventoryEndpoint: /inv/v1/hotels/{HotelId}/hotelInventory
+      hotelMigrationStatusEndpoint: /ent/config/v1/hotels/{HotelId}/hotelDetails
+      searchRateRestrictionCriteriaEndpoint: /par/v1/hotels/{HotelId}/restrictions
+
+ondemandrefresh:
+  interval: 30
+  scheduledRefreshCronJob: 0 1 0 ? * * *
+  maxDays: 90
+  maxRange: 365
+  jobDelay: 120
+
+migrationstatusrefresh:
+  scheduledRefreshCronJob: 0 0/15 * ? * * *
+
+async-thread-config:
+  corePoolSize: 2
+  maxPoolSize: 2
+  queueCapacity: 16
+
+db:
+  batchSize: 50
+  maxRetryLimit: 2
+
+encrypt:
+  failOnError: false
+
+OperaClientColdStartService:
+  runner:
+    enabled: false

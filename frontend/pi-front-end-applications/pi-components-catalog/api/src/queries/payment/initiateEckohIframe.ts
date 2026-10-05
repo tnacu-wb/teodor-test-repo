@@ -1,0 +1,44 @@
+import { gql } from 'graphql-request';
+
+export const INITIATE_ECKOH_IFRAME = gql`
+  mutation eckohIframe(
+    $basketReference: String!
+    $agentEmail: String!
+    $agentName: String!
+    $country: String!
+    $identifier: String!
+    $location: String!
+    $hotelName: String!
+    $reservationType: String!
+    $channel: String!
+    $journey: String!
+    $language: String!
+    $paymentType: String!
+    $requestId: String!
+    $paymentMethod: String!
+  ) {
+    initiateEckohPayment(
+      basketReference: $basketReference
+      eckohPaymentRequest: {
+        booking: {
+          agent: { email: $agentEmail, name: $agentName }
+          businessSite: {
+            country: $country
+            identifier: $identifier
+            location: $location
+            name: $hotelName
+            type: $reservationType
+          }
+          channel: $channel
+          journey: $journey
+          language: $language
+          type: $paymentType
+        }
+        requestId: $requestId
+        payment: { type: $paymentMethod }
+      }
+    ) {
+      paymentId
+    }
+  }
+`;

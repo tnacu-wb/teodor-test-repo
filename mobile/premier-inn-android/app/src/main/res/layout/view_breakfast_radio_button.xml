@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:paddingBottom="26dp"
+        android:paddingTop="@dimen/generic_padding_20">
+
+        <TextView
+            android:id="@+id/tv_breakfast_legend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            style="@style/Header3"
+            tools:text="Premier Inn Breakfast"/>
+
+        <TextView
+            android:id="@+id/tv_breakfast_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_6"
+            style="@style/Body"
+            tools:text="7.99 per adult (24.99 for all)"/>
+
+        <TextView
+            android:id="@+id/tv_breakfast_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/generic_margin_64"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_10"
+            style="@style/BodySmall"
+            tools:text="Premier Inn breakfast and a two course dinner and drinks."/>
+
+        <LinearLayout
+            android:id="@+id/ll_breakfast_added"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_6"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="@dimen/generic_margin_10"
+                android:src="@drawable/ic_validation"/>
+
+            <TextView
+                android:id="@+id/tv_breakfast_validation_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/teal_light"
+                style="@style/BodySmall"
+                tools:text="test"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/rb_breakfast_radio_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:layout_gravity="end|center"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:duplicateParentState="true"
+        app:buttonTint="@color/grey_dark"/>
+</merge>

@@ -1,0 +1,25 @@
+{
+  "name": "auth.jwks",
+  "request": {
+    "method": "GET",
+    "urlPattern": ".*/\\.well-known/jwks\\.json"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "keys": [
+        {
+          "kty": "RSA",
+          "e": "AQAB",
+          "use": "sig",
+          "kid": "integration-test-auth-key",
+          "alg": "RS256",
+          "n": "20SL3b95SMrvlKaXatFUdE2BsVTFBF745vjaQzyaCbZHB2Z8TzDvP0oIEFE3cBxku4PuWs8_Lhx4aJh34Fa9Wv_Bvm1JhtbracueoobKlXVJz62nP390TcZ1JcwY99ndZlP3WR__Ro68a5cG5_19Xww4soI9AviQlO1wtsU152JNY682SGm6l8U42iRy5sSZCwZVcWWsZI8pE3PvjRiWWvnnT4zVih_7gztYVxJeiscjQER9jZnMp8A04b1wWuw2i-K1TH2TAVet6Hjg_17qQ7uYuDrBKzpOmHoe7TqOdiwfYqVnCGHVtdsg3OHYLDwvB8W0bQOZs0xrS-x_Wpe76Q"
+        }
+      ]
+    }
+  }
+}

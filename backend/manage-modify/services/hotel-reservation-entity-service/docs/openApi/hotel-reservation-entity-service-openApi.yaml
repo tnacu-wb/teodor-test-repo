@@ -1,0 +1,5835 @@
+openapi: 3.1.0
+info:
+  description: <p>TBU</p>
+  title: Sample API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9103
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /v1/reservations:
+    get:
+      operationId: getReservationsByBasketReference
+      parameters:
+      - in: query
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: basketReference
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      - in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationsDetailsResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get reservations by basket reference
+      tags:
+      - hotel-reservation-controller
+    post:
+      operationId: createReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Create a reservation
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/reservations/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/reservations/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/reservations/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /v1/reservations/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /v1/reservations/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /v1/reservations/alerts:
+    put:
+      operationId: updateReservationAlerts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateReservationAlertsRequestDto"
+        required: true
+      responses:
+        "204":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update udfs for a reservation
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/amend/addNewRoom:
+    post:
+      operationId: addNewRoomToExistingBasket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddNewRoomRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Create a reservation for a new room
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/amend/amendConfirmationPrices:
+    get:
+      operationId: amendConfirmationPrices
+      parameters:
+      - in: query
+        name: originalBookingRef
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tempBookingRef
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: token
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfirmAmendLogicResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Amend confirmation prices
+      tags:
+      - amend-controller
+  /v1/reservations/amend/cnp/{basketRef}:
+    put:
+      operationId: updateCnpReservations
+      parameters:
+      - in: path
+        name: basketRef
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCnpReservationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateCnpReservationResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update CNP Reservations based on basket reference
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/amend/confirmAmend:
+    put:
+      operationId: confirmAmend
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfirmAmendRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationByBasketRefResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Confirm amend changes
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/amend/confirmAmendLogic:
+    put:
+      operationId: confirmAmendLogic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfirmAmendLogicRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfirmAmendLogicResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Confirm amend logic
+      tags:
+      - amend-controller
+  /v1/reservations/amend/editRoom:
+    put:
+      operationId: amendEditRoom
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditRoomRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update room information
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/amend/paymentOptions:
+    get:
+      operationId: getAmendPaymentPage
+      parameters:
+      - in: query
+        name: originalBookingRef
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tempBookingRef
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: token
+        required: true
+        schema:
+          type: string
+      - example: PI
+        in: query
+        name: bookingChannel.channel
+        required: true
+        schema:
+          type: string
+          example: PI
+          minLength: 1
+      - example: WEB
+        in: query
+        name: bookingChannel.subchannel
+        required: true
+        schema:
+          type: string
+          example: WEB
+          minLength: 1
+      - example: EN
+        in: query
+        name: bookingChannel.language
+        required: true
+        schema:
+          type: string
+          example: EN
+      - in: query
+        name: country
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfirmAmendLogicResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Amend payment page
+      tags:
+      - amend-controller
+  /v1/reservations/amend/summary:
+    get:
+      operationId: getAmendSummaryDetails
+      parameters:
+      - in: query
+        name: originalBasketRef
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: copyBasketRef
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: token
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: bookingChannel.channel
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: bookingChannel.subchannel
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: bookingChannel.language
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: country
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AmendSummaryDetailsDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieving amend summary details
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/amendDistribution/{basketReference}:
+    post:
+      operationId: amendDistribution
+      parameters:
+      - in: path
+        name: basketReference
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AmendDistributionRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationByBasketRefResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Amend Distribution
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/amendStayDates:
+    post:
+      operationId: amendStayDates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AmendStayDatesRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AmendStayDatesResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Amend stay dates for an existing basket
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/ancillaries:
+    get:
+      operationId: getReservationsPackagesByIds
+      parameters:
+      - in: query
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: basketReferenceId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: mealInclusiveRate
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationsPackagesResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get reservations packages by reservations ids.
+      tags:
+      - hotel-reservation-controller
+    put:
+      operationId: saveReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationPackagesRequestDto"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveReservationResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: updateReservationPackages
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/ancillaries/reservation-id:
+    put:
+      operationId: saveReservationPackagesByReservationId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationPackagesRequestByIdDto"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveReservationResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: updateReservationPackagesByReservationId
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/ancillaries/scheduled:
+    put:
+      operationId: updateReservationPackages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationPackagesScheduledRequestDto"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveReservationResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: add/remove reservation packages by specifying the schedule
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/attachments:
+    post:
+      operationId: addAttachmentToReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationFileAttachmentRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreCheckInResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Add attachment to a Reservation
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/basket/{basketReference}:
+    get:
+      operationId: getAllReservationsJustByBasketReference
+      parameters:
+      - in: path
+        name: basketReference
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: priceBreakdownNeeded
+        required: false
+        schema:
+          type: string
+          default: "false"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationByBasketRefResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get all reservations just by basket reference
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/basket/{basketReference}/allowances:
+    get:
+      operationId: getBookingAllowancesByBasketReference
+      parameters:
+      - in: path
+        name: basketReference
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingAllowancesResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get booking allowances by basket reference
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/basket/{basketReference}/memos:
+    get:
+      operationId: getMemos
+      parameters:
+      - in: path
+        name: basketReference
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemosResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get memos for a basket
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/basket/{bookingReference}/authenticated:
+    get:
+      operationId: getAllReservationsJustByBookingReferenceAuthenticated
+      parameters:
+      - in: path
+        name: bookingReference
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationByBasketRefResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get all reservations just by basket reference authenticated
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/basket/{bookingReference}/authenticatedWithToken:
+    get:
+      operationId: getAllReservationsJustByBookingReferenceWithToken
+      parameters:
+      - in: header
+        name: headers
+        required: true
+        schema:
+          $ref: "#/components/schemas/HttpHeaders"
+      - in: path
+        name: bookingReference
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationByBasketRefResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get all reservations just by basket reference authenticated with token
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/business:
+    put:
+      operationId: updateBusinessItems
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BusinessItemsRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update business items
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/cancel:
+    get:
+      operationId: getManageBookingInformation
+      parameters:
+      - example: LONSTM
+        in: query
+        name: hotelId
+        required: true
+        schema:
+          type: string
+          example: LONSTM
+          minLength: 1
+      - in: query
+        name: basketReference
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: userDateTime
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: token
+        required: false
+        schema:
+          type: string
+      - example: PI
+        in: query
+        name: channel
+        required: true
+        schema:
+          type: string
+          example: PI
+          minLength: 1
+      - example: WEB
+        in: query
+        name: subchannel
+        required: true
+        schema:
+          type: string
+          example: WEB
+          minLength: 1
+      - example: EN
+        in: query
+        name: language
+        required: true
+        schema:
+          type: string
+          example: EN
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ManageBookingResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get cancel information by reservation id.
+      tags:
+      - manage-booking-controller
+  /v1/reservations/cancellationPolicies:
+    get:
+      operationId: getCancellationPolicies
+      parameters:
+      - in: query
+        name: basketReference
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: ratePlanCode
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: arrivalDate
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CancellationPoliciesResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get cancellation policies by external reference id or rate plane
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/cancellations:
+    post:
+      operationId: cancelReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelReservationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Cancel a reservation
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/cancellations/on-hold:
+    put:
+      operationId: cancelOnHoldReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelReservationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Cancel an on hold reservation.
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/cancellations/rollback:
+    post:
+      operationId: rollbackReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelReservationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Rollback a reservation
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/changeLog:
+    get:
+      operationId: getChangeLog
+      parameters:
+      - in: query
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: reservationId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChangeLogResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieve change log
+      tags:
+      - change-log-controller
+  /v1/reservations/confirm:
+    post:
+      operationId: confirmReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfirmReservationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfirmReservationResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: confirmReservation
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/copy:
+    post:
+      operationId: copyBooking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CopyBookingRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CopyBookingResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: copyBooking
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/create/profile:
+    post:
+      operationId: createProfiles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationGuestRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationProfilesDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Create a booker/ company Profile
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/deposits:
+    get:
+      operationId: getDepositsForReservationId
+      parameters:
+      - in: query
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: reservationId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DepositsResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get deposits information by reservation id.
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/discount:
+    put:
+      operationId: updateDiscount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDiscountRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update discount
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/email/{basketReference}:
+    put:
+      operationId: updateEmailReservations
+      parameters:
+      - in: path
+        name: basketReference
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEmailReservationRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update booker email on reservation based on basket reference
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/find:
+    get:
+      operationId: findBooking
+      parameters:
+      - in: query
+        name: resNo
+        required: true
+        schema:
+          type: string
+          maxLength: 20
+          minLength: 4
+      - in: query
+        name: arrivalDate
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: lastName
+        required: true
+        schema:
+          type: string
+          maxLength: 30
+          minLength: 0
+      - in: query
+        name: country
+        required: false
+        schema:
+          type: string
+          default: gb
+      - example: EN
+        in: query
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+      - in: query
+        name: isOldBooking
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - example: PI
+        in: query
+        name: channel
+        required: true
+        schema:
+          type: string
+          example: PI
+          minLength: 1
+      - example: WEB
+        in: query
+        name: subchannel
+        required: true
+        schema:
+          type: string
+          example: WEB
+          minLength: 1
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FindBookingResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: "Find reservation by booking reference, surname and arrivalDate"
+      tags:
+      - manage-booking-controller
+  /v1/reservations/find/kiosk:
+    get:
+      operationId: findBookingForKiosk
+      parameters:
+      - in: query
+        name: resNo
+        required: true
+        schema:
+          type: string
+          maxLength: 20
+          minLength: 4
+      - in: query
+        name: country
+        required: false
+        schema:
+          type: string
+          default: gb
+      - in: query
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FindBookingResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Find reservation by booking reference for Kiosk
+      tags:
+      - manage-booking-controller
+  /v1/reservations/guests:
+    post:
+      operationId: createReservationGuest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationGuestRequestDto"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Create a reservation guest
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/link-leisure-customer:
+    put:
+      operationId: linkReservationToLeisureCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LinkReservationToLeisureCustomerRequestDto"
+        required: true
+      responses:
+        "204":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Link reservation to leisure customer account
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/marketingPreferences:
+    get:
+      operationId: getMarketingPreferences
+      parameters:
+      - in: query
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: reservationId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketingPreferencesResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get marketing preferences information by reservation id.
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/memos:
+    post:
+      operationId: createMemo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMemoRequestDto"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemosResponseDto"
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Create memo for a basket
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/overrideReasons:
+    put:
+      operationId: updateReservationOverrideReasons
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateReservationOverrideReasonsRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update reservation override reasons
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/pre-checkin:
+    post:
+      operationId: saveReservationPreCheckIn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PreCheckInRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreCheckInResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Save Pre-CheckIn status of a Reservation
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/preferences:
+    put:
+      operationId: updatePreferences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationPreferencesRequestDto"
+        required: true
+      responses:
+        "204":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update preferences
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/preview-deposits:
+    get:
+      operationId: getDepositFolioForReservations
+      parameters:
+      - in: query
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: reservationIds
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DepositFoliosResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OhipBadRequestException"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OhipNotFoundException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OhipInternalException"
+          description: Internal Server Error
+      summary: Preview generated deposit folios for reservations
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/profiles:
+    post:
+      operationId: attachProfileToReservations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AttachReservationProfileRequestDto"
+        required: true
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Attach a profile to reservations
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/qrcode/{code}:
+    get:
+      description: Generate a QR code image in the confirmation email a customer receives
+        when making a reservation
+      operationId: generateReservationQrCode
+      parameters:
+      - in: path
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: byte
+          description: Success
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Generates a QR code image
+      tags:
+      - qr-code-controller
+  /v1/reservations/questions-and-answers:
+    put:
+      operationId: updateQuestionsAndAnswers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyQuestionAndAnswerDetailsRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update reservations with Reference & Custom questions and answers
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/rate-code:
+    put:
+      operationId: updateReservationRatePlanCode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRateCodeRequestDto"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Upgrade a reservation to a different rate plan
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/reasonForStay:
+    put:
+      operationId: updateReasonForStay
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateReasonForStayRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateReasonForStayRequestDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update reason for stay
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/roomTypeUpdate:
+    put:
+      operationId: updateRoomType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRoomTypeRequestDto"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Upgrade room to a different type.
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/rooms/delete:
+    post:
+      operationId: removeRoom
+      parameters:
+      - in: query
+        name: tempBookingRef
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: reservationId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: token
+        required: true
+        schema:
+          type: string
+      - example: PI
+        in: query
+        name: channel
+        required: true
+        schema:
+          type: string
+          example: PI
+          minLength: 1
+      - example: WEB
+        in: query
+        name: subchannel
+        required: true
+        schema:
+          type: string
+          example: WEB
+          minLength: 1
+      - example: EN
+        in: query
+        name: language
+        required: true
+        schema:
+          type: string
+          example: EN
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TempBookingRefResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Remove a room based on basket ref and reservation id
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/routingInstructions:
+    delete:
+      operationId: deleteRoutingInstructions
+      parameters:
+      - in: query
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: reservationIds
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+      responses:
+        "204":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Delete all existing routing instructions.
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/save-deposit-folios:
+    post:
+      operationId: saveDepositFolios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepositFoliosRequestDto"
+        required: true
+      responses:
+        "201":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OhipBadRequestException"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OhipNotFoundException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OhipInternalException"
+          description: Internal Server Error
+      summary: create Deposit Folios for reservations
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/search:
+    get:
+      operationId: searchBookings
+      parameters:
+      - example: LONEUS1391808
+        in: query
+        name: bookingReference
+        required: false
+        schema:
+          type: string
+      - example: Doe
+        in: query
+        name: bookerLastName
+        required: false
+        schema:
+          type: string
+      - example: Doe
+        in: query
+        name: guestLastName
+        required: false
+        schema:
+          type: string
+      - example: WC2N 5DU
+        in: query
+        name: bookerPostcode
+        required: false
+        schema:
+          type: string
+      - example: LONSTM
+        in: query
+        name: hotelId
+        required: false
+        schema:
+          type: string
+      - example: john.doe@email.com
+        in: query
+        name: bookerEmail
+        required: false
+        schema:
+          type: string
+      - example: "+3905678754"
+        in: query
+        name: bookerPhone
+        required: false
+        schema:
+          type: string
+      - example: 2022-03-05
+        in: query
+        name: arrivalDate
+        required: false
+        schema:
+          type: string
+      - example: 2022-03-06
+        in: query
+        name: cancellationDate
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: companyName
+        required: false
+        schema:
+          type: string
+      - example: LONEUS1391808
+        in: query
+        name: thirdPartyBookingReferenceNumber
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+      - in: query
+        name: country
+        required: false
+        schema:
+          type: string
+          default: gb
+      - example: 0
+        in: query
+        name: offset
+        required: false
+        schema:
+          type: int
+          default: "0"
+      - example: 20
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: int
+          default: "20"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchBookingsResponseMapper"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Search bookings
+      tags:
+      - manage-booking-controller
+  /v1/reservations/search/booking/cdh:
+    get:
+      operationId: searchBookingFromCdh
+      parameters:
+      - example: LONEUS1391808
+        in: query
+        name: bookingReference
+        required: false
+        schema:
+          type: string
+      - example: Doe
+        in: query
+        name: bookerLastName
+        required: false
+        schema:
+          type: string
+      - example: Doe
+        in: query
+        name: guestLastName
+        required: false
+        schema:
+          type: string
+      - example: WC2N 5DU
+        in: query
+        name: bookerPostcode
+        required: false
+        schema:
+          type: string
+      - example: LONSTM
+        in: query
+        name: hotelId
+        required: false
+        schema:
+          type: string
+      - example: john.doe@email.com
+        in: query
+        name: bookerEmail
+        required: false
+        schema:
+          type: string
+      - example: "+3905678754"
+        in: query
+        name: bookerPhone
+        required: false
+        schema:
+          type: string
+      - example: 2022-03-05
+        in: query
+        name: arrivalDateFrom
+        required: false
+        schema:
+          type: string
+      - example: 2022-03-05
+        in: query
+        name: arrivalDateTo
+        required: false
+        schema:
+          type: string
+      - example: 2022-03-06
+        in: query
+        name: cancellationDate
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: companyName
+        required: false
+        schema:
+          type: string
+      - example: LONEUS1391808
+        in: query
+        name: thirdPartyBookingReferenceNumber
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: bookingsDatabaseSearch
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: PageSize
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: PageNumber
+        required: false
+        schema:
+          type: integer
+      - in: query
+        name: ContinuationToken
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchBookingsResponseMapper"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Search booking from CDH
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/special-requests:
+    put:
+      operationId: updateReservationsSpecialRequests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SpecialRequestsDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update reservations special requests
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/universal-login/link-leisure-customer:
+    put:
+      operationId: linkReservationPostRegistration
+      parameters:
+      - description: Universal Login API key for authentication
+        example: your-api-key-value
+        in: header
+        name: X-UL-API-KEY
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LinkReservationToLeisureCustomerRequestDto"
+        required: true
+      responses:
+        "204":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Link reservation to leisure customer account - Universal Login
+      tags:
+      - universal-login-controller
+  /v1/reservations/update:
+    put:
+      operationId: updateReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateReservationSingleCallRequestDto"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json: {}
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Update reservations details
+      tags:
+      - hotel-reservation-controller
+  /v1/reservations/updateUdfc20:
+    put:
+      operationId: updateUdfc20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UdfsRequestDto"
+        required: true
+      responses:
+        "204":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OhipBadRequestException"
+          description: Bad Request - Invalid Client Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OhipNotFoundException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OhipInternalException"
+          description: Internal Server Error
+      summary: Update the UDFC20 field value in Opera.
+      tags:
+      - manage-booking-controller
+components:
+  schemas:
+    AccompanyingGuestDetailsDto:
+      type: object
+      properties:
+        additionalDetails:
+          $ref: "#/components/schemas/StayingGuestAdditionalDetailsDto"
+        emailAddress:
+          type: string
+        employeeAccountId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        title:
+          type: string
+    AccountCompanyItemsDto:
+      type: object
+      properties:
+        charges:
+          type: string
+        companyId:
+          type: string
+        companyNumber:
+          type: string
+    AddNewRoomRequestDto:
+      type: object
+      properties:
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        leadGuest:
+          $ref: "#/components/schemas/LeadGuestDto"
+        ratePlanCode:
+          type: string
+        roomOccupancy:
+          $ref: "#/components/schemas/RoomOccupancyDto"
+        roomType:
+          type: string
+          minLength: 1
+        specialRequests:
+          type: array
+          items:
+            type: string
+        tempBookingRef:
+          type: string
+          minLength: 1
+        token:
+          type: string
+      required:
+      - leadGuest
+      - roomOccupancy
+      - roomType
+      - tempBookingRef
+    AdditionalGuestInfoDto:
+      type: object
+      properties:
+        acceptFutureMailing:
+          type: boolean
+        purposeOfStay:
+          type: string
+    AddressCcuiDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          maxLength: 35
+          minLength: 0
+          pattern: "^[ a-zA-Z0-9-ÖØ-ʒͰ-ͳͶ-ͷͻ-ͽvΑ-Ͽἀ-ῼЀ-ӿễấßÜÖÄüöä/'.,-]*$"
+        addressLine2:
+          type: string
+          maxLength: 35
+          minLength: 0
+          pattern: "^[ a-zA-Z0-9-ÖØ-ʒͰ-ͳͶ-ͷͻ-ͽvΑ-Ͽἀ-ῼЀ-ӿễấßÜÖÄüöä/'.,-]*$"
+        addressLine3:
+          type: string
+          maxLength: 35
+          minLength: 0
+          pattern: "^[ a-zA-Z0-9-ÖØ-ʒͰ-ͳͶ-ͷͻ-ͽvΑ-Ͽἀ-ῼЀ-ӿễấßÜÖÄüöä/'.,-]*$"
+        addressLine4:
+          type: string
+          maxLength: 35
+          minLength: 0
+          pattern: "^[ a-zA-Z0-9-ÖØ-ʒͰ-ͳͶ-ͷͻ-ͽvΑ-Ͽἀ-ῼЀ-ӿễấßÜÖÄüöä/'.,-]*$"
+        addressType:
+          type: string
+        cityName:
+          type: string
+        companyName:
+          type: string
+        country:
+          type: string
+        postalCode:
+          type: string
+    AddressResponseDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        cityName:
+          type: string
+        companyName:
+          type: string
+        country:
+          type: string
+        postalCode:
+          type: string
+    AlertsDto:
+      type: object
+      properties:
+        area:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+        printerNotification:
+          type: boolean
+        screenNotification:
+          type: boolean
+    AmendDistributionGuestDto:
+      type: object
+      properties:
+        email:
+          type: string
+        givenName:
+          type: string
+        nameTitle:
+          type: string
+        surName:
+          type: string
+    AmendDistributionRequestDto:
+      type: object
+      properties:
+        bookerDetails:
+          $ref: "#/components/schemas/BookerDetailsCnpDto"
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        bookingNotes:
+          type: array
+          items:
+            type: string
+        distributionIATANumber:
+          type: string
+        isOta:
+          type: boolean
+        reservations:
+          type: array
+          items:
+            $ref: "#/components/schemas/AmendDistributionReservationDto"
+        sendEmailConfirmation:
+          type: boolean
+        sendEmailInvoice:
+          type: boolean
+        token:
+          type: string
+          minLength: 1
+      required:
+      - bookingChannel
+      - token
+    AmendDistributionReservationDto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+          minLength: 1
+        reservationGuestList:
+          type: array
+          items:
+            $ref: "#/components/schemas/AmendDistributionGuestDto"
+        reservationId:
+          type: string
+        reservationPackageList:
+          type: array
+          items:
+            $ref: "#/components/schemas/AmendPackagesDistributionDto"
+        roomStay:
+          $ref: "#/components/schemas/RoomStayDistributionDto"
+      required:
+      - hotelId
+    AmendPackagesDistributionDto:
+      type: object
+      properties:
+        packageCode:
+          type: string
+        price:
+          type: number
+          format: double
+        totalQuantity:
+          type: integer
+          format: int32
+    AmendStayDatesRequestDto:
+      type: object
+      properties:
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        newEndDate:
+          type: string
+        newStartDate:
+          type: string
+        tempBookingRef:
+          type: string
+        token:
+          type: string
+      required:
+      - bookingChannel
+      - newEndDate
+      - newStartDate
+      - tempBookingRef
+    AmendStayDatesResponseDto:
+      type: object
+      properties:
+        tempBasket:
+          type: string
+    AmendSummaryDetailsDto:
+      type: object
+      properties:
+        balanceAuthorised:
+          type: string
+        balancePaid:
+          type: string
+        charitable:
+          type: string
+        navigationOptions:
+          $ref: "#/components/schemas/NavigationOptionsDto"
+        nonRefundable:
+          type: string
+        payOnArrival:
+          type: string
+        paymentCardDetails:
+          $ref: "#/components/schemas/PaymentCardDetailsDto"
+        paymentOptions:
+          $ref: "#/components/schemas/PaymentOptionsDto"
+        previousTotal:
+          type: string
+        refund:
+          type: string
+        totalCost:
+          type: string
+    AttachReservationProfileRequestDto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+        profileId:
+          type: string
+        reservationIds:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+      required:
+      - hotelId
+      - profileId
+      - reservationIds
+    BillingCcuiDto:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/AddressCcuiDto"
+    BillingResponseDto:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/AddressResponseDto"
+        email:
+          type: string
+        firstName:
+          type: string
+        landline:
+          type: string
+        lastName:
+          type: string
+        telephone:
+          type: string
+        title:
+          type: string
+    BookerAddressCnpDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          example: 4 Brockley Avenue
+        addressLine2:
+          type: string
+          example: London District 2
+        addressLine3:
+          type: string
+          example: Greater London - sub district 2
+        addressLine4:
+          type: string
+          example: Greater London - street 22
+        postalCode:
+          type: string
+          example: EC1A 1BB
+    BookerAddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressType:
+          type: string
+        cityName:
+          type: string
+        companyName:
+          type: string
+        countryCode:
+          type: string
+        postalCode:
+          type: string
+    BookerDetailsCnpDto:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/BookerAddressCnpDto"
+        companyName:
+          type: string
+          example: ABCD1234
+        emailAddress:
+          type: string
+          example: test@mailinator.com
+        firstName:
+          type: string
+          example: Test
+        landline:
+          type: string
+          example: "+44123123"
+        lastName:
+          type: string
+          example: Testerson
+        mobile:
+          type: string
+          example: "+44123123"
+        title:
+          type: string
+          example: Mr
+    BookerDetailsDto:
+      type: object
+      properties:
+        acceptFutureMailing:
+          type: boolean
+        address:
+          $ref: "#/components/schemas/BookerAddressDto"
+        emailAddress:
+          type: string
+          example: john.carry@email.com
+        firstName:
+          type: string
+          example: John
+          minLength: 1
+        landline:
+          type: string
+          example: "+3905678754"
+        language:
+          type: string
+          example: en
+        lastName:
+          type: string
+          example: Carry
+          minLength: 1
+        mobile:
+          type: string
+          example: "+3905678754"
+        title:
+          type: string
+          example: Mrs
+      required:
+      - firstName
+      - lastName
+    BookingAllowanceDto:
+      type: object
+      properties:
+        allowance:
+          type: string
+        budget:
+          type: number
+    BookingAllowancesResponseDto:
+      type: object
+      properties:
+        bookingAllowances:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingAllowanceDto"
+    BookingChannelDto:
+      type: object
+      properties:
+        channel:
+          type: string
+          example: PI
+          minLength: 1
+        language:
+          type: string
+          example: EN
+        subchannel:
+          type: string
+          example: WEB
+          minLength: 1
+      required:
+      - channel
+      - language
+      - subchannel
+    BusinessAccountCnpDto:
+      type: object
+      properties:
+        alcoholAllowed:
+          type: string
+          example: "No"
+        breakfastCodeReq:
+          type: integer
+          format: int32
+          example: 12
+        carParkingAllowed:
+          type: string
+          example: "Yes"
+        cardNotPresentAuth:
+          type: string
+          example: "Yes"
+        customerReference:
+          type: string
+          example: ab12
+        dinnerAllowance:
+          type: number
+          example: 50
+        otherChargesAllowed:
+          type: string
+          example: "No"
+        purchaseOrder:
+          type: string
+          example: abc123
+        wifiAllowed:
+          type: string
+          example: "Yes"
+    BusinessAllowanceCcuiDto:
+      type: object
+      properties:
+        allowance:
+          type: string
+        budget:
+          type: number
+        isAuthorised:
+          type: boolean
+    BusinessAllowanceDto:
+      type: object
+      properties:
+        allowance:
+          type: string
+        budget:
+          type: number
+        isAuthorised:
+          type: boolean
+    BusinessItemsCcuiDto:
+      type: object
+      properties:
+        businessAllowances:
+          type: array
+          items:
+            $ref: "#/components/schemas/BusinessAllowanceCcuiDto"
+        businessNotes:
+          type: string
+        customReferenceNumber:
+          type: string
+        purchaseOrderNumber:
+          type: string
+    BusinessItemsDto:
+      type: object
+      properties:
+        businessAllowances:
+          type: array
+          items:
+            $ref: "#/components/schemas/BusinessAllowanceDto"
+        businessNotes:
+          type: string
+        customReferenceNumber:
+          type: string
+        purchaseOrderNumber:
+          type: string
+    BusinessItemsRequestDto:
+      type: object
+      properties:
+        businessItems:
+          $ref: "#/components/schemas/BusinessItemsDto"
+        channel:
+          type: string
+        companyId:
+          type: string
+        hotelId:
+          type: string
+        reservationIds:
+          type: array
+          items:
+            type: string
+    CancelReservationRequestDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+          minLength: 1
+        hotelId:
+          type: string
+          example: LONSTM
+        paymentOption:
+          type: string
+          enum:
+          - PAY_NOW
+          - PAY_ON_ARRIVAL
+          - RESERVE_WITHOUT_CARD
+          - ACCOUNT_COMPANY
+        reservationIds:
+          type: array
+          items:
+            type: string
+        reservationOverrideReason:
+          $ref: "#/components/schemas/ReservationOverrideReasonDto"
+        token:
+          type: string
+      required:
+      - basketReference
+    CancellationPoliciesResponseDto:
+      type: object
+      properties:
+        text:
+          type: string
+        time:
+          type: string
+    CardCcuiDto:
+      type: object
+      properties:
+        cardHolderAddress:
+          $ref: "#/components/schemas/AddressCcuiDto"
+        cardHolderFirstName:
+          type: string
+          minLength: 1
+        cardHolderLastName:
+          type: string
+          minLength: 1
+      required:
+      - cardHolderAddress
+      - cardHolderFirstName
+      - cardHolderLastName
+    CcuiExtraItemsDto:
+      type: object
+      properties:
+        accountCompanyItems:
+          $ref: "#/components/schemas/AccountCompanyItemsDto"
+        addressCompanyName:
+          type: string
+        businessItems:
+          $ref: "#/components/schemas/BusinessItemsCcuiDto"
+        cardPresent:
+          type: boolean
+        nonguaranteedItems:
+          $ref: "#/components/schemas/NonguaranteedItemsDto"
+        sendMail:
+          type: boolean
+    ChangeLogListTypeDto:
+      type: object
+      properties:
+        activityLog:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChangeLogTypeDto"
+        count:
+          type: integer
+          format: int32
+        hasMore:
+          type: boolean
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        totalResults:
+          type: integer
+          format: int32
+    ChangeLogResponseDto:
+      type: object
+      properties:
+        activityLog:
+          $ref: "#/components/schemas/ChangeLogListTypeDto"
+    ChangeLogTypeDto:
+      type: object
+      properties:
+        actionDescription:
+          type: string
+        actionType:
+          type: string
+        date:
+          type: string
+        time:
+          type: string
+        user:
+          type: string
+    CompanyQuestionAndAnswerDetailsDto:
+      type: object
+      properties:
+        customerReferenceQuestionAndAnswer:
+          $ref: "#/components/schemas/CompanyQuestionAndAnswerDto"
+        purchaseOrderQuestionAndAnswer:
+          $ref: "#/components/schemas/CompanyQuestionAndAnswerDto"
+        userDefinedQuestionAndAnswers:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompanyQuestionAndAnswerDto"
+    CompanyQuestionAndAnswerDetailsRequestDto:
+      type: object
+      properties:
+        companyQuestionAndAnswerDetails:
+          $ref: "#/components/schemas/CompanyQuestionAndAnswerDetailsDto"
+        hotelId:
+          type: string
+        reservationIds:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          uniqueItems: true
+      required:
+      - companyQuestionAndAnswerDetails
+      - hotelId
+      - reservationIds
+    CompanyQuestionAndAnswerDto:
+      type: object
+      properties:
+        answer:
+          type: string
+        question:
+          type: string
+        questionHeader:
+          type: string
+    ConfirmAmendLogicRequestDto:
+      type: object
+      properties:
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        ccuiExtraItems:
+          $ref: "#/components/schemas/CcuiExtraItemsDto"
+        emailAddress:
+          type: string
+        environment:
+          type: string
+        originalBookingRef:
+          type: string
+        paymentOption:
+          type: string
+        paymentOptionSelected:
+          type: string
+          enum:
+          - PAY_NOW
+          - PAY_ON_ARRIVAL
+        paymentRequest:
+          $ref: "#/components/schemas/PaymentCcuiRequestDto"
+        preCheckIn:
+          type: array
+          items:
+            type: string
+        subPaymentType:
+          type: string
+        tempBookingRef:
+          type: string
+        token:
+          type: string
+      required:
+      - bookingChannel
+      - environment
+      - originalBookingRef
+      - tempBookingRef
+      - token
+    ConfirmAmendLogicResponseDto:
+      type: object
+      properties:
+        payment:
+          $ref: "#/components/schemas/InitiatePaymentResponseDto"
+    ConfirmAmendRequestDto:
+      type: object
+      properties:
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        ccAgentId:
+          type: string
+        emailAddress:
+          type: string
+        originalBookingRef:
+          type: string
+        paymentOptionSelected:
+          type: string
+        tempBookingRef:
+          type: string
+        token:
+          type: string
+      required:
+      - bookingChannel
+      - originalBookingRef
+      - tempBookingRef
+    ConfirmReservationRequestDto:
+      type: object
+      properties:
+        ccAgentId:
+          type: string
+        hotelId:
+          type: string
+          minLength: 1
+        paymentCard:
+          $ref: "#/components/schemas/PaymentCardDto"
+        paymentId:
+          type: string
+        paymentMethod:
+          type: string
+        paymentOption:
+          type: string
+          enum:
+          - PAY_NOW
+          - PAY_ON_ARRIVAL
+          - RESERVE_WITHOUT_CARD
+          - ACCOUNT_COMPANY
+        paymentType:
+          type: string
+        pibaCardPresent:
+          type: boolean
+        reservationId:
+          type: string
+          minLength: 1
+        threeDSIndicator:
+          type: string
+      required:
+      - hotelId
+      - paymentOption
+      - reservationId
+    ConfirmReservationResponseDto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+        isPartialPaid:
+          type: boolean
+          writeOnly: true
+        partialPaid:
+          type: boolean
+        reservationGuest:
+          $ref: "#/components/schemas/ConfirmationCustomerDto"
+        reservationIdList:
+          type: array
+          items:
+            $ref: "#/components/schemas/UniqueIDTypeDto"
+        reservationStatus:
+          type: string
+        roomStay:
+          $ref: "#/components/schemas/ConfirmationRoomStayDto"
+    ConfirmationCustomerDto:
+      type: object
+      properties:
+        givenName:
+          type: string
+        surName:
+          type: string
+    ConfirmationRoomStayDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+          format: date
+        departureDate:
+          type: string
+          format: date
+    ContentDisposition:
+      type: object
+      properties:
+        attachment:
+          type: boolean
+        charset:
+          type: string
+        filename:
+          type: string
+        formData:
+          type: boolean
+        inline:
+          type: boolean
+        name:
+          type: string
+        type:
+          type: string
+    CopyBookingRequestDto:
+      type: object
+      properties:
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        originalBasketReference:
+          type: string
+          minLength: 1
+        token:
+          type: string
+      required:
+      - bookingChannel
+      - originalBasketReference
+    CopyBookingResponseDto:
+      type: object
+      properties:
+        copyBasketReference:
+          type: string
+    CreateMemoRequestDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+          minLength: 1
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        description:
+          type: string
+          minLength: 1
+      required:
+      - basketReference
+      - bookingChannel
+      - description
+    CurrencyAmountDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currencyCode:
+          type: string
+      required:
+      - amount
+      - currencyCode
+    CurrencyAmountTypeDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currencyCode:
+          type: string
+    CustomerDto:
+      type: object
+      properties:
+        country:
+          type: string
+        firstName:
+          type: string
+        language:
+          type: string
+        lastName:
+          type: string
+        title:
+          type: string
+    DepositFolioChargeDto:
+      type: object
+      properties:
+        currencyAmount:
+          $ref: "#/components/schemas/CurrencyAmountDto"
+        quantity:
+          type: integer
+          format: int32
+        reference:
+          type: string
+        transactionCode:
+          type: string
+      required:
+      - currencyAmount
+      - quantity
+      - reference
+      - transactionCode
+    DepositFolioDto:
+      type: object
+      properties:
+        charges:
+          type: array
+          items:
+            $ref: "#/components/schemas/DepositFolioChargeDto"
+        hotelId:
+          type: string
+        reservationId:
+          type: string
+        vatRegion:
+          type: string
+    DepositFolioRequestDto:
+      type: object
+      properties:
+        charges:
+          type: array
+          items:
+            $ref: "#/components/schemas/DepositFolioChargeDto"
+        defaultPaymentMethod:
+          type: string
+        hotelId:
+          type: string
+        paymentId:
+          type: string
+        reservationId:
+          type: string
+    DepositFoliosRequestDto:
+      type: object
+      properties:
+        depositFolios:
+          type: array
+          items:
+            $ref: "#/components/schemas/DepositFolioRequestDto"
+    DepositFoliosResponseDto:
+      type: object
+      properties:
+        depositFolios:
+          type: array
+          items:
+            $ref: "#/components/schemas/DepositFolioDto"
+    DepositPoliciesDto:
+      type: object
+      properties:
+        amountDue:
+          $ref: "#/components/schemas/CurrencyAmountTypeDto"
+        amountPaid:
+          $ref: "#/components/schemas/CurrencyAmountTypeDto"
+        policyCode:
+          type: string
+    DepositsDto:
+      type: object
+      properties:
+        paymentReference:
+          type: string
+        postedAmount:
+          $ref: "#/components/schemas/CurrencyAmountTypeDto"
+    DepositsResponseDto:
+      type: object
+      properties:
+        deposits:
+          type: array
+          items:
+            $ref: "#/components/schemas/DepositsDto"
+    EditRoomRequestDto:
+      type: object
+      properties:
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        leadGuest:
+          $ref: "#/components/schemas/LeadGuestDto"
+        ratePlanCode:
+          type: string
+        reservationId:
+          type: string
+          minLength: 1
+        roomOccupancy:
+          $ref: "#/components/schemas/RoomOccupancyDto"
+        roomType:
+          type: string
+          minLength: 1
+        specialRequests:
+          type: array
+          items:
+            type: string
+        tempBookingRef:
+          type: string
+          minLength: 1
+        token:
+          type: string
+      required:
+      - leadGuest
+      - reservationId
+      - roomOccupancy
+      - roomType
+      - tempBookingRef
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    ExternalReferenceTypeDto:
+      type: object
+      properties:
+        id:
+          type: string
+        idContext:
+          type: string
+        idExtension:
+          type: integer
+          format: int32
+    FindBookingResponseDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+        cookieName:
+          type: string
+        hotelId:
+          type: string
+        idContext:
+          type: string
+        minutesTillExpiry:
+          type: string
+        operaConfNumber:
+          type: string
+        redirectBase:
+          type: string
+        ref:
+          type: string
+        sourcePms:
+          type: string
+        token:
+          type: string
+    GuestAddressDto:
+      type: object
+      properties:
+        addressId:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressType:
+          type: string
+        cityName:
+          type: string
+        countryCode:
+          type: string
+        postalCode:
+          type: string
+    HttpHeaders:
+      type: object
+      properties:
+        accept:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaType"
+        acceptCharset:
+          type: array
+          items:
+            type: string
+        acceptLanguage:
+          type: array
+          items:
+            type: object
+            properties:
+              range:
+                type: string
+              weight:
+                type: number
+                format: double
+        acceptLanguageAsLocales:
+          type: array
+          items:
+            type: string
+        acceptPatch:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaType"
+        accessControlAllowCredentials:
+          type: boolean
+        accessControlAllowHeaders:
+          type: array
+          items:
+            type: string
+        accessControlAllowMethods:
+          type: array
+          items:
+            $ref: "#/components/schemas/HttpMethod"
+        accessControlAllowOrigin:
+          type: string
+        accessControlExposeHeaders:
+          type: array
+          items:
+            type: string
+        accessControlMaxAge:
+          type: integer
+          format: int64
+        accessControlRequestHeaders:
+          type: array
+          items:
+            type: string
+        accessControlRequestMethod:
+          $ref: "#/components/schemas/HttpMethod"
+        all:
+          type: object
+          additionalProperties:
+            type: string
+          writeOnly: true
+        allow:
+          type: array
+          items:
+            $ref: "#/components/schemas/HttpMethod"
+          uniqueItems: true
+        basicAuth:
+          type: string
+          writeOnly: true
+        bearerAuth:
+          type: string
+          writeOnly: true
+        cacheControl:
+          type: string
+        connection:
+          type: array
+          items:
+            type: string
+        contentDisposition:
+          $ref: "#/components/schemas/ContentDisposition"
+        contentLanguage:
+          type: string
+        contentLength:
+          type: integer
+          format: int64
+        contentType:
+          $ref: "#/components/schemas/MediaType"
+        date:
+          type: integer
+          format: int64
+        empty:
+          type: boolean
+        etag:
+          type: string
+        expires:
+          type: integer
+          format: int64
+        host:
+          type: object
+          properties:
+            address:
+              type: object
+              properties:
+                address:
+                  type: string
+                  format: byte
+                anyLocalAddress:
+                  type: boolean
+                canonicalHostName:
+                  type: string
+                hostAddress:
+                  type: string
+                hostName:
+                  type: string
+                linkLocalAddress:
+                  type: boolean
+                loopbackAddress:
+                  type: boolean
+                mcglobal:
+                  type: boolean
+                mclinkLocal:
+                  type: boolean
+                mcnodeLocal:
+                  type: boolean
+                mcorgLocal:
+                  type: boolean
+                mcsiteLocal:
+                  type: boolean
+                multicastAddress:
+                  type: boolean
+                siteLocalAddress:
+                  type: boolean
+            hostName:
+              type: string
+            hostString:
+              type: string
+            port:
+              type: integer
+              format: int32
+            unresolved:
+              type: boolean
+        ifMatch:
+          type: array
+          items:
+            type: string
+        ifModifiedSince:
+          type: integer
+          format: int64
+        ifNoneMatch:
+          type: array
+          items:
+            type: string
+        ifUnmodifiedSince:
+          type: integer
+          format: int64
+        lastModified:
+          type: integer
+          format: int64
+        location:
+          type: string
+          format: uri
+        origin:
+          type: string
+        pragma:
+          type: string
+        range:
+          type: array
+          items:
+            $ref: "#/components/schemas/HttpRange"
+        upgrade:
+          type: string
+        vary:
+          type: array
+          items:
+            type: string
+    HttpMethod: {}
+    HttpRange: {}
+    InitiatePaymentResponseDto:
+      type: object
+      properties:
+        paymentRequiredDetails:
+          $ref: "#/components/schemas/PaymentRequiredDetailsDto"
+        status:
+          type: string
+          enum:
+          - NOT_REQUIRED
+          - PAYMENT_REQUIRED
+    LeadGuestDto:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/GuestAddressDto"
+        emailAddress:
+          type: string
+        firstName:
+          type: string
+        language:
+          type: string
+        lastName:
+          type: string
+        title:
+          type: string
+      required:
+      - firstName
+      - lastName
+      - title
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    LinkReservationToLeisureCustomerRequestDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+          description: Digital basket reference
+          example: BKS-1234a567-qq7b-2024-123s-aa5ssbn557gh
+          minLength: 1
+        customerAccountId:
+          type: string
+          description: Customer Account ID generated by CDH
+          minLength: 1
+      required:
+      - basketReference
+      - customerAccountId
+    ManageBookingResponseDto:
+      type: object
+      properties:
+        aemLabelKey:
+          type: string
+        checkInOnlineAvailable:
+          type: boolean
+        checkOutOnlineAvailable:
+          type: boolean
+        ciolErrorLabelKey:
+          type: string
+        digitalKey:
+          type: boolean
+        isAmendable:
+          type: boolean
+        isCancellable:
+          type: boolean
+        isCheckInOnlineAvailable:
+          type: boolean
+        isCheckOutOnlineAvailable:
+          type: boolean
+        isDigitalKey:
+          type: boolean
+        isRuleCompliant:
+          type: boolean
+    MarketingPreferencesResponseDto:
+      type: object
+      properties:
+        contactValue:
+          type: string
+        customer:
+          $ref: "#/components/schemas/CustomerDto"
+        optIn:
+          type: boolean
+    MediaType:
+      type: object
+      properties:
+        charset:
+          type: string
+        concrete:
+          type: boolean
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        qualityValue:
+          type: number
+          format: double
+        subtype:
+          type: string
+        subtypeSuffix:
+          type: string
+        type:
+          type: string
+        wildcardSubtype:
+          type: boolean
+        wildcardType:
+          type: boolean
+    MemoDto:
+      type: object
+      properties:
+        createdBy:
+          type: string
+        createdOn:
+          type: string
+        description:
+          type: string
+        ids:
+          type: array
+          items:
+            $ref: "#/components/schemas/MemoIdsDto"
+        memoType:
+          type: string
+        modifiedBy:
+          type: string
+        modifiedOn:
+          type: string
+    MemoIdsDto:
+      type: object
+      properties:
+        memoIds:
+          type: array
+          items:
+            type: string
+        reservationId:
+          type: string
+    MemosResponseDto:
+      type: object
+      properties:
+        memos:
+          type: array
+          items:
+            $ref: "#/components/schemas/MemoDto"
+    NavigationOptionsDto:
+      type: object
+      properties:
+        amendPaymentPage:
+          type: boolean
+    NonguaranteedItemsDto:
+      type: object
+      properties:
+        typeOfCaller:
+          type: string
+    OhipBadRequestException:
+      type: object
+      properties:
+        cause:
+          $ref: "#/components/schemas/OhipBadRequestExceptionCause"
+        debugMessage:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+        localizedMessage:
+          type: string
+        message:
+          type: string
+        stackTrace:
+          type: array
+          items:
+            $ref: "#/components/schemas/OhipBadRequestExceptionCauseStackTraceInner"
+        suppressed:
+          type: array
+          items:
+            $ref: "#/components/schemas/OhipBadRequestExceptionCause"
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: string
+    OhipBadRequestExceptionCause:
+      type: object
+      properties:
+        localizedMessage:
+          type: string
+        message:
+          type: string
+        stackTrace:
+          type: array
+          items:
+            $ref: "#/components/schemas/OhipBadRequestExceptionCauseStackTraceInner"
+    OhipBadRequestExceptionCauseStackTraceInner:
+      type: object
+      properties:
+        classLoaderName:
+          type: string
+        className:
+          type: string
+        fileName:
+          type: string
+        lineNumber:
+          type: integer
+          format: int32
+        methodName:
+          type: string
+        moduleName:
+          type: string
+        moduleVersion:
+          type: string
+        nativeMethod:
+          type: boolean
+    OhipInternalException:
+      type: object
+      properties:
+        cause:
+          $ref: "#/components/schemas/OhipBadRequestExceptionCause"
+        debugMessage:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+        localizedMessage:
+          type: string
+        message:
+          type: string
+        stackTrace:
+          type: array
+          items:
+            $ref: "#/components/schemas/OhipBadRequestExceptionCauseStackTraceInner"
+        suppressed:
+          type: array
+          items:
+            $ref: "#/components/schemas/OhipBadRequestExceptionCause"
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: string
+    OhipNotFoundException:
+      type: object
+      properties:
+        cause:
+          $ref: "#/components/schemas/OhipBadRequestExceptionCause"
+        debugMessage:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+        localizedMessage:
+          type: string
+        message:
+          type: string
+        stackTrace:
+          type: array
+          items:
+            $ref: "#/components/schemas/OhipBadRequestExceptionCauseStackTraceInner"
+        suppressed:
+          type: array
+          items:
+            $ref: "#/components/schemas/OhipBadRequestExceptionCause"
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: string
+    PackagesSelectionDto:
+      type: object
+      properties:
+        id:
+          type: string
+        noOfSelections:
+          type: integer
+          format: int32
+        scheduledList:
+          type: array
+          items:
+            type: string
+    PackagesSelectionScheduledDto:
+      type: object
+      properties:
+        id:
+          type: string
+        noOfSelections:
+          type: integer
+          format: int32
+        scheduledDates:
+          type: array
+          items:
+            type: string
+            format: date
+    PaymentCardDetailsDto:
+      type: object
+      properties:
+        cardHolderName:
+          type: string
+        cardLogoSrc:
+          type: string
+        cardName:
+          type: string
+        cardNumberLast4Digits:
+          type: string
+        cardNumberMasked:
+          type: string
+        cardType:
+          type: string
+        expirationDate:
+          type: string
+          format: date
+        token:
+          type: string
+    PaymentCardDto:
+      type: object
+      properties:
+        cardHolderName:
+          type: string
+        cardNumberLast4Digits:
+          type: string
+        cardType:
+          type: string
+        citId:
+          type: string
+        expirationDate:
+          type: string
+        token:
+          type: string
+    PaymentCcuiDto:
+      type: object
+      properties:
+        billing:
+          $ref: "#/components/schemas/BillingCcuiDto"
+        card:
+          $ref: "#/components/schemas/CardCcuiDto"
+        subType:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          minLength: 1
+      required:
+      - subType
+      - type
+    PaymentCcuiRequestDto:
+      type: object
+      properties:
+        payment:
+          $ref: "#/components/schemas/PaymentCcuiDto"
+        requestId:
+          type: string
+    PaymentOptionsDto:
+      type: object
+      properties:
+        payNow:
+          type: boolean
+        payOnArrival:
+          type: boolean
+    PaymentRequiredDetailsDto:
+      type: object
+      properties:
+        paymentRedirect:
+          type: string
+        sessionId:
+          type: string
+        template:
+          type: string
+    PreCheckInRequestDto:
+      type: object
+      properties:
+        arrivalTime:
+          type: string
+          format: date
+          example: 2024-07-13
+        hotelId:
+          type: string
+          example: STAUIR
+          minLength: 1
+        language:
+          type: string
+          example: EN
+          pattern: EN|DE
+        reservationId:
+          type: string
+          example: "123456"
+          minLength: 1
+      required:
+      - arrivalTime
+      - hotelId
+      - reservationId
+    PreCheckInResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: string
+    PreferencesCollectionDto:
+      type: object
+      properties:
+        preferenceType:
+          type: string
+          minLength: 1
+        preferences:
+          type: array
+          items:
+            type: string
+      required:
+      - preferenceType
+      - preferences
+    RateInfoDetailsDto:
+      type: object
+      properties:
+        currencyCode:
+          type: string
+        gross:
+          type: number
+        net:
+          type: number
+        packageDetails:
+          type: number
+        ratePlanCode:
+          type: string
+        revenue:
+          type: number
+        summaryDate:
+          type: string
+        tax:
+          type: number
+    RateInfoDto:
+      type: object
+      properties:
+        summary:
+          $ref: "#/components/schemas/RateInfoSummaryDto"
+    RateInfoSummaryDto:
+      type: object
+      properties:
+        currencyCode:
+          type: string
+        deposit:
+          type: number
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/RateInfoDetailsDto"
+        end:
+          type: string
+        gross:
+          type: number
+        guestPay:
+          type: number
+        hasSuppressedRate:
+          type: string
+        net:
+          type: number
+        outStandingCostOfStay:
+          type: number
+        routing:
+          type: number
+        start:
+          type: string
+        totalCostOfStay:
+          type: number
+    RatePerNightDto:
+      type: object
+      properties:
+        cityTaxAmountBeforeTax:
+          type: number
+        cityTaxPerNight:
+          type: number
+        cityTaxVat:
+          type: number
+        grossPricePerNight:
+          type: number
+        pricePerNight:
+          type: number
+        startDate:
+          type: string
+        vatRate:
+          type: number
+    RatePriceDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        priceEndDate:
+          type: string
+          format: date
+          example: 2015-10-21
+        priceStartDate:
+          type: string
+          format: date
+          example: 2015-10-20
+      required:
+      - priceEndDate
+      - priceStartDate
+    ReservationBookerAddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressType:
+          type: string
+        cityName:
+          type: string
+        companyName:
+          type: string
+        countryCode:
+          type: string
+        postalCode:
+          type: string
+    ReservationBookerDto:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/ReservationBookerAddressDto"
+        email:
+          type: string
+        firstName:
+          type: string
+        landline:
+          type: string
+        lastName:
+          type: string
+        mobile:
+          type: string
+        title:
+          type: string
+    ReservationByBasketRefResponseDto:
+      type: object
+      properties:
+        balanceOutstanding:
+          type: number
+        basketReference:
+          type: string
+        basketStatus:
+          type: string
+        bookingReference:
+          type: string
+        channel:
+          type: string
+        companyId:
+          type: string
+        currencyCode:
+          type: string
+        customReferenceNumber:
+          type: string
+        discount:
+          type: number
+        hasCityTax:
+          type: boolean
+        hotelId:
+          type: string
+        idContext:
+          type: string
+        isCnp:
+          type: boolean
+        newTotal:
+          type: number
+        paymentOption:
+          type: string
+        policyCode:
+          type: string
+        previousTotal:
+          type: number
+        promoKind:
+          type: string
+          enum:
+          - LANDING_PAGE
+          - SITE_WIDE
+          - GENERIC
+          - UNIQUE
+        promotionCode:
+          type: string
+        purchaseOrderNumber:
+          type: string
+        reservationByIdList:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReservationByIdDto"
+        totalCost:
+          type: number
+        totalCostWoDiscount:
+          type: number
+        upsellsAddonsEnabled:
+          type: boolean
+    ReservationByIdDto:
+      type: object
+      properties:
+        additionalGuestInfo:
+          $ref: "#/components/schemas/AdditionalGuestInfoDto"
+        balanceAmount:
+          type: number
+        billing:
+          $ref: "#/components/schemas/BillingResponseDto"
+        deRegCardCompleted:
+          type: boolean
+        depositPolicies:
+          type: array
+          items:
+            $ref: "#/components/schemas/DepositPoliciesDto"
+        gdsReferenceNumber:
+          type: string
+        guaranteeCode:
+          type: string
+        onHold:
+          type: boolean
+        paymentCard:
+          $ref: "#/components/schemas/ReservationPaymentCardTypeDto"
+        preCheckInStatus:
+          type: boolean
+        preferences:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReservationPreferencesDto"
+        rateInfo:
+          $ref: "#/components/schemas/RateInfoDto"
+        reservationBooker:
+          $ref: "#/components/schemas/ReservationBookerDto"
+        reservationEmailNotifications:
+          $ref: "#/components/schemas/ReservationEmailNotificationsDto"
+        reservationGuestList:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReservationByIdGuestsDto"
+        reservationId:
+          type: string
+        reservationOverridden:
+          type: boolean
+        reservationOverrideReasons:
+          $ref: "#/components/schemas/ReservationOverrideReasonsDto"
+        reservationPackageList:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReservationPackagesDetailsResponseDto"
+        reservationStatus:
+          type: string
+        roomStay:
+          $ref: "#/components/schemas/RoomStayByIdDto"
+        wifiCode:
+          type: string
+    ReservationByIdGuestsDto:
+      type: object
+      properties:
+        additionalDetails:
+          $ref: "#/components/schemas/StayingGuestAdditionalDetailsDto"
+        address:
+          $ref: "#/components/schemas/GuestAddressDto"
+        email:
+          type: string
+        givenName:
+          type: string
+        homeAddress:
+          $ref: "#/components/schemas/GuestAddressDto"
+        isAccompanyingGuest:
+          type: boolean
+        nameTitle:
+          type: string
+        profileId:
+          type: string
+        sameAsBooker:
+          type: boolean
+        surName:
+          type: string
+        type:
+          type: string
+    ReservationDto:
+      type: object
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+          example: 1
+          maximum: 2
+          minimum: 1
+        arrival:
+          type: string
+          format: date
+          example: 2015-10-20
+        basketReferenceId:
+          type: string
+          example: "132484"
+        bookingNotes:
+          type: string
+          example: bookingNotes
+        childrenNumber:
+          type: integer
+          format: int32
+          example: 0
+          maximum: 3
+          minimum: 0
+        cotRequired:
+          type: boolean
+          example: false
+        departure:
+          type: string
+          format: date
+          example: 2015-10-21
+        distributionIATANumber:
+          type: string
+          example: "00000000123456"
+        distributionUsername:
+          type: string
+          example: distributionUsername
+        gdsReferenceNumber:
+          type: string
+          example: gdsReferenceNumber
+        hotelId:
+          type: string
+          example: LONSTM
+          minLength: 1
+          pattern: "^[A-Za-z]{6}$"
+        reservationPackages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReservationPackageDto"
+        roomRates:
+          $ref: "#/components/schemas/RoomRateDto"
+      required:
+      - adultsNumber
+      - arrival
+      - departure
+      - hotelId
+      - roomRates
+    ReservationEmailNotificationsDto:
+      type: object
+      properties:
+        sendEmailConfirmation:
+          type: boolean
+        sendEmailInvoice:
+          type: boolean
+    ReservationFileAttachmentRequestDto:
+      type: object
+      properties:
+        description:
+          type: string
+        fileAttachment:
+          type: string
+          example: Base64 encoded string
+        fileName:
+          type: string
+          example: REG_RES1234567_ID232323_P76767676.pdf
+        global:
+          type: boolean
+          example: false
+        hotelId:
+          type: string
+          example: STUAIR
+        overwriteExistingFile:
+          type: boolean
+          example: false
+        reservationId:
+          type: string
+          example: "1234567"
+      required:
+      - fileAttachment
+      - fileName
+      - hotelId
+      - reservationId
+    ReservationGuestDto:
+      type: object
+      properties:
+        birthDate:
+          type: string
+          format: date
+        email:
+          type: string
+        fullName:
+          type: string
+        givenName:
+          type: string
+        guestRestricted:
+          type: boolean
+        id:
+          type: string
+        language:
+          type: string
+        nameTitle:
+          type: string
+        phoneNumber:
+          type: string
+        surname:
+          type: string
+        type:
+          type: string
+    ReservationGuestRequestDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+          minLength: 1
+        booker:
+          $ref: "#/components/schemas/BookerDetailsDto"
+        bookerProfileId:
+          type: string
+        companyId:
+          type: string
+        companyProfileId:
+          type: string
+        hotelId:
+          type: string
+          example: LONSTM
+          minLength: 1
+          pattern: "^[A-Za-z]{6}$"
+        preCheckIn:
+          type: boolean
+        reasonForStay:
+          type: string
+          example: LEI
+          minLength: 1
+        sendEmailConfirmation:
+          type: boolean
+          example: false
+        sendEmailInvoice:
+          type: boolean
+          example: false
+        stayingGuests:
+          type: array
+          items:
+            $ref: "#/components/schemas/StayingGuestDto"
+          maxItems: 2147483647
+          minItems: 1
+        updateProfileConsent:
+          type: boolean
+      required:
+      - basketReference
+      - booker
+      - hotelId
+      - reasonForStay
+      - stayingGuests
+    ReservationInfoDto:
+      type: object
+      properties:
+        externalReferences:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExternalReferenceTypeDto"
+        hotelId:
+          type: string
+        hotelName:
+          type: string
+        reservationGuest:
+          $ref: "#/components/schemas/ReservationGuestDto"
+        reservationIdList:
+          type: array
+          items:
+            $ref: "#/components/schemas/UniqueIDTypeDto"
+        roomStay:
+          $ref: "#/components/schemas/RoomStayDto"
+        roomStayReservation:
+          type: boolean
+    ReservationOverrideReasonDto:
+      type: object
+      properties:
+        callerName:
+          type: string
+          example: Jane Doe
+        managerName:
+          type: string
+          example: John Smith
+        reasonCode:
+          type: string
+          example: ILL
+        reasonName:
+          type: string
+          example: MA Illness
+      required:
+      - callerName
+      - reasonCode
+      - reasonName
+    ReservationOverrideReasonsDto:
+      type: object
+      properties:
+        callerName:
+          type: string
+        managerName:
+          type: string
+        reasonCode:
+          type: string
+        reasonName:
+          type: string
+    ReservationPackageDto:
+      type: object
+      properties:
+        endDate:
+          type: string
+          format: date
+        packageCode:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        startDate:
+          type: string
+          format: date
+        unitPrice:
+          type: number
+    ReservationPackagesDetailsResponseDto:
+      type: object
+      properties:
+        computedPrice:
+          type: number
+        description:
+          type: string
+        endDate:
+          type: string
+        grossPrice:
+          type: number
+        packageCode:
+          type: string
+        packageGroup:
+          type: string
+        startDate:
+          type: string
+        totalQuantity:
+          type: integer
+          format: int32
+        unitPrice:
+          type: number
+        vatTax:
+          type: number
+    ReservationPackagesRequestByIdDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+          example: 2015-10-20
+        basketReferenceId:
+          type: string
+        departureDate:
+          type: string
+          example: 2015-10-21
+        hotelId:
+          type: string
+          example: LONSTM
+        previousRoomsSelections:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomsSelectionsByReservationIdDto"
+        roomsSelections:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomsSelectionsByReservationIdDto"
+      required:
+      - arrivalDate
+      - basketReferenceId
+      - departureDate
+    ReservationPackagesRequestDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+          example: 2015-10-20
+        basketReferenceId:
+          type: string
+          minLength: 1
+        departureDate:
+          type: string
+          example: 2015-10-21
+        hotelId:
+          type: string
+          example: LONSTM
+        previousRoomsSelections:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomsSelectionsDto"
+        reservationsId:
+          type: array
+          items:
+            type: string
+        roomsSelections:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomsSelectionsDto"
+      required:
+      - arrivalDate
+      - basketReferenceId
+      - departureDate
+    ReservationPackagesScheduledRequestDto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+          example: FRAMTI
+        reservations:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomReservationPackagesScheduledRequestDto"
+          minItems: 1
+      required:
+      - reservations
+    ReservationPaymentCardTypeDto:
+      type: object
+      properties:
+        cardHolderName:
+          type: string
+        cardNumberMasked:
+          type: string
+        cardType:
+          type: string
+        expirationDate:
+          type: string
+          format: date
+        folioView:
+          type: integer
+          format: int32
+        paymentMethod:
+          type: string
+        token:
+          type: string
+    ReservationPreferencesDto:
+      type: object
+      properties:
+        code:
+          type: string
+        preferenceType:
+          type: string
+    ReservationPreferencesRequestDto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+          example: LONSTM
+          minLength: 1
+        preferencesCollections:
+          type: array
+          items:
+            $ref: "#/components/schemas/PreferencesCollectionDto"
+        reservationsIds:
+          type: array
+          items:
+            type: string
+          minItems: 1
+      required:
+      - hotelId
+      - reservationsIds
+    ReservationProfilesDto:
+      type: object
+      properties:
+        bookerProfileId:
+          type: string
+        companyProfileId:
+          type: string
+    ReservationRequestDto:
+      type: object
+      properties:
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        bookingFlowId:
+          type: string
+        getReservationsByIds:
+          type: boolean
+        isOta:
+          type: boolean
+        reservations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReservationDto"
+          maxItems: 2147483647
+          minItems: 1
+      required:
+      - bookingChannel
+      - reservations
+    ReservationsDetailsResponseDto:
+      type: object
+      properties:
+        reservations:
+          $ref: "#/components/schemas/ReservationsDto"
+    ReservationsDto:
+      type: object
+      properties:
+        hasMore:
+          type: boolean
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        reservationInfo:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReservationInfoDto"
+        totalPages:
+          type: integer
+          format: int32
+        totalResults:
+          type: integer
+          format: int32
+    ReservationsPackagesResponseDto:
+      type: object
+      properties:
+        ratePlanCode:
+          type: string
+        roomsSelections:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomsSelectionsDto"
+        roomsSelectionsAmendExtras:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomsSelectionsDto"
+    RoomOccupancyDto:
+      type: object
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+        childrenNumber:
+          type: integer
+          format: int32
+        cotRequired:
+          type: boolean
+      required:
+      - adultsNumber
+      - childrenNumber
+    RoomRateDto:
+      type: object
+      properties:
+        cellCode:
+          type: string
+          example: ABC
+        endDate:
+          type: string
+          format: date
+          example: 2015-10-21
+        pmsRoomType:
+          type: string
+          example: FMTRPL
+          minLength: 1
+        promoKind:
+          type: string
+          enum:
+          - LANDING_PAGE
+          - SITE_WIDE
+          - GENERIC
+          - UNIQUE
+        promotionCode:
+          type: string
+        rateDisplaySet:
+          type: string
+          example: NEG
+        ratePlanCode:
+          type: string
+          example: FLEXRATE
+          minLength: 1
+        ratePrices:
+          type: array
+          items:
+            $ref: "#/components/schemas/RatePriceDto"
+        specialRequests:
+          type: array
+          example: SNGL
+          items:
+            type: string
+        startDate:
+          type: string
+          format: date
+          example: 2015-10-20
+      required:
+      - endDate
+      - pmsRoomType
+      - ratePlanCode
+      - startDate
+    RoomReservationPackagesScheduledRequestDto:
+      type: object
+      properties:
+        addPackages:
+          type: array
+          items:
+            $ref: "#/components/schemas/PackagesSelectionScheduledDto"
+        removePackages:
+          type: array
+          items:
+            $ref: "#/components/schemas/PackagesSelectionDto"
+        reservationsId:
+          type: string
+          minLength: 1
+      required:
+      - addPackages
+      - removePackages
+      - reservationsId
+    RoomStayByIdDto:
+      type: object
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+        arrivalDate:
+          type: string
+        bookingChannel:
+          type: string
+        cellCode:
+          type: string
+        checkInTime:
+          type: string
+        checkOutTime:
+          type: string
+        childrenNumber:
+          type: integer
+          format: int32
+        cot:
+          type: boolean
+        departureDate:
+          type: string
+        promotionCode:
+          type: string
+        ratePlanCode:
+          type: string
+        ratesPerNight:
+          type: array
+          items:
+            $ref: "#/components/schemas/RatePerNightDto"
+        roomNumber:
+          type: string
+        roomPrice:
+          type: number
+        roomType:
+          type: string
+        sourceCode:
+          type: string
+    RoomStayDistributionDto:
+      type: object
+      properties:
+        adultsNumber:
+          type: integer
+          format: int32
+        arrivalDate:
+          type: string
+          minLength: 1
+        childrenNumber:
+          type: integer
+          format: int32
+        cot:
+          type: boolean
+        departureDate:
+          type: string
+          minLength: 1
+        operaRoomType:
+          type: string
+        ratePlanCode:
+          type: string
+        roomType:
+          type: string
+        specialRequests:
+          type: array
+          items:
+            type: string
+      required:
+      - arrivalDate
+      - departureDate
+    RoomStayDto:
+      type: object
+      properties:
+        adultCount:
+          type: integer
+          format: int32
+        arrivalDate:
+          type: string
+          format: date
+        bookingChannelCode:
+          type: string
+        childCount:
+          type: integer
+          format: int32
+        departureDate:
+          type: string
+          format: date
+        fixedRate:
+          type: boolean
+        marketCode:
+          type: string
+        numberOfRooms:
+          type: integer
+          format: int32
+        pseudoRoom:
+          type: boolean
+        rateAmount:
+          $ref: "#/components/schemas/CurrencyAmountTypeDto"
+        ratePlanCode:
+          type: string
+        rateSuppressed:
+          type: boolean
+        roomClass:
+          type: string
+        roomNumberLocked:
+          type: boolean
+        roomType:
+          type: string
+        roomTypeCharged:
+          type: string
+        sourceCode:
+          type: string
+        totalAmount:
+          $ref: "#/components/schemas/CurrencyAmountTypeDto"
+    RoomsSelectionsByReservationIdDto:
+      type: object
+      properties:
+        packagesSelection:
+          type: array
+          items:
+            $ref: "#/components/schemas/PackagesSelectionDto"
+        reservationId:
+          type: string
+    RoomsSelectionsDto:
+      type: object
+      properties:
+        packagesSelection:
+          type: array
+          items:
+            $ref: "#/components/schemas/PackagesSelectionDto"
+        reservationId:
+          type: string
+    SaveReservationResponseDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+    SearchBookingsResponseMapper: {}
+    SpecialRequestsDto:
+      type: object
+      properties:
+        bookingNotes:
+          type: array
+          items:
+            type: string
+        hotelId:
+          type: string
+        reservationIds:
+          type: array
+          items:
+            type: string
+        specialRequests:
+          type: array
+          items:
+            type: string
+    StayingGuestAdditionalDetailsDto:
+      type: object
+      properties:
+        dob:
+          type: string
+          format: date
+        nationality:
+          type: string
+        passportNumber:
+          type: string
+    StayingGuestAddressDto:
+      type: object
+      properties:
+        addressId:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressType:
+          type: string
+        cityName:
+          type: string
+        companyName:
+          type: string
+        countryCode:
+          type: string
+        postalCode:
+          type: string
+        valid:
+          type: boolean
+    StayingGuestDetailsDto:
+      type: object
+      properties:
+        additionalDetails:
+          $ref: "#/components/schemas/StayingGuestAdditionalDetailsDto"
+        address:
+          $ref: "#/components/schemas/StayingGuestAddressDto"
+        emailAddress:
+          type: string
+          example: debbie.doe@whitbread.com
+        employeeAccountId:
+          type: string
+        firstName:
+          type: string
+          example: Debbie
+          minLength: 1
+        lastName:
+          type: string
+          example: Doe
+          minLength: 1
+        profileId:
+          type: string
+        title:
+          type: string
+          example: Mrs
+      required:
+      - firstName
+      - lastName
+    StayingGuestDto:
+      type: object
+      properties:
+        accompanyingGuestDetails:
+          $ref: "#/components/schemas/AccompanyingGuestDetailsDto"
+        isAccompanyingGuest:
+          type: boolean
+        language:
+          type: string
+        reservationId:
+          type: string
+          example: "132484"
+        sameAsBooker:
+          type: boolean
+        stayingGuestDetails:
+          $ref: "#/components/schemas/StayingGuestDetailsDto"
+      required:
+      - sameAsBooker
+      - stayingGuestDetails
+    TempBookingRefResponseDto:
+      type: object
+      properties:
+        tempBookingRef:
+          type: string
+    UdfsRequestDto:
+      type: object
+      properties:
+        ciolStatus:
+          type: string
+          enum:
+          - CIOL_STARTED
+          - WALLET_PASS
+          - DK_ISSUED
+          - CIOL_COMPLETED
+        hotelId:
+          type: string
+        reservationIds:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          uniqueItems: true
+      required:
+      - ciolStatus
+      - hotelId
+      - reservationIds
+    UniqueIDTypeDto:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+    UpdateCnpReservationRequestDto:
+      type: object
+      properties:
+        booker:
+          $ref: "#/components/schemas/BookerDetailsCnpDto"
+        businessAccount:
+          $ref: "#/components/schemas/BusinessAccountCnpDto"
+        countryCode:
+          type: string
+        language:
+          type: string
+      required:
+      - businessAccount
+    UpdateCnpReservationResponseDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+    UpdateDiscountRequestDto:
+      type: object
+      properties:
+        currency:
+          type: string
+        discountAmount:
+          type: number
+        hotelId:
+          type: string
+        reservationIds:
+          type: array
+          items:
+            type: string
+    UpdateEmailReservationRequestDto:
+      type: object
+      properties:
+        email:
+          type: string
+          minLength: 1
+      required:
+      - email
+    UpdateRateCodeRequestDto:
+      type: object
+      properties:
+        adultsNumber:
+          type: array
+          items:
+            type: integer
+            format: int32
+          minItems: 1
+        basketReferenceId:
+          type: string
+          minLength: 1
+        childrenNumber:
+          type: array
+          items:
+            type: integer
+            format: int32
+        currency:
+          type: string
+          example: EUR
+        endDate:
+          type: string
+          example: 2015-10-21
+          minLength: 1
+        hotelId:
+          type: string
+          example: LONSTM
+        rateCode:
+          type: string
+          example: FLEXRATE
+          minLength: 1
+        roomType:
+          type: array
+          example: "DOUBLE,FMQUAD"
+          items:
+            type: string
+        startDate:
+          type: string
+          example: 2015-10-20
+          minLength: 1
+      required:
+      - adultsNumber
+      - basketReferenceId
+      - endDate
+      - rateCode
+      - startDate
+    UpdateReasonForStayRequestDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+        basketReference:
+          type: string
+          minLength: 1
+        country:
+          type: string
+        hotelId:
+          type: string
+          minLength: 1
+        language:
+          type: string
+        reasonForStay:
+          type: string
+          example: LEI
+          minLength: 1
+      required:
+      - basketReference
+      - hotelId
+      - reasonForStay
+    UpdateReservationAlertsRequestDto:
+      type: object
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: "#/components/schemas/AlertsDto"
+        hotelId:
+          type: string
+          minLength: 1
+        reservationIds:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          uniqueItems: true
+      required:
+      - alerts
+      - hotelId
+      - reservationIds
+    UpdateReservationOverrideReasonsRequestDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+          example: GBM6919649
+          minLength: 1
+        callerName:
+          type: string
+          example: John Doe
+          minLength: 1
+        hotelId:
+          type: string
+          example: LONEUS
+        managerName:
+          type: string
+        reasonCode:
+          type: string
+          example: ILL
+          minLength: 1
+        reasonName:
+          type: string
+          example: Medical Appointments
+          minLength: 1
+      required:
+      - basketReference
+      - callerName
+      - hotelId
+      - reasonCode
+      - reasonName
+    UpdateReservationSingleCallRequestDto:
+      type: object
+      properties:
+        businessItem:
+          $ref: "#/components/schemas/BusinessItemsRequestDto"
+        paymentDetails:
+          $ref: "#/components/schemas/ConfirmReservationRequestDto"
+        reservationGuestDetails:
+          $ref: "#/components/schemas/ReservationGuestRequestDto"
+        reservationPackages:
+          $ref: "#/components/schemas/ReservationPackagesRequestDto"
+        specialRequests:
+          $ref: "#/components/schemas/SpecialRequestsDto"
+    UpdateRoomTypeRequestDto:
+      type: object
+      properties:
+        adultsNumber:
+          type: array
+          items:
+            type: integer
+            format: int32
+          minItems: 1
+        basketReferenceId:
+          type: string
+          minLength: 1
+        childrenNumber:
+          type: array
+          items:
+            type: integer
+            format: int32
+          minItems: 1
+        currency:
+          type: string
+          minLength: 1
+        endDate:
+          type: string
+          minLength: 1
+        hotelId:
+          type: string
+          minLength: 1
+        rateCode:
+          type: string
+          minLength: 1
+        reservationIds:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        roomTypes:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        startDate:
+          type: string
+          minLength: 1
+      required:
+      - adultsNumber
+      - basketReferenceId
+      - childrenNumber
+      - currency
+      - endDate
+      - hotelId
+      - rateCode
+      - reservationIds
+      - roomTypes
+      - startDate
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string

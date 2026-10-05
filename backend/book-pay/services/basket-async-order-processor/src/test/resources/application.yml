@@ -1,0 +1,41 @@
+server:
+  port: 9110
+
+swagger:
+  api:
+    version: 1.0.0
+
+spring:
+  profiles:
+    active: test
+
+config:
+  service:
+    reservation:
+      status:
+        reserved: "RESERVED"
+
+basket:
+  event:
+    order:
+      prefix:
+        stayOrderPrefix: "STAY"
+        amendOrderPrefix: "AMEND"
+  topics:
+    ack: "ack"
+    orders:
+      name: "orders"
+      concurrency: 1
+  kafka:
+    bootstrapServers: ${spring.embedded.kafka.brokers:localhost:8000}
+    groupId: basket-order
+    requestTimeout: 480000
+    heartBeatInterval: 1000
+    maxPollInterval: 900000
+    maxPollRecords: 100
+    sessionTimeout: 600000
+
+logging:
+  configuration:
+    logger: default
+

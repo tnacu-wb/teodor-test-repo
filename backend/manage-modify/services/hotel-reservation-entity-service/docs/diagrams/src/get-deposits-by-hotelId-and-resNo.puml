@@ -1,0 +1,19 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as Webclient
+
+A -> Controller: GET /v1/reservations/deposits?reservationId=791415&hotelId=DUSOST
+Controller -> InboundPort: getDepositsForReservationId
+InboundPort -> OutboundPort: getDepositsForReservationId
+OutboundPort -> Webclient: getDepositsByReservationId
+Webclient -> OHIPAdapter: GET adp/v1/reservations/deposits?reservationId=791415&hotelId=DUSOST
+
+Webclient <- OHIPAdapter: DepositsOhipResponseDto
+OutboundPort <- Webclient: DepositsResponse
+InboundPort <- OutboundPort: DepositsResponse
+Controller <- InboundPort: DepositsResponse
+A <- Controller: DepositsResponseDto
+@enduml

@@ -1,0 +1,24 @@
+{
+  "id" : "5fea1ed3-b919-428e-8d8d-40cba76a6e30",
+  "request" : {
+    "urlPath" : "/v1/reservations/profiles",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'HOTELTEST')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['profileId'] == '1234')]"
+    }, {
+      "matchesJsonPath" : "$.['reservationIds'][?(@ == '1234')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "5fea1ed3-b919-428e-8d8d-40cba76a6e30"
+}

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
+
+  <changeSet id="01-create-extensions" author="naveen">
+    <sql dbms="postgresql" splitStatements="false">
+      CREATE EXTENSION IF NOT EXISTS pgcrypto;
+    </sql>
+  </changeSet>
+
+  <changeSet id="02-create-touch-updated-at-fn" author="naveen">
+    <sql dbms="postgresql" splitStatements="false">
+      CREATE OR REPLACE FUNCTION promotions.touch_updated_at()
+      RETURNS trigger AS $$
+      BEGIN
+      NEW.updated_at = now();
+      RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+    </sql>
+  </changeSet>
+
+  <changeSet id="03-create-promo-batch-table" author="naveen">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="promo_batch" schemaName="promotions"/>
+      </not>
+    </preConditions>
+    <createTable tableName="promo_batch" schemaName="promotions">
+      <column name="batch_id" type="UUID">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="campaign_name" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="opera_promo" type="VARCHAR(32)"/>
+      <column name="batch_count" type="INT" defaultValueNumeric="100">
+        <constraints nullable="false"/>
+      </column>
+      <column name="code_length" type="INT" defaultValueNumeric="8">
+        <constraints nullable="false"/>
+      </column>
+      <column name="prefix" type="VARCHAR(4)"/>
+      <column name="status" type="VARCHAR(20)" defaultValue="PENDING"/>
+      <column name="s3_key" type="VARCHAR(256)"/>
+      <column name="downloaded" type="BOOLEAN" defaultValueBoolean="false"/>
+      <column name="password" type="VARCHAR(20)"/>
+      <column name="notes" type="TEXT"/>
+      <column name="requested_by" type="VARCHAR(128)"/>
+      <column name="expiry_date" type="DATE"/>
+      <column name="created_at" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="now()">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="now()">
+        <constraints nullable="false"/>
+      </column>
+      <column name="completed_at" type="TIMESTAMP WITH TIME ZONE"/>
+    </createTable>
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      ADD CONSTRAINT chk_promo_batch_count
+      CHECK (batch_count &gt;= 0 AND batch_count &lt;= 1000000);
+    </sql>
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      ADD CONSTRAINT chk_promo_batch_code_length
+      CHECK (code_length &gt;= 8 AND code_length &lt;= 12);
+    </sql>
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      ADD CONSTRAINT chk_promo_batch_status
+      CHECK (status IN ('PENDING','RUNNING','COMPLETED','FAILED'));
+    </sql>
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      ADD CONSTRAINT chk_promo_batch_prefix_length
+      CHECK (prefix IS NULL
+      OR char_length(prefix) BETWEEN 1 AND 4);
+    </sql>
+  </changeSet>
+
+  <changeSet id="04-promo-batch-trigger-and-indexes" author="naveen">
+    <sql dbms="postgresql" splitStatements="false">
+      DROP TRIGGER IF EXISTS promo_batch_touch_updated_at ON promotions.promo_batch;
+      CREATE TRIGGER promo_batch_touch_updated_at
+      BEFORE UPDATE ON promotions.promo_batch
+      FOR EACH ROW
+      EXECUTE FUNCTION promotions.touch_updated_at();
+
+      CREATE INDEX IF NOT EXISTS idx_promo_batch_status
+      ON promotions.promo_batch(status);
+
+      CREATE INDEX IF NOT EXISTS idx_promo_batch_opera_promo
+      ON promotions.promo_batch(opera_promo);
+    </sql>
+  </changeSet>
+
+  <changeSet id="05-add-expired-status-to-promo-batch" author="nikhitha">
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      DROP CONSTRAINT IF EXISTS chk_promo_batch_status;
+    </sql>
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      ADD CONSTRAINT chk_promo_batch_status
+      CHECK (status IN ('PENDING','RUNNING','COMPLETED','FAILED','EXPIRED'));
+    </sql>
+
+  </changeSet>
+
+  <changeSet id="06-add-index-for-expiry-cleanup" author="nikhitha">
+    <createIndex
+            indexName="idx_promo_batch_status_expiry"
+            tableName="promo_batch"
+            schemaName="promotions">
+      <column name="status"/>
+      <column name="expiry_date"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="update-prefix-length" author="ippili-wb">
+
+    <modifyDataType
+            schemaName="promotions"
+            tableName="promo_batch"
+            columnName="prefix"
+            newDataType="VARCHAR(25)"/>
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      DROP CONSTRAINT IF EXISTS chk_promo_batch_prefix_length;
+    </sql>
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      ADD CONSTRAINT chk_promo_batch_prefix_length
+      CHECK (
+      prefix IS NULL
+      OR char_length(prefix) BETWEEN 1 AND 25
+      );
+    </sql>
+
+  </changeSet>
+
+  <changeSet id="update-prefix-length-to-20" author="ippili-wb">
+
+    <preConditions onFail="HALT">
+      <sqlCheck expectedResult="0">
+        SELECT COUNT(*)
+        FROM promotions.promo_batch
+        WHERE length(prefix) > 20
+      </sqlCheck>
+    </preConditions>
+
+    <modifyDataType
+            schemaName="promotions"
+            tableName="promo_batch"
+            columnName="prefix"
+            newDataType="VARCHAR(20)"/>
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      DROP CONSTRAINT IF EXISTS chk_promo_batch_prefix_length;
+    </sql>
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      ADD CONSTRAINT chk_promo_batch_prefix_length
+      CHECK (
+      prefix IS NULL
+      OR char_length(prefix) BETWEEN 1 AND 20
+      );
+    </sql>
+
+  </changeSet>
+
+  <changeSet id="update-code-length-to-40" author="ippili-wb">
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      DROP CONSTRAINT IF EXISTS chk_promo_batch_code_length;
+    </sql>
+
+    <sql dbms="postgresql">
+      ALTER TABLE promotions.promo_batch
+      ADD CONSTRAINT chk_promo_batch_code_length
+      CHECK (
+      code_length >= 8
+      AND code_length &lt;= 40
+      );
+    </sql>
+
+  </changeSet>
+
+  <changeSet id="08-add-is-multiple-and-max-redemption-limit" author="ippili-wb">
+
+    <addColumn tableName="promo_batch" schemaName="promotions">
+
+      <column name="is_multiple"
+              type="BOOLEAN"
+              defaultValueBoolean="false">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="max_redemption_limit"
+              type="INT"/>
+
+    </addColumn>
+
+  </changeSet>
+
+</databaseChangeLog>

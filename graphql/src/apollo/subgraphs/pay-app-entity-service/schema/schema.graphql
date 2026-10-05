@@ -1,0 +1,434 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    getPayApplications: PayApplicationsResponse
+    getWorldlineUserPreferences(tetheredUserGuids: [String]!): [WorldlineUserPreferences]
+    getAppLookupData(scheme: Scheme!): AppLookupData
+    companyDetailsLookup(companyRegistrationNumber: String!, scheme: Scheme): CompanyDetailsLookupResponse
+    getApplicationDetails(applicationId: String!, applicationGuid: String!, scheme: Scheme!): ApplicationDetailsResponse
+    getApplicationCards(applicationGuid: String!, scheme: Scheme!, page: Int!, maxDisplayRows: Int!): ApplicationCardsResponse
+    appPreCheck(scheme: Scheme!): AppPreCheckResponse
+    getDdSepaFormStatus(hostedPageGuid: String!, scheme: Scheme!): GetDdSepaFormStatusResponse
+}
+
+type Mutation {
+    initializeApplication(initializeApplicationRequest: InitializeApplicationRequest!): InitializeApplicationResponse
+    updateAppContactDetails(updateAppContactDetailsCriteria: UpdateAppContactDetailsCriteria!): UpdateAppContactDetailsResponse
+    deleteApplication(deleteApplicationRequest: DeleteApplicationRequest!): DeleteApplicationResponse
+    updateAppCompanyDetails(updateAppCompanyDetailsCriteria: UpdateAppCompanyDetailsCriteria!): UpdateAppCompanyDetailsResponse
+    shareApplication(shareApplicationRequest: ShareApplicationRequest!): ShareApplicationResponse
+    addApplicationCard(addApplicationCardCriteria: AddApplicationCardRequest!): AddApplicationCardResponse
+    deleteApplicationCard(deleteApplicationCardRequest: DeleteApplicationCardRequest!): String
+    removeParticipant(removeParticipantRequest: RemoveParticipantRequest!): String
+    submitApplication(submitApplicationRequest: SubmitApplicationRequest!): String @deprecated(reason: "Use submitApplicationV1 instead, with a response type.")
+    submitApplicationV1(submitApplicationRequest: SubmitApplicationRequest!): SubmitApplicationResponse
+    directDebit(directDebitRequest: DirectDebitRequest!): DirectDebitResponse
+    updateResumeUrl(updateResumeUrlRequest: UpdateResumeUrlRequest!): UpdateResumeUrlResponse
+}
+
+type GetDdSepaFormStatusResponse {
+    status: String
+}
+
+input UpdateResumeUrlRequest {
+    applicationId: String!
+    applicationGuid: String!
+    resumeUrl: String!
+}
+
+input DirectDebitRequest {
+    applicationId: String!
+    applicationGuid: String!
+    resumeUrl: String!
+    directDebitOption: DirectDebitOption!
+}
+
+enum DirectDebitOption {
+    BY_POST
+    DIRECT
+}
+
+type DirectDebitResponse {
+    hostedPageGuid: String
+}
+
+input RemoveParticipantRequest {
+    applicationId: String!
+    applicationGuid: String!
+    employeeId: Int!
+}
+
+type ApplicationCardsResponse {
+    appCards: [WorldLineCardDetails]
+}
+
+type WorldLineCardDetails {
+    cardName: String
+    myCard: Boolean
+    cardOwnerName: String
+    creditLimit: CreditLimit
+    emailAddress: String
+    cardGUID: String
+}
+
+input ShareApplicationRequest {
+    applicationId: String!
+    applicationGuid: String!
+    employeeId: Int!
+    email: String!
+    fullName: String!
+}
+
+input AddApplicationCardRequest {
+    applicationGuid: String!
+    applicationId: String!
+    scheme: Scheme!
+    employeeId: Int
+    cardDetails: AddApplicationCardDetails
+}
+
+input AddApplicationCardDetails {
+    myCard: Boolean
+    cardLimit: Int
+    cardName: String
+    title: String
+    foreName: String
+    lastName: String
+    emailAddress: String
+    restrictCardUsage: Boolean
+    startDate: String
+    endDate: String
+}
+
+type AddApplicationCardResponse {
+    cardGuid: String
+}
+
+type ShareApplicationResponse {
+    status: Int
+    message: String
+}
+
+type WorldlineUserPreferences {
+    tetheredUserGuid: String!
+    settings: [WorldlineUserSetting]
+    details: WorldlineUserDetails
+}
+
+type WorldlineUserSetting {
+    smsTypeId: Int
+    isSmsSelected: Boolean
+    smsTypeDescription: String
+    smsType: String
+}
+
+type WorldlineUserDetails {
+    showSmsStopsToCardholder: Boolean
+    sendCardsToCardholder: Boolean
+    accountName: String
+    roleId: Int
+    accountNumber: Int
+    roleDescription: String
+}
+
+input UpdateAppContactDetailsCriteria {
+    applicationGuid: String!
+    title: String!
+    foreName: String!
+    lastName: String!
+    position: String!
+    telephone: String
+    mobile: String
+    email: String!
+    scheme: Scheme
+    applicationId: String!
+    resumeUrl: String!
+}
+
+type UpdateAppContactDetailsResponse {
+    status: Int
+    message: String
+}
+
+input InitializeApplicationRequest {
+    email: String!
+    scheme: Scheme
+    campaignCode: String
+    incentiveCode: String
+}
+
+type InitializeApplicationResponse {
+    applicationGUID: String
+    applicationId: String
+}
+
+enum Scheme {
+    GB
+    DE
+}
+
+type PayApplicationsResponse {
+    applications: [PayApplicationDetails]
+}
+
+type PayApplicationDetails {
+    status: String
+    accountName: String
+    applicationId: String
+    applicationGuid: String
+    resumeUrl: String
+    scheme: String
+}
+
+input DeleteApplicationRequest {
+    applicationId: String!
+    applicationGuid: String!
+    scheme: Scheme
+}
+
+type DeleteApplicationResponse {
+    status: Int
+    message: String
+}
+
+type AppLookupData {
+    title: String!
+    tradingStyle: String!
+    estimatedMonthlySpend: String!
+    hotelBrandPolicies: String!
+    hotelBookingRoles: String!
+    isoCountryCodes: String!
+    timeTrading: String!
+    industrySector: String!
+    registrationQuestions: String!
+    numberOfEmployees: String!
+    cancellationReason: String!
+}
+
+type CompanyDetailsLookupResponse {
+    data: [CompanyDetailsLookup]
+}
+
+type CompanyDetailsLookup {
+    address: AddressLookup
+    companyName: String
+    creditAgencyReference: String
+}
+
+type AddressLookup{
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    postcode: String
+    countryCode: String
+}
+
+type ApplicationDetailsResponse {
+    applicationId: String
+    applicationNumber: String
+    applicationGuid: String
+    companyId: Int
+    startedDate: String
+    scheme: String
+    updateDate: String
+    accountName: String
+    status: String
+    resumeUrl: String
+    submittedDate: String
+    activatedDate: String
+    campaignCode: String
+    incentiveId: Int
+    incentiveCode: String
+    termsAndConditionsAccepted: String
+    registrationQuestion: String
+    registrationAnswer: String
+    participants: [ApplicationParticipant]
+    cardHolders: [CardHolder]
+    created: String
+    modified: String
+    contactDetails: ApplicationContactDetails
+    companyDetails: CompanyDetailsData
+    cardDetails: [CardDetails]
+    hostedPageGuid: String
+    directDebitOption: DirectDebitOption
+}
+
+type ApplicationParticipant {
+    initiator: Boolean
+    participantId: Int
+    delegated: Boolean
+    terms: Boolean
+    directDebit: Boolean
+    email: String
+    shared: String
+    name: String
+}
+
+type CardHolder {
+    employeeId: Int
+    userGuid: String
+}
+
+type AppDetails {
+    status: String
+    campaignCode: String
+    incentiveId: Int
+    incentiveCode: String
+    dateReceived: String
+    termsAndConditionsAccepted: String
+    registrationQuestion: String
+    registrationAnswer: String
+}
+
+type ApplicationContactDetails {
+    title: String
+    foreName: String
+    lastName: String
+    position: String
+    telephone: String
+    mobile: String
+    email: String
+}
+
+type CompanyDetailsData {
+    vatRegistrationNumber: String
+    estMonthlySpend: String
+    companyType: String
+    charityNumber: String
+    companyRegNum: String
+    partnerDetails: PartnerDetails
+    timeTradingId: String
+    registrationAddress: ApplicationAddress
+    correspondenceAddress: ApplicationAddress
+    correspondenceContactInfo: ApplicationContactDetails
+    hotelBrandPolicy: String
+    parentCompanyName: String
+    industrySector: String
+    numberOfEmployees: String
+    companyNameOnCard: String
+}
+
+type PartnerDetails {
+    title: String
+    foreName: String
+    lastName: String
+    dateOfBirth: String
+    numberOfPartners: Int
+}
+
+type ApplicationAddress {
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    postcode: String
+    countryCode: String
+}
+
+type CardDetails {
+    cardName: String
+    myCard: Boolean
+    cardOwnerName: String
+    creditLimit: CreditLimit
+    emailAddress: String
+    cardGuid: String
+}
+
+type CreditLimit {
+    value: Int
+    currencyCode: String
+}
+
+input UpdateAppCompanyDetailsCriteria {
+    applicationGuid: String!
+    applicationId: String!
+    resumeUrl: String!
+    scheme: Scheme
+    appCompanyDetailsDto: AppCompanyDetails!
+}
+
+input AppCompanyDetails {
+    companyName: String!
+    vatRegistrationNumber: String
+    estMonthlySpend: String!
+    companyType: String!
+    charityNumber: String
+    companyRegNum: String
+    partnerDetails: PartnerDetailsInput
+    timeTradingId: String
+    registrationAddress: AddressInput
+    correspondenceAddress: AddressInput
+    correspondenceContactInfo: ContactInfoInput
+    hotelBrandPolicy: String
+    parentCompanyName: String
+    industrySector: String
+    numberOfEmployees: String
+    companyNameOnCard: String
+}
+
+input PartnerDetailsInput {
+    title: String!
+    foreName: String!
+    lastName: String!
+    dateOfBirth: String!
+    numberOfPartners: Int!
+}
+
+input AddressInput {
+    addressLine1: String!
+    addressLine2: String!
+    addressLine3: String
+    addressLine4: String
+    postcode: String
+    countryCode: String
+}
+
+input ContactInfoInput {
+    title: String!
+    foreName: String!
+    lastName: String!
+    position: String
+    telephone: String
+    mobile: String
+    email: String!
+}
+
+type UpdateAppCompanyDetailsResponse {
+    status: Int
+    message: String
+}
+
+input DeleteApplicationCardRequest {
+    applicationGuid: String!
+    applicationId: String!
+    cardGuid: String!
+}
+
+input SubmitApplicationRequest {
+    applicationGuid: String!
+    applicationId: String!
+    scheme: Scheme!
+    hostedPageGuid: String
+    registrationQuestion: String
+    registrationAnswer: String
+    termsAndConditionAccepted: String
+    isDirectDebit: Boolean
+}
+
+type AppPreCheckResponse {
+    isTetheredUser: Boolean
+    applicationGuid: String
+}
+
+type UpdateResumeUrlResponse {
+    status: Int
+    message: String
+}
+
+type SubmitApplicationResponse {
+    message: String
+}

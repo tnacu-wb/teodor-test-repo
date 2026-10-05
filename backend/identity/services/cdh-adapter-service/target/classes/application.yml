@@ -1,0 +1,164 @@
+server:
+  port: 9119
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "cdh-adapter-service"
+    description: "CDH Adapter Service"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+  override-with-generic-response: false
+
+management:
+  endpoints:
+    web:
+      base-path: /v1/cdh/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  application:
+    name: cdh-adapter-service
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+feature-flags:
+  cdh-api-deprecation:
+    key: "release_pi_cdh_api_deprecation"
+    fallback: false
+
+webclient:
+  codec:
+    size: 16
+    blockingTimeout: ${BLOCKING_TIMEOUT:120} # Timeout in seconds for blocking operations (e.g., pagination of large datasets)
+
+cdh:
+  oauth-client:
+    host: https://login.microsoftonline.com
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH_OAUTH_SCOPE}/.default
+    grant-type: client_credentials
+  api:
+    host: ${CDH_API_HOST}
+    request-header-name: X-Azure-FDID
+    request-header-value: ${AZURE_FDID}
+    getCompaniesEndpoint: /AccountServices/V2/GetcompaniesV2
+    getCompanyEmployeeEndpoint: /AccountServices/V1/companies/{companyAccountId}/employees
+    companyEmployeesEndpointV2: /AccountServices/V2/companies/{companyAccountId}/employees
+    getEmployeeEndpoint: /AccountServices/V1/companies/{companyAccountId}/employees/{employeeAccountId}
+    employeeEndpointV2: /AccountServices/V2/companies/{companyAccountId}/employees/{employeeAccountId}
+    getManagementInformationEndpoint: /AccountServices/V1/Companies/{companyId}/Reports/ManagementInformation
+    getEmergencyReportEndpoint: /AccountServices/V1/Companies/{companyId}/Reports/Emergency
+    getEmployeesEndpoint: /AccountServices/V1/employees
+    getCompanyEndpoint: /AccountServices/V3/companies/{companyAccountId}
+    employeesEndpointV2: /AccountServices/V2/employees
+    getEmployeeSpendEndpoint: /IB/V1/Report/EmployeeSpend/{companyAccountId}/{employeeAccountId}
+    reservationSearchEndpointV3: /BookingServices/V3/ReservationSearch
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      booking-subscription-key: ${BOOKING_HUB_OAUTH_SUBSCRIPTION_KEY}
+      account-subscription-key: ${ACCOUNT_HUB_OAUTH_SUBSCRIPTION_KEY}
+      inn-business-subscription-key: ${INN_BUSINESS_OAUTH_SUBSCRIPTION_KEY}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+logging:
+  configuration:
+    logger: custom
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-qa
+        - opera-dev
+        - opera-perf
+        - opera-uat
+        - opera-dit
+        - opera-sit
+
+management:
+  endpoints:
+    web:
+      base-path: /v1/cdh/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

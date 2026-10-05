@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/generic_margin_16"
+    android:animateLayoutChanges="true"
+    android:background="@android:color/white"
+    android:paddingStart="@dimen/generic_padding_16"
+    android:paddingTop="@dimen/generic_padding_16"
+    android:paddingEnd="@dimen/generic_padding_16">
+
+    <TextView
+        android:id="@+id/payment_info_heading"
+        style="@style/Body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:text="@string/payment_bacs_info_heading"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/purchase_order_reference_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_58"
+        android:hint="@string/payment_bacs_purchase_order_hint"
+        android:labelFor="@+id/payment_bacs_purchase_order_reference"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        app:layout_constraintTop_toBottomOf="@id/payment_info_heading"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+
+        <EditText
+            android:id="@+id/purchase_order_reference"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="textCapCharacters" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/customer_reference_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:layout_marginBottom="@dimen/generic_margin_40"
+        android:hint="@string/payment_bacs_customer_reference_hint"
+        android:labelFor="@+id/payment_bacs_customer_reference"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        app:layout_constraintTop_toBottomOf="@id/purchase_order_reference_input"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <EditText
+            android:id="@+id/customer_reference"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences|textAutoCorrect" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        android:layerType="software"
+        android:src="@drawable/shape_dashed_line_separator"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customer_reference_input" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/paymentCnpToggle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:text="@string/review_booking_card_type_not_present_toggle_label"
+        android:minHeight="48dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator"
+        app:showText="false"
+        app:switchMinWidth="60dp"
+        tools:text="I will not be carrying this card\nat check-in" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/memorableWord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:hint="@string/review_booking_memorable_word_hint"
+        android:labelFor="@+id/review_booking_memorable_word_input"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        app:layout_constraintTop_toBottomOf="@+id/paymentCnpToggle"
+        app:layout_constraintBottom_toTopOf="@id/memorableWordInfoIcon"
+        app:passwordToggleEnabled="true"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:passwordToggleTint="@color/grey_medium">
+
+        <EditText
+            android:id="@+id/memorableWordInput"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/memorableWordInfoIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="@dimen/generic_padding_16"
+        android:src="@drawable/ic_info"
+        android:tint="?attr/colorPrimary"
+        app:layout_constraintEnd_toStartOf="@+id/memorableWordInfoLabel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/memorableWord"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/memorableWordInfoLabel"
+        style="@style/BodySmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:text="@string/review_booking_memorable_word_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/memorableWordInfoIcon"
+        app:layout_constraintTop_toBottomOf="@+id/memorableWord"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/dinnerAllowanceSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:layerType="software"
+        android:src="@drawable/shape_dashed_line_separator"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/memorableWordInfoLabel"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/dinnerAllowanceSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:minHeight="40dp"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dinnerAllowanceSeparator"
+        app:showText="false"
+        app:switchMinWidth="60dp"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/dinnerBudgetPerPerson"
+        style="@style/Header4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:text="@string/review_booking_dinner_budget_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dinnerAllowanceSwitch"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dinnerBudgetWrapper"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:hint="@string/review_booking_dinner_budget_hint"
+        android:labelFor="@+id/review_booking_dinner_budget_input"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/dinnerBudgetPerPerson">
+
+        <EditText
+            android:id="@+id/dinnerBudgetInput"
+            style="@style/Body"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/includeAlcoholSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:enabled="false"
+        android:minHeight="40dp"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dinnerBudgetWrapper"
+        app:showText="false"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:switchMinWidth="60dp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/bookingParkingToggle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeAlcoholSwitch"
+        app:showText="false"
+        app:switchMinWidth="60dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="Hotel car parking\nPlease not, parking is not\nguaranteed" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/wifiToggle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bookingParkingToggle"
+        app:showText="false"
+        app:switchMinWidth="60dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="Ultimate Wifi\n8x faster than our free Wifi" />
+
+    <ImageView
+        android:id="@+id/bottomSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:layerType="software"
+        android:src="@drawable/shape_dashed_line_separator"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/wifiToggle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

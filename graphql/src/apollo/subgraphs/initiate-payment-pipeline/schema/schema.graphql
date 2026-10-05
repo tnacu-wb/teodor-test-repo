@@ -1,0 +1,170 @@
+schema {
+    mutation: Mutation
+}
+
+type Mutation {
+    initiatePayment(basketReference: String!, createPaymentCriteria: CreatePaymentCriteria!): CreatePayment!
+    initiatePaypalPayment(basketReference: String!, createPaymentCriteria: CreatePaymentCriteria!): CreatePayment!
+}
+
+enum PaymentStatus {
+    NOT_REQUIRED,
+    PAYMENT_REQUIRED
+}
+
+input AddressRequest {
+    addressType: String
+    companyName: String
+    country: String
+    addressLine1: String!
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    cityName: String
+    postalCode: String
+}
+
+input BookingRequest {
+    businessSite: BusinessSite!
+    channel: String!
+    journey: String!
+    language: String!
+    rooms: [RoomType!]!
+    type: String!
+    arrivalDate: String
+    departureDate: String
+    leadGuest: GuestRequest
+}
+
+input Billing {
+    address: AddressRequest!
+    cardBillingAddress: AddressRequest
+    differentBillingAddress: Boolean
+    bookerIsNotGuest: Boolean
+    email: String!
+    firstName: String!
+    lastName: String!
+    telephone: String
+    title: String!
+}
+
+input BusinessAccount {
+    purchaseOrder: String
+    customerReference: String
+    cardNotPresentAuth: String
+    breakfastCodeReq: Int
+    dinnerAllowance: Float
+    alcoholAllowed: String
+    carParkingAllowed: String
+    wifiAllowed: String
+    otherChargesAllowed: String
+}
+
+input BusinessAllowance {
+    budget: Float!
+    allowance: String!
+    isAuthorised: Boolean!
+}
+
+input BusinessItems {
+    purchaseOrderNumber: String!
+    customReferenceNumber: String!
+    businessAllowances: [BusinessAllowance]
+    businessNotes: String
+}
+
+input BusinessSite {
+    identifier: String!
+    name: String!
+    type: String!
+    location: String!
+}
+
+input CardRequest {
+    cardholderName: String!
+    cardType: String!
+    expiryMonth: String!
+    expiryYear: String!
+    token: String!
+    cnpRequired: Boolean
+    logoUrl: String
+    type: String
+    last4Digits: String
+}
+
+input CompanyQuestionAndAnswer {
+    question: String
+    answer: String
+    questionHeader: String
+}
+
+input CompanyQuestionAndAnswerDetails {
+    purchaseOrderQuestionAndAnswer: CompanyQuestionAndAnswer
+    customerReferenceQuestionAndAnswer: CompanyQuestionAndAnswer
+    userDefinedQuestionAndAnswers: [CompanyQuestionAndAnswer]
+}
+
+type CreatePayment {
+    status: PaymentStatus!
+    paymentRequiredDetails: PaymentRequiredDetails
+}
+
+input CreatePaymentCriteria {
+    booking: BookingRequest!
+    payment: PaymentRequest!
+    charityPackageCode: String
+    hotelId: String
+    requestId: String!
+    businessAccount: BusinessAccount
+    specialRequests: [String]
+    bookingNotes: [String]
+    companyQuestionAndAnswerDetails: CompanyQuestionAndAnswerDetails
+    tmpBasketRef: String
+    isCiol: Boolean
+    isSecureBooking: Boolean
+    useCache: Boolean
+}
+
+input GuestRequest {
+    name: String!
+    previousBookings: Int
+    registered: Boolean
+    registeredSince: String
+}
+
+input PaymentRequest {
+    billing: Billing!
+    card: CardRequest
+    environment: String!
+    subType: String!
+    type: String!
+    sca: Sca
+    businessItems: BusinessItems
+    pibaCardPresent: Boolean
+    paypalNonce: String
+    paypalDeviceData: String
+}
+
+type PaymentRequiredDetails {
+    paymentRedirect: String
+    template: String
+    sessionId: String
+    providerUrl: String
+}
+
+input RoomType {
+    adultsNumber: Int!
+    rate: String!
+    type: String!
+}
+
+input Sca {
+    captureMethod: String
+    protocolVersion: String
+    eci: Int
+    xid: String!
+    dsTransactionID: String
+    transStatus: String
+    cavv: Int
+    authorisedAmount: Float
+}

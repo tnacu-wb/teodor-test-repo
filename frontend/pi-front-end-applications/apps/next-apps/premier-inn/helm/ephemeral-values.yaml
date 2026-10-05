@@ -1,0 +1,336 @@
+# Ephemeral (per-PR) values for premier-inn.
+#
+# Consumed by the pr-deploy job in .github/workflows/ci-fe.yaml through
+# .github/frontend/scripts/deploy/helm-deploy.sh, which installs the shared
+# chart at infra/helm/opera-app-chart.
+#
+# That chart reads the whole pod spec from `deployment.*` and gates every
+# optional resource on a `create` flag. Keys outside those names are silently
+# ignored — an unset `deployment.containerEnvs` renders `env: null` and the app
+# boots with no environment at all, falling back to its build-time defaults.
+#
+# Self-contained: this is the ONLY values file the preview deploy passes. It is
+# not layered on top of dev-values.yaml, so a dev tuning change cannot silently
+# alter PR environments, and vice versa.
+#
+# Replaced per-deploy by helm-deploy.sh:
+#   applicationName, service.name   the PR release name
+#   istio.host                      the PR release hostname
+#   image.repository, image.tag
+
+# ── Ephemeral switches ───────────────────────────────────────────────────────
+
+# Gates the Flagger Canary out of the chart. Once a Canary exists Flagger owns
+# the Service's .spec.selector and .spec.ports[].name and the VirtualService's
+# .spec.http, and Helm's server-side apply then fails on the next upgrade of
+# the same release with:
+#   conflicts with "flagger" using v1: .spec.selector
+# A canary analysis also cannot finish inside the lifetime of a PR release.
+ephemeral: true
+canary:
+  create: false
+
+# An HPA competing with a redeploy on every push is churn and cost with no
+# benefit. The frontend-app chart carried `autoscaling.enabled: true` but had no
+# HPA template at all, so previews have always run on a single replica; this
+# keeps that and makes it explicit.
+autoscaling:
+  create: false
+
+# Nothing should auto-bump the image; the pipeline sets the tag on every deploy.
+imageAutomation:
+  create: false
+
+# A disruption budget over a single short-lived replica just blocks node drains.
+pdb:
+  create: false
+
+# ── Identity ─────────────────────────────────────────────────────────────────
+# applicationName names the Deployment, Service, VirtualService and HPA, and is
+# the selector label. service.name is what the VirtualService routes at — the
+# chart does not derive one from the other, so both are replaced with the
+# release name at deploy time and both are kept here so `helm template` renders
+# standalone for local inspection.
+applicationName: premier-inn
+namespace: opera-fe
+
+# Repository and tag are both set by the workflow; the values here only
+# document the shape.
+image:
+  repository: whitbreaddigital/premier-inn
+  pullPolicy: Always
+  tag: 1.0.0
+
+# ── Workload ─────────────────────────────────────────────────────────────────
+#
+# `lifecycle: null` removes the chart's default 20s preStop sleep rather than
+# merging with it (an empty map would leave the default in place). That sleep
+# and the chart's 90s grace period are right for draining production traffic
+# behind Istio, but together they add roughly two minutes to every push here.
+# 30s is the Kubernetes default and what previews ran with before.
+imagePullSecrets:
+  - name: regcred
+deployment:
+  create: true
+  replicaCount: 1
+  lifecycle: null
+  terminationGracePeriodSeconds: 30
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 9001
+    runAsGroup: 9001
+    fsGroup: 9001
+    seccompProfile:
+      type: RuntimeDefault
+  containerPorts:
+    - name: http
+      containerPort: 3002
+      protocol: TCP
+  dns:
+    ndots: 3
+  containerEnvs:
+    - name: NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      valueFrom:
+        secretKeyRef:
+          key: google-maps-api-key
+          name: google-maps-api-key
+    - name: NEXT_PUBLIC_GOOGLE_CAPTCHA_API_KEY
+      valueFrom:
+        secretKeyRef:
+          key: site_key
+          name: google-recaptcha
+    - name: NEXT_PUBLIC_GRAPHQL_ENDPOINT
+      value: https://api.dev.premierinn.digital/graphql
+    - name: NEXT_PUBLIC_SERVER_APOLLO_GRAPHQL_ENDPOINT
+      value: http://opera-apollo-router.apollo
+    - name: NEXT_PUBLIC_AUTH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          key: NEXT_PUBLIC_AUTH_CLIENT_ID
+          name: pi-auth0-credentials
+    - name: NEXT_PUBLIC_AUTH_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          key: NEXT_PUBLIC_AUTH_CLIENT_SECRET
+          name: pi-auth0-credentials
+    - name: NEXT_PUBLIC_AUTH_DOMAIN
+      valueFrom:
+        secretKeyRef:
+          key: NEXT_PUBLIC_AUTH_DOMAIN
+          name: pi-auth0-credentials
+    - name: NEXT_PUBLIC_AUTH_REALM
+      value: bart-users-beta-u
+    - name: NEXT_PUBLIC_REDIS_HOST
+      value: clustercfg.opera-dev.jynzd4.memorydb.eu-west-1.amazonaws.com
+    - name: NEXT_PUBLIC_REDIS_PORT
+      value: '6379'
+    - name: NEXT_PUBLIC_AUTH_CREDENTIAL_TYPE
+      value: http://auth0.com/oauth/grant-type/password-realm
+    - name: NEXT_PUBLIC_REST_API
+      value: https://restapi.dev.premierinn.digital
+    - name: NEXT_PUBLIC_REST_API_NEW_EKS
+      value: https://restapi.dev.premierinn.digital
+    - name: NEXT_PUBLIC_ASSETS_URL
+      value: www.dev.premierinn.digital
+    - name: NEXT_PUBLIC_SNOWDROP_BASE_URL
+      value: /api/
+    - name: NEXT_PUBLIC_COOKIES_DOMAIN
+      value: .premierinn.digital
+    - name: NEXT_PUBLIC_ACCOUNT_SERVICE
+      value: http://hotel-account-service-opera.opera-be
+    - name: NEXT_PUBLIC_SECURE2_URL
+      value: https://www.dev.premierinn.digital
+    - name: NEXT_BASIC_AUTH_ID
+      value: betatester
+    - name: NEXT_BASIC_AUTH_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: basic_auth_pwd
+          name: wb-fe-credential
+    - name: NEXT_PUBLIC_DISPLAY_REGISTER_GDP_GB
+      value: 'false'
+    - name: NEXT_PUBLIC_DISPLAY_REGISTER_GDP_DE
+      value: 'false'
+    - name: NEXT_ENABLE_AMEND_PAY_NOW_PI_BB
+      value: 'true'
+    - name: NEXT_ENABLE_SERVER_APOLLO_GRAPHQL_ENDPOINT
+      value: 'true'
+    - name: NEXT_FS_SILENT_SUBSTITUTION
+      value: 'true'
+    - name: NEXT_IMAGE_UNOPTIMIZED
+      value: 'false'
+    - name: NEXT_ENV
+      value: dev
+    - name: NEXT_PUBLIC_UNLEASH_SERVER_API_URL
+      value: https://whitbread.edge.getunleash.io/api
+    - name: NEXT_PUBLIC_APP_NAME
+      value: premier-inn
+    - name: UNLEASH_SERVER_API_TOKEN
+      valueFrom:
+        secretKeyRef:
+          key: api-token
+          name: unleash-enterprise-secrets
+    - name: NEXT_PUBLIC_UNLEASH_FRONTEND_API_TOKEN
+      valueFrom:
+        secretKeyRef:
+          key: api-fe-token
+          name: unleash-enterprise-secrets
+    - name: NEXT_PUBLIC_APPLEPAY_GOOGLEPAY_ENABLE
+      value: 'true'
+    - name: NEXT_PUBLIC_PAYMENT_ORCHESTRATION_API
+      value: http://payment-orchestration-service-feat-sre-320.opera-be:9200
+    - name: NEXT_PUBLIC_DATATRANS_SECURE_FIELDS_URL
+      value: https://pay.sandbox.datatrans.com/upp/payment/js/secure-fields-2.0.0.min.js
+    - name: NEXT_PUBLIC_DATATRANS_PAYPAL_BUTTON_URL
+      value: https://pay.sandbox.datatrans.com/upp/payment/js/paypal-button-1.0.0.js
+    - name: NEXT_PUBLIC_DATATRANS_PAYMENT_BUTTON_URL
+      value: https://pay.sandbox.datatrans.com/upp/payment/js/payment-button-3.0.0.js
+    - name: NEXT_PUBLIC_DATATRANS_MERCHANT_ID
+      value: deWB-ABEAIB
+    - name: NEXT_PUBLIC_GOOGLE_PAY_MERCHANT_ID
+      value: deWB-ABEAIB
+    - name: NEXT_APP_STATIC_CONTENT_CACHE_TTL
+      value: '3600'
+    - name: NEXT_PUBLIC_LOG_ENDPOINT
+      value: /api/premierinn/log
+    - name: NEXT_PUBLIC_REGISTER_LOGIN_DELAY
+      value: '5'
+    - name: NEXT_PUBLIC_REGISTRATION_REDIRECT_GB
+      value: creating-your-account.html
+    - name: NEXT_PUBLIC_REGISTRATION_REDIRECT_DE
+      value: kontoerstellung.html
+    - name: NEXT_OPENSEARCH_LOGS
+      value: 'false'
+    - name: NEXT_SHOW_PRE_CHECK_IN
+      value: 'true'
+    - name: NEXT_PUBLIC_APPLEPAY_SCRIPT_URL
+      value: https://web2payuat.3cint.com/iPage/Content/3c/js/applePayParent.js
+    - name: NEXT_PUBLIC_HOTELS_API_URL
+      value: http://hotel-info-service-opera.opera-be
+    - name: NEXT_APP_UNLEASH_DEFINITIONS_CACHE_TTL
+      value: '60'
+    - name: NEXT_FS_ENABLE_SCRIPTS_EMBED_APP_DYNAMICS
+      value: 'true'
+    - name: NEXT_FS_SEO_BREADCRUMB_PI
+      value: 'true'
+    - name: NEXT_FS_META_ARRIVAL_DAY_KEYWORD_PI
+      value: 'true'
+    - name: NEXT_PUBLIC_FIREBASE_API_KEY
+      value: AIzaSyBqPf4ua9n90gsnCtB2tPg1Kr4Fg0Cw75A
+    - name: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+      value: premier-inn---non-prod.firebaseapp.com
+    - name: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+      value: premier-inn---non-prod
+    - name: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+      value: premier-inn---non-prod.appspot.com
+    - name: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+      value: '386288266342'
+    - name: NEXT_PUBLIC_AMAZON_CHAT_URL_GB
+      value: https://chat-dev2.premierinn.digital/connectwidget/static/amazon-connect-chat-interface-client.js
+    - name: NEXT_PUBLIC_AMAZON_CHAT_ID_GB
+      value: 28d4b469-1a65-42c5-b88c-ad9d5a2f3d47
+    - name: NEXT_PUBLIC_AMAZON_CHAT_SNIPPET_ID_GB
+      value: QVFJREFIaCtFalN0ZDVNdVlGRUhSSWxuYkZIVi9vOWJuK3J1RHFLMnREVloybXpFTVFHM1RjK2V3dnliT3htVEErUTE5cXJBQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNS2dIWmcydGc3dng2VGVLTUFnRVFnQ3ZjUVFZUnNPS3VycjUxalFueXlYSzJYdmI1Z1dEYWNtRThWVlNPRzlCdGRJc2I0bGJzeFZnR2VpSWE6OjhvUEh1MkxSTkJjZzc5SmlKcTVXaVRtTm4rMjJjb0FUV1J2MmxIOW1IVkZoSTM5T0NUUVo4M1JOK3NRR1NDM1RMZndpL3lKQk9iNy9wVGFZS1FRTERnai9vOWZsMGtvNCtCNktPNWg4UUJrRHZvT29zVEdqanhNYVBOanF5eU80cXYvNytkcFd3Q2FCWEo4RkxVMW0rb3J6bDQ1S1gvST0=
+    - name: NEXT_PUBLIC_AMAZON_CHAT_ENABLED
+      value: 'true'
+    - name: NEXT_PUBLIC_FIREBASE_APP_ID
+      value: 1:386288266342:web:965ff310da50c03e4791a7
+    - name: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+      value: G-8W93XP47G6
+    - name: NEXT_PUBLIC_FIREBASE_KEYVAPID_KEY
+      value: BM9ZWfMvCgtXs1-obPhGnqxwFhNAXuUF1xy-wYvbbQeo3ArXEV0GVYjdNDqyXzG3ux2d1GhRmFRjvAFG9KmNWi0
+    - name: NEXT_PUBLIC_BREAKFAST_PROMO_PACKAGE
+      value: ADBFPR
+    - name: NEXT_PUBLIC_DLP_AKAMAI_CACHE_TTL
+      value: 60m
+    - name: NEXT_PUBLIC_GOOGLE_MAP_ID_DLP
+      value: 5a1ab11b4d2d8789
+    - name: NEXT_PUBLIC_AMAZON_CHAT_AUTH_URL
+      value: https://chat-dev.premierinn.com/dev/getJwt
+    - name: NEXT_OVERWRITE_METARATE
+      value: FLEXRATE-FX30R
+    - name: NEXT_PUBLIC_RESTAURANTS_GRAPHQL_ENDPOINT
+      value: https://api-restaurant.dev.premierinn.digital/graphql
+    - name: NEXT_PUBLIC_SERVER_RESTAURANTS_APOLLO_GRAPHQL_ENDPOINT
+      value: http://restaurants-apollo-router.apollo
+    - name: NEXT_PUBLIC_OCCASION_NAME
+      value: Table Booking (Whitbread WEB & Host)
+    - name: NEXT_ENABLE_SERVER_RESTAURANTS_APOLLO_GRAPHQL_ENDPOINT
+      value: 'true'
+    - name: NEXT_PUBLIC_ADD_TO_WALLET_ENCRYPTION
+      valueFrom:
+        secretKeyRef:
+          key: email-decryption-key
+          name: adobe-campaign-secret
+    - name: AUTH0_DOMAIN
+      value: dev-whitbread-digital.eu.auth0.com
+    - name: AUTH0_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          key: auth0_ccui_client_id
+          name: auth0-k8s-connection-secrets
+    - name: AUTH0_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          key: auth0_ccui_client_secret
+          name: auth0-k8s-connection-secrets
+    - name: AUTH0_SECRET
+      valueFrom:
+        secretKeyRef:
+          key: auth0_ccui_secret
+          name: auth0-k8s-connection-secrets
+    # Left at the shared dev host, which is what previews have always used here:
+    # the frontend-app chart only substituted the preview hostname for ccui.
+    # Pointing it at the preview host would need that hostname registered as an
+    # Auth0 callback first, so it is not changed as part of the chart move.
+    - name: AUTH0_BASE_URL
+      value: https://www.dev.premierinn.digital
+    - name: AUTH0_SESSION_ROLLING
+      value: 'true'
+  livenessProbe:
+    failureThreshold: 6
+    httpGet:
+      path: /api/liveness
+      port: 3002
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  readinessProbe:
+    failureThreshold: 6
+    httpGet:
+      path: /api/readiness
+      port: 3002
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1000Mi
+    limits:
+      cpu: 1000m
+      memory: 4000Mi
+
+# ── Networking ───────────────────────────────────────────────────────────────
+#
+# service.ports is the chart's list form of the old flat port/targetPort pair.
+service:
+  create: true
+  name: premier-inn
+  type: ClusterIP
+  ports:
+    - name: port3002
+      port: 3002
+      protocol: TCP
+      targetPort: 3002
+
+# istio.host is empty here and set to the PR hostname at deploy time. With it
+# set the chart's VirtualService matches on :authority for that one hostname
+# instead of claiming hosts ["*"] on the gateway, so the preview routes
+# alongside the long-lived release rather than competing with it.
+istio:
+  create: true
+  gateway: pi
+  host: ''

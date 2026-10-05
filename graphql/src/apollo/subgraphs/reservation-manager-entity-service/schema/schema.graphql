@@ -1,0 +1,318 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    bookingHistory(bookingHistoryRequest: BookingHistoryRequest!) : BookingHistory
+    bookingInfoCardDetails(bookingInfoCardRequest: BookingInfoCardRequest): BookingInfoCard
+    getUpcomingBookings(upcomingBookingsRequest: UpcomingBookingsRequest!): UpcomingBookingsResponse
+}
+
+type Mutation {
+    cancelBooking(cancelBookingRequest: CancelBookingRequest!): CancelBookingResponse!
+    resendInvoiceEmail(resendInvoiceRequest: ResendInvoiceRequest!): String
+    resendConfirmationEmail(resendConfirmationRequest: ResendConfirmationRequest): String
+    downloadBookingInvoice(downloadBookingInvoiceRequest: DownloadBookingInvoiceRequest!): InvoiceDownloadResponse
+}
+
+input DownloadBookingInvoiceRequest {
+    bookingRef: [String!]!
+    lang: String!
+    channel: String!
+    subChannel: String
+    hotelBrand: String
+}
+
+enum Language {
+    EN
+    DE
+}
+
+type InvoiceMeta {
+    invoiceNumber: String!
+    issuedDate: String!
+    hotelId: String
+}
+
+type InvoiceDownload {
+    bookingRef: String!
+    url: String!
+    expiresAt: String!
+    fileName: String!
+    mimeType: String!
+    language: Language!
+    invoiceMeta: InvoiceMeta!
+}
+
+type InvoiceDownloadResponse {
+    invoices: [InvoiceDownload!]!
+}
+
+input UpcomingBookingsRequest {
+    language: String!
+    country: String!
+    channel: String
+    subchannel: String
+}
+
+type UpcomingBookingsResponse {
+    stays: Int
+    bookings: Int
+    hotelName: String
+    arrivalDate: String
+    arrivalTime: String
+    departureDate: String
+    departureTime: String
+    bookingReference: String
+    brand: String
+    links: Links
+    galleryImages: [ImageItem]
+    thumbnailImages: [ThumbnailImage]
+    topSectionImages: [TopSectionImage]
+}
+
+type Links {
+    detailsPage: String!
+}
+
+type ImageItem {
+    imageSrc: String
+    thumbnailSrc: String
+    alt: String
+    caption: String
+    iconSrc: String
+}
+
+type ThumbnailImage {
+    imageSrc: String
+    tags: [String!]!
+}
+
+type TopSectionImage{
+    imageSrc: String
+    thumbnailSrc: String
+    alt: String
+    caption: String
+    iconSrc: String
+    tags: [String]
+}
+
+enum Channel {
+    PI
+    BB
+    CCUI
+    DISTR
+    EMPLOYEE
+}
+
+type Booking {
+    bookingFee: String
+    bookedBy: String
+    hotelName: String
+    arrivalDate: String
+    noOfNights: String
+    bookingStatus: String
+    bookingReference: String
+    totalCost: Price
+    hotelCode: String
+    sourceSystem: String
+    departureDate: String
+    cityTax: Price
+    roomTypes: [BookingRoomType]
+    noOfRooms: Int
+    customerReference: String
+    historyRecordNumber: String
+    purchaseOrder: String
+    prePaidAmount: Price
+    paymentStatus: String
+    cancelled: Boolean
+    checkInOnline: Boolean
+    checkedIn: String
+    rateClass: String
+    checkInDate: String
+    promotionText: String
+    cellCodeLegend: String
+    carDataRequired: Boolean
+    amendable: Boolean
+    guestHistoryNumber: String
+    outstandingAmount: Price
+    frequentBooking: Price
+    mpibooking: Boolean
+    rateName: String
+    cancelable: Boolean
+    cancellationId: String
+    leadGuest: String
+    leadGuestSurname: String
+    isCheckInOnlineAvailable: Boolean
+    basketStatus: String
+    hotelCountry: String
+    isDigitalKeyEligible: Boolean
+    ciolErrorLabelKey: String
+}
+
+input BookingChannelCriteria {
+    channel: Channel!
+    subchannel: String!
+    language: String
+}
+
+type BookingHistory {
+    bookings: [Booking]
+    totalSize: Int
+    pageSize: Int
+    pageIndex: Int
+    totals: BookingTypesTotal
+    continuationToken: String
+}
+
+input BookingHistoryRequest {
+    business: Boolean
+    includeCheckInBookings: Boolean
+    filterType: String
+    filterValue: String
+    sortOrder: String
+    typeOfBooking: String
+    continuationToken: String
+    pageSize: Int
+    pageIndex: Int
+    bookingChannel: BookingChannelCriteria
+}
+
+type BookingInfoCard {
+    reservationDetails: ReservationDetails
+    checkInTime: String
+    checkOutTime: String
+    sessionId: String
+}
+
+input BookingInfoCardRequest {
+    bookingReference: String!
+    hotelId: String!
+    arrival: String!
+    surname: String!
+    country: String
+    language: String
+    bookingChannel: BookingChannelCriteria
+    sourceSystem: String
+    token: String
+}
+
+type BookingRoomType {
+    roomType: String
+    bookingStatus: String
+    carDataPresent: Boolean
+    guest: PersonalDetails
+}
+
+type BookingTypesTotal {
+    cancelled: Int
+    upcoming: Int
+    past: Int
+    checkedIn: Int
+}
+
+type CancellationInfoResponse {
+    amendable: Boolean
+    cancelable: Boolean
+    ruleCompliant: Boolean
+    aemLabelKey: String
+}
+
+input CancelBookingRequest {
+    bookingReference: String
+    basketReference: String
+    hotelId: String!
+    sourceSystem: String
+    arrivalDate: String
+    paymentOption: String
+    token: String
+    country: String
+    language: String
+    bookingChannel: BookingChannelCriteria
+}
+
+type CancelBookingResponse {
+    bookingReference: String
+    cancellationId: String
+}
+
+type PaymentCard {
+    cardType: String
+}
+
+type PackageDetails {
+    packageCode: String
+    description: String
+    totalPrice: Price
+    noSelections: Int
+}
+
+type PersonalDetails {
+    title: String
+    firstName: String
+    lastName: String
+}
+
+type Price {
+    amount: Float!
+    currency: String
+}
+
+input ResendInvoiceRequest {
+    email: String
+    hotelId: String
+    bookingReference: String
+    invoiceRecordNumber: String
+    bookingChannel: BookingChannelCriteria
+    sourceSystem: String
+}
+
+input ResendConfirmationRequest {
+    email: String
+    hotelId: String
+    bookingReference: String
+    sessionId: String
+    sourceSystem: String
+}
+
+type ReservationDetails {
+    bookingReference: String
+    basketReference: String
+    hotelCode: String
+    arrivalDate: String
+    bookingStatus: String
+    departureDate: String
+    nights: Int
+    noOfRooms: Int
+    rooms: [Rooms]
+    rateType: String
+    totalCost: Price
+    newTotal: Price
+    outstandingAmount: Price
+    previousTotal: Price
+    refund: Price
+    hotelHasCityTaxForLeisure: Boolean
+    prepaidAmount: Price
+    paymentOption: String
+    sourceSystem: String
+    cancellationInfoResponse: CancellationInfoResponse
+    donationsPackage: PackageDetails
+    rateDescription: String
+    payment: PaymentCard
+    dinnerAllowance: Price
+    cityTaxTotal: Price
+}
+
+type Rooms {
+    roomId: String
+    roomType: String
+    roomCost: Price
+    adults: Int
+    children: Int
+    cot: Boolean
+    guest: PersonalDetails
+    kidsMeal: [PackageDetails]
+    adultsMeal: [PackageDetails]
+    extrasItems: [PackageDetails]
+}

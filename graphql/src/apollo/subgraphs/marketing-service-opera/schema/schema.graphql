@@ -1,0 +1,92 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    anonymousNewsletterPreferences(email: String!, brandCode: String!, countryOfResidence: String, language: String): AnonymousNewsletterPreferences
+    getContactPreferences(request: PreferencesGetRequest!): PreferencesGetResponse
+}
+
+type Mutation {
+    updateContactPreferences(contactType: String!, contactValue: String!, request: PreferencesUpdateRequest!): String
+    updateEmailPreferences(request: PreferencesUpdateRequest!): String
+    updateEmailPreferencesWithChannelId(contactChannelId: String!, request: PreferencesUpdateRequest!): String
+}
+
+type AnonymousNewsletterPreferences {
+    optIn: Boolean!
+    secondOptIn: Boolean!
+    secondOptInReq: Boolean!
+    secondPartyOptIn: Boolean!
+    thirdPartyVendorsOptIn: Boolean!
+    suppressMarketingCheckbox: Boolean!
+}
+
+input PreferencesGetRequest {
+    business: Boolean
+    contactType: String!
+    contactValue: String!
+    contactChannelId: String
+    brandCodes: String!
+    countryOfResidence: String
+    language: String
+}
+
+type PreferencesGetResponse {
+    permissions: [Permission]
+    loyaltyAccounts: [LoyaltyAccount]
+    valid: Boolean
+    deleted: Boolean
+    contactChannelId: String
+    contactChannelValue: String
+}
+
+type Permission {
+    brandCode: String
+    brand: String
+    optIn: Boolean
+    secondOptInReq: Boolean
+    secondOptIn: Boolean
+    secondPartyOptIn: Boolean
+    thirdPartyVendorsOptIn: Boolean
+    suppressMarketingCheckbox: Boolean
+}
+
+type LoyaltyAccount {
+    loyaltyBrand: String
+    loyaltySystemId: String
+}
+
+input PreferencesUpdateRequest {
+    optIn: Boolean
+    doubleOptIn: Boolean
+    secondPartyOptIn: Boolean
+    thirdPartyVendorsOptIn: Boolean
+    brandCodes: [String!]
+    customer: CustomerDetails!
+    contactSubType: ContactSubType
+    sourceDetails: SourceDetails!
+}
+
+input CustomerDetails {
+    title: String
+    firstName: String
+    lastName: String
+    nationality: String
+    userId: String
+    countryOfResidence: String
+    customerId: String
+    language: String
+}
+
+enum ContactSubType {
+    mobile
+    landline
+}
+
+input SourceDetails {
+    channel: String!
+    journey: String
+    locale: String
+}

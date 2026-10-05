@@ -1,0 +1,41 @@
+# UAT environment overrides
+# Layered: values.yaml → nonprod.yaml → uat.yaml
+#
+# UAT uses Serverless Aurora (provisioned by Infra). Shared Aurora connection
+# settings (credentials via ESO `existingSecret`, pools, TLS) live in
+# nonprod.yaml; this file sets only the UAT Aurora writer endpoint plus
+# UAT capacity overrides.
+
+temporal:
+  server:
+    # `replicaCount` is the effective scaling control: the temporal 1.6.0 chart
+    # has no HorizontalPodAutoscaler template, so the `autoscaling` block below is
+    # inert (creates no HPA). UAT runs a fixed 2 replicas. The block is kept for
+    # parity/future use only; change replicaCount to change actual capacity.
+    replicaCount: 2
+
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage: 80
+
+    config:
+      persistence:
+        datastores:
+          # Aurora Serverless writer endpoint (eu-west-1), anchored once and
+          # reused for both datastores. All other connection settings
+          # (credentials, pools, TLS) are inherited from nonprod.yaml.
+          default:
+            sql:
+              connectAddr: &auroraAddr "temporal-uat.cluster-cfp3ckubgukh.eu-west-1.rds.amazonaws.com:5432"
+          visibility:
+            sql:
+              connectAddr: *auroraAddr
+
+# Temporal Web UI — ExternalDNS creates DNS record automatically
+temporalUI:
+  gateway:
+    enabled: true
+    host: "temporal-ui.uat.opera.whitbread.digital"

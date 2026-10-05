@@ -1,0 +1,117 @@
+server:
+  port: "9134"
+  servlet:
+    contextPath: "/ocd/"
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "ocd-adapter-service"
+    description: "OCD Adapter Microservice"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+  api-docs:
+    path: /v3/api-docs
+    version: OPENAPI_3_1
+  swagger-ui:
+    path: /swagger-ui.html
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+logging:
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    brave: WARN
+    org.springframework.cache: warn
+
+config:
+  httpClient:
+    connectionTimeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+    responseTimeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  service:
+    ocd:
+      isClientCredentialsEnabled: ${ENABLE_CLIENT_CREDENTIALS:false}
+      wireTapAccessToken: ${WIRE_TAP_ACCESS_TOKEN:false}
+      host: ${OCD_HOST}
+      authEndpoint: ${OCD_AUTH_ENDPOINT:/hdpba/oauth2/v1/tokens}
+      appKey: ${OCD_APP_KEY}
+      channelCode: ${CHANNEL_CODE}
+      scope: ${OCD_SCOPE:}
+
+      enterpriseId: ${ENTERPRISE_ID}
+      clientId: ${OCD_CLIENT_ID}
+      clientSecret: ${OPERA_CLIENT_SECRET}
+
+      username: ${OCD_USERNAME}
+      password: ${OCD_PASSWORD}
+
+      propertyOfferEndpoint: "/shop/v1/hotels/{hotelId}/offer"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+logging:
+  configuration:
+    logger: default

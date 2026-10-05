@@ -1,0 +1,65 @@
+import { RegistrationQuestionWithAnswer } from '@whitbread-eos/api';
+
+export const mockCompanyRegistrationQuestions = [
+  {
+    id: 'purchaseOrderAnswer',
+    mandatory: false,
+    type: 'text',
+    options: null,
+    answer: '8',
+    label: 'Purchase order number?',
+  },
+  {
+    id: 'customerReferenceAnswer',
+    mandatory: true,
+    type: 'text',
+    options: null,
+    answer: '8',
+    label: 'Customer reference?',
+  },
+  {
+    id: 'COQU_76f3817f-4940-43cc-89f8-7c1caf406f95',
+    mandatory: true,
+    type: 'select',
+    options: ['first', 'second'],
+    answer: '2',
+    label: 'Mandatory dropdown?',
+  },
+  {
+    id: 'COQU_17a382ab-a741-475c-bf71-685e2269977b',
+    mandatory: false,
+    type: 'text',
+    options: null,
+    answer: 'dev',
+    label: 'What are you?',
+  },
+] as RegistrationQuestionWithAnswer[];
+
+export const mockEmployeeDetails = {
+  id: '123',
+  ghNumber: '123',
+  emailAddress: 'test@test.com',
+  position: null,
+  phoneNumber: '123',
+  mobileNumber: null,
+  textConfirmation: false,
+  title: 'Mr',
+  firstName: 'Jon',
+  lastName: 'Snow',
+  centralCardId: '123',
+  address: {
+    addressLine1: 'abc',
+    addressLine2: 'def',
+    addressLine3: '',
+    addressLine4: 'abc',
+    addressLine5: '',
+    postCode: '123',
+    country: 'DE',
+  },
+  accessLevel: 'SUPER',
+  employeeStatus: 'ACTIVE',
+  dialingCode: null,
+  guestHistoryNumber: '123',
+  lockedForEditing: false,
+  password: null,
+} as any;

@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor "end user" as Actor
+participant "UI/IoS/Android" as Client
+participant "Hotel Payment Service" as HotelPaymentService
+participant "ElasticSearch" as elasticSearch
+
+Actor -> Client : enters card details - In account setting/payment option/Payment page
+Client -> HotelPaymentService : GET - /payment/validations/{bin} with bin number
+HotelPaymentService -> elasticSearch : GET - aws.elasticsearch.validatebin.path
+elasticSearch -> HotelPaymentService : Response - ElasticSearchBinResponse
+alt if elasticSearchBinResponse.getFound()
+HotelPaymentService -> Client: ValidateBinResponse - 200 response to client
+else card not found in elasticSearch
+HotelPaymentService -> Client: CardNotFoundException("Card not found in ElasticSearch")
+end
+Client -> Actor: Invalid card entered error
+@enduml

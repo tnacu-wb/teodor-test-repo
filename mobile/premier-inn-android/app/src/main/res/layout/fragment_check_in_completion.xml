@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ciol_completion_background_pi"
+        android:scaleType="centerCrop"
+        android:tintMode="src_over"
+        app:tint="@color/premier_inn_purple_opaque"
+        app:layout_constraintDimensionRatio="1:2.4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/completionDoneImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ciol_completion_done"
+        app:layout_constraintDimensionRatio="1:0.35"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/checkedInHeadline"
+        style="@style/Header2ExtraBold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="0sp"
+        android:gravity="center_horizontal"
+        android:paddingTop="@dimen/generic_padding_40"
+        android:layout_marginHorizontal="@dimen/generic_padding_32"
+        android:text="@string/ciol_completion_headline_text"
+        android:textColor="@color/metallic_pearl_seventy_percent"
+        android:textSize="@dimen/title_text_size_26"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/completionDoneImage"
+        app:layout_constraintTop_toBottomOf="@id/completionDoneImage" />
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/gotItButton"
+        style="@style/Button1"
+        android:layout_width="326dp"
+        android:layout_height="50dp"
+        android:text="@string/ciol_completion_button_text"
+        app:cab_background_color="@color/white"
+        app:cab_spinner_color="@color/white"
+        app:cab_text_color="@color/grey_dark"
+        android:layout_marginBottom="@dimen/generic_padding_40"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/checkedInHeadline"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+        android:id="@+id/roomKeyInstructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:textSize="@dimen/default_text_size"
+        android:padding="@dimen/generic_padding_20"
+        android:src="@drawable/ic_info"
+        android:text="@string/booking_details_get_room_key_instructions"
+        android:textColor="@color/metallic_pearl_seventy_percent"
+        app:iconTintColor="@color/metallic_pearl_seventy_percent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gotItButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

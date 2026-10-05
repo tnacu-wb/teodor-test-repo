@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Maven Build Cache Extension configuration.
+    https://maven.apache.org/extensions/maven-build-cache-extension/
+
+    The extension fingerprints each module's effective POM, source/resource
+    files and dependencies, and on a match restores the packaged artifacts
+    instead of rebuilding — unchanged modules pulled in via `-am` complete in
+    a fraction of the time.
+
+    Locally the cache lives in ~/.m2/build-cache (delete that directory to
+    reset it; size is unbounded, maxBuildsCached only caps entries per
+    module).
+
+    In CI (build-service.yaml / build-library.yaml /
+    build-docker-container.yaml) the cache root is redirected onto the
+    shared EFS volume mounted on the runner pods:
+      -Dmaven.build.cache.location=/mnt/efs/maven-build-cache
+      -Dmaven.build.cache.maxLocalBuildsCached=7   (parallel PRs churn keys)
+-->
+<cache xmlns="http://maven.apache.org/BUILD-CACHE-CONFIG/1.4.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://maven.apache.org/BUILD-CACHE-CONFIG/1.4.0 https://maven.apache.org/xsd/build-cache-config-1.4.0.xsd">
+
+    <configuration>
+        <enabled>true</enabled>
+        <hashAlgorithm>SHA-256</hashAlgorithm>
+        <validateXml>true</validateXml>
+        <!-- Only builds that started from a clean module may populate the
+             cache: a dirty incremental build can package stale classes left
+             in target/, and a cached entry would replay that mistake forever.
+             Restores still work for every build. -->
+        <mandatoryClean>true</mandatoryClean>
+        <local>
+            <!-- Keep the last few fingerprints per module so switching between
+                 branches does not immediately evict the other branch's cache. -->
+            <maxBuildsCached>3</maxBuildsCached>
+        </local>
+    </configuration>
+
+    <input>
+        <global>
+            <!-- No <glob>: the 1.3.0 default scans every file type under the
+                 source/resource/test roots, which is the safe direction — an
+                 unnecessary rebuild beats a stale jar. Our resource trees
+                 carry images, .xlsx, certs, JAXB bindings and extensionless
+                 ServiceLoader files that a filename glob cannot cover. -->
+            <excludes>
+                <!-- Build outputs must never feed the fingerprint. -->
+                <exclude>target</exclude>
+            </excludes>
+        </global>
+    </input>
+
+    <executionControl>
+        <runAlways>
+            <plugins>
+                <!-- flatten-maven-plugin rewrites ${revision} into the POM that
+                     install/deploy publish. It must run even on a cache hit,
+                     otherwise a restored build has no .flattened-pom.xml and
+                     installs an unresolved ${revision} POM. -->
+                <plugin artifactId="flatten-maven-plugin"/>
+                <!-- On `mvn install`, a cache hit must still copy the restored
+                     jar into ~/.m2/repository, or builds run without -am keep
+                     resolving the previous install. -->
+                <plugin artifactId="maven-install-plugin"/>
+            </plugins>
+        </runAlways>
+        <!-- CLI skip flags are not part of the cache key: without these rules a
+             build run with -DskipTests would be cached and then restored for a
+             later plain `mvn verify`, reporting green with zero tests run.
+             skipValue="true" makes the guard one-directional — a full cached
+             build may serve a skipping request, never the reverse. -->
+        <reconcile>
+            <plugins>
+                <plugin artifactId="maven-surefire-plugin" goal="test">
+                    <reconciles>
+                        <reconcile propertyName="skip" skipValue="true"/>
+                        <reconcile propertyName="skipExec" skipValue="true"/>
+                        <reconcile propertyName="skipTests" skipValue="true"/>
+                        <reconcile propertyName="testFailureIgnore" skipValue="true"/>
+                        <!-- Test-selection flags run a subset: any value difference
+                             (e.g. -Dtest=FooTest) must force a rebuild. -->
+                        <reconcile propertyName="test"/>
+                    </reconciles>
+                </plugin>
+                <plugin artifactId="maven-failsafe-plugin" goal="integration-test">
+                    <reconciles>
+                        <reconcile propertyName="skip" skipValue="true"/>
+                        <reconcile propertyName="skipTests" skipValue="true"/>
+                        <reconcile propertyName="skipITs" skipValue="true"/>
+                        <reconcile propertyName="it.test"/>
+                    </reconciles>
+                </plugin>
+                <plugin artifactId="maven-checkstyle-plugin" goal="check">
+                    <reconciles>
+                        <reconcile propertyName="skip" skipValue="true"/>
+                    </reconciles>
+                </plugin>
+            </plugins>
+        </reconcile>
+    </executionControl>
+</cache>

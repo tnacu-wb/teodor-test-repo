@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RateChangedViewController" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="ctaButton" destination="u5B-Xy-vya" id="vVY-vQ-BzQ"/>
+                <outlet property="heading" destination="AzM-qz-L6W" id="G5u-dd-nWs"/>
+                <outlet property="message" destination="6Go-Ym-IYj" id="wRG-5U-qFl"/>
+                <outlet property="ratePrice" destination="ulo-cF-KYH" id="K43-fV-2FQ"/>
+                <outlet property="searchAgainButton" destination="dJL-Sf-x19" id="kaj-2a-SnD"/>
+                <outlet property="totalPriceLabel" destination="50b-Dk-rYY" id="uXm-6d-s0a"/>
+                <outlet property="view" destination="uMV-NU-56p" id="454-Ki-dU6"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="uMV-NU-56p">
+            <rect key="frame" x="0.0" y="0.0" width="315" height="545"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rateChangeIcon" translatesAutoresizingMaskIntoConstraints="NO" id="hyG-Nj-5zm">
+                    <rect key="frame" x="121.5" y="50" width="72" height="59"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="72" id="ntI-eq-OIo"/>
+                        <constraint firstAttribute="width" secondItem="hyG-Nj-5zm" secondAttribute="height" multiplier="72:59" id="zLe-MS-K8v"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your booking price has changed" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AzM-qz-L6W">
+                    <rect key="frame" x="45" y="132" width="225" height="42"/>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="18"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dJL-Sf-x19" customClass="FadeOnHighlightButton" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="20" y="430" width="275" height="44"/>
+                    <color key="backgroundColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="6DQ-wr-yB3"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="18"/>
+                    <state key="normal" title="New search">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="searchAgainButtonDidTap:" destination="-1" eventType="touchUpInside" id="41U-NI-yb0"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u5B-Xy-vya" customClass="FadeOnHighlightButton" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="20" y="376" width="275" height="44"/>
+                    <color key="backgroundColor" red="0.97647058819999999" green="0.78823529410000004" blue="0.25098039220000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="eJb-aJ-BUv"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="18"/>
+                    <state key="normal" title="Continue with new price">
+                        <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="continueWithRateButtonDidTap:" destination="-1" eventType="touchUpInside" id="Fdh-LE-91i"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Go-Ym-IYj">
+                    <rect key="frame" x="20" y="189" width="275" height="82"/>
+                    <string key="text">We hold a booking for 25 minutes before we release it and update our prices.
+
+If you are happy with the new price you can continue with your booking</string>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="14"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New total" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="50b-Dk-rYY">
+                    <rect key="frame" x="226.5" y="311" width="68.5" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="aGE-9M-ODu"/>
+                        <constraint firstAttribute="height" constant="15" id="jGq-gJ-tax"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="£200.25" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ulo-cF-KYH">
+                    <rect key="frame" x="193.5" y="336" width="101.5" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="l3o-Qx-N0Z"/>
+                        <constraint firstAttribute="height" constant="20" id="yo1-qn-CC9"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="28"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="AzM-qz-L6W" firstAttribute="top" secondItem="hyG-Nj-5zm" secondAttribute="bottom" constant="23" id="3me-IL-vIe"/>
+                <constraint firstItem="hyG-Nj-5zm" firstAttribute="top" secondItem="uMV-NU-56p" secondAttribute="top" constant="50" id="45c-0m-glt"/>
+                <constraint firstItem="u5B-Xy-vya" firstAttribute="leading" secondItem="uMV-NU-56p" secondAttribute="leading" constant="20" id="AFQ-40-1Ld"/>
+                <constraint firstAttribute="trailing" secondItem="u5B-Xy-vya" secondAttribute="trailing" constant="20" id="Ee8-Jn-MdG"/>
+                <constraint firstItem="hyG-Nj-5zm" firstAttribute="centerX" secondItem="uMV-NU-56p" secondAttribute="centerX" id="J4s-bR-C3T"/>
+                <constraint firstItem="dJL-Sf-x19" firstAttribute="top" secondItem="u5B-Xy-vya" secondAttribute="bottom" constant="10" id="JPO-Vz-ePa"/>
+                <constraint firstItem="6Go-Ym-IYj" firstAttribute="leading" secondItem="uMV-NU-56p" secondAttribute="leading" constant="20" id="VeD-hM-tOi"/>
+                <constraint firstItem="dJL-Sf-x19" firstAttribute="leading" secondItem="uMV-NU-56p" secondAttribute="leading" constant="20" id="Y4X-KX-gsW"/>
+                <constraint firstAttribute="trailing" secondItem="AzM-qz-L6W" secondAttribute="trailing" constant="45" id="ZdH-TY-09J"/>
+                <constraint firstAttribute="trailing" secondItem="ulo-cF-KYH" secondAttribute="trailing" constant="20" id="bXc-aM-DNO"/>
+                <constraint firstAttribute="trailing" secondItem="50b-Dk-rYY" secondAttribute="trailing" constant="20" id="cIy-Y5-DpW"/>
+                <constraint firstAttribute="trailing" secondItem="6Go-Ym-IYj" secondAttribute="trailing" constant="20" id="cbh-fU-ZM7"/>
+                <constraint firstItem="50b-Dk-rYY" firstAttribute="top" secondItem="6Go-Ym-IYj" secondAttribute="bottom" constant="40" id="cqm-uf-iSe"/>
+                <constraint firstItem="6Go-Ym-IYj" firstAttribute="top" secondItem="AzM-qz-L6W" secondAttribute="bottom" constant="15" id="mFB-zT-HEN"/>
+                <constraint firstItem="ulo-cF-KYH" firstAttribute="top" secondItem="50b-Dk-rYY" secondAttribute="bottom" constant="10" id="mdV-8f-p49"/>
+                <constraint firstItem="AzM-qz-L6W" firstAttribute="leading" secondItem="uMV-NU-56p" secondAttribute="leading" constant="45" id="pfj-Au-06F"/>
+                <constraint firstItem="u5B-Xy-vya" firstAttribute="top" secondItem="ulo-cF-KYH" secondAttribute="bottom" constant="20" id="rQO-IF-7vY"/>
+                <constraint firstAttribute="trailing" secondItem="dJL-Sf-x19" secondAttribute="trailing" constant="20" id="sVF-kV-23G"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="25.5" y="52.5"/>
+        </view>
+    </objects>
+    <designables>
+        <designable name="dJL-Sf-x19">
+            <size key="intrinsicContentSize" width="95" height="33"/>
+        </designable>
+        <designable name="u5B-Xy-vya">
+            <size key="intrinsicContentSize" width="195" height="33"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="rateChangeIcon" width="191" height="156"/>
+    </resources>
+</document>

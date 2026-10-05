@@ -1,0 +1,73 @@
+
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationPort as InboundPort
+participant OhipOutPort as OhipOutPort
+participant BasketOutPort as BasketOutPort
+participant BasketWebClient as BasketWebClient
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as Webclient
+participant RulesServiceOutPort as RulesOutPort
+participant ContentServiceOutPort
+entity "Reservation Entity Service"
+entity "Authentication Service" as Auth
+entity "Basket Service" as BasketService
+entity "OHIPAdapter Service" as OHIPAdapterService
+entity "Rules Service" as RulesService
+entity "Content Service" as ContentService
+
+A -> Controller: POST /v1/reservations/amend/addNewRoom
+Controller -> InboundPort: addNewRoomToExistingBasket
+
+InboundPort -> Auth: getCurrentUserAccount() validate for not selfBooker
+InboundPort <- Auth
+
+InboundPort -> BasketOutPort: getBasketById
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+InboundPort -> Auth: validateToken for not logged ind user
+InboundPort <- Auth
+
+InboundPort -> RulesOutPort: validateMaxRoomsRule
+RulesOutPort -> RulesService: (validateMaxRoomsRule) GET /v1/rules/max-rooms
+RulesOutPort <- RulesService: MaxRoomsRuleResponse
+InboundPort <- RulesOutPort: MaxRoomsRuleResponse
+
+InboundPort -> BasketOutPort: getAllReservationsJustByBasketReference
+BasketOutPort -> BasketWebClient: (sendGetBasket) GET /v1/baskets/{basket-reference}
+BasketWebClient -> BasketService
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+InboundPort -> OhipOutPort: getReservationsByIds
+OhipOutPort -> OHIPAdapterService: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+InboundPort -> OhipOutPort: createReservation for new room reservation
+InboundPort <- OhipOutPort: OhipReservationResponse
+
+InboundPort -> BasketOutPort: addReservationToBasket
+BasketOutPort -> BasketWebClient: addBasketItems
+BasketWebClient -> BasketService: POST /v1/baskets/{basket-reference}/items
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+InboundPort -> ContentServiceOutPort: copyBookingAllowances
+ContentServiceOutPort -> ContentService: (getBusinessNotes) GET /v1/content/businessNotes
+ContentService -> ContentServiceOutPort: BusinessNotesResponse
+ContentServiceOutPort -> InboundPort: BusinessNotesResponse
+InboundPort -> OhipOutPort: updateBusinessItems
+OhipOutPort -> OHIPAdapterService: (sendUpdateBusinessItemsRequest) PUT /v1/reservations/business
+OhipOutPort <- OHIPAdapterService: 200 OK
+InboundPort <- OhipOutPort: updateBusinessItems
+
+Controller <- InboundPort: AddNewRoomResponse (basketReferenceId)
+A <- Controller: Add new room reservation response
+@enduml

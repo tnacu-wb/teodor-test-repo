@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://hub.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="http://hub.micros.com/1.0">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://hub.micros.com/1.0">
+            <s:element name="InHouseRecordIdentification">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:InHouseIdentificationRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="InHouseIdentificationRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="guestHistoryNumber" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="InHouseRecordIdentificationResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="InHouseRecordIdentificationResult" type="s0:InHouseIdentificationResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="InHouseIdentificationResponse">
+                <s:sequence>
+                    <s:element name="guests" type="s0:ArrayOfGuestGuest"/>
+                    <s:element name="arrivalDate" type="s:date"/>
+                    <s:element name="departureDate" type="s:date"/>
+                    <s:element name="hotelCode" type="s:string"/>
+                    <s:element name="roomNumber" type="s:string"/>
+                    <s:element name="QRCode" type="s:string"/>
+                    <s:element name="upsellItems" type="s0:ArrayOfupsellItemUpsellItem"/>
+                    <s:element name="payment" type="s0:Payment"/>
+                    <s:element name="validUpsellItems" type="s0:ArrayOfvalidUpsellItemValidUpsellItem"/>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfGuestGuest">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="Guest" nillable="true" type="s0:Guest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Guest">
+                <s:sequence>
+                    <s:element name="title" type="s:string"/>
+                    <s:element name="FirstName" type="s:string"/>
+                    <s:element name="LastName" type="s:string"/>
+                    <s:element name="contactAddress" type="s0:Address"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Address">
+                <s:sequence>
+                    <s:element name="addressLine1" type="s:string"/>
+                    <s:element minOccurs="0" name="addressLine2" type="s:string"/>
+                    <s:element minOccurs="0" name="addressLine3" type="s:string"/>
+                    <s:element minOccurs="0" name="addressLine4" type="s:string"/>
+                    <s:element minOccurs="0" name="addressLine5" type="s:string"/>
+                    <s:element name="countryCode" type="s:string"/>
+                    <s:element name="postCode" type="s:string"/>
+                    <s:element name="companyName" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfupsellItemUpsellItem">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="upsellItem" nillable="true" type="s0:UpsellItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="UpsellItem">
+                <s:sequence>
+                    <s:element name="postingDate" type="s:date"/>
+                    <s:element name="code" type="s:string"/>
+                    <s:element name="quantity" type="s:string"/>
+                    <s:element minOccurs="0" name="legend" type="s:string"/>
+                    <s:element minOccurs="0" name="unitCost" type="s0:UnitCost"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="UnitCost">
+                <s:sequence>
+                    <s:element name="amount" type="s:string"/>
+                    <s:element name="currency" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Payment">
+                <s:sequence>
+                    <s:element name="cardType" type="s:string"/>
+                    <s:element name="cardNumber" type="s:string"/>
+                    <s:element name="expiryDate" type="s:string"/>
+                    <s:element name="startDate" type="s:string"/>
+                    <s:element name="issueNumber" type="s:string"/>
+                    <s:element name="cardholderName" type="s:string"/>
+                    <s:element name="billingAddress" type="s0:Address"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfvalidUpsellItemValidUpsellItem">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="validUpsellItem" nillable="true" type="s0:ValidUpsellItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ValidUpsellItem">
+                <s:sequence>
+                    <s:element name="code" type="s:string"/>
+                    <s:element minOccurs="0" name="legend" type="s:string"/>
+                    <s:element minOccurs="0" name="unitCost" type="s0:UnitCost"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOferrorError">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="s0:Error"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Error">
+                <s:sequence>
+                    <s:element minOccurs="0" name="errorCode">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="5"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="errorDescription" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpsellCheck">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpsellCheckRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpsellCheckRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="guestHistoryNumber" type="s:string"/>
+                    <s:element name="roomNumber" type="s:string"/>
+                    <s:element name="upsellItems" type="s0:ArrayOfupsellItemUpsellItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpsellCheckResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpsellCheckResult" type="s0:UpsellCheckResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpsellCheckResponse">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="paymentRequired" type="s:boolean"/>
+                    <s:element name="paymentAmount" type="s0:Price"/>
+                    <s:element minOccurs="0" name="paymentCard" type="s0:PaymentCard"/>
+                    <s:element name="refundRequired" type="s:boolean"/>
+                    <s:element name="refundAmount" type="s0:Price"/>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Price">
+                <s:sequence>
+                    <s:element name="amount" type="s:decimal"/>
+                    <s:element name="currency" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="PaymentCard">
+                <s:sequence>
+                    <s:element name="cardType" type="s:string"/>
+                    <s:element name="cardNumber" type="s:string"/>
+                    <s:element name="expiryDate" type="s:string"/>
+                    <s:element minOccurs="0" name="startDate" type="s:string"/>
+                    <s:element minOccurs="0" name="issueNumber" type="s:string"/>
+                    <s:element name="cardholderName" type="s:string"/>
+                    <s:element minOccurs="0" name="cscCode" type="s:string"/>
+                    <s:element minOccurs="0" name="businessAccountDetails" type="s0:BusinessAccount"/>
+                    <s:element minOccurs="0" name="useExistingCard" type="s:boolean"/>
+                    <s:element minOccurs="0" name="billingAddress" type="s0:Address"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="BusinessAccount">
+                <s:sequence>
+                    <s:element minOccurs="0" name="purchaseOrder" type="s:string"/>
+                    <s:element minOccurs="0" name="customerReference" type="s:string"/>
+                    <s:element minOccurs="0" name="cardNotPresentAuth" type="s:boolean"/>
+                    <s:element minOccurs="0" name="atosUsername" type="s:string"/>
+                    <s:element minOccurs="0" name="atosPassword" type="s:string"/>
+                    <s:element minOccurs="0" name="dinnerAllowance" type="s0:Price"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpsellUpdate">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpsellUpdateRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpsellUpdateRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="guestHistoryNumber" type="s:string"/>
+                    <s:element name="roomNumber" type="s:string"/>
+                    <s:element minOccurs="0" name="paymentCard" type="s0:PaymentCard"/>
+                    <s:element minOccurs="0" name="PARes">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="99999"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="browserAccept">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="1000"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="browserUserAgent">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="1000"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="IPAddress" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpsellUpdateResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpsellUpdateResult" type="s0:UpsellUpdateResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpsellUpdateResponse">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element minOccurs="0" name="transactionComplete" type="s:boolean"/>
+                    <s:element minOccurs="0" name="transactionAmount" type="s0:Price"/>
+                    <s:element minOccurs="0" name="redirectURL" type="s:string"/>
+                    <s:element minOccurs="0" name="threeDSecureRequired" type="s:boolean"/>
+                    <s:element minOccurs="0" name="PAReq">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="99999"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </types>
+    <message name="InHouseRecordIdentificationSoapIn">
+        <part name="parameters" element="s0:InHouseRecordIdentification"/>
+    </message>
+    <message name="InHouseRecordIdentificationSoapOut">
+        <part name="parameters" element="s0:InHouseRecordIdentificationResponse"/>
+    </message>
+    <message name="UpsellCheckSoapIn">
+        <part name="parameters" element="s0:UpsellCheck"/>
+    </message>
+    <message name="UpsellCheckSoapOut">
+        <part name="parameters" element="s0:UpsellCheckResponse"/>
+    </message>
+    <message name="UpsellUpdateSoapIn">
+        <part name="parameters" element="s0:UpsellUpdate"/>
+    </message>
+    <message name="UpsellUpdateSoapOut">
+        <part name="parameters" element="s0:UpsellUpdateResponse"/>
+    </message>
+    <portType name="InRoomAppSoap">
+        <operation name="InHouseRecordIdentification">
+            <input message="s0:InHouseRecordIdentificationSoapIn"/>
+            <output message="s0:InHouseRecordIdentificationSoapOut"/>
+        </operation>
+        <operation name="UpsellCheck">
+            <input message="s0:UpsellCheckSoapIn"/>
+            <output message="s0:UpsellCheckSoapOut"/>
+        </operation>
+        <operation name="UpsellUpdate">
+            <input message="s0:UpsellUpdateSoapIn"/>
+            <output message="s0:UpsellUpdateSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="InRoomAppSoap" type="s0:InRoomAppSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="InHouseRecordIdentification">
+            <soap:operation soapAction="http://hub.micros.com/1.0/ws.InRoomApp.InRoomAppService.InHouseRecordIdentification" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpsellCheck">
+            <soap:operation soapAction="http://hub.micros.com/1.0/ws.InRoomApp.InRoomAppService.UpsellCheck" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpsellUpdate">
+            <soap:operation soapAction="http://hub.micros.com/1.0/ws.InRoomApp.InRoomAppService.UpsellUpdate" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="InRoomApp">
+        <port name="InRoomAppSoap" binding="s0:InRoomAppSoap">
+            <soap:address location="https://alpha2.bookings.premierinn.com:443/csp/sql/ws.InRoomApp.InRoomAppService.cls"/>
+        </port>
+    </service>
+</definitions>

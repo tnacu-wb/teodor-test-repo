@@ -1,0 +1,27 @@
+@startuml
+!pragma teoz true
+
+participant "Basket Confirmation Processor" as BCP
+participant "Basket Service Controller" as BSK
+participant "RefundInPort" as RIP
+participant "BasketOutPort" as BOP
+participant "RefundOutPort" as ROP
+participant "RefundProducer" as RP
+participant "Refund Request Processor" as RRP
+participant "3CP" as 3CP
+participant "Dynamo DB/SQL DB" as DB
+
+
+BSK -> RIP: refundPayment(basketReference, refundRequest)
+RIP -> BOP: getBasketByReference(referenceNumber)
+BOP -> DB: getBasketByReference(referenceNumber)
+BOP <- DB: Basket
+RIP <- BOP: Basket
+RIP -> ROP: processRefund(basketReference, refundRequest, paymentID)
+ROP -> RP: sendRefundRequest(refundEvent)
+RP -> RRP: enque new refund request
+RRP -> 3CP
+RRP <- 3CP
+BCP <-- RRP: return ack
+
+@enduml

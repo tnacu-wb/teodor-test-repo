@@ -1,0 +1,25 @@
+{
+  "id" : "368512f2-32fc-4a82-adba-e345b1ad59fd",
+  "request" : {
+    "urlPath" : "/v1/rules/vat-codes",
+    "method" : "GET",
+    "queryParameters" : {
+      "vatRegion" : {
+        "equalTo" : "UK"
+      },
+      "pkgCodeArr" : {
+        "equalTo" : "OBFGGO,INCPIO"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"vatRegion\":\"UK\",\"tranCodes\":[{\"pkgCode\":\"INCPIO\",\"tranCode\":\"9028\"},{\"pkgCode\":\"INCPIO\",\"tranCode\":\"9026\"},{\"pkgCode\":\"OBFGGO\",\"tranCode\":\"9026\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "368512f2-32fc-4a82-adba-e345b1ad59fd",
+  "priority" : 1
+}

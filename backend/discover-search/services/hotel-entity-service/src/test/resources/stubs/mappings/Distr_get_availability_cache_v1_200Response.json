@@ -1,0 +1,44 @@
+{
+  "request": {
+    "urlPathPattern": "/dist/search/hotels/availabilities",
+    "method": "GET",
+    "queryParameters": {
+      "hotelCodes": {
+        "equalTo": "LONEUS,BERALX"
+      },
+      "arrival": {
+        "equalToDateTime": "now",
+        "truncateExpected": "first hour of day"
+      },
+      "departure": {
+        "equalToDateTime": "now +3 days",
+        "truncateExpected": "first hour of day"
+      },
+      "cot": {
+        "equalTo": "false"
+      },
+      "adults": {
+        "equalTo": "1"
+      },
+      "children": {
+        "equalTo": "0"
+      },
+      "roomQty": {
+        "equalTo": "1"
+      },
+      "roomTypes": {
+        "equalTo": "DBLWIN,WINCMB,NWDCMB,WINSPL,NWDSPL,DOUBLE,ZPLDBL,FMTHRE,FMTRPL,FMTRSC,FMFOUR,DBLDBL,FMQUAD,FMBUNK,DBLNWD,EXTDBL,EXDZPL,PPLDBL,PDBZPL,PFAMIL,LOWDBL,WETDBL,BRFDBL,BRFZPL,BIGWIN,BIGNWD,BIGZPL,ACCWIN,ACCNWD,EXDLOW,EXDWET,PPDLOW,PPDWET"
+      },
+      "rooms": {
+        "equalTo": "1"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "Distr_get_hotelAvailabilityCacheV1_200Response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

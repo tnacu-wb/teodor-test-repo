@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+header piba-account-service
+title /piba/account/proposecreditlimit
+autonumber
+participant "UI" as Client
+participant "PibaAccountController" as PAC
+participant "PibaAccountService" as PAS
+participant "PibaGuidServiceClient" as PGSC
+participant "WorldlineTransformer" as WLT
+participant "worldlineWebServiceTemplate" as WWST
+participant "WorldLineAccountResponseValidator" as WLARV
+
+Client -> PAC : Calls POST /proposecreditlimit with CreditProposeLimitRequest :: SchemeCustomerId:{} TetheredUserGuid:{}
+PAC -> PAS : Calls proposeNewCreditLimit with CreditProposeLimitRequest
+PAS -> WLT : Dispatches Request  CreditProposeNewLimit via method marshalSendAndReceive
+WLT -> PAS : Returns CreditProposeNewLimitResponse
+PAS -> WLARV : Validate the Response
+WLT -> PAS : Return CreditProposeLimitResponse from toCreditProposeNewLimitResponse
+PAS -> PAC : Return CreditProposeLimitResponse
+PAC -> Client : Return CreditProposeLimitResponse
+@enduml

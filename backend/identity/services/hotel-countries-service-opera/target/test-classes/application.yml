@@ -1,0 +1,67 @@
+server:
+  port: 9031
+
+feign-clients:
+  aem:
+    url: http://localhost:${wiremock.server.port:0}
+    country: gb
+    language: en
+    resource: admin/pi/countries.xml
+    username: user
+    password: pass
+
+aem:
+  port: ${wiremock.server.port:0}
+  countriesFile: admin/pi/countries.xml
+  authentication:
+    enabled: true
+    username: user
+    password: password
+  hostMapping:
+    default: localhost
+
+cache:
+  default:
+    ttl: 5000
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+  cache:
+    type: none
+
+hotel:
+  countries:
+    cache:
+      hotelCountries:
+        name: hotelCountries
+        ttl: 86400
+
+management:
+  security:
+    enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - disable-caching
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+    bus:
+      enabled: false
+  cache:
+    type: none
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+logging:
+  level:
+    uk.co.whitbread.hotelcountries.controller: DEBUG

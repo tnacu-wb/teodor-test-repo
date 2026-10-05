@@ -1,0 +1,2308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 (x64) (http://www.altova.com) by Atos (Atos) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="worldline.mst.bsm.api.b2b.pi.data.v1.1" targetNamespace="worldline.mst.bsm.api.b2b.pi.data.v1.1" elementFormDefault="qualified" attributeFormDefault="unqualified" id="data">
+	<xs:complexType name="AddressISOType">
+		<xs:annotation>
+			<xs:documentation>Generic postal address</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Line1" nillable="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Line2" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Line3" nillable="false" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Line4" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Postal town should be passed in line 4 for non UK addresses</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ZIPCode" nillable="false" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="10"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ISO3166CountryCode">
+				<xs:annotation>
+					<xs:documentation>e.g. GBR Alpha3</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="3"/>
+						<xs:minLength value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNPCheckMemorableWordRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="CardNumber" type="tns:CardNumberType"/>
+			<xs:element name="MemorableWordOrPassword">
+				<xs:annotation>
+					<xs:documentation>Memorable word OR password depending on whether or not the card is associated with a tethered user</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+						<xs:minLength value="1"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNPCheckMemorableWordResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CNPCheckTelephoneBookingRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="CardNumber" type="tns:CardNumberType"/>
+			<xs:element name="Char1Position">
+				<xs:annotation>
+					<xs:documentation>Position of first character (of memorable word OR password)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Char1Value">
+				<xs:annotation>
+					<xs:documentation>First supplied character (of memorable word OR password)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Char2Position">
+				<xs:annotation>
+					<xs:documentation>Position of second character (of memorable word OR password)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Char2Value">
+				<xs:annotation>
+					<xs:documentation>Second supplied character (of memorable word OR password)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNPCheckTelephoneBookingResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CNPCheckTetheredUserRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="CardNumber" type="tns:CardNumberType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType">
+				<xs:annotation>
+					<xs:documentation>The Guid associated with the tethered user.  Reminder: the Guid is associated with a user and NOT a card</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNPCheckTetheredUserResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CNPHostedPageInitiateRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="SuccessURL">
+				<xs:annotation>
+					<xs:documentation>Redirection URL on successful cardholder verification</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="500"/>
+						<xs:minLength value="1"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="FailURL" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Redirection URL on cardholder verification failure (optional - success URL will be used)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="500"/>
+						<xs:minLength value="1"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="StyleName" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>(optional � otherwise will use the default style associated with the Trusted Partner making the API call)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+						<xs:minLength value="1"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNPHostedPageInitiateResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="CNPSessionId" type="tns:GuidType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>(e.g. c0cc0ff5-b05d-43ce-86be-c5d6c85e8ea2)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="HostedPageUrl" type="tns:GuidType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Full Hosted Page URL including cnpSessionID (e.g. https://cnp.atosb2b.com/hostedpage.aspx?cnpsessionId=c0cc0ff5-b05d-43ce-86be-c5d6c85e8ea2)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SchemeID" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CNPHostedPageResultRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="CNPSessionID">
+				<xs:annotation>
+					<xs:documentation>CNPSessionId (e.g. c0cc0ff5-b05d-43ce-86be-c5d6c85e8ea2)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+						<xs:minLength value="1"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNPHostedPageResultResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="result" type="tns:HostedPageResultType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CreditProposeNewLimitGetStatusRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="SchemeCustomerId" type="xs:int" nillable="false"/>
+			<xs:element name="CLIRequestId" type="tns:GuidType" nillable="false"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CreditProposeNewLimitGetStatusResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="Completed" type="xs:boolean"/>
+					<xs:element name="OutcomeId" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>1=Approved, 2=Referred, 3=Rejected </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="AgreedNewCreditLimit" type="xs:int" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CreditProposeNewLimitRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="SchemeCustomerId" type="xs:int" nillable="false"/>
+			<xs:element name="ProposedCreditLimit" type="xs:int" nillable="false"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CreditProposeNewLimitResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="CLIRequestId" type="tns:GuidType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CurrencyType">
+		<xs:sequence>
+			<xs:element name="Amount">
+				<xs:simpleType>
+					<xs:restriction base="xs:decimal">
+						<xs:totalDigits value="19"/>
+						<xs:fractionDigits value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CurrencyCode">
+				<xs:annotation>
+					<xs:documentation>e.g. 826</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="3"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomAttributeType">
+		<xs:annotation>
+			<xs:documentation>Custom attributes that can be utilised to pass/retrieve additional information without breaking the interface</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AttributeId" nillable="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Name" nillable="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Value" nillable="false" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Type" nillable="false" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountBalanceDetailsType">
+		<xs:sequence>
+			<xs:element name="OutstandingBalanceAtRisk" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>A. OS_Balance from scheme database + DD payments and cheques which have not yet included in the available balance (authorisation)  Or B + O</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OutstandingBalance" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>B. OS_Balance from scheme database</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AvailableToSpend" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>C. This is the balance on OLA platform and reflects what the credit the account has. It is a revolving balance and is a sum of all the debits and credits taken away from the credit limit. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CreditLimit" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>D. Held on the customer table</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CurrentSpend" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>E = D-C</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SpendSinceLastInvoice" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>F = G + H + I</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PendingTransactions" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>G . Authorisations where no settlement has been received.  Purchase minus Refunds 
+
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransactionsReadyToBeInvoicedWithL3" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>H.Uninvoiced transactions from scheme database where there is a match to level 3</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransactionsReadyToBeInvoicedWithoutLevel3" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>I. Uninvoiced transactions from scheme database where there is not a level 3 match  </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LastStatement" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>J. How much owed when the last invoice was generated - from invoice trailer record</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DepositReceived" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>K. Deposit was received (if applicable)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DepositReturned" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>L. Deposit was returned (if applicable)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DepositBalance" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>M. The value of deposit received (if applicable) K-L</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PayAdjustSinceLastStatement" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>N. Payments/adjustments since last statement (uninvoiced payments, excluding *future* DDs)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ScheduledPayments" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>O. Future  DDs</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="InterimPaymentsSinceLastStatement" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>P.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CashBalance" type="tns:CurrencyType">
+				<xs:annotation>
+					<xs:documentation>Q. Cash Balance</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CB_Period_1" type="tns:CurrencyType"/>
+			<xs:element name="CB_Period_2" type="tns:CurrencyType"/>
+			<xs:element name="CB_Period_3" type="tns:CurrencyType"/>
+			<xs:element name="CB_Period_4" type="tns:CurrencyType"/>
+			<xs:element name="CB_Period_5" type="tns:CurrencyType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountBalancesDashboardPattern1Type">
+		<xs:sequence>
+			<xs:element name="SchemeCustomerId" type="xs:int"/>
+			<xs:element name="Outstanding" type="tns:CurrencyType"/>
+			<xs:element name="NewTransactions" type="tns:CurrencyType"/>
+			<xs:element name="Available" type="tns:CurrencyType"/>
+			<xs:element name="CreditLimit" type="tns:CurrencyType"/>
+			<xs:element name="CurrentBalance" type="tns:CurrencyType"/>
+			<xs:element name="InterimPayments" type="tns:CurrencyType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardActivateRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="CardId" type="xs:int" nillable="false"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardActivateResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardAddRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="Card" type="tns:CustomerAccountCardAddType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardAddResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="Card" type="tns:CustomerAccountCardAllDetailsType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardAddType">
+		<xs:complexContent>
+			<xs:extension base="tns:CustomerAccountCardBaseDetailsType">
+				<xs:sequence>
+					<xs:element name="PrimarySchemeCustomerId" type="xs:int"/>
+					<xs:element name="SchemeCustomerId" type="xs:int"/>
+					<xs:element name="APIUserGuid" type="tns:GuidType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+If appropriate select a user from a list
+
+Note: To invite someone to be a registered user use additional call to customerAccountCardInvite</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="DespatchChoice" type="tns:CustomerAccountCardDespatchChoiceType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>If not supplied defaults to AccountCorrespondenceAddress </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardAllDetailsType">
+		<xs:complexContent>
+			<xs:extension base="tns:CustomerAccountCardBaseDetailsType">
+				<xs:sequence>
+					<xs:element name="Info" type="tns:CustomerAccountCardInfoType"/>
+					<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardAlternativeDespatchDetailType">
+		<xs:annotation>
+			<xs:documentation>Alternative address option 
+Populate the adress object when alternative address is the despatch choice.
+Option to AssociateAddressWithFutureCardholder
+
+Registered user address option
+Do not populate address
+Selected registered user must be populated. If the selected registered user has an address already associated with it it will be used. If not the account correspondence address will be used.
+
+Account correspondence address
+Do not populate the address.
+The account correspondence address will be used.
+
+</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Title">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Forename">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Surname">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Address" type="tns:AddressISOType" minOccurs="0"/>
+			<xs:element name="AssociateAddressWithFutureCardholder" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Should we associate this address with any future cardholder registrations?  When True we will use this address as a default card delivery address when the cardholder registers their card.  When False this is considered an ad-hoc address and it will not be associated with the registered user</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardBaseDetailsType">
+		<xs:annotation>
+			<xs:documentation>Card details required for a new card </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DisplayName">
+				<xs:annotation>
+					<xs:documentation>This is the name to be printed on the card changing this value will cause a new card with the same number to be issued</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+						<xs:maxLength value="27"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CardLimit" nillable="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> This is an optional limit to restrict an individual card spend in addition to the         account limit. Whichever limit is reached first will stop this card from transacting.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="1000000"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CardUsageRestrictions" type="tns:CustomerAccountCardUsageRestrictionType" minOccurs="0"/>
+			<xs:element name="ReportingGroups" type="tns:CustomerAccountCardReportingGroupType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>not for UK scheme</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardCancelRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="CardId" type="xs:int" nillable="false"/>
+			<xs:element name="IssueReplacement" type="xs:boolean"/>
+			<xs:element name="APIUserGuid" type="tns:GuidType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If despatch choice is  registered user address the APIUserGuid of the user should be supplied</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DespatchChoice" type="tns:CustomerAccountCardDespatchChoiceType" minOccurs="0"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardCancelResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="NewCardDetails" type="tns:CustomerAccountCardAllDetailsType" minOccurs="0"/>
+					<xs:element name="CancelledCardDetails" type="tns:CustomerAccountCardAllDetailsType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardDespatchChoiceType">
+		<xs:sequence>
+			<xs:element name="DespatchChoice">
+				<xs:annotation>
+					<xs:documentation>AccountCorrespondenceAddress
+RegisteredUserAddress
+AlternativeAddress</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="tns:eDespatchChoiceType">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomerAccountCardAlternativeDespatchDetail" type="tns:CustomerAccountCardAlternativeDespatchDetailType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Alternative Address Rules
+Populate this object when alternative address is the despatch choice.
+
+Registered User Address Rules
+SelectedRegisteredUser must be populated.
+if the registered user has a correspondence address it will be used otherwise the account correspondence address will be used
+
+Account Correspondence Address
+Do not populate this object
+
+
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardHolderInviteDetailsType">
+		<xs:sequence>
+			<xs:element name="IsMyCard" type="xs:boolean"/>
+			<xs:element name="InviteeDetails" type="tns:CustomerAccountCardInviteDetailsType" minOccurs="0"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardHolderUpdateDetailsType">
+		<xs:sequence>
+			<xs:element name="SelectedCardHolder" type="tns:GuidType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If appropriate as selected from a drop down list this will be the APIUserGUID for the selected users rather than the TetheredUserGuid</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardInfoType">
+		<xs:annotation>
+			<xs:documentation>Read-only information </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CardId" type="xs:int" nillable="false"/>
+			<xs:element name="PAN">
+				<xs:simpleType>
+					<xs:restriction base="tns:CardNumberMaskedType">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+						<xs:pattern value="[0-9]{16,19}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PrimarySchemeCustomerId" type="xs:int"/>
+			<xs:element name="SchemeCustomerId" type="xs:int" nillable="false"/>
+			<xs:element name="IsMyCard" type="xs:boolean"/>
+			<xs:element name="Status" type="tns:eCustomerAccountCardStatusType" nillable="false"/>
+			<xs:element name="IsActivated" type="xs:boolean" nillable="false"/>
+			<xs:element name="ExpiryDate" type="xs:date"/>
+			<xs:element name="CardCurrentSpend" type="tns:CurrencyType" minOccurs="0"/>
+			<xs:element name="RegInfoTitle">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="25"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RegInfoForename">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="30"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RegInfoSurname">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RegInfoEmail">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="200"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RegisteredUsers" type="tns:CustomerAccountRegisteredUserType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Card owners can be account holders, card holders, and other roles. There is usually one however can be multiple</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ContextCan" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Comma seperated list of actions that can be performed in the combined context of the state of account or cost centre. card and user 
+e.g. 
+   CardActivate
+   CardCancel  
+   CardView</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardInviteCardHolderRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="CardId" type="xs:int" nillable="false"/>
+			<xs:element name="InviteeDetails" type="tns:CustomerAccountCardInviteDetailsType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardInviteCardholderResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardInviteDetailsType">
+		<xs:sequence>
+			<xs:element name="RegInfoTitle">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="25"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RegInfoForename">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="30"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RegInfoSurname">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RegInfoEmailAddress" type="tns:EmailAddressType"/>
+			<xs:element name="SendMeACopyOfInvite" type="xs:boolean"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardListItemType">
+		<xs:sequence>
+			<xs:element name="PrimarySchemeCustomerId" type="xs:int"/>
+			<xs:element name="SchemeCustomerId" type="xs:int"/>
+			<xs:element name="CardId" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>This value should be used when performing any action on the card</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PAN" type="tns:CardNumberMaskedType">
+				<xs:annotation>
+					<xs:documentation>This will be the PAN masked</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CardName">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Status" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Note: If status pending then card despatched is false</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsActivated" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Whether the card is activated or not</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsMyCard" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Whether the is registered to the caller of the method </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CountRegistrations" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>0 Card is not registered 1 Card is registered > 1 card is registered to n users</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ContextCan">
+				<xs:annotation>
+					<xs:documentation>Comma seperated list of actions that can be performed in the combined context of the state of account or cost centre. card and user 
+e.g. 
+ CardActivate
+ CardCancel
+ CardView</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardListRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="SchemeCustomerId" type="xs:int"/>
+			<xs:element name="ShowOnlyMyCards" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>only makes a difference for accountholder or cost centre owner</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IncludeCancelledCards" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>adds cancelled card to the result set</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PagingRequest" type="tns:PagingRequestWithoutSortType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardListResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="CustomerAccountCardListItem" type="tns:CustomerAccountCardListItemType" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="PagingResult" type="tns:PagingResultType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardRenewRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="CardId" type="xs:int" nillable="false"/>
+			<xs:element name="DespatchChoice" type="tns:CustomerAccountCardDespatchChoiceType" minOccurs="0"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardRenewResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardReportingGroupType">
+		<xs:sequence>
+			<xs:element name="ReportingGroupId" type="xs:int"/>
+			<xs:element name="IsChecked" type="xs:boolean"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardTransactionDetailType">
+		<xs:sequence>
+			<xs:element name="Description">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Quantity" type="xs:int" minOccurs="0"/>
+			<xs:element name="NetAmount" type="tns:CurrencyType"/>
+			<xs:element name="TaxAmount" type="tns:CurrencyType"/>
+			<xs:element name="GrossAmount" type="tns:CurrencyType"/>
+			<xs:element name="GuestName" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="InvoiceLineItem" type="xs:int" minOccurs="0"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardTransactionType">
+		<xs:sequence>
+			<xs:element name="InvoiceDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="InvoiceNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransactionDate" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Includes time element</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NetAmount" type="tns:CurrencyType" minOccurs="0"/>
+			<xs:element name="TaxAmount" type="tns:CurrencyType" minOccurs="0"/>
+			<xs:element name="GrossAmount" type="tns:CurrencyType"/>
+			<xs:element name="Location">
+				<xs:annotation>
+					<xs:documentation>Merchant location (derived from Merchant Id)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PAN">
+				<xs:annotation>
+					<xs:documentation>Masked</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="tns:CardNumberMaskedType">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+						<xs:maxLength value="19"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CardName">
+				<xs:annotation>
+					<xs:documentation>Derived from card number</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PurchaseOrderReference" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>AKA PurchaseRef</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomerOwnRef" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SalesOrderNumber" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>AKA ReservationNumber</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="LineItems" type="tns:CustomerAccountCardTransactionDetailType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardUpdateRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="Card" type="tns:CustomerAccountCardUpdateType" nillable="false"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardUpdateResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="Card" type="tns:CustomerAccountCardAllDetailsType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardUpdateType">
+		<xs:complexContent>
+			<xs:extension base="tns:CustomerAccountCardBaseDetailsType">
+				<xs:sequence>
+					<xs:element name="CardId" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>A unique identifier for the card</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="APIUserGuid" type="tns:GuidType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>If appropriate as selected from a drop down list this will be the APIUserGUID for the selected users rather than the TetheredUserGuid</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardUsageRestrictionType">
+		<xs:sequence>
+			<xs:element name="RestrictCardUsage" type="xs:boolean"/>
+			<xs:element name="RestrictionStart" type="xs:date" nillable="true" minOccurs="0"/>
+			<xs:element name="RestrictionEnd" type="xs:date" nillable="true" minOccurs="0"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardViewRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="CardId" type="xs:int"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountCardViewResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="Card" type="tns:CustomerAccountCardAllDetailsType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountInvoiceDownloadRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="SchemeCustomerId">
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="FileID" type="xs:int"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountInvoiceDownloadResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="FileDownloadResult" type="tns:FileDownloadResultType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountInvoiceItemType">
+		<xs:sequence>
+			<xs:element name="StatementDate">
+				<xs:simpleType>
+					<xs:restriction base="xs:date">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="InvoiceNo">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="BroughtForward" type="tns:CurrencyType"/>
+			<xs:element name="PaymentsReceived" type="tns:CurrencyType"/>
+			<xs:element name="OverdueBalance" type="tns:CurrencyType"/>
+			<xs:element name="InvoiceValue" type="tns:CurrencyType"/>
+			<xs:element name="StatementBalance" type="tns:CurrencyType"/>
+			<xs:element name="FileAutoID" type="xs:int" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountInvoiceListRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType">
+				<xs:annotation>
+					<xs:documentation>The Guid associated with the tethered user.  Reminder: the Guid is associated with a user and NOT a card</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SchemeCustomerId" type="xs:int" nillable="false"/>
+			<xs:element name="SearchCriteria" type="tns:CustomerAccountInvoiceListSearchCriteriaType" minOccurs="0"/>
+			<xs:element name="PagingRequestDetails" type="tns:PagingRequestWithoutSortType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountInvoiceListResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="CustomerAccountInvoiceItem" type="tns:CustomerAccountInvoiceItemType" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="PagingResult" type="tns:PagingResultType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountInvoiceListSearchCriteriaType">
+		<xs:sequence>
+			<xs:element name="DateFrom" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>inclusive</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DateTo" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>inclusive</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountOverviewType">
+		<xs:sequence>
+			<xs:element name="PrimarySchemeCustomerId" type="xs:int"/>
+			<xs:element name="SchemeCustomerId" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>for uk scheme priimaryschemecustomerid and scheme customer id will be the same for euro where cost centres are involvedthis would refer to the cost centre</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AccountName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The account name</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AccountNumber">
+				<xs:annotation>
+					<xs:documentation>e.g. 3089503200066597</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="CostCentreName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The cost centre name (Eurozone only)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountRegisteredUserListRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="SchemeCustomerId" type="xs:int" nillable="false"/>
+			<xs:element name="CardId" type="xs:int" nillable="true" minOccurs="0"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountRegisteredUserListResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="RegisteredUsers" type="tns:CustomerAccountRegisteredUserType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountRegisteredUserType">
+		<xs:sequence>
+			<xs:element name="APIUserGuid" type="tns:GuidType"/>
+			<xs:element name="DisplayName">
+				<xs:annotation>
+					<xs:documentation>Title Forename Surname (EmailAddress)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HasAddress" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountViewCurrentBalancesRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="SchemeCustomerId" type="xs:int"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountViewCurrentBalancesResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="CustomerAccountBalancesDashboardPattern1" type="tns:CustomerAccountBalancesDashboardPattern1Type" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountViewTransactionsByDateCriteriaType">
+		<xs:sequence>
+			<xs:element name="DateFrom" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Transaction date</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DateTo" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Transaction date</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransactionTypes">
+				<xs:annotation>
+					<xs:documentation>Invoiced, Uninvoiced or both</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+						<xs:enumeration value="Invoiced"/>
+						<xs:enumeration value="Uninvoiced"/>
+						<xs:enumeration value="Both"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PAN" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Only include transactions for this PAN number</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountViewTransactionsByInvoiceDateCriteriaType">
+		<xs:sequence>
+			<xs:element name="InvoiceDate" type="xs:date" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>At least one invoice date must be provided</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PAN" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Only include transactions for these (full) PAN numbers</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountViewTransactionsByInvoiceNumberCriteriaType">
+		<xs:sequence>
+			<xs:element name="InvoiceNumber" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountViewTransactionsCriteriaType">
+		<xs:sequence>
+			<xs:element name="DateSearch" type="tns:CustomerAccountViewTransactionsByDateCriteriaType" minOccurs="0"/>
+			<xs:element name="InvoiceNumberSearch" type="tns:CustomerAccountViewTransactionsByInvoiceNumberCriteriaType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountViewTransactionsRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="SchemeCustomerId" type="xs:int"/>
+			<xs:element name="SearchCriteria" type="tns:CustomerAccountViewTransactionsCriteriaType"/>
+			<xs:element name="PagingRequest" type="tns:PagingRequestWithoutSortType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerAccountViewTransactionsResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="Transactions" type="tns:CustomerAccountCardTransactionType" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="PagingResult" type="tns:PagingResultType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DropDownListItemType">
+		<xs:sequence>
+			<xs:element name="Text">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Value">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EndSessionRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="SessionToken" type="tns:SessionTokenType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EndSessionResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ErrorInfoType">
+		<xs:annotation>
+			<xs:documentation>Generic definition of an error</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ErrorCode">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Info" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FileDownloadResultType">
+		<xs:sequence>
+			<xs:element name="FileName" nillable="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+						<xs:maxLength value="250"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="BinaryData" nillable="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:base64Binary">
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="FileExtension">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="HeaderType">
+		<xs:annotation>
+			<xs:documentation>Standard header type (may be extended in the future)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ClientMessageId" nillable="false">
+				<xs:annotation>
+					<xs:documentation>Message identifier created by original client</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CultureCode" type="tns:CultureCodeType">
+				<xs:annotation>
+					<xs:documentation>Culture code for the request.  Initially the API will only support en-GB.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="UserIPv4" type="tns:IPV4Address" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>IP Address of end user if known (the person at the browser)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="HostedPageResultType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="VerificationStatus" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Success, Fail, Incomplete, Error</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TokenisedPAN" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Returned from 3CP API</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MaskedPAN" type="xs:string" minOccurs="0"/>
+			<xs:element name="CardExpiryDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="SchemeID" type="xs:integer" minOccurs="0"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LoginTetheredUserRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LoginTetheredUserResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="NewSession" type="tns:NewSessionType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Newly created session details</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NewSessionType">
+		<xs:annotation>
+			<xs:documentation>Newly created session details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SessionId">
+				<xs:annotation>
+					<xs:documentation>A unique session identifier created by Worldline but not a secret value (is passed in the clear within the session token)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SharedSecret">
+				<xs:annotation>
+					<xs:documentation>Shared secret created by Worldline but must be stored by the caller for the duration of the session (required for generation of the session token)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PagingRequestType">
+		<xs:sequence>
+			<xs:element name="Page" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>The page to be returned</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MaximumDisplayRows" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>The maximum amount of rows to be returned</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SortOrderAsc" type="xs:boolean"/>
+			<xs:element name="SortColumn">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PagingRequestWithoutSortType">
+		<xs:sequence>
+			<xs:element name="Page" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>The page to be returned</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MaximumDisplayRows" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>The maximum amount of rows to be returned</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PagingResultType">
+		<xs:sequence>
+			<xs:element name="FromRecord" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>The first record number returned from this search</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ToRecord" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>The last record number returned from this seach</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TotalRecordCount" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>The total records returned from this sesrch</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LastPage" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>The last possible page to display</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProcessingMetaInfoType">
+		<xs:annotation>
+			<xs:documentation>Meta information about the request processing</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MessageGuid" type="tns:GuidType">
+				<xs:annotation>
+					<xs:documentation>A unique Guid generated by Worldline for this message</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TimeStamp" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>The UTC time from the Worldline server when the request processing began</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RefreshSessionRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="SessionToken" type="tns:SessionTokenType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RefreshSessionResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RegistrationAuthenticateRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="RegistrationCode">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="AuthenticationAnswers" type="tns:RegistrationAuthenticationAnswerType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Responses to authentication questions (if any were requested)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RegistrationAuthenticateResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="RegistrationCodeInfo" type="tns:RegistrationCodeInfoType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Same summary information as provided before for reference </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="PrepopulatedItems" type="tns:RegistrationPrepopulatedItemsType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Pre-populated items that should be  used as defaults for the registrant (these can be changed)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RegistrationAuthenticationAnswerType">
+		<xs:sequence>
+			<xs:element name="QuestionId">
+				<xs:annotation>
+					<xs:documentation>Question Id 1-based)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Answer">
+				<xs:annotation>
+					<xs:documentation>Response from registrant</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+						<xs:maxLength value="1000"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RegistrationAuthenticationQuestionType">
+		<xs:sequence>
+			<xs:element name="QuestionId">
+				<xs:annotation>
+					<xs:documentation>Question Id 1-based)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Question">
+				<xs:annotation>
+					<xs:documentation>Question text to be presented to registrant</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+						<xs:maxLength value="1000"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RegistrationCodeInfoType">
+		<xs:sequence>
+			<xs:element name="RegistrationCode">
+				<xs:annotation>
+					<xs:documentation>The verified registration code </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PrimarySchemeCustomerId" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>Worldline customerId of the overall account</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SchemeCustomerId" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>When a cost centre this will be populated with a *different* value to PrimarySchemeCustomerId otherwise will be identical</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RegistrationRole">
+				<xs:annotation>
+					<xs:documentation>The role that the registration code relates to</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="AuthenticationQuestions" type="tns:RegistrationAuthenticationQuestionType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Authentication questions.  There could be none, 1 or many of these</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RegistrationDetailsType">
+		<xs:sequence>
+			<xs:element name="Title">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+						<xs:maxLength value="25"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Forename">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="30"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Surname">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="EmailAddress">
+				<xs:simpleType>
+					<xs:restriction base="tns:EmailAddressType"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="MobileNumber" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="14"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="LandlineNumber" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="14"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="MemorableWord">
+				<xs:annotation>
+					<xs:documentation>This must be specified in order to use CNP going forward.  Effectively replaces the user password</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+						<xs:minLength value="7"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RegistrationGetInfoRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="RegistrationCode">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RegistrationGetInfoResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="RegistrationCodeInfo" type="tns:RegistrationCodeInfoType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Summary information about the supplied registration code (including authentication questions)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RegistrationPrepopulatedItemsType">
+		<xs:sequence>
+			<xs:element name="Title" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Forename" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Surname" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="EmailAddress" type="tns:EmailAddressType" minOccurs="0"/>
+			<xs:element name="MobileNumber" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="LandlineNumber" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RegistrationSubmitRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="RegistrationCode">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="AuthenticationAnswers" type="tns:RegistrationAuthenticationAnswerType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Same responses as passed previously (will be re-validated during this call)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RegistrationDetails" type="tns:RegistrationDetailsType">
+				<xs:annotation>
+					<xs:documentation>Details used to define new Worldline user</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RegistrationSubmitResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="RegistrationCodeInfo" type="tns:RegistrationCodeInfoType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Same summary information as provided before for reference </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="TetherDetails" type="tns:TetherDetailsType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ResponseType">
+		<xs:annotation>
+			<xs:documentation>Generic response type used as a base type for all message responses</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ResultCode">
+				<xs:annotation>
+					<xs:documentation>Result code.  OK means success.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Errors" type="tns:ErrorInfoType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="MetaInfo" type="tns:ProcessingMetaInfoType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SelectedRegisteredUserType">
+		<xs:sequence>
+			<xs:element name="APIUserGuid" type="tns:GuidType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If appropriate as selected from a drop down list this will be the APIUserGUID for the selected users rather than the TetheredUserGuid</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SessionTokenType">
+		<xs:annotation>
+			<xs:documentation>Session token (generated by client and passed to Worldline)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SessionId">
+				<xs:annotation>
+					<xs:documentation>The sessionId value returned during the login process</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Nonce">
+				<xs:annotation>
+					<xs:documentation>Random "number used once" value generated by caller.  We recommend Base64 encoding a random GUID for this purpose.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Timestamp" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Passed as a string to ensure cryptographic hash will be accurate.  This should be the current UTC date in the format: yyyy-MM-ddTHH:mm:ss</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Hash">
+				<xs:annotation>
+					<xs:documentation>SHA256 hash of above values + shared secret</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TetherByAccountNumberRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="LinkCode" type="tns:LinkCodeType">
+				<xs:annotation>
+					<xs:documentation>Unique code that will either have been emailed to user OR should be retrieved from Worldline MMA area</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AccountNumber">
+				<xs:annotation>
+					<xs:documentation>Note: This is the 16 digit account number as displayed on the customers invoice</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="tns:AccountNumberFromInvoiceType">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="NewMemorableWord">
+				<xs:annotation>
+					<xs:documentation>This must be specified in order to use CNP going forward.  Effectively replaces the user password</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+						<xs:minLength value="7"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TetherByAccountNumberResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="TetherDetails" type="tns:TetherDetailsType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Only returned in the event of a successful tether</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TetherByCardNumberRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="LinkCode" type="tns:LinkCodeType">
+				<xs:annotation>
+					<xs:documentation>Unique code that will either have been emailed to user OR should be retrieved from Worldline MMA area</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CardNumber" type="tns:CardNumberType">
+				<xs:annotation>
+					<xs:documentation>This card number must be associated with the user (i.e. for a cardholder the card must registered to the user and for an account holder the card must be a "my card")</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NewMemorableWord">
+				<xs:annotation>
+					<xs:documentation>This must be specified in order to use CNP going forward</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+						<xs:minLength value="7"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TetherByCardNumberResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="TetherDetails" type="tns:TetherDetailsType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Only returned in the event of a successful tether</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TetherDetailsType">
+		<xs:annotation>
+			<xs:documentation>Successful tether result information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType">
+				<xs:annotation>
+					<xs:documentation>A random Guid that represents the newly tethered user.  This is the value that will be used in future to create a new session (loginTetheredUser)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TetheredUserDetailsGetRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TetheredUserDetailsGetResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="TetheredUserDetails" type="tns:TetheredUserDetailsType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TetheredUserDetailsType">
+		<xs:sequence>
+			<xs:element name="TetheredUserOverview" type="tns:TetheredUserOverviewType"/>
+			<xs:element name="CustomerAccountOverview" type="tns:CustomerAccountOverviewType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TetheredUserOverviewType">
+		<xs:sequence>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType">
+				<xs:annotation>
+					<xs:documentation>Only applies to tethered users</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="APIUserGuid" type="tns:GuidType">
+				<xs:annotation>
+					<xs:documentation>This is an unique identifier for a user and uniquely identifies a user whether the user is tethered ot not. This value may be used for example in a mycard situation when adding or updating a card rather than selecting the user from a list of APIUserGuid</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="UserRole" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>AccountHolder
+AccountCardHolder
+AccountCardHolderWithReportsAndInvoices ReportsAndInvoices</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CountMyCards" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>This will be a count of the users “current” cards [note ‘current’ cards can be active (activated) or inactive (not yet activated)]</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TrustedPartnerCredentialsType">
+		<xs:annotation>
+			<xs:documentation>Trusted partner credentials</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Username">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Password">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UpdateMemorableWordRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="SessionToken" type="tns:SessionTokenType"/>
+			<xs:element name="NewMemorableWord">
+				<xs:annotation>
+					<xs:documentation>Note: Premier Inn should validate the current memorable word before allowing a new one to be specified</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="50"/>
+						<xs:minLength value="7"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UpdateMemorableWordResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="AccountNumberFromInvoiceType">
+		<xs:annotation>
+			<xs:documentation>The full account number as displayed on the customes invoice</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:length value="16"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CardNumberMaskedType">
+		<xs:annotation>
+			<xs:documentation>For Premier Inn all card numbers are length 19</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="[0-9]{8}[*]{7}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CardNumberType">
+		<xs:annotation>
+			<xs:documentation>For Premier Inn all card numbers are length 19</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="[0-9]{19}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CultureCodeType">
+		<xs:annotation>
+			<xs:documentation>Represents a culture code (e.g. en-GB)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="10"/>
+			<xs:whiteSpace value="collapse"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="eCustomerAccountCardStatusType">
+		<xs:annotation>
+			<xs:documentation>Status of card</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Pending"/>
+			<xs:enumeration value="Cancelled"/>
+			<xs:enumeration value="Closed"/>
+			<xs:enumeration value="Current"/>
+			<xs:enumeration value="HOT"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="eDespatchChoiceType">
+		<xs:annotation>
+			<xs:documentation>Card despatch choice</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AccountCorrespondenceAddress"/>
+			<xs:enumeration value="RegisteredUserAddress"/>
+			<xs:enumeration value="AlternativeAddress"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EmailAddressType">
+		<xs:annotation>
+			<xs:documentation>Valid email address (using regex)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:minLength value="1"/>
+			<xs:maxLength value="200"/>
+			<xs:pattern value="([\w\-\.'_]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,20}|[0-9]{1,3})(\]?)"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GuidType">
+		<xs:annotation>
+			<xs:documentation>The representation of a GUID</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="\{[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IPV4Address">
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="([0-9]{1,3}\.){3}[0-9]{1,3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LinkCodeType">
+		<xs:annotation>
+			<xs:documentation>Key piece of information to initiate the tethering process (NB this code is unqiue to a user).  Code is in the format of xxx-xxx-xxx</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:length value="11"/>
+			<xs:pattern value="[0-9,a-z,A-Z]{3}-[0-9,a-z,A-Z]{3}-[0-9,a-z,A-Z]{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RegistrationRole">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AccountHolder"/>
+			<xs:enumeration value="CardHolder"/>
+			<xs:enumeration value="CostCentre"/>
+			<xs:enumeration value="Reporting"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

@@ -1,0 +1,74 @@
+# Non-production shared values (dev, dit, sit, uat, perf)
+# Layered: values.yaml → nonprod.yaml → <env>.yaml
+#
+# All non-prod environments have migrated OFF the in-cluster Bitnami PostgreSQL
+# onto Serverless Aurora. Each Aurora cluster and its credentials are provisioned
+# by the Infra team. The DB password lives in AWS Secrets Manager and is synced
+# into the `temporal-postgres-credentials` Kubernetes Secret by External Secrets
+# Operator (ClusterExternalSecret + "aws-secret-manager" ClusterSecretStore).
+# Temporal consumes that secret via `existingSecret`; nobody sets the password in
+# the chart (`password: ""` stays empty). The Aurora clusters and their AWS
+# Secrets Manager secrets are owned and managed by the Infra team; this chart
+# only references the synced K8s secret.
+#
+# This file holds the Aurora connection settings common to every non-prod
+# environment. Only the per-env Aurora writer endpoint differs, so `connectAddr`
+# is set in each <env>.yaml; everything else is shared here via the &auroraSql
+# anchor.
+
+temporal:
+  # No wait-for-postgresql init container: there is no in-cluster
+  # `temporal-postgresql` service to wait on with Aurora. The Temporal schema
+  # setup job retries (backoffLimit in values.yaml) until Aurora is reachable.
+  admintools:
+    additionalInitContainers: []
+
+  server:
+    config:
+      persistence:
+        datastores:
+          default:
+            sql: &auroraSql
+              # connectAddr is per-environment — set in each <env>.yaml.
+              password: ""
+              # Infra-managed credentials. ESO syncs the AWS Secrets Manager
+              # value into this K8s Secret; Temporal reads the password from
+              # `secretKey`. To rotate, update the value in AWS Secrets Manager.
+              existingSecret: "temporal-postgres-credentials"
+              secretKey: "database_password"
+              # Aurora Serverless has a per-ACU connection ceiling, so keep
+              # per-pod pools small to leave headroom for scale-out.
+              maxConns: 10
+              maxIdleConns: 5
+              maxConnLifetime: "1h"
+              # Aurora enforces SSL (rds.force_ssl); a plaintext connection is
+              # rejected by pg_hba ("no pg_hba.conf entry ... no encryption"),
+              # which surfaces as "no usable database connection found" and the
+              # server crashlooping on the schema version check. The Temporal SQL
+              # driver connects without TLS unless told otherwise, so enable it.
+              #
+              # `enableHostVerification: false` for now: the temporalio/server
+              # image trusts the OS/public CA bundle but NOT the Amazon RDS CA, so
+              # verifying the server cert would fail with "certificate signed by
+              # unknown authority" until the RDS global-bundle.pem is mounted into
+              # the pods. This keeps the connection encrypted (fixes the crash)
+              # without the CA plumbing. FOLLOW-UP (SRE-364): switch to host
+              # verification once the RDS CA bundle is mounted (Infra owns the
+              # Aurora cert):
+              #   enableHostVerification: true
+              #   serverName: "<env Aurora writer endpoint>"
+              #   caFile: "/etc/rds/global-bundle.pem"   # requires mounting the bundle
+              tls:
+                enabled: true
+                enableHostVerification: false
+
+          visibility:
+            # Reuse the shared connection settings; override only maxConns.
+            sql:
+              <<: *auroraSql
+              maxConns: 5
+
+# In-cluster Bitnami PostgreSQL is removed for all non-prod environments —
+# Aurora Serverless is the datastore now.
+postgresql:
+  enabled: false

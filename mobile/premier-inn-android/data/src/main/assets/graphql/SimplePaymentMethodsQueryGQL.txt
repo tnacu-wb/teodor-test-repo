@@ -1,0 +1,33 @@
+query paymentMethods ($paymentMethodsCriteria: PaymentMethodsCriteria!) {
+    paymentMethods (paymentMethodsCriteria: $paymentMethodsCriteria) {
+        name
+        type
+        order
+        clientId
+        clientToken
+        acceptedCardTypes {
+            type
+            name
+            logoSrc
+        }
+        card {
+            token
+            expiryMonth
+            expiryYear
+            type
+            logoSrc
+            cardType
+            cardHolderName
+            cnpRequired
+        }
+        paymentOptions {
+            type
+            order
+            enabled
+        }
+        enabled
+        cnpPreSelected
+        cnpOptionAvailable
+        reasons
+    }
+}

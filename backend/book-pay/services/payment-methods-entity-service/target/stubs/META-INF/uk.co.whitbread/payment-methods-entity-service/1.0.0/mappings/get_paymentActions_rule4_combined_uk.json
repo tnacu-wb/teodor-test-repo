@@ -1,0 +1,21 @@
+{
+  "id" : "022dd926-27f8-45c8-a68a-dae5adb274ef",
+  "request" : {
+    "urlPath" : "/v1/payment-methods/payment-actions/BASKET_UK_COMBINED",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"displayPaymentPage\":true,\"paymentActions\":[{\"chargeType\":\"CARD_ON_FILE\",\"price\":{\"amount\":100.0,\"currency\":\"GBP\"},\"order\":1},{\"chargeType\":\"CREDIT_CARD\",\"price\":{\"amount\":50.0,\"currency\":\"GBP\"},\"order\":2}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "022dd926-27f8-45c8-a68a-dae5adb274ef"
+}

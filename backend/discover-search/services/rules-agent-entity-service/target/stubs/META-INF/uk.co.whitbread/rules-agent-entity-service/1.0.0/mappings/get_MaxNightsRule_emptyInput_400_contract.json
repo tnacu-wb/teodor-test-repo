@@ -1,0 +1,22 @@
+{
+  "id" : "2a9f5882-c4de-4209-8d4f-ce5c996140c7",
+  "request" : {
+    "urlPath" : "/v1/rules/max-nights",
+    "method" : "GET",
+    "queryParameters" : {
+      "channelId" : {
+        "equalTo" : ""
+      }
+    }
+  },
+  "response" : {
+    "status" : 422,
+    "body" : "{\"errCode\":401,\"globalErrTextTemplate\":\"validation.error.form\",\"details\":[{\"elementId\":\"channelId\",\"errTextTemplate\":\"must not be blank\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "2a9f5882-c4de-4209-8d4f-ce5c996140c7",
+  "priority" : 1
+}

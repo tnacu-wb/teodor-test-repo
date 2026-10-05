@@ -1,0 +1,17 @@
+@startuml
+actor User as User
+entity "Front End App" as FE
+entity "AppSync"
+entity "Address Lookup Entity Service" as ALS
+entity "Experian QAS" as QAS
+
+User -> FE: Format address
+FE -> AppSync: graphql addressFormat
+AppSync -> ALS: GET v1/addresses/{{identifier}}
+ALS -> QAS: DoGetAddress - **moniker**
+
+ALS <- QAS: Return full address
+AppSync <- ALS: Return full address
+FE <- AppSync: Return full address
+User <- FE: Display full address
+@enduml

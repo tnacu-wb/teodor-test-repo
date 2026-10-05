@@ -1,0 +1,23 @@
+{
+  "id" : "800efab4-88b2-4382-be4f-ab803ed30ef2",
+  "request" : {
+    "urlPath" : "/v1/pay-app/application/initialize",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['email'] == 'john.doe@email.com')]"
+    } ]
+  },
+  "response" : {
+    "status" : 500,
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "800efab4-88b2-4382-be4f-ab803ed30ef2"
+}

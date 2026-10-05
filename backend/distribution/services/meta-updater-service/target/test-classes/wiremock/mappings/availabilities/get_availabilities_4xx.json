@@ -1,0 +1,16 @@
+{
+  "request": {
+    "urlPathPattern": "/v1/meta-proxy/4xx",
+    "method": "POST",
+    "bodyPatterns": [{
+      "equalToJson" : "{ \"hotelCode\": \"LONEUS\", \"startDate\": \"2023-02-04\",\"endDate\": \"2024-04-07\",\"roomTypes\": [\"DOUBLE\"]}",
+      "ignoreArrayOrder" : true
+    }]
+  },
+  "response": {
+    "status": 404,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

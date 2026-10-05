@@ -1,0 +1,64 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "baseUrl": "./src",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "paths": {
+      "~public/*": ["../public/*"],
+      "~pages/*": ["./pages/*"],
+      "~page-helper/*": ["./page-helper/*"],
+      "~components/*": ["./components/*"],
+      "~components": ["./components/index.ts"],
+      "~types/*": ["./types/*"],
+      "~store/*": ["./store/*"],
+      "~store": ["./store/index.ts"],
+      "~hooks/*": ["./hooks/*"],
+      "~utils/*": ["./utils/*"],
+      "~services/*": ["./services/*"],
+      "~services": ["./services/index.ts"],
+      "~styles/*": ["./styles/*"],
+      "~queries/*": ["./queries/*"],
+      "~queries": ["./queries/index.ts"],
+      "~mocks/*": ["./mocks/*"],
+      "@WB-playwright/utils": ["../playwright/utils/index.ts"],
+      "@WB-playwright/constants": ["../playwright/constants/index.ts"],
+      "@WB-playwright/types": ["../playwright/types/index.ts"],
+      "@WB-playwright/config": ["../playwright/config.ts"]
+    },
+    "incremental": false,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    ".yarn",
+    ".next",
+    "playwright-report",
+    "test-results",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.json",
+    ".next/types/**/*.ts"
+  ]
+}

@@ -1,0 +1,17 @@
+mutation confirmPreCheckOut(
+  $basketReference: String!
+) {
+  confirmPreCheckOut(
+    basketReference: $basketReference
+  ) {
+    basketReference
+    basketStatus
+    createdAt
+    basketError {
+        code
+        description
+        type
+    }
+    retryPayment
+  }
+}

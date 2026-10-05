@@ -1,0 +1,52 @@
+{
+  "id" : "1c9e7d59-466a-4a71-8397-bbeca006d6ad",
+  "request" : {
+    "urlPath" : "/v1/baskets/ccui/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/eckoh",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['requestId'] == '12345678')]"
+    }, {
+      "matchesJsonPath" : "$.['payment'][?(@.['type'] == 'CARD')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['agent'][?(@.['email'] == 'james.bond@whitbread.com')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['agent'][?(@.['name'] == 'James Bond')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'][?(@.['type'] == 'PAY_ON_ARRIVAL')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'][?(@.['language'] == 'en')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'][?(@.['journey'] == 'BOOKING')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'][?(@.['channel'] == 'PI')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['businessSite'][?(@.['identifier'] == 'LONEUS')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['businessSite'][?(@.['type'] == 'HOTEL')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['businessSite'][?(@.['name'] == 'London Euston')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['businessSite'][?(@.['location'] == 'London')]"
+    }, {
+      "matchesJsonPath" : "$.['booking'].['businessSite'][?(@.['country'] == 'GB')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['paymentOption'] == 'PAY_NOW')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['subPaymentType'] == 'PIBAGB')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"paymentId\":\"33661084018D\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "1c9e7d59-466a-4a71-8397-bbeca006d6ad"
+}

@@ -1,0 +1,8 @@
+query getHotelInventory($hotelId: String!, $dateRangeEnd: String!, $dateRangeStart: String!) {
+    hotelInventory(hotelId: $hotelId, dateRangeEnd: $dateRangeEnd, dateRangeStart: $dateRangeStart) {
+        roomTypeInventories {
+            availableCount
+            code
+        }
+    }
+}

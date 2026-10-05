@@ -1,0 +1,65 @@
+export const mockedBookingConfirmationData = {
+  bookingFlowId: 'booking-ct-a1',
+  hotelId: 'FRAMTI',
+  hotelName: 'Frankfurt Messe',
+  infoMessages: ['<p>Kostenlose Stornierung und Änderung bis 18:00 Uhr am Anreisetag.</p>\n'],
+  currencyCode: 'EUR',
+  totalCost: 73,
+  previousTotal: 0,
+  newTotal: 73,
+  channel: 'CCUI',
+  companyId: null,
+  reservationByIdList: [
+    {
+      reservationId: '2151840',
+      preCheckInStatus: false,
+      deRegCardCompleted: false,
+      reservationGuestList: [
+        {
+          givenName: 'abc',
+          surName: 'cde',
+          nameTitle: 'Mr',
+          email: 'abc@as.ro',
+          address: {
+            addressLine1: 'Whitbread Court, Porz Avenue',
+            addressLine2: 'Houghton Hall Park, Houghton Regis',
+            addressLine3: null,
+            addressLine4: 'DUNSTABLE',
+            cityName: 'DUNSTABLE',
+            postalCode: 'LU5 5XE',
+            countryCode: 'GB',
+          },
+        },
+      ],
+      billing: {
+        address: {
+          addressLine1: 'Whitbread Court, Porz Avenue',
+          addressLine2: 'Houghton Hall Park, Houghton Regis',
+          addressLine3: '',
+          addressLine4: 'DUNSTABLE',
+          companyName: '',
+          country: 'GB',
+          postalCode: 'LU5 5XE',
+        },
+        email: 'abc@as.ro',
+      },
+      roomStay: {
+        adultsNumber: 1,
+        childrenNumber: 0,
+        arrivalDate: '2024-08-31',
+        departureDate: '2024-09-01',
+        ratePlanCode: 'FLEXRATE',
+        roomExtraInfo: {
+          roomType: 'DOUBLE',
+          roomName: 'Doppelzimmer',
+          groupId: 'double',
+        },
+        accessibleRoom: {
+          phoneNumber: '+49 (0)69 8500691',
+          isAccessible: false,
+        },
+        roomPrice: 55,
+      },
+    },
+  ],
+};

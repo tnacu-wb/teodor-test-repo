@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_14" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/guest_details_form_first_name"
+        android:labelFor="@+id/guest_details_first_name_input"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText">
+
+        <EditText
+            android:id="@+id/guest_details_first_name_input"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="personGivenName"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords|textNoSuggestions" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/guest_details_form_last_name"
+        android:labelFor="@+id/guest_details_last_name_input"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText">
+
+        <EditText
+            android:id="@+id/guest_details_last_name_input"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="personFamilyName"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords|textNoSuggestions" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/guest_details_form_contact_number"
+        android:labelFor="@+id/guest_details_contact_number_input"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText">
+
+        <EditText
+            android:id="@+id/guest_details_contact_number_input"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="phoneNumberDevice|phoneNumber|phoneNational"
+            android:imeOptions="actionNext"
+            android:inputType="number|text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/email_address"
+        android:labelFor="@+id/guest_details_email_input"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText">
+
+        <EditText
+            android:id="@+id/guest_details_email_input"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="emailAddress"
+            android:imeOptions="actionDone"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</merge>

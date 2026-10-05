@@ -1,0 +1,51 @@
+{{- if and .Values.virtualService.enabled .Values.virtualService.host }}
+# TLS is terminated at the AWS ALB (load balancer) level, not by Istio.
+# Port 443 uses protocol HTTP because the ALB forwards decrypted traffic
+# to the Istio ingress gateway. Same pattern as temporal-ui.
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: {{ include "opera-ohip-app.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "opera-ohip-app.labels" . | nindent 4 }}
+spec:
+  selector:
+    istio: ingress-tools-istio-ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - {{ .Values.virtualService.host | quote }}
+      tls:
+        httpsRedirect: true
+    - port:
+        number: 443
+        name: https-443
+        protocol: HTTP
+      hosts:
+        - {{ .Values.virtualService.host | quote }}
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ include "opera-ohip-app.fullname" . }}
+  labels:
+    {{- include "opera-ohip-app.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ .Values.virtualService.host | quote }}
+  gateways:
+    - {{ include "opera-ohip-app.fullname" . }}
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ include "opera-ohip-app.fullname" . }}
+            port:
+              number: {{ .Values.service.port }}
+{{- end }}

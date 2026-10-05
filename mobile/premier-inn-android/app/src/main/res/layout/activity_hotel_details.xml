@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/hotel_details_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="@android:color/white">
+
+        <include
+            android:id="@+id/toolbar_layout"
+            layout="@layout/toolbar_hotel_details" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.whitbread.premierinn.common.view.TouchEventAwareRecyclerView
+        android:id="@+id/hotel_details_content_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/hotel_details_button_wrapper"
+        app:layout_constraintTop_toBottomOf="@id/hotel_details_toolbar" />
+
+    <FrameLayout
+        android:id="@+id/hotel_details_button_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:animateLayoutChanges="true"
+        android:background="@color/white"
+        android:elevation="@dimen/generic_elevation_1"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+            android:id="@+id/hotel_details_select_rate_button"
+            style="@style/Button1"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="@dimen/generic_margin_8"
+            android:text="@string/hotel_details_select_rate"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/hdp_progress_bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="10dp">
+
+        <ProgressBar
+            android:id="@+id/translucent_loading_hdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

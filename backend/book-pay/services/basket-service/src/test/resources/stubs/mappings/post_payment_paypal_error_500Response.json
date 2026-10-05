@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathPattern": "/payments",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$..identifier",
+          "contains": "WORHIG"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 500,
+    "bodyFileName": "post_pay_now_paypal_payment_error_500Response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

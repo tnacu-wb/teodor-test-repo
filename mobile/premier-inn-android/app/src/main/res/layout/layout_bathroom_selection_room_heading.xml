@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/roomAccessibleImage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:src="@drawable/ic_wheelchair"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/roomHeading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/roomHeading"
+        style="@style/Header2SemiBold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/charcoal"
+        app:layout_constraintBottom_toTopOf="@id/roomOccupants"
+        app:layout_constraintEnd_toStartOf="@+id/tooltip"
+        app:layout_constraintStart_toEndOf="@id/roomAccessibleImage"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Room 1" />
+
+    <TextView
+        android:id="@+id/roomOccupants"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/bathroom_room_size_description"
+        app:layout_constraintStart_toStartOf="@id/roomHeading"
+        app:layout_constraintTop_toBottomOf="@+id/roomHeading"
+        tools:text="2 Adults" />
+
+    <TextView
+        android:id="@+id/bathroom_room_size_description"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/generic_padding_8"
+        android:textColor="@color/eclipse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/roomHeading"
+        app:layout_constraintTop_toBottomOf="@+id/roomOccupants"
+        tools:text="Accessible Double" />
+
+    <TextView
+        android:id="@+id/bathroom_change_type"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change"
+        android:textColor="@color/premier_inn_purple"
+        app:layout_constraintBottom_toBottomOf="@+id/bathroom_room_size_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/bathroom_room_size_description"
+        app:layout_constraintTop_toTopOf="@+id/bathroom_room_size_description" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:background="@color/grey_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bathroom_room_size_description" />
+
+    <TextView
+        android:id="@+id/tooltip"
+        style="@style/SubtextSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:background="@drawable/tooltip"
+        android:gravity="center"
+        android:paddingBottom="@dimen/generic_padding_6"
+        android:textColor="@color/eclipse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/roomHeading"
+        tools:text="Accessible twin available" />
+</androidx.constraintlayout.widget.ConstraintLayout>

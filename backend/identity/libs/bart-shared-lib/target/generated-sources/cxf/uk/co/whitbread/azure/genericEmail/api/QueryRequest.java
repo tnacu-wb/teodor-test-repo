@@ -1,0 +1,260 @@
+
+package uk.co.whitbread.azure.genericEmail.api;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
+
+
+/**
+ * &lt;p&gt;Java class for QueryRequest complex type&lt;/p&gt;.
+ * 
+ * &lt;p&gt;The following schema fragment specifies the expected content contained within this class.&lt;/p&gt;
+ * 
+ * &lt;pre&gt;{&#064;code
+ * &lt;complexType name="QueryRequest"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="ClientIDs" type="{https://transact.comms.int.wtbapi.com/wsdl/emailAPI}ClientID" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="Query" type="{https://transact.comms.int.wtbapi.com/wsdl/emailAPI}Query"/&gt;
+ *         &lt;element name="RespondTo" type="{https://transact.comms.int.wtbapi.com/wsdl/emailAPI}AsyncResponse" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="PartnerProperties" type="{https://transact.comms.int.wtbapi.com/wsdl/emailAPI}APIProperty" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="ContinueRequest" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="QueryAllAccounts" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
+ *         &lt;element name="RetrieveAllSinceLastBatch" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
+ * }&lt;/pre&gt;
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "QueryRequest", propOrder = {
+    "clientIDs",
+    "query",
+    "respondTo",
+    "partnerProperties",
+    "continueRequest",
+    "queryAllAccounts",
+    "retrieveAllSinceLastBatch"
+})
+public class QueryRequest
+    implements Serializable
+{
+
+    private static final long serialVersionUID = 1L;
+    @XmlElement(name = "ClientIDs")
+    protected List<ClientID> clientIDs;
+    @XmlElement(name = "Query", required = true)
+    protected Query query;
+    @XmlElement(name = "RespondTo")
+    protected List<AsyncResponse> respondTo;
+    @XmlElement(name = "PartnerProperties")
+    protected List<APIProperty> partnerProperties;
+    @XmlElement(name = "ContinueRequest")
+    protected String continueRequest;
+    @XmlElement(name = "QueryAllAccounts")
+    protected Boolean queryAllAccounts;
+    @XmlElement(name = "RetrieveAllSinceLastBatch")
+    protected Boolean retrieveAllSinceLastBatch;
+
+    /**
+     * Gets the value of the clientIDs property.
+     * 
+     * <p>This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the Jakarta XML Binding object.
+     * This is why there is not a {@code set} method for the clientIDs property.</p>
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * </p>
+     * <pre>
+     * getClientIDs().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link ClientID }
+     * </p>
+     * 
+     * 
+     * @return
+     *     The value of the clientIDs property.
+     */
+    public List<ClientID> getClientIDs() {
+        if (clientIDs == null) {
+            clientIDs = new ArrayList<>();
+        }
+        return this.clientIDs;
+    }
+
+    /**
+     * Gets the value of the query property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Query }
+     *     
+     */
+    public Query getQuery() {
+        return query;
+    }
+
+    /**
+     * Sets the value of the query property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Query }
+     *     
+     */
+    public void setQuery(Query value) {
+        this.query = value;
+    }
+
+    /**
+     * Gets the value of the respondTo property.
+     * 
+     * <p>This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the Jakarta XML Binding object.
+     * This is why there is not a {@code set} method for the respondTo property.</p>
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * </p>
+     * <pre>
+     * getRespondTo().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link AsyncResponse }
+     * </p>
+     * 
+     * 
+     * @return
+     *     The value of the respondTo property.
+     */
+    public List<AsyncResponse> getRespondTo() {
+        if (respondTo == null) {
+            respondTo = new ArrayList<>();
+        }
+        return this.respondTo;
+    }
+
+    /**
+     * Gets the value of the partnerProperties property.
+     * 
+     * <p>This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the Jakarta XML Binding object.
+     * This is why there is not a {@code set} method for the partnerProperties property.</p>
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * </p>
+     * <pre>
+     * getPartnerProperties().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link APIProperty }
+     * </p>
+     * 
+     * 
+     * @return
+     *     The value of the partnerProperties property.
+     */
+    public List<APIProperty> getPartnerProperties() {
+        if (partnerProperties == null) {
+            partnerProperties = new ArrayList<>();
+        }
+        return this.partnerProperties;
+    }
+
+    /**
+     * Gets the value of the continueRequest property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getContinueRequest() {
+        return continueRequest;
+    }
+
+    /**
+     * Sets the value of the continueRequest property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setContinueRequest(String value) {
+        this.continueRequest = value;
+    }
+
+    /**
+     * Gets the value of the queryAllAccounts property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isQueryAllAccounts() {
+        return queryAllAccounts;
+    }
+
+    /**
+     * Sets the value of the queryAllAccounts property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setQueryAllAccounts(Boolean value) {
+        this.queryAllAccounts = value;
+    }
+
+    /**
+     * Gets the value of the retrieveAllSinceLastBatch property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isRetrieveAllSinceLastBatch() {
+        return retrieveAllSinceLastBatch;
+    }
+
+    /**
+     * Sets the value of the retrieveAllSinceLastBatch property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setRetrieveAllSinceLastBatch(Boolean value) {
+        this.retrieveAllSinceLastBatch = value;
+    }
+
+}

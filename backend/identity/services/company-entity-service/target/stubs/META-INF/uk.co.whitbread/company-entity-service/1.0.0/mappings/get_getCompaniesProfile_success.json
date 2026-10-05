@@ -1,0 +1,35 @@
+{
+  "id" : "3b5cea71-daf0-4c0b-9714-9ca0d3eef73b",
+  "request" : {
+    "urlPath" : "/v1/companies/profile",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json;charset=UTF-8"
+      }
+    },
+    "queryParameters" : {
+      "hotelId" : {
+        "equalTo" : "MANOLD"
+      },
+      "arNumber" : {
+        "equalTo" : "167003"
+      },
+      "companyName" : {
+        "equalTo" : "AMEROPA-REISEN G"
+      },
+      "limit" : {
+        "equalTo" : "50"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"companies\":[{\"name\":\"AMEROPA-REISEN GmbH\",\"telephoneNumber\":\"+1 415 555 0101\",\"profileType\":\"Company\",\"corpId\":\"AB-63\",\"companyId\":\"43215\",\"language\":\"en\",\"arNumber\":\"167003\",\"active\":true,\"negotiatedRateEnabled\":false,\"restricted\":true,\"restrictedReason\":\"A2CNACTV\",\"address\":{\"addressLine1\":\"Siemensstraße 27\",\"addressLine2\":\"Siemensstraße 27\",\"addressLine3\":\"Siemensstraße 27\",\"addressLine4\":\"Siemensstraße 27\",\"city\":\"Bad Homburg\",\"country\":\"Romania\",\"postalCode\":\"61352\"}}],\"totalResults\":1,\"hasMore\":false,\"limit\":1,\"offset\":0,\"page\":0,\"pageSize\":0}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "3b5cea71-daf0-4c0b-9714-9ca0d3eef73b"
+}

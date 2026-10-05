@@ -1,0 +1,97 @@
+package uk.co.whitbread.hotel.ohip.adapter.generated.models;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.lang.Nullable;
+import uk.co.whitbread.hotel.ohip.adapter.generated.models.AddressInfoDto;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
+
+/**
+ * AddressesDto
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-08-27T18:51:15.274731+03:00[Europe/Bucharest]", comments = "Generator version: 7.12.0")
+public class AddressesDto {
+
+  @Valid
+  private List<@Valid AddressInfoDto> addressInfo = new ArrayList<>();
+
+  public AddressesDto addressInfo(List<@Valid AddressInfoDto> addressInfo) {
+    this.addressInfo = addressInfo;
+    return this;
+  }
+
+  public AddressesDto addAddressInfoItem(AddressInfoDto addressInfoItem) {
+    if (this.addressInfo == null) {
+      this.addressInfo = new ArrayList<>();
+    }
+    this.addressInfo.add(addressInfoItem);
+    return this;
+  }
+
+  /**
+   * Get addressInfo
+   * @return addressInfo
+   */
+  @Valid 
+  @Schema(name = "addressInfo", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("addressInfo")
+  public List<@Valid AddressInfoDto> getAddressInfo() {
+    return addressInfo;
+  }
+
+  public void setAddressInfo(List<@Valid AddressInfoDto> addressInfo) {
+    this.addressInfo = addressInfo;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    AddressesDto addressesDto = (AddressesDto) o;
+    return Objects.equals(this.addressInfo, addressesDto.addressInfo);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(addressInfo);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class AddressesDto {\n");
+    sb.append("    addressInfo: ").append(toIndentedString(addressInfo)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+

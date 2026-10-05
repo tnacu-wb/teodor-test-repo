@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="HotelMapCell" rowHeight="364" id="KGk-i7-Jjw" customClass="HotelMapCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="364"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" tableViewCell="KGk-i7-Jjw" id="jdD-Ve-IQ7">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="363.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CgY-lI-thY">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="296"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="296" id="xOB-RX-YhT"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5.2 miles from HP23 5LE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aMg-zz-D9H">
+                        <rect key="frame" x="112" y="322" width="191" height="22"/>
+                        <accessibility key="accessibilityConfiguration" identifier="hotelDetailDistanceAcc"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="17"/>
+                        <color key="textColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CpQ-gg-4dd" customClass="TriangleView" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="183" y="272" width="48" height="24"/>
+                        <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="Y5W-NM-CGA"/>
+                            <constraint firstAttribute="width" constant="48" id="eXP-2j-cch"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="CgY-lI-thY" firstAttribute="leading" secondItem="jdD-Ve-IQ7" secondAttribute="leading" id="02O-AA-MoN"/>
+                    <constraint firstItem="aMg-zz-D9H" firstAttribute="top" secondItem="CgY-lI-thY" secondAttribute="bottom" constant="26" id="1bQ-BW-FLJ"/>
+                    <constraint firstAttribute="bottom" secondItem="aMg-zz-D9H" secondAttribute="bottom" constant="20" id="EfL-l3-95c"/>
+                    <constraint firstItem="CpQ-gg-4dd" firstAttribute="centerX" secondItem="jdD-Ve-IQ7" secondAttribute="centerX" id="I5M-Lr-JjT"/>
+                    <constraint firstItem="aMg-zz-D9H" firstAttribute="centerX" secondItem="jdD-Ve-IQ7" secondAttribute="centerX" id="Rbs-Tw-Sdz"/>
+                    <constraint firstItem="CgY-lI-thY" firstAttribute="top" secondItem="jdD-Ve-IQ7" secondAttribute="top" id="Tph-1b-Z3K"/>
+                    <constraint firstAttribute="trailing" secondItem="CgY-lI-thY" secondAttribute="trailing" id="jjS-H5-uQx"/>
+                    <constraint firstItem="CgY-lI-thY" firstAttribute="bottom" secondItem="CpQ-gg-4dd" secondAttribute="bottom" id="rTE-I0-IET"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="distanceLabel" destination="aMg-zz-D9H" id="fgL-Tu-u6z"/>
+                <outlet property="mapImageView" destination="CgY-lI-thY" id="N3G-ns-0LX"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

@@ -1,0 +1,100 @@
+{{- if .Values.persistence.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.applicationName }}
+  namespace: {{ .Values.namespace }} 
+  labels:
+    whitbread.services/name: {{ .Values.applicationName }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  {{- if ne .Values.service.name "" }}
+  serviceName: "{{ .Values.service.name }}"
+  {{- else }}
+  serviceName: "{{ .Values.applicationName }}"
+  {{- end }}
+  selector:
+    matchLabels:
+      whitbread.services/name: {{ .Values.applicationName }}
+  template:
+    metadata:
+      labels:
+        whitbread.services/name: {{ .Values.applicationName }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        env:
+          {{- toYaml .Values.containerEnvs | trim | nindent 10 }}
+        ports:
+          {{- toYaml .Values.containerPorts | trim | nindent 10 }}
+        livenessProbe:
+          {{- toYaml .Values.livenessProbe | trim | nindent 10 }}
+        readinessProbe:
+          {{- toYaml .Values.readinessProbe | trim | nindent 10 }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        {{- with .Values.volumeMounts }}
+        volumeMounts:
+        {{- toYaml . | nindent 10 }}
+        {{- end}}
+        {{- with .Values.containerEnvFrom }}
+        envFrom:
+        {{- toYaml . | nindent 10 }}
+        {{- end}}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ template "table-reservation-service-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      {{- if eq .Values.persistence.claimName "" }}
+      name: {{ .Values.applicationName }}
+      {{- else }}
+      name: {{ .Values.persistence.claimName }}
+      {{- end }}
+      namespace: {{ .Values.namespace }}
+      {{- with .Values.persistence.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.persistence.accessModes }}
+      accessModes:
+      {{- toYaml . | nindent 8 }}
+      {{- end}}
+      resources:
+        requests:
+          storage: {{ .Values.persistence.size }}
+      {{- if eq .Values.persistence.storageClassName "" }}
+      storageClassName: ""
+      {{- else }}
+      storageClassName: {{ .Values.persistence.storageClassName }}
+      {{- end }}
+{{- end }}

@@ -1,0 +1,93 @@
+# Common values for Opera OHIP App deployment
+# Only values that are identical across ALL environments
+# Layered: values.yaml -> nonprod.yaml -> <env>.yaml (non-prod) or values.yaml -> prod.yaml (prod)
+
+replicaCount: 2
+
+image:
+  repository: "" # Set per-environment (registry path)
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3000
+
+containerPort: 3000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+
+livenessProbe:
+  httpGet:
+    path: /api/ping
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 5
+
+readinessProbe:
+  httpGet:
+    path: /api/ping
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 3
+
+# Pod security context
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  fsGroup: 1001
+  seccompProfile:
+    type: RuntimeDefault
+
+# Container security context
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# OHIP configuration (non-sensitive values set per-environment in values files)
+ohip:
+  # Name of the K8s secret holding OHIP credentials (APP_KEY + CLIENT_ID + CLIENT_SECRET),
+  # synced from CyberArk by the ExternalSecret.
+  secretName: opera-ohip-app-credentials
+
+  # Per-environment config (non-sensitive — set in env-specific values files).
+  # appKey is NOT configured here: it is a credential sourced from CyberArk.
+  uat:
+    baseUrl: ""
+    scope: ""
+    enterpriseId: ""
+  sit:
+    baseUrl: ""
+    scope: ""
+    enterpriseId: ""
+  perf:
+    baseUrl: ""
+    scope: ""
+    enterpriseId: ""
+
+# CyberArk ExternalSecret configuration
+cyberark:
+  enabled: true
+  safe: "" # Set per-environment (e.g. digital-team-ce-tooling)
+
+# Istio VirtualService + Gateway configuration
+# The chart creates its own Gateway with ingress-tools-istio-ingressgateway selector.
+# ExternalDNS creates the DNS record automatically from the host.
+virtualService:
+  enabled: true
+  host: ""    # Set per-environment
+
+# Node selector, tolerations, and affinity (optional)
+nodeSelector: {}
+tolerations: []
+affinity: {}

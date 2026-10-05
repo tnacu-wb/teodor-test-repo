@@ -1,0 +1,486 @@
+openapi: 3.0.1
+info:
+  title: 3C Payment Service REST API
+  version: 1.2.0
+servers:
+  - url: http://localhost:9001
+    description: Generated server url
+paths:
+  /payments:
+    post:
+      tags:
+        - Payments
+      summary: Creates a payment resource.
+      operationId: createPayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentResponse'
+  /payments/{paymentId}:
+    get:
+      tags:
+        - Payments
+      summary: Retrieves a payment resource.
+      operationId: getPayment
+      parameters:
+        - name: paymentId
+          in: path
+          description: Payment resource id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentResponse'
+components:
+  schemas:
+    Address:
+      required:
+        - line1
+        - countryCode
+        - postalCode
+      type: object
+      properties:
+        line1:
+          type: string
+          description: Address line 1
+          example: Whitbread Group PLC
+        line2:
+          type: string
+          description: Address line 2
+          example: Houghton Hall Business Park
+        line3:
+          type: string
+          description: Address line 3
+          example: Porz Avenue
+        line4:
+          type: string
+          description: Address line 4
+          example: Porz Avenue
+        countryCode:
+          type: string
+          description: Country Code
+          example: GB
+          default: GB
+        postalCode:
+          type: string
+          description: Postal code.
+          example: LU5 5XE
+      description: Billing address for customer making payment
+    Amount:
+      required:
+        - currency
+        - minorUnits
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Currency of payment.
+          example: GBP
+        minorUnits:
+          minimum: 1
+          type: integer
+          description: Minor units of payment..e.g 1 == £0.01 or €0.01
+          format: int32
+          example: 1
+      description: Information on amount to process refund for.
+    Billing:
+      type: object
+      properties:
+        title:
+          type: string
+          description: name title.
+          example: Mr
+        firstName:
+          type: string
+          description: Card holder first name.
+          example: James
+        lastName:
+          type: string
+          description: Card holder last name.
+          example: Bond
+        email:
+          type: string
+          description: Booker email address.
+          example: example@email.com
+        telephone:
+          type: string
+          description: Booker telephone number.
+          example: '0789110237'
+        address:
+          $ref: '#/components/schemas/Address'
+      description: Information regarding the booking being made.
+    Booking:
+      required:
+        - businessSite
+        - channel
+        - journey
+        - type
+      type: object
+      properties:
+        channel:
+          type: string
+          description: Type of booking channel that the payment is for.
+          example: PI
+        journey:
+          type: string
+          description: Type of customer journey the payment is for.
+          example: BOOKING
+        type:
+          type: string
+          description: Type of booking the payment is for.
+          example: PAY_NOW
+        reference:
+          type: string
+          description: Booking reference.
+          example: BR260692A
+        businessSite:
+          $ref: '#/components/schemas/BusinessSite'
+        arrivalDate:
+          type: string
+          description: Arrival date of the booking.
+          format: date
+          example: '2021-11-25'
+        departureDate:
+          type: string
+          description: Departure date of the booking.
+          format: date
+          example: '2021-11-26'
+        language:
+          type: string
+          description: Chosen ISO 639-1 language of the customer making the booking. Only applicable for ECOMM payment type.
+          example: en
+        leadGuest:
+          $ref: '#/components/schemas/Guest'
+        rooms:
+          type: array
+          description: Information on the rooms being booked.
+          items:
+            $ref: '#/components/schemas/Room'
+    BusinessSite:
+      required:
+        - identifier
+        - type
+      type: object
+      properties:
+        identifier:
+          type: string
+          description: The unique site identifier.
+          example: LONHOL
+        name:
+          type: string
+          description: The name of the site.
+          example: London Holborn Premier Inn
+        type:
+          type: string
+          description: Type of business site.
+          example: HOTEL
+        location:
+          type: string
+          description: The city/town that the business site is in.
+          example: London
+      description: Information on the site the booking is for. A site can be a hotel, restaurant or another entity run by Whitbread.
+    Card:
+      type: object
+      properties:
+        cardholderName:
+          type: string
+          description: Card holder name.
+          example: 'Smith'
+        token:
+          type: string
+          description: 3C Payment token.
+          example: '4943056398164344242'
+        expiryMonth:
+          type: string
+          description: Expiry month for the payment card/token.
+          format: MM
+          example: '01'
+        expiryYear:
+          type: string
+          description: Expiry year for the payment card/token.
+          format: YY
+          example: '21'
+        cardType:
+          type: string
+          description: Card Type.
+          example: 'BUSINESS_PERSONAL_STORED_CARD'
+        cnpRequired:
+          type: boolean
+          description: CNP.
+          example: true
+        logoUrl:
+          type: string
+          description: Card log.
+          example: '/content/dam/global/booking/VC.jpg'
+        type:
+          type: string
+          description: Type.
+          example: 'VI'
+      description: Customers card for refund of the payment.
+    Guest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full name of guest.
+          example: Mr James Bond
+        registered:
+          type: boolean
+          description: Whether the guest is registered with a Premier Inn account.
+          example: true
+        registeredSince:
+          type: string
+          description: How long the guest has been registered with a Premier Inn Account.
+          format: date
+          example: '2021-11-26'
+        previousBookings:
+          type: integer
+          description: How many previous bookings the customer has made.
+          format: int32
+          example: 10
+      description: Information regarding the lead guest of the booking.
+    Payment:
+      required:
+        - amount
+        - billing
+        - subType
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of payment to process.
+          example: CARD
+        subType:
+          type: string
+          description: Sub type of payment to process.
+          example: ECOMM
+        environment:
+          type: string
+          description: Browser window host name where ECOMM payment is being processed via iPage.
+          example: https://www.premierinn.com
+        card:
+          $ref: '#/components/schemas/Card'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        billing:
+          $ref: '#/components/schemas/Billing'
+    PaymentRequest:
+      required:
+        - booking
+        - payment
+        - requestId
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Unique reference for transaction provided by consumer.
+          example: a0a9f782-98ee-468c-9839-30c487c832a3
+        payment:
+          $ref: '#/components/schemas/Payment'
+        booking:
+          $ref: '#/components/schemas/Booking'
+        language:
+          type: string
+        paymentSubType:
+          type: string
+        hotelCode:
+          type: string
+    Room:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of room being booked.
+          example: FAM
+        rate:
+          type: string
+          description: Rate type for the room being booked.
+          example: SV344
+        adults:
+          type: integer
+          description: Number of adults in room being booked.
+          format: int32
+          example: 2
+      description: Information on the rooms being booked.
+    RefundResponse:
+      type: object
+      properties:
+        paymentId:
+          type: string
+        refunded:
+          type: boolean
+        requestId:
+          type: string
+        refundId:
+          type: string
+        ProviderResponse:
+          type: object
+          properties:
+            threecResponse:
+              $ref: '#/components/schemas/ThreeCResponse'
+            eckohResponse:
+              $ref: '#/components/schemas/EckohResponse'
+    PaymentResponse:
+      type: object
+      properties:
+        paymentId:
+          type: string
+        providerResponse:
+          $ref: '#/components/schemas/ProviderResponse'
+        booking:
+          $ref: '#/components/schemas/Booking'
+        payment:
+          $ref: '#/components/schemas/PaymentRs'
+        refunded:
+          type: boolean
+        bookingReference:
+          type: string
+        paymentStatus:
+          type: string
+    ProviderResponse:
+      type: object
+      properties:
+        threecResponse:
+          $ref: '#/components/schemas/ThreeCResponse'
+        eckohResponse:
+          $ref: '#/components/schemas/EckohResponse'
+    EckohResponse:
+      type: object
+      properties:
+        content:
+          type : string
+        result:
+          type : string
+        resultCode:
+          type : integer
+        paymentId:
+          type : string
+        maskedPan:
+          type : string
+        expiry:
+          type : string
+        type:
+          type : string
+        reference:
+          type : string
+        token:
+          type : string
+    ThreeCResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        template:
+          type: string
+        providerUrl:
+          type: string
+        providerStatus:
+          type: string
+        providerStatusText:
+          type: string
+        providerReason:
+          type: string
+        providerResult:
+          type: string
+        authCode:
+          type: string
+        last4Digits:
+          type: string
+        cardSchemeId:
+          type: string
+        cardSchemeName:
+          type: string
+        token:
+          type: string
+        binRange:
+          type: string
+        expiry:
+          type: string
+        status:
+          type: string
+        avsResult:
+          type: string
+        fraudCheckDecision:
+          type: string
+        fraudCheckResult:
+          type: string
+        fraudCheckResultReason:
+          type: string
+        fraudCheckRequestId:
+          type: string
+        date:
+          type: string
+          format: date
+        scaReference:
+          type: string
+        threeDSIndicator:
+          type: string
+        iPageHtml:
+          type: string
+    PaymentRs:
+      required:
+        - amount
+        - billing
+        - subType
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of payment to process.
+          example: CARD
+        subType:
+          type: string
+          description: Sub type of payment to process.
+          example: ECOMM
+        environment:
+          type: string
+          description: Browser window host name where ECOMM payment is being processed via iPage.
+          example: https://www.premierinn.com
+        card:
+          $ref: '#/components/schemas/Card'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        billing:
+          $ref: '#/components/schemas/BillingResponse'
+    BillingResponse:
+      type: object
+      properties:
+        title:
+          type: string
+          description: name title.
+          example: Mr
+        firstName:
+          type: string
+          description: Card holder first name.
+          example: James
+        lastName:
+          type: string
+          description: Card holder last name.
+          example: Bond
+        email:
+          type: string
+          description: Booker email address.
+          example: example@email.com
+        telephone:
+          type: string
+          description: Booker telephone number.
+          example: '0789110237'

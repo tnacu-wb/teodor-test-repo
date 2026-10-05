@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/generic_margin_16"
+    android:background="@color/white"
+    android:elevation="@dimen/generic_elevation_1"
+    android:padding="@dimen/generic_padding_20">
+
+    <TextView
+        android:id="@+id/donationHeading"
+        style="@style/Header3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/donationMessage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6" />
+
+    <com.whitbread.premierinn.common.view.NetworkImageView
+        android:id="@+id/donationImageView"
+        android:layout_width="130dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/donationMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <TextView
+        android:id="@+id/donationMessage"
+        style="@style/BodySmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_100"
+        app:layout_constraintEnd_toEndOf="@id/noDonationButton"
+        app:layout_constraintStart_toStartOf="@id/minDonationButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constrainedWidth="true"/>
+
+    <Button
+        android:id="@+id/minDonationButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_30"
+        android:layout_marginBottom="@dimen/generic_margin_20"
+        android:background="@drawable/view_toggle_button_background_ripple_left"
+        android:paddingStart="@dimen/generic_padding_24"
+        android:paddingEnd="@dimen/generic_padding_24"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/view_toggle_button_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/donationMessage" />
+
+    <Button
+        android:id="@+id/maxDonationButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_30"
+        android:layout_marginBottom="@dimen/generic_margin_20"
+        android:background="@drawable/view_toggle_button_background_ripple_left"
+        android:paddingStart="@dimen/generic_padding_24"
+        android:paddingEnd="@dimen/generic_padding_24"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/view_toggle_button_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/noDonationButton"
+        app:layout_constraintStart_toEndOf="@+id/minDonationButton"
+        app:layout_constraintTop_toBottomOf="@+id/donationMessage" />
+
+    <Button
+        android:id="@+id/noDonationButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_30"
+        android:layout_marginBottom="@dimen/generic_margin_20"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        android:background="@drawable/view_toggle_button_background_ripple_left"
+        android:paddingStart="@dimen/generic_padding_24"
+        android:paddingEnd="@dimen/generic_padding_24"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/view_toggle_button_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/donationMessage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/generic_elevation_4"
+        android:minHeight="?attr/actionBarSize" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            style="@style/ScrollbarVertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_dodgeInsetEdges="top">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/red"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/banner_below"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_dodgeInsetEdges="top">
+
+                    <LinearLayout
+                        android:id="@+id/ll_my_account_log_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/my_account_large_divider_height"
+                        android:background="@android:color/white"
+                        android:elevation="@dimen/generic_elevation_1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/my_account_login_message"
+                            style="@style/Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/default_large_margin"
+                            android:layout_marginTop="@dimen/generic_margin_30"
+                            android:layout_marginEnd="@dimen/default_large_margin"
+                            android:text="@string/my_account_log_in_info"
+                            android:textColor="@color/grey_dark" />
+
+                        <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                            android:id="@+id/cab_my_account_log_in"
+                            style="@style/Button1"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="@dimen/default_large_margin"
+                            android:layout_marginTop="@dimen/default_large_margin"
+                            android:layout_marginEnd="@dimen/default_large_margin"
+                            android:text="@string/log_in"
+                            app:cab_spinner_color="@color/white"/>
+
+                        <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                            android:id="@+id/my_account_create_account_button"
+                            style="@style/Button1"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="@dimen/default_large_margin"
+                            android:layout_marginTop="@dimen/default_large_margin"
+                            android:layout_marginEnd="@dimen/default_large_margin"
+                            android:layout_marginBottom="@dimen/default_extra_large_margin"
+                            android:text="@string/my_account_create_account_label"
+                            app:cab_is_secondary="true"
+                            app:cab_text_color="?attr/colorPrimary"
+                            />
+
+                        <ProgressBar
+                            android:id="@+id/loading_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/generic_padding_16" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_my_account_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/my_account_large_divider_height"
+                        android:background="@android:color/white"
+                        android:elevation="@dimen/generic_elevation_1"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/generic_padding_28"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/tv_bb_label"
+                            style="@style/BodySmallBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/default_large_margin"
+                            android:layout_marginBottom="@dimen/generic_margin_14"
+                            android:background="@drawable/bb_label_background"
+                            android:paddingStart="@dimen/generic_padding_12"
+                            android:paddingTop="@dimen/generic_padding_4"
+                            android:paddingEnd="@dimen/generic_padding_12"
+                            android:paddingBottom="@dimen/generic_padding_4"
+                            android:text="@string/innBusiness_long_label"
+                            android:textColor="@color/white"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tv_my_account_name"
+                            style="@style/Header3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/default_large_margin"
+                            android:layout_marginEnd="@dimen/default_large_margin" />
+
+                        <TextView
+                            android:id="@+id/tv_my_account_email"
+                            style="@style/Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/default_large_margin"
+                            android:layout_marginTop="@dimen/default_small_margin"
+                            android:layout_marginEnd="@dimen/default_large_margin"
+                            android:layout_marginBottom="@dimen/generic_margin_30" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/my_account_logged_in_options"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        tools:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/my_account_large_divider_height"
+                            android:background="@android:color/white"
+                            android:divider="@drawable/shape_divider_grey"
+                            android:elevation="@dimen/generic_elevation_1"
+                            android:orientation="vertical"
+                            android:paddingStart="@dimen/generic_padding_16"
+                            android:showDividers="middle">
+
+                            <com.whitbread.premierinn.account.view.ListButton
+                                android:id="@+id/my_account_my_details"
+                                style="@style/ListButton.Account"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:text="@string/my_account_personal_details" />
+
+                            <com.whitbread.premierinn.account.view.ListButton
+                                android:id="@+id/my_account_payment_methods"
+                                style="@style/ListButton.Account"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:text="@string/my_account_payment_methods" />
+
+                            <com.whitbread.premierinn.account.view.ListButton
+                                android:id="@+id/my_account_change_password"
+                                style="@style/ListButton.Account"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:text="@string/change_password_label" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/booking_preferences_and_newsletter_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/my_account_large_divider_height"
+                            android:background="@android:color/white"
+                            android:divider="@drawable/shape_divider_grey"
+                            android:elevation="@dimen/generic_elevation_1"
+                            android:orientation="vertical"
+                            android:paddingStart="@dimen/generic_padding_16"
+                            android:showDividers="middle">
+
+                            <com.whitbread.premierinn.account.view.ListButton
+                                android:id="@+id/my_account_booking_preferences"
+                                style="@style/ListButton.Account"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:text="@string/my_account_booking_preferences" />
+
+                            <com.whitbread.premierinn.account.view.ListButton
+                                android:id="@+id/my_account_newsletters"
+                                style="@style/ListButton.Account"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:text="@string/my_account_newsletters" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/account_links_list_buttons_linear_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/my_account_large_divider_height"
+                        android:background="@android:color/white"
+                        android:divider="@drawable/shape_divider_grey"
+                        android:elevation="@dimen/generic_elevation_1"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/generic_padding_16"
+                        android:showDividers="middle">
+
+                        <com.whitbread.premierinn.account.view.ListButton
+                            android:id="@+id/rl_dynamic_canvas"
+                            style="@style/ListButton.Account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
+
+                        <com.whitbread.premierinn.account.view.ListButton
+                            android:id="@+id/rl_my_account_faq"
+                            style="@style/ListButton.Account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:text="@string/my_account_faq" />
+
+                        <com.whitbread.premierinn.account.view.ListButton
+                            android:id="@+id/rl_my_account_contact_us"
+                            style="@style/ListButton.Account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:text="@string/my_account_contact" />
+
+                        <com.whitbread.premierinn.account.view.ListButton
+                            android:id="@+id/rl_my_account_terms_conditions"
+                            style="@style/ListButton.Account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:text="@string/my_account_terms_conditions" />
+
+                        <com.whitbread.premierinn.account.view.ListButton
+                            android:id="@+id/rl_my_account_privacy_policy"
+                            style="@style/ListButton.Account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:text="@string/my_account_privacy_policy" />
+
+                        <com.whitbread.premierinn.account.view.ListButton
+                            android:id="@+id/rl_my_account_gdpr"
+                            style="@style/ListButton.Account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:text="@string/my_account_gdpr" />
+
+                        <com.whitbread.premierinn.account.view.ListButton
+                            android:id="@+id/rl_my_account_about"
+                            style="@style/ListButton.Account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:text="@string/my_account_about" />
+
+                        <com.whitbread.premierinn.account.view.ListButton
+                            android:id="@+id/rl_my_account_send_feedback"
+                            style="@style/ListButton.Account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:text="@string/my_account_send_feedback" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sc_my_account_enable_employee_offer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            style="@style/ListButton.Account"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            android:checked="true"
+                            android:padding="@dimen/generic_padding_16"
+                            android:text="@string/debug_menu_employee_offer" />
+
+                    </LinearLayout>
+
+                    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                        android:id="@+id/my_account_log_out_button"
+                        style="@style/Button1"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="@dimen/default_large_margin"
+                        android:layout_marginTop="@dimen/generic_margin_20"
+                        android:layout_marginEnd="@dimen/default_large_margin"
+                        android:layout_marginBottom="@dimen/generic_margin_20"
+                        android:text="@string/my_account_log_out"
+                        app:cab_background_color="?attr/colorPrimary"
+                        app:cab_text_color="@android:color/white" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

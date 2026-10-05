@@ -1,0 +1,29 @@
+{
+  "request": {
+    "url": "/CustomerHub/V1/GetPermissions",
+    "method": "POST",
+    "headers" : {
+      "Content-Type" : {
+        "contains" : "application/json"
+      },
+      "Authorization": {
+        "contains" : "123456.access.token"
+      },
+      "Ocp-Apim-Subscription-Key": {
+        "contains": "dummyValue"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matches": ".*PINN.*"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+      "bodyFileName": "customer-hub-get-permissions-success-response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

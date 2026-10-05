@@ -1,0 +1,50 @@
+{
+  "id" : "507e35d1-4696-4f07-a7b2-e99944282de8",
+  "request" : {
+    "urlPath" : "/v1/bookings/history",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "WB-Authorization" : {
+        "equalTo" : "Bearer test=="
+      }
+    },
+    "queryParameters" : {
+      "business" : {
+        "equalTo" : "false"
+      },
+      "companyId" : {
+        "equalTo" : "companyId"
+      },
+      "employeeId" : {
+        "equalTo" : "employeeId"
+      },
+      "filterValue" : {
+        "equalTo" : "filterValue"
+      },
+      "includeCheckInBookings" : {
+        "equalTo" : "false"
+      },
+      "continuationToken" : {
+        "equalTo" : "continuationToken"
+      },
+      "channe;" : {
+        "equalTo" : "pi"
+      },
+      "subchannel" : {
+        "equalTo" : "WEB"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"pageIndex\":1,\"pageSize\":1,\"totalSize\":3,\"continuationToken\":\"continuationToken\",\"totals\":{\"upcoming\":1,\"cancelled\":3,\"checkedIn\":5,\"past\":6},\"bookings\":[{\"hotelCode\":\"DUNCRO\",\"arrivalDate\":\"2023-01-06\",\"departureDate\":\"2023-02-06\",\"totalCost\":{\"amount\":\"20\",\"currency\":\"$\"},\"cityTax\":{\"amount\":\"20\",\"currency\":\"$\"},\"roomTypes\":[{\"roomType\":\"roomType\",\"carDataPresent\":false,\"personDetails\":{\"title\":\"title\",\"firstName\":\"firstName\",\"lastName\":\"lastName\"}}],\"noOfRooms\":1,\"customerReference\":\"customerReference\",\"historyRecordNumber\":2,\"purchaseOrder\":\"purchaseOrder\",\"bookingReference\":\"confirmationNumber\",\"prePaidAmount\":{\"amount\":\"20\",\"currency\":\"$\"},\"paymentStatus\":\"paymentStatus\",\"cancelled\":false,\"checkInOnline\":true,\"checkedIn\":false,\"rateClass\":\"rateClass\",\"checkInDate\":\"checkInDate\",\"promotionText\":\"promotionText\",\"cellCodeLegend\":\"cellCodeLegend\",\"carDataRequired\":false,\"amendable\":true,\"guestHistoryNumber\":\"guestHistoryNumber\",\"bookedBy\":\"bookedBy\",\"bookingFee\":{\"amount\":\"20\",\"currency\":\"$\"},\"outstandingAmount\":{\"amount\":\"20\",\"currency\":\"$\"},\"frequentBooking\":\"frequentBooking\",\"mpibooking\":false,\"rateName\":\"rateName\",\"cancelable\":false,\"cancellationId\":\"cancellationId\",\"hotelName\":\"hotelName\",\"leadGuest\":\"leadGuest\",\"leadGuestSurname\":\"leadGuestSurname\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "507e35d1-4696-4f07-a7b2-e99944282de8"
+}

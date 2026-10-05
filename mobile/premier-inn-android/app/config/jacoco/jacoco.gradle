@@ -1,0 +1,40 @@
+apply plugin: 'jacoco'
+
+task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports"
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    def fileFilter = ['**/R.class',
+                      '**/R$*.class',
+                      '**/BuildConfig.*',
+                      '**/Manifest*.*',
+                      'android/**/*.*',
+                      '**/Lambda$*.class', //Retrolambda
+                      '**/Lambda.class',
+                      '**/*Lambda.class',
+                      '**/*Lambda*.class',
+                      '**/*Lambda*.*',
+                      '**/*Builder.*',
+                      '**/*_MembersInjector.class',  //Dagger2 generated code
+                      '**/*_MembersInjector*.*',  //Dagger2 generated code
+                      '**/*_*Factory*.*', //Dagger2 generated code
+                      '**/*Component*.*', //Dagger2 generated code
+                      '**/*Module*.*', //Dagger2 generated code
+                      '**/*Activity*.*',
+                      '**/*View*.*',
+                      '**/*AutoValue*.*',
+                      '**/*RealmProxy*.*' // Realm
+    ]
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.from = files([mainSrc])
+    classDirectories.from = files([debugTree])
+    executionData.from = fileTree(dir: project.projectDir, includes:
+            ['**/*.exec' , '**/*.ec'])
+}

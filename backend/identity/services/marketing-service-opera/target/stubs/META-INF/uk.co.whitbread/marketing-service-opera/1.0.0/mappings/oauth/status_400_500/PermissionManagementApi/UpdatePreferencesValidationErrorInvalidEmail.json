@@ -1,0 +1,49 @@
+{
+  "id" : "e69de190-e2d4-4c04-ac5b-3476f0e6b56d",
+  "request" : {
+    "url" : "/marketing/newsletter/email/rachel.cody@housemark.c",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "Authentication" : {
+        "equalTo" : "Bearer dummyToken"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['optIn'] == false)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['secondPartyOptIn'] == true)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['thirdPartyVendorsOptIn'] == true)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['doubleOptIn'] == false)]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['countryOfResidence'] == 'DE')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['title'] == 'Mr')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['firstName'] == 'liam')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['lastName'] == 'wilson')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['nationality'] == 'GB')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['language'] == 'en')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['userId'] == 'liam.wilson.test1')]"
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "body" : "{\"code\":\"001\",\"details\":[\"Invalid email\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "e69de190-e2d4-4c04-ac5b-3476f0e6b56d"
+}

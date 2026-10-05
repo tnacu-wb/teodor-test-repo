@@ -1,0 +1,25 @@
+{
+  "id" : "fe9514a4-187f-4627-8784-a56d1d6df52e",
+  "request" : {
+    "urlPathPattern" : "/v1/baskets/[a-zA-Z]{3}-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/allowances",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "If-Match" : {
+        "equalTo" : "1684426938941"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$.['bookingAllowances'][*][?(@.['allowance'] =~ /^\\s*\\S[\\S\\s]*/)]"
+    }, {
+      "matchesJsonPath" : "$.['bookingAllowances'][*][?(@.['budget'] =~ /^(\\d+\\.\\d+)$/)]"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "fe9514a4-187f-4627-8784-a56d1d6df52e"
+}

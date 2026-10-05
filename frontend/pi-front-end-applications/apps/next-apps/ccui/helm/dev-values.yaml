@@ -1,0 +1,238 @@
+# Dev (long-lived) values for ccui.
+#
+# Shaped for the shared chart at infra/helm/opera-app-chart, and converted from
+# the Flux HelmRelease that deploys dev today
+# (microservices-gitops/opera-dev/apps/ccui.yaml) so this file starts from
+# what is actually running rather than from the preview config.
+#
+# The dev deploy of pi-front-end-applications is still disabled in
+# ci-fe-deploy.yaml and dev continues to reconcile through Flux. This file is
+# what a pipeline-driven dev deploy installs when that cuts over; keeping it
+# separate from ephemeral-values.yaml means a preview tweak cannot reach dev.
+#
+# Replaced per-deploy: image.repository, image.tag
+#
+# NOTE: the Flux config this was derived from still points at port 3004, which
+# is what the old standalone ccui image listened on. Every image built from
+# this monorepo comes out of the shared Dockerfile, which sets ENV PORT=3002
+# for all three apps, so the probes and Service here were moved to 3002.
+# Deploying 3004 against a monorepo image would fail readiness.
+
+# ── Switches ─────────────────────────────────────────────────────────────────
+
+# No progressive delivery for the frontend today — dev has never had a Canary,
+# and turning one on is a routing change, not a chart migration.
+canary:
+  create: false
+
+# The pipeline sets the image tag on every deploy, so nothing should auto-bump
+# it. The Flux config this was converted from sets `create: true` with pattern
+# "develop"; that belongs to the Flux ImagePolicy in flux-apps and goes away
+# with it when dev cuts over to a pipeline deploy.
+imageAutomation:
+  create: false
+
+pdb:
+  create: false
+
+# ── Identity ─────────────────────────────────────────────────────────────────
+# applicationName names the Deployment, Service, VirtualService and HPA, and is
+# the selector label. service.name is what the VirtualService routes at — the
+# chart does not derive one from the other, so both are replaced with the
+# release name at deploy time and both are kept here so `helm template` renders
+# standalone for local inspection.
+applicationName: ccui
+namespace: opera-fe
+
+# Dev pulls from ECR. Repository and tag are both set by the workflow; the
+# values here only document the shape.
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/ccui
+  pullPolicy: IfNotPresent
+  tag: ''
+
+# ── Workload ─────────────────────────────────────────────────────────────────
+#
+# The chart's default preStop sleep and 90s grace period are kept here — a
+# long-lived release behind Istio does need to drain.
+imagePullSecrets:
+  - name: regcred
+deployment:
+  create: true
+  checksumValues: r2
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 9001
+    runAsGroup: 9001
+    fsGroup: 9001
+    seccompProfile:
+      type: RuntimeDefault
+  containerPorts:
+    - name: http
+      containerPort: 3002
+      protocol: TCP
+  dns:
+    ndots: 3
+  containerEnvs:
+    - name: AUTH0_SESSION_ROLLING
+      value: 'true'
+    - name: AUTH0_SESSION_ROLLING_DURATION
+      value: '7200'
+    - name: NEXT_PUBLIC_GRAPHQL_ENDPOINT
+      value: https://api.dev.premierinn.digital/graphql
+    - name: NEXT_PUBLIC_SERVER_APOLLO_GRAPHQL_ENDPOINT
+      value: http://opera-apollo-router.apollo
+    - name: AUTH0_BASE_URL
+      value: https://ccui.dev.premierinn.digital
+    - name: AUTH0_ISSUER_BASE_URL
+      value: https://dev-whitbread-digital.eu.auth0.com
+    - name: AUTH0_DOMAIN
+      value: dev-whitbread-digital.eu.auth0.com
+    - name: ECKOH_IFRAME_SRC
+      value: https://premierinniframe.vt.uat.eckoh.uk/
+    - name: ECKOH_ENV
+      value: ccui_qa
+    - name: ECKOH_PROD
+      value: 'false'
+    - name: ECKOH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          key: eckoh_client_id
+          name: eckoh-client-id
+    - name: NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      valueFrom:
+        secretKeyRef:
+          key: google-maps-api-key
+          name: google-maps-api-key
+    - name: AUTH0_SECRET
+      valueFrom:
+        secretKeyRef:
+          key: auth0_ccui_secret
+          name: auth0-k8s-connection-secrets
+    - name: AUTH0_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          key: auth0_ccui_client_id
+          name: auth0-k8s-connection-secrets
+    - name: AUTH0_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          key: auth0_ccui_client_secret
+          name: auth0-k8s-connection-secrets
+    - name: NEXT_PUBLIC_ASSETS_URL
+      value: www.dev.premierinn.digital
+    - name: NEXT_PUBLIC_REST_API
+      value: https://restapi.dev.premierinn.digital
+    - name: NEXT_PUBLIC_REST_API_NEW_EKS
+      value: https://restapi.dev.premierinn.digital
+    - name: NEXT_PUBLIC_SNOWDROP_BASE_URL
+      value: https://api-uat.whitbread.co.uk/
+    - name: NEXT_BASIC_AUTH_ID
+      value: betatester
+    - name: NEXT_BASIC_AUTH_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: basic_auth_pwd
+          name: wb-fe-credential
+    - name: NEXT_FS_MEAL_RESTRICTIONS
+      value: 'false'
+    - name: NEXT_FS_DISPLAY_GUEST_ACCOUNT
+      value: 'true'
+    - name: NEXT_FS_ENABLE_SEARCH_ACCOUNT_SAVE_CHANGES
+      value: 'true'
+    - name: NEXT_FS_SILENT_SUBSTITUTION
+      value: 'true'
+    - name: NEXT_ENABLE_SERVER_APOLLO_GRAPHQL_ENDPOINT
+      value: 'true'
+    - name: NEXT_FS_CONFIRM_EMAIL_ADDRESS_CCUI
+      value: 'false'
+    - name: NEXT_ENV
+      value: dev
+    - name: NEXT_PUBLIC_UNLEASH_SERVER_API_URL
+      value: https://whitbread.edge.getunleash.io/api
+    - name: NEXT_PUBLIC_APP_NAME
+      value: ccui
+    - name: UNLEASH_SERVER_API_TOKEN
+      valueFrom:
+        secretKeyRef:
+          key: api-token
+          name: unleash-enterprise-secrets
+    - name: NEXT_PUBLIC_UNLEASH_FRONTEND_API_TOKEN
+      valueFrom:
+        secretKeyRef:
+          key: api-fe-token
+          name: unleash-enterprise-secrets
+    - name: NEXT_PUBLIC_LOG_ENDPOINT
+      value: /api/log
+    - name: NEXT_FS_SHOW_AMEND_PAYMENT_PAGE
+      value: 'true'
+    - name: NEXT_APP_STATIC_CONTENT_CACHE_TTL
+      value: '3600'
+    - name: NEXT_OPENSEARCH_LOGS
+      value: 'false'
+    - name: NEXT_APP_UNLEASH_DEFINITIONS_CACHE_TTL
+      value: '60'
+    - name: NEXT_APP_UNLEASH_DEFINITIONS_FETCH_TIMEOUT
+      value: '2'
+    - name: NEXT_APP_UNLEASH_METRICS_INTERVAL
+      value: '60'
+    - name: NEXT_APP_UNLEASH_METRICS_JITTER
+      value: '5'
+    - name: NEXT_FS_ENABLE_SCRIPTS_EMBED_APP_DYNAMICS
+      value: 'true'
+    - name: NEXT_PUBLIC_REDIS_HOST
+      value: clustercfg.opera-dev.jynzd4.memorydb.eu-west-1.amazonaws.com
+    - name: NEXT_PUBLIC_REDIS_PORT
+      value: '6379'
+  livenessProbe:
+    failureThreshold: 6
+    httpGet:
+      path: /api/liveness
+      port: 3002
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  readinessProbe:
+    failureThreshold: 6
+    httpGet:
+      path: /api/readiness
+      port: 3002
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  resources:
+    requests:
+      cpu: 50m
+      memory: 750Mi
+    limits:
+      cpu: 1000m
+      memory: 4000Mi
+
+# ── Networking ───────────────────────────────────────────────────────────────
+service:
+  create: true
+  name: ccui
+  type: ClusterIP
+  ports:
+    - name: port3002
+      port: 3002
+      protocol: TCP
+      targetPort: 3002
+autoscaling:
+  create: true
+  maxReplicas: 20
+  minReplicas: 1
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 180
+  targetCPUUtilizationPercentage: 80
+
+# istio.host stays empty for a long-lived release: the VirtualService claims
+# hosts ["*"] on its gateway and picks this app out by path. Only per-PR
+# releases set a host (see ephemeral-values.yaml).
+istio:
+  create: true
+  gateway: ccui
+  prefix: /
+  host: ''

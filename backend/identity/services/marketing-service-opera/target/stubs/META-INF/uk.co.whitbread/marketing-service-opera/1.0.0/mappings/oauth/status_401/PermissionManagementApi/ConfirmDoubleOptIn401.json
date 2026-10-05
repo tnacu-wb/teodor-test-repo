@@ -1,0 +1,28 @@
+{
+  "id" : "3d5a79a1-54fd-4119-a07a-c0a60689872f",
+  "request" : {
+    "url" : "/marketing/newsletter/channel/CHNL401_28a5d984-7782-4e93-99a5-b2e9f8a746f3/confirm",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['customerId'] == '122434')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['contactType'] == 'email')]"
+    } ]
+  },
+  "response" : {
+    "status" : 401,
+    "body" : "{\"code\":\"3001\",\"details\":[\"You do not have permission to view this directory or page.\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "3d5a79a1-54fd-4119-a07a-c0a60689872f"
+}

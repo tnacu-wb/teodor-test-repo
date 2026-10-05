@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="pooja" id="init_data_base_rate_rule" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="base_rate_rule"/>
+
+                <sqlCheck expectedResult="0">select count(*) from rules_engine.base_rate_rule</sqlCheck>
+            </and>
+        </preConditions>
+
+        <loadData tableName="base_rate_rule" file="sql/liquibase/data/base_rate_rule.csv"/>
+    </changeSet>
+
+</databaseChangeLog>

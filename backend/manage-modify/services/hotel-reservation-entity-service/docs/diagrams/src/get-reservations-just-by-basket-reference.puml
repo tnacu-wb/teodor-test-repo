@@ -1,0 +1,26 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant BasketOutPort as BasketOutPort
+participant HotelReservationWebClient as Webclient
+entity BasketService as basket
+entity OHIPAdapter as OHIPAdapter
+
+A -> Controller: GET /v1/reservations/basket/{BasketReference}
+Controller -> InboundPort: getAllReservationsJustByBasketReference
+InboundPort -> OutboundPort: getAllReservationsJustByBasketReference
+OutboundPort -> BasketOutPort: getAllReservationsJustByBasketReference
+BasketOutPort -> basket: getBasketByReference
+basket -> BasketOutPort: BasketResponse
+BasketOutPort -> OutboundPort: BasketResponse
+OutboundPort -> Webclient: getReservationsByIds
+Webclient -> OHIPAdapter: GET adp/v1/reservations?reservationIds=123,234&hotelId=HOTELTEST
+
+Webclient <- OHIPAdapter: Reservations
+OutboundPort <- Webclient: Reservations
+InboundPort <- OutboundPort: Reservations
+Controller <- InboundPort: Reservations
+A <- Controller: Reservations
+@enduml

@@ -1,0 +1,72 @@
+@startuml
+entity "User" as USER
+entity "AppSync" as A
+entity "Reservation Entity Service" as RES
+entity "Basket Service" as BSK
+entity "Authentication Service" as Auth
+entity "Content Service" as Content
+entity "OHIP Adapter Service" as OHIP
+entity "OHIP Adapter Service" as OHIP
+entity "OPERA" as OPERA
+
+USER -> A:  GraphQL copyBooking(basketReference)
+A -> RES: POST /v1/reservations/copy
+
+RES -> Auth: validateToken for not logged ind user
+RES <- Auth
+
+RES -> BSK: GET /v1/baskets/{basket-reference}
+RES <- BSK: DTO with reservationIds, hotelId
+
+RES -> BSK: (createBasket) POST /v1/baskets
+RES <- BSK: DTO with temporaryBasketReference
+
+RES -> OHIP: (copyReservations) POST /v1/reservations/copy
+OHIP -> OHIP: POST /v1/reservations/copy
+
+loop for each reservationId
+    OHIP -> OPERA: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/\n?fetchInstructions=Reservation&fetchInstructions=InventoryItems\n&fetchInstructions=ReservationPolicies&fetchInstructions=Packages
+    OHIP <- OPERA: Reservation
+end
+
+loop for each reservation
+    OHIP -> OPERA: POST /rsv/v1/hotels/{{HotelId}}/reservations
+    OHIP <- OPERA: 201 Created
+end
+
+loop for each created reservation
+    OHIP -> OPERA: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/\n?fetchInstructions=Reservation&fetchInstructions=InventoryItems\n&fetchInstructions=ReservationPolicies&fetchInstructions=Packages
+    OHIP <- OPERA: Reservation with createDateTime
+end
+
+OHIP <- OHIP: DTO with new reservation ids
+RES <- OHIP: DTO with new reservation ids
+
+RES -> BSK: (addReservationsToBasket) POST /v1/baskets/{{temporaryBasketReference}}/items
+RES <- BSK: 200
+
+RES -> BSK: (getBasketById) GET /v1/baskets/{basket-reference}
+RES <- BSK: copy BasketResponse
+
+RES -> BSK: (linkAmendReservationsInBasket) POST /v1/baskets/{basket-reference}/linkAmendReservations
+RES <- BSK: BasketResponse
+
+RES -> BSK: (linkAmendReservationsInBasket) POST /v1/baskets/{basket-reference}/linkAmendReservations
+RES <- BSK: BasketResponse
+
+
+RES -> BSK: GET /v1/baskets/{basket-reference}
+BSK -> RES: Basket
+RES -> OHIP: GET adp/v1/reservations/basket?reservationIds=123&hotelId=HOTELCODE
+OHIP -> OHIP: GET ohip/v1/hotels/{hotelId}/reservations?reservationIds=123&hotelId=HOTELTEST
+OHIP <- OHIP: Reservations
+RES <- OHIP: Reservations
+
+RES -> Content: (copyBookingAllowances - getBusinessNotes) GET /v1/content/businessNotes
+Content -> RES: BusinessNotesResponse
+RES -> OHIP: (updateBusinessItems) PUT /v1/reservations/business
+RES <- OHIP: 200 OK
+
+A <- RES: new basketReference
+USER <- A: new basketReference
+@enduml

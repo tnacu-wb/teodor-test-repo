@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Semibold.ttf">
+            <string>ProximaNova-Semibold</string>
+        </array>
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="KGk-i7-Jjw" customClass="CheckInRoomDetailsValidCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="109.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mVf-LS-pfa">
+                        <rect key="frame" x="20" y="30" width="207" height="10"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="18"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lcN-az-KcX">
+                        <rect key="frame" x="239" y="28" width="66" height="23"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="23" id="bTX-j7-D6Z"/>
+                            <constraint firstAttribute="width" constant="66" id="iO5-D2-4c2"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                        <state key="normal" title="Change">
+                            <color key="titleColor" red="0.2901960784" green="0.1450980392" blue="0.36862745099999999" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
+                        <connections>
+                            <action selector="addDetailsButtonDidTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="6tn-Pp-aIk"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4f-XG-AVE">
+                        <rect key="frame" x="20" y="60" width="280" height="19.5"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="g4f-XG-AVE" secondAttribute="trailing" constant="20" id="0Ny-TD-5WM"/>
+                    <constraint firstAttribute="bottom" secondItem="g4f-XG-AVE" secondAttribute="bottom" constant="30" id="9Gj-8O-C08"/>
+                    <constraint firstAttribute="trailing" secondItem="lcN-az-KcX" secondAttribute="trailing" constant="15" id="N67-mb-dDX"/>
+                    <constraint firstItem="mVf-LS-pfa" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="R1w-Lk-TlY"/>
+                    <constraint firstItem="lcN-az-KcX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="28" id="dMk-Ua-sCD"/>
+                    <constraint firstItem="lcN-az-KcX" firstAttribute="leading" secondItem="mVf-LS-pfa" secondAttribute="trailing" constant="12" id="fqy-xB-9Hf"/>
+                    <constraint firstItem="g4f-XG-AVE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="oCB-Xg-aZW"/>
+                    <constraint firstItem="g4f-XG-AVE" firstAttribute="top" secondItem="mVf-LS-pfa" secondAttribute="bottom" constant="20" id="rUr-eU-5rJ"/>
+                    <constraint firstItem="mVf-LS-pfa" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="30" id="raa-6B-rBW"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="addDetailsButton" destination="lcN-az-KcX" id="n4u-SR-Br3"/>
+                <outlet property="guestDetails" destination="g4f-XG-AVE" id="ZGk-Av-Vis"/>
+                <outlet property="roomName" destination="mVf-LS-pfa" id="s3v-J5-ONr"/>
+            </connections>
+            <point key="canvasLocation" x="132.80000000000001" y="154.72263868065968"/>
+        </tableViewCell>
+    </objects>
+</document>

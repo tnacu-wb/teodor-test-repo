@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:elevation="@dimen/generic_elevation_1"
+    android:paddingStart="@dimen/generic_padding_16"
+    android:paddingEnd="@dimen/generic_padding_16"
+    android:paddingBottom="@dimen/generic_padding_16">
+
+    <TextView
+        android:id="@+id/tv_payment_details_address_title"
+        style="@style/Header3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:text="@string/payment_details_cardholder_address"
+        android:textColor="?attr/colorPrimary" />
+
+    <TextView
+        android:id="@+id/tv_payment_details_same_address_label"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_payment_details_address_title"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:maxLines="2"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/sc_payment_details_same_address"
+        android:text="@string/payment_details_same_as_address_label" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sc_payment_details_same_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_payment_details_address_title"
+        android:layout_alignBaseline="@id/tv_payment_details_same_address_label"
+        android:layout_alignParentEnd="true"
+        app:showText="false"
+        app:switchMinWidth="60dp" />
+
+    <include
+        android:id="@+id/manual_address_layout"
+        layout="@layout/layout_manual_address_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sc_payment_details_same_address" />
+</RelativeLayout>

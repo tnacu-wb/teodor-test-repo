@@ -1,0 +1,30 @@
+{
+  "id" : "84b412ad-fed8-4e61-a263-2d095f806a4c",
+  "request" : {
+    "url" : "/piba/account/balance",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "company-id" : {
+        "equalTo" : "123"
+      },
+      "employee-id" : {
+        "equalTo" : "40"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value2"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"currentBalances\":[{\"schemeCustomerId\":783582,\"outstanding\":null,\"newTransactions\":null,\"available\":null,\"creditLimit\":null,\"currentBalance\":null,\"interimPayments\":null,\"tetheredGuid\":\"9B1B3ED5-F61C-403E-8A56-59F0B625F856\",\"accountName\":\"07788435\",\"accountNumber\":\"3089503200100301\",\"registrationRoles\":[\"CARD_HOLDER\"],\"errorCode\":\"Error while retrieving balance\"}],\"totalRecordCount\":1}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "84b412ad-fed8-4e61-a263-2d095f806a4c"
+}

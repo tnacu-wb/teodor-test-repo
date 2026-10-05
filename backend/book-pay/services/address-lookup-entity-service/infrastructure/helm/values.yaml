@@ -1,0 +1,148 @@
+# Values for address-lookup-entity-service.
+#
+# Shaped for the shared `opera-app-chart` (whitbread-eos/helm-central-charts), which is
+# what .github/workflows/ci-matrix-deploy.yaml installs. That chart reads the pod spec
+# from `deployment.*` and gates optional resources on a `create` flag — keys outside
+# those names are silently ignored, so an unset `deployment.containerEnvs` renders
+# `env: null` and the pod starts with no environment at all.
+#
+# Derived from the Flux HelmRelease this service already runs under in
+# microservices-gitops/opera-dev/apps/address-lookup-entity-service.yaml. Two things
+# from there are deliberately NOT carried over:
+#
+#   imageAutomation — the pipeline --sets `imageAutomation.create=false` and pins the
+#     tag it just built. Flux remains the owner of image automation in the GitOps repo.
+#   canary — a Flagger Canary takes ownership of the Service's .spec.selector and
+#     .spec.ports[].name and of the VirtualService's .spec.http, which then collides
+#     with Helm's server-side apply on the next `helm upgrade` of the same release.
+#
+# Overridden per-deploy by ci-matrix-deploy.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create
+
+applicationName: address-lookup-entity-service
+namespace: opera-be
+
+image:
+  # --set by the pipeline to the ECR repository docker-build actually pushed to; the
+  # value here only documents the shape so `helm template` renders standalone.
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/address-lookup-entity-service
+  pullPolicy: Always
+  tag: "develop"
+
+imagePullSecrets:
+  - name: regcred
+
+deployment:
+  create: true
+  replicaCount: 1
+
+  containerPorts:
+    - containerPort: 9111
+      protocol: TCP
+      name: http
+
+  containerEnvFrom:
+    - configMapRef:
+        name: address-lookup-entity-service-configmap
+
+  containerEnvs:
+    # Turns on the profile block in application.yml that exposes the health, info,
+    # metrics and prometheus actuator endpoints. Spring's relaxed binding accepts
+    # either case; the canonical form is used here.
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=80 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    # QAS (Experian address lookup). The token has no default in application.yml, so a
+    # missing secret is a startup failure rather than a degraded service — which is the
+    # right outcome for the one downstream this service exists to call.
+    - name: QAS_AUTH_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: qas-secrets
+          key: qas_auth_token
+    - name: QAS_URL
+      valueFrom:
+        configMapKeyRef:
+          name: address-lookup-entity-service-configmap
+          key: qas_url
+
+  dns:
+    ndots: 3
+
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - sh
+          - -c
+          - sleep 20
+  terminationGracePeriodSeconds: 90
+
+  livenessProbe:
+    httpGet:
+      path: /v1/addresses/actuator/health/liveness
+      port: 9111
+    initialDelaySeconds: 90
+    periodSeconds: 30
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
+
+  readinessProbe:
+    httpGet:
+      path: /v1/addresses/actuator/health/readiness
+      port: 9111
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
+
+  # requests.memory tracks limits.memory because the heap is sized off the memory LIMIT
+  # (-XX:MaxRAMPercentage above). A heap sized against memory the pod never reserved is
+  # evictable under node pressure.
+  resources:
+    requests:
+      cpu: 400m
+      memory: 1000Mi
+    limits:
+      memory: 1000Mi
+
+# The Service publishes port 80 and forwards to the application port, which is what lets
+# every other service address this one as a bare hostname with no port.
+service:
+  create: true
+  name: address-lookup-entity-service
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 9111
+      protocol: TCP
+      name: port9111
+
+autoscaling:
+  create: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 120
+
+configMap:
+  create: true
+  data:
+    qas_url: https://ws.ondemand.qas.com
+
+istio:
+  create: true
+  auth: false
+  gateway: opera-api
+  regex:
+    enabled: true
+    pattern: ^\/v\d+\/addresses.*
+
+prometheusSpring:
+  create: true
+  path: /v1/addresses/actuator/prometheus

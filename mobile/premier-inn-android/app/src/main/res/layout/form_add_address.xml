@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/country_spinner_label"
+        style="@style/BodySmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_4"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:text="@string/form_field_label_country"
+        android:textColor="@color/grey_medium" />
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/country_spinner"
+        style="@style/CountySpinnerStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.whitbread.premierinn.common.view.FormEditTextView
+            android:id="@+id/lookup_postcode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autofillHints="postalCode"
+            android:hint="@string/postcode_finder_search_hint"
+            android:imeOptions="actionNext"
+            android:inputType="textCapCharacters"
+            android:visibility="visible" />
+
+        <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+            android:id="@+id/find_address_btn"
+            style="@style/Button2"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginStart="@dimen/generic_margin_30"
+            android:paddingStart="@dimen/generic_padding_10"
+            android:paddingEnd="@dimen/generic_padding_10"
+            android:text="@string/postcode_finder_find_address_label"
+            app:cab_background_color="@color/premier_inn_purple_light"
+            app:cab_text_color="@android:color/white" />
+    </LinearLayout>
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/address_line_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="streetAddress"
+        android:hint="@string/address_form_address_line1"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords|textNoSuggestions"
+        android:visibility="visible" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/address_line_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:autofillHints="extendedAddress"
+        android:hint="@string/address_form_address_line2"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords|textNoSuggestions"
+        android:visibility="visible" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:autofillHints="addressLocality"
+        android:hint="@string/address_form_hint_city"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords|textNoSuggestions"
+        android:visibility="visible" />
+
+    <com.whitbread.premierinn.common.view.FormEditTextView
+        android:id="@+id/postcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:autofillHints="postalCode"
+        android:hint="@string/address_form_postcode"
+        android:imeOptions="actionNext"
+        android:inputType="textNoSuggestions"
+        android:visibility="visible" />
+
+</LinearLayout>

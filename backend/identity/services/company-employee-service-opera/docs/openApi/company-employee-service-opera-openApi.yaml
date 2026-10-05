@@ -1,0 +1,1731 @@
+openapi: 3.1.0
+info:
+  description: API Documentation
+  title: Company Employee Microservice API Documentation
+  version: "2.17"
+servers:
+- description: Generated server url
+  url: http://localhost:9039
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /companies/activation:
+    post:
+      description: Activate Travel Manager's Account
+      operationId: activationTravelManagerAccount
+      parameters:
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+          default: gb
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+      - in: query
+        name: activation-key
+        required: true
+        schema:
+          type: string
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+          description: Success
+          headers:
+            company-id:
+              description: Company ID
+              schema:
+                type: string
+              style: simple
+            session-id:
+              description: BART session ID
+              schema:
+                type: string
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - Company Employee operations
+  /companies/admin/{companyId}/employees:
+    post:
+      description: Add an employee to a company
+      operationId: addEmployee
+      parameters:
+      - in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Employee"
+        required: true
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              description: Unique identifier for the employee created
+              schema:
+                type: string
+                format: uri
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Our bad something went wrong on our side"
+      summary: addEmployee
+      tags:
+      - Company Employee operations
+  /companies/admin/{companyId}/employees/approvereject:
+    patch:
+      description: Approve or Reject an employee
+      operationId: approveRejectEmployee_1
+      parameters:
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+          default: gb
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRegistrationRequest"
+        required: true
+      responses:
+        "204":
+          description: Success. No Content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Please check your input"
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: approveRejectEmployee
+      tags:
+      - Company Employee Profile operations
+  /companies/admin/{companyId}/employees/invite:
+    post:
+      description: End point to send an invite to an employee
+      operationId: inviteEmployee
+      parameters:
+      - in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InviteRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Please check your input"
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: inviteEmployee
+      tags:
+      - Company Employee operations
+  /companies/admin/{companyId}/employees/{employeeId}/accesslevel:
+    patch:
+      description: Update employee access level
+      operationId: updateEmployeeAccessLevel
+      parameters:
+      - in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: employeeId
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAccessLevelRequest"
+        required: true
+      responses:
+        "204":
+          description: All good. No Content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Please check your input "
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: updateEmployeeAccessLevel
+      tags:
+      - Company Employee operations
+  /companies/employees/activation-details:
+    get:
+      description: Get Employee Activation Details
+      operationId: getActivationDetails
+      parameters:
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+          default: gb
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+      - in: query
+        name: activation-key
+        required: true
+        schema:
+          type: string
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+          description: Success
+          headers:
+            company-id:
+              description: Company ID
+              schema:
+                type: string
+              style: simple
+            session-id:
+              description: BART session ID
+              schema:
+                type: string
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - Company Employee operations
+  /companies/{companyId}/employees:
+    get:
+      description: Get Employees
+      operationId: getEmployees
+      parameters:
+      - in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: me
+        description: SearchCriteria
+        in: query
+        name: searchCriteria
+      - content:
+          '*/*':
+            schema:
+              type: boolean
+              default: "false"
+        description: AwaitingApproval
+        in: query
+        name: awaitingApproval
+      - content:
+          '*/*':
+            schema:
+              type: integer
+              default: "10"
+        description: Maximum number of results to return per page. Should return this
+          many unless on last page.
+        in: query
+        name: size
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: integer
+              default: "1"
+        description: The requested page number.
+        in: query
+        name: page
+      - content:
+          '*/*':
+            schema:
+              type: string
+        description: The requested page token.
+        in: query
+        name: pageToken
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetEmployeesResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: getEmployees
+      tags:
+      - Company Employee operations
+  /companies/{companyId}/employees/{employeeId}:
+    get:
+      description: Get Employee
+      operationId: getEmployee
+      parameters:
+      - in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: employeeId
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - in: query
+        name: activation-key
+        required: false
+        schema:
+          type: string
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+          description: Success
+          headers:
+            session-id:
+              description: "BART session ID, returned only after the activation is\
+                \ triggered"
+              schema:
+                type: string
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - Company Employee operations
+    put:
+      description: Update an employee in a company
+      operationId: updateEmployee
+      parameters:
+      - in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: employeeId
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - in: query
+        name: activation-key
+        required: false
+        schema:
+          type: string
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Employee"
+        required: true
+      responses:
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Our bad something went wrong on our side"
+      summary: updateEmployee
+      tags:
+      - Company Employee operations
+  /companies/{companyId}/employees/{employeeId}/bookingpreferences:
+    get:
+      description: Get employee booking preferences
+      operationId: getEmployeeBookingPreferences
+      parameters:
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: employeeId
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingPreference"
+          description: All good
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Please check your input "
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Server Error: our bad something went wrong on our side"
+      summary: getEmployeeBookingPreferences
+      tags:
+      - Company Employee Profile operations
+    patch:
+      description: Update employee booking preferences
+      operationId: updateEmployeeBookingPreferences
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: employeeId
+        required: true
+        schema:
+          type: string
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingPreference"
+        required: true
+      responses:
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Our bad something went wrong on our side"
+      summary: updateEmployeeBookingPreferences
+      tags:
+      - Company Employee Profile operations
+  /company-employee-service/actuator:
+    get:
+      operationId: links
+      parameters:
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /company-employee-service/actuator/health:
+    get:
+      operationId: health
+      parameters:
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /company-employee-service/actuator/info:
+    get:
+      operationId: info
+      parameters:
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/company-employee-service/innbusiness/employees/activation-details:
+    get:
+      operationId: getInnBusinessActivationDetails
+      parameters:
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+          default: gb
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+      - in: query
+        name: activation-key
+        required: true
+        schema:
+          type: string
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeActivationResponse"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - InnBusiness related actions
+  /v1/company-employee-service/innbusiness/travelManager/activationEmail:
+    post:
+      description: Send activation email to travel manager
+      operationId: sendActivationEmail
+      parameters:
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendActivationRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Our bad something went wrong on our side"
+      summary: sendActivationEmail
+      tags:
+      - InnBusiness related actions
+  /v1/company-employee-service/innbusiness/travelManager/approvereject:
+    post:
+      description: Approve or reject an employee for InnBusiness
+      operationId: approveRejectEmployee
+      parameters:
+      - in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: company-id
+        required: true
+      - $ref: "#/components/parameters/string"
+        description: Required for authorization
+        in: header
+        name: employee-id
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApproveRejectRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Bad Request: please check your input"
+        "401":
+          content:
+            application/json: {}
+          description: Unauthorized
+        "403":
+          content:
+            application/json: {}
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "Error Occurred: Our bad something went wrong on our side"
+      summary: acceptRejectEmployee
+      tags:
+      - InnBusiness related actions
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          example: 120 Holborn
+          minLength: 1
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressLine5:
+          type: string
+        country:
+          type: string
+          example: GB
+          minLength: 1
+          pattern: "^[A-Z]{1,3}$"
+        postCode:
+          type: string
+          example: EC1N 2TD
+          minLength: 1
+      required:
+      - addressLine1
+      - country
+      - postCode
+    ApproveRejectRequest:
+      type: object
+      description: The approve reject request
+      properties:
+        accessLevel:
+          type: string
+          enum:
+          - STAYER
+          - SELF
+          - BOOKER
+          - SUPER
+          - BUSINESS_PAY_MANAGER
+          - BUSINESS_PAY_USER
+        approved:
+          type: boolean
+        email:
+          type: string
+          format: email
+          minLength: 1
+        language:
+          type: string
+          minLength: 1
+      required:
+      - accessLevel
+      - approved
+      - email
+      - language
+    BookingPreference:
+      type: object
+      properties:
+        adults:
+          type: integer
+          format: int32
+        children:
+          type: integer
+          format: int32
+        continentalBreakfast:
+          type: boolean
+        cotRequired:
+          type: boolean
+        electronicInvoice:
+          type: boolean
+        mealDeal:
+          type: boolean
+        premierBreakfast:
+          type: boolean
+        preselectWifi:
+          type: boolean
+        roomType:
+          type: string
+          enum:
+          - FAM
+          - DB
+          - TWIN
+          - DIS
+          - SB
+      required:
+      - adults
+      - children
+      - cotRequired
+    Employee:
+      type: object
+      description: The employee JSON payload
+      properties:
+        accessLevel:
+          type: string
+          enum:
+          - STAYER
+          - SELF
+          - BOOKER
+          - SUPER
+          - BUSINESS_PAY_MANAGER
+          - BUSINESS_PAY_USER
+        address:
+          $ref: "#/components/schemas/Address"
+        centralCardId:
+          type: string
+        dialingCode:
+          type: string
+        emailAddress:
+          type: string
+          format: email
+          minLength: 1
+        employeeAnswers:
+          $ref: "#/components/schemas/EmployeeAnswers"
+        employeeId:
+          type: string
+        employeeStatus:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - SUSPENDED
+          - DEACTIVATED
+          - PURGED
+        firstName:
+          type: string
+          minLength: 1
+          pattern: ^\D+$
+        ghNumber:
+          type: string
+        guestHistoryNumber:
+          type: string
+        id:
+          type: string
+        innBusiness:
+          type: boolean
+        lastName:
+          type: string
+          minLength: 1
+          pattern: ^\D+$
+        lockedForEditing:
+          type: boolean
+        mobileNumber:
+          type: string
+        password:
+          type: string
+        phoneNumber:
+          type: string
+        position:
+          type: string
+        textConfirmation:
+          type: boolean
+        title:
+          type: string
+          minLength: 1
+        updatePreferencesRequest:
+          $ref: "#/components/schemas/UpdatePreferencesRequest"
+      required:
+      - address
+      - emailAddress
+      - firstName
+      - lastName
+      - title
+    EmployeeActivationResponse:
+      type: object
+      properties:
+        accessLevel:
+          type: string
+          enum:
+          - STAYER
+          - SELF
+          - BOOKER
+          - SUPER
+          - BUSINESS_PAY_MANAGER
+          - BUSINESS_PAY_USER
+        address:
+          $ref: "#/components/schemas/Address"
+        centralCardId:
+          type: string
+        companyId:
+          type: string
+        companyName:
+          type: string
+        dialingCode:
+          type: string
+        emailAddress:
+          type: string
+          format: email
+          minLength: 1
+        employeeAnswers:
+          $ref: "#/components/schemas/EmployeeAnswers"
+        employeeId:
+          type: string
+        employeeStatus:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - SUSPENDED
+          - DEACTIVATED
+          - PURGED
+        firstName:
+          type: string
+          minLength: 1
+          pattern: ^\D+$
+        ghNumber:
+          type: string
+        guestHistoryNumber:
+          type: string
+        id:
+          type: string
+        innBusiness:
+          type: boolean
+        lastName:
+          type: string
+          minLength: 1
+          pattern: ^\D+$
+        lockedForEditing:
+          type: boolean
+        mobileNumber:
+          type: string
+        password:
+          type: string
+        phoneNumber:
+          type: string
+        position:
+          type: string
+        textConfirmation:
+          type: boolean
+        title:
+          type: string
+          minLength: 1
+        updatePreferencesRequest:
+          $ref: "#/components/schemas/UpdatePreferencesRequest"
+      required:
+      - address
+      - emailAddress
+      - firstName
+      - lastName
+      - title
+    EmployeeAnswers:
+      type: object
+      properties:
+        customerReferenceAnswer:
+          type: string
+        purchaseOrderAnswer:
+          type: string
+        userDefinedAnswers:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserDefinedAnswer"
+    EmployeeSummary:
+      type: object
+      properties:
+        accessLevel:
+          type: string
+          enum:
+          - STAYER
+          - SELF
+          - BOOKER
+          - SUPER
+          - BUSINESS_PAY_MANAGER
+          - BUSINESS_PAY_USER
+        emailAddress:
+          type: string
+          format: email
+          minLength: 1
+        employeeId:
+          type: string
+        employeeStatus:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - SUSPENDED
+          - DEACTIVATED
+          - PURGED
+        firstName:
+          type: string
+          minLength: 1
+          pattern: ^\D+$
+        guestHistoryNumber:
+          type: string
+        id:
+          type: string
+        lastName:
+          type: string
+          minLength: 1
+          pattern: ^\D+$
+        lockedForEditing:
+          type: boolean
+        textConfirmation:
+          type: boolean
+        title:
+          type: string
+          minLength: 1
+      required:
+      - emailAddress
+      - firstName
+      - lastName
+      - title
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "001"
+          minLength: 1
+        details:
+          type: array
+          example:
+          - Error message
+          items:
+            type: string
+      required:
+      - code
+      - details
+    GetEmployeesResponse:
+      type: object
+      properties:
+        employees:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmployeeSummary"
+        pageToken:
+          type: string
+        success:
+          type: boolean
+    InviteRequest:
+      type: object
+      description: The Invite JSON payload
+      properties:
+        centralCardId:
+          type: string
+        emailAddress:
+          type: string
+        innBusiness:
+          type: boolean
+      required:
+      - emailAddress
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    MarketingCustomer:
+      type: object
+      properties:
+        countryOfResidence:
+          type: string
+        customerId:
+          type: string
+        firstName:
+          type: string
+        language:
+          type: string
+        lastName:
+          type: string
+        nationality:
+          type: string
+        title:
+          type: string
+        userId:
+          type: string
+    SendActivationRequest:
+      type: object
+      description: The activation request
+      properties:
+        companyName:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          format: email
+          minLength: 1
+        language:
+          type: string
+          pattern: en|de
+      required:
+      - companyName
+      - email
+      - language
+    SourceDetails:
+      type: object
+      properties:
+        channel:
+          type: string
+        journey:
+          type: string
+        locale:
+          type: string
+    UpdateAccessLevelRequest:
+      type: object
+      description: The Booking Preference JSON payload
+      properties:
+        accessLevel:
+          type: string
+          enum:
+          - STAYER
+          - SELF
+          - BOOKER
+          - SUPER
+          - BUSINESS_PAY_MANAGER
+          - BUSINESS_PAY_USER
+      required:
+      - accessLevel
+    UpdatePreferencesRequest:
+      type: object
+      properties:
+        brandCodes:
+          type: array
+          items:
+            type: string
+        contactSubType:
+          type: string
+          enum:
+          - mobile
+          - landline
+        contactType:
+          type: string
+        contactValue:
+          type: string
+        customer:
+          $ref: "#/components/schemas/MarketingCustomer"
+        doubleOptIn:
+          type: boolean
+        optIn:
+          type: boolean
+        secondPartyOptIn:
+          type: boolean
+        sourceDetails:
+          $ref: "#/components/schemas/SourceDetails"
+        thirdPartyVendorsOptIn:
+          type: boolean
+    UpdateRegistrationRequest:
+      type: object
+      description: The Invite JSON payload
+      properties:
+        accessLevel:
+          type: string
+          enum:
+          - STAYER
+          - SELF
+          - BOOKER
+          - SUPER
+          - BUSINESS_PAY_MANAGER
+          - BUSINESS_PAY_USER
+        approved:
+          type: boolean
+        emailAddress:
+          type: string
+    UserDefinedAnswer:
+      type: object
+      properties:
+        miAnswer:
+          type: string
+        miID:
+          type: string

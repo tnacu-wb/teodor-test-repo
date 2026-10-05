@@ -1,0 +1,24 @@
+{
+  "id" : "bc8ea5c6-fffa-4990-acd6-4a0aa10755cf",
+  "request" : {
+    "url" : "/marketing/newsletter/phone/rachel.cody@housemark.co.uk?brandCodes=",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "Authentication" : {
+        "equalTo" : "Bearer dummyToken"
+      }
+    }
+  },
+  "response" : {
+    "status" : 400,
+    "body" : "{\"code\":\"001\",\"details\":[\"At least one brand code must be present\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "bc8ea5c6-fffa-4990-acd6-4a0aa10755cf"
+}

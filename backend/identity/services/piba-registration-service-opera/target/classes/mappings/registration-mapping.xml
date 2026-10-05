@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <mapping map-empty-string="false">
+        <class-a>worldline.mst.bsm.api.b2b.pi.data.RegistrationGetInfoResponse</class-a>
+        <class-b>uk.co.whitbread.piba.registration.model.RegistrationInfoResponse</class-b>
+
+        <field>
+            <a>response.registrationCodeInfo</a>
+            <b>registrationCodeInfo</b>
+        </field>
+
+    </mapping>
+
+
+    <mapping map-empty-string="false">
+        <class-a>worldline.mst.bsm.api.b2b.pi.data.RegistrationAuthenticateResponse</class-a>
+        <class-b>uk.co.whitbread.piba.registration.model.RegistrationAuthenticationResponse</class-b>
+
+        <field>
+            <a>response.registrationCodeInfo</a>
+            <b>registrationCodeInfo</b>
+        </field>
+
+        <field>
+            <a>response.prepopulatedItems</a>
+            <b>registrationPrePopulatedItems</b>
+        </field>
+
+        <field custom-converter="uk.co.whitbread.piba.registration.converter.UserTitleConverter">
+            <a>response.prepopulatedItems.title</a>
+            <b>registrationPrePopulatedItems.title</b>
+        </field>
+
+    </mapping>
+
+    <mapping map-empty-string="false">
+        <class-a>worldline.mst.bsm.api.b2b.pi.data.RegistrationSubmitResponse</class-a>
+        <class-b>uk.co.whitbread.piba.registration.model.RegistrationSubmitResp</class-b>
+
+        <field>
+            <a>response.registrationCodeInfo</a>
+            <b>registrationCodeInfo</b>
+        </field>
+
+        <field>
+            <a>response.tetherDetails</a>
+            <b>tetherDetails</b>
+        </field>
+
+    </mapping>
+
+    <mapping map-empty-string="false">
+        <class-a>uk.co.whitbread.piba.registration.model.RegistrationDetails</class-a>
+        <class-b>worldline.mst.bsm.api.b2b.pi.data.RegistrationDetailsType</class-b>
+    </mapping>
+
+</mappings>

@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions targetNamespace="worldline.mst.bsm.api.b2b.pi.messages.v1.1"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+                  xmlns:wsa10="http://www.w3.org/2005/08/addressing"
+                  xmlns:tns="worldline.mst.bsm.api.b2b.pi.messages.v1.1"
+                  xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+                  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+                  xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="worldline.mst.bsm.api.b2b.pi.messages.v1.1/Imports">
+      <xsd:import schemaLocation="../xsd/mex.xsd" namespace="worldline.mst.bsm.api.b2b.pi.messages.v1.1"/>
+      <xsd:import schemaLocation="../xsd/mex_1.xsd" namespace="worldline.mst.bsm.api.b2b.pi.data.v1.1"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IB2BPIAPI_cnpCheckMemorableWord_InputMessage">
+    <wsdl:part name="parameters" element="tns:cnpCheckMemorableWord"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpCheckMemorableWord_OutputMessage">
+    <wsdl:part name="parameters" element="tns:cnpCheckMemorableWordResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpCheckTelephoneBooking_InputMessage">
+    <wsdl:part name="parameters" element="tns:cnpCheckTelephoneBooking"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpCheckTelephoneBooking_OutputMessage">
+    <wsdl:part name="parameters" element="tns:cnpCheckTelephoneBookingResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpCheckTetheredUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:cnpCheckTetheredUser"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpCheckTetheredUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:cnpCheckTetheredUserResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_endSession_InputMessage">
+    <wsdl:part name="parameters" element="tns:endSession"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_endSession_OutputMessage">
+    <wsdl:part name="parameters" element="tns:endSessionResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_loginTetheredUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:loginTetheredUser"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_loginTetheredUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:loginTetheredUserResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_refreshSession_InputMessage">
+    <wsdl:part name="parameters" element="tns:refreshSession"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_refreshSession_OutputMessage">
+    <wsdl:part name="parameters" element="tns:refreshSessionResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_registrationAuthenticate_InputMessage">
+    <wsdl:part name="parameters" element="tns:registrationAuthenticate"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_registrationAuthenticate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:registrationAuthenticateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_registrationGetInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:registrationGetInfo"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_registrationGetInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:registrationGetInfoResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_registrationSubmit_InputMessage">
+    <wsdl:part name="parameters" element="tns:registrationSubmit"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_registrationSubmit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:registrationSubmitResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_tetherByAccountNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:tetherByAccountNumber"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_tetherByAccountNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:tetherByAccountNumberResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_tetherByCardNumber_InputMessage">
+    <wsdl:part name="parameters" element="tns:tetherByCardNumber"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_tetherByCardNumber_OutputMessage">
+    <wsdl:part name="parameters" element="tns:tetherByCardNumberResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_updateMemorableWord_InputMessage">
+    <wsdl:part name="parameters" element="tns:updateMemorableWord"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_updateMemorableWord_OutputMessage">
+    <wsdl:part name="parameters" element="tns:updateMemorableWordResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountViewCurrentBalances_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountViewCurrentBalances"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountViewCurrentBalances_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountViewCurrentBalancesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountViewTransactions_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountViewTransactions"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountViewTransactions_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountViewTransactionsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpHostedPageInitiate_InputMessage">
+    <wsdl:part name="parameters" element="tns:cnpHostedPageInitiate"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpHostedPageInitiate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:cnpHostedPageInitiateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpHostedPageResult_InputMessage">
+    <wsdl:part name="parameters" element="tns:cnpHostedPageResult"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpHostedPageResult_OutputMessage">
+    <wsdl:part name="parameters" element="tns:cnpHostedPageResultResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_creditProposeNewLimit_InputMessage">
+    <wsdl:part name="parameters" element="tns:creditProposeNewLimit"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_creditProposeNewLimit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:creditProposeNewLimitResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_creditProposeNewLimitGetStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:creditProposeNewLimitGetStatus"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_creditProposeNewLimitGetStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:creditProposeNewLimitGetStatusResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardActivate_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardActivate"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardActivate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardActivateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardAdd_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardAdd"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardAdd_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardAddResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardCancel_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardCancel"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardCancel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardCancelResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardInvite_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardInvite"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardInvite_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardInviteResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardList_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardList"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardListResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardRenew_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardRenew"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardRenew_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardRenewResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardUpdate"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardUpdateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardView_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardView"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCardView_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCardViewResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountInvoiceDownload_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountInvoiceDownload"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountInvoiceDownload_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountInvoiceDownloadResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountInvoiceList_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountInvoiceList"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountInvoiceList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountInvoiceListResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountRegisteredUserList_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountRegisteredUserList"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountRegisteredUserList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountRegisteredUserListResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_tetheredUserDetailsGet_InputMessage">
+    <wsdl:part name="parameters" element="tns:tetheredUserDetailsGet"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_tetheredUserDetailsGet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:tetheredUserDetailsGetResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCostCentreList_InputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCostCentreList"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_customerAccountCostCentreList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:customerAccountCostCentreListResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpGetDigitsForCheckTelephoneBooking_InputMessage">
+    <wsdl:part name="parameters" element="tns:cnpGetDigitsForCheckTelephoneBooking"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpGetDigitsForCheckTelephoneBooking_OutputMessage">
+    <wsdl:part name="parameters" element="tns:cnpGetDigitsForCheckTelephoneBookingResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpCheckTelephoneBookingBySessionID_InputMessage">
+    <wsdl:part name="parameters" element="tns:cnpCheckTelephoneBookingBySessionID"/>
+  </wsdl:message>
+  <wsdl:message name="IB2BPIAPI_cnpCheckTelephoneBookingBySessionID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:cnpCheckTelephoneBookingBySessionIDResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="IB2BPIAPI">
+    <wsdl:operation name="cnpCheckMemorableWord">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpCheckMemorableWord"
+                  message="tns:IB2BPIAPI_cnpCheckMemorableWord_InputMessage"/>
+      <wsdl:output
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpCheckMemorableWordResponse"
+              message="tns:IB2BPIAPI_cnpCheckMemorableWord_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="cnpCheckTelephoneBooking">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpCheckTelephoneBooking"
+                  message="tns:IB2BPIAPI_cnpCheckTelephoneBooking_InputMessage"/>
+      <wsdl:output
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpCheckTelephoneBookingResponse"
+              message="tns:IB2BPIAPI_cnpCheckTelephoneBooking_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="cnpCheckTetheredUser">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpCheckTetheredUser"
+                  message="tns:IB2BPIAPI_cnpCheckTetheredUser_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpCheckTetheredUserResponse"
+                   message="tns:IB2BPIAPI_cnpCheckTetheredUser_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="endSession">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/endSession"
+                  message="tns:IB2BPIAPI_endSession_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/endSessionResponse"
+                   message="tns:IB2BPIAPI_endSession_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="loginTetheredUser">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/loginTetheredUser"
+                  message="tns:IB2BPIAPI_loginTetheredUser_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/loginTetheredUserResponse"
+                   message="tns:IB2BPIAPI_loginTetheredUser_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="refreshSession">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/refreshSession"
+                  message="tns:IB2BPIAPI_refreshSession_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/refreshSessionResponse"
+                   message="tns:IB2BPIAPI_refreshSession_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="registrationAuthenticate">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/registrationAuthenticate"
+                  message="tns:IB2BPIAPI_registrationAuthenticate_InputMessage"/>
+      <wsdl:output
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/registrationAuthenticateResponse"
+              message="tns:IB2BPIAPI_registrationAuthenticate_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="registrationGetInfo">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/registrationGetInfo"
+                  message="tns:IB2BPIAPI_registrationGetInfo_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/registrationGetInfoResponse"
+                   message="tns:IB2BPIAPI_registrationGetInfo_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="registrationSubmit">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/registrationSubmit"
+                  message="tns:IB2BPIAPI_registrationSubmit_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/registrationSubmitResponse"
+                   message="tns:IB2BPIAPI_registrationSubmit_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="tetherByAccountNumber">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/tetherByAccountNumber"
+                  message="tns:IB2BPIAPI_tetherByAccountNumber_InputMessage"/>
+      <wsdl:output
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/tetherByAccountNumberResponse"
+              message="tns:IB2BPIAPI_tetherByAccountNumber_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="tetherByCardNumber">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/tetherByCardNumber"
+                  message="tns:IB2BPIAPI_tetherByCardNumber_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/tetherByCardNumberResponse"
+                   message="tns:IB2BPIAPI_tetherByCardNumber_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="updateMemorableWord">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/updateMemorableWord"
+                  message="tns:IB2BPIAPI_updateMemorableWord_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/updateMemorableWordResponse"
+                   message="tns:IB2BPIAPI_updateMemorableWord_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountViewCurrentBalances">
+      <wsdl:input
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountViewCurrentBalances"
+              message="tns:IB2BPIAPI_customerAccountViewCurrentBalances_InputMessage"/>
+      <wsdl:output
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountViewCurrentBalancesResponse"
+              message="tns:IB2BPIAPI_customerAccountViewCurrentBalances_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountViewTransactions">
+      <wsdl:input
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountViewTransactions"
+              message="tns:IB2BPIAPI_customerAccountViewTransactions_InputMessage"/>
+      <wsdl:output
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountViewTransactionsResponse"
+              message="tns:IB2BPIAPI_customerAccountViewTransactions_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="cnpHostedPageInitiate">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpHostedPageInitiate"
+                  message="tns:IB2BPIAPI_cnpHostedPageInitiate_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpHostedPageInitiateResponse"
+                   message="tns:IB2BPIAPI_cnpHostedPageInitiate_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="cnpHostedPageResult">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpHostedPageResult"
+                  message="tns:IB2BPIAPI_cnpHostedPageResult_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpHostedPageResultResponse"
+                   message="tns:IB2BPIAPI_cnpHostedPageResult_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="creditProposeNewLimit">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/creditProposeNewLimit"
+                  message="tns:IB2BPIAPI_creditProposeNewLimit_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/creditProposeNewLimitResponse"
+                   message="tns:IB2BPIAPI_creditProposeNewLimit_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="creditProposeNewLimitGetStatus">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/creditProposeNewLimitGetStatus"
+                  message="tns:IB2BPIAPI_creditProposeNewLimitGetStatus_InputMessage"/>
+      <wsdl:output
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/creditProposeNewLimitGetStatusResponse"
+              message="tns:IB2BPIAPI_creditProposeNewLimitGetStatus_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountCardActivate">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardActivate"
+                  message="tns:IB2BPIAPI_customerAccountCardActivate_InputMessage"/>
+      <wsdl:output
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardActivateResponse"
+              message="tns:IB2BPIAPI_customerAccountCardActivate_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountCardAdd">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardAdd"
+                  message="tns:IB2BPIAPI_customerAccountCardAdd_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardAddResponse"
+                   message="tns:IB2BPIAPI_customerAccountCardAdd_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountCardCancel">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardCancel"
+                  message="tns:IB2BPIAPI_customerAccountCardCancel_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardCancelResponse"
+                   message="tns:IB2BPIAPI_customerAccountCardCancel_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountCardInvite">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardInvite"
+                  message="tns:IB2BPIAPI_customerAccountCardInvite_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardInviteResponse"
+                   message="tns:IB2BPIAPI_customerAccountCardInvite_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountCardList">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardList"
+                  message="tns:IB2BPIAPI_customerAccountCardList_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardListResponse"
+                   message="tns:IB2BPIAPI_customerAccountCardList_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountCardRenew">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardRenew"
+                  message="tns:IB2BPIAPI_customerAccountCardRenew_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardRenewResponse"
+                   message="tns:IB2BPIAPI_customerAccountCardRenew_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountCardUpdate">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardUpdate"
+                  message="tns:IB2BPIAPI_customerAccountCardUpdate_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardUpdateResponse"
+                   message="tns:IB2BPIAPI_customerAccountCardUpdate_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountCardView">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardView"
+                  message="tns:IB2BPIAPI_customerAccountCardView_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCardViewResponse"
+                   message="tns:IB2BPIAPI_customerAccountCardView_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountInvoiceDownload">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountInvoiceDownload"
+                  message="tns:IB2BPIAPI_customerAccountInvoiceDownload_InputMessage"/>
+      <wsdl:output
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountInvoiceDownloadResponse"
+              message="tns:IB2BPIAPI_customerAccountInvoiceDownload_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountInvoiceList">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountInvoiceList"
+                  message="tns:IB2BPIAPI_customerAccountInvoiceList_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountInvoiceListResponse"
+                   message="tns:IB2BPIAPI_customerAccountInvoiceList_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountRegisteredUserList">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountRegisteredUserList"
+                  message="tns:IB2BPIAPI_customerAccountRegisteredUserList_InputMessage"/>
+      <wsdl:output
+              wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountRegisteredUserListResponse"
+              message="tns:IB2BPIAPI_customerAccountRegisteredUserList_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="tetheredUserDetailsGet">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/tetheredUserDetailsGet"
+                  message="tns:IB2BPIAPI_tetheredUserDetailsGet_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/tetheredUserDetailsGetResponse"
+                   message="tns:IB2BPIAPI_tetheredUserDetailsGet_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="customerAccountCostCentreList">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCostCentreList"
+                  message="tns:IB2BPIAPI_customerAccountCostCentreList_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/customerAccountCostCentreListResponse"
+                   message="tns:IB2BPIAPI_customerAccountCostCentreList_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="cnpGetDigitsForCheckTelephoneBooking">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpGetDigitsForCheckTelephoneBooking" message="tns:IB2BPIAPI_cnpGetDigitsForCheckTelephoneBooking_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpGetDigitsForCheckTelephoneBookingResponse" message="tns:IB2BPIAPI_cnpGetDigitsForCheckTelephoneBooking_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="cnpCheckTelephoneBookingBySessionID">
+      <wsdl:input wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpCheckTelephoneBookingBySessionID" message="tns:IB2BPIAPI_cnpCheckTelephoneBookingBySessionID_InputMessage"/>
+      <wsdl:output wsaw:Action="worldline.mst.bsm.api.b2b.pi.messages.v1.1/IB2BPIAPI/cnpCheckTelephoneBookingBySessionIDResponse" message="tns:IB2BPIAPI_cnpCheckTelephoneBookingBySessionID_OutputMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

@@ -1,0 +1,1387 @@
+openapi: 3.0.1
+info:
+  description: <p>CDH Api Documentation</p>
+  title: CDH API Documentation
+  version: 2.1.0
+servers:
+  - description: Generated server url
+    url: http://localhost:9119
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  /v1/cdh/account/companies:
+    post:
+      operationId: getCompanies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanySearchCriteriaDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanySearchResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Search companies from CDH Account Services API V2
+      tags:
+        - company-controller
+  /v1/cdh/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+        - Actuator
+  /v1/cdh/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+        - Actuator
+  /v1/cdh/actuator/health/**:
+    get:
+      operationId: health-path
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health-path'
+      tags:
+        - Actuator
+  /v1/cdh/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+        - Actuator
+  /v1/cdh/companies/{companyId}/reports/emergency-report:
+    get:
+      operationId: getEmergencyReport
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            type: string
+        - example: 2023-10-05
+          in: query
+          name: fromDate
+          required: true
+          schema:
+            type: string
+        - example: 2023-10-05
+          in: query
+          name: toDate
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: accessContext
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: accessedBy
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyReportResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Emergency Report from CDH Booking Services API V2
+      tags:
+        - report-controller
+  /v1/cdh/companies/{companyId}/reports/management-information:
+    get:
+      operationId: getManagementInformation
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            type: string
+        - example: 2023-10-05
+          in: query
+          name: fromDate
+          required: true
+          schema:
+            type: string
+        - example: 2023-10-05
+          in: query
+          name: toDate
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: accessContext
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: accessedBy
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManagementInformationResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Management Information from CDH Booking Services API V2
+      tags:
+        - report-controller
+  /v1/cdh/reservation/search:
+    post:
+      operationId: getReservationSearch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CdhReservationSearchCriteriaDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CdhReservationSearchDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Search bookings from CDH Booking Services API V2
+      tags:
+        - cdh-reservation-search-controller
+components:
+  schemas:
+    AddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressLine5:
+          type: string
+        companyName:
+          type: string
+        countryCode:
+          type: string
+        postCode:
+          type: string
+        type:
+          type: string
+    AnswersDto:
+      type: object
+      properties:
+        answerValues:
+          type: array
+          items:
+            type: string
+        type:
+          type: string
+    BillingAddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressLine5:
+          type: string
+        companyName:
+          type: string
+        countryCode:
+          type: string
+        postCode:
+          type: string
+        type:
+          type: string
+    BookerDto:
+      type: object
+      properties:
+        companyName:
+          type: string
+        emailAddress:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobile:
+          type: string
+        telephoneNumber:
+          type: string
+    BookingAlertsDto:
+      type: object
+      properties:
+        bookingAlertHotels:
+          type: array
+          items:
+            type: string
+        dayOfArrival:
+          type: boolean
+        frequency:
+          type: string
+        passThroughWeekend:
+          type: boolean
+        rateCaps:
+          $ref: '#/components/schemas/RateCapsDto'
+        recipientEmailAddresses:
+          type: array
+          items:
+            type: string
+        weekendArrival:
+          type: boolean
+    BookingAllowancesDto:
+      type: object
+      properties:
+        allowAdditionalCosts:
+          type: boolean
+        allowAlcohol:
+          type: boolean
+        allowCarParking:
+          type: boolean
+        allowIndividualCards:
+          type: boolean
+        allowPremierSaverRates:
+          type: boolean
+        extrasCodes:
+          type: array
+          items:
+            type: string
+        maxDinnerBudgets:
+          $ref: '#/components/schemas/MaxDinnerBudgetsDto'
+        maxNumberOfNights:
+          type: integer
+          format: int32
+        upsellItemsAllowed:
+          type: array
+          items:
+            type: string
+    BookingPreferenceDto:
+      type: object
+      properties:
+        continentalBreakfast:
+          type: boolean
+        electronicInvoiceRequired:
+          type: boolean
+        mealDeal:
+          type: boolean
+        premierBreakfast:
+          type: boolean
+        preselectWifi:
+          type: boolean
+        reason:
+          type: string
+        roomRequirements:
+          $ref: '#/components/schemas/RoomRequirementsDto'
+    BusinessDto:
+      type: object
+      properties:
+        dismissMPILink:
+          type: boolean
+        miSetupRequired:
+          type: boolean
+        myPILink:
+          type: string
+        tethered:
+          type: boolean
+    CardNotPresentDto:
+      type: object
+      properties:
+        businessAccountPassword:
+          type: string
+        businessAccountUsername:
+          type: string
+    CdhReservationSearchCriteriaDto:
+      type: object
+      properties:
+        arrivalDateFrom:
+          type: string
+        arrivalDateTo:
+          type: string
+        bartGuestHistoryNumber:
+          type: string
+        bookingDate:
+          type: string
+        bookingReference:
+          type: string
+        bookingsDatabaseSearch:
+          type: boolean
+        cancellationDate:
+          type: string
+        companyAccountId:
+          type: string
+        companyName:
+          type: string
+        continuationToken:
+          type: string
+        customerAccountId:
+          type: string
+        customerReference:
+          type: string
+        emailAddress:
+          type: string
+        employeeAccountId:
+          type: string
+        hotelCode:
+          type: string
+        hotelName:
+          type: string
+        lastName:
+          type: string
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        postalCode:
+          type: string
+        purchaseOrder:
+          type: string
+        reservationId:
+          type: integer
+          format: int32
+        status:
+          type: string
+        telephone:
+          type: string
+        thirdPartyReference:
+          type: string
+    CdhReservationSearchDto:
+      type: object
+      properties:
+        continuationToken:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsDto'
+        searchResults:
+          type: integer
+          format: int32
+        totalResults:
+          type: integer
+          format: int32
+        totalSize:
+          type: integer
+          format: int32
+        totals:
+          $ref: '#/components/schemas/TotalsDto'
+    CellCodeDto:
+      type: object
+      properties:
+        cellCode:
+          type: string
+        id:
+          type: integer
+          format: int32
+    CompaniesDto:
+      type: object
+      properties:
+        accountToCompany:
+          type: boolean
+        allowCentralCreditCard:
+          type: boolean
+        alternateCompanyName:
+          type: string
+        bookingAlerts:
+          $ref: '#/components/schemas/BookingAlertsDto'
+        bookingAllowances:
+          $ref: '#/components/schemas/BookingAllowancesDto'
+        cellCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CellCodeDto'
+        companyAccountId:
+          type: string
+        companyAddress:
+          $ref: '#/components/schemas/CompanyAddressDto'
+        companyCellCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyCellCodeDto'
+        companyLockedForEditing:
+          type: boolean
+        companyManagementDetails:
+          $ref: '#/components/schemas/CompanyManagementDetailsDto'
+        companyName:
+          type: string
+        companyType:
+          type: string
+        crmCompanyId:
+          type: string
+        globalCompanyId:
+          type: integer
+          format: int32
+        mainContact:
+          $ref: '#/components/schemas/MainContactDto'
+        managedAccount:
+          type: boolean
+        manualValidationRequired:
+          type: boolean
+        manuallyValidated:
+          type: boolean
+        marketingAllowed:
+          type: boolean
+        numberOfEmployees:
+          type: integer
+          format: int32
+        status:
+          type: string
+    CompanyAddressDto:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressLine5:
+          type: string
+        countryCode:
+          type: string
+        postCode:
+          type: string
+    CompanyAnswersDto:
+      type: object
+      properties:
+        answer:
+          type: string
+        header:
+          type: string
+        label:
+          type: string
+        position:
+          type: integer
+          format: int32
+        questionId:
+          type: string
+    CompanyCellCodeDto:
+      type: object
+      properties:
+        code:
+          type: string
+        id:
+          type: string
+    CompanyManagementDetailsDto:
+      type: object
+      properties:
+        customerReferenceManagement:
+          $ref: '#/components/schemas/CustomerReferenceManagementDto'
+        paymentDetails:
+          $ref: '#/components/schemas/PaymentDetailsDto'
+        purchaseOrderManagement:
+          $ref: '#/components/schemas/PurchaseOrderManagementDto'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionsDto'
+        restrictedHotelCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestrictedHotelCodeDto'
+        restrictedRatePlans:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestrictedRatePlanDto'
+    CompanySearchCriteriaDto:
+      type: object
+      properties:
+        accessContext:
+          type: string
+        accessedBy:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressLine5:
+          type: string
+        cellCode:
+          type: string
+        companyName:
+          type: string
+        companyType:
+          type: string
+        countryCode:
+          type: string
+        globalCompanyId:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        postCode:
+          type: string
+        sortBy:
+          type: string
+        sortDirection:
+          type: string
+      required:
+        - accessContext
+        - accessedBy
+    CompanySearchResponseDto:
+      type: object
+      properties:
+        continuationToken:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompaniesDto'
+        searchResults:
+          type: integer
+          format: int32
+        totalResults:
+          type: integer
+          format: int32
+    CustomerReferenceManagementDto:
+      type: object
+      properties:
+        active:
+          type: boolean
+        answers:
+          $ref: '#/components/schemas/AnswersDto'
+        header:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
+        location:
+          type: string
+        mandatory:
+          type: boolean
+        type:
+          type: string
+    EmergencyReportBookerDto:
+      type: object
+      properties:
+        emailAddress:
+          type: string
+        mobileNumber:
+          type: string
+        telephoneNumber:
+          type: string
+    EmergencyReportResponseDto:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmergencyResultsDto'
+    EmergencyResultsDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+        booker:
+          $ref: '#/components/schemas/EmergencyReportBookerDto'
+        bookingReference:
+          type: string
+        departureDate:
+          type: string
+        guests:
+          type: array
+          items:
+            $ref: '#/components/schemas/GuestsDto'
+        hotelArea:
+          type: string
+        hotelName:
+          type: string
+        hotelPhoneNumber:
+          type: string
+        hotelPostcode:
+          type: string
+        noOfAdults:
+          type: string
+        noOfChildren:
+          type: string
+        status:
+          type: string
+    EmployeeAnswersDto:
+      type: object
+      properties:
+        companyAnswers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyAnswersDto'
+        customerReferenceAnswer:
+          type: string
+        purchaseOrderAnswer:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+      required:
+        - code
+        - details
+    GreaterLondonDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        netAmount:
+          type: number
+    GuestsDto:
+      type: object
+      properties:
+        emailAddress:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        telephoneNumber:
+          type: string
+    IrelandDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        netAmount:
+          type: number
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    MainContactDto:
+      type: object
+      properties:
+        accessLevel:
+          type: string
+        activationKey:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        approxAnnualUKHotelSpend:
+          type: string
+        awaitingApproval:
+          type: boolean
+        bartEmployeeId:
+          type: integer
+          format: int32
+        bartGuestHistoryCreation:
+          type: string
+        bartGuestHistoryNumber:
+          type: string
+        bookingPreference:
+          $ref: '#/components/schemas/BookingPreferenceDto'
+        business:
+          $ref: '#/components/schemas/BusinessDto'
+        carRegistration:
+          type: string
+        centralCardId:
+          type: integer
+          format: int32
+        companyAccountId:
+          type: string
+        emailAddress:
+          type: string
+        employeeAccountId:
+          type: string
+        employeeAnswers:
+          $ref: '#/components/schemas/EmployeeAnswersDto'
+        firstName:
+          type: string
+        globalCompanyId:
+          type: string
+        lastName:
+          type: string
+        lockedForEditing:
+          type: boolean
+        mainEmployee:
+          type: boolean
+        mobileNumber:
+          type: string
+        paymentPreference:
+          $ref: '#/components/schemas/PaymentPreferenceDto'
+        phoneNumber:
+          type: string
+        position:
+          type: string
+        status:
+          type: string
+        textConfirmation:
+          type: boolean
+        title:
+          type: string
+    ManagementInformationResponseDto:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportsDto'
+    MaxDinnerBudgetsDto:
+      type: object
+      properties:
+        greaterLondon:
+          $ref: '#/components/schemas/GreaterLondonDto'
+        ireland:
+          $ref: '#/components/schemas/IrelandDto'
+        ukWide:
+          $ref: '#/components/schemas/UkWideDto'
+    PaymentCardDto:
+      type: object
+      properties:
+        billingAddress:
+          $ref: '#/components/schemas/BillingAddressDto'
+        cardId:
+          type: string
+        cardLabel:
+          type: string
+        cardNotPresent:
+          $ref: '#/components/schemas/CardNotPresentDto'
+        cardNotPresentRequired:
+          type: boolean
+        cardNumber:
+          type: string
+        cardType:
+          type: string
+        created:
+          type: string
+        dateDeleted:
+          type: string
+          format: date
+        deleted:
+          type: boolean
+        expiryDate:
+          type: string
+        modified:
+          type: string
+        nameOnCard:
+          type: string
+        position:
+          type: integer
+          format: int32
+        token:
+          type: string
+    PaymentDetailsDto:
+      type: object
+      properties:
+        allowIndividualCards:
+          type: boolean
+        paymentCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentCardDto'
+        profileLocked:
+          type: boolean
+    PaymentPreferenceDto:
+      type: object
+      properties:
+        paymentCard:
+          $ref: '#/components/schemas/PaymentPreferencePaymentCardDto'
+    PaymentPreferencePaymentCardDto:
+      type: object
+      properties:
+        billingAddress:
+          $ref: '#/components/schemas/BillingAddressDto'
+        cardHolderName:
+          type: string
+        cardNumber:
+          type: string
+        cardType:
+          type: string
+        cnpBusinessAccountPassword:
+          type: string
+        cnpBusinessAccountUsername:
+          type: string
+        cnpRequired:
+          type: boolean
+        expiryDate:
+          type: string
+        token:
+          type: string
+    PriceDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        netAmount:
+          type: number
+    PurchaseOrderManagementDto:
+      type: object
+      properties:
+        active:
+          type: boolean
+        answers:
+          $ref: '#/components/schemas/AnswersDto'
+        header:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
+        location:
+          type: string
+        mandatory:
+          type: boolean
+        type:
+          type: string
+    QuestionsDto:
+      type: object
+      properties:
+        answers:
+          $ref: '#/components/schemas/AnswersDto'
+        header:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
+        location:
+          type: string
+        mandatory:
+          type: boolean
+        position:
+          type: string
+    RateCapsDto:
+      type: object
+      properties:
+        greaterLondon:
+          $ref: '#/components/schemas/GreaterLondonDto'
+        ireland:
+          $ref: '#/components/schemas/IrelandDto'
+        ukWide:
+          $ref: '#/components/schemas/UkWideDto'
+    ReportsDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+        booker:
+          $ref: '#/components/schemas/BookerDto'
+        bookingDate:
+          type: string
+        bookingReference:
+          type: string
+        bookingStatus:
+          type: string
+        cardNumber:
+          type: string
+        cardType:
+          type: string
+        customerReference:
+          type: string
+        departureDate:
+          type: string
+        employeeAnswers:
+          $ref: '#/components/schemas/EmployeeAnswersDto'
+        guest:
+          $ref: '#/components/schemas/BookerDto'
+        hotelName:
+          type: string
+        leadTime:
+          type: integer
+          format: int32
+        nights:
+          type: integer
+          format: int32
+        noOfAdults:
+          type: integer
+          format: int32
+        noOfChildren:
+          type: integer
+          format: int32
+        purchaseOrder:
+          type: string
+        rateCategory:
+          type: string
+        roomCost:
+          $ref: '#/components/schemas/PriceDto'
+        rooms:
+          type: integer
+          format: int32
+        totalCost:
+          $ref: '#/components/schemas/PriceDto'
+        upsellTotalCost:
+          $ref: '#/components/schemas/PriceDto'
+    RestrictedHotelCodeDto:
+      type: object
+      properties:
+        code:
+          type: string
+    RestrictedRatePlanDto:
+      type: object
+      properties:
+        code:
+          type: string
+    ResultsDto:
+      type: object
+      properties:
+        accountType:
+          type: string
+        amendable:
+          type: boolean
+        arrivalDate:
+          type: string
+        bartEmployeeId:
+          type: integer
+          format: int64
+        bartGuestHistoryNumber:
+          type: string
+        booker:
+          $ref: '#/components/schemas/BookerDto'
+        bookingDate:
+          type: string
+        bookingMethod:
+          type: string
+        bookingMethodDescription:
+          type: string
+        bookingReference:
+          type: string
+        bookingType:
+          type: string
+        cancellable:
+          type: boolean
+        cancellationDate:
+          type: string
+        cancellationId:
+          type: string
+        cellCode:
+          type: string
+        cellCodeId:
+          type: integer
+          format: int32
+        companyAccountId:
+          type: string
+        crmCompanyId:
+          type: string
+        customerAccountId:
+          type: string
+        customerReference:
+          type: string
+        dctmcUserName:
+          type: string
+        departureDate:
+          type: string
+        employeeAccountId:
+          type: string
+        employeeAnswers:
+          $ref: '#/components/schemas/EmployeeAnswersDto'
+        globalCompanyId:
+          type: integer
+          format: int64
+        hotelCode:
+          type: string
+        hotelName:
+          type: string
+        iataNumber:
+          type: string
+        id:
+          type: string
+        package:
+          type: boolean
+        partitionKey:
+          type: string
+        paymentCard:
+          $ref: '#/components/schemas/PaymentCardDto'
+        prePaid:
+          type: boolean
+        prePaidAmount:
+          $ref: '#/components/schemas/PriceDto'
+        purchaseOrder:
+          type: string
+        rateCategory:
+          type: string
+        rateCategoryCode:
+          type: string
+        rateClass:
+          type: string
+        ratePlan:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomsDto'
+        sourceSystem:
+          type: string
+        status:
+          type: string
+        statusSortOrder:
+          type: string
+        thirdPartyReference:
+          type: string
+        totalCost:
+          $ref: '#/components/schemas/PriceDto'
+        upsellTotalCost:
+          $ref: '#/components/schemas/PriceDto'
+        walkIn:
+          type: boolean
+    RoomRequirementsDto:
+      type: object
+      properties:
+        adults:
+          type: integer
+          format: int32
+        children:
+          type: integer
+          format: int32
+        cotRequired:
+          type: boolean
+        hotelBrand:
+          type: string
+        lettingType:
+          type: string
+        type:
+          type: string
+    RoomsDto:
+      type: object
+      properties:
+        carDetails:
+          type: boolean
+        cot:
+          type: boolean
+        guests:
+          type: array
+          items:
+            $ref: '#/components/schemas/GuestsDto'
+        invoiceNumber:
+          type: string
+        noOfAdults:
+          type: string
+        noOfChildren:
+          type: string
+        paymentCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentCardDto'
+        reservationId:
+          type: string
+        roomCost:
+          $ref: '#/components/schemas/PriceDto'
+        roomId:
+          type: string
+        roomNumber:
+          type: string
+        roomType:
+          type: string
+        status:
+          type: string
+        totalCost:
+          $ref: '#/components/schemas/PriceDto'
+        upsellTotalCost:
+          $ref: '#/components/schemas/PriceDto'
+    TotalsDto:
+      type: object
+      properties:
+        cancelled:
+          type: integer
+          format: int32
+        checkedIn:
+          type: integer
+          format: int32
+        past:
+          type: integer
+          format: int32
+        upcoming:
+          type: integer
+          format: int32
+    UkWideDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        netAmount:
+          type: number

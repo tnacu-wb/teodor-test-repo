@@ -1,0 +1,44 @@
+{
+  "id" : "6dbfe885-98c6-4f10-8307-d966598b4de2",
+  "request" : {
+    "urlPath" : "/v1/reservations/find",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "queryParameters" : {
+      "resNo" : {
+        "equalTo" : "ABCD123456"
+      },
+      "lastName" : {
+        "equalTo" : "Caesar"
+      },
+      "arrivalDate" : {
+        "equalTo" : "2023-12-30"
+      },
+      "country" : {
+        "equalTo" : "gb"
+      },
+      "language" : {
+        "equalTo" : "en"
+      },
+      "channel" : {
+        "equalTo" : "PI"
+      },
+      "subchannel" : {
+        "equalTo" : "MOBILE"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"sourcePms\":\"Opera\",\"cookieName\":\"pi.single-booking\",\"ref\":\"ABCD123456\",\"redirectBase\":\"/gb/en/account/dashboard\",\"minutesTillExpiry\":\"30\",\"basketReference\":\"TST-16a014c5-d8a4-4418-8d15-2537660f08e9\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "6dbfe885-98c6-4f10-8307-d966598b4de2"
+}

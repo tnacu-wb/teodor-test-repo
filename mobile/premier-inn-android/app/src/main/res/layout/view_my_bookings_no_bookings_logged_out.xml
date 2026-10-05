@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/generic_padding_16"
+        tools:showIn="@layout/activity_my_bookings">
+
+        <ImageView
+            android:layout_width="84dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="@dimen/generic_margin_50"
+            android:src="@drawable/ic_no_bookings" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_26"
+            android:gravity="center_horizontal"
+            android:text="@string/my_bookings_no_bookings"
+            style="@style/Header3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_34"
+            android:layout_marginTop="@dimen/generic_margin_26"
+            android:layout_marginEnd="@dimen/generic_margin_34"
+            android:gravity="center_horizontal"
+            android:text="@string/my_bookings_no_bookings_log_in_message"
+            style="@style/BodySmall"
+            android:visibility="visible"/>
+
+        <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+            android:id="@+id/my_bookings_login_button"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            style="@style/Button1"
+            android:layout_marginStart="@dimen/generic_margin_20"
+            android:layout_marginTop="@dimen/generic_margin_40"
+            android:layout_marginEnd="@dimen/generic_margin_20"
+            android:text="@string/log_in"
+            app:cab_spinner_color="@color/white"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_20"
+            android:layout_marginTop="@dimen/generic_margin_34"
+            android:layout_marginEnd="@dimen/generic_margin_20"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="4.5"
+                android:background="@color/grey_medium" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/BodySmall"
+                android:gravity="center"
+                android:text="@string/log_in_or_label" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="4.5"
+                android:background="@color/grey_medium" />
+        </LinearLayout>
+
+        <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+            android:id="@+id/my_bookings_find_booking_button"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            style="@style/Button1"
+            android:layout_marginStart="@dimen/generic_margin_20"
+            android:layout_marginTop="@dimen/generic_margin_20"
+            android:layout_marginEnd="@dimen/generic_margin_20"
+            android:text="@string/my_bookings_find_booking_button"
+            app:cab_text_color="?attr/colorPrimary"
+            app:cab_is_secondary="true" />
+    </LinearLayout>
+</ScrollView>

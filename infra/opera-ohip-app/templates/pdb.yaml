@@ -1,0 +1,11 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "opera-ohip-app.fullname" . }}
+  labels:
+    {{- include "opera-ohip-app.labels" . | nindent 4 }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      {{- include "opera-ohip-app.selectorLabels" . | nindent 6 }}

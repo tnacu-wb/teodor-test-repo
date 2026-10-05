@@ -1,0 +1,29 @@
+{
+  "request": {
+    "url": "/CustomerHub/V1/GetPermissions",
+    "method": "POST",
+    "headers" : {
+      "Content-Type" : {
+        "contains" : "application/json"
+      },
+      "Authorization": {
+        "contains" : "123456.access.token"
+      },
+      "Ocp-Apim-Subscription-Key": {
+        "contains": "dummyValue"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matches": ".*Telephone.*447777777777.*"
+      }
+    ]
+  },
+  "response": {
+    "status": 400,
+      "bodyFileName": "customer-hub-permissions-400-response.json",
+    "headers": {
+      "Content-Type": "text/html; charset=utf-8"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id" : "d96ca6e5-187c-481a-a28e-0cf4107bc07c",
+  "request" : {
+    "urlPath" : "/customers/hotels/customer@test.com?business=false",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_expired_value"
+      }
+    }
+  },
+  "response" : {
+    "status" : 401,
+    "body" : "{\"code\":\"035\",\"details\":[\"Provided token was invalid or expired\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "d96ca6e5-187c-481a-a28e-0cf4107bc07c"
+}

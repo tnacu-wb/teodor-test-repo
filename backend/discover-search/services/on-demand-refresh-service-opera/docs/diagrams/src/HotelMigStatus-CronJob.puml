@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autonumber
+participant "HotelMigrationStatusRefreshCronJob" as HMSRCJ
+participant "HotelMigrationStatusRefreshService" as HMSRS
+participant "HotelMigrationStatusJpaRepository" as HMSJR
+participant "HotelMigrationStatusFeignClient" as HMSFC
+participant "Opera OHIP Svc" as OPHS
+database Database as DB
+HMSRCJ -> HMSRS : Get Hotel Codes
+HMSRS -> HMSJR : Get Hotel Codes
+HMSJR -> DB : Get Hotels with \n pms_source='BART' \n or on_sale='false'\n
+DB -> HMSJR : Return Hotels
+HMSJR -> HMSRS : Return Hotels
+loop for each hotel
+HMSRS -> HMSFC : Get hotel migration status
+HMSFC -> OPHS :  Get hotel migration status \n /ent/config/v0/hotels/{{hotelId}}/hotelDetails
+OPHS -> HMSFC : Return hotel migration status
+HMSFC -> HMSRS : Return hotel migration status
+HMSRS -> HMSJR : Save migration status under \n "hotel_migration_status" table
+HMSJR -> DB : Save migration status under \n "hotel_migration_status" table
+end
+@enduml

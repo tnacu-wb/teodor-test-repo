@@ -1,0 +1,1 @@
+export { TripAdvisorReview } from './TripAdvisorReview';

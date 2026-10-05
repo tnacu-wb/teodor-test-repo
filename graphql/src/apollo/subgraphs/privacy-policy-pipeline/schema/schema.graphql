@@ -1,0 +1,29 @@
+schema {
+    query: Query
+}
+
+type Query {
+    privacyPolicy(bookingFlowCriteria: BookingFlowCriteria!): PrivacyPolicy
+}
+
+input BookingFlowCriteria {
+    bookingChannel:String
+    hotelId: String!
+    language: String!
+    country: String!
+    rateCode: String!
+}
+
+type PrivacyPolicy {
+    name: String
+    description: String
+    linkLabel: String
+    linkSrc: String
+    moreInfoLabel: String
+    moreInfo: [SecurityInfoItem]
+}
+
+type SecurityInfoItem {
+    image: String
+    description: String
+}

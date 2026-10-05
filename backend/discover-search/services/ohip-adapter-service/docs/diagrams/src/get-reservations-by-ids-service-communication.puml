@@ -1,0 +1,23 @@
+@startuml
+autonumber
+entity "AppSync" as A
+entity "Reservation Entity Service" as R
+entity "Basket Service" as B
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OHIP
+entity "Opera" as O
+
+A -> R: GET /rsv/hotels/{hotelId}/reservations\n?basketReference={basketReference}
+R -> B: GET /bsk/v1/baskets/{basketReference}
+R <- B: DTO with reservationIds, hotelId
+R -> PMS: GET /adp/hotels/{hotelId}/reservations/basket\n?reservationIds={reservationIds}
+PMS -> OHIP: GET /ohip/hotels/{hotelId}/reservations/basket\n?reservationIds={reservationIds}
+loop for each reservationId
+            OHIP -> O: GET /rsv/v1/hotels/{hotelId}/reservations/{reservationId}\n?fetchInstructions=Reservation\n&fetchInstructions=InventoryItems\n&fetchInstructions=ReservationPolicies\n&fetchInstructions=Packages
+            OHIP <- O: ReservationsDetails
+end
+OHIP -> OHIP: Aggregate responses
+PMS <- OHIP: ReservationByBasketRefResponseDto
+R <- PMS: ReservationByBasketRefResponseDto
+A <- R: ReservationByBasketRefResponseDto
+@enduml

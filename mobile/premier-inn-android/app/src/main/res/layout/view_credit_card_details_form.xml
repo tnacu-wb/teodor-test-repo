@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        style="@style/Header3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_28"
+        android:layout_marginBottom="@dimen/generic_margin_18"
+        android:gravity="start"
+        android:text="@string/card_details_form_heading"
+        android:textColor="?attr/colorPrimary" />
+
+    <RelativeLayout
+        android:id="@+id/ll_card_number_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_card_details_form_fee"
+            style="@style/BodySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:gravity="end"
+            android:textColor="@color/grey_dark"
+            android:visibility="invisible"
+            tools:text="£1 fee"
+            tools:visibility="visible" />
+
+        <com.whitbread.premierinn.common.view.NetworkImageView
+            android:id="@+id/iv_card_details_form_card_icon"
+            android:layout_width="32dp"
+            android:layout_height="22dp"
+            android:layout_below="@+id/tv_card_details_form_fee"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/generic_margin_4" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_card_details_form_card_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="@dimen/generic_margin_10"
+            android:layout_toEndOf="@id/til_card_details_form_card_number"
+            android:hint="@string/card_details_form_card_number"
+            android:labelFor="@+id/et_card_details_form_card_number"
+            app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+            app:hintTextAppearance="@style/TextInputLayout.HintText">
+
+            <EditText
+                android:id="@+id/et_card_details_form_card_number"
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="creditCardNumber"
+                android:imeOptions="actionNext"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </RelativeLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_card_details_form_name_on_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/card_details_form_name_on_card"
+        android:labelFor="@+id/et_card_details_form_name_on_card"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText">
+
+        <EditText
+            android:id="@+id/et_card_details_form_name_on_card"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="personName"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName|textCapWords" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_card_details_form_start_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/card_details_form_start_date"
+        android:labelFor="@+id/et_card_details_form_start_date"
+        android:visibility="gone"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        tools:visiblity="visible">
+
+        <EditText
+            android:id="@+id/et_card_details_form_start_date"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:maxLength="5" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_card_details_form_expiry_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/card_details_form_expiry_date"
+        android:labelFor="@+id/et_card_details_form_expiry_date"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText">
+
+        <EditText
+            android:id="@+id/et_card_details_form_expiry_date"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:autofillHints="creditCardExpirationDate"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLength="5" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_card_details_form_issue_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/card_details_form_issue_number"
+        android:labelFor="@+id/et_card_details_form_issue_number"
+        android:visibility="gone"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        tools:visiblity="visible">
+
+        <EditText
+            android:id="@+id/et_card_details_form_issue_number"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:maxLength="2" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_card_details_form_cvv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:hint="@string/card_details_form_cvv"
+        android:labelFor="@+id/et_card_details_form_cvv"
+        android:visibility="gone"
+        app:errorTextAppearance="@style/TextInputLayout.ErrorText"
+        app:hintTextAppearance="@style/TextInputLayout.HintText"
+        tools:visiblity="visible">
+
+        <EditText
+            android:id="@+id/et_card_details_form_cvv"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:maxLength="4"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/generic_padding_4"
+        android:paddingEnd="@dimen/generic_padding_4"
+        android:layout_marginTop="@dimen/generic_margin_10">
+
+        <ImageView
+            android:id="@+id/iv_credit_card_cvv_icon"
+            android:layout_width="36dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            android:scaleType="centerCrop"
+            android:src="@drawable/accesibility_label_state_bg" />
+
+        <TextView
+            android:id="@+id/tv_credit_card_cvv_text"
+            style="@style/BodySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/generic_margin_8"
+            android:text="@string/card_details_form_cvv_back"/>
+
+    </LinearLayout>
+
+</merge>

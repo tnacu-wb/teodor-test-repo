@@ -1,0 +1,35 @@
+{
+  "request": {
+    "urlPathPattern": "/hotels/LONEUS/price-breakdown",
+    "method": "GET",
+    "queryParameters": {
+      "arrivalDate": {
+        "equalToDateTime": "now",
+        "truncateExpected": "first hour of day"
+      },
+      "departureDate": {
+        "equalToDateTime": "now +3 days",
+        "truncateExpected": "first hour of day"
+      },
+      "roomTypes": {
+        "equalTo": "FMTRPL"
+      },
+      "ratePlanCode": {
+        "equalTo": "FLEXRATE"
+      },
+      "adultsNo": {
+        "equalTo": "2"
+      },
+      "childrenNo": {
+        "equalTo": "1"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "ohip_adapter_price-breakdown_LONEUS_FMTRPL_success_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

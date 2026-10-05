@@ -1,0 +1,188 @@
+server:
+  port: 9115
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "meta-search-service"
+    description: "Whitbread Meta Search Service"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /v1/meta-search/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+spring:
+  tracing:
+    propagation:
+      type: aws
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  application:
+    name: meta-search-service
+
+security:
+  #token used by Whitbread
+  xWhitKeyWBValue: ${X_WHIT_KEY_WB_VALUE}
+  #token used by Meta Channels
+  xWhitKeyValue: ${X_WHIT_KEY_META_VALUE}
+  xWhitKey: X-WHIT-API-KEY
+
+
+hotel:
+  codes: ${HOTEL_CODES}
+  roomTypes: ${ROOM_TYPES}
+  maxNights: 9
+
+config:
+  service:
+    content:
+      host: http://${CONTENT_SERVICE_HOST:localhost:9106}
+      hotelInformationEndpoint: "/v1/content/hotels/{hotelId}/information"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-local
+    endpoint: http://localhost:8000
+    accessKey: dummyKey
+    secretKey: secret
+    region: eu-west-1
+    maxRetry: 2
+    irsa: false
+
+security:
+  xWhitKeyWBValue: local-wb-key
+  xWhitKeyValue: local-meta-key
+  xWhitKey: X-WHIT-API-KEY
+hotel:
+  codes: ABETIR,ABECOC,LONEUS
+  roomTypes: DOUBLE,SINGLE,FAMILY,ACCESSIBLE,TWIN
+  maxNights: 9
+
+config:
+  service:
+    content:
+      host: http://${CONTENT_SERVICE_HOST:localhost:9106}
+      hotelInformationEndpoint: "/v1/content/hotels/{hotelId}/information"
+
+---
+spring.config.activate.on-profile: opera-dev
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-dev
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-dit
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-dit
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-perf
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-perf
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-sit
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-sit
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-uat
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-uat
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-ce
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-ce
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-demo
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-demo
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-hulk
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-hulk
+    region: eu-central-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-wanda
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-hulk
+    region: eu-central-1
+    irsa: true

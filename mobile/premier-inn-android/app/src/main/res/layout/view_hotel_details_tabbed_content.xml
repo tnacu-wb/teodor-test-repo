@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/generic_margin_16"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.whitbread.premierinn.common.view.CustomTabLayout
+        android:id="@+id/hotel_details_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_24"
+        android:background="@drawable/hotel_details_restaurant_tab_background"
+        android:minHeight="?attr/actionBarSize"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/teal_dark"
+        app:tabPaddingBottom="@dimen/generic_margin_16"
+        tools:visibility="visible" />
+
+    <com.whitbread.premierinn.common.view.HeightAwareViewPager
+        android:id="@+id/hotel_details_content_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

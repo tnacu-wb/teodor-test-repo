@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/generic_padding_10"
+    android:animateLayoutChanges="true"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_room_meals"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/generic_padding_5"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_10"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textColor="@color/full_black"
+        style="@style/Header2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Room 1" />
+
+    <TextView
+        android:id="@+id/tv_room_meals_type"
+        style="@style/Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_10"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_room_meals"
+        tools:text="1 adult, double room" />
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/generic_margin_1"
+        android:layout_marginTop="@dimen/generic_margin_10"
+        android:background="@color/base_black"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_room_meals_type"/>
+
+    <LinearLayout
+        android:id="@+id/ll_chosen_meal_info_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/view_divider">
+
+        <FrameLayout
+            android:id="@+id/fl_tick_circle_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_10"
+            android:layout_marginBottom="@dimen/generic_margin_10"
+            android:layout_marginStart="@dimen/generic_margin_10">
+
+            <ImageView
+                android:id="@+id/iv_tick_circle"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_tick_circle"
+                android:layout_marginEnd="@dimen/generic_margin_4"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_selected_meal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/generic_margin_6"
+            android:layout_marginEnd="@dimen/generic_margin_10"
+            android:layout_marginTop="@dimen/generic_margin_10"
+            android:layout_marginBottom="@dimen/generic_margin_10"
+            android:textColor="@color/full_black"
+            style="@style/BodySemiBold"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="1 x No meals chosen - £3.33" />
+
+        <FrameLayout
+            android:id="@+id/fl_chosen_meal_button_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_10"
+            android:layout_marginBottom="@dimen/generic_margin_10"
+            android:layout_marginEnd="@dimen/generic_margin_10"
+            android:clickable="true"
+            android:focusable="true"
+            android:descendantFocusability="blocksDescendants">
+
+            <TextView
+                android:id="@+id/btn_add_meals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/generic_margin_8"
+                android:paddingBottom="@dimen/generic_margin_10"
+                android:paddingStart="@dimen/generic_padding_18"
+                android:paddingEnd="@dimen/generic_padding_18"
+                android:text="@string/summary_add_meals"
+                style="@style/BodySemiBold"
+                android:textColor="@color/full_black"
+                android:visibility="gone"
+                tools:visibility="gone"
+                android:background="@drawable/view_button_grey" />
+
+            <TextView
+                android:id="@+id/btn_change_meals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/generic_margin_5"
+                android:text="@string/summary_change_selection"
+                style="@style/BodySemiBold"
+                android:textColor="@color/premier_inn_purple"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_summary_meals"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="1dp"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/ll_chosen_meal_info_wrapper"
+        tools:itemCount="3"
+        tools:listitem="@layout/view_summary_meal_item" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

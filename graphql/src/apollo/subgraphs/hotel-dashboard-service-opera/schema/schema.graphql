@@ -1,0 +1,84 @@
+schema {
+    query: Query
+}
+
+type Query {
+    getHotelDashboard(customerId: String, hasRecentSearches: Boolean, dashboardRequest: RetrieveDashboardRequest): [DashboardElement]
+}
+
+input RetrieveDashboardRequest {
+    confirmationNumber: String
+    surname: String
+    arrivalDate: String
+    business: Boolean
+    companyId: String
+    employeeId: String
+    language: String
+}
+
+type DashboardElement {
+    type: DashboardType
+    content: DashboardContent
+}
+
+enum DashboardType {
+    UPCOMING_BOOKING
+    FREQUENT_BOOKINGS
+    RECENT_SEARCHES
+    PAST_SEARCHES
+}
+
+type DashboardContent {
+    hotelImage: String
+    hotelName: String
+    hotelCode: String
+    hotelBrand: String
+    checkedIn: Boolean
+    map: Map
+    address: DashboardAddress
+    confirmationNumber: String
+    arrivalDate: String
+    departureDate: String
+    rooms: [DashboardRoom]
+    guests: Int
+    actions: [Action]
+    frequentBookings: [FrequentBooking]
+}
+
+type Map {
+    latitude: String,
+    longitude: String
+}
+
+type DashboardAddress{
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    addressLine5: String
+    country: String
+    postCode: String
+}
+
+type DashboardRoom {
+    type: String
+}
+
+type Action {
+    action: ActionType
+    title: String
+}
+
+enum ActionType {
+    CIOL
+    UPSELLS
+    DIRECTIONS
+    BOOKING_DETAILS
+}
+
+type FrequentBooking {
+    hotelImage: String
+    hotelName: String
+    hotelBrand: String
+    hotelCode: String
+}

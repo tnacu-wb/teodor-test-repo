@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MapListContainerViewController" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="cardsContainerView" destination="Xsg-IQ-yWo" id="CGT-KE-oQ8"/>
+                <outlet property="cardsContainerViewBottomHandle" destination="jNw-r8-s2y" id="HFL-T7-Aa3"/>
+                <outlet property="cardsContainerViewHeight" destination="AbI-bZ-8qv" id="Q4v-dt-rdU"/>
+                <outlet property="editDatesButton" destination="8YJ-Uo-amY" id="3uP-MN-F8e"/>
+                <outlet property="editGuestsButton" destination="gbA-IB-uAa" id="yaa-nG-hpl"/>
+                <outlet property="editPlaceButton" destination="ovv-jU-m3G" id="AVr-aD-UeK"/>
+                <outlet property="listContainerView" destination="KhY-6A-HQT" id="Spk-lb-iGC"/>
+                <outlet property="mapContainerView" destination="gg1-aX-yZx" id="Oxr-oz-oeh"/>
+                <outlet property="view" destination="iN0-l3-epB" id="ytf-Jl-NY1"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gg1-aX-yZx">
+                    <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                    <color key="backgroundColor" red="0.0" green="1" blue="0.9916666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KhY-6A-HQT">
+                    <rect key="frame" x="0.0" y="70" width="374" height="698"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="374" id="01s-UW-q1f"/>
+                    </constraints>
+                </view>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xsg-IQ-yWo" userLabel="Cards Container View">
+                    <rect key="frame" x="0.0" y="668" width="1024" height="100"/>
+                    <color key="backgroundColor" red="0.0" green="0.95631700750000004" blue="0.27055696829999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="100" id="AbI-bZ-8qv"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gbA-IB-uAa" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="834" y="704" width="170" height="46"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="170" id="DEf-lD-xBQ"/>
+                        <constraint firstAttribute="height" constant="46" id="Pib-fW-NRo"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="17"/>
+                    <color key="tintColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <inset key="titleEdgeInsets" minX="11" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <inset key="imageEdgeInsets" minX="-8" minY="4" maxX="7" maxY="4"/>
+                    <state key="normal" title="Edit guests" image="guests">
+                        <color key="titleColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="12"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                            <real key="value" value="0.0"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOffsetWidth">
+                            <real key="value" value="0.0"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOffsetHeight">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                            <real key="value" value="0.69999999999999996"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="editGuestsButtonDidTap:" destination="-1" eventType="touchUpInside" id="aaF-xb-hhC"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8YJ-Uo-amY" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="834" y="642" width="170" height="46"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="46" id="Pdx-HG-5Ec"/>
+                        <constraint firstAttribute="width" constant="170" id="odh-q0-Vh0"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="17"/>
+                    <color key="tintColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <inset key="titleEdgeInsets" minX="11" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <inset key="imageEdgeInsets" minX="-8" minY="4" maxX="7" maxY="4"/>
+                    <state key="normal" title="Edit dates" image="calendar2">
+                        <color key="titleColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="12"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                            <real key="value" value="0.0"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOffsetWidth">
+                            <real key="value" value="0.0"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOffsetHeight">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                            <real key="value" value="0.69999999999999996"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="editDatesButtonDidTap:" destination="-1" eventType="touchUpInside" id="UkT-Ry-v3s"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ovv-jU-m3G" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="834" y="580" width="170" height="46"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="170" id="3ea-sT-gy0"/>
+                        <constraint firstAttribute="height" constant="46" id="aCc-Rw-rT1"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="17"/>
+                    <color key="tintColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <inset key="titleEdgeInsets" minX="11" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <inset key="imageEdgeInsets" minX="-8" minY="4" maxX="7" maxY="4"/>
+                    <state key="normal" title="Edit place" image="mapPin">
+                        <color key="titleColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="12"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                            <real key="value" value="0.0"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOffsetWidth">
+                            <real key="value" value="0.0"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOffsetHeight">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                            <real key="value" value="0.69999999999999996"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="editPlaceButtonDidTap:" destination="-1" eventType="touchUpInside" id="FgA-1a-7qq"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="ovv-jU-m3G" firstAttribute="trailing" secondItem="8YJ-Uo-amY" secondAttribute="trailing" id="2DO-hw-B6Q"/>
+                <constraint firstItem="gbA-IB-uAa" firstAttribute="top" secondItem="8YJ-Uo-amY" secondAttribute="bottom" constant="16" id="3t9-Of-QdD"/>
+                <constraint firstItem="gg1-aX-yZx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="7TW-Kt-5gI"/>
+                <constraint firstItem="KhY-6A-HQT" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="D61-Bp-VRN"/>
+                <constraint firstItem="8YJ-Uo-amY" firstAttribute="trailing" secondItem="gbA-IB-uAa" secondAttribute="trailing" id="HGZ-Ry-N4y"/>
+                <constraint firstItem="Xsg-IQ-yWo" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Nvi-lZ-Txx"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="gbA-IB-uAa" secondAttribute="bottom" constant="18" id="REY-Zi-bU1"/>
+                <constraint firstItem="gg1-aX-yZx" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="U99-xN-clK"/>
+                <constraint firstItem="KhY-6A-HQT" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="cvf-bX-QtG"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Xsg-IQ-yWo" secondAttribute="bottom" id="jNw-r8-s2y"/>
+                <constraint firstAttribute="bottom" secondItem="gg1-aX-yZx" secondAttribute="bottom" id="kmO-27-eqE"/>
+                <constraint firstAttribute="bottom" secondItem="KhY-6A-HQT" secondAttribute="bottom" id="ku9-Mj-HSr"/>
+                <constraint firstItem="8YJ-Uo-amY" firstAttribute="top" secondItem="ovv-jU-m3G" secondAttribute="bottom" constant="16" id="paf-mC-A7g"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="gbA-IB-uAa" secondAttribute="trailing" constant="20" id="qJt-7a-e9l"/>
+                <constraint firstItem="gg1-aX-yZx" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="rQf-cY-z2c"/>
+                <constraint firstItem="Xsg-IQ-yWo" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="ya1-ug-Iw6"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <point key="canvasLocation" x="33.5" y="53.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="calendar2" width="24" height="24"/>
+        <image name="guests" width="24" height="24"/>
+        <image name="mapPin" width="22" height="22"/>
+    </resources>
+</document>

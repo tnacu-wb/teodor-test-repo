@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GdprShieldFooterView" id="U6b-Vx-4bR" customClass="GdprShieldFooterView" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="189"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZNu-Wr-sGo">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="189"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qeQ-RG-q8H">
+                            <rect key="frame" x="124" y="20" width="72" height="22"/>
+                            <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="Button" image="shield">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="buttonDidTap:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="YEu-Mf-hR6"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="qeQ-RG-q8H" secondAttribute="trailing" constant="10" id="4UD-Oi-RpG"/>
+                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="qeQ-RG-q8H" secondAttribute="bottom" priority="750" constant="100" id="WMI-hQ-cOM"/>
+                        <constraint firstItem="qeQ-RG-q8H" firstAttribute="top" secondItem="ZNu-Wr-sGo" secondAttribute="top" constant="20" id="WOm-kQ-gDs"/>
+                        <constraint firstItem="qeQ-RG-q8H" firstAttribute="centerX" secondItem="ZNu-Wr-sGo" secondAttribute="centerX" id="Xh0-Ry-1g3"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstItem="VXr-Tz-HHm" firstAttribute="bottom" secondItem="ZNu-Wr-sGo" secondAttribute="bottom" id="7ll-VD-QkO"/>
+                <constraint firstItem="ZNu-Wr-sGo" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" id="9B5-cz-Mf4"/>
+                <constraint firstItem="ZNu-Wr-sGo" firstAttribute="top" secondItem="VXr-Tz-HHm" secondAttribute="top" id="gvJ-Ba-zJ2"/>
+                <constraint firstItem="VXr-Tz-HHm" firstAttribute="trailing" secondItem="ZNu-Wr-sGo" secondAttribute="trailing" id="tTV-d1-hln"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
+            <connections>
+                <outlet property="button" destination="qeQ-RG-q8H" id="6Bp-m7-X3t"/>
+            </connections>
+            <point key="canvasLocation" x="34" y="123.5"/>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <image name="shield" width="18" height="22"/>
+    </resources>
+</document>

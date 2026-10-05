@@ -1,0 +1,131 @@
+query bookingConfirmationAndManageBooking($basketReference: String!, $country: String!, $language: String!, $bookingChannel: String, $cancelInformationCriteria: CancelInformationCriteria!)  {
+    bookingConfirmation(basketReference: $basketReference, country: $country, language: $language, bookingChannel: $bookingChannel) {
+      bookingReference
+      upsellsAddonsEnabled
+      paymentOption
+      isThirdPartyBooking
+      basketStatus
+      balanceOutstanding
+      bookingFlowId
+      currencyCode
+      hotelId
+      infoMessages
+      newTotal
+      policyCode
+      previousTotal
+      reservationByIdList {
+      reservationId
+      preCheckInStatus
+      reservationStatus
+        billing {
+          address {
+            addressLine1
+            addressLine2
+            addressLine3
+            addressLine4
+            cityName
+            country
+            postalCode
+          }
+          email
+          firstName
+          lastName
+          telephone
+          title
+        }
+        depositPolicies {
+          amountDue {
+            amount
+            currencyCode
+          }
+          amountPaid {
+            amount
+            currencyCode
+          }
+          policyCode
+        }
+        reservationGuestList {
+          givenName
+          surName
+          nameTitle
+          email
+          additionalDetails {
+            dob
+            passportNumber
+            nationality
+          }
+          isAccompanyingGuest
+          profileId
+          address {
+            addressType
+            addressLine1
+            addressLine2
+            addressLine3
+            addressLine4
+            postalCode
+            cityName
+            countryCode
+            addressId
+          }
+        }
+        additionalGuestInfo {
+           purposeOfStay
+        }
+        reservationPackageList {
+          packageCode
+          computedPrice
+          description
+          totalQuantity
+          unitPrice
+        }
+        roomStay {
+          accessibleRoom {
+            isAccessible
+            phoneNumber
+          }
+          adultsNumber
+          arrivalDate
+          childrenNumber
+          cot
+          departureDate
+          rateExtraInfo {
+            rateClassification
+            rateDescription
+            rateLongDescription
+            rateName
+            rateNotes
+            rateOrder
+          }
+          ratePlanCode
+          ratesPerNight {
+            pricePerNight
+            startDate
+          }
+          roomExtraInfo {
+            roomDescription
+            roomName
+            roomType
+          }
+          roomPrice
+          roomType
+        }
+        preferences {
+            code
+            preferenceType
+        }
+      }
+      totalCost
+      upgradeToFlex {
+        amount
+        currency
+        flexRateCode
+      }
+    }
+    manageBooking (cancelInformationCriteria: $cancelInformationCriteria) {
+            isCancellable
+            isAmendable
+            isCheckInOnlineAvailable
+            isCheckOutOnlineAvailable
+            ciolErrorLabelKey
+        }
+  }

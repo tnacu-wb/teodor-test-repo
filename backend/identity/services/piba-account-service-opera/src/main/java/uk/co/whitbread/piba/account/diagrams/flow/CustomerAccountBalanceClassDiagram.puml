@@ -1,0 +1,33 @@
+@startuml
+class CustomerAccountCurrentBalances {
+  #SchemeCustomerId : int
+  #outstanding : Currency
+  #newTransactions : Currency
+  #available : Currency
+  #creditLimit : Currency
+  #currentBalance : Currency
+  #interimPayments : Currency
+  #tetheredGuid : String
+  #accountName : String
+  #accountNumber : String
+  #registrationRoles : List<RegistrationRoles>
+  #errorCode : String
+  #scheme : String
+}
+note right of CustomerAccountCurrentBalances::"scheme"
+  This needs to be added
+end note
+class Currency {
+    #amount : BigDecimal
+    #currencyCode:String
+    #currencySymbol:String
+}
+enum RegistrationRoles {
+  ACCOUNT_HOLDER("AccountHolder"),
+  CARD_HOLDER("CardHolder"),
+  FINANCE_USER_CARD_HOLDER ("AccountCardHolderWithReportsAndInvoices"),
+  FINANCE_USER ("ReportsAndInvoices"),
+  ACCOUNT_CARD_HOLDER ("AccountCardHolder"),
+  COST_CENTRE_USER ("CostCentreHolder");
+}
+@enduml

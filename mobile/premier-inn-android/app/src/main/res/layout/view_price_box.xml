@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <TextView
+        android:id="@+id/price_box_rate_name"
+        style="@style/Header3Bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_4"
+        android:lineSpacingExtra="0sp"
+        android:maxLines="2"
+        android:textColor="@color/grey_dark"
+        app:layout_constraintEnd_toStartOf="@+id/ll_labels"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="FLex (Discount applied) fsd fsdfsd fsdfsdfs" />
+
+    <LinearLayout
+        android:id="@+id/ll_labels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="@dimen/generic_margin_2"
+        android:layout_marginTop="@dimen/generic_margin_14"
+        android:layout_marginEnd="@dimen/generic_margin_14">
+
+        <TextView
+            android:id="@+id/promoLozenge"
+            style="@style/BodySmallBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_blue_tint"
+            android:textColor="@color/teal_dark"
+            android:paddingTop="@dimen/generic_padding_4"
+            android:paddingBottom="@dimen/generic_padding_4"
+            android:paddingStart="@dimen/generic_padding_8"
+            android:paddingEnd="@dimen/generic_padding_8"
+            android:drawablePadding="@dimen/generic_padding_4"
+            android:visibility="gone"
+            tools:text="@string/discount_tag"
+            tools:visibility="visible"
+            app:drawableStartCompat="@drawable/ic_tag" />
+
+        <TextView
+            android:id="@+id/tv_employee_offer_label"
+            style="@style/BodyMediumSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/teal_deep_dark"
+            android:paddingTop="@dimen/generic_padding_4"
+            android:paddingBottom="@dimen/generic_padding_4"
+            android:paddingStart="@dimen/generic_padding_8"
+            android:paddingEnd="0dp"
+            android:drawablePadding="@dimen/generic_padding_4"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:text="@string/hotel_details_employee_offer_label"
+            tools:text="@string/saver_value" />
+
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/tv_price_box_details"
+        style="@style/BodySmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/price_box_rate_name"
+        tools:text="No amends or cancel up to 1pm on the day" />
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/cal_saver_button"
+        style="@style/Button1"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_12"
+        android:padding="@dimen/generic_padding_12"
+        app:layout_constraintBottom_toBottomOf="@+id/rate_price_box_nights_rooms"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_price_box_strikethrough"
+        style="@style/Header3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/light_grey_1"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_12"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_price_box_details"
+        tools:text="£456.00"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/tv_price_box_price"
+        style="@style/Header3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_dark"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_minus_5"
+        app:layout_goneMarginTop="@dimen/generic_margin_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_price_box_strikethrough"
+        tools:text="£456.00" />
+
+    <TextView
+        android:id="@+id/rate_price_box_nights_rooms"
+        style="@style/BodySmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_4"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_price_box_price"
+        tools:text="3 nights, 2 rooms" />
+
+</merge>

@@ -1,0 +1,47 @@
+query HomepageAppsContent($channel: Channel!, $subchannel: String!, $language: String!, $country: String!) {
+  homepageAppsContent(channel: $channel, subchannel: $subchannel, language: $language, country: $country) {
+    logo
+    heading
+    destinationCards {
+      imagePath
+      imageTag
+      title
+      subtitle
+      linkPath
+      openLinkInApp
+      order
+      trackingId
+      latitude
+      longitude
+    }
+    contentCards {
+      imagePath
+      imageTag
+      title
+      subtitle
+      linkPath
+      openLinkInApp
+      order
+      trackingId
+    }
+    promoCards {
+      imagePath
+      imageTag
+      title
+      subtitle
+      linkPath
+      openLinkInApp
+      order
+      trackingId
+    }
+    notification {
+      type
+      title
+      message
+      linkLabel
+      linkPath
+      openLinkInApp
+      dismissible
+    }
+  }
+}

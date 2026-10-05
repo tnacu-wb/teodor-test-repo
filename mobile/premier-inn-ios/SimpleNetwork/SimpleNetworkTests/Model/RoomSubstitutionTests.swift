@@ -1,0 +1,29 @@
+//
+//  RoomSubstitutionTests.swift
+//  SimpleNetworkTests
+//
+//  Created by Marcello Mascia on 23/05/2018.
+//  Copyright © 2018 Whitbread. All rights reserved.
+//
+
+import XCTest
+@testable import SimpleNetwork
+
+class RoomSubstitutionTests: XCTestCase {
+    
+    override func setUp() {
+        super.setUp()
+        // Put setup code here. This method is called before the invocation of each test method in the class.
+    }
+    
+    override func tearDown() {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        super.tearDown()
+    }
+    
+    func testRoomSubstitution() {
+
+        let sub = RoomSubstitution(desired: .double, substituted: .family, substitutedRoomsConcatenated: "Family room", roomName: "Pippo")
+		XCTAssertNotNil(sub)
+    }
+}

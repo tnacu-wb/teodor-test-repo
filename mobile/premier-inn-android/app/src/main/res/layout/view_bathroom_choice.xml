@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:paddingTop="@dimen/generic_padding_16"
+        android:paddingBottom="@dimen/generic_padding_16">
+
+        <TextView
+            android:id="@+id/bathroom_choice_heading"
+            style="@style/Header4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@id/bathroom_choice_radio_button"
+            tools:text="Lowered bathroom" />
+
+        <TextView
+            android:id="@+id/bathroom_choice_price"
+            style="@style/BodySemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bathroom_choice_heading"
+            android:layout_alignStart="@id/bathroom_choice_heading"
+            android:layout_marginTop="@dimen/generic_margin_4"
+            android:layout_toStartOf="@id/bathroom_choice_radio_button" />
+
+        <TextView
+            android:id="@+id/bathroom_choice_description"
+            style="@style/BodySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bathroom_choice_price"
+            android:layout_alignStart="@id/bathroom_choice_heading"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/generic_margin_4"
+            android:layout_toStartOf="@id/bathroom_choice_radio_button"
+            tools:text="Mauris non tempor quam, et lacinia sapien. Mauris accumsan erot." />
+
+        <ImageView
+            android:id="@+id/bathroom_choice_radio_button"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/generic_margin_8"
+            app:srcCompat="@drawable/radio_button_states" />
+
+    </RelativeLayout>
+
+    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+        android:id="@+id/bathroom_choice_warning_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:background="@color/orange_sunrise"
+        android:padding="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_24"
+        android:src="@drawable/ic_info"
+        android:visibility="gone"
+        app:iconTintColor="@color/gamboge" />
+</LinearLayout>

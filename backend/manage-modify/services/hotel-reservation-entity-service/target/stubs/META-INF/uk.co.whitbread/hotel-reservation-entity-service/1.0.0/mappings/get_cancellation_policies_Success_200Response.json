@@ -1,0 +1,36 @@
+{
+  "id" : "c36a3ae1-fe23-43ee-a9d2-3e325da9c1ca",
+  "request" : {
+    "urlPath" : "/v1/reservations/cancellationPolicies",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "queryParameters" : {
+      "hotelId" : {
+        "equalTo" : "HOTELTEST"
+      },
+      "basketReference" : {
+        "equalTo" : "basketCancellation"
+      },
+      "ratePlanCode" : {
+        "equalTo" : ""
+      },
+      "arrivalDate" : {
+        "equalTo" : ""
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"time\":\"2022-04-04T01:00:00+01:00\",\"text\":\"Cancellations after 1pm on the day of arrival charged 100% of 1 night\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "c36a3ae1-fe23-43ee-a9d2-3e325da9c1ca",
+  "priority" : 1
+}

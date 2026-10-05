@@ -1,0 +1,20 @@
+package uk.co.whitbread.ohip.infrastructure.rest.controller.reservation.model.out;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class DepositPoliciesDto {
+
+  CurrencyAmountTypeDto amountPaid;
+  CurrencyAmountTypeDto amountDue;
+  String policyCode;
+
+}

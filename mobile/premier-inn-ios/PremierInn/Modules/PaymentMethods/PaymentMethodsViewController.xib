@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PaymentMethodsViewController" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="ctaButton" destination="MIm-6u-6sL" id="sb9-kG-Or7"/>
+                <outlet property="table" destination="Ep4-SE-Vzu" id="2Ul-bU-gTC"/>
+                <outlet property="view" destination="iN0-l3-epB" id="bBO-Up-uAC"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Ep4-SE-Vzu">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                </tableView>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MIm-6u-6sL">
+                    <rect key="frame" x="16" y="607" width="343" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="uLt-jM-AYq"/>
+                    </constraints>
+                    <state key="normal" title="Button"/>
+                    <connections>
+                        <action selector="ctaButtonDidTap:" destination="-1" eventType="touchUpInside" id="4MU-xg-6cm"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Ep4-SE-Vzu" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Exb-0a-CrY"/>
+                <constraint firstItem="MIm-6u-6sL" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="J9j-rZ-SPr"/>
+                <constraint firstItem="Ep4-SE-Vzu" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="SHl-B9-HVm"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="MIm-6u-6sL" secondAttribute="trailing" constant="16" id="W2n-XR-XXU"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="MIm-6u-6sL" secondAttribute="bottom" constant="16" id="lIK-G6-ZE9"/>
+                <constraint firstItem="Ep4-SE-Vzu" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="osa-HP-nS5"/>
+                <constraint firstItem="Ep4-SE-Vzu" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="pLh-dX-cMi"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="33.5" y="53.5"/>
+        </view>
+    </objects>
+</document>

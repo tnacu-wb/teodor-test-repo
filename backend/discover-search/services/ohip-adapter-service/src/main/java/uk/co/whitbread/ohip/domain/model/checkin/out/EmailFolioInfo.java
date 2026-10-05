@@ -1,0 +1,19 @@
+package uk.co.whitbread.ohip.domain.model.checkin.out;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class EmailFolioInfo {
+
+  private Email email;
+  private boolean emailFolio;
+  private String id;
+  private String type;
+
+}

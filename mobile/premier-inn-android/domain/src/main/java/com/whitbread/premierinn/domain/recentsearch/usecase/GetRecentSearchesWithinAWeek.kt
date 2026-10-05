@@ -1,0 +1,12 @@
+package com.whitbread.premierinn.domain.recentsearch.usecase
+
+import com.whitbread.premierinn.domain.recentsearch.entity.RecentSearch
+import com.whitbread.premierinn.domain.recentsearch.repository.RecentSearchRepository
+import io.reactivex.Observable
+import javax.inject.Inject
+
+class GetRecentSearchesWithinAWeek @Inject constructor(private val repository: RecentSearchRepository) {
+    fun execute(): Observable<List<RecentSearch>> {
+        return repository.getRecentSearchesWithinAWeek()
+    }
+}

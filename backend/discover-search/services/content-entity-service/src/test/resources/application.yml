@@ -1,0 +1,263 @@
+spring:
+  profiles:
+    active: test
+
+feature-flags:
+  fetch-tripadvisor-feedback:
+    key: "release_pi_bb_ccui_white_trip_advisor_review"
+    fallback: false
+
+  free-fnb-extras:
+    key: "release_pi_free_fnb_and_extras"
+    fallback: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+---
+server:
+  port: 9020
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1 # Fix for M1 macs as described here https://stackoverflow.com/questions/60074168/java-lang-illegalstateexception-no-server-alpnprocessors-wiremock
+
+config:
+  httpClient:
+     connectionTimeout: 10000
+     responseTimeout: 30
+  service:
+    aem:
+      webclientMetricsEnabled: true
+      host: http://localhost:${wiremock.server.port:0}
+      hostMock: http://localhost:${wiremock.server.port:0} #TODO remove when AEMClient is finished
+      username: us
+      password: pa
+      apps:
+        homepage:
+          countryParam: countryParam
+          languageParam: languageParam
+          pathParam: pathParam
+          subchannelParam: subchannelParam
+      labelsEndpoint: "etc/designs/global/dictionaries/labels/i18n.jsondict.{language}"
+      indexHeaderDataEndpoint: "/{country}/{language}/index.header.data"
+      hotelInformationEndpoint: "{country}/{language}/hoteldirectory/{hotelDirectory}/{hotelId}.complete.data"
+      bookingInformationEndpoint: "/{country}/{language}/content-service.booking-flow.detail/bookingId/{bookingFlowId}.json"
+      upsellItemsEndpoint: "/{country}/{language}/hoteldirectory/{initialCharacter}/{hotelId}.upsellitems.data"
+      rateInformationEndpoint: "{country}/{language}/content-service.rates.detail/site/leisure/brand/{brand}.json"
+      bbRateInformationEndpoint: "{country}/{language}/content-service.rates.detail/site/business-booker/brand/{brand}.json"
+      rateInformationForHotelEndpoint: "{country}/{language}/content-service.rates.detail/site/leisure/brand/{brand}/hotelCode/{hotelId}.json"
+      bbRateInformationForHotelEndpoint: "{country}/{language}/content-service.rates.detail/site/business-booker/brand/{brand}/hotelCode/{hotelId}.json"
+      allHotelDetailsEndpoint: "{country}/{language}/hoteldirectory/list.hotels.data"
+      footerEndpoint: "{country}/{language}/index.footer.data/site/{site}.json"
+      searchResultsDataEndpoint: "/{country}/{language}/search.searchresults.data"
+      roomTypeEndpoint: "{country}/{language}/content-service.room-types.detail/brand/{brand}.json"
+      countriesEndpoint: "/{country}/{language}/content-service.countries.detail/site/{site}.json"
+      cookiePoliciesEndpoint: "/{country}/{language}/content-service.cookie-policies.detail/brand/{brand}.json"
+      bbIndexHeaderDataEndpoint: "/{country}/{language}/business-booker/index.header.data"
+      ratesOverrideEndpoint: "/{country}/{language}/content-service.rates-override.detail/site/leisure/brand/{brand}.json"
+      bbRatesOverrideEndpoint: "/{country}/{language}/content-service.rates-override.detail/site/business-booker/brand/{brand}.json"
+      businessNotesEndpoint: "etc/designs/global/dictionaries/allowances/i18n.jsondict.{language}"
+      piPreCheckInEndpoint: "etc/designs/global/dictionaries/guest-checkin/i18n.jsondict.{language}"
+      extrasLabelsEndpoint: "etc/designs/global/dictionaries/extras/i18n.jsondict.{language}"
+      piGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/leisure/brand/{brand}.json"
+      promoLabelsEndpoint: "etc/designs/global/dictionaries/promotions/i18n.jsondict.{language}"
+      bbGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/business-booker/brand/{brand}.json"
+      ccuiGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/ccui/brand/{brand}.json"
+      distrGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/distribution/brand/{brand}.json"
+      homePageEndpoint: "/etc/designs/global/dictionaries/innbusiness/home/i18n.jsondict.{language}"
+      spendingReportingEndpoint: "/etc/designs/global/dictionaries/innbusiness/spending-reporting/i18n.jsondict.{language}"
+      appsHomepageEndPoint: "/${config.service.aem.apps.homepage.countryParam}/${config.service.aem.apps.homepage.languageParam}/${config.service.aem.apps.homepage.subchannelParam}/${config.service.aem.apps.homepage.pathParam}/home.model.json"
+    ohip:
+      host: http://localhost:${wiremock.server.port:0}
+      ratePlansEndpoint: "/ratePlans"
+      hotelInfoEndpoint: "/hotels/{hotelId}/info"
+    hotelreviewservice:
+      host: http://localhost:${wiremock.server.port:0}
+      reviewsForSingleHotelEndpoint: "/v1/hotel-review/reviews/{hotelCode}"
+spring:
+  config:
+    activate:
+      on-profile:
+        - test
+  cache:
+    type: none
+
+jobs:
+  hotel-information-updater:
+    # every Monday at 6 am
+    schedule: "0 0 6 * * MON"
+
+content-entity:
+  hotels:
+    information:
+      processing:
+        thread:
+          count: 10
+    filters:
+      # every Monday at 6 am
+      refresh: "0 0 6 * * MON"
+      facilityCodes:
+        - "CPF"
+        - "CPP"
+        - "COP"
+        - "ACO"
+        - "LFT"
+        - "MEE"
+        - "EAT"
+  scheduler:
+    enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - cachePrefixConfigured
+  cache:
+    type: redis
+    redis:
+      key-prefix: "Content-Entity-Service"
+      use-key-prefix: true
+
+swagger:
+  api:
+    version: 1.0.0
+
+config:
+  httpClient:
+    connectionTimeout: 10000
+    responseTimeout: 30
+  service:
+    aem:
+      webclientMetricsEnabled: true
+      host: http://localhost:${wiremock.server.port:0}
+      hostMock: http://localhost:${wiremock.server.port:0} #TODO remove when AEMClient is finished
+      username: us
+      password: pa
+      labelsEndpoint: "etc/designs/global/dictionaries/labels/i18n.jsondict.{language}"
+      indexHeaderDataEndpoint: "/{country}/{language}/index.header.data"
+      hotelInformationEndpoint: "{country}/{language}/hoteldirectory/{hotelDirectory}/{hotelId}.complete.data"
+      bookingInformationEndpoint: "/{country}/{language}/content-service.booking-flow.detail/bookingId/{bookingFlowId}.json"
+      upsellItemsEndpoint: "/{country}/{language}/hoteldirectory/{initialCharacter}/{hotelId}.upsellitems.data"
+      rateInformationEndpoint: "{country}/{language}/content-service.rates.detail/site/leisure/brand/{brand}.json"
+      bbRateInformationEndpoint: "{country}/{language}/content-service.rates.detail/site/business-booker/brand/{brand}.json"
+      rateInformationForHotelEndpoint: "{country}/{language}/content-service.rates.detail/site/leisure/brand/{brand}/hotelCode/{hotelId}.json"
+      bbRateInformationForHotelEndpoint: "{country}/{language}/content-service.rates.detail/site/business-booker/brand/{brand}/hotelCode/{hotelId}.json"
+      allHotelDetailsEndpoint: "{country}/{language}/hoteldirectory/list.hotels.data"
+      footerEndpoint: "{country}/{language}/index.footer.data/site/{site}.json"
+      searchResultsDataEndpoint: "/{country}/{language}/search.searchresults.data"
+      roomTypeEndpoint: "{country}/{language}/content-service.room-types.detail/brand/{brand}.json"
+      countriesEndpoint: "/{country}/{language}/content-service.countries.detail/site/{site}.json"
+      cookiePoliciesEndpoint: "/{country}/{language}/content-service.cookie-policies.detail/brand/{brand}.json"
+      bbIndexHeaderDataEndpoint: "/{country}/{language}/business-booker/index.header.data"
+      ratesOverrideEndpoint: "/{country}/{language}/content-service.rates-override.detail/site/leisure/brand/{brand}.json"
+      bbRatesOverrideEndpoint: "/{country}/{language}/content-service.rates-override.detail/site/business-booker/brand/{brand}.json"
+      businessNotesEndpoint: "etc/designs/global/dictionaries/allowances/i18n.jsondict.{language}"
+      piPreCheckInEndpoint: "etc/designs/global/dictionaries/guest-checkin/i18n.jsondict.{language}"
+      extrasLabelsEndpoint: "etc/designs/global/dictionaries/extras/i18n.jsondict.{language}"
+      piGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/leisure/brand/{brand}.json"
+      bbGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/business-booker/brand/{brand}.json"
+      ccuiGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/ccui/brand/{brand}.json"
+      distrGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/distribution/brand/{brand}.json"
+
+content-entity:
+  hotels:
+    information:
+      processing:
+        thread:
+          count: 10
+    filters:
+      # every Monday at 6 am
+      refresh: "0 0 6 * * MON"
+      facilityCodes:
+        - "CPF"
+        - "CPP"
+        - "COP"
+        - "ACO"
+        - "LFT"
+        - "MEE"
+        - "EAT"
+  scheduler:
+    enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - noCachePrefix
+  cache:
+    type: redis
+    redis:
+      key-prefix: "Content-Entity-Service"
+      use-key-prefix: false
+
+swagger:
+  api:
+    version: 1.0.0
+
+config:
+  httpClient:
+    connectionTimeout: 10000
+    responseTimeout: 30
+  service:
+    aem:
+      webclientMetricsEnabled: true
+      host: http://localhost:${wiremock.server.port:0}
+      hostMock: http://localhost:${wiremock.server.port:0} #TODO remove when AEMClient is finished
+      username: us
+      password: pa
+      labelsEndpoint: "etc/designs/global/dictionaries/labels/i18n.jsondict.{language}"
+      indexHeaderDataEndpoint: "/{country}/{language}/index.header.data"
+      hotelInformationEndpoint: "{country}/{language}/hoteldirectory/{hotelDirectory}/{hotelId}.complete.data"
+      bookingInformationEndpoint: "/{country}/{language}/content-service.booking-flow.detail/bookingId/{bookingFlowId}.json"
+      upsellItemsEndpoint: "/{country}/{language}/hoteldirectory/{initialCharacter}/{hotelId}.upsellitems.data"
+      rateInformationEndpoint: "{country}/{language}/content-service.rates.detail/site/leisure/brand/{brand}.json"
+      bbRateInformationEndpoint: "{country}/{language}/content-service.rates.detail/site/business-booker/brand/{brand}.json"
+      rateInformationForHotelEndpoint: "{country}/{language}/content-service.rates.detail/site/leisure/brand/{brand}/hotelCode/{hotelId}.json"
+      bbRateInformationForHotelEndpoint: "{country}/{language}/content-service.rates.detail/site/business-booker/brand/{brand}/hotelCode/{hotelId}.json"
+      allHotelDetailsEndpoint: "{country}/{language}/hoteldirectory/list.hotels.data"
+      footerEndpoint: "{country}/{language}/index.footer.data/site/{site}.json"
+      searchResultsDataEndpoint: "/{country}/{language}/search.searchresults.data"
+      roomTypeEndpoint: "{country}/{language}/content-service.room-types.detail/brand/{brand}.json"
+      countriesEndpoint: "/{country}/{language}/content-service.countries.detail/site/{site}.json"
+      cookiePoliciesEndpoint: "/{country}/{language}/content-service.cookie-policies.detail/brand/{brand}.json"
+      bbIndexHeaderDataEndpoint: "/{country}/{language}/business-booker/index.header.data"
+      ratesOverrideEndpoint: "/{country}/{language}/content-service.rates-override.detail/site/leisure/brand/{brand}.json"
+      bbRatesOverrideEndpoint: "/{country}/{language}/content-service.rates-override.detail/site/business-booker/brand/{brand}.json"
+      businessNotesEndpoint: "etc/designs/global/dictionaries/allowances/i18n.jsondict.{language}"
+      piPreCheckInEndpoint: "etc/designs/global/dictionaries/guest-checkin/i18n.jsondict.{language}"
+      extrasLabelsEndpoint: "etc/designs/global/dictionaries/extras/i18n.jsondict.{language}"
+      piGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/leisure/brand/{brand}.json"
+      bbGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/business-booker/brand/{brand}.json"
+      ccuiGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/ccui/brand/{brand}.json"
+      distrGlobalConfigEndpoint: "/{country}/{language}/content-service.global-config.detail/site/distribution/brand/{brand}.json"
+
+content-entity:
+  hotels:
+    information:
+      processing:
+        thread:
+          count: 10
+    filters:
+      # every Monday at 6 am
+      refresh: "0 0 6 * * MON"
+      facilityCodes:
+        - "CPF"
+        - "CPP"
+        - "COP"
+        - "ACO"
+        - "LFT"
+        - "MEE"
+        - "EAT"
+  scheduler:
+    enabled: false

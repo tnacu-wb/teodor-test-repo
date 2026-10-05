@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="RoomTypeSelectorCell" rowHeight="70" id="MBn-ER-Mbz" customClass="RoomTypeSelectorCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MBn-ER-Mbz" id="Hhv-b3-GgO">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="65.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jce-fN-htF" customClass="SeparatedStepperButton" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="260" y="14" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="0C8-xY-Eol"/>
+                            <constraint firstAttribute="width" constant="40" id="XEd-eh-tBh"/>
+                        </constraints>
+                        <color key="tintColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <state key="normal" image="arrowRight"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Double room" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G9f-Rd-fGy">
+                        <rect key="frame" x="20" y="22" width="119.5" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="KgD-zo-R86"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="20"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jfx-tZ-esq" userLabel="Separator Line">
+                        <rect key="frame" x="20" y="64.5" width="280" height="1"/>
+                        <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="xON-zP-Ynb"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="jfx-tZ-esq" firstAttribute="leading" secondItem="G9f-Rd-fGy" secondAttribute="leading" id="53A-D5-8O0"/>
+                    <constraint firstItem="G9f-Rd-fGy" firstAttribute="leading" secondItem="Hhv-b3-GgO" secondAttribute="leading" constant="20" id="MLo-9b-JyE"/>
+                    <constraint firstItem="jfx-tZ-esq" firstAttribute="trailing" secondItem="Jce-fN-htF" secondAttribute="trailing" id="NHz-fO-8i9"/>
+                    <constraint firstItem="G9f-Rd-fGy" firstAttribute="centerY" secondItem="Jce-fN-htF" secondAttribute="centerY" id="QxL-o7-TUu"/>
+                    <constraint firstItem="Jce-fN-htF" firstAttribute="top" secondItem="Hhv-b3-GgO" secondAttribute="top" constant="14" id="Y5k-yh-TBp"/>
+                    <constraint firstItem="Jce-fN-htF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="G9f-Rd-fGy" secondAttribute="trailing" constant="10" id="ZNZ-6u-jTv"/>
+                    <constraint firstAttribute="bottom" secondItem="Jce-fN-htF" secondAttribute="bottom" priority="999" constant="14" id="aET-UA-are"/>
+                    <constraint firstAttribute="trailing" secondItem="Jce-fN-htF" secondAttribute="trailing" constant="20" id="d6n-8P-jI8"/>
+                    <constraint firstAttribute="bottom" secondItem="jfx-tZ-esq" secondAttribute="bottom" id="haU-R0-Nt6"/>
+                </constraints>
+            </tableViewCellContentView>
+            <accessibility key="accessibilityConfiguration" identifier="roomTypeSelectorCellAcc">
+                <bool key="isElement" value="YES"/>
+            </accessibility>
+            <connections>
+                <outlet property="roomTypeLabel" destination="G9f-Rd-fGy" id="8kh-lm-kLA"/>
+                <outlet property="roomTypeSelectorButton" destination="Jce-fN-htF" id="Wk4-5i-M2e"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="arrowRight" width="44" height="44"/>
+    </resources>
+</document>

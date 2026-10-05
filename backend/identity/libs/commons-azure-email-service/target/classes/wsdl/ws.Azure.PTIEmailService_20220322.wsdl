@@ -1,0 +1,2265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:ns1="https://dto.email.transact.comms.int.wtbapi.com"
+  xmlns:tns="https://email.transact.comms.int.wtbapi.com"
+  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="https://email.transact.comms.int.wtbapi.com">
+  <wsdl:types>
+    <xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified"
+      targetNamespace="https://dto.email.transact.comms.int.wtbapi.com">
+      <xsd:complexType name="NewPremierGuestInternet">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentPremierGuestInternet" nillable="true"
+            type="ns1:ContentPremierGuestInternet"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Login">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="userName" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="PromotionalImages">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="promotions" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Template">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="templateId" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentPremierGuestInternet">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="address1" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="address2" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="address3" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="country" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestForename" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestSurname" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestTitle" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="postCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="telephone" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="userName" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="PremierGuestResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CancellationDetailsIndividual">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arrivalDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="bookerDetails" nillable="true" type="ns1:BookerDetails"/>
+          <xsd:element minOccurs="0" name="breakfastPostings" nillable="true"
+            type="ns1:BreakfastPosting"/>
+          <xsd:element minOccurs="0" name="cancelNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="checkInTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="checkOutTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="currencyCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="departureDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestDetails" nillable="true" type="ns1:GuestDetails"/>
+          <xsd:element minOccurs="0" name="hotelCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="hotelName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="numberNights" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="paymentReceipt" nillable="true"
+            type="ns1:PaymentReceipt"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="resNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="restaurantBooking" nillable="true"
+            type="ns1:RestaurantBooking"/>
+          <xsd:element minOccurs="0" name="rooms" nillable="true" type="ns1:RoomsInd"/>
+          <xsd:element minOccurs="0" name="supplementBooking" nillable="true"
+            type="ns1:SupplementBooking"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+          <xsd:element minOccurs="0" name="totalCancellation" nillable="true"
+            type="ns1:TotalCancellation"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RestaurantBooking">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="brandCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="dinnerArray" nillable="true" type="ns1:ArrayOfDinner"/>
+          <xsd:element minOccurs="0" name="restaurantBrand" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="restaurantName" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfDinner">
+        <xsd:sequence>
+          <xsd:element maxOccurs="unbounded" minOccurs="0" name="Dinner" nillable="true"
+            type="ns1:Dinner"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Dinner">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="date" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="diners" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="time" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SupplementBooking">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="supplementsArray" nillable="true"
+            type="ns1:ArrayOfSupplement"/>
+          <xsd:element minOccurs="0" name="totalSupplementCost" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfSupplement">
+        <xsd:sequence>
+          <xsd:element maxOccurs="unbounded" minOccurs="0" name="Supplement" nillable="true"
+            type="ns1:Supplement"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Supplement">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="date" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="quantity" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="totalSupplement" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="type" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="unit" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="TotalCancellation">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="refundAmount" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="refundRequired" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="refundSuccessful" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="totalValue" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BreakfastPosting">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="breakfastArray" nillable="true"
+            type="ns1:ArrayOfBreakfast"/>
+          <xsd:element minOccurs="0" name="totalBreakfastCost" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfBreakfast">
+        <xsd:sequence>
+          <xsd:element maxOccurs="unbounded" minOccurs="0" name="Breakfast" nillable="true"
+            type="ns1:Breakfast"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Breakfast">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="date" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="quantity" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="totalType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="type" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="unit" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GuestDetails">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="guestForename" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestSurname" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestTitle" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RoomsInd">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="rateDialogue" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomDetailsIndividualArray" nillable="true"
+            type="ns1:ArrayOfRoomDetailsIndividual"/>
+          <xsd:element minOccurs="0" name="totalRoomCost" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="totalRooms" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfRoomDetailsIndividual">
+        <xsd:sequence>
+          <xsd:element maxOccurs="unbounded" minOccurs="0" name="RoomDetailsIndividual"
+            nillable="true" type="ns1:RoomDetailsIndividual"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RoomDetailsIndividual">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="adults" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="children" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="guestForename" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestSurname" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestTitle" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomNumber" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="roomStatus" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomTypeCost" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="PaymentReceipt">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="amount" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="authCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="cardHolder" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="cardNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="cardType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="comment" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="companyText1" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="copyBill" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="copyBillText" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="depositName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="depositNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="description" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="eftNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="expires" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="paymentAddress1" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="paymentAddress2" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="paymentAddress3" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="paymentAddress4" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="paymentMethod" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="paymentPostCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="tid" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="transDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="transTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="transType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="vatExcLine" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="vatIncLine" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="vatReg" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="vatTotalLine" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BookerDetails">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="bookingForename" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="bookingSurname" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="bookingTitle" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CancelConfirmationResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ConfirmationBookingDetails">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arrivalDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="breakfastPostings" nillable="true"
+            type="ns1:BreakfastPosting"/>
+          <xsd:element minOccurs="0" name="checkInTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="checkOutTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="checkedInBy" nillable="true" type="ns1:CheckedInBy"/>
+          <xsd:element minOccurs="0" name="currencyCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="departureDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestDetails" nillable="true" type="ns1:GuestDetails"/>
+          <xsd:element minOccurs="0" name="hotelCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="hotelName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="numberNights" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="paidStatus" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="paymentReceipt" nillable="true"
+            type="ns1:PaymentReceipt"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="recipientDetails" nillable="true"
+            type="ns1:RecipientDetails"/>
+          <xsd:element minOccurs="0" name="resNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="restaurantBooking" nillable="true"
+            type="ns1:RestaurantBooking"/>
+          <xsd:element minOccurs="0" name="rooms" nillable="true" type="ns1:Rooms"/>
+          <xsd:element minOccurs="0" name="supplementBooking" nillable="true"
+            type="ns1:SupplementBooking"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+          <xsd:element minOccurs="0" name="totalReservation" nillable="true"
+            type="ns1:TotalReservation"/>
+          <xsd:element minOccurs="0" name="voucher" nillable="true" type="ns1:Voucher"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RecipientDetails">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="forename" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="surname" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="title" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Voucher">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="totalVoucher" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="voucherArray" nillable="true"
+            type="ns1:ArrayOfVoucherDetails"/>
+          <xsd:element minOccurs="0" name="voucherSum" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfVoucherDetails">
+        <xsd:sequence>
+          <xsd:element maxOccurs="unbounded" minOccurs="0" name="VoucherDetails" nillable="true"
+            type="ns1:VoucherDetails"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="VoucherDetails">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="serialNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="voucherDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="voucherNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="voucherValue" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="TotalReservation">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="cardNotPresentAuth" nillable="true"
+            type="ns1:CardNotPresentAuth"/>
+          <xsd:element minOccurs="0" name="customerReference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guaranteeMethod" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guaranteed" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="paraId" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="paraText" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="paymentMethod" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="purchaseOrder" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="refundAmount" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="refundRequired" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="refundSuccessful" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="totalValue" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CardNotPresentAuth">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="alcohol" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="breakfast" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="carParking" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="cnp" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="dinner" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="other" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="wifi" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CheckedInBy">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="forename" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="surname" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Rooms">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="rateDialogue" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomDetailsArray" nillable="true"
+            type="ns1:ArrayOfRoomDetails"/>
+          <xsd:element minOccurs="0" name="totalRoomCost" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="totalRooms" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfRoomDetails">
+        <xsd:sequence>
+          <xsd:element maxOccurs="unbounded" minOccurs="0" name="RoomDetails" nillable="true"
+            type="ns1:RoomDetails"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RoomDetails">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="adults" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="children" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="guestForename" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestSurname" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestTitle" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomNumber" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="roomStatus" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomTypeCost" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GenericServiceResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GuestResponseEmail">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="bodyText" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="messageType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="restaurantBrand" nillable="true"
+            type="ns1:RestaurantBrand"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RestaurantBrand">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="brandCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="brandName" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="NewPremierGuestCCCIVR">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentPremierGuestCCCIVR" nillable="true"
+            type="ns1:ContentPremierGuestCCCIVR"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentPremierGuestCCCIVR">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="address1" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="address2" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="address3" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="country" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestForename" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestSurname" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestTitle" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="pin" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="postCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="regTelephone" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="telephone" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="userName" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ForgottenPasswordReset">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="content" nillable="true" type="ns1:Content"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Content">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="resetLink" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ForgottenPasswordResetResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="NewPremierGuestCCC">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentPremierGuestCCC" nillable="true"
+            type="ns1:ContentPremierGuestCCC"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentPremierGuestCCC">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="address1" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="address2" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="address3" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="country" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestForename" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestSurname" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestTitle" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="postCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="telephone" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="userName" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CompanyEmail">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="bodyText" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="cardDetails" nillable="true" type="ns1:CardDetails"/>
+          <xsd:element minOccurs="0" name="company" nillable="true" type="ns1:Company"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="messageType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+          <xsd:element minOccurs="0" name="userDetail" nillable="true" type="ns1:UserDetail"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CardDetails">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="cardLabel" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="cardNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="expiryDate" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="UserDetail">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="firstName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="lastName" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Company">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="activateLink" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="authorityLevel" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="companyLink" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="companyName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="resetLink" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="unsubscribeLink" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GuestRelationsCentralRefund">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentGuestRelationsCentralRefund" nillable="true"
+            type="ns1:ContentGuestRelationsCentralRefund"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentGuestRelationsCentralRefund">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="invoiceText" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GuestRelationsCentralRefundResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BookingDetailsGroup">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arrivalDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="bookerDetails" nillable="true" type="ns1:BookerDetails"/>
+          <xsd:element minOccurs="0" name="breakfastPostings" nillable="true"
+            type="ns1:BreakfastPosting"/>
+          <xsd:element minOccurs="0" name="checkInTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="checkOutTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="currencyCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="departureDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestDetails" nillable="true" type="ns1:GuestDetails"/>
+          <xsd:element minOccurs="0" name="hotelCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="hotelName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="numberNights" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="paymentReceipt" nillable="true"
+            type="ns1:PaymentReceipt"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="resNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="restaurantBooking" nillable="true"
+            type="ns1:RestaurantBooking"/>
+          <xsd:element minOccurs="0" name="rooms" nillable="true" type="ns1:RoomsGrp"/>
+          <xsd:element minOccurs="0" name="sleepParkFly" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="supplementBooking" nillable="true"
+            type="ns1:SupplementBooking"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+          <xsd:element minOccurs="0" name="totalReservation" nillable="true"
+            type="ns1:TotalReservation"/>
+          <xsd:element minOccurs="0" name="voucher" nillable="true" type="ns1:Voucher"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RoomsGrp">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="rateDialogue" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomDetailsGroupArray" nillable="true"
+            type="ns1:ArrayOfRoomDetailsGroup"/>
+          <xsd:element minOccurs="0" name="totalRoomCost" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="totalRooms" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfRoomDetailsGroup">
+        <xsd:sequence>
+          <xsd:element maxOccurs="unbounded" minOccurs="0" name="RoomDetailsGroup" nillable="true"
+            type="ns1:RoomDetailsGroup"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RoomDetailsGroup">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="adults" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="babies" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="children" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="noGuaranteedRooms" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="noRooms" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="roomStatus" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="roomTypeCost" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BookingConfirmationResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="MiscTextEmail">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentMiscText" nillable="true"
+            type="ns1:ContentMiscText"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentMiscText">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="bodyText" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="MiscTextEmailResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="NewPremierGuestEdited">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentPremierGuestEdited" nillable="true"
+            type="ns1:ContentPremierGuestEdited"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentPremierGuestEdited">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="address1" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="address2" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="address3" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="country" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress2" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestForename" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestSurname" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestTitle" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="postCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="telephone" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="userName" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CancellationDetailsGroup">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arrivalDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="bookerDetails" nillable="true" type="ns1:BookerDetails"/>
+          <xsd:element minOccurs="0" name="breakfastPostings" nillable="true"
+            type="ns1:BreakfastPosting"/>
+          <xsd:element minOccurs="0" name="cancelNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="checkInTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="checkOutTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="currencyCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="departureDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestDetails" nillable="true" type="ns1:GuestDetails"/>
+          <xsd:element minOccurs="0" name="hotelCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="hotelName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="numberNights" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="paymentReceipt" nillable="true"
+            type="ns1:PaymentReceipt"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="resNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="restaurantBooking" nillable="true"
+            type="ns1:RestaurantBooking"/>
+          <xsd:element minOccurs="0" name="rooms" nillable="true" type="ns1:RoomsGrp"/>
+          <xsd:element minOccurs="0" name="supplementBooking" nillable="true"
+            type="ns1:SupplementBooking"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+          <xsd:element minOccurs="0" name="totalCancellation" nillable="true"
+            type="ns1:TotalCancellation"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RestaurantRewardVoucher">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="bookerDetails" nillable="true" type="ns1:BookerDetails"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+          <xsd:element minOccurs="0" name="voucherDetails" nillable="true"
+            type="ns1:VoucherDetails"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RestaurantRewardVoucherResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ForgottenPasswordReminder">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentForgottenPasswordReminder" nillable="true"
+            type="ns1:ContentForgottenPasswordReminder"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentForgottenPasswordReminder">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ForgottenPasswordReminderResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="PromptEmail">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="bookingDetails" nillable="true"
+            type="ns1:BookingDetails"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="messageType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="recipientDetails" nillable="true"
+            type="ns1:RecipientDetails"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+          <xsd:element minOccurs="0" name="totalReservation" nillable="true"
+            type="ns1:TotalReservation"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BookingDetails">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arrivalDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="arrivalDay" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="arrivalMonth" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="arrivalYear" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="currencyCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="departureDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="hotelCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="hotelName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="mpiRes" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="numberNights" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="paidStatus" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="resNumber" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="DepositInvoices">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentDepositInvoices" nillable="true"
+            type="ns1:ContentDepositInvoices"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentDepositInvoices">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arrivalDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="departureDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="hotelCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="invoiceText" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="resNumber" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="DepositInvoicesResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="WeekendRewardsWelcomeMyPI">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentWeekendRewardsWelcomeMyPI" nillable="true"
+            type="ns1:ContentWeekendRewardsWelcomeMyPI"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentWeekendRewardsWelcomeMyPI">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="userName" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="WeekendRewardsWelcomeMyPIResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SleepParkFlyReminderEmail">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="bookerDetails" nillable="true" type="ns1:BookerDetails"/>
+          <xsd:element minOccurs="0" name="bookingDetails" nillable="true"
+            type="ns1:BookingDetails"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="messageType" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GuestInvoices">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentGuestInvoices" nillable="true"
+            type="ns1:ContentGuestInvoices"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentGuestInvoices">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arrivalDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="departureDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="hotelCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="invoiceText" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="resNumber" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GuestInvoicesResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BookingDetailsIndividual">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arrivalDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="bookerDetails" nillable="true" type="ns1:BookerDetails"/>
+          <xsd:element minOccurs="0" name="breakfastPostings" nillable="true"
+            type="ns1:BreakfastPosting"/>
+          <xsd:element minOccurs="0" name="checkInTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="checkOutTime" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="currencyCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="departureDate" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="guestDetails" nillable="true" type="ns1:GuestDetails"/>
+          <xsd:element minOccurs="0" name="hotelCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="hotelName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="numberNights" type="xsd:int"/>
+          <xsd:element minOccurs="0" name="paymentReceipt" nillable="true"
+            type="ns1:PaymentReceipt"/>
+          <xsd:element minOccurs="0" name="promotionalImages" nillable="true"
+            type="ns1:PromotionalImages"/>
+          <xsd:element minOccurs="0" name="resNumber" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="restaurantBooking" nillable="true"
+            type="ns1:RestaurantBooking"/>
+          <xsd:element minOccurs="0" name="rooms" nillable="true" type="ns1:RoomsInd"/>
+          <xsd:element minOccurs="0" name="sleepParkFly" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="supplementBooking" nillable="true"
+            type="ns1:SupplementBooking"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+          <xsd:element minOccurs="0" name="totalReservation" nillable="true"
+            type="ns1:TotalReservation"/>
+          <xsd:element minOccurs="0" name="voucher" nillable="true" type="ns1:Voucher"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="WeekendRewardsWelcome">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="contentWeekendRewardsWelcome" nillable="true"
+            type="ns1:ContentWeekendRewardsWelcome"/>
+          <xsd:element minOccurs="0" name="login" nillable="true" type="ns1:Login"/>
+          <xsd:element minOccurs="0" name="template" nillable="true" type="ns1:Template"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ContentWeekendRewardsWelcome">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="emailAddress" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="infName" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="languageCode" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="WeekendRewardsWelcomeResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="field" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="reference" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified"
+      targetNamespace="https://email.transact.comms.int.wtbapi.com">
+      <xsd:element name="sendNewPremierGuestInternet">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:NewPremierGuestInternet"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendNewPremierGuestInternetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:PremierGuestResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendSingleCancellationConfirmation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:CancellationDetailsIndividual"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendSingleCancellationConfirmationResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:CancelConfirmationResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendBkrStayingCinPaidNoExt">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:ConfirmationBookingDetails"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendBkrStayingCinPaidNoExtResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestResponseEmail">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:GuestResponseEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestResponseEmailResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendNewPremierGuestCCCIVR">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:NewPremierGuestCCCIVR"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendNewPremierGuestCCCIVRResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:PremierGuestResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendforgottenPasswordReset">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:ForgottenPasswordReset"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendforgottenPasswordResetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:ForgottenPasswordResetResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestCinPaid">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:ConfirmationBookingDetails"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestCinPaidResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendNewPremierGuestCCC">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:NewPremierGuestCCC"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendNewPremierGuestCCCResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:PremierGuestResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendConfirmationOfCompanySetup">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:CompanyEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendConfirmationOfCompanySetupResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestRelationsCentralRefund">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:GuestRelationsCentralRefund"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestRelationsCentralRefundResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GuestRelationsCentralRefundResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendOutOfPolicyAlert">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:CompanyEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendOutOfPolicyAlertResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendBkrCinPaidPreviousUnpaid">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:ConfirmationBookingDetails"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendBkrCinPaidPreviousUnpaidResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendBkrNotStayingCinPaid">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:ConfirmationBookingDetails"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendBkrNotStayingCinPaidResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendEmailAlreadyRegistered">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:CompanyEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendEmailAlreadyRegisteredResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGroupBookingConfirmation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:BookingDetailsGroup"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGroupBookingConfirmationResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:BookingConfirmationResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendMiscellaneousTextEmails">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:MiscTextEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendMiscellaneousTextEmailsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:MiscTextEmailResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendActivateYourAccount">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:CompanyEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendActivateYourAccountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendNewPremierGuestEdited">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:NewPremierGuestEdited"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendNewPremierGuestEditedResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:PremierGuestResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGroupCancellationConfirmation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:CancellationDetailsGroup"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGroupCancellationConfirmationResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:CancelConfirmationResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendConfirmationOfAccounCreation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:CompanyEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendConfirmationOfAccounCreationResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestCinPreviousPaid">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:ConfirmationBookingDetails"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestCinPreviousPaidResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestCinPaidAlternate">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:ConfirmationBookingDetails"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestCinPaidAlternateResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendRestaurantRewardVoucherEmails">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:RestaurantRewardVoucher"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendRestaurantRewardVoucherEmailsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:RestaurantRewardVoucherResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendForgottenPasswordReminder">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:ForgottenPasswordReminder"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendForgottenPasswordReminderResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:ForgottenPasswordReminderResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendPromptEmailForBkr">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:PromptEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendPromptEmailForBkrResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendBkrStayingCinPaidAddedExt">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:ConfirmationBookingDetails"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendBkrStayingCinPaidAddedExtResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendDepositInvoices">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:DepositInvoices"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendDepositInvoicesResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:DepositInvoicesResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendCreateYourNewPassword">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:CompanyEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendCreateYourNewPasswordResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendWeekendRewardsWelcomeMyPI">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:WeekendRewardsWelcomeMyPI"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendWeekendRewardsWelcomeMyPIResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:WeekendRewardsWelcomeMyPIResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendCreditCardAboutToExpire">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:CompanyEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendCreditCardAboutToExpireResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendSleepParkflyReminderEmail">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:SleepParkFlyReminderEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendSleepParkflyReminderEmailResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendPromptEmailForGuest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:PromptEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendPromptEmailForGuestResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestInvoices">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:GuestInvoices"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendGuestInvoicesResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GuestInvoicesResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendSingleBookingConfirmation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:BookingDetailsIndividual"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendSingleBookingConfirmationResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:BookingConfirmationResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendWillReceiveOutOfPolicyBookingAlerts">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:CompanyEmail"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendWillReceiveOutOfPolicyBookingAlertsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:GenericServiceResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendWeekendRewardsWelcome">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" nillable="true"
+              type="ns1:WeekendRewardsWelcome"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendWeekendRewardsWelcomeResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" nillable="true"
+              type="ns1:WeekendRewardsWelcomeResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="sendForgottenPasswordReminderRequest">
+    <wsdl:part name="parameters" element="tns:sendForgottenPasswordReminder"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewPremierGuestInternetResponse">
+    <wsdl:part name="parameters" element="tns:sendNewPremierGuestInternetResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendBkrNotStayingCinPaidRequest">
+    <wsdl:part name="parameters" element="tns:sendBkrNotStayingCinPaid"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestRelationsCentralRefundResponse">
+    <wsdl:part name="parameters" element="tns:sendGuestRelationsCentralRefundResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendPromptEmailForBkrRequest">
+    <wsdl:part name="parameters" element="tns:sendPromptEmailForBkr"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewPremierGuestCCCIVRRequest">
+    <wsdl:part name="parameters" element="tns:sendNewPremierGuestCCCIVR"/>
+  </wsdl:message>
+  <wsdl:message name="sendWillReceiveOutOfPolicyBookingAlertsResponse">
+    <wsdl:part name="parameters" element="tns:sendWillReceiveOutOfPolicyBookingAlertsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendSleepParkflyReminderEmailRequest">
+    <wsdl:part name="parameters" element="tns:sendSleepParkflyReminderEmail"/>
+  </wsdl:message>
+  <wsdl:message name="sendWeekendRewardsWelcomeMyPIRequest">
+    <wsdl:part name="parameters" element="tns:sendWeekendRewardsWelcomeMyPI"/>
+  </wsdl:message>
+  <wsdl:message name="sendCreditCardAboutToExpireResponse">
+    <wsdl:part name="parameters" element="tns:sendCreditCardAboutToExpireResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestCinPreviousPaidRequest">
+    <wsdl:part name="parameters" element="tns:sendGuestCinPreviousPaid"/>
+  </wsdl:message>
+  <wsdl:message name="sendBkrStayingCinPaidAddedExtResponse">
+    <wsdl:part name="parameters" element="tns:sendBkrStayingCinPaidAddedExtResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendPromptEmailForBkrResponse">
+    <wsdl:part name="parameters" element="tns:sendPromptEmailForBkrResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendEmailAlreadyRegisteredRequest">
+    <wsdl:part name="parameters" element="tns:sendEmailAlreadyRegistered"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestCinPreviousPaidResponse">
+    <wsdl:part name="parameters" element="tns:sendGuestCinPreviousPaidResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendConfirmationOfCompanySetupRequest">
+    <wsdl:part name="parameters" element="tns:sendConfirmationOfCompanySetup"/>
+  </wsdl:message>
+  <wsdl:message name="sendGroupCancellationConfirmationResponse">
+    <wsdl:part name="parameters" element="tns:sendGroupCancellationConfirmationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendWeekendRewardsWelcomeResponse">
+    <wsdl:part name="parameters" element="tns:sendWeekendRewardsWelcomeResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendRestaurantRewardVoucherEmailsResponse">
+    <wsdl:part name="parameters" element="tns:sendRestaurantRewardVoucherEmailsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendActivateYourAccountRequest">
+    <wsdl:part name="parameters" element="tns:sendActivateYourAccount"/>
+  </wsdl:message>
+  <wsdl:message name="sendBkrStayingCinPaidNoExtRequest">
+    <wsdl:part name="parameters" element="tns:sendBkrStayingCinPaidNoExt"/>
+  </wsdl:message>
+  <wsdl:message name="sendSingleBookingConfirmationResponse">
+    <wsdl:part name="parameters" element="tns:sendSingleBookingConfirmationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendWillReceiveOutOfPolicyBookingAlertsRequest">
+    <wsdl:part name="parameters" element="tns:sendWillReceiveOutOfPolicyBookingAlerts"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestCinPaidRequest">
+    <wsdl:part name="parameters" element="tns:sendGuestCinPaid"/>
+  </wsdl:message>
+  <wsdl:message name="sendforgottenPasswordResetResponse">
+    <wsdl:part name="parameters" element="tns:sendforgottenPasswordResetResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendMiscellaneousTextEmailsRequest">
+    <wsdl:part name="parameters" element="tns:sendMiscellaneousTextEmails"/>
+  </wsdl:message>
+  <wsdl:message name="sendCreditCardAboutToExpireRequest">
+    <wsdl:part name="parameters" element="tns:sendCreditCardAboutToExpire"/>
+  </wsdl:message>
+  <wsdl:message name="sendOutOfPolicyAlertRequest">
+    <wsdl:part name="parameters" element="tns:sendOutOfPolicyAlert"/>
+  </wsdl:message>
+  <wsdl:message name="sendActivateYourAccountResponse">
+    <wsdl:part name="parameters" element="tns:sendActivateYourAccountResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendMiscellaneousTextEmailsResponse">
+    <wsdl:part name="parameters" element="tns:sendMiscellaneousTextEmailsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendWeekendRewardsWelcomeRequest">
+    <wsdl:part name="parameters" element="tns:sendWeekendRewardsWelcome"/>
+  </wsdl:message>
+  <wsdl:message name="sendConfirmationOfCompanySetupResponse">
+    <wsdl:part name="parameters" element="tns:sendConfirmationOfCompanySetupResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendBkrStayingCinPaidAddedExtRequest">
+    <wsdl:part name="parameters" element="tns:sendBkrStayingCinPaidAddedExt"/>
+  </wsdl:message>
+  <wsdl:message name="sendGroupBookingConfirmationResponse">
+    <wsdl:part name="parameters" element="tns:sendGroupBookingConfirmationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendCreateYourNewPasswordResponse">
+    <wsdl:part name="parameters" element="tns:sendCreateYourNewPasswordResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendDepositInvoicesRequest">
+    <wsdl:part name="parameters" element="tns:sendDepositInvoices"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestRelationsCentralRefundRequest">
+    <wsdl:part name="parameters" element="tns:sendGuestRelationsCentralRefund"/>
+  </wsdl:message>
+  <wsdl:message name="sendSingleCancellationConfirmationRequest">
+    <wsdl:part name="parameters" element="tns:sendSingleCancellationConfirmation"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestResponseEmailResponse">
+    <wsdl:part name="parameters" element="tns:sendGuestResponseEmailResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendRestaurantRewardVoucherEmailsRequest">
+    <wsdl:part name="parameters" element="tns:sendRestaurantRewardVoucherEmails"/>
+  </wsdl:message>
+  <wsdl:message name="sendSingleCancellationConfirmationResponse">
+    <wsdl:part name="parameters" element="tns:sendSingleCancellationConfirmationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendGroupBookingConfirmationRequest">
+    <wsdl:part name="parameters" element="tns:sendGroupBookingConfirmation"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestInvoicesRequest">
+    <wsdl:part name="parameters" element="tns:sendGuestInvoices"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestCinPaidAlternateRequest">
+    <wsdl:part name="parameters" element="tns:sendGuestCinPaidAlternate"/>
+  </wsdl:message>
+  <wsdl:message name="sendBkrStayingCinPaidNoExtResponse">
+    <wsdl:part name="parameters" element="tns:sendBkrStayingCinPaidNoExtResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewPremierGuestInternetRequest">
+    <wsdl:part name="parameters" element="tns:sendNewPremierGuestInternet"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewPremierGuestEditedResponse">
+    <wsdl:part name="parameters" element="tns:sendNewPremierGuestEditedResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendConfirmationOfAccounCreationRequest">
+    <wsdl:part name="parameters" element="tns:sendConfirmationOfAccounCreation"/>
+  </wsdl:message>
+  <wsdl:message name="sendEmailAlreadyRegisteredResponse">
+    <wsdl:part name="parameters" element="tns:sendEmailAlreadyRegisteredResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewPremierGuestEditedRequest">
+    <wsdl:part name="parameters" element="tns:sendNewPremierGuestEdited"/>
+  </wsdl:message>
+  <wsdl:message name="sendBkrCinPaidPreviousUnpaidRequest">
+    <wsdl:part name="parameters" element="tns:sendBkrCinPaidPreviousUnpaid"/>
+  </wsdl:message>
+  <wsdl:message name="sendGroupCancellationConfirmationRequest">
+    <wsdl:part name="parameters" element="tns:sendGroupCancellationConfirmation"/>
+  </wsdl:message>
+  <wsdl:message name="sendCreateYourNewPasswordRequest">
+    <wsdl:part name="parameters" element="tns:sendCreateYourNewPassword"/>
+  </wsdl:message>
+  <wsdl:message name="sendPromptEmailForGuestResponse">
+    <wsdl:part name="parameters" element="tns:sendPromptEmailForGuestResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendOutOfPolicyAlertResponse">
+    <wsdl:part name="parameters" element="tns:sendOutOfPolicyAlertResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewPremierGuestCCCRequest">
+    <wsdl:part name="parameters" element="tns:sendNewPremierGuestCCC"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewPremierGuestCCCIVRResponse">
+    <wsdl:part name="parameters" element="tns:sendNewPremierGuestCCCIVRResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendforgottenPasswordResetRequest">
+    <wsdl:part name="parameters" element="tns:sendforgottenPasswordReset"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestInvoicesResponse">
+    <wsdl:part name="parameters" element="tns:sendGuestInvoicesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendBkrNotStayingCinPaidResponse">
+    <wsdl:part name="parameters" element="tns:sendBkrNotStayingCinPaidResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendDepositInvoicesResponse">
+    <wsdl:part name="parameters" element="tns:sendDepositInvoicesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestCinPaidAlternateResponse">
+    <wsdl:part name="parameters" element="tns:sendGuestCinPaidAlternateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendForgottenPasswordReminderResponse">
+    <wsdl:part name="parameters" element="tns:sendForgottenPasswordReminderResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendBkrCinPaidPreviousUnpaidResponse">
+    <wsdl:part name="parameters" element="tns:sendBkrCinPaidPreviousUnpaidResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendConfirmationOfAccounCreationResponse">
+    <wsdl:part name="parameters" element="tns:sendConfirmationOfAccounCreationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestResponseEmailRequest">
+    <wsdl:part name="parameters" element="tns:sendGuestResponseEmail"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewPremierGuestCCCResponse">
+    <wsdl:part name="parameters" element="tns:sendNewPremierGuestCCCResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendPromptEmailForGuestRequest">
+    <wsdl:part name="parameters" element="tns:sendPromptEmailForGuest"/>
+  </wsdl:message>
+  <wsdl:message name="sendSleepParkflyReminderEmailResponse">
+    <wsdl:part name="parameters" element="tns:sendSleepParkflyReminderEmailResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendSingleBookingConfirmationRequest">
+    <wsdl:part name="parameters" element="tns:sendSingleBookingConfirmation"/>
+  </wsdl:message>
+  <wsdl:message name="sendWeekendRewardsWelcomeMyPIResponse">
+    <wsdl:part name="parameters" element="tns:sendWeekendRewardsWelcomeMyPIResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendGuestCinPaidResponse">
+    <wsdl:part name="parameters" element="tns:sendGuestCinPaidResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="PTIEmailServicePortType">
+    <wsdl:operation name="sendNewPremierGuestInternet">
+      <wsdl:input name="sendNewPremierGuestInternetRequest"
+        message="tns:sendNewPremierGuestInternetRequest"/>
+      <wsdl:output name="sendNewPremierGuestInternetResponse"
+        message="tns:sendNewPremierGuestInternetResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendSingleCancellationConfirmation">
+      <wsdl:input name="sendSingleCancellationConfirmationRequest"
+        message="tns:sendSingleCancellationConfirmationRequest"/>
+      <wsdl:output name="sendSingleCancellationConfirmationResponse"
+        message="tns:sendSingleCancellationConfirmationResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendBkrStayingCinPaidNoExt">
+      <wsdl:input name="sendBkrStayingCinPaidNoExtRequest"
+        message="tns:sendBkrStayingCinPaidNoExtRequest"/>
+      <wsdl:output name="sendBkrStayingCinPaidNoExtResponse"
+        message="tns:sendBkrStayingCinPaidNoExtResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestResponseEmail">
+      <wsdl:input name="sendGuestResponseEmailRequest" message="tns:sendGuestResponseEmailRequest"/>
+      <wsdl:output name="sendGuestResponseEmailResponse"
+        message="tns:sendGuestResponseEmailResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendNewPremierGuestCCCIVR">
+      <wsdl:input name="sendNewPremierGuestCCCIVRRequest"
+        message="tns:sendNewPremierGuestCCCIVRRequest"/>
+      <wsdl:output name="sendNewPremierGuestCCCIVRResponse"
+        message="tns:sendNewPremierGuestCCCIVRResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendforgottenPasswordReset">
+      <wsdl:input name="sendforgottenPasswordResetRequest"
+        message="tns:sendforgottenPasswordResetRequest"/>
+      <wsdl:output name="sendforgottenPasswordResetResponse"
+        message="tns:sendforgottenPasswordResetResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestCinPaid">
+      <wsdl:input name="sendGuestCinPaidRequest" message="tns:sendGuestCinPaidRequest"/>
+      <wsdl:output name="sendGuestCinPaidResponse" message="tns:sendGuestCinPaidResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendNewPremierGuestCCC">
+      <wsdl:input name="sendNewPremierGuestCCCRequest" message="tns:sendNewPremierGuestCCCRequest"/>
+      <wsdl:output name="sendNewPremierGuestCCCResponse"
+        message="tns:sendNewPremierGuestCCCResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendConfirmationOfCompanySetup">
+      <wsdl:input name="sendConfirmationOfCompanySetupRequest"
+        message="tns:sendConfirmationOfCompanySetupRequest"/>
+      <wsdl:output name="sendConfirmationOfCompanySetupResponse"
+        message="tns:sendConfirmationOfCompanySetupResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestRelationsCentralRefund">
+      <wsdl:input name="sendGuestRelationsCentralRefundRequest"
+        message="tns:sendGuestRelationsCentralRefundRequest"/>
+      <wsdl:output name="sendGuestRelationsCentralRefundResponse"
+        message="tns:sendGuestRelationsCentralRefundResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendOutOfPolicyAlert">
+      <wsdl:input name="sendOutOfPolicyAlertRequest" message="tns:sendOutOfPolicyAlertRequest"/>
+      <wsdl:output name="sendOutOfPolicyAlertResponse" message="tns:sendOutOfPolicyAlertResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendBkrCinPaidPreviousUnpaid">
+      <wsdl:input name="sendBkrCinPaidPreviousUnpaidRequest"
+        message="tns:sendBkrCinPaidPreviousUnpaidRequest"/>
+      <wsdl:output name="sendBkrCinPaidPreviousUnpaidResponse"
+        message="tns:sendBkrCinPaidPreviousUnpaidResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendBkrNotStayingCinPaid">
+      <wsdl:input name="sendBkrNotStayingCinPaidRequest"
+        message="tns:sendBkrNotStayingCinPaidRequest"/>
+      <wsdl:output name="sendBkrNotStayingCinPaidResponse"
+        message="tns:sendBkrNotStayingCinPaidResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendEmailAlreadyRegistered">
+      <wsdl:input name="sendEmailAlreadyRegisteredRequest"
+        message="tns:sendEmailAlreadyRegisteredRequest"/>
+      <wsdl:output name="sendEmailAlreadyRegisteredResponse"
+        message="tns:sendEmailAlreadyRegisteredResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendGroupBookingConfirmation">
+      <wsdl:input name="sendGroupBookingConfirmationRequest"
+        message="tns:sendGroupBookingConfirmationRequest"/>
+      <wsdl:output name="sendGroupBookingConfirmationResponse"
+        message="tns:sendGroupBookingConfirmationResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendMiscellaneousTextEmails">
+      <wsdl:input name="sendMiscellaneousTextEmailsRequest"
+        message="tns:sendMiscellaneousTextEmailsRequest"/>
+      <wsdl:output name="sendMiscellaneousTextEmailsResponse"
+        message="tns:sendMiscellaneousTextEmailsResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendActivateYourAccount">
+      <wsdl:input name="sendActivateYourAccountRequest"
+        message="tns:sendActivateYourAccountRequest"/>
+      <wsdl:output name="sendActivateYourAccountResponse"
+        message="tns:sendActivateYourAccountResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendNewPremierGuestEdited">
+      <wsdl:input name="sendNewPremierGuestEditedRequest"
+        message="tns:sendNewPremierGuestEditedRequest"/>
+      <wsdl:output name="sendNewPremierGuestEditedResponse"
+        message="tns:sendNewPremierGuestEditedResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendGroupCancellationConfirmation">
+      <wsdl:input name="sendGroupCancellationConfirmationRequest"
+        message="tns:sendGroupCancellationConfirmationRequest"/>
+      <wsdl:output name="sendGroupCancellationConfirmationResponse"
+        message="tns:sendGroupCancellationConfirmationResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendConfirmationOfAccounCreation">
+      <wsdl:input name="sendConfirmationOfAccounCreationRequest"
+        message="tns:sendConfirmationOfAccounCreationRequest"/>
+      <wsdl:output name="sendConfirmationOfAccounCreationResponse"
+        message="tns:sendConfirmationOfAccounCreationResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestCinPreviousPaid">
+      <wsdl:input name="sendGuestCinPreviousPaidRequest"
+        message="tns:sendGuestCinPreviousPaidRequest"/>
+      <wsdl:output name="sendGuestCinPreviousPaidResponse"
+        message="tns:sendGuestCinPreviousPaidResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestCinPaidAlternate">
+      <wsdl:input name="sendGuestCinPaidAlternateRequest"
+        message="tns:sendGuestCinPaidAlternateRequest"/>
+      <wsdl:output name="sendGuestCinPaidAlternateResponse"
+        message="tns:sendGuestCinPaidAlternateResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendRestaurantRewardVoucherEmails">
+      <wsdl:input name="sendRestaurantRewardVoucherEmailsRequest"
+        message="tns:sendRestaurantRewardVoucherEmailsRequest"/>
+      <wsdl:output name="sendRestaurantRewardVoucherEmailsResponse"
+        message="tns:sendRestaurantRewardVoucherEmailsResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendForgottenPasswordReminder">
+      <wsdl:input name="sendForgottenPasswordReminderRequest"
+        message="tns:sendForgottenPasswordReminderRequest"/>
+      <wsdl:output name="sendForgottenPasswordReminderResponse"
+        message="tns:sendForgottenPasswordReminderResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendPromptEmailForBkr">
+      <wsdl:input name="sendPromptEmailForBkrRequest" message="tns:sendPromptEmailForBkrRequest"/>
+      <wsdl:output name="sendPromptEmailForBkrResponse"
+        message="tns:sendPromptEmailForBkrResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendBkrStayingCinPaidAddedExt">
+      <wsdl:input name="sendBkrStayingCinPaidAddedExtRequest"
+        message="tns:sendBkrStayingCinPaidAddedExtRequest"/>
+      <wsdl:output name="sendBkrStayingCinPaidAddedExtResponse"
+        message="tns:sendBkrStayingCinPaidAddedExtResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendDepositInvoices">
+      <wsdl:input name="sendDepositInvoicesRequest" message="tns:sendDepositInvoicesRequest"/>
+      <wsdl:output name="sendDepositInvoicesResponse" message="tns:sendDepositInvoicesResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendCreateYourNewPassword">
+      <wsdl:input name="sendCreateYourNewPasswordRequest"
+        message="tns:sendCreateYourNewPasswordRequest"/>
+      <wsdl:output name="sendCreateYourNewPasswordResponse"
+        message="tns:sendCreateYourNewPasswordResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendWeekendRewardsWelcomeMyPI">
+      <wsdl:input name="sendWeekendRewardsWelcomeMyPIRequest"
+        message="tns:sendWeekendRewardsWelcomeMyPIRequest"/>
+      <wsdl:output name="sendWeekendRewardsWelcomeMyPIResponse"
+        message="tns:sendWeekendRewardsWelcomeMyPIResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendCreditCardAboutToExpire">
+      <wsdl:input name="sendCreditCardAboutToExpireRequest"
+        message="tns:sendCreditCardAboutToExpireRequest"/>
+      <wsdl:output name="sendCreditCardAboutToExpireResponse"
+        message="tns:sendCreditCardAboutToExpireResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendSleepParkflyReminderEmail">
+      <wsdl:input name="sendSleepParkflyReminderEmailRequest"
+        message="tns:sendSleepParkflyReminderEmailRequest"/>
+      <wsdl:output name="sendSleepParkflyReminderEmailResponse"
+        message="tns:sendSleepParkflyReminderEmailResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendPromptEmailForGuest">
+      <wsdl:input name="sendPromptEmailForGuestRequest"
+        message="tns:sendPromptEmailForGuestRequest"/>
+      <wsdl:output name="sendPromptEmailForGuestResponse"
+        message="tns:sendPromptEmailForGuestResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestInvoices">
+      <wsdl:input name="sendGuestInvoicesRequest" message="tns:sendGuestInvoicesRequest"/>
+      <wsdl:output name="sendGuestInvoicesResponse" message="tns:sendGuestInvoicesResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendSingleBookingConfirmation">
+      <wsdl:input name="sendSingleBookingConfirmationRequest"
+        message="tns:sendSingleBookingConfirmationRequest"/>
+      <wsdl:output name="sendSingleBookingConfirmationResponse"
+        message="tns:sendSingleBookingConfirmationResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendWillReceiveOutOfPolicyBookingAlerts">
+      <wsdl:input name="sendWillReceiveOutOfPolicyBookingAlertsRequest"
+        message="tns:sendWillReceiveOutOfPolicyBookingAlertsRequest"/>
+      <wsdl:output name="sendWillReceiveOutOfPolicyBookingAlertsResponse"
+        message="tns:sendWillReceiveOutOfPolicyBookingAlertsResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendWeekendRewardsWelcome">
+      <wsdl:input name="sendWeekendRewardsWelcomeRequest"
+        message="tns:sendWeekendRewardsWelcomeRequest"/>
+      <wsdl:output name="sendWeekendRewardsWelcomeResponse"
+        message="tns:sendWeekendRewardsWelcomeResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PTIEmailServiceHttpBinding" type="tns:PTIEmailServicePortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="sendNewPremierGuestInternet">
+      <wsdlsoap:operation soapAction="sendNewPremierGuestInternet"/>
+      <wsdl:input name="sendNewPremierGuestInternetRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendNewPremierGuestInternetResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendSingleCancellationConfirmation">
+      <wsdlsoap:operation soapAction="sendSingleCancellationConfirmation"/>
+      <wsdl:input name="sendSingleCancellationConfirmationRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendSingleCancellationConfirmationResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendBkrStayingCinPaidNoExt">
+      <wsdlsoap:operation soapAction="sendBkrStayingCinPaidNoExt"/>
+      <wsdl:input name="sendBkrStayingCinPaidNoExtRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendBkrStayingCinPaidNoExtResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestResponseEmail">
+      <wsdlsoap:operation soapAction="sendGuestResponseEmail"/>
+      <wsdl:input name="sendGuestResponseEmailRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendGuestResponseEmailResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendNewPremierGuestCCCIVR">
+      <wsdlsoap:operation soapAction="sendNewPremierGuestCCCIVR"/>
+      <wsdl:input name="sendNewPremierGuestCCCIVRRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendNewPremierGuestCCCIVRResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendforgottenPasswordReset">
+      <wsdlsoap:operation soapAction="sendforgottenPasswordReset"/>
+      <wsdl:input name="sendforgottenPasswordResetRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendforgottenPasswordResetResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestCinPaid">
+      <wsdlsoap:operation soapAction="sendGuestCinPaid"/>
+      <wsdl:input name="sendGuestCinPaidRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendGuestCinPaidResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendNewPremierGuestCCC">
+      <wsdlsoap:operation soapAction="sendNewPremierGuestCCC"/>
+      <wsdl:input name="sendNewPremierGuestCCCRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendNewPremierGuestCCCResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendConfirmationOfCompanySetup">
+      <wsdlsoap:operation soapAction="sendConfirmationOfCompanySetup"/>
+      <wsdl:input name="sendConfirmationOfCompanySetupRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendConfirmationOfCompanySetupResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestRelationsCentralRefund">
+      <wsdlsoap:operation soapAction="sendGuestRelationsCentralRefund"/>
+      <wsdl:input name="sendGuestRelationsCentralRefundRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendGuestRelationsCentralRefundResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendOutOfPolicyAlert">
+      <wsdlsoap:operation soapAction="sendOutOfPolicyAlert"/>
+      <wsdl:input name="sendOutOfPolicyAlertRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendOutOfPolicyAlertResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendBkrCinPaidPreviousUnpaid">
+      <wsdlsoap:operation soapAction="sendBkrCinPaidPreviousUnpaid"/>
+      <wsdl:input name="sendBkrCinPaidPreviousUnpaidRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendBkrCinPaidPreviousUnpaidResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendBkrNotStayingCinPaid">
+      <wsdlsoap:operation soapAction="sendBkrNotStayingCinPaid"/>
+      <wsdl:input name="sendBkrNotStayingCinPaidRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendBkrNotStayingCinPaidResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendEmailAlreadyRegistered">
+      <wsdlsoap:operation soapAction="sendEmailAlreadyRegistered"/>
+      <wsdl:input name="sendEmailAlreadyRegisteredRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendEmailAlreadyRegisteredResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendGroupBookingConfirmation">
+      <wsdlsoap:operation soapAction="sendGroupBookingConfirmation"/>
+      <wsdl:input name="sendGroupBookingConfirmationRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendGroupBookingConfirmationResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendMiscellaneousTextEmails">
+      <wsdlsoap:operation soapAction="sendMiscellaneousTextEmails"/>
+      <wsdl:input name="sendMiscellaneousTextEmailsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendMiscellaneousTextEmailsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendActivateYourAccount">
+      <wsdlsoap:operation soapAction="sendActivateYourAccount"/>
+      <wsdl:input name="sendActivateYourAccountRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendActivateYourAccountResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendNewPremierGuestEdited">
+      <wsdlsoap:operation soapAction="sendNewPremierGuestEdited"/>
+      <wsdl:input name="sendNewPremierGuestEditedRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendNewPremierGuestEditedResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendGroupCancellationConfirmation">
+      <wsdlsoap:operation soapAction="sendGroupCancellationConfirmation"/>
+      <wsdl:input name="sendGroupCancellationConfirmationRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendGroupCancellationConfirmationResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendConfirmationOfAccounCreation">
+      <wsdlsoap:operation soapAction="sendConfirmationOfAccounCreation"/>
+      <wsdl:input name="sendConfirmationOfAccounCreationRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendConfirmationOfAccounCreationResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestCinPreviousPaid">
+      <wsdlsoap:operation soapAction="sendGuestCinPreviousPaid"/>
+      <wsdl:input name="sendGuestCinPreviousPaidRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendGuestCinPreviousPaidResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestCinPaidAlternate">
+      <wsdlsoap:operation soapAction="sendGuestCinPaidAlternate"/>
+      <wsdl:input name="sendGuestCinPaidAlternateRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendGuestCinPaidAlternateResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendRestaurantRewardVoucherEmails">
+      <wsdlsoap:operation soapAction="sendRestaurantRewardVoucherEmails"/>
+      <wsdl:input name="sendRestaurantRewardVoucherEmailsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendRestaurantRewardVoucherEmailsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendForgottenPasswordReminder">
+      <wsdlsoap:operation soapAction="sendForgottenPasswordReminder"/>
+      <wsdl:input name="sendForgottenPasswordReminderRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendForgottenPasswordReminderResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendPromptEmailForBkr">
+      <wsdlsoap:operation soapAction="sendPromptEmailForBkr"/>
+      <wsdl:input name="sendPromptEmailForBkrRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendPromptEmailForBkrResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendBkrStayingCinPaidAddedExt">
+      <wsdlsoap:operation soapAction="sendBkrStayingCinPaidAddedExt"/>
+      <wsdl:input name="sendBkrStayingCinPaidAddedExtRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendBkrStayingCinPaidAddedExtResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendDepositInvoices">
+      <wsdlsoap:operation soapAction="sendDepositInvoices"/>
+      <wsdl:input name="sendDepositInvoicesRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendDepositInvoicesResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendCreateYourNewPassword">
+      <wsdlsoap:operation soapAction="sendCreateYourNewPassword"/>
+      <wsdl:input name="sendCreateYourNewPasswordRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendCreateYourNewPasswordResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendWeekendRewardsWelcomeMyPI">
+      <wsdlsoap:operation soapAction="sendWeekendRewardsWelcomeMyPI"/>
+      <wsdl:input name="sendWeekendRewardsWelcomeMyPIRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendWeekendRewardsWelcomeMyPIResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendCreditCardAboutToExpire">
+      <wsdlsoap:operation soapAction="sendCreditCardAboutToExpire"/>
+      <wsdl:input name="sendCreditCardAboutToExpireRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendCreditCardAboutToExpireResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendSleepParkflyReminderEmail">
+      <wsdlsoap:operation soapAction="sendSleepParkflyReminderEmail"/>
+      <wsdl:input name="sendSleepParkflyReminderEmailRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendSleepParkflyReminderEmailResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendPromptEmailForGuest">
+      <wsdlsoap:operation soapAction="sendPromptEmailForGuest"/>
+      <wsdl:input name="sendPromptEmailForGuestRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendPromptEmailForGuestResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendGuestInvoices">
+      <wsdlsoap:operation soapAction="sendGuestInvoices"/>
+      <wsdl:input name="sendGuestInvoicesRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendGuestInvoicesResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendSingleBookingConfirmation">
+      <wsdlsoap:operation soapAction="sendSingleBookingConfirmation"/>
+      <wsdl:input name="sendSingleBookingConfirmationRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendSingleBookingConfirmationResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendWillReceiveOutOfPolicyBookingAlerts">
+      <wsdlsoap:operation soapAction="sendWillReceiveOutOfPolicyBookingAlerts"/>
+      <wsdl:input name="sendWillReceiveOutOfPolicyBookingAlertsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendWillReceiveOutOfPolicyBookingAlertsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendWeekendRewardsWelcome">
+      <wsdlsoap:operation soapAction="sendWeekendRewardsWelcome"/>
+      <wsdl:input name="sendWeekendRewardsWelcomeRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendWeekendRewardsWelcomeResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PTIEmailService">
+    <wsdl:port name="PTIEmailServiceHttpPort" binding="tns:PTIEmailServiceHttpBinding">
+      <wsdlsoap:address location="http://localhost/internal/PTIEmailService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

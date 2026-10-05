@@ -1,0 +1,1 @@
+export { AmendBookingPage } from '../shared/amendBooking.page';

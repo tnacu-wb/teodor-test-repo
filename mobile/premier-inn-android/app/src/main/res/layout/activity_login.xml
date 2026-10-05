@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/account_login_root_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/defaultBackgroundColor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:gravity="end"
+        android:minHeight="?attr/actionBarSize"/>
+
+    <com.whitbread.premierinn.common.view.CustomTabLayout
+        android:id="@+id/login_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorGravity="stretch"
+        app:tabBackground="@drawable/tab_unselected_background"
+        app:tabIndicatorColor="@color/white"
+        app:tabMode="fixed">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_leisure_tab_title"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/innBusiness_short_label"/>
+
+    </com.whitbread.premierinn.common.view.CustomTabLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/generic_margin_24"
+            android:layout_marginStart="@dimen/generic_margin_24"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/account_login_reset_pass_confirm_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/teal_light"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/generic_padding_10"
+                android:paddingTop="@dimen/generic_padding_10"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="@dimen/generic_margin_20"
+                    android:src="@drawable/ic_tick" />
+
+                <TextView
+                    android:id="@+id/account_login_reset_pass_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/generic_margin_10"
+                    android:text="@string/reset_password_email_confirmation_message"
+                    android:textColor="@android:color/white"
+                    style="@style/Header4" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/account_login_server_side_error_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/metallic_pearl_seventy_percent"
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/ic_error"
+                android:padding="@dimen/default_medium_margin"
+                tools:text="@string/log_in_log_in_api_call_failed"
+                android:textColor="@color/error_red"
+                style="@style/BodySmall"
+                android:visibility="gone"
+                tools:visiblity="visible" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_login_email_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_large_margin"
+                android:labelFor="@+id/account_login_email_input"
+                android:hint="@string/email_address"
+                android:autofillHints="emailAddress"
+                app:hintTextAppearance="@style/TextInputLayout.HintText"
+                app:errorTextAppearance="@style/TextInputLayout.ErrorText">
+
+                <EditText
+                    android:id="@+id/account_login_email_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    style="@style/Body"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_login_password_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_medium_margin"
+                android:hint="@string/password_label"
+                android:autofillHints="password"
+                android:labelFor="@+id/account_login_password_input"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/grey_medium"
+                app:hintTextAppearance="@style/TextInputLayout.HintText"
+                app:errorTextAppearance="@style/TextInputLayout.ErrorText">
+
+                <EditText
+                    android:id="@+id/account_login_password_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    style="@style/Body"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                android:id="@+id/account_login_login_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="@dimen/generic_margin_52"
+                style="@style/Button1"
+                android:text="@string/log_in"
+                app:cab_spinner_color="@color/white"/>
+
+            <TextView
+                android:id="@+id/account_login_forgot_password_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/generic_margin_12"
+                android:padding="@dimen/generic_padding_12"
+                android:background="?attr/selectableItemBackground"
+                android:text="@string/forgot_password"
+                android:textColor="?attr/colorPrimary"
+                style="@style/BodySmall" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/generic_margin_26"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_weight="4.5"
+                    android:background="@color/grey_medium" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/log_in_or_label"
+                    style="@style/BodySmall" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_weight="4.5"
+                    android:background="@color/grey_medium" />
+
+            </LinearLayout>
+
+            <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                android:id="@+id/cab_login_continue_guest_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cta_button_height"
+                android:layout_marginTop="@dimen/generic_margin_26"
+                android:backgroundTint="@color/premier_inn_purple"
+                android:padding="@dimen/generic_padding_12"
+                android:text="@string/log_in_continue_as_guest"
+                app:cab_is_secondary="true"
+                app:cab_spinner_color="@color/premier_inn_purple"
+                app:cab_text_color="@color/premier_inn_purple"
+                style="@style/Button1"/>
+
+            <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                android:id="@+id/account_login_more_about_business_booker"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cta_button_height"
+                android:layout_marginTop="@dimen/generic_margin_26"
+                android:backgroundTint="@color/premier_inn_purple"
+                android:gravity="center"
+                android:padding="@dimen/generic_padding_12"
+                android:text="@string/login_more_about_business_booker"
+                android:visibility="gone"
+                app:cab_is_secondary="true"
+                app:cab_spinner_color="@color/premier_inn_purple"
+                app:cab_text_color="@color/premier_inn_purple"
+                tools:visibility="visible"
+                style="@style/Button1"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

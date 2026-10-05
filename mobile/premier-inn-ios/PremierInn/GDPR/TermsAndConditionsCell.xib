@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="137" id="oLS-JD-Cdr" customClass="TermsAndConditionsCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="314" height="137"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oLS-JD-Cdr" id="nQ0-wz-eCt">
+                <rect key="frame" x="0.0" y="0.0" width="314" height="136.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="TOL-Xo-SyF">
+                        <rect key="frame" x="243" y="15" width="51" height="31"/>
+                        <color key="onTintColor" red="0.85490196080000003" green="0.88235294119999996" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                    </switch>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="asclasdiasdaiodasaodsaoasdas sdasoijas dasdsa" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fuO-PC-nMj">
+                        <rect key="frame" x="20" y="15" width="206.5" height="39"/>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LYj-1M-sd0">
+                        <rect key="frame" x="20" y="63.5" width="274" height="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="1" green="0.06950727541" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="TOL-Xo-SyF" firstAttribute="top" secondItem="fuO-PC-nMj" secondAttribute="top" id="3he-pb-0az"/>
+                    <constraint firstAttribute="trailing" secondItem="TOL-Xo-SyF" secondAttribute="trailing" constant="22" id="FrS-08-AaA"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="fuO-PC-nMj" secondAttribute="bottom" constant="15" id="HSg-8q-11a"/>
+                    <constraint firstItem="fuO-PC-nMj" firstAttribute="top" secondItem="nQ0-wz-eCt" secondAttribute="top" constant="15" id="HWw-GW-Bj4"/>
+                    <constraint firstItem="LYj-1M-sd0" firstAttribute="leading" secondItem="fuO-PC-nMj" secondAttribute="leading" id="OWB-6s-NBh"/>
+                    <constraint firstItem="LYj-1M-sd0" firstAttribute="top" secondItem="fuO-PC-nMj" secondAttribute="bottom" constant="10" id="ZTv-Us-XXI"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="LYj-1M-sd0" secondAttribute="bottom" priority="750" constant="5" id="b6a-4U-81a"/>
+                    <constraint firstItem="fuO-PC-nMj" firstAttribute="leading" secondItem="nQ0-wz-eCt" secondAttribute="leading" constant="20" id="df4-Cm-j5d"/>
+                    <constraint firstItem="TOL-Xo-SyF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fuO-PC-nMj" secondAttribute="trailing" constant="10" id="dm8-le-oM0"/>
+                    <constraint firstAttribute="trailing" secondItem="LYj-1M-sd0" secondAttribute="trailing" constant="20" id="qEJ-qX-lWO"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="errorLabel" destination="LYj-1M-sd0" id="6Sp-SY-PlP"/>
+                <outlet property="message" destination="fuO-PC-nMj" id="ozj-Ab-1OG"/>
+                <outlet property="toggleSwitch" destination="TOL-Xo-SyF" id="uhV-4Y-I9I"/>
+            </connections>
+            <point key="canvasLocation" x="-40" y="34.5"/>
+        </tableViewCell>
+    </objects>
+</document>

@@ -1,0 +1,53 @@
+# Production environment overrides (hulk, wanda)
+# Merged with values/values.yaml: helm upgrade --values values/values.yaml --values values/prod.yaml
+#
+# ⚠️  PRODUCTION CONFIGURATION INCOMPLETE ⚠️
+# This file requires completion by platform team before production deployment:
+# 1. Real Aurora DB endpoint (replace temporal-shared.cluster-xxx...)
+# 2. IAM authentication setup (IRSA annotations on service account)
+# 3. Remove password-based auth (security requirement: use IAM only in prod)
+# 4. Aurora must have BOTH databases: 'temporal' and 'temporal_visibility'
+
+temporal:
+  server:
+    replicaCount: 3
+    
+    autoscaling:
+      enabled: true
+      minReplicas: 3
+      maxReplicas: 10
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage: 80
+    
+    config:
+      persistence:
+        datastores:
+          default:
+            sql:
+              # TODO: Replace with actual Aurora endpoint from platform team
+              connectAddr: "temporal-shared.cluster-xxx.eu-central-1.rds.amazonaws.com:5432"
+              # TODO: Configure IAM auth instead of password (IRSA required)
+              # Remove password/existingSecret once IAM is configured
+              password: ""
+              existingSecret: "temporal-db-secret"
+              secretKey: "password"
+          
+          visibility:
+            sql:
+              # TODO: Replace with actual Aurora endpoint from platform team
+              connectAddr: "temporal-shared.cluster-xxx.eu-central-1.rds.amazonaws.com:5432"
+              # TODO: Configure IAM auth instead of password (IRSA required)
+              password: ""
+              existingSecret: "temporal-db-secret"
+              secretKey: "password"
+  
+  serviceAccount:
+    create: true
+    name: temporal
+    # TODO: Add IAM role annotation for IRSA (platform team to provide ARN)
+    # annotations:
+    #   eks.amazonaws.com/role-arn: arn:aws:iam::<account>:role/<temporal-db-access-role>
+
+# Disable PostgreSQL subchart for production (external Aurora)
+postgresql:
+  enabled: false

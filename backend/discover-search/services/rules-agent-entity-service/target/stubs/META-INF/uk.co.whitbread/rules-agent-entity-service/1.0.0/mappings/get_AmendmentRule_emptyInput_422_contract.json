@@ -1,0 +1,31 @@
+{
+  "id" : "b2b27ceb-f725-4f14-b345-1387af311706",
+  "request" : {
+    "urlPath" : "/v1/rules/amendments",
+    "method" : "GET",
+    "queryParameters" : {
+      "rateType" : {
+        "equalTo" : ""
+      },
+      "arrivalDate" : {
+        "equalTo" : "20220401"
+      },
+      "hotelLocalDateTime" : {
+        "equalTo" : "20200208T080910"
+      },
+      "hotelCountryCode" : {
+        "equalTo" : "GB"
+      }
+    }
+  },
+  "response" : {
+    "status" : 422,
+    "body" : "{\"errCode\":401,\"globalErrTextTemplate\":\"validation.error.form\",\"details\":[{\"elementId\":\"rateType\",\"errTextTemplate\":\"must not be blank\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "b2b27ceb-f725-4f14-b345-1387af311706",
+  "priority" : 1
+}

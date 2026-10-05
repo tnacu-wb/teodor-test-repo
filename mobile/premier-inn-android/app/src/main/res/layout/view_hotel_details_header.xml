@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/hotel_details_heading"
+        style="@style/Header2Bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:textColor="@color/grey_dark"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Restaurant and bar"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/disclaimerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_12"
+        android:background="@drawable/edit_button_background"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/hotel_details_heading"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/disclaimerIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:contentDescription="@string/information_banner_info_txt"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_notifications_info"
+            app:layout_constraintEnd_toStartOf="@+id/disclaimerText"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/information_blue" />
+
+        <TextView
+            android:id="@+id/disclaimerText"
+            style="@style/BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_8"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            android:textColor="@color/grey_dark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/disclaimerIcon"
+            app:layout_constraintTop_toTopOf="@id/disclaimerIcon"
+            tools:text="Depending on your selected hotel and dates you stay, we will be offering different breakfast and evening options." />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

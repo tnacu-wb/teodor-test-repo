@@ -1,0 +1,11 @@
+package uk.co.whitbread.reservation.infrastructure.rest.client.ohip.mapper;
+
+import org.mapstruct.Mapper;
+import uk.co.whitbread.hotel.ohip.adapter.generated.models.SpecialRequestsDto;
+import uk.co.whitbread.reservation.domain.model.in.SpecialRequests;
+
+@Mapper(componentModel = "spring")
+public interface SpecialRequestsOhipMapper {
+
+  SpecialRequestsDto toDto(SpecialRequests specialRequests);
+}

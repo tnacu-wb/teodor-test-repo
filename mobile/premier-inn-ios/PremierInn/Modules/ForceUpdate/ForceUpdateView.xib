@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Semibold.ttf">
+            <string>ProximaNova-Semibold</string>
+        </array>
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ForceUpdateView" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="forceUpdateDescription" destination="0n4-Br-AD5" id="goL-Sd-4NP"/>
+                <outlet property="forceUpdateTitle" destination="pGW-Sg-0tI" id="TUH-Qz-Pa6"/>
+                <outlet property="updateButton" destination="6js-El-9y5" id="nVv-pN-6rV"/>
+                <outlet property="updateButtonDescription" destination="9gC-iG-ZNt" id="TF3-BW-fzJ"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your app needs an upgrade" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pGW-Sg-0tI">
+                    <rect key="frame" x="74" y="189.5" width="227" height="49"/>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="20"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0n4-Br-AD5">
+                    <rect key="frame" x="25" y="258.5" width="325" height="117"/>
+                    <string key="text">We've made a few changes to the Premier Inn app, and you're missing out on some great new features - plus improved in-app security. To keep using the app and start making the most of these updates, just click the button below.</string>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6js-El-9y5" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="30" y="405.5" width="315" height="44"/>
+                    <color key="backgroundColor" red="0.97647058819999999" green="0.78823529410000004" blue="0.25098039220000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="GcQ-tH-WC0"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="18"/>
+                    <state key="normal" title="Update">
+                        <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="3"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="updateButtonDidTap:" destination="-1" eventType="touchUpInside" id="Rda-vn-68L"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="takes you to the app store" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gC-iG-ZNt">
+                    <rect key="frame" x="20" y="469.5" width="335" height="17.5"/>
+                    <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.29019607843137252" green="0.14509803921568626" blue="0.36862745098039218" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="9gC-iG-ZNt" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="71b-yq-TlP"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="pGW-Sg-0tI" secondAttribute="trailing" constant="74" id="MG7-sH-wsu"/>
+                <constraint firstItem="0n4-Br-AD5" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="25" id="MHg-aB-0px"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="9gC-iG-ZNt" secondAttribute="trailing" constant="20" id="PJf-hG-c9c"/>
+                <constraint firstItem="pGW-Sg-0tI" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="74" id="PdA-MS-g92"/>
+                <constraint firstItem="9gC-iG-ZNt" firstAttribute="top" secondItem="6js-El-9y5" secondAttribute="bottom" constant="20" id="aKO-Ue-5Fr"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="0n4-Br-AD5" secondAttribute="trailing" constant="25" id="bYW-Rn-UUw"/>
+                <constraint firstItem="0n4-Br-AD5" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" multiplier="0.95" id="iR7-OY-ehq"/>
+                <constraint firstItem="6js-El-9y5" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="30" id="kYT-pl-Jdm"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="6js-El-9y5" secondAttribute="trailing" constant="30" id="mDp-d3-0lQ"/>
+                <constraint firstItem="6js-El-9y5" firstAttribute="top" secondItem="0n4-Br-AD5" secondAttribute="bottom" constant="30" id="mcD-at-NN5"/>
+                <constraint firstItem="0n4-Br-AD5" firstAttribute="top" secondItem="pGW-Sg-0tI" secondAttribute="bottom" constant="20" id="uIB-ui-cUS"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+        </view>
+    </objects>
+</document>

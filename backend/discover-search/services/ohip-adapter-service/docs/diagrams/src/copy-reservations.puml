@@ -1,0 +1,38 @@
+@startuml
+entity "PMS Adapter Service" as PMS
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as Webclient
+entity Opera as opera
+
+PMS -> Controller: POST /ohip/v1/reservations/copy
+Controller -> InboundPort: copyReservations(CopyReservationsRequest copyReservationsRequest)
+InboundPort -> OutboundPort: copyReservations(CopyReservationsRequest copyReservationsRequest)
+
+OutboundPort -> Webclient: sendGetReservationsByIds(String hotelId, Set<String> reservationIds)
+
+loop for each reservationId
+    Webclient -> opera: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/\n?fetchInstructions=Reservation&fetchInstructions=InventoryItems\n&fetchInstructions=ReservationPolicies&fetchInstructions=Packages
+    Webclient <- opera: Reservation
+end
+OutboundPort <- Webclient: Reservations
+
+loop for each reservation
+    OutboundPort -> Webclient: sendCreateReservationRequest(String hotelId,CreateReservation createReservation)
+    Webclient -> opera: POST /rsv/v1/hotels/{{HotelId}}/reservations
+    Webclient <- opera: 201 Created
+    OutboundPort <- Webclient: ReservationId
+end
+
+OutboundPort -> Webclient: sendGetReservationsByIds(String hotelId, Set<String> reservationIds)
+loop for each created reservation
+    Webclient -> opera: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/\n?fetchInstructions=Reservation&fetchInstructions=InventoryItems\n&fetchInstructions=ReservationPolicies&fetchInstructions=Packages
+    Webclient <- opera: Reservation with createDateTime
+end
+OutboundPort <- Webclient: Reservations
+
+InboundPort <- OutboundPort: CopyReservationsResponse
+Controller <- InboundPort: CopyReservationsResponse
+PMS <- Controller: CopyReservationsResponseDto
+@enduml

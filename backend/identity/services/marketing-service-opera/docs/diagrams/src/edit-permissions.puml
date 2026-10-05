@@ -1,0 +1,19 @@
+@startuml
+actor Client
+box "Edit permissions"
+    boundary "newsletter/edit" as EDIT
+end box
+entity Oauth
+entity Redis
+entity CDH
+Client -> EDIT: FE sends email/phone
+EDIT <-> Redis: retrieve bearer token from cache
+
+alt if token not in cache
+    EDIT <-> Oauth: generate new bearer token
+    EDIT -> Redis: Cache bearer token for 1 hour
+end
+
+EDIT <-> CDH: edit permissions with token
+EDIT -> Client: Returns 204 status
+@enduml

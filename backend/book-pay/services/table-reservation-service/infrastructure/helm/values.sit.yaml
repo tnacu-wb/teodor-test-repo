@@ -1,0 +1,43 @@
+containerEnvs:
+  - name: spring_profiles_active
+    value: TBD
+  - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: appd-app-agent-envs-secret
+        key: app_dynamics_dev_key
+  - name: username
+    valueFrom:
+      secretKeyRef:
+        name: restaurant-zonal-secrets
+        key: username
+  - name: Password
+    valueFrom:
+      secretKeyRef:
+        name: restaurant-zonal-secrets
+        key: Password
+  - name: zonal_base_uri
+    valueFrom:
+      secretKeyRef:
+        name: restaurant-zonal-secrets
+        key: zonal_base_uri
+  - name: aem_base_uri
+    valueFrom:
+      secretKeyRef:
+        name: restaurant-zonal-secrets
+        key: aem_base_uri
+  - name: cookie_content
+    valueFrom:
+      secretKeyRef:
+        name: restaurant-zonal-secrets
+        key: cookie_content
+  - name: aem_username
+    valueFrom:
+      secretKeyRef:
+        name: restaurant-zonal-secrets
+        key: aem_username
+  - name: aem_Password
+    valueFrom:
+      secretKeyRef:
+        name: restaurant-zonal-secrets
+        key: aem_Password

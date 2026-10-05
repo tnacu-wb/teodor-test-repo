@@ -1,0 +1,152 @@
+openapi: 3.0.1
+info:
+  description: <p>TBU</p>
+  title: Promo API Documentation
+  version: 1.0.0
+servers:
+  - description: Generated server url
+    url: http://localhost:9137
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  /v1/promo/batches/promo-kind:
+    get:
+      operationId: validatePromoKind
+      parameters:
+        - in: query
+          name: promoCode
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PromoKindResponseDto'
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      tags:
+        - promo-batch-controller
+  /v1/promo/batches/redeem:
+    post:
+      operationId: redeemPromoCode
+      tags:
+        - promo-batch-controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RedeemPromoCodeRequestDto'
+      responses:
+        "200":
+          description: Promo redeemed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedeemPromoCodeResponseDto'
+        "400":
+          description: Validation or business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    RedeemPromoCodeRequestDto:
+      type: object
+      required:
+        - promoCode
+        - bookingReference
+      properties:
+        promoCode:
+          type: string
+          example: "27CR7HCV49"
+        bookingReference:
+          type: string
+          example: "AQN3269618"
+    RedeemPromoCodeResponseDto:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        status:
+          $ref: '#/components/schemas/RedeemStatus'
+        promoCode:
+          type: string
+          example: "27CR7HCV49"
+        message:
+          type: string
+          example: "Promo code redeemed successfully"
+    RedeemStatus:
+      type: string
+      enum:
+        - REDEEMED
+        - ALREADY_REDEEMED
+        - INVALID_PROMO_CODE
+        - EXPIRED
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string
+    PromoKindResponseDto:
+      type: object
+      properties:
+        promoKind:
+          $ref: "#/components/schemas/PromoKind"
+        operaPromoCode:
+          type: string
+        uniquePromoCodeStatus:
+          $ref: "#/components/schemas/PromoCodeStatus"
+    PromoKind:
+      type: string
+      enum:
+        - GENERIC
+        - UNIQUE
+    PromoCodeStatus:
+      type: string
+      enum:
+        - ISSUED
+        - REDEEMED
+        - EXPIRED
+        - VOID

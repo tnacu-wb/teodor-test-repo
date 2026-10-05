@@ -1,0 +1,47 @@
+@startuml
+entity "Front-End" as A
+participant CcuiPaymentController as Controller
+participant CcuiPaymentInPort as CcuiInPort
+participant CcuiPaymentOutPort as CcuiOutPort
+participant BasketOutboundPort as BskOutPort
+participant HotelReservationOutPort as ResOutPort
+participant ReservationClient as ResClient
+participant PaymentOutPort as PayOutPort
+participant ReservationClient as PayClient
+entity "Dynamo DB/SQL DB" as DB
+entity "Reservation Entity Service" as ResEntity
+entity "WB Payments Service" as WBPayment
+
+A -> Controller: POST /v1/baskets/ccui/{basketReference}/pay
+Controller -> CcuiInPort: initiateCcuiPaymentProcess(basketReference, paymentCcuiRequest)
+CcuiInPort -> BskOutPort: getBasketByReference(referenceNumber)
+
+BskOutPort -> DB: getBasketByReference(referenceNumber)
+BskOutPort <- DB: Basket
+CcuiInPort <- BskOutPort: Basket
+
+CcuiInPort -> ResOutPort: getReservationsByBasketReference(hotelId, basketReference)
+ResOutPort -> ResClient: getReservationsByBasketReference(hotelId, basketReference)
+ResClient -> ResEntity: getReservationsByBasketReference(hotelId, basketReference)
+
+ResEntity -> ResClient : ReservationsDetailsResponseDto
+ResClient -> ResOutPort: ReservationsDetailsResponse
+ResOutPort -> CcuiInPort: ReservationsDetailsResponse
+
+CcuiInPort -> PayOutPort: createPayment(paymentRequest)
+PayOutPort -> PayClient: createPayment(paymentRequest)
+PayClient -> WBPayment: createPayment(paymentRequest)
+
+PayClient <- WBPayment: PaymentResponseDto
+PayOutPort <- PayClient: PaymentResponseDto
+CcuiInPort <- PayOutPort: PaymentResponse
+
+CcuiInPort -> BskOutPort: updatePaymentIdInBasket
+BskOutPort -> DB: updatePaymentIdInBasket
+
+CcuiInPort -> CcuiOutPort: getUriRedirect(basket)
+CcuiOutPort -> CcuiInPort: URI
+
+Controller <- CcuiInPort: PaymentCcuiResponse
+A <- Controller: PaymentCcuiResponse
+@enduml

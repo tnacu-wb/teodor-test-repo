@@ -1,0 +1,36 @@
+package contracts
+
+import org.springframework.cloud.contract.spec.Contract
+
+Contract.make {
+    description("company-reporting-controller")
+    request {
+        method 'POST'
+        urlPath('/v1/company-reports/admin/1568/management-information-report')
+        body('''
+                {
+                    "fromDate":"2023-01-02",
+                    "toDate":"2023-04-30",
+                    "showQnAColumns": " "
+                }
+                ''')
+        headers {
+            header('Content-Type', 'application/json')
+        }
+    }
+
+    response {
+        status 422
+        body('''
+        {
+            "code": "001",
+            "details": [
+                "showQnAColumns must not be null"
+            ]
+        }
+        ''')
+        headers {
+            header('Content-Type', 'application/json')
+        }
+    }
+}

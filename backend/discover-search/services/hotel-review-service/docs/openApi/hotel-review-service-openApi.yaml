@@ -1,0 +1,409 @@
+openapi: 3.1.0
+info:
+  description: Hotel Review Service to get review details of hotel from TRIP ADVISOR
+  title: Hotel Review Service API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9126
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /v1/hotel-review/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/hotel-review/actuator/caches:
+    delete:
+      operationId: clearCaches
+      responses:
+        "204":
+          description: No Content
+      summary: Actuator web endpoint 'caches'
+      tags:
+      - Actuator
+    get:
+      operationId: caches
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'caches'
+      tags:
+      - Actuator
+  /v1/hotel-review/actuator/caches/{cache}:
+    delete:
+      operationId: clearCache
+      parameters:
+      - in: path
+        name: cache
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: cacheManager
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+      summary: Actuator web endpoint 'caches-cache'
+      tags:
+      - Actuator
+    get:
+      operationId: cache
+      parameters:
+      - in: path
+        name: cache
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: cacheManager
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "404":
+          description: Not Found
+      summary: Actuator web endpoint 'caches-cache'
+      tags:
+      - Actuator
+  /v1/hotel-review/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/hotel-review/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/hotel-review/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /v1/hotel-review/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "404":
+          description: Not Found
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /v1/hotel-review/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /v1/hotel-review/reviews/{hotelCode}:
+    get:
+      operationId: getReviewsForSingleHotel
+      parameters:
+      - in: path
+        name: hotelCode
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: lang
+        required: false
+        schema:
+          type: string
+          default: en_US
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 5
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves Sample Hotels getReviewsForSingleHotel Result
+      tags:
+      - hotel-review-controller
+components:
+  schemas:
+    AwardDto:
+      type: object
+      properties:
+        awardType:
+          type: string
+        image:
+          type: string
+        images:
+          $ref: "#/components/schemas/AwardImagesDto"
+        year:
+          type: integer
+          format: int32
+    AwardImagesDto:
+      type: object
+      properties:
+        large:
+          type: string
+        small:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    ReviewDto:
+      type: object
+      properties:
+        publishedDate:
+          type: string
+        rating:
+          type: number
+          format: double
+        text:
+          type: string
+        title:
+          type: string
+        tripType:
+          type: string
+        user:
+          $ref: "#/components/schemas/UserDto"
+    ReviewResponseDto:
+      type: object
+      properties:
+        address:
+          type: string
+        awards:
+          type: array
+          items:
+            $ref: "#/components/schemas/AwardDto"
+        hotelCode:
+          type: string
+        locationId:
+          type: string
+        name:
+          type: string
+        numberOfReviews:
+          type: integer
+          format: int32
+        rating:
+          type: number
+          format: double
+        reviews:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewDto"
+        subRatings:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubRatingDto"
+        webUrl:
+          type: string
+        writeReview:
+          type: string
+    SubRatingDto:
+      type: object
+      properties:
+        localisedName:
+          type: string
+        ratingImageUrl:
+          type: string
+        value:
+          type: number
+          format: double
+    UserDto:
+      type: object
+      properties:
+        location:
+          type: string
+        username:
+          type: string
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string

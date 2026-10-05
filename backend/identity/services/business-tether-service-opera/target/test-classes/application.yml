@@ -1,0 +1,98 @@
+spring:
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    config:
+      enabled: false
+  cache:
+    type: ${CACHE_TYPE:none}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+server:
+  port: 9047
+
+swagger:
+  api:
+    version: 2.2
+
+feign:
+  pibaguid:
+    name: pibaguid
+    url: http://localhost:${wiremock.server.port:0}
+
+worldline:
+  clientMessageId: '{a6173aca-ea66-48e6-8ce2-4e04f1d4b628}'
+  cultureCode: en-GB
+  host: http://localhost:${wiremock.server.port:0}
+  piba:
+    username: gbtest
+    password: gbtest
+    service:
+      url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+  gb:
+    clientMessageId: '{gb-client-message-id}}'
+    cultureCode: en-GB
+    username: gbtest
+    password: gbtest
+    url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+  de:
+    clientMessageId: '{de-client-message-id}'
+    cultureCode: de-DE
+    username: detest
+    password: detest
+    url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+  tetheringPlus:
+    enabled: true
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: /oauth2/v2.0/token
+    client-id: placeholder
+    client-secret: placeholder
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: http://localhost:${wiremock.server.port:1}
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: placeholder
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: http://localhost/api/v2/
+      namespace: http://localhost
+      issuer: http://localhost/
+      jwkUri: http://localhost/.well-known/jwks.json
+  urlPathRegex:
+    - .*\/business\/tether\/.*
+
+
+default:
+  remote:
+    ipAddress: 127.0.0.1
+
+custom:
+  jackson:
+    enabled: false

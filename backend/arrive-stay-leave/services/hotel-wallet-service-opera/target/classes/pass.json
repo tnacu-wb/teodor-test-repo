@@ -1,0 +1,96 @@
+{
+  "formatVersion": 1,
+  "passTypeIdentifier": "pass.com.whitbread.booking",
+  "teamIdentifier": "2F5CUZHNZT",
+  "associatedStoreIdentifiers": [602110169],
+  "serialNumber": "1111[(${reservationId})]",
+  "description": "Booking reservation",
+  "organizationName": "[(${hotelBrand})]",
+  "logoText": "",
+  "foregroundColor": "[(${foregroundColor})]",
+  "backgroundColor": "[(${backgroundColor})]",
+  "labelColor": "[(${labelColor})]",
+  "relevantDate": "[(${arrivalDateISO8601})]",
+  "locations": [
+    {
+      "longitude": "[(${hotelLongitude})]",
+      "latitude": "[(${hotelLatitude})]"
+    }
+  ],
+  "barcodes": [
+    {
+      "message": "[(${reservationId})]",
+      "format": "PKBarcodeFormatQR",
+      "messageEncoding": "iso-8859-1",
+      "altText": "ScanQRCodeAltText"
+    }
+  ],
+  "eventTicket": {
+    "headerFields": [
+      {
+        "key": "bookingReference",
+        "label": "ReferenceNoLabel",
+        "value": "[(${reservationId})]"
+      }
+    ],
+    "primaryFields": [
+      {
+        "key": "guest",
+        "label": "BookerLabel",
+        "value": "[(${bookerWithTitle})]"
+      }
+    ],
+    "secondaryFields": [
+      {
+        "key": "hotelName",
+        "label": "YourHotelLabel",
+        "value": "[(${hotelName})]"
+      }
+    ],
+    "auxiliaryFields": [
+      {
+        "key": "checkInTime",
+        "label": "CheckInTimeLabel",
+        "value": "[(${checkInTime})]",
+        "textAlignment" : "PKTextAlignmentLeft"
+      }
+    ],
+    "backFields": [
+      {
+        "key": "hotelName",
+        "label": "YourHotelLabel",
+        "value": "[(${hotelName})]"
+      },
+      {
+        "key": "address",
+        "label": "AddressLabel",
+        "value": "[(${address})]"
+      },
+      {
+        "key": "phone",
+        "label": "PhoneNumberLabel",
+        "value": "[(${phone})]"
+      },
+      {
+        "key": "checkOutTime",
+        "label": "CheckOutTimeLabel",
+        "value": "[(${checkOutTime})]"
+      },
+      {
+        "key": "parking",
+        "label": "ParkingLabel",
+        "value": "[(${parking})]"
+      },
+      {
+        "key": "links",
+        "label": "LinksLabel",
+        "value": "[(${links})]"
+      },
+      {
+        "key": "contactCentre",
+        "label": "ContactCentreLabel",
+        "value": "[(${contactCentre})]"
+      }
+    ]
+  }
+}

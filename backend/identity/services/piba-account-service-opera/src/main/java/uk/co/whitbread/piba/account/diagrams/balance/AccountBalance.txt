@@ -1,0 +1,176 @@
+log.info("Called GET /piba/account/balance");
+
+<xs:element name="customerAccountViewCurrentBalances">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element name="Request" type="data:CustomerAccountViewCurrentBalancesRequestType"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+<xs:element name="customerAccountViewCurrentBalancesResponse">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element name="Response" type="data:CustomerAccountViewCurrentBalancesResponseType"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+
+xs:complexType name="CustomerAccountViewCurrentBalancesRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+			<xs:element name="SchemeCustomerId" type="xs:int"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+</xs:complexType>
+
+
+
+<xs:complexType name="CustomerAccountViewCurrentBalancesResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="CustomerAccountBalancesDashboardPattern1" type="tns:CustomerAccountBalancesDashboardPattern1Type" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CustomerAccountBalancesDashboardPattern1Type">
+		<xs:sequence>
+			<xs:element name="SchemeCustomerId" type="xs:int"/>
+			<xs:element name="Outstanding" type="tns:CurrencyType"/>
+			<xs:element name="NewTransactions" type="tns:CurrencyType"/>
+			<xs:element name="Available" type="tns:CurrencyType"/>
+			<xs:element name="CreditLimit" type="tns:CurrencyType"/>
+			<xs:element name="CurrentBalance" type="tns:CurrencyType"/>
+			<xs:element name="InterimPayments" type="tns:CurrencyType"/>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+</xs:complexType>
+
+================================================================================================
+Request
+------------------------------------------------------------------------------------------------
+
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+<SOAP-ENV:Header/>
+<SOAP-ENV:Body>
+    <ns3:tetheredUserDetailsGet xmlns:ns2="worldline.mst.bsm.api.b2b.pi.data.v1.1"
+                                xmlns:ns3="worldline.mst.bsm.api.b2b.pi.messages.v1.1">
+        <ns3:Request>
+            <ns2:Header>
+                <ns2:ClientMessageId>{a6173aca-ea66-48e6-8ce2-4e04f1d4b628}</ns2:ClientMessageId>
+                <ns2:CultureCode>en-GB</ns2:CultureCode>
+            </ns2:Header>
+            <ns2:TrustedPartnerCredentials>
+                <ns2:Username>PremierInnMW</ns2:Username>
+                <ns2:Password><![CDATA[YJih#dxd16]]></ns2:Password>
+            </ns2:TrustedPartnerCredentials>
+            <ns2:TetheredUserGuid>{f59ee763-6ba5-4cae-a3fa-f1678c291d4f}</ns2:TetheredUserGuid>
+        </ns3:Request>
+    </ns3:tetheredUserDetailsGet>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+------------------------------------------------------------------------------------------------
+Response
+------------------------------------------------------------------------------------------------
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <tetheredUserDetailsGetResponse xmlns="worldline.mst.bsm.api.b2b.pi.messages.v1.1">
+            <Response>
+                <ResultCode xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1">OK</ResultCode>
+                <MetaInfo xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1">
+                    <MessageGuid>3e82a22c-2f23-4b58-ba78-50ffee652576</MessageGuid>
+                    <TimeStamp>2023-05-23T14:09:16.0158509Z</TimeStamp>
+                </MetaInfo>
+                <TetheredUserDetails xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1">
+                    <TetheredUserOverview>
+                        <TetheredUserGuid>f59ee763-6ba5-4cae-a3fa-f1678c291d4f</TetheredUserGuid>
+                        <APIUserGuid>be8943b4-6ac0-48e3-a342-6eafecac8f56</APIUserGuid>
+                        <UserRole>AccountHolder</UserRole>
+                        <CountMyCards>1</CountMyCards>
+                    </TetheredUserOverview>
+                    <CustomerAccountOverview>
+                        <PrimarySchemeCustomerId>66925</PrimarySchemeCustomerId>
+                        <SchemeCustomerId>66925</SchemeCustomerId>
+                        <AccountName>Premier Inn Test Account</AccountName>
+                        <AccountNumber>3089503200000450</AccountNumber>
+                    </CustomerAccountOverview>
+                </TetheredUserDetails>
+            </Response>
+        </tetheredUserDetailsGetResponse>
+    </s:Body>
+</s:Envelope>
+
+
+================================================================================================
+Request
+------------------------------------------------------------------------------------------------
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+<SOAP-ENV:Header/>
+<SOAP-ENV:Body>
+    <ns3:customerAccountViewCurrentBalances xmlns:ns2="worldline.mst.bsm.api.b2b.pi.data.v1.1"
+                                            xmlns:ns3="worldline.mst.bsm.api.b2b.pi.messages.v1.1">
+        <ns3:Request>
+            <ns2:Header>
+                <ns2:ClientMessageId>{a6173aca-ea66-48e6-8ce2-4e04f1d4b628}</ns2:ClientMessageId>
+                <ns2:CultureCode>en-GB</ns2:CultureCode>
+            </ns2:Header>
+            <ns2:TrustedPartnerCredentials>
+                <ns2:Username>PremierInnMW</ns2:Username>
+                <ns2:Password><![CDATA[YJih#dxd16]]></ns2:Password>
+            </ns2:TrustedPartnerCredentials>
+            <ns2:TetheredUserGuid>{f59ee763-6ba5-4cae-a3fa-f1678c291d4f}</ns2:TetheredUserGuid>
+            <ns2:SchemeCustomerId>66925</ns2:SchemeCustomerId>
+        </ns3:Request>
+    </ns3:customerAccountViewCurrentBalances>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+------------------------------------------------------------------------------------------------
+Response
+------------------------------------------------------------------------------------------------
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+<s:Body xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <customerAccountViewCurrentBalancesResponse xmlns="worldline.mst.bsm.api.b2b.pi.messages.v1.1">
+        <Response>
+            <ResultCode xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1">OK</ResultCode>
+            <MetaInfo xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1">
+                <MessageGuid>4236a080-73df-4585-a43e-2451f48b47d3</MessageGuid>
+                <TimeStamp>2023-05-23T14:09:16.1797128Z</TimeStamp>
+            </MetaInfo>
+            <CustomerAccountBalancesDashboardPattern1 xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1">
+                <SchemeCustomerId>66925</SchemeCustomerId>
+                <Outstanding>
+                    <Amount>0.00</Amount>
+                    <CurrencyCode>826</CurrencyCode>
+                </Outstanding>
+                <NewTransactions>
+                    <Amount>0.00</Amount>
+                    <CurrencyCode>826</CurrencyCode>
+                </NewTransactions>
+                <Available>
+                    <Amount>3287.66</Amount>
+                    <CurrencyCode>826</CurrencyCode>
+                </Available>
+                <CreditLimit>
+                    <Amount>2600.00</Amount>
+                    <CurrencyCode>826</CurrencyCode>
+                </CreditLimit>
+                <CurrentBalance>
+                    <Amount>-687.66</Amount>
+                    <CurrencyCode>826</CurrencyCode>
+                </CurrentBalance>
+                <InterimPayments>
+                    <Amount>0.00</Amount>
+                    <CurrencyCode>826</CurrencyCode>
+                </InterimPayments>
+            </CustomerAccountBalancesDashboardPattern1>
+        </Response>
+    </customerAccountViewCurrentBalancesResponse>
+</s:Body>
+</s:Envelope>
+================================================================================================

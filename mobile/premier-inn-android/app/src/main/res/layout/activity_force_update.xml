@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/generic_padding_24"
+    tools:background="@color/premier_inn_purple">
+
+    <TextView
+        android:id="@+id/force_update_title"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".3"
+        android:gravity="center"
+        android:textColor="@color/white"
+        style="@style/Header1"
+        tools:text="@string/force_update_title_fallback" />
+
+    <TextView
+        android:id="@+id/force_update_description"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".6"
+        android:lineSpacingMultiplier="1.2"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        style="@style/Body"
+        tools:text="@string/force_update_desc_fallback" />
+
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/force_update_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Button1"
+        android:padding="@dimen/generic_padding_16"
+        android:text="@string/force_update" />
+
+</LinearLayout>

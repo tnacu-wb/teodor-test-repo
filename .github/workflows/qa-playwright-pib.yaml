@@ -1,0 +1,39 @@
+name: QA Playwright PIB
+
+on:
+  workflow_dispatch:
+    inputs:
+      tests_filter:
+        description: 'Test title/tag regex (e.g. @smoke or @regression). Leave blank for all PIB tests.'
+        required: false
+        type: string
+        default: ''
+      environment:
+        description: 'Target test environment'
+        required: true
+        type: choice
+        options:
+          - uat
+          - dit
+        default: uat
+      locale:
+        description: 'Website locale'
+        required: true
+        type: choice
+        options:
+          - gb-en
+          - de-de
+        default: gb-en
+
+permissions:
+  contents: read
+
+jobs:
+  playwright:
+    uses: ./.github/workflows/qa-playwright.yaml
+    with:
+      app: pib
+      environment: ${{ inputs.environment }}
+      locale: ${{ inputs.locale }}
+      tests_filter: ${{ inputs.tests_filter }}
+    secrets: inherit

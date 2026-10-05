@@ -1,0 +1,90 @@
+schema: spec-driven
+
+context: |
+  The root OpenSpec library is organized by product domain, not by
+  application or repository structure. Domain names match the backend squad
+  folders, except meta, which holds shared platform code rather than a product
+  domain. Each domain may be implemented across backend, web, iOS, Android,
+  and GraphQL.
+
+  Product domains: book-pay, manage-modify, discover-search, arrive-stay-leave,
+  identity.
+
+  Capability paths are <domain>/<subdomain>/<capability>, for example
+  book-pay/payment/new-card-payment. A subdomain groups related capabilities
+  within a domain. Reuse an existing subdomain; when none fits, propose a new
+  one in the proposal and justify it.
+
+  Implementation locations:
+  - Backend domain code: backend/<domain>/
+  - Web shared codebase: frontend/pi-front-end-applications/
+  - Android shared codebase: mobile/premier-inn-android/
+  - iOS shared codebase: mobile/premier-inn-ios/
+  - GraphQL subgraphs shared codebase: graphql/
+
+  Code ownership: backend/<squad>/ is owned by that squad. Squads are moving
+  towards changing only their own backend code, so a change that needs another
+  squad's backend code must make that dependency explicit.
+
+  Web, mobile, and GraphQL are shared codebases used by multiple squads; their
+  physical layout does not create separate OpenSpec namespaces. Put each
+  capability under its owning product domain and identify every affected
+  application and squad in the proposal, design, and tasks.
+
+  Do not duplicate a capability specification for backend, web, Android, iOS,
+  or GraphQL. One capability contract describes shared behavior;
+  platform-specific behavior belongs in that capability only when it is part
+  of the observable contract.
+
+rules:
+  proposal:
+    - 'Explain why the change belongs in the root product library: its observable behavior or enduring architecture matters outside one implementing folder. If it does not, stop and ask the user where the change belongs.'
+    - 'Before drafting, ask once for Jira, Figma, Confluence, design documents, and other supporting material unless the user already supplied them. Accept `Not provided` or `Not applicable`; missing references do not block the proposal.'
+    - 'Record supplied references exactly under `## References`: Jira, Figma, Confluence, Design documents, and Other documents. Never invent missing links or infer inaccessible content.'
+    - 'Retrieve and read accessible sources needed to establish scope and intent. Later stages may reuse this discovery and SHOULD retrieve a source again only when its content is unavailable in the current context, has changed, or is needed to resolve a decision.'
+    - 'Read each affected capability''s living spec.md (current contract) and adjacent design.md (current architecture), and identify cross-capability dependencies.'
+    - 'Under `## Capabilities`, add a `### Capability impact` table with one row per affected capability: path, owning squad, contract impact (create, update, or no change), living-design impact (create, update, or review only), and surfaces (backend, web, Android, iOS, GraphQL). List only create and update rows under New or Modified Capabilities; no-change rows appear only in the table. For a new capability, note that archive creates both spec.md and design.md.'
+    - 'Record the requesting squad (from Jira, or ask the user). If the change needs code changes under another squad''s backend/<squad>/ folder, add `## Cross-squad work` listing each owning squad, affected service or library, required change, and whether this change is blocked on it.'
+    - 'Add `## Conflicts and decisions` when sources disagree. Classify each item as: blocking decision, implementation investigation, bounded accepted unknown, or unrelated future question. Record the owner and affected artifact; never choose silently.'
+    - 'Keep the proposal proportionate. Omit sections that do not apply rather than filling them with speculative work.'
+  specs:
+    - 'Use the proposal, its references, and affected living specs to define observable behavior, edge cases, and scenarios. Use capability paths exactly as the proposal lists them.'
+    - 'Keep delta specs implementation-independent: observable behavior only, with no service classes, build tasks, framework types, or test machinery. Defer architecture and rationale to the change design.md.'
+    - 'Reference other capabilities by full path instead of copying their requirements. MODIFIED blocks still copy the full existing requirement, as the schema requires.'
+    - 'The living spec is the current contract. When the proposal, delta, or living design disagrees with it, record the conflict in proposal.md under `## Conflicts and decisions` instead of choosing silently; the living spec stays authoritative until resolved. Resolve blocking decisions that change observable behavior, asking the user, before writing the affected requirement.'
+  design:
+    - 'This is the change design, not the living design. Read affected living designs for current architecture, but do not create or edit openspec/specs/<capability-path>/design.md; archive reconciles them.'
+    - 'Always write design.md, since tasks depend on it. When there is no enduring architectural change, say so briefly and why; do not manufacture abstractions, diagrams, migration plans, or rollout work.'
+    - 'Use the template sections; when several capabilities are affected, subdivide Context and Decisions by capability. Cover only applicable concerns, such as services and applications, boundaries, contracts, failure handling, compatibility, security, observability, and rollout.'
+    - 'For each service or library owned by another squad, name the owning squad and the contract or change this change needs from it.'
+    - 'Cite requirements by capability path and requirement name instead of restating them. Keep code-derived wire schemas distinct from behavioral requirements.'
+    - 'Resolve remaining blocking decisions from the proposal''s `## Conflicts and decisions` here, asking the user when needed, and record each outcome under Decisions; only bounded accepted unknowns go under Open Questions.'
+    - 'Include diagrams only when they clarify boundaries, sequence, state, ownership, data flow, or recovery.'
+    - 'End with `## Living design reconciliation`: the enduring decisions, diagrams, workflows, boundaries, and open questions archive must carry into each affected living design. Exclude temporary implementation detail.'
+  tasks:
+    - 'Build tasks from the delta specs (what) and change design (how); read affected living specs only where a task depends on current behavior.'
+    - 'Stop and return to design if any blocking decision is unresolved. Convert implementation investigations into explicit spike tasks with a decision outcome. Bounded accepted unknowns may remain when they have an owner and do not change safe delivery; exclude unrelated future questions.'
+    - 'Make every task concrete: name the repository-relative area, the expected outcome, and how to verify it. Avoid vague tasks such as `update backend` or `fix frontend`.'
+    - 'Group tasks by capability and surface in dependency order: producer and contract work before consumers. Put work in another squad''s backend code in its own group labelled with the owning squad, as a handoff.'
+    - 'Trace tasks to the requirement, scenario, or design decision they deliver where useful, without copying the contract.'
+    - 'Add only applicable validation, migration, feature-flag, observability, rollout, rollback, and compatibility tasks.'
+
+operations:
+  apply:
+    guidance:
+      - 'Before writing, confirm `openspec list --json` reports root.path as the repository root, not a nested openspec/ directory.'
+      - 'Besides the change artifacts, read affected living spec.md and design.md files; for a new capability their absence is expected.'
+      - 'Mark a task complete only after its stated verification passes.'
+      - 'Update proposal, delta specs, design, or tasks only when implementation discovery materially changes scope, observable behavior, architecture, compatibility, or sequencing; ordinary implementation detail does not require artifact churn.'
+      - 'Do not create or update living spec.md or design.md during apply. They represent delivered reality and are reconciled through archive.'
+  archive:
+    guidance:
+      - 'Before archiving, confirm `openspec list --json` reports root.path as the repository root, not a nested openspec/ directory.'
+      - 'Confirm tasks and applicable validation are complete, every blocking decision is resolved, and each remaining accepted unknown has an owner and a reason it does not block safe delivery. Run `openspec validate <change> --strict` and fix all errors.'
+      - 'Before the spec sync, run the openspec-verify-change skill for this change and show its report. Stop on any CRITICAL issue; if only WARNINGs remain, list them and ask the user whether to proceed.'
+      - 'After the spec sync and before moving the change into changes/archive/, create or reconcile openspec/specs/<capability-path>/design.md for every affected capability from the change design''s `## Living design reconciliation` section. Do not move the change until every living design is done.'
+      - 'Follow openspec/living-design-template.md and its authoring comments. Keep one design per capability; do not create an openspec/designs/ tree or duplicate another capability''s contract.'
+      - 'Reconcile rather than copy the change design: keep enduring architecture, decisions, diagrams, workflows, integration boundaries, failure handling, flags, security and operability constraints, and owned open questions; drop temporary migration steps, rejected alternatives, and obsolete information. Turn resolved questions into design decisions.'
+      - 'When code diverges from the living spec, keep spec.md as the intended contract and describe actual behavior in design.md. Record a divergence that needs a decision as an owned open question; leave plain defects to the issue tracker; change the spec only through a change, when the code behavior is deliberate.'
+      - 'For an affected capability with no design impact, verify its design.md is still accurate instead of rewriting it.'
+      - 'Validate each living pair: strict OpenSpec validation, links and requirement references, rendered Mermaid diagrams, code-derived claims against current implementation, and `git diff --check`. Rerun after any further material change.'

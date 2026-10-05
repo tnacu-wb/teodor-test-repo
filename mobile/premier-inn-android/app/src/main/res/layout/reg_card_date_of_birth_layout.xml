@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/dateOfBirthHint"
+        style="@style/BodySmallRegular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reg_card_dob_info_hint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/dayInputLayout"
+        layout="@layout/reg_card_text_input_layout_item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_12"
+        app:layout_constraintEnd_toStartOf="@id/monthInputLayout"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateOfBirthHint" />
+
+    <include
+        android:id="@+id/monthInputLayout"
+        layout="@layout/reg_card_text_input_layout_item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_12"
+        app:layout_constraintEnd_toStartOf="@id/yearInputLayout"
+        app:layout_constraintStart_toEndOf="@id/dayInputLayout"
+        app:layout_constraintTop_toTopOf="@id/dayInputLayout" />
+
+    <include
+        android:id="@+id/yearInputLayout"
+        layout="@layout/reg_card_text_input_layout_item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/monthInputLayout"
+        app:layout_constraintTop_toTopOf="@id/dayInputLayout" />
+
+    <TextView
+        android:id="@+id/dateOfBirthError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_4"
+        android:textColor="@color/new_error_red"
+        android:textSize="@dimen/body_small_text_size_14"
+        android:paddingBottom="@dimen/generic_padding_40"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dayInputLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

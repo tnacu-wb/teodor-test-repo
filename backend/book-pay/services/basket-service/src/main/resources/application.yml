@@ -1,0 +1,431 @@
+server:
+  port: @application.port@
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "@project.version@"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  endpoints:
+    web:
+      base-path: /v1/baskets/actuator
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  configuration:
+    logger: fluentd
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - Authorization
+        - phoneNumber
+        - cardNumber
+        - cardId
+        - cardNo
+        - bankAccount
+        - visaNumber
+        - chargeCardNumber
+        - cardHolderName
+        - nameOnCard
+        - personName
+        - name
+        - fullName
+        - firstName
+        - lastName
+        - givenName
+        - middleName
+        - surname
+        - surName
+        - address
+        - telephone
+        - email
+        - emailAddress
+        - contactValue
+        - addressLine
+        - idNumber
+        - companyName
+        - expirationDate
+        - postalCode
+        - mobile
+        - landline
+        - addressLine1
+        - addressLine2
+        - addressLine3
+        - addressLine4
+        - passportNumber
+        - line1
+        - line2
+        - line3
+        - line4
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    brave: WARN
+    io:
+      getunleash: TRACE
+      micrometer.observation.contextpropagation.ObservationThreadLocalAccessor: ERROR
+    org.springframework.web.servlet.handler.HandlerMappingIntrospector: ERROR
+
+basket:
+  cleanUpTimeSeconds:
+    openStatus: 1800
+    processingStatus: 1800
+    amendingStatus: 1800
+    amendedStatus: 1800
+    payPendingStatus: 1800
+    completedStatus: 63113904  # 2 years
+    cancelledStatus: 31556952  # 1 year
+    amendFailedStatus: 31556952 # 1 year
+    failedStatus: 31556952  #1 year
+    preCheckedInStatus: 63113904  # 2 years
+    preCheckedOutStatus: 63113904  # 2 years
+    ciolRcFailedStatus: 63113904  # 2 years
+  root.fields: hotelId, paymentID
+  basketValidity: 1680000 # 28 minutes
+  basketStatusPolling: 300000 # 5 minutes
+  successfulThreeCResponse: 01,0000,0
+  topics:
+    refunds: ${TOPICS_REFUNDS:refunds}
+    orders: ${TOPICS_ORDERS:orders}
+    bookingCompleted: ${TOPICS_BOOKING_COMPLETED:booking-completed}
+    bookingCompletedPartitions: ${TOPICS_BOOKING_COMPLETED_PARTITIONS:3}
+    bookingCompletedReplicas: ${TOPICS_BOOKING_COMPLETED_REPLICAS:1}
+    notifications: ${TOPICS_NOTIFICATIONS:notifications}
+    paymentAuthorised: ${TOPICS_PAYMENT_AUTHORISED:payment-authorised}
+    paymentAuthorisedPartitions: ${TOPICS_PAYMENT_AUTHORISED_PARTITIONS:3}
+    paymentAuthorisedReplicas: ${TOPICS_PAYMENT_AUTHORISED_REPLICAS:1}
+  kafka:
+    consumer:
+      paymentAuthorised:
+        groupId: ${KAFKA_PAYMENT_AUTHORISED_GROUP_ID:basket-service-payment-authorised}
+        concurrency: ${KAFKA_PAYMENT_AUTHORISED_CONCURRENCY:1}
+
+distribution:
+  meals:
+    11: PREMIER_BREAKFAST
+    12: CONTINENTAL_BREAKFAST
+    17: MEAL_DEAL
+    18: BOXED_BREAKFAST
+    15: CONTINENTAL_BUNDLE
+    14: LIGHTER_BUNDLE
+    20: BREAKFAST_ROLL_BUNDLE
+
+  mailSuppressionSorceCodes: 38,43
+
+config:
+  service:
+    threec:
+      host: http://${THREEC_HOST:localhost:9001}
+      paymentsEndpoint: "/payments"
+      tokensEndpoint: "/tokens"
+      returnCodes:
+        contactBankCodes: 1, 4, 5, 7, 14, 15, 17, 18, 23, 31, 34, 35, 36, 38, 39, 40, 41, 42, 43, 44, 51, 52, 53, 56, 57, 59, 61, 62, 63, 64, 65, 67, 75, 77, 80, 91, 93
+        incorrectCardDetailsCodes: 33, 54, 55
+        tryAgainCodes: 2, 3, 6, 9, 12, 13, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29, 30, 58, 60, 66, 68, 81, 88, 89, 90, 92, 94, 95, 96, 97, 98, 99
+    reservation:
+      host: http://${RESERVATION_HOST:localhost:9103}
+      reservationEndpoint: "/v1/reservations/basket/{basketReference}"
+      discountEndpoint: "/v1/reservations/discount"
+      previewDepositsEndpoint: "/v1/reservations/preview-deposits"
+      depositsEndpoint: "/v1/reservations/deposits"
+      saveDepositFoliosEndpoint: "/v1/reservations/save-deposit-folios"
+      rollbackEndpoint: "/v1/reservations/cancellations/rollback"
+      businessItemsEndpoint: "/v1/reservations/business"
+      companyQuestionAndAnswerEndpoint: "/v1/reservations/questions-and-answers"
+      marketingPreferencesEndpoint: "/v1/reservations/marketingPreferences"
+      specialRequestsEndpoint: "/v1/reservations/special-requests"
+      attachProfileToReservationsEndpoint: "/v1/reservations/profiles"
+      routingInstructionsEndpoint: "/v1/reservations/routingInstructions"
+      updateReservationEndPoint: "/v1/reservations/update"
+      createProfilesEndPoint: "/v1/reservations/create/profile"
+      updateAlertsEndPoint: "/v1/reservations/alerts"
+    content:
+      host: http://${CONTENT_HOST:localhost:9106}
+      paymentInformationEndpoint: "/v1/content/hotels/{hotelId}/payment-information"
+      businessNotesEndpoint: "/v1/content/businessNotes"
+    hotel-entity:
+      host: http://${HOTEL_ENTITY_HOST:localhost:9102}
+      hotelInfoEndpoint: "/v1/hotels/{hotelId}/info"
+    marketing:
+      host: ${MARKETING_HOST}
+      marketingNewsletterEndpoint: "/marketing/newsletter/{contactType}/{contactValue}"
+      defaultBrandCode: PINN
+      defaultLanguage: en
+      defaultContactType: email
+      defaultJourney: BOOKINGFLOW
+      defaultChannel: WEB
+    refund:
+      host: http://${REFUND_REQUEST_PROCESSOR:localhost:9113}
+      tokenRefundEndpoint: "/v1/rrp/tokenRefund"
+    rules-agent:
+      host: http://${RULES_AGENT_HOST:localhost:9108}/v1/rules
+      businessAllowanceEndpoint: "/allowances"
+      vatCodesEndpoint: "/vat-codes"
+    ohip:
+      host: http://${OHIP_HOST:localhost:9100}/ohip
+      reservationBillingAddressEndpoint: "/v1/reservation/updateBillingAddress"
+      customReferenceNumberEndpoint: "/v1/reservations/customReferenceNumber"
+      updateReservationCcAgentIdEndpoint: "/v1/reservations/ccAgentId"
+      getNegotiatedRatesEndpoint: "/{profileId}/negotiatedRates"
+      updateCharacterUdfsEndpoint: "/reservations/characterudfs"
+      reservationsPaymentTypeByReservationIds: "/v1/reservations/paymentType"
+      saveReservationPreRegister: "/v1/reservations/pre-register"
+      getReservationByBasketEndpoint: "/v1/reservations/basket"
+    cdh:
+      host: http://${CDH_ADAPTER_HOST:localhost:9119}
+      companiesSearchEndpoint: "/v1/cdh/account/companies"
+    promotion:
+      host: http://${PROMO_SERVICE_HOST:localhost:9137}
+      promoKindEndpoint: "/v1/promo/batches/promo-kind"
+      redeemEndpoint: "/v1/promo/batches/redeem"
+
+  initiate-payment:
+    reservations-cache: ${RESERVATIONS_CACHE:Payment-Methods-Entity-Service::ReservationsByBasketRef}
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      key-prefix: "Basket-Service"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+
+amazon:
+  dynamodb:
+    tableName: ${DYNAMODB_TABLE_BASKET_NAME:newBasket}
+    tableNamePrepaidDeposit: ${DYNAMODB_TABLE_PREPAID_BOOKING_CHARGES_NAME:PrepaidBookingCharges}
+    irsa: true
+    region: ${DYNAMODB_TABLE_BASKET_REGION:eu-west-1}
+
+auth:
+  rulesEngineHost: rules-agent-entity-service
+  isAllowedAccessForRoleIdsEndpoint: /v1/rules/ccui/rbac
+  tenants:
+    - name: "CCUI Tenant"
+      audience: ${CCUI_TENANT_AUDIENCE}
+      namespace:  ${CCUI_TENANT_NAMESPACE}
+      issuer:  ${CCUI_TENANT_ISSUER}
+      jwkUri:  ${CCUI_TENANT_JWK_URI}
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+
+feature-flags:
+  save-allowances-in-basket:
+    key: "release_pi_bb_ccui_distr_web4_save-allowances-in-basket"
+    fallback: false
+  save-payment-instruction-folio-three:
+    key: "release_pi_ccui_bb_save_payment_instruction_folio3"
+    fallback: false
+  save-payment-instruction-folio-three-bb:
+    key: "release_bb_save_payment_instruction_folio3"
+    fallback: false
+  piba-booking:
+    key: "release_pi_bb_ccui_distr_piba_booking"
+    fallback: false
+  ccui-agent-id-log:
+    key: "release_ccui_agent_id_log"
+    fallback: false
+  capture-billing-address-bb:
+    key: "release_bb_capture_billing_address"
+    fallback: false
+  check-in-online:
+    key: "pi_bb_mobile_check-in-online"
+    fallback: false
+  threecp-return-codes-mapping:
+    key: "release_pi_bb_ccui_threecp_return_codes_mapping"
+    fallback: false
+  paypal-error-mapping:
+    key: "release_pi_bb_paypal_error_mapping"
+    fallback: false
+  company-name-feature-flag:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false
+  prepaid-booking-charges-ttl:
+    key: "release_pi_bb_ccui_prepaid_booking_charges_ttl"
+    fallback: false
+  save-secure-booking:
+    key: "pi-save-secure-booking"
+    fallback: false
+  redeem-promo-code:
+    key: "pi_ccui_bb_redeem-promo-code"
+    fallback: false
+  mobile-preRegistered-repurpose:
+    key: "mobile_preRegistered_repurpose"
+    fallback: false
+  publish-datatrans-booking-completed-event:
+    key: "publish_datatrans_booking_completed_event"
+    fallback: false
+
+thirdpartybooking:
+  cityTaxList: "${CITY_TAX:CITYTAX,CITYEXP}"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
+logging:
+  level:
+    uk:
+      co:
+        whitbread:
+          basket:
+            infrastructure:
+              queue:
+                processor: DEBUG
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      ssl:
+        enabled: false
+      client-type: lettuce
+
+amazon:
+  dynamodb:
+    endpoint: http://localhost:8000
+    tableName: ${DYNAMODB_TABLE_BASKET_NAME:newBasket}
+    tableNamePrepaidDeposit: ${DYNAMODB_TABLE_PREPAID_BOOKING_CHARGES_NAME:PrepaidBookingCharges}
+    accessKey: key
+    secretKey: secret
+    region: eu-west-1
+    irsa: false
+
+logging:
+  configuration:
+    logger: default
+
+auth:
+  rulesEngineHost: rules-agent-entity-service
+  isAllowedAccessForRoleIdsEndpoint: /v1/rules/ccui/rbac
+  tenants:
+    - name: "CCUI Tenant"
+      audience: dummy
+      namespace: dummy
+      issuer: dummy
+      jwkUri:  https://dummy/.well-known/jwks.json
+    - name: "PI BB Tenant"
+      audience: dummy
+      namespace: dummy
+      issuer: dummy
+      jwkUri: https://dummy/.well-known/jwks.json
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

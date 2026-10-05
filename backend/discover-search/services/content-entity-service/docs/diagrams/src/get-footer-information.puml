@@ -1,0 +1,12 @@
+@startuml
+entity GraphQL_endpoint
+title Retrieve Footer Information from AEM
+
+entity "content-entity-service" as CES
+entity AEM
+
+GraphQL_endpoint-> CES  ++: GET /content/footer?country=gb&language=en&brand=pi
+CES -> AEM: GET {country}/{language}/index.footer.data/site/{site}.json
+GraphQL_endpoint<- CES -- : return content footer
+
+@enduml

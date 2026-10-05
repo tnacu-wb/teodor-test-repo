@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/generalInfoContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/generic_padding_16"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+        android:id="@+id/hotelImage"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:contentDescription="null"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_map_hotel_head"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/CornerRounded8" />
+
+    <TextView
+        android:id="@+id/headerTitle"
+        style="@style/Header4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_4"
+        android:includeFontPadding="false"
+        android:text="@string/ready_to_leave_title"
+        android:textColor="@color/full_black"
+        app:layout_constraintBottom_toBottomOf="@id/hotelImage"
+        app:layout_constraintTop_toTopOf="@+id/hotelImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/hotelImage"/>
+
+    <ImageView
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_oval_grey"
+        android:contentDescription="@null"
+        android:padding="@dimen/generic_padding_8"
+        android:src="@drawable/ic_close_dark"
+        app:layout_constraintBottom_toBottomOf="@+id/hotelImage"
+        app:layout_constraintEnd_toEndOf="@id/headerTitle"
+        app:layout_constraintTop_toTopOf="@+id/hotelImage" />
+
+    <View
+        android:id="@+id/dividerLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:background="@color/grey_lavender"
+        app:layout_constraintTop_toBottomOf="@+id/hotelImage" />
+
+    <TextView
+        android:id="@+id/readyToLeaveMessage"
+        style="@style/UnderstoodMessageStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:text="@string/ready_to_leave_message"
+        app:layout_constraintStart_toStartOf="@+id/hotelImage"
+        app:layout_constraintTop_toBottomOf="@+id/dividerLine" />
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/leftMyRoomButton"
+        style="@style/Button1"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:visibility="visible"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:text="@string/ready_to_leave_button_text"
+        app:cab_spinner_color="@color/white"
+        app:cab_text_color="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/readyToLeaveMessage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

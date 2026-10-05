@@ -1,0 +1,115 @@
+schema {
+    mutation: Mutation
+}
+
+type Mutation {
+    innBRegistrationStepOne(innBRegistrationStepOneRequest: InnBRegistrationStepOneRequest!): InnBRegistrationStepOneResponse
+    innBRegistrationStepTwo(innBRegistrationStepTwoRequest: InnBRegistrationStepTwoRequest!): InnBRegistrationStepTwoResponse
+    appsRegistration(appsRegistrationRequest: AppsRegistrationRequest!): AppsRegistrationResponse
+}
+
+input CompanyAddressRequest {
+    line1: String!
+    line2: String
+    line3: String
+    line4: String
+    line5: String
+    postCode: String
+    countryCode: String!
+    companyName: String
+}
+
+input InnBRegistrationStepOneRequest {
+    email: String!
+    companyName: String!
+    address: CompanyAddressRequest!
+    language: String!
+    socialMediaType: String
+    socialMediaId: String
+    uniqueTaxpayerReference: String
+    companyType: CompanyType
+    updatePreferencesRequest: UpdatePreferencesRequest
+}
+
+enum CompanyType {
+    BB
+    INNB
+    PIBP_ONLY
+    BP
+}
+
+type InnBRegistrationStepOneResponse {
+    existingCompany: Boolean
+    existingEmployee: Boolean
+    existingCompanyType: String
+}
+
+input InnBRegistrationStepTwoRequest {
+    title: String!
+    firstName: String!
+    lastName: String!
+    phoneNumber: String
+    password: String!
+    activationKey: String!
+    companySector: String
+    averageMonthlyBooking: String
+    numberOfEmployee: String
+    updatePreferencesRequest: UpdatePreferencesRequest
+}
+
+type InnBRegistrationStepTwoResponse {
+    email: String
+    companyId: String
+}
+
+input AppsRegistrationRequest {
+    contactDetail: AppsContactDetail!
+    password: String!
+}
+
+input AppsContactDetail {
+    firstName: String!
+    lastName: String!
+    email:String!
+}
+
+type AppsRegistrationResponse {
+    success: Boolean
+    customerId: String
+    existingEmployee: Boolean
+}
+
+input UpdatePreferencesRequest {
+    contactType: String
+    optIn: Boolean
+    doubleOptIn: Boolean
+    secondPartyOptIn: Boolean
+    thirdPartyVendorsOptIn: Boolean
+    brandCodes: [String]
+    customer: MarketingCustomer
+    contactSubType: ContactSubType
+    sourceDetails: SourceDetails
+    contactValue: String
+}
+
+input MarketingCustomer {
+    title: String
+    firstName: String
+    lastName: String
+    nationality: String
+    userId: String
+    countryOfResidence: String
+    customerId: String
+    language: String
+}
+
+enum ContactSubType {
+    mobile
+    landline
+}
+
+input SourceDetails {
+    channel: String
+    journey: String
+    locale: String
+}

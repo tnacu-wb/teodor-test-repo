@@ -1,0 +1,30 @@
+server:
+  port: 9113
+
+swagger:
+  api:
+    version: 1.0.0
+
+spring:
+  profiles:
+    active: test
+
+
+rrp:
+  topics:
+    ack: "ack"
+    refunds:
+      name: "refunds"
+      concurrency: 1
+  kafka:
+    bootstrapServers: ${spring.embedded.kafka.brokers:localhost:8000}
+    groupId: basket-refund
+    requestTimeout: 480000
+    heartBeatInterval: 1000
+    maxPollInterval: 900000
+    maxPollRecords: 100
+    sessionTimeout: 600000
+
+logging:
+  configuration:
+    logger: default

@@ -1,0 +1,19 @@
+query getTermsAndConditions(
+  $hotelId: String!
+  $language: String!
+  $country: String!
+  $rateCode: String!
+  $bookingChannel: String
+) {
+  termsAndConditions(
+    bookingFlowCriteria: {
+      hotelId: $hotelId
+      language: $language
+      country: $country
+      rateCode: $rateCode
+      bookingChannel: $bookingChannel
+    }
+  ) {
+    text
+  }
+}

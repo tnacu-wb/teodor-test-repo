@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:gravity="end"
+        android:minHeight="?attr/actionBarSize" />
+
+    <LinearLayout
+        android:id="@+id/booking_prefs_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/generic_margin_10"
+            android:background="@color/white"
+            android:elevation="@dimen/generic_elevation_1"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/generic_padding_24"
+            android:paddingTop="@dimen/generic_padding_30"
+            android:paddingEnd="@dimen/generic_padding_24"
+            android:paddingBottom="@dimen/generic_padding_24">
+
+            <TextView
+                style="@style/Header3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/booking_preference_stay_preferences" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/generic_margin_30"
+                android:layout_marginBottom="@dimen/generic_margin_10"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/Header3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/booking_preference_room_requirements"
+                    android:textColor="@color/teal" />
+
+                <TextView
+                    android:id="@+id/booking_prefs_room_change"
+                    style="@style/Action1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/booking_preference_add"
+                    android:textColor="?attr/colorPrimary" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/booking_prefs_room_requirements"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/booking_prefs_adults"
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="2 Adults" />
+
+                <TextView
+                    android:id="@+id/booking_prefs_children"
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="1 Child" />
+
+                <TextView
+                    android:id="@+id/booking_prefs_room"
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Family Room" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/booking_prefs_none_room_requirements"
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/booking_preference_none" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="1dp"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/generic_padding_24"
+            android:paddingTop="@dimen/generic_padding_24"
+            android:paddingEnd="@dimen/generic_padding_24"
+            android:paddingBottom="@dimen/generic_padding_24">
+
+            <TextView
+                style="@style/Header3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/booking_preference_meal_preferences" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/generic_margin_30"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/booking_prefs_meal_preference"
+                    style="@style/Body"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/booking_preference_none" />
+
+                <TextView
+                    android:id="@+id/booking_prefs_meal_preference_change"
+                    style="@style/Action1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/booking_preference_add"
+                    android:textColor="?attr/colorPrimary" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/booking_prefs_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+</LinearLayout>

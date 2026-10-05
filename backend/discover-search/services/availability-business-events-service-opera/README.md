@@ -1,0 +1,79 @@
+# Whitbread availability business events &micro;Service
+
+## Requirements
+
+All services should:
+
+* Include _**.gitignore**_
+* Include the following section in _src/main/resources/application.yml_
+
+```
+info:
+     build:
+       groupId: @project.groupId@
+       artifact: @project.artifactId@
+       description: @project.description@
+       version: @project.version@
+       git:
+         branch: @git.branch@
+         commit:
+           id: @git.commit.id@
+           time: @git.commit.time@
+           message: @git.commit.message.short@
+```
+
+* Have it's own package, (e.g. uk.co.whitbread.avail.business.events)
+
+## How to run
+
+### Run as a Spring Boot local application
+
+`mvn clean install spring-boot:run -Dspring.profiles.active=local`
+
+A profile is necessary since the service is not design to fall back to any default profile. `local`
+disables all integration tools making sure the project runs in isolation/
+
+## Hexagonal Architecture
+
+`domain` - Models the domain of the API
+
+`ports` - Defines any primary ports which act as input to the API and any secondary ports which are
+external dependencies/resources
+
+`adapters` - Implementations of ports
+
+`config` - Package that contains any Spring Bean configuration
+
+There is provided a 'sample', ready to use, workflow by starting the service.  
+Added unit tests and contract tests compliant to this structure.
+
+[Confluence: Sample-Service Description and project structure](https://whitbreadis.atlassian.net/wiki/spaces/DSA/pages/3420815378/Sample-Service+structure+description)
+
+## Project Folder Structure
+
+The arrangement below provides the structure within which the development effort will be
+accomplished.
+
+    .
+    ├── docs                        # Documentation files
+    ├── infrastructure              # Infrastucture related configuration
+    │   ├── docker-local            # Defining and running the systems on which the application depends
+    │   ├── docker-release          # Release version of the application image
+    │   └── helm                    # Helm charts that describe a related set of Kubernetes resources
+    ├── src                         # Application sources
+    │   ├── main                    # Source files
+    │   └── test                    # Test files
+    ├── .gitignore                  # Files/folders to be ignored by Git
+    ├── google-checkstyle.xml       # Checkstyle configuration
+    ├── Jenkinsfile                 # Definition of a Jenkins Pipeline
+    ├── pom.xml                     # Configuration details used by Maven to build the project
+    └── README.md                   # Brief description of underlying GitHub project
+
+## Technologies
+
+- Spring Boot 4.0.3 (Spring Framework 7.0.x)
+- Spring Cloud Microservices Parent v4.0.5
+- Maven 3.9+
+- Docker 17+
+- Docker-compose v1+
+- Java 25

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="https://jakarta.ee/xml/ns/jaxb" xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
+          xmlns:xs="http://www.w3.org/2001/XMLSchema"
+          jaxb:extensionBindingPrefixes="xjc annox inheritance" jaxb:version="3.0">
+
+    <globalBindings generateElementProperty="false">
+        <!-- All generated classes implements Serializable -->
+        <serializable uid="1" />
+
+        <!-- All temporal fields are implemented as Joda DateTime and use DateUtils
+            as an adapter -->
+        <javaType name="java.time.LocalDate" xmlType="xs:date"
+                  parseMethod="uk.co.whitbread.bart.util.adapter.DateBinder.parseDate"
+                  printMethod="uk.co.whitbread.bart.util.adapter.DateBinder.printDate" />
+        <javaType name="java.time.LocalTime" xmlType="xs:time"
+                  parseMethod="uk.co.whitbread.bart.util.adapter.TimeBinder.parseTime"
+                  printMethod="uk.co.whitbread.bart.util.adapter.TimeBinder.printTime" />
+        <javaType name="java.time.LocalDateTime" xmlType="xs:dateTime"
+                  parseMethod="uk.co.whitbread.bart.util.adapter.DateTimeBinder.parseDateTime"
+                  printMethod="uk.co.whitbread.bart.util.adapter.DateTimeBinder.printDateTime" />
+    </globalBindings>
+
+</bindings>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://corporate.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="http://corporate.micros.com/1.0">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://corporate.micros.com/1.0">
+            <s:element name="InitSession">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:InitSessionRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="InitSessionRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" name="guestHistoryNumber" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="InitSessionResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="InitSessionResult" type="s0:InitSessionResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="InitSessionResponse">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employee" type="s0:Employee2"/>
+                    <s:element name="basicCompanyDetails" type="s0:BasicCompanyDetails2"/>
+                    <s:element minOccurs="0" name="setupDetails" type="s0:CompanySetupDetails2"/>
+                    <s:element minOccurs="0" name="numberOfEmployees" type="s:decimal"/>
+                    <s:element minOccurs="0" name="upcomingBookings" type="s0:ArrayOfUpcomingBookingSummary"/>
+                    <s:element name="setupProgress">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="COMPANY_DETAILS"/>
+                                <s:enumeration value="PAYMENT_OPTIONS"/>
+                                <s:enumeration value="MANAGEMENT_INFORMATION"/>
+                                <s:enumeration value="BOOKING_ALLOWANCES"/>
+                                <s:enumeration value="BOOKING_ALERTS"/>
+                                <s:enumeration value="COMPLETE"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="miSetupRequired" type="s:boolean"/>
+                    <s:element name="changeCompanyName" type="s:boolean"/>
+                    <s:element minOccurs="0" name="awaitingApproval" type="s:decimal"/>
+                    <s:element minOccurs="0" name="tetheredGuid" type="s:string"/>
+                    <s:element minOccurs="0" name="MyPILink" type="s:string"/>
+                    <s:element name="dismissMPILink" type="s:boolean"/>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError2"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Employee2">
+                <s:sequence>
+                    <s:element minOccurs="0" name="employeeID" type="s:string"/>
+                    <s:element minOccurs="0" name="ghNumber" type="s:string"/>
+                    <s:element minOccurs="0" name="ghCreation" type="s:date"/>
+                    <s:element name="contact" type="s0:Contact2"/>
+                    <s:element minOccurs="0" name="address" type="s0:Address2"/>
+                    <s:element minOccurs="0" name="centralCard" type="s:string"/>
+                    <s:element minOccurs="0" name="customerReferenceAnswer" type="s:string"/>
+                    <s:element minOccurs="0" name="purchaseOrderAnswer" type="s:string"/>
+                    <s:element minOccurs="0" name="userDefinedAnswers" type="s0:ArrayOfUDFAnswers"/>
+                    <s:element minOccurs="0" name="accessLevel">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="STAYER"/>
+                                <s:enumeration value="SELF"/>
+                                <s:enumeration value="BOOKER"/>
+                                <s:enumeration value="SUPER"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="totalStays" type="s:long"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Administrator2">
+                <s:complexContent>
+                    <s:extension base="s0:Contact2">
+                        <s:sequence>
+                            <s:element name="position" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="Contact2">
+                <s:complexContent>
+                    <s:extension base="s0:Person2">
+                        <s:sequence>
+                            <s:element name="emailAddress" type="s:string"/>
+                            <s:element minOccurs="0" name="phoneNumber" type="s:string"/>
+                            <s:element minOccurs="0" name="mobileNumber" type="s:string"/>
+                            <s:element minOccurs="0" name="textConfirmation" type="s:boolean"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="Person2">
+                <s:sequence>
+                    <s:element minOccurs="0" name="title">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="Mr"/>
+                                <s:enumeration value="Mrs"/>
+                                <s:enumeration value="Ms"/>
+                                <s:enumeration value="Miss"/>
+                                <s:enumeration value="Master"/>
+                                <s:enumeration value="Dr"/>
+                                <s:enumeration value="Lord"/>
+                                <s:enumeration value="Lady"/>
+                                <s:enumeration value="Sir"/>
+                                <s:enumeration value="Col"/>
+                                <s:enumeration value="Prof"/>
+                                <s:enumeration value="Rev"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="firstName" type="s:string"/>
+                    <s:element minOccurs="0" name="lastName" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Address2">
+                <s:sequence>
+                    <s:element name="addressLine1">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="35"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="addressLine2">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="35"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="addressLine3">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="35"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="addressLine4">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="35"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="addressLine5">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="35"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="postCode" type="s:string"/>
+                    <s:element name="country">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="30"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfUDFAnswers">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="UDFAnswers" nillable="true" type="s0:UDFAnswers2"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="UDFAnswers2">
+                <s:sequence>
+                    <s:element name="miID" type="s:decimal"/>
+                    <s:element name="miAnswer" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="BasicCompanyDetails2">
+                <s:sequence>
+                    <s:element name="companyName" type="s:string"/>
+                    <s:element name="companyAddress" type="s0:Address2"/>
+                    <s:element name="mainContact" type="s0:MainContact2"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="MainContact2">
+                <s:sequence>
+                    <s:element minOccurs="0" name="employeeID" type="s:string"/>
+                    <s:element name="contact" type="s0:Contact2"/>
+                    <s:element minOccurs="0" name="position" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CompanySetupDetails2">
+                <s:sequence>
+                    <s:element name="alternateCompanyName" type="s:string"/>
+                    <s:element name="dashboardMessage">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="400"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfUpcomingBookingSummary">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="UpcomingBookingSummary" nillable="true" type="s0:UpcomingBookingSummary2"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="UpcomingBookingSummary2">
+                <s:sequence>
+                    <s:element name="arrivalDate" type="s:string"/>
+                    <s:element name="hotelName" type="s:string"/>
+                    <s:element name="guestName" type="s:string"/>
+                    <s:element name="bookingID" type="s:string"/>
+                    <s:element name="surname" type="s:string"/>
+                    <s:element minOccurs="0" name="amendable" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOferrorError2">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="s0:Error2"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Error2">
+                <s:sequence>
+                    <s:element minOccurs="0" name="errorCode">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="5"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="errorDescription" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </types>
+    <message name="InitSessionSoapIn">
+        <part name="parameters" element="s0:InitSession"/>
+    </message>
+    <message name="InitSessionSoapOut">
+        <part name="parameters" element="s0:InitSessionResponse"/>
+    </message>
+    <portType name="Auth0ServiceSoap">
+        <operation name="InitSession">
+            <input message="s0:InitSessionSoapIn"/>
+            <output message="s0:InitSessionSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="Auth0ServiceSoap" type="s0:Auth0ServiceSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="InitSession">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.Auth0Service.InitSession" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="Auth0Service">
+        <port name="Auth0ServiceSoap" binding="s0:Auth0ServiceSoap">
+            <soap:address location="https://alpha2.bookings.premierinn.com:443/csp/sql/ws.Corporate.Auth0Service.cls"/>
+        </port>
+    </service>
+</definitions>

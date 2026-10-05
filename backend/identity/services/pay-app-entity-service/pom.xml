@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>uk.co.whitbread</groupId>
+    <artifactId>digital-monorepo-service-parent</artifactId>
+    <version>${revision}</version>
+    <relativePath>../../../parents/service-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>pay-app-entity-service</artifactId>
+  <packaging>jar</packaging>
+
+  <properties>
+    <application.port>9133</application.port>
+    <sonar.coverage.exclusions>
+      **/model/**,
+      **/properties/**,
+      **/config/**,
+      **/mapper/**,
+      **/exception/**,
+      **/exceptions/**,
+      **/properties/**,
+      **/generated/**,
+      **PayAppEntityServiceApplication*
+    </sonar.coverage.exclusions>
+    <sonar.cpd.exclusions>
+      **/model/**,
+    </sonar.cpd.exclusions>
+  </properties>
+
+  <name>pay-app-entity-service</name>
+  <description>Whitbread Pay App Entity Microservice</description>
+
+  <dependencies>
+
+    <!-- Whitbread -->
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-exceptions</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>commons-cdh-lib</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.whitbread.shared</groupId>
+      <artifactId>common-auth0</artifactId>
+    </dependency>
+
+    <!-- Spring/SpringBoot -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web-services</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webclient</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+    </dependency>
+
+    <!-- Micrometer tracing - needed for Tracer class, version managed by Spring Boot -->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-tracing-bridge-brave</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-contract-wiremock</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>company</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <skipValidateSpec>true</skipValidateSpec>
+              <inputSpec>
+                ${project.basedir}/src/main/resources/openapi/company-service-opera-openApi.yaml
+              </inputSpec>
+              <generatorName>spring</generatorName>
+              <modelPackage>uk.co.whitbread.payapp.generated.models.company</modelPackage>
+              <typeMappings>
+                <typeMapping>OffsetDateTime=Date</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>java.time.OffsetDateTime=java.util.Date</importMapping>
+              </importMappings>
+              <generateApis>false</generateApis>
+              <generateApiDocumentation>false</generateApiDocumentation>
+              <generateModelDocumentation>false</generateModelDocumentation>
+              <generateSupportingFiles>false</generateSupportingFiles>
+              <modelNameSuffix>Dto</modelNameSuffix>
+              <configOptions>
+                <useJakartaEe>true</useJakartaEe>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!--spring-boot-maven-plugin is needed by springdoc-openapi-maven-plugin to generate OpenAPI yaml description -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+        </configuration>
+        <executions>
+          <execution>
+            <id>pre-integration-test</id>
+            <goals>
+              <goal>start</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>post-integration-test</id>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!--Used to generate OpenAPI yaml description -->
+      <plugin>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <apiDocsUrl>http://localhost:${application.port}/v3/api-docs.yaml</apiDocsUrl>
+          <outputFileName>${project.name}-openApi.yaml</outputFileName>
+          <outputDir>${basedir}/docs/openApi</outputDir>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/uk/co/whitbread/payapp/PayAppEntityServiceApplication*</exclude>
+            <exclude>**/uk/co/whitbread/**/model/**</exclude>
+            <exclude>**/uk/co/whitbread/**/config/**</exclude>
+            <exclude>**/uk/co/whitbread/**/mapper/**</exclude>
+            <exclude>**/uk/co/whitbread/**/exception/**</exclude>
+            <exclude>**/uk/co/whitbread/**/exceptions/**</exclude>
+            <exclude>**/uk/co/whitbread/**/properties/**</exclude>
+            <exclude>**/uk/co/whitbread/**/generated/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <baseClassForTests>uk.co.whitbread.payapp.ContractVerifierBaseTest
+          </baseClassForTests>
+          <basePackageForTests>uk.co.whitbread.payapp</basePackageForTests>
+          <nameSuffixForTests>IT</nameSuffixForTests>
+          <testFramework>JUNIT5</testFramework>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <configuration>
+          <excludedClasses>
+            <param>uk.co.whitbread.payapp.PayAppEntityServiceApplication</param>
+          </excludedClasses>
+          <excludedTestClasses>
+            <excludedTestClass>
+              uk.co.whitbread.payapp.ArchUnitTests
+            </excludedTestClass>
+          </excludedTestClasses>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

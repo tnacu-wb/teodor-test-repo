@@ -1,0 +1,55 @@
+# Dependabot configuration for digital-monorepo.
+#
+# Scoped deliberately to the Python tools under tools/python/ (SRE-338). The
+# monorepo had no Dependabot config before this; keeping the scope narrow
+# avoids enabling version updates across the Java estate by accident.
+#
+# The `directories` globbing (`/tools/python/*`) mirrors the generic CI: a new
+# tool dropped under tools/python/<name>/ is picked up with no edit here, the
+# same zero-config onboarding ci-python-tools.yaml gives. No per-tool entry is
+# needed.
+#
+# commit-message.prefix keeps Dependabot's commits consistent with the repo's
+# conventional-commit style (e.g. `fix(deps): ...`); Dependabot's own defaults
+# ("Bump x from a to b") would otherwise diverge from it.
+#
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+updates:
+  # Python dependencies (pyproject.toml + uv.lock) for every Python tool.
+  - package-ecosystem: "uv"
+    directories:
+      - "/tools/python/*"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "fix(deps)"
+      prefix-development: "chore(deps)"
+  # Base image in each tool's Dockerfile.
+  - package-ecosystem: "docker"
+    directories:
+      - "/tools/python/*"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "fix(deps)"
+  # Images referenced by each tool's compose.yaml.
+  - package-ecosystem: "docker-compose"
+    directories:
+      - "/tools/python/*"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "docker-compose"
+    commit-message:
+      prefix: "fix(deps)"

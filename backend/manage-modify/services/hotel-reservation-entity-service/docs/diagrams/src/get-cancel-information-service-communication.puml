@@ -1,0 +1,13 @@
+@startuml
+entity "Reservation Entity Service" as A
+entity "OHIP Adapter Service" as OHIP
+entity "OHIP Adapter Service" as OHIP
+entity OPERA
+
+A -> OHIP: GET /adp/reservations/cancel?hotelId={hotelId}&reservationIds={reservationIds}&userDateTime={userDateTime}
+OHIP -> OHIP: GET /ohip/reservations/cancel?hotelId={hotelId}&reservationIds={reservationIds}&userDateTime={userDateTime}
+OHIP -> OPERA: GET /rsv/v0/hotels/{hotelId}/reservations/{reservationId}/policies
+OHIP <- OPERA: CancelInformationDto
+OHIP <- OHIP: CancelInformationDto
+A <- OHIP: CancelInformationDto
+@enduml

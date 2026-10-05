@@ -1,0 +1,34 @@
+{
+  "id" : "2d41e0e1-6459-4c84-b816-f378e1bd908f",
+  "request" : {
+    "urlPath" : "/v1/reservations/business",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'HOTELCODE')]"
+    }, {
+      "matchesJsonPath" : "$.['reservationIds'][?(@ == '123456')]"
+    }, {
+      "matchesJsonPath" : "$.['businessItems'][?(@.['businessNotes'] == 'TestingNote is authorized')]"
+    }, {
+      "matchesJsonPath" : "$.['businessItems'][?(@.['purchaseOrderNumber'] == '1234521345')]"
+    }, {
+      "matchesJsonPath" : "$.['businessItems'][?(@.['customReferenceNumber'] == 'ABC123456')]"
+    }, {
+      "matchesJsonPath" : "$.['businessItems'].['businessAllowances'][*][?(@.['allowance'] == 'ultimateWifi')]"
+    }, {
+      "matchesJsonPath" : "$.['businessItems'].['businessAllowances'][*][?(@.['budget'] == '0.0')]"
+    }, {
+      "matchesJsonPath" : "$.['businessItems'].['businessAllowances'][*][?(@.['isAuthorised'] == true)]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "2d41e0e1-6459-4c84-b816-f378e1bd908f"
+}

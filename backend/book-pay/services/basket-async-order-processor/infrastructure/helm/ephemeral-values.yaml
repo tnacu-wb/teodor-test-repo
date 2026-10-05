@@ -1,0 +1,116 @@
+# Ephemeral (per-PR) values for basket-async-order-processor.
+#
+# ci-matrix-deploy-eph.yaml layers this file OVER the backend stack defaults at
+# backend/infrastructure/helm/ephemeral-values.yaml:
+#
+#   opera-app-chart/values.yaml  <  stack ephemeral defaults  <  THIS FILE  <  --set
+#
+# Everything generic to a PR release — canary/autoscaling/pdb/istio/prometheus off,
+# replicaCount 1, the trimmed lifecycle and grace period, ndots, probe TIMINGS,
+# imagePullSecrets, namespace — is inherited and is not repeated here.
+#
+# Overridden per-deploy by ci-matrix-deploy-eph.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create, ephemeral
+#
+# ── Why the environment is inlined ───────────────────────────────────────────
+#
+# The chart names its ConfigMap `{{ applicationName }}-configmap` and applicationName is
+# the PR release name here, so `configMap.create: true` would produce
+# `basket-async-order-processor-pr-N-configmap` while a configMapKeyRef still names the
+# fixed one. The non-secret values are inlined instead, which also makes the release
+# self-contained against a GitOps change landing mid-PR.
+#
+# ── The Kafka consumer group ─────────────────────────────────────────────────
+#
+# KAFKA_GROUP_ID is deliberately NOT the dev group. A PR release joining
+# `basket-order-dev` would be handed live partitions of `orders-dev` and would steal
+# messages from the shared dev consumer — a PR environment must never be able to do
+# that. It gets its own group and therefore its own offsets. The group name is a
+# constant, not the release name (nothing --sets an env var), so two concurrent PR
+# releases of THIS service share one group and split the partitions between them.
+
+applicationName: basket-async-order-processor
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/basket-async-order-processor
+
+deployment:
+  containerPorts:
+    - containerPort: 9110
+      protocol: TCP
+      name: http
+    # Not published through the Service — reach it with
+    # `kubectl port-forward -n opera-be deploy/<release> 5005:5005`.
+    - containerPort: 5005
+      protocol: TCP
+      name: debug
+
+  containerEnvFrom:
+    # Cluster-provisioned and shared, so referencing it by its fixed name is safe here.
+    # `optional: true` because nothing in .github/workflows creates it: without it the
+    # app falls back to application.yml's localhost:9092 and fails to consume, which is
+    # a degraded environment rather than a pod stuck in CreateContainerConfigError with
+    # `helm --wait` timing out.
+    - configMapRef:
+        name: kafka-bootstrap-config
+        optional: true
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=70 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # Shared dev downstream, addressed by bare hostname (its Service publishes port 80).
+    - name: RESERVATION_HOST
+      value: hotel-reservation-entity-service
+
+    # Same dev topics the service reads and writes in opera-dev.
+    - name: TOPICS_ORDERS
+      value: orders-dev
+    - name: TOPICS_ACK
+      value: ack-dev
+
+    # See the header: an isolated group so a PR release cannot consume the shared dev
+    # consumer's messages.
+    - name: KAFKA_GROUP_ID
+      value: basket-order-eph
+    - name: KAFKA_ORDERS_CONCURRENCY
+      value: '1'
+    - name: KAFKA_REQUEST_TIMEOUT
+      value: '30000'
+    - name: KAFKA_HEARTBEAT_INTERVAL
+      value: '1000'
+    - name: KAFKA_MAX_POLL_INTERVAL
+      value: '900000'
+    - name: KAFKA_MAX_POLL_RECORDS
+      value: '30'
+    - name: KAFKA_SESSION_TIMEOUT
+      value: '45000'
+
+  readinessProbe:
+    httpGet:
+      path: /aop/actuator/health/readiness
+      port: 9110
+
+  livenessProbe:
+    httpGet:
+      path: /aop/actuator/health/liveness
+      port: 9110
+
+  # Only memory is stated; requests.cpu (50m) merges through from the stack defaults.
+  # requests.memory is pinned to limits.memory because the heap is sized off the limit.
+  resources:
+    requests:
+      memory: 1024Mi
+    limits:
+      memory: 1024Mi
+
+service:
+  name: basket-async-order-processor
+  ports:
+    - port: 80
+      targetPort: 9110
+      protocol: TCP
+      name: port9110

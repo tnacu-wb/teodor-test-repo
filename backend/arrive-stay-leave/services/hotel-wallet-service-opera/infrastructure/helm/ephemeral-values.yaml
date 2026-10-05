@@ -1,0 +1,238 @@
+# Ephemeral (per-PR) values for hotel-wallet-service-opera.
+#
+# Self-contained: this is the ONLY values file the ephemeral deploy passes.
+# ci-matrix-deploy-eph.yaml picks it up ahead of values.yaml and does NOT layer
+# production values underneath, so anything the service needs to boot has to be
+# here. Keeping the two separate means a production tuning change cannot
+# silently alter PR environments, and vice versa.
+#
+# Shaped for opera-app-chart (whitbread-eos/helm-central-charts; a copy of the
+# same chart lives at infra/helm/opera-app-chart). The chart reads the pod spec
+# from `deployment.*` and gates every optional resource on a `create` flag —
+# keys outside those names are silently ignored, so an unset
+# `deployment.containerEnvs` renders `env: null` and the pod boots with no
+# environment at all.
+#
+# Overridden per-deploy by ci-matrix-deploy-eph.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create, ephemeral
+#
+# `deployment.checksumValues` is deliberately absent: nothing in the chart reads
+# it. deployment.yaml computes `checksum/values` by hashing the whole values
+# tree, and the image tag in that tree changes on every push anyway.
+
+# ── Ephemeral switches ───────────────────────────────────────────────────────
+# All five default to false in the chart. They are set explicitly because
+# production values.yaml turns every one of them ON, and this file is what a
+# reviewer diffs against it.
+
+# Gates the Flagger Canary out of the chart. canary.yaml checks this value
+# directly. Once a Canary exists Flagger claims ownership of the Service's
+# .spec.selector and .spec.ports[].name and of the VirtualService's .spec.http,
+# and Helm's server-side apply then fails on the next upgrade of the same
+# release with:
+#   conflicts with "flagger" using v1: .spec.selector
+# A canary analysis also cannot finish inside the lifetime of a PR release, and
+# production's canary block drags in a load test and a smoke-test script that
+# would run against every commit.
+ephemeral: true
+
+canary:
+  create: false
+# Production runs 2-4 replicas. An HPA competing with a redeploy on every push
+# is churn and cost, no benefit — and with autoscaling off the chart emits
+# `replicas: deployment.replicaCount`, which is what pins this to one pod.
+autoscaling:
+  create: false
+# Production tracks the `develop` tag. Nothing should auto-bump a PR release;
+# the pipeline sets the tag on every deploy.
+imageAutomation:
+  create: false
+# A disruption budget over a single short-lived replica just blocks node drains.
+pdb:
+  create: false
+# Keeps the spring.prometheus/scrape annotations off the pod. Short-lived PR
+# pods appearing and vanishing in the shared Prometheus are noise, and they
+# would land in the same metric series as production.
+prometheusSpring:
+  create: false
+
+# ── Identity ─────────────────────────────────────────────────────────────────
+# Both are replaced with the PR release name at deploy time. They are kept here
+# so `helm template` renders standalone for local inspection.
+
+applicationName: hotel-wallet-service-opera
+namespace: opera-be
+
+image:
+  # Ephemeral images come from ECR, not DockerHub — build-service.yaml pushes to
+  # whitbreaddigital/<service-name> in account 327347623470. Repository and tag
+  # are both set by the workflow; the value here only documents the shape.
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/hotel-wallet-service-opera
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: regcred
+
+# ── Workload ─────────────────────────────────────────────────────────────────
+
+deployment:
+  create: true
+  replicaCount: 1
+
+  # Required, not cosmetic. application.yml sets `irsa.enabled: true` and reads
+  # the Apple Wallet signing certificates out of S3 at startup
+  # (CertsRetrieverOutPortImpl -> amazonS3.getObject). The IRSA role is attached
+  # to this ServiceAccount, so on the default SA every cert fetch fails 403 and
+  # no pass can be generated. The SA is namespace-scoped and already exists in
+  # opera-be, so a PR release just reuses it — and the only S3 verb in the
+  # service is getObject, so sharing the dev bucket is read-only.
+  serviceAccount: hotel-wallet-service-account
+
+  # The chart defaults to a 20s preStop sleep and a 90s grace period, which
+  # production keeps for draining traffic behind Istio but which adds ~2 minutes
+  # to every push here. null removes the chart's default rather than merging
+  # with it — an empty map would leave the default in place.
+  lifecycle: null
+  terminationGracePeriodSeconds: 15
+
+  # Production omits these, which renders `ports: null`. Valid, but it leaves
+  # `kubectl describe pod` with nothing to show.
+  containerPorts:
+    - containerPort: 9131
+      protocol: TCP
+      name: http
+
+  containerEnvs:
+    # Consumed by the image's entrypoint: Dockerfile.backend runs
+    # `exec java ${JAVA_OPTS} -jar /app.jar`, so the shell expands this at
+    # start. MaxRAMPercentage is a share of the *memory limit* below — change
+    # one and the heap moves with it.
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=80
+
+    # Production spells this `spring_profiles_active`; both forms reach
+    # `spring.profiles.active` through Spring's relaxed environment binding, and
+    # the canonical spelling is what the other ephemeral values files use.
+    # Note this buys less than it looks like: application.yml has no opera-dev
+    # profile block (only `local`), and its DEBUG logging is on unconditionally
+    # via logging.configuration.debug. It is set to match the deployed
+    # environment the shared libraries expect.
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+
+    # Downstream services — shared dev instances, not per-PR copies.
+    #
+    # BARE HOSTNAMES, NO SCHEME AND NO PORT. application.yml composes the URL
+    # itself as `host: http://${RESERVATION_HOST:localhost:9103}`, so a value of
+    # `http://...` here would render `http://http://...`. No port because these
+    # Services publish port 80 and target the app port behind it — the same
+    # shape this service's own `service.ports` uses below.
+    - name: RESERVATION_HOST
+      value: hotel-reservation-entity-service
+    - name: CONTENT_SERVICE_HOST
+      value: content-entity-service
+
+    # Both of the following are MANDATORY. Unlike most of this service's
+    # settings they have no default in application.yml — `${HOTEL_WALLET_...}`
+    # with no `:fallback` — so an unset value is an unresolvable placeholder and
+    # the Spring context refuses to start.
+
+    # Read-only: the bucket holds the Apple Wallet certs and pass template.
+    - name: HOTEL_WALLET_BUCKET_NAME
+      value: opera-dev-pi-mobile-wallet
+
+    # Deliberately NOT `optional: true`. That flag is the right call when the
+    # app has a usable fallback, but wallet.cert.password has none: an optional
+    # ref to a missing secret only defers the same failure into a placeholder
+    # error and a CrashLoopBackOff. A hard ref fails as
+    # CreateContainerConfigError instead, which names the missing secret.
+    - name: HOTEL_WALLET_CERT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: hotel-wallet-credentials
+          key: hotel_wallet_cert_password
+
+    # NOT SET, deliberately:
+    #
+    #   HTTP_CONNECTION_TIMEOUT / HTTP_RESPONSE_TIMEOUT — application.yml
+    #     defaults these to 10000 and 30, which is what production runs on too;
+    #     production sets neither.
+
+  # Same 300s startup budget as production, reached sooner and sampled harder:
+  # 30s + 60x5s = 330s. Production's 60s + 24x10s makes `helm --wait` sit
+  # through up to a 10s poll gap after the pod is actually serving, and this
+  # service is slow enough to start that the gap is worth closing. The whole
+  # budget still has to fit inside the workflow's `--timeout 10m`.
+  readinessProbe:
+    httpGet:
+      path: /v1/hotel-wallet/actuator/health/readiness
+      port: 9131
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 60
+
+  # initialDelaySeconds stays at production's 420 on purpose: it MUST outlast
+  # the readiness budget above (330s), or liveness starts failing a JVM that is
+  # still booting and turns a slow deploy into a crash loop.
+  livenessProbe:
+    httpGet:
+      path: /v1/hotel-wallet/actuator/health/liveness
+      port: 9131
+    initialDelaySeconds: 420
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
+
+  # Only CPU is cut. Memory request stays pinned to the limit, which is the
+  # opposite of what the other ephemeral values files do, because JAVA_OPTS
+  # sizes the heap at 80% of the *limit*: dropping the request below it leaves a
+  # ~640Mi heap running inside a smaller reservation, and the kubelet may evict
+  # it under node pressure. Evicting a service that takes minutes to start costs
+  # more than the packing density is worth. As in production there is no CPU
+  # limit — CPU is compressible, and throttling only makes the slow start
+  # slower.
+  resources:
+    requests:
+      cpu: 50m
+      memory: 800Mi
+    limits:
+      memory: 800Mi
+
+  dns:
+    ndots: 3
+
+# ── Networking ───────────────────────────────────────────────────────────────
+
+service:
+  create: true
+  # Overridden with the release name at deploy time. service.yaml names the
+  # Service after applicationName while virtualservice.yaml routes to
+  # service.name, so the two must move together; the workflow --sets both.
+  name: hotel-wallet-service-opera
+  type: ClusterIP
+  ports:
+    - name: port9131
+      port: 80
+      protocol: TCP
+      targetPort: 9131
+
+# No VirtualService, and this one is not merely tidiness. virtualservice.yaml
+# renders `hosts: ["*"]` on the shared `opera-api` gateway with production's
+# `regex: ^\/v\d+\/hotel-wallet.*` — there is no per-release hostname anywhere
+# in the template, and the chart does NOT gate the VirtualService on
+# `ephemeral`, only the Canary. So every open PR would publish a route matching
+# the same host and the same path as production, and Istio resolves that
+# collision by picking one — traffic for /v1/hotel-wallet can end up in a PR
+# pod. ci-matrix-deploy-eph.yaml says the same thing from the other side:
+# ephemeral backend releases are addressed in-cluster by service name, and it
+# never passes an istio.host.
+#
+# Reach a PR release at (port 80, per service.ports above):
+#   http://<release-name>.opera-be.svc.cluster.local
+# which is the service-host the workflow's prepare job prints.
+istio:
+  create: false

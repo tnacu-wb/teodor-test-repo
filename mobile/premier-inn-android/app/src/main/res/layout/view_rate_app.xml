@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rate_modal_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:maxHeight="@dimen/app_rating_min_height">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Header3"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:text="@string/rate_app_title_first"
+        app:layout_constraintBottom_toTopOf="@+id/top_guide"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/negative_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:src="@drawable/ic_sentiment_negative"
+        app:layout_constraintBottom_toTopOf="@+id/negative_caption"
+        app:layout_constraintEnd_toStartOf="@+id/mid_guide"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_guide"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:scaleX="1"
+        tools:scaleY="1" />
+
+    <TextView
+        android:id="@+id/negative_caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Subtext"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:text="@string/rate_app_negative_caption"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_guide"
+        app:layout_constraintEnd_toEndOf="@+id/negative_btn"
+        app:layout_constraintStart_toStartOf="@+id/negative_btn"
+        app:layout_constraintTop_toBottomOf="@+id/negative_btn"
+        tools:scaleX="1"
+        tools:scaleY="1" />
+
+    <ImageView
+        android:id="@+id/positive_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:src="@drawable/ic_sentiment_positive"
+        app:layout_constraintBottom_toTopOf="@+id/positive_caption"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="@+id/mid_guide"
+        app:layout_constraintTop_toBottomOf="@+id/top_guide"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:scaleX="1"
+        tools:scaleY="1" />
+
+    <TextView
+        android:id="@+id/positive_caption"
+        style="@style/Subtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:text="@string/rate_app_positive_caption"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_guide"
+        app:layout_constraintEnd_toEndOf="@+id/positive_btn"
+        app:layout_constraintStart_toStartOf="@id/positive_btn"
+        app:layout_constraintTop_toBottomOf="@+id/positive_btn"
+        tools:scaleX="1"
+        tools:scaleY="1" />
+
+    <Button
+        android:id="@+id/cancel_btn"
+        style="@style/BorderlessButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:text="@string/rate_app_not_now"
+        android:textColor="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bottom_guide" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mid_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

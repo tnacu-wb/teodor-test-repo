@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <include layout="@layout/calendar_days_in_week_header" />
+
+    <include layout="@layout/view_calendar_error" />
+
+    <com.kizitonwose.calendarview.CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/generic_padding_8"
+        android:paddingBottom="@dimen/generic_padding_8"
+        app:cv_dayViewResource="@layout/calendar_day"
+        app:cv_monthFooterResource="@layout/calendar_month_footer"
+        app:cv_monthHeaderResource="@layout/calendar_month_header" />
+
+</merge>

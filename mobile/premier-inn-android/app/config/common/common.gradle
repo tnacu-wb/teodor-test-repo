@@ -1,0 +1,48 @@
+ext.commitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
+    }
+    stdout.toString().trim()
+}
+
+ext.localBranch = { ->
+    def branchout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
+        standardOutput = branchout
+    }
+
+    branchout.toString().replace("/", "_").trim()
+}
+
+ext.envBranch = { ->
+    System.getenv("BRANCH") ? System.getenv("BRANCH").replace("/", "_") : null
+}
+
+def envVarOrDefault(String key, Integer defaultValue) {
+    return System.getenv(key) as Integer ?: defaultValue
+}
+// Check the reason behind Semantic versioning : https://medium.com/@maxirosson/versioning-android-apps-d6ec171cfd82
+ext.calculateVersionCode = { major, minor, patch, googlePlayRelease ->
+
+    def buildNumber = envVarOrDefault("BUILD_NUMBER", 1)
+    def majorLimit = 9
+    def minorLimit = 99
+    def patchLimit = 99
+    def buildNumberLimit = googlePlayRelease ? 99 : 999999999999
+
+    if (major > majorLimit) throw new InvalidUserDataException("$major for major exceeds the limit of $majorLimit")
+    if (minor > minorLimit) throw new InvalidUserDataException("$minor for minor exceeds the limit of $minorLimit")
+    if (patch > patchLimit) throw new InvalidUserDataException("$patch for patch exceeds the limit of $patchLimit")
+    if (buildNumber > buildNumberLimit) throw new InvalidUserDataException("$buildNumber for buildNumber exceeds the limit of $buildNumberLimit")
+
+    if(googlePlayRelease) {
+        // TODO the 'buildNumber' here for builds to the Beta track needs to be manually entered when the build job is run
+        // - This number should represent how many times this major.minor.path version has been released to the Beta track
+        major * 1000000 + minor * 10000 + patch * 100 + buildNumber
+    } else {
+        buildNumber
+    }
+}

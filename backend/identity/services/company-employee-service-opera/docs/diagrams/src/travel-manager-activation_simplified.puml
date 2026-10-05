@@ -1,0 +1,22 @@
+@startuml
+actor "Travel Manager" as TM
+
+box "Business Booker Front End"
+    participant "Register new business account Page" as RNBA
+    participant "Login page" as ALP
+end box
+
+box "Company Employee Microservice"
+    participant "Create Business Account" as CA
+    participant "Activate account" as AD
+end box
+
+
+TM -> RNBA: Creates new account
+RNBA -> CA: FE calls Create new account endpoint
+TM -> ALP: Travel manager clicks on the email
+ALP -> AD: FE calls activate account
+ALP -> ALP: Displays Login popup with successful message
+TM -> ALP: Enter his credentials and submit
+
+@enduml

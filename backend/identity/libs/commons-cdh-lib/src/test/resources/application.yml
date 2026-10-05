@@ -1,0 +1,73 @@
+server:
+  port: 9028
+
+swagger:
+  api:
+    version: 1.0.0
+
+spring.jackson.serialization.WRITE_DATES_AS_TIMESTAMPS: false
+
+info:
+  build:
+    groupId: '@project.groupId@'
+    artifact: '@project.artifactId@'
+    description: '@project.description@'
+    version: '@project.version@'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+session:
+  security:
+    encryptionEnabled: true
+    whitelistingEnabled: true
+
+
+# OAUTH env parameters - CDH token bearer generation
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: /oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+# Customer Data Hub env parameters
+  api:
+    host: http://localhost:${wiremock.server.port:0}
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: 88134dec7f304a
+      booking-subscription-key: c76f86e2a01
+
+config:
+  httpClient:
+    connectionTimeout: 10000
+    responseTimeout: 30
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:none}
+  data:
+    redis:
+      ssl:
+        enabled: false
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m

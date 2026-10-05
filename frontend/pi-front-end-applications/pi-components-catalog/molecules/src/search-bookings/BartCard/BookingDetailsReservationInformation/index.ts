@@ -1,0 +1,3 @@
+import BartBookingDetailsReservationInformationComponent from './BartBookingDetailsReservationInformation.component';
+
+export default BartBookingDetailsReservationInformationComponent;

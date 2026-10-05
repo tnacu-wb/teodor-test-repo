@@ -1,0 +1,132 @@
+package uk.co.whitbread.content.entity.service.generated.models.content;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import org.springframework.lang.Nullable;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * BookingSpinnerConfigDto
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-08-25T07:51:27.565654+03:00[Europe/Bucharest]", comments = "Generator version: 7.12.0")
+public class BookingSpinnerConfigDto {
+
+  private @Nullable String order;
+
+  private @Nullable String seconds;
+
+  private @Nullable String text;
+
+  public BookingSpinnerConfigDto order(String order) {
+    this.order = order;
+    return this;
+  }
+
+  /**
+   * Get order
+   * @return order
+   */
+  
+  @Schema(name = "order", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("order")
+  public String getOrder() {
+    return order;
+  }
+
+  public void setOrder(String order) {
+    this.order = order;
+  }
+
+  public BookingSpinnerConfigDto seconds(String seconds) {
+    this.seconds = seconds;
+    return this;
+  }
+
+  /**
+   * Get seconds
+   * @return seconds
+   */
+  
+  @Schema(name = "seconds", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("seconds")
+  public String getSeconds() {
+    return seconds;
+  }
+
+  public void setSeconds(String seconds) {
+    this.seconds = seconds;
+  }
+
+  public BookingSpinnerConfigDto text(String text) {
+    this.text = text;
+    return this;
+  }
+
+  /**
+   * Get text
+   * @return text
+   */
+  
+  @Schema(name = "text", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("text")
+  public String getText() {
+    return text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    BookingSpinnerConfigDto bookingSpinnerConfigDto = (BookingSpinnerConfigDto) o;
+    return Objects.equals(this.order, bookingSpinnerConfigDto.order) &&
+        Objects.equals(this.seconds, bookingSpinnerConfigDto.seconds) &&
+        Objects.equals(this.text, bookingSpinnerConfigDto.text);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(order, seconds, text);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class BookingSpinnerConfigDto {\n");
+    sb.append("    order: ").append(toIndentedString(order)).append("\n");
+    sb.append("    seconds: ").append(toIndentedString(seconds)).append("\n");
+    sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+

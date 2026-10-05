@@ -1,0 +1,47 @@
+import { semanticTextStyles } from '../adapters/semanticTypography';
+
+export const typography = {
+  fonts: {
+    heading: 'Proxima Nova Sans, helvetica, arial, sans-serif',
+    header: 'Proxima Nova Sans, helvetica, arial, sans-serif',
+    body: 'Proxima Nova Sans, helvetica, arial, sans-serif',
+  },
+  fontSizes: {
+    xxs: '12px',
+    xs: '13px',
+    sm: '14px',
+    md: '16px',
+    lg: '18px',
+    xl: '20px',
+    '2xl': '23px',
+    '3xl': '26px',
+    '3xxl': '29px',
+    '4xl': '36px',
+    '5xl': '48px',
+    '6xl': '60px',
+    '7xl': '72px',
+  },
+  lineHeights: {
+    normal: 'normal',
+    '1': '16px',
+    '2': '20px',
+    '3': '24px',
+    '4': '32px',
+    '5': '40px',
+    '6': '56px',
+    '7': '72px',
+    '8': '88px',
+  },
+  fontWeights: {
+    hairline: 100,
+    thin: 200,
+    light: 300,
+    normal: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+    extrabold: 800,
+    black: 900,
+  },
+  textStyles: semanticTextStyles,
+};

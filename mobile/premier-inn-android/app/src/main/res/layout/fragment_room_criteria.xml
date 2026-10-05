@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_room_criteria_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/generic_margin_24"
+    android:animateLayoutChanges="true"
+    android:background="@color/white"
+    android:paddingBottom="@dimen/generic_padding_24">
+
+    <TextView
+        android:id="@+id/room_name"
+        style="@style/criteria_room_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        tools:text="Room 1" />
+
+    <TextView
+        android:id="@+id/adults_label"
+        style="@style/Header4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_32"
+        android:text="@string/adults"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+        app:layout_constraintTop_toBottomOf="@+id/room_name" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <TextView
+        android:id="@+id/adults_subtext"
+        style="@style/criteria_sublabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/criteria_adult_rules"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toBottomOf="@+id/adults_label" />
+
+    <TextView
+        android:id="@+id/children_label"
+        style="@style/Header4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/children"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="@+id/children_minus_button" />
+
+    <TextView
+        android:id="@+id/children_subtext"
+        style="@style/criteria_sublabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/criteria_children_rules"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toBottomOf="@+id/children_label" />
+
+    <TextView
+        android:id="@+id/infants_label"
+        style="@style/Header4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/infants"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/infants_minus_button"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="@+id/infants_minus_button"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/cot_label"
+        style="@style/Header4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_42"
+        android:text="@string/criteria_add_cot"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toBottomOf="@+id/infants_label" />
+
+    <TextView
+        android:id="@+id/room_type_label"
+        style="@style/Header4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_42"
+        android:text="@string/criteria_room_type"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toBottomOf="@+id/cot_label" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="24dp" />
+
+    <ImageButton
+        android:id="@+id/adults_plus_button"
+        android:layout_width="@dimen/room_minus_button_width"
+        android:layout_height="@dimen/room_plus_button_height"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+        app:layout_constraintTop_toTopOf="@+id/adults_label"
+        app:srcCompat="@drawable/criteria_plus" />
+
+    <ImageButton
+        android:id="@+id/children_plus_button"
+        android:layout_width="@dimen/room_minus_button_width"
+        android:layout_height="@dimen/room_plus_button_height"
+        android:layout_marginTop="@dimen/generic_margin_32"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+        app:layout_constraintTop_toBottomOf="@+id/adults_plus_button"
+        app:srcCompat="@drawable/criteria_plus" />
+
+    <ImageButton
+        android:id="@+id/infants_plus_button"
+        android:layout_width="@dimen/room_minus_button_width"
+        android:layout_height="@dimen/room_plus_button_height"
+        android:layout_marginTop="@dimen/generic_margin_32"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+        app:layout_constraintTop_toBottomOf="@+id/children_plus_button"
+        app:srcCompat="@drawable/criteria_plus"
+        tools:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/adults_minus_button"
+        android:layout_width="@dimen/room_minus_button_width"
+        android:layout_height="@dimen/room_plus_button_height"
+        android:layout_marginEnd="@dimen/generic_margin_44"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintEnd_toStartOf="@+id/adults_plus_button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/adults_subtext"
+        app:layout_constraintTop_toTopOf="@+id/adults_plus_button"
+        app:srcCompat="@drawable/criteria_minus" />
+
+    <ImageButton
+        android:id="@+id/children_minus_button"
+        android:layout_width="@dimen/room_minus_button_width"
+        android:layout_height="@dimen/room_plus_button_height"
+        android:layout_marginTop="@dimen/generic_margin_32"
+        android:layout_marginEnd="@dimen/generic_margin_44"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintEnd_toStartOf="@+id/adults_plus_button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/children_subtext"
+        app:layout_constraintTop_toBottomOf="@+id/adults_minus_button"
+        app:srcCompat="@drawable/criteria_minus" />
+
+    <ImageButton
+        android:id="@+id/infants_minus_button"
+        android:layout_width="@dimen/room_minus_button_width"
+        android:layout_height="@dimen/room_plus_button_height"
+        android:layout_marginTop="@dimen/generic_margin_32"
+        android:layout_marginEnd="@dimen/generic_margin_44"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/infants_plus_button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toBottomOf="@+id/children_minus_button"
+        app:srcCompat="@drawable/criteria_minus"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/adults_number"
+        style="@style/Header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        app:layout_constraintBottom_toBottomOf="@+id/adults_plus_button"
+        app:layout_constraintEnd_toStartOf="@+id/adults_plus_button"
+        app:layout_constraintStart_toEndOf="@+id/adults_minus_button"
+        app:layout_constraintTop_toTopOf="@+id/adults_plus_button"
+        tools:text="2" />
+
+    <TextView
+        android:id="@+id/children_number"
+        style="@style/Header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        app:layout_constraintBottom_toBottomOf="@+id/children_plus_button"
+        app:layout_constraintEnd_toStartOf="@+id/children_plus_button"
+        app:layout_constraintStart_toEndOf="@+id/children_minus_button"
+        app:layout_constraintTop_toTopOf="@+id/children_plus_button"
+        tools:text="1" />
+
+    <TextView
+        android:id="@+id/infants_number"
+        style="@style/Header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:layout_marginEnd="@dimen/generic_margin_8"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/infants_plus_button"
+        app:layout_constraintEnd_toStartOf="@+id/infants_plus_button"
+        app:layout_constraintStart_toEndOf="@+id/infants_minus_button"
+        app:layout_constraintTop_toTopOf="@+id/infants_plus_button"
+        tools:text="1"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/room_remove"
+        style="@style/criteria_room_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/criteria_remove_room"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/room_name"
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+        app:layout_constraintTop_toTopOf="@+id/room_name" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/cot_switch"
+        android:layout_width="@dimen/switch_width"
+        android:layout_height="@dimen/switch_height"
+        android:layout_marginEnd="@dimen/generic_margin_12"
+        android:minWidth="@dimen/switch_min_width"
+        android:minHeight="@dimen/switch_min_height"
+        android:theme="@style/Switch"
+        app:layout_constraintBottom_toBottomOf="@+id/cot_label"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+        app:layout_constraintTop_toTopOf="@+id/cot_label"
+        app:showText="false" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/room_type"
+        style="@style/criteria_room_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/room_type_background"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_chevron_right"
+        android:focusable="true"
+        app:drawableTint="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@+id/room_type_label"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/room_type_label"
+        app:layout_constraintTop_toTopOf="@+id/room_type_label"
+        tools:text="Double" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/cot_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="cot_switch,cot_label" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/infant_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="infants_number,infants_label, infants_minus_button, infants_plus_button, infants_age_criteria" />
+
+    <TextView
+        android:id="@+id/children_age_criteria"
+        style="@style/criteria_sublabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/generic_padding_4"
+        android:paddingEnd="@dimen/generic_padding_4"
+        android:text="@string/children_age_specification"
+        app:layout_constraintBottom_toBottomOf="@+id/children_label"
+        app:layout_constraintStart_toEndOf="@+id/children_label"
+        app:layout_constraintTop_toTopOf="@+id/children_label" />
+
+    <TextView
+        android:id="@+id/infants_age_criteria"
+        style="@style/criteria_sublabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/generic_padding_4"
+        android:paddingEnd="@dimen/generic_padding_4"
+        android:text="@string/infants_age_specification"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/infants_label"
+        app:layout_constraintStart_toEndOf="@+id/infants_label"
+        app:layout_constraintTop_toTopOf="@+id/infants_label" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

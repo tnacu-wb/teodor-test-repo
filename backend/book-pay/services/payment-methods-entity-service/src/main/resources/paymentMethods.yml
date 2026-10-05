@@ -1,0 +1,172 @@
+### everything enabled by default and when we apply rules we can set enabled to false
+configuration:
+  defaultPaymentMethods:
+    - name: "CARD"
+      type: NEW_CARD
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: true
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: true
+        - type: "RESERVE_WITHOUT_CARD"
+          order: 3
+          enabled: true
+
+    - name: "PIBA"
+      type: NEW_PIBA
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: true
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: true
+        - type: "RESERVE_WITHOUT_CARD"
+          order: 3
+          enabled: true
+
+    - name: "PAYPAL"
+      type: PAYPAL
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: true
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: false
+
+    - name: "APPLE"
+      type: AP
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: true
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: false
+
+    - name: "GOOGLE"
+      type: GP
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: true
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: false
+
+  savedCardPaymentOptions:
+    - type: "PAY_NOW"
+      order: 1
+      enabled: true
+    - type: "PAY_ON_ARRIVAL"
+      order: 2
+      enabled: true
+    - type: "RESERVE_WITHOUT_CARD"
+      order: 3
+      enabled: true
+
+  failSafePaymentMethods:
+    - name: "CARD"
+      type: NEW_CARD
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: false
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: false
+        - type: "RESERVE_WITHOUT_CARD"
+          order: 3
+          enabled: true
+
+
+configuration-ccui:
+  defaultPaymentMethods:
+    - name: "CARD"
+      type: NEW_CARD
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: true
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: true
+
+    - name: "PIBA UK"
+      type: NEW_PIBA
+      subType: PIBAGB
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: false
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: true
+
+    - name: "PIBA EU"
+      type: NEW_PIBA
+      subType: PIBADE
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: false
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: true
+
+    - name: "Account to company"
+      type: ACCOUNT_COMPANY
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: false
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: true
+
+    - name: "Non-guaranteed booking"
+      type: RESERVE_WITHOUT_CARD
+      enabled: true
+      paymentOptions:
+        - type: "PAY_NOW"
+          order: 1
+          enabled: false
+        - type: "PAY_ON_ARRIVAL"
+          order: 2
+          enabled: true
+
+  failSafePaymentMethods:
+      - name: "Non-guaranteed booking"
+        type: RESERVE_WITHOUT_CARD
+        enabled: true
+        paymentOptions:
+          - type: "PAY_NOW"
+            order: 1
+            enabled: false
+          - type: "PAY_ON_ARRIVAL"
+            order: 2
+            enabled: true
+
+      - name: "Account to company"
+        type: ACCOUNT_COMPANY
+        enabled: true
+        paymentOptions:
+          - type: "PAY_NOW"
+            order: 1
+            enabled: false
+          - type: "PAY_ON_ARRIVAL"
+            order: 2
+            enabled: true

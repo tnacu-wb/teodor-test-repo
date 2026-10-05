@@ -1,0 +1,65 @@
+server:
+  port: 9020
+
+swagger:
+  api:
+    version: 1.0.0
+
+config:
+  service:
+    hotel-account:
+      host: http://localhost:${wiremock.server.port:0}
+      hotelAccountEndpoint: "/customers/hotels/{customerId}"
+    company-service:
+      host: http://localhost:${wiremock.server.port:0}
+      companyEndpoint: "/company/{companyId}"
+    hotel-card:
+      host: http://localhost:${wiremock.server.port:0}
+      companyCardsEndpoint: "/companies/{companyId}/cards"
+    reservation:
+      host: http://localhost:${wiremock.server.port:0}
+      reservationEndpoint: "/v1/reservations/basket/{basketReference}"
+      reservationDeposits: "/v1/reservations/deposits"
+    content:
+      host: http://localhost:${wiremock.server.port:0}
+      paymentInformationEndpoint: "/v1/content/hotels/{hotelId}/payment-information"
+    basket:
+      host: http://localhost:${wiremock.server.port:0}
+      basketEndpoint: "/v1/baskets/{basketReference}"
+    hotel-entity:
+      host: http://localhost:${wiremock.server.port:0}
+      hotelInfoEndpoint: "/v1/hotels/{hotelId}/info"
+
+piba:
+  euro:
+    flag: false
+
+logging:
+  configuration:
+    logger: default
+
+feature-flags:
+  disable-payments:
+    key: "kill_switch_pi_bb_ccui_disable_payments"
+    fallback: false
+  ccui-de-enable-payments-within-72h:
+    key: "kill_switch_ccui_de_enable_payments_within_72h"
+    fallback: true
+  ccui-uk-enable-payments-within-72h:
+    key: "kill_switch_ccui_uk_enable_payments_within_72h"
+    fallback: true
+  enable-hub-hotels-poa:
+    key: "release_pi_pib_ccui_enable_hub_hotels_poa"
+    fallback: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+spring:
+  cache:
+    type: none

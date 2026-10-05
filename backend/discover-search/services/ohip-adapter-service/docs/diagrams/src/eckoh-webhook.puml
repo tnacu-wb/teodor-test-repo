@@ -1,0 +1,26 @@
+@startuml
+entity "Eckoh" as Eckoh
+participant EckohController as Controller
+participant EckohWebhookInPort as InboundPort
+participant EckohWebhookOutPort as OutboundPort
+participant EckohWebClient as Webclient
+entity Opera as opera
+
+Eckoh -> Controller: POST /ohip/v1/webhook/eckoh
+Controller -> InboundPort: webHook(EckohWebhookRequest eckohWebhookRequest)
+InboundPort -> OutboundPort: webHook(EckohWebhookRequest eckohWebhookRequest)
+OutboundPort -> Webclient: getReservationByIdBlock(String idBlock)
+Webclient -> opera: GET /rsv/v1/reservations?searchType=Any&fetchInstructions=Reservation&blockIds={{blockId}}
+opera -> Webclient: ReservationsDetails
+Webclient -> OutboundPort: ReservationsDetails
+
+loop for each ReservationsDetails.reservationId
+OutboundPort -> Webclient: sendChangeReservationRequest(String hotelId, String reservationId, ChangeReservation changeReservation)
+Webclient -> opera: PUT /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}
+Webclient <- opera: ChangeReservationDetails
+OutboundPort <- Webclient: ChangeReservationDetails
+end
+InboundPort <- OutboundPort
+Controller <- InboundPort
+Eckoh <- Controller: 204 NO_CONTENT
+@enduml

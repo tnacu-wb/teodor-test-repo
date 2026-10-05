@@ -1,0 +1,159 @@
+server:
+  port: 9105
+  servlet:
+    contextPath: "/rmg/"
+  shutdown: graceful
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${Cluster_Write_End_Point}/${Database_Name}
+    username: ${Database_User_Name}
+    password: ${Database_Password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: POSTGRESQL
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:sql/liquibase/changelog/db.changelog-master.xml
+    enabled: true
+    default-schema: rules_engine
+    contexts: non-prod
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+logging:
+  level:
+    uk.co.whitbread: WARN
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+
+rules-engine:
+  scheduler:
+    enabled: true
+    fixedDelay:
+      in:
+        ms: 60000
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "rules-manager-entity-service"
+    description: "Whitbread Rules Manager Entity Service"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+---
+spring.config.activate.on-profile: local
+
+rules-engine:
+  scheduler:
+    enabled: true
+    fixedDelay:
+      in:
+        ms: 10000
+
+logging:
+  configuration:
+    logger: default
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  level:
+    uk:
+      co:
+        whitbread:
+          rules:
+            manager: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql: TRACE
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+spring:
+  jpa:
+    database: POSTGRESQL
+  datasource:
+    url: jdbc:postgresql://localhost:5438/postgres
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    change-log: classpath:sql/liquibase/changelog/db.changelog-master.xml
+    enabled: true
+    default-schema: rules_engine
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+  liquibase:
+    contexts: prod

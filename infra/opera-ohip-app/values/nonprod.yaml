@@ -1,0 +1,21 @@
+# Non-production shared values (dev, dit, sit, uat)
+# Layered: values.yaml -> nonprod.yaml -> <env>.yaml
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/opera-ohip-app
+  pullPolicy: Always
+
+# Lower resources for non-prod
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+
+# CyberArk enabled for non-prod
+cyberark:
+  enabled: true
+
+virtualService:
+  gateway: "" # Unused — app creates its own Gateway with ingress-tools selector

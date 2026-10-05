@@ -1,0 +1,27 @@
+{
+  "request": {
+    "url": "/api/data/v8.2/incidents",
+    "method": "POST",
+    "bodyPatterns": [{
+      "equalToJson":
+      "{\"whb_wfsource\" : \"https://www.whitbreadinns.co.uk\",\"title\":\"Failing Feedback Form\",\"whb_wfbookingrefifapplicable\":\"AB12345\",\"whb_wfcontactnumber\":\"+447724547605\",\"whb_wfdateofstayifapplicable\":\"2018-02-14\",\"whb_wfemailaddress\":\"dimitris.damilos@whitbread.com\",\"whb_wfreasonforfeedback\":\"Restaurant/Bar experience\",\"whb_summary\":\"This was a weird hotel\",\"whb_wffeedbacktype\":130570000,\"whb_wffirstname\":\"Walter\",\"whb_wflastname\":\"White\",\"whb_wfpostcode\":\"AB1 2CD\",\"whb_wfhotelname\":\"ABEMAI\",\"whb_wfididntbookthroughpremierinncom\":false,\"whb_contacttype\":130570009,\"whb_reasonforcontact\":2,\"customerid_contact@odata.bind\":\"dev\",\"whb_wftypeofvisit\": \"Dinner\",\"whb_loyaltycardnumber\": \"my-loyalty-card-num\",\"whb_wfchecknumber\": \"check-number\",\"whb_wfsleep\": false,\"whb_wfreported\": true }"
+    }]
+  },
+  "response": {
+    "status": 500,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "error": {
+        "code": "0x80044410",
+        "message": "You should specify a parent contact or account.",
+        "innererror": {
+          "message": "You should specify a parent contact or account.",
+          "type": "Microsoft.Dynamics.Solution.Common.CrmException",
+          "stacktrace": "   at Microsoft.Crm.Extensibility.OrganizationSdkServiceInternal.CreateInternal(Entity entity, CorrelationToken correlationToken, CallerOriginToken callerOriginToken, WebServiceType serviceType, Boolean checkAdminMode, Dictionary`2 optionalParameters)\r\n   at Microsoft.Crm.Extensibility.OData.CrmODataExecutionContext.CreateOrganizationResponse(Entity entity)\r\n   at Microsoft.Crm.Extensibility.OData.CrmODataServiceDataProvider.CreateEdmEntity(CrmODataExecutionContext context, String edmEntityName, EdmEntityObject entityObject, Boolean isUpsert)\r\n   at Microsoft.Crm.Extensibility.OData.EntityController.PostEntitySetInternal(CrmODataExecutionContext context, String edmEntityName, EdmEntityObject entityObject, Boolean isUpsert)\r\n   at Microsoft.Crm.Extensibility.OData.EntityController.PostEntitySet(String entitySetName, EdmEntityObject entityObject)\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.<>c__DisplayClass10.<GetExecutor>b__9(Object instance, Object[] methodParameters)\r\n   at System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ExecuteAsync(HttpControllerContext controllerContext, IDictionary`2 arguments, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Runtime.CompilerServices.TaskAwaiter.ValidateEnd(Task task)\r\n   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()\r\n   at System.Web.Http.Controllers.ApiControllerActionInvoker.<InvokeActionAsyncCore>d__0.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Runtime.CompilerServices.TaskAwaiter.ValidateEnd(Task task)\r\n   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()\r\n   at System.Web.Http.Controllers.ActionFilterResult.<ExecuteAsync>d__2.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Runtime.CompilerServices.TaskAwaiter.ValidateEnd(Task task)\r\n   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()\r\n   at System.Web.Http.Dispatcher.HttpControllerDispatcher.<SendAsync>d__1.MoveNext()"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "url": "/CustomerHub/V1/EditPermissions",
+    "method": "POST",
+    "headers" : {
+      "Content-Type" : {
+        "contains" : "application/json"
+      },
+      "Authorization": {
+        "contains" : "dummyToken"
+      },
+      "Ocp-Apim-Subscription-Key": {
+        "contains": "dummyValue"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matches": ".*unauthorized@gmail.com.*"
+      }
+    ]
+  },
+  "response": {
+    "status": 401,
+      "bodyFileName": "customer-hub-permissions-401-response.json",
+    "headers": {
+      "Content-Type": "text/html; charset=utf-8"
+    }
+  }
+}

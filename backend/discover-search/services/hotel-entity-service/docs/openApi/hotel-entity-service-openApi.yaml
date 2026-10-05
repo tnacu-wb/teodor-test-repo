@@ -1,0 +1,2795 @@
+openapi: 3.1.0
+info:
+  description: "<p>Provides the option to search for a specific hotel availability\
+    \ information, given a search criteria.</p>"
+  title: Hotel Entity Service API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9102
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /v1/hotels/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/hotels/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/hotels/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/hotels/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /v1/hotels/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /v1/hotels/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /v1/hotels/availabilities:
+    get:
+      operationId: getSrpHotelAvailabilities
+      parameters:
+      - example: Arrival date in format yyyy-mm-dd
+        in: query
+        name: arrivalDate
+        required: false
+        schema:
+          type: string
+      - example: Departure date in format yyyy-mm-dd
+        in: query
+        name: departureDate
+        required: false
+        schema:
+          type: string
+      - example: en
+        in: query
+        name: language
+        required: true
+        schema:
+          type: string
+      - example: gb
+        in: query
+        name: country
+        required: true
+        schema:
+          type: string
+      - example: "1,2,2"
+        in: query
+        name: adultsNumber
+        required: true
+        schema:
+          type: array
+      - example: "0,0,2"
+        in: query
+        name: childrenNumber
+        required: false
+        schema:
+          type: array
+      - example: "DB,TWIN,FAM"
+        in: query
+        name: roomTypes
+        required: false
+        schema:
+          type: array
+      - example: "MOBILE,WEB,WEB_DE,CBT"
+        in: query
+        name: oldWorldChannel
+        required: true
+        schema:
+          type: string
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      - example: "PI,CCUI,BB"
+        in: query
+        name: channel
+        required: true
+        schema:
+          type: string
+      - example: WEB
+        in: query
+        name: subChannel
+        required: true
+        schema:
+          type: string
+      - example: 2569623
+        in: query
+        name: companyId
+        required: false
+        schema:
+          type: string
+      - example: 10
+        in: query
+        name: page
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - example: 10
+        in: query
+        name: initialPageSize
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - example: 10
+        in: query
+        name: lazyLoadPageSize
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - example: DISTANCE or PRICE
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+      - example: 0.3
+        in: query
+        name: rcPriceModifier
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+      - example: 0.5
+        in: query
+        name: rcDistanceModifier
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+      - example: "EAT,LFT"
+        in: query
+        name: filters
+        required: false
+        schema:
+          type: array
+      - example: 0.85
+        in: query
+        name: rcHubModifier
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilitiesResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - search-results-page-controller
+  /v1/hotels/availabilities/distr:
+    get:
+      operationId: getHotelAvailabilitiesByIds
+      parameters:
+      - in: query
+        name: hotelIds
+        required: true
+        schema:
+          type: array
+          example: "LONEUS,LONKIN"
+          items:
+            type: string
+      - example: Arrival date in format yyyy-mm-dd
+        in: query
+        name: arrivalDate
+        required: true
+        schema:
+          type: string
+      - example: Departure date in format yyyy-mm-dd
+        in: query
+        name: departureDate
+        required: true
+        schema:
+          type: string
+      - example: "DB,TWIN,FAM"
+        in: query
+        name: roomTypes
+        required: true
+        schema:
+          type: array
+      - example: "1,2,2"
+        in: query
+        name: adultsNumber
+        required: true
+        schema:
+          type: array
+      - example: "0,0,2"
+        in: query
+        name: childrenNumber
+        required: false
+        schema:
+          type: array
+      - example: true
+        in: query
+        name: cotsRequired
+        required: false
+        schema:
+          type: array
+      - example: FLEXRATE
+        in: query
+        name: ratePlanCodes
+        required: false
+        schema:
+          type: string
+      - example: PI
+        in: query
+        name: channel
+        required: true
+        schema:
+          type: string
+      - example: WEB
+        in: query
+        name: subchannel
+        required: true
+        schema:
+          type: string
+      - example: EN
+        in: query
+        name: language
+        required: true
+        schema:
+          type: string
+      - example: GB
+        in: query
+        name: country
+        required: false
+        schema:
+          type: string
+      - example: 1370
+        in: query
+        name: globalCompanyId
+        required: false
+        schema:
+          type: string
+      - example: BMD
+        in: query
+        name: negotiatedRateDisplaySets
+        required: true
+        schema:
+          type: string
+      - example: true
+        in: query
+        name: vatNotRequired
+        required: false
+        schema:
+          type: boolean
+      - example: true
+        in: query
+        name: isOTA
+        required: false
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityByIdsDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Internal Server Error
+      summary: Retrieves Hotel Availabilities for the specified hotel IDs
+      tags:
+      - hotel-availability-controller
+  /v1/hotels/locations:
+    get:
+      operationId: getHotelLocations
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelLocationSearchResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelSearchLocationException"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelSearchLocationException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelSearchLocationException"
+          description: Internal Server Error
+      summary: Retrieves Hotels from search Result
+      tags:
+      - snowdrop-controller
+  /v1/hotels/{hotelCode}/group/bookingForm:
+    post:
+      operationId: createGroupBooking
+      parameters:
+      - in: path
+        name: hotelCode
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupBookingRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupBookingResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupBookingException"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupBookingException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupBookingException"
+          description: Internal Server Error
+      summary: Sends the Group Booking form data to D365 and Retrieves a ticket number
+      tags:
+      - group-booking-controller
+  /v1/hotels/{hotelId}/availabilities:
+    get:
+      operationId: getHotelAvailabilities_1
+      parameters:
+      - example: TKINPT
+        in: path
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - example: Arrival date in format yyyy-mm-dd
+        in: query
+        name: arrivalDate
+        required: true
+        schema:
+          type: string
+      - example: Departure date in format yyyy-mm-dd
+        in: query
+        name: departureDate
+        required: true
+        schema:
+          type: string
+      - example: "DB,TWIN,FAM"
+        in: query
+        name: roomTypes
+        required: false
+        schema:
+          type: array
+      - example: "1,2,2"
+        in: query
+        name: adultsNumber
+        required: true
+        schema:
+          type: array
+      - example: "0,0,2"
+        in: query
+        name: childrenNumber
+        required: false
+        schema:
+          type: array
+      - example: true
+        in: query
+        name: cotsRequired
+        required: false
+        schema:
+          type: array
+      - example: 2569623
+        in: query
+        name: companyId
+        required: false
+        schema:
+          type: string
+      - example: PI
+        in: query
+        name: channel
+        required: true
+        schema:
+          type: string
+      - example: WEB
+        in: query
+        name: subchannel
+        required: true
+        schema:
+          type: string
+      - example: EN
+        in: query
+        name: language
+        required: true
+        schema:
+          type: string
+      - example: GB
+        in: query
+        name: country
+        required: false
+        schema:
+          type: string
+      - example: PROMO
+        in: query
+        name: promotionCode
+        required: false
+        schema:
+          type: string
+      - example: GBH-214d4b84-5b3c-4670-ba3e-dfe249c52c16
+        in: query
+        name: originalBasketReference
+        required: false
+        schema:
+          type: string
+      - example: rate
+        in: query
+        name: softBundle
+        required: false
+        schema:
+          type: string
+      - example: LANDING_PAGE
+        in: query
+        name: promoKind
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Internal Server Error
+      summary: Retrieves Hotels Availability Result
+      tags:
+      - hotel-availability-controller
+  /v1/hotels/{hotelId}/cancellationReasons:
+    get:
+      operationId: getCancellationReasons
+      parameters:
+      - in: path
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CancellationReasonsResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get list of cancellation reasons
+      tags:
+      - list-of-values-controller
+  /v1/hotels/{hotelId}/distance:
+    get:
+      operationId: getHotelAvailabilities
+      parameters:
+      - in: path
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DistanceFromSearchResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelDistanceException"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelDistanceException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelDistanceException"
+          description: Internal Server Error
+      summary: Retrieves Hotels Distance from search Result
+      tags:
+      - snowdrop-controller
+  /v1/hotels/{hotelId}/hotelInventory:
+    get:
+      operationId: getHotelRoomsInventory
+      parameters:
+      - in: path
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - example: 2022-10-05
+        in: query
+        name: dateRangeStart
+        required: true
+        schema:
+          type: string
+      - example: 2022-10-07
+        in: query
+        name: dateRangeEnd
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelInventoryRoomTypeDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Bad Request - Invalid Client Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Internal Server Error
+      summary: Retrieves Hotel Inventory
+      tags:
+      - hotel-availability-controller
+  /v1/hotels/{hotelId}/info:
+    get:
+      operationId: getHotelInfo
+      parameters:
+      - in: path
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelInfoDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get hotel info
+      tags:
+      - hotel-info-controller
+  /v1/hotels/{hotelId}/packages:
+    get:
+      operationId: getHotelPackages
+      parameters:
+      - example: TKINPT
+        in: path
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - example: Start date in format yyyy-mm-dd
+        in: query
+        name: startDate
+        required: true
+        schema:
+          type: string
+      - example: End date in format yyyy-mm-dd
+        in: query
+        name: endDate
+        required: true
+        schema:
+          type: string
+      - example: 1
+        in: query
+        name: adultsNumber
+        required: true
+        schema:
+          type: integer
+          exclusiveMinimum: 0
+      - example: 0
+        in: query
+        name: childrenNumber
+        required: true
+        schema:
+          type: integer
+          minimum: 0
+      - example: 2
+        in: query
+        name: nightsNumber
+        required: true
+        schema:
+          type: integer
+          exclusiveMinimum: 0
+      - example: FLEXRATE
+        in: query
+        name: ratePlanCode
+        required: false
+        schema:
+          type: string
+      - example: en
+        in: query
+        name: language
+        required: false
+        schema:
+          type: string
+      - example: gb
+        in: query
+        name: country
+        required: false
+        schema:
+          type: string
+      - example: PI
+        in: query
+        name: channel
+        required: false
+        schema:
+          type: string
+      - example: "TRUE"
+        in: query
+        name: isManageBookingPage
+        required: false
+        schema:
+          type: boolean
+      - example: "TRUE"
+        in: query
+        name: mealInclusiveRate
+        required: false
+        schema:
+          type: boolean
+      - example: "OBFPRO,FIFR24,HSCKIF"
+        in: query
+        name: packageSelections
+        required: false
+        schema:
+          type: string
+      - example: "TRUE"
+        in: query
+        name: isCiol
+        required: false
+        schema:
+          type: boolean
+      - example: abc
+        in: query
+        name: basketReference
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackagesResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackagesException"
+          description: Bad Request - Invalid Client Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackagesException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackagesException"
+          description: Internal Server Error
+      summary: Retrieves Packages
+      tags:
+      - packages-controller
+  /v1/hotels/{hotelId}/packages/donations:
+    get:
+      operationId: getHotelCharityPackagesDetails
+      parameters:
+      - example: TKINPT
+        in: path
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - description: The donation package codes sent to get the package codes details
+        example: "CHRTY1, CHRTY2"
+        in: query
+        name: packageCodes
+        required: true
+        schema:
+          type: array
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackagesResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackagesException"
+          description: Bad Request - Invalid Client Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackagesException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackagesException"
+          description: Internal Server Error
+      summary: Retrieves Donations Packages Details
+      tags:
+      - packages-controller
+  /v1/hotels/{hotelId}/preferences:
+    get:
+      operationId: getHotelPreferences
+      parameters:
+      - in: path
+        name: hotelId
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - example: EVENTS
+        in: query
+        name: preferenceGroupsCodes
+        required: true
+        schema:
+          type: string
+      - example: en
+        in: query
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+          enum:
+          - en
+          - de
+          pattern: ^(en|de)$
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelPreferencesResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Get hotel preferences for a group
+      tags:
+      - hotel-info-controller
+  /v1/hotels/{hotelId}/rate-code-pricing:
+    get:
+      operationId: getRateCodePricing
+      parameters:
+      - in: path
+        name: hotelId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: arrivalDate
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: departureDate
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: ratePlanCode
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: roomTypes
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - in: query
+        name: adultsNo
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - in: query
+        name: childrenNo
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - in: query
+        name: reservationRatePlanCode
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateCodePricingRsDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Internal Server Error
+      summary: Retrieves the pricing information for a rate code
+      tags:
+      - hotel-availability-controller
+  /v2/hotels/availabilities:
+    get:
+      operationId: getSrpHotelAvailabilitiesV2
+      parameters:
+      - example: Arrival date in format yyyy-mm-dd
+        in: query
+        name: arrivalDate
+        required: false
+        schema:
+          type: string
+      - example: Departure date in format yyyy-mm-dd
+        in: query
+        name: departureDate
+        required: false
+        schema:
+          type: string
+      - example: en
+        in: query
+        name: language
+        required: true
+        schema:
+          type: string
+      - example: gb
+        in: query
+        name: country
+        required: true
+        schema:
+          type: string
+      - example: "1,2,2"
+        in: query
+        name: adultsNumber
+        required: true
+        schema:
+          type: array
+      - example: "0,0,2"
+        in: query
+        name: childrenNumber
+        required: false
+        schema:
+          type: array
+      - example: "DB,TWIN,FAM"
+        in: query
+        name: roomTypes
+        required: false
+        schema:
+          type: array
+      - example: "MOBILE,WEB,WEB_DE,CBT"
+        in: query
+        name: oldWorldChannel
+        required: true
+        schema:
+          type: string
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      - example: "PI,CCUI,BB"
+        in: query
+        name: channel
+        required: true
+        schema:
+          type: string
+      - example: WEB
+        in: query
+        name: subChannel
+        required: true
+        schema:
+          type: string
+      - example: 2569623
+        in: query
+        name: companyId
+        required: false
+        schema:
+          type: string
+      - example: 10
+        in: query
+        name: page
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - example: 10
+        in: query
+        name: initialPageSize
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - example: 10
+        in: query
+        name: lazyLoadPageSize
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - example: DISTANCE or PRICE
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+      - example: 0.3
+        in: query
+        name: rcPriceModifier
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+      - example: 0.5
+        in: query
+        name: rcDistanceModifier
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+      - example: "EAT,LFT"
+        in: query
+        name: filters
+        required: false
+        schema:
+          type: array
+      - example: 0.85
+        in: query
+        name: rcHubModifier
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          minimum: 0
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilitiesResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - search-results-page-controller
+  /v2/hotels/availabilities/distr:
+    post:
+      operationId: getHotelAvailabilitiesByIdsV2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HotelAvailabilitiesByIdsRequestV2Dto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityByIdsV2Dto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Internal Server Error
+      summary: Retrieves Hotel Availabilities for the specified hotel IDs based on
+        dedicated Opera APIs
+      tags:
+      - hotel-availability-controller
+  /v3/hotels/availabilities/distr:
+    post:
+      operationId: getHotelAvailabilitiesByIdsV3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HotelAvailabilitiesByIdsRequestV3Dto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityByIdsV2Dto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HotelAvailabilityException"
+          description: Internal Server Error
+      summary: Retrieves Hotel Availabilities for the specified hotel IDs based on
+        dedicated Opera APIs
+      tags:
+      - hotel-availability-controller
+components:
+  schemas:
+    AttachmentsDto:
+      type: object
+      properties:
+        label:
+          type: string
+        path:
+          type: string
+        type:
+          type: string
+    BookingChannelDto:
+      type: object
+      properties:
+        channel:
+          type: string
+          example: PI
+          minLength: 1
+        language:
+          type: string
+          example: EN
+        subchannel:
+          type: string
+          example: WEB
+          minLength: 1
+      required:
+      - channel
+      - language
+      - subchannel
+    CancellationReasonDto:
+      type: object
+      properties:
+        active:
+          type: boolean
+        code:
+          type: string
+        description:
+          type: string
+        managerApprovalNeeded:
+          type: boolean
+        name:
+          type: string
+    CancellationReasonsResponseDto:
+      type: object
+      properties:
+        cancellationReasons:
+          type: array
+          items:
+            $ref: "#/components/schemas/CancellationReasonDto"
+    CorporateRateDto:
+      type: object
+      properties:
+        corporateId:
+          type: string
+        ratePlanSets:
+          type: array
+          items:
+            type: string
+    DailyPriceDto:
+      type: object
+      properties:
+        date:
+          type: string
+        effectiveRate:
+          type: number
+        grossPrice:
+          type: number
+        netPrice:
+          type: number
+        roomNetPrice:
+          type: number
+    DistanceFromSearchResponseDto:
+      type: object
+      properties:
+        brand:
+          type: string
+        distance:
+          type: string
+        hotelId:
+          type: string
+        name:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    ExtrasDto:
+      type: object
+      properties:
+        available:
+          type: integer
+          format: int32
+        basePrice:
+          type: number
+        currency:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+        imageSrc:
+          type: string
+        isFree:
+          type: boolean
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        price:
+          type: number
+        promoText:
+          type: string
+    GroupBookingException:
+      type: object
+      properties:
+        cause:
+          type: object
+          properties:
+            localizedMessage:
+              type: string
+            message:
+              type: string
+            stackTrace:
+              type: array
+              items:
+                type: object
+                properties:
+                  classLoaderName:
+                    type: string
+                  className:
+                    type: string
+                  fileName:
+                    type: string
+                  lineNumber:
+                    type: integer
+                    format: int32
+                  methodName:
+                    type: string
+                  moduleName:
+                    type: string
+                  moduleVersion:
+                    type: string
+                  nativeMethod:
+                    type: boolean
+            suppressed:
+              type: array
+              items:
+                type: object
+                properties:
+                  localizedMessage:
+                    type: string
+                  message:
+                    type: string
+                  stackTrace:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        classLoaderName:
+                          type: string
+                        className:
+                          type: string
+                        fileName:
+                          type: string
+                        lineNumber:
+                          type: integer
+                          format: int32
+                        methodName:
+                          type: string
+                        moduleName:
+                          type: string
+                        moduleVersion:
+                          type: string
+                        nativeMethod:
+                          type: boolean
+        debugMessage:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+        localizedMessage:
+          type: string
+        message:
+          type: string
+        stackTrace:
+          type: array
+          items:
+            type: object
+            properties:
+              classLoaderName:
+                type: string
+              className:
+                type: string
+              fileName:
+                type: string
+              lineNumber:
+                type: integer
+                format: int32
+              methodName:
+                type: string
+              moduleName:
+                type: string
+              moduleVersion:
+                type: string
+              nativeMethod:
+                type: boolean
+        suppressed:
+          type: array
+          items:
+            type: object
+            properties:
+              localizedMessage:
+                type: string
+              message:
+                type: string
+              stackTrace:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    classLoaderName:
+                      type: string
+                    className:
+                      type: string
+                    fileName:
+                      type: string
+                    lineNumber:
+                      type: integer
+                      format: int32
+                    methodName:
+                      type: string
+                    moduleName:
+                      type: string
+                    moduleVersion:
+                      type: string
+                    nativeMethod:
+                      type: boolean
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: string
+    GroupBookingRequestDto:
+      type: object
+      properties:
+        accessibleDouble:
+          type: integer
+          format: int32
+        accessibleSingle:
+          type: integer
+          format: int32
+        accessibleTwin:
+          type: integer
+          format: int32
+        additionalInformation:
+          type: string
+        arrivalDate:
+          type: string
+          minLength: 1
+        bookerType:
+          type: string
+          minLength: 1
+        companyName:
+          type: string
+        departureDate:
+          type: string
+          minLength: 1
+        doubleOccupancy:
+          type: integer
+          format: int32
+        emailAddress:
+          type: string
+          minLength: 1
+        familyOf21A1C:
+          type: integer
+          format: int32
+        familyOf31A2C:
+          type: integer
+          format: int32
+        familyOf32A1C:
+          type: integer
+          format: int32
+        familyOf42A2C:
+          type: integer
+          format: int32
+        firstName:
+          type: string
+          minLength: 1
+        hotelBrand:
+          type: string
+        hotelName:
+          type: string
+        isAccessibleRoom:
+          type: boolean
+        isPackageTypeBf:
+          type: boolean
+        isPackageTypeMealDeal:
+          type: boolean
+        isSchoolOrYouth:
+          type: boolean
+        isTravellingWithChild:
+          type: boolean
+        language:
+          type: string
+        lastName:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+          minLength: 1
+        purposeOfStay:
+          type: string
+          minLength: 1
+        reasonForVisit:
+          type: string
+          minLength: 1
+        reasonForVisitOther:
+          type: string
+        singleOccupancy:
+          type: integer
+          format: int32
+        title:
+          type: string
+          minLength: 1
+        twinRooms:
+          type: integer
+          format: int32
+      required:
+      - arrivalDate
+      - bookerType
+      - departureDate
+      - emailAddress
+      - firstName
+      - lastName
+      - phoneNumber
+      - purposeOfStay
+      - reasonForVisit
+      - title
+    GroupBookingResponseDto:
+      type: object
+      properties:
+        incidentId:
+          type: string
+        ticketNumber:
+          type: string
+    HotelAvailabilitiesByIdsRequestV2Dto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+          format: date
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        departureDate:
+          type: string
+          format: date
+        hotelIds:
+          type: array
+          items:
+            type: string
+        isOTA:
+          type: boolean
+        rates:
+          $ref: "#/components/schemas/RateDto"
+        rooms:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomDto"
+        vatNotRequired:
+          type: boolean
+      required:
+      - arrivalDate
+      - bookingChannel
+      - departureDate
+      - hotelIds
+      - rates
+      - rooms
+    HotelAvailabilitiesByIdsRequestV3Dto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+          format: date
+        bookingChannel:
+          $ref: "#/components/schemas/BookingChannelDto"
+        departureDate:
+          type: string
+          format: date
+        hotelIds:
+          type: array
+          items:
+            type: string
+        isOTA:
+          type: boolean
+        rates:
+          $ref: "#/components/schemas/RateV3Dto"
+        rooms:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomDto"
+        vatNotRequired:
+          type: boolean
+      required:
+      - arrivalDate
+      - bookingChannel
+      - departureDate
+      - hotelIds
+      - rates
+      - rooms
+    HotelAvailabilitiesResponseDto:
+      type: object
+      properties:
+        hotelAvailabilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelAvailabilityResponseDto"
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    HotelAvailabilityByIdsDto:
+      type: object
+      properties:
+        hotelAvailability:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelAvailabilityResponseDto"
+    HotelAvailabilityByIdsV2Dto:
+      type: object
+      properties:
+        hotelAvailability:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelAvailabilityV2Dto"
+    HotelAvailabilityException:
+      type: object
+      properties:
+        cause:
+          type: object
+          properties:
+            localizedMessage:
+              type: string
+            message:
+              type: string
+            stackTrace:
+              type: array
+              items:
+                type: object
+                properties:
+                  classLoaderName:
+                    type: string
+                  className:
+                    type: string
+                  fileName:
+                    type: string
+                  lineNumber:
+                    type: integer
+                    format: int32
+                  methodName:
+                    type: string
+                  moduleName:
+                    type: string
+                  moduleVersion:
+                    type: string
+                  nativeMethod:
+                    type: boolean
+            suppressed:
+              type: array
+              items:
+                type: object
+                properties:
+                  localizedMessage:
+                    type: string
+                  message:
+                    type: string
+                  stackTrace:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        classLoaderName:
+                          type: string
+                        className:
+                          type: string
+                        fileName:
+                          type: string
+                        lineNumber:
+                          type: integer
+                          format: int32
+                        methodName:
+                          type: string
+                        moduleName:
+                          type: string
+                        moduleVersion:
+                          type: string
+                        nativeMethod:
+                          type: boolean
+        debugMessage:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+        localizedMessage:
+          type: string
+        message:
+          type: string
+        stackTrace:
+          type: array
+          items:
+            type: object
+            properties:
+              classLoaderName:
+                type: string
+              className:
+                type: string
+              fileName:
+                type: string
+              lineNumber:
+                type: integer
+                format: int32
+              methodName:
+                type: string
+              moduleName:
+                type: string
+              moduleVersion:
+                type: string
+              nativeMethod:
+                type: boolean
+        suppressed:
+          type: array
+          items:
+            type: object
+            properties:
+              localizedMessage:
+                type: string
+              message:
+                type: string
+              stackTrace:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    classLoaderName:
+                      type: string
+                    className:
+                      type: string
+                    fileName:
+                      type: string
+                    lineNumber:
+                      type: integer
+                      format: int32
+                    methodName:
+                      type: string
+                    moduleName:
+                      type: string
+                    moduleVersion:
+                      type: string
+                    nativeMethod:
+                      type: boolean
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: string
+    HotelAvailabilityResponseDto:
+      type: object
+      properties:
+        available:
+          type: boolean
+        endDate:
+          type: string
+        hotelId:
+          type: string
+        limitedAvailability:
+          type: boolean
+        mlos:
+          type: boolean
+        roomRates:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomRateDto"
+        startDate:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    HotelAvailabilityV2Dto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+        roomStays:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomStayV2Dto"
+    HotelDistanceException:
+      type: object
+      properties:
+        cause:
+          type: object
+          properties:
+            localizedMessage:
+              type: string
+            message:
+              type: string
+            stackTrace:
+              type: array
+              items:
+                type: object
+                properties:
+                  classLoaderName:
+                    type: string
+                  className:
+                    type: string
+                  fileName:
+                    type: string
+                  lineNumber:
+                    type: integer
+                    format: int32
+                  methodName:
+                    type: string
+                  moduleName:
+                    type: string
+                  moduleVersion:
+                    type: string
+                  nativeMethod:
+                    type: boolean
+            suppressed:
+              type: array
+              items:
+                type: object
+                properties:
+                  localizedMessage:
+                    type: string
+                  message:
+                    type: string
+                  stackTrace:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        classLoaderName:
+                          type: string
+                        className:
+                          type: string
+                        fileName:
+                          type: string
+                        lineNumber:
+                          type: integer
+                          format: int32
+                        methodName:
+                          type: string
+                        moduleName:
+                          type: string
+                        moduleVersion:
+                          type: string
+                        nativeMethod:
+                          type: boolean
+        debugMessage:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+        localizedMessage:
+          type: string
+        message:
+          type: string
+        stackTrace:
+          type: array
+          items:
+            type: object
+            properties:
+              classLoaderName:
+                type: string
+              className:
+                type: string
+              fileName:
+                type: string
+              lineNumber:
+                type: integer
+                format: int32
+              methodName:
+                type: string
+              moduleName:
+                type: string
+              moduleVersion:
+                type: string
+              nativeMethod:
+                type: boolean
+        suppressed:
+          type: array
+          items:
+            type: object
+            properties:
+              localizedMessage:
+                type: string
+              message:
+                type: string
+              stackTrace:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    classLoaderName:
+                      type: string
+                    className:
+                      type: string
+                    fileName:
+                      type: string
+                    lineNumber:
+                      type: integer
+                      format: int32
+                    methodName:
+                      type: string
+                    moduleName:
+                      type: string
+                    moduleVersion:
+                      type: string
+                    nativeMethod:
+                      type: boolean
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: string
+    HotelInfoDto:
+      type: object
+      properties:
+        hotelCountryCode:
+          type: string
+        threeLetterId:
+          type: string
+    HotelInventoryRoomTypeDto:
+      type: object
+      properties:
+        roomTypeInventories:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomLevelInventoryDto"
+    HotelLocationSearchResponseDto:
+      type: object
+      properties:
+        brand:
+          type: string
+        distance:
+          type: string
+        hotelId:
+          type: string
+        location:
+          $ref: "#/components/schemas/HotelMapLocationDto"
+        name:
+          type: string
+    HotelMapLocationDto:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+    HotelPreferenceDto:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        hotelId:
+          type: string
+        housekeeping:
+          type: boolean
+        label:
+          type: string
+        orderSequence:
+          type: integer
+          format: int32
+        preferenceGroup:
+          type: string
+    HotelPreferencesResponseDto:
+      type: object
+      properties:
+        hotelPreferences:
+          type: array
+          items:
+            $ref: "#/components/schemas/HotelPreferenceDto"
+    HotelSearchLocationException:
+      type: object
+      properties:
+        cause:
+          type: object
+          properties:
+            localizedMessage:
+              type: string
+            message:
+              type: string
+            stackTrace:
+              type: array
+              items:
+                type: object
+                properties:
+                  classLoaderName:
+                    type: string
+                  className:
+                    type: string
+                  fileName:
+                    type: string
+                  lineNumber:
+                    type: integer
+                    format: int32
+                  methodName:
+                    type: string
+                  moduleName:
+                    type: string
+                  moduleVersion:
+                    type: string
+                  nativeMethod:
+                    type: boolean
+            suppressed:
+              type: array
+              items:
+                type: object
+                properties:
+                  localizedMessage:
+                    type: string
+                  message:
+                    type: string
+                  stackTrace:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        classLoaderName:
+                          type: string
+                        className:
+                          type: string
+                        fileName:
+                          type: string
+                        lineNumber:
+                          type: integer
+                          format: int32
+                        methodName:
+                          type: string
+                        moduleName:
+                          type: string
+                        moduleVersion:
+                          type: string
+                        nativeMethod:
+                          type: boolean
+        debugMessage:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+        localizedMessage:
+          type: string
+        message:
+          type: string
+        stackTrace:
+          type: array
+          items:
+            type: object
+            properties:
+              classLoaderName:
+                type: string
+              className:
+                type: string
+              fileName:
+                type: string
+              lineNumber:
+                type: integer
+                format: int32
+              methodName:
+                type: string
+              moduleName:
+                type: string
+              moduleVersion:
+                type: string
+              nativeMethod:
+                type: boolean
+        suppressed:
+          type: array
+          items:
+            type: object
+            properties:
+              localizedMessage:
+                type: string
+              message:
+                type: string
+              stackTrace:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    classLoaderName:
+                      type: string
+                    className:
+                      type: string
+                    fileName:
+                      type: string
+                    lineNumber:
+                      type: integer
+                      format: int32
+                    methodName:
+                      type: string
+                    moduleName:
+                      type: string
+                    moduleVersion:
+                      type: string
+                    nativeMethod:
+                      type: boolean
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    MealDto:
+      type: object
+      properties:
+        allergyInfoSrc:
+          type: string
+        basePrice:
+          type: number
+        currency:
+          type: string
+        id:
+          type: string
+        idDesc:
+          type: string
+        idImg:
+          type: string
+        isFree:
+          type: boolean
+        name:
+          type: string
+        price:
+          type: number
+        promoText:
+          type: string
+    MealsIncludedDto:
+      type: object
+      properties:
+        breakfast:
+          type: boolean
+        dinner:
+          type: boolean
+        mealName:
+          type: string
+    PackageInfoDto:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+    PackagesDto:
+      type: object
+      properties:
+        extrasItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExtrasDto"
+        meals:
+          type: array
+          items:
+            $ref: "#/components/schemas/MealDto"
+    PackagesException:
+      type: object
+      properties:
+        cause:
+          type: object
+          properties:
+            localizedMessage:
+              type: string
+            message:
+              type: string
+            stackTrace:
+              type: array
+              items:
+                type: object
+                properties:
+                  classLoaderName:
+                    type: string
+                  className:
+                    type: string
+                  fileName:
+                    type: string
+                  lineNumber:
+                    type: integer
+                    format: int32
+                  methodName:
+                    type: string
+                  moduleName:
+                    type: string
+                  moduleVersion:
+                    type: string
+                  nativeMethod:
+                    type: boolean
+            suppressed:
+              type: array
+              items:
+                type: object
+                properties:
+                  localizedMessage:
+                    type: string
+                  message:
+                    type: string
+                  stackTrace:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        classLoaderName:
+                          type: string
+                        className:
+                          type: string
+                        fileName:
+                          type: string
+                        lineNumber:
+                          type: integer
+                          format: int32
+                        methodName:
+                          type: string
+                        moduleName:
+                          type: string
+                        moduleVersion:
+                          type: string
+                        nativeMethod:
+                          type: boolean
+        debugMessage:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+        localizedMessage:
+          type: string
+        message:
+          type: string
+        stackTrace:
+          type: array
+          items:
+            type: object
+            properties:
+              classLoaderName:
+                type: string
+              className:
+                type: string
+              fileName:
+                type: string
+              lineNumber:
+                type: integer
+                format: int32
+              methodName:
+                type: string
+              moduleName:
+                type: string
+              moduleVersion:
+                type: string
+              nativeMethod:
+                type: boolean
+        suppressed:
+          type: array
+          items:
+            type: object
+            properties:
+              localizedMessage:
+                type: string
+              message:
+                type: string
+              stackTrace:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    classLoaderName:
+                      type: string
+                    className:
+                      type: string
+                    fileName:
+                      type: string
+                    lineNumber:
+                      type: integer
+                      format: int32
+                    methodName:
+                      type: string
+                    moduleName:
+                      type: string
+                    moduleVersion:
+                      type: string
+                    nativeMethod:
+                      type: boolean
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: string
+    PackagesResponseDto:
+      type: object
+      properties:
+        hotelHasCityTaxForBusiness:
+          type: boolean
+        hotelHasCityTaxForLeisure:
+          type: boolean
+        packages:
+          $ref: "#/components/schemas/PackagesDto"
+        restaurant:
+          $ref: "#/components/schemas/RestaurantDto"
+    PriceInfoDto:
+      type: object
+      properties:
+        amountAfterTax:
+          type: number
+        amountBeforeTax:
+          type: number
+        stayDate:
+          type: string
+          format: date
+    RateCodePricingRsDto:
+      type: object
+      properties:
+        currencyCode:
+          type: string
+        ratePlanCode:
+          type: string
+        totalNetAmount:
+          type: number
+    RateDto:
+      type: object
+      properties:
+        corporateRates:
+          $ref: "#/components/schemas/CorporateRateDto"
+        ratePlanCodes:
+          type: array
+          items:
+            type: string
+    RateV3Dto:
+      type: object
+      properties:
+        corporateRates:
+          type: array
+          items:
+            $ref: "#/components/schemas/CorporateRateDto"
+        ratePlanCodes:
+          type: array
+          items:
+            type: string
+    RestaurantDto:
+      type: object
+      properties:
+        logoSrc:
+          type: string
+        noMealsFound:
+          type: boolean
+        restaurantNotFound:
+          type: boolean
+    RoomDto:
+      type: object
+      properties:
+        cotAvailable:
+          type: boolean
+        isSubstitution:
+          type: boolean
+        mealsIncluded:
+          $ref: "#/components/schemas/MealsIncludedDto"
+        numberOfRoomsAvailable:
+          type: integer
+          format: int32
+        pmsRoomType:
+          type: string
+        roomClass:
+          type: string
+        roomPriceBreakdown:
+          $ref: "#/components/schemas/RoomPriceBreakdownDto"
+        roomType:
+          type: string
+        silentSubstitution:
+          type: boolean
+        softBundles:
+          $ref: "#/components/schemas/SoftBundlesDto"
+        specialRequests:
+          type: array
+          items:
+            type: string
+        substitution:
+          type: string
+    RoomLevelInventoryDto:
+      type: object
+      properties:
+        availableCount:
+          type: integer
+          format: int32
+        code:
+          type: string
+    RoomPriceBreakdownDto:
+      type: object
+      properties:
+        baseRateAmount:
+          type: number
+        currencyCode:
+          type: string
+        dailyPrices:
+          type: array
+          items:
+            $ref: "#/components/schemas/DailyPriceDto"
+        effectiveRateAmount:
+          type: number
+        packageAmount:
+          type: number
+        packageCode:
+          type: string
+        totalCityTaxAmount:
+          type: number
+        totalGrossAmount:
+          type: number
+        totalNetAmount:
+          type: number
+        totalRoomNetAmount:
+          type: number
+        totalTaxAmount:
+          type: number
+    RoomRateDto:
+      type: object
+      properties:
+        cellCode:
+          type: string
+          example: EMP01
+        globalCompanyId:
+          type: string
+        promotionCode:
+          type: string
+        rateDisplaySet:
+          type: string
+          example: PBF
+        ratePlanCode:
+          type: string
+          example: FLEXRATE
+        roomTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomTypeDto"
+        twinRoomTypeAvailability:
+          type: boolean
+      required:
+      - rateDisplaySet
+      - ratePlanCode
+    RoomRateInfoV2Dto:
+      type: object
+      properties:
+        packages:
+          type: array
+          items:
+            $ref: "#/components/schemas/PackageInfoDto"
+        priceInfo:
+          type: array
+          items:
+            $ref: "#/components/schemas/PriceInfoDto"
+    RoomRateV2Dto:
+      type: object
+      properties:
+        currencyCode:
+          type: string
+        displaySet:
+          type: string
+        globalCompanyId:
+          type: string
+        ratePlanCode:
+          type: string
+        roomRateInfo:
+          $ref: "#/components/schemas/RoomRateInfoV2Dto"
+    RoomStayV2Dto:
+      type: object
+      properties:
+        roomClass:
+          type: string
+        roomTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomTypeV2Dto"
+    RoomTypeDto:
+      type: object
+      properties:
+        adults:
+          type: integer
+          format: int32
+        children:
+          type: integer
+          format: int32
+        cotRequested:
+          type: boolean
+        roomNumber:
+          type: integer
+          format: int32
+        roomType:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomDto"
+    RoomTypeV2Dto:
+      type: object
+      properties:
+        adults:
+          type: string
+        children:
+          type: string
+        numberOfRooms:
+          type: string
+        roomRates:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomRateV2Dto"
+        roomType:
+          type: string
+        specialRequests:
+          type: array
+          items:
+            type: string
+        tag:
+          type: string
+    SoftBundleContentDto:
+      type: object
+      properties:
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttachmentsDto"
+        description:
+          type: string
+        id:
+          type: string
+        imageSrc:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+        strikeThrough:
+          type: boolean
+    SoftBundlesDto:
+      type: object
+      properties:
+        isOptional:
+          type: boolean
+        softBundleContent:
+          type: array
+          items:
+            $ref: "#/components/schemas/SoftBundleContentDto"
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string

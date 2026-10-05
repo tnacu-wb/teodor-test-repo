@@ -1,0 +1,837 @@
+openapi: 3.1.0
+info:
+  description: <p>TBU</p>
+  title: Payment Methods Entity Service API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9107
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /v1/payment-methods:
+    get:
+      operationId: getPaymentMethods
+      parameters:
+      - in: query
+        name: basketReference
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: country
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: language
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: userType
+        required: false
+        schema:
+          type: string
+          enum:
+          - LEISURE
+          - BUSINESS
+          - AGENT
+          - MANAGER
+      - in: query
+        name: clientChannel
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: changePaymentBIC
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: flow
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - in: header
+        name: WB-Authorization
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentMethodDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - payment-methods-controller
+    post:
+      operationId: validateSelectedPaymentMethod
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SelectedPaymentMethodsDto"
+        description: Details of the Item to be created
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - payment-methods-controller
+  /v1/payment-methods/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/payment-methods/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/payment-methods/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/payment-methods/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /v1/payment-methods/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /v1/payment-methods/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /v1/payment-methods/ccui:
+    get:
+      operationId: getCcuiPaymentMethods
+      parameters:
+      - in: query
+        name: basketReference
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: country
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: language
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - in: query
+        name: userType
+        required: false
+        schema:
+          type: string
+          enum:
+          - LEISURE
+          - BUSINESS
+          - AGENT
+          - MANAGER
+      - in: query
+        name: clientChannel
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: changePaymentBIC
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: flow
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          enum:
+          - CBT
+          - MOBILE
+          - WEB
+          - WEB_DE
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentMethodDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - payment-methods-controller
+  /v1/payment-methods/payment-actions/{basketReference}:
+    get:
+      operationId: getPaymentActions
+      parameters:
+      - in: path
+        name: basketReference
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentActionResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - payment-methods-controller
+components:
+  schemas:
+    AcceptedCardTypeDto:
+      type: object
+      properties:
+        logoSrc:
+          type: string
+          description: Logo url for card type
+          example: https://www.visa.co.uk/dam/VCOM/regional/lac/ENG/Default/Partner%20With%20Us/Payment%20Technology/visapos/full-color-800x450.jpg
+        name:
+          type: string
+        type:
+          type: string
+          description: CardDto type
+          enum:
+          - AC
+          - AM
+          - AT
+          - DI
+          - DL
+          - EL
+          - MA
+          - MD
+          - VI
+          - MC
+          - AX
+          - PI
+          - DN
+          - VS
+          - BD
+          - AP
+          - GP
+          - PP
+          - PE
+          - ECA
+          - AMX
+          - VIS
+          - DIN
+          - MAU
+          example: VI
+      required:
+      - type
+    BookingAllowancesDto:
+      type: object
+      properties:
+        allowAdditionalCosts:
+          type: boolean
+          description: flag to allow additional costs
+          example: true
+        allowAlcohol:
+          type: boolean
+          description: flag to allow alcohol
+          example: true
+        allowCarParking:
+          type: boolean
+          description: flag to allow car parking
+          example: true
+        allowIndividualCards:
+          type: boolean
+          description: flag to allow individual cards
+          example: true
+        allowPremierSaverRates:
+          type: boolean
+          description: flag to allow premier saver rates
+          example: true
+        maxDinnerBudgets:
+          $ref: "#/components/schemas/PriceCapLocationsDto"
+          description: PriceCapLocationsDto data
+        maxNumberOfNights:
+          type: integer
+          format: int32
+          description: max number of nights
+          example: 14
+      required:
+      - allowAdditionalCosts
+      - allowAlcohol
+      - allowCarParking
+      - allowIndividualCards
+      - allowPremierSaverRates
+      - maxDinnerBudgets
+      - maxNumberOfNights
+    CardDto:
+      type: object
+      properties:
+        cardHolderName:
+          type: string
+          description: Name of the card holder
+          example: FirstName LastName
+        cardName:
+          type: string
+          description: The name of the card type.
+          example: Visa Credit
+        cardNumber:
+          type: string
+          description: Card number masked
+          example: '************1103'
+        cardType:
+          type: string
+          description: Type of saved card
+          enum:
+          - LEISURE_STORED_CARD
+          - BUSINESS_CENTRALLY_STORED_CARD
+          - BUSINESS_PERSONAL_STORED_CARD
+          example: BUSINESS_CENTRALLY_STORED_CARD
+        cnpRequired:
+          type: boolean
+        expiryMonth:
+          type: string
+          format: MM
+          description: Expiry month for the payment card/token.
+          example: "01"
+        expiryYear:
+          type: string
+          format: YY
+          description: Expiry year for the payment card/token.
+          example: "21"
+        logoSrc:
+          type: string
+          description: Logo url for card type
+          example: https://www.visa.co.uk/dam/VCOM/regional/lac/ENG/Default/Partner%20With%20Us/Payment%20Technology/visapos/full-color-800x450.jpg
+        token:
+          type: string
+          description: 3C Payment token.
+          example: "4943056398164344242"
+        type:
+          type: string
+          description: CardDto type
+          enum:
+          - AC
+          - AM
+          - AT
+          - DI
+          - DL
+          - EL
+          - MA
+          - MD
+          - VI
+          - MC
+          - AX
+          - PI
+          - DN
+          - VS
+          - BD
+          - AP
+          - GP
+          - PP
+          - PE
+          - ECA
+          - AMX
+          - VIS
+          - DIN
+          - MAU
+          example: VI
+      required:
+      - type
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "001"
+          minLength: 1
+        details:
+          type: array
+          example:
+          - Error message
+          items:
+            type: string
+      required:
+      - code
+      - details
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    PaymentActionDto:
+      type: object
+      properties:
+        chargeType:
+          type: string
+        order:
+          type: integer
+          format: int32
+        price:
+          $ref: "#/components/schemas/PriceDto"
+    PaymentActionResponseDto:
+      type: object
+      properties:
+        displayPaymentPage:
+          type: boolean
+        paymentActions:
+          type: array
+          items:
+            $ref: "#/components/schemas/PaymentActionDto"
+    PaymentMethodDto:
+      type: object
+      properties:
+        acceptedCardTypes:
+          type: array
+          description: Accepted card types
+          items:
+            $ref: "#/components/schemas/AcceptedCardTypeDto"
+        bookingAllowances:
+          $ref: "#/components/schemas/BookingAllowancesDto"
+          description: BookingAllowancesDto data
+        card:
+          $ref: "#/components/schemas/CardDto"
+          description: Saved CardDto data
+        clientId:
+          type: string
+          description: Client ID if applicable for the Payment Type
+        clientToken:
+          type: string
+          description: Token generated if applicable for the Payment Type
+        cnpOptionAvailable:
+          type: boolean
+          description: Determines if card holder present option is available
+          example: true
+        cnpPreSelected:
+          type: boolean
+          description: Determines if card holder present option has been pre selected.
+            Saved Business Booker cards only.
+          example: true
+        enabled:
+          type: boolean
+          description: Payment method enabled
+          example: true
+        flow:
+          type: string
+          description: "Optional field, provides additional information about the\
+            \ payment method flow, e.g. CheckInOnline "
+          enum:
+          - CHECKINONLINE
+        logoSrc:
+          type: string
+          description: Logo source for each payment type
+        name:
+          type: string
+          description: Payment Method Name - CardDto/PIBA
+          example: CARD/PIBA
+        order:
+          type: integer
+          format: int32
+          description: Order(priority) of payment method
+          example: 1
+        paymentOptions:
+          type: array
+          description: Payment Options available for the payment method
+          items:
+            $ref: "#/components/schemas/PaymentOptionDto"
+        paymentProvider:
+          type: string
+          description: Indicates which payment provider backs the accepted card types
+            for this method
+          enum:
+          - 3CP
+          - Datatrans
+        reasons:
+          type: string
+          description: why a saved card is not available.
+          enum:
+          - EXPIRED
+          - CARD_NOT_ACCEPTED_AT_HOTEL
+          - CARD_EXPIRED_BEFORE_DEPARTURE
+          - CARD_NOT_VALID_FOR_RATE
+          - COMPANY_DISABLED_NEW_CARD
+          - PIBA_ALLOWED_ONLY_IN_UK
+          - PIBA_ALLOWED_ONLY_IN_UK_DE
+          - PIBA_UK_ALLOWED_ONLY_IN_UK
+          - PIBA_EU_ALLOWED_ONLY_IN_EU
+          - PERSONAL_STORED_CARD_DISABLED
+          example: CARD_NOT_ACCEPTED_AT_HOTEL
+        subType:
+          type: string
+          description: Subtype
+          example: PIBAGB/PIBADE
+        type:
+          type: string
+          description: CardDto type
+          enum:
+          - NEW_CARD
+          - SAVED_CARD
+          - NEW_PIBA
+          - AP
+          - GP
+          - RESERVE_WITHOUT_CARD
+          - ACCOUNT_COMPANY
+          - PAYPAL
+          example: NEW_CARD
+      required:
+      - name
+      - order
+      - type
+    PaymentOptionDto:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: flag to enable payment option
+          example: true
+        order:
+          type: integer
+          format: int32
+          description: order of payment option
+          example: 1
+        type:
+          type: string
+          description: Payment option
+          enum:
+          - PAY_NOW
+          - PAY_ON_ARRIVAL
+          - RESERVE_WITHOUT_CARD
+          example: Pay Now/Pay on Arrival
+      required:
+      - enabled
+      - order
+      - type
+    PriceCapLocationsDto:
+      type: object
+      properties:
+        greaterLondon:
+          $ref: "#/components/schemas/PriceDto"
+          description: Price data for Greater London
+        ireland:
+          $ref: "#/components/schemas/PriceDto"
+          description: Price data for Ireland
+        ukWide:
+          $ref: "#/components/schemas/PriceDto"
+          description: Price data for UK Wide
+    PriceDto:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: authorised amount per person per night
+          example: 25
+        currency:
+          type: string
+          description: the amount currency
+          example: GBP
+      required:
+      - amount
+      - currency
+    SelectedPaymentMethodsDto:
+      type: object
+      properties:
+        basketReference:
+          type: string
+          description: Basket reference for which the payment methods needs to be
+            retrieved.
+          example: DJERSE8792035
+          minLength: 1
+        isCiol:
+          type: boolean
+          description: isCiol flag indicating if the request is for CIOL.
+          example: true
+        selectedPaymentOption:
+          type: string
+          description: Selected payment option.
+          example: PAY_NOW
+          minLength: 1
+        type:
+          type: string
+          description: "The selected card type: CARD or PIBA."
+          example: PIBA
+          minLength: 1
+      required:
+      - basketReference
+      - selectedPaymentOption
+      - type

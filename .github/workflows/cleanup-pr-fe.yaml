@@ -1,0 +1,98 @@
+name: Cleanup PR FE
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+      - test-deployment
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+  deployments: write
+  pull-requests: read
+  issues: write
+
+jobs:
+  cleanup-on-pr-close:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: dev-default-runner-scale-set
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v7
+
+      - name: Cleanup preview
+        uses: ./.github/frontend/actions/cleanup-preview
+        with:
+          branch-name: ${{ github.head_ref }}
+          pr-number: ${{ github.event.pull_request.number }}
+          pipeline-app-id: ${{ vars.PIPELINE_APP_ID || '1141433' }}
+          pipeline-app-private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+
+  find-stale-prs:
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    outputs:
+      pr-matrix: ${{ steps.find.outputs.pr-matrix }}
+      has-stale-prs: ${{ steps.find.outputs.has-stale-prs }}
+    steps:
+      - name: Find stale PRs against main
+        id: find
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const staleDays = 15;
+            const cutoff = Date.now() - staleDays * 24 * 60 * 60 * 1000;
+            const prs = await github.paginate(github.rest.pulls.list, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              base: 'main',
+              per_page: 100,
+            });
+
+            const stalePrs = [];
+            for (const pr of prs) {
+              const commits = await github.paginate(github.rest.pulls.listCommits, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                per_page: 100,
+              });
+              const lastCommit = commits.at(-1);
+              const lastCommitAt = lastCommit?.commit?.committer?.date ||
+                lastCommit?.commit?.author?.date || pr.updated_at;
+              if (Date.parse(lastCommitAt) <= cutoff) {
+                stalePrs.push({ branch_name: pr.head.ref, pr_number: String(pr.number) });
+              }
+            }
+
+            core.info(`Found ${stalePrs.length} stale PR(s) against main.`);
+            core.setOutput('pr-matrix', JSON.stringify(stalePrs));
+            core.setOutput('has-stale-prs', stalePrs.length > 0 ? 'true' : 'false');
+
+  cleanup-stale-prs:
+    needs: find-stale-prs
+    if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && needs.find-stale-prs.outputs.has-stale-prs == 'true' }}
+    runs-on: dev-default-runner-scale-set
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.find-stale-prs.outputs.pr-matrix) }}
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v7
+
+      - name: Cleanup stale preview
+        uses: ./.github/frontend/actions/cleanup-preview
+        with:
+          branch-name: ${{ matrix.branch_name }}
+          pr-number: ${{ matrix.pr_number }}
+          pipeline-app-id: ${{ vars.PIPELINE_APP_ID || '1141433' }}
+          pipeline-app-private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+          post-pr-comment: "false"

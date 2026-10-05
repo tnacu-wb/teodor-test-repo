@@ -1,0 +1,34 @@
+query hotelAvailability ($availabilitySearchCriteria: AvailabilitySearchCriteria!) {
+    hotelAvailability (availabilitySearchCriteria: $availabilitySearchCriteria) {
+        hotelId
+        startDate
+        endDate
+        available
+        limitedAvailability
+        roomRates {
+            ratePlanCode
+            cellCode
+            roomTypes {
+                roomType
+                adults
+                children
+                cotRequested
+                rooms {
+                    pmsRoomType
+                    silentSubstitution
+                    roomClass
+                    cotAvailable
+                    specialRequests
+                    roomPriceBreakdown {
+                      currencyCode
+                      dailyPrices {
+                        date
+                        netPrice
+                      }
+                      totalNetAmount
+                    }
+                }
+            }
+        }
+    }
+}

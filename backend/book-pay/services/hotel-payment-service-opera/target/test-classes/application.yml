@@ -1,0 +1,59 @@
+swagger:
+  api:
+    version: "1.12"
+    path: https://api.swaggerhub.com/apis/whitbread/Payment-API/${swagger.api.version}/swagger.yaml
+    token: eaaab7b2-ab2e-4471-b01f-ed3d901c144f
+
+bart:
+  password: pwd
+  username: username
+  host: http://localhost:${wiremock.server.port:0}
+  service:
+    card:
+      defaultUrl: ${bart.host}/cardUrl
+    booking:
+      defaultUrl: ${bart.host}/bookingUrl
+      hub:
+        defaultUrl: ${bart.host}/hubUrl
+        cardValidationUrl: ${bart.host}/cbookingCardValidationUrl
+  cmdDefaultMaxPerRoute: 2
+  cmMaxTotal: 10
+  cmTimeout: 5000
+  connectionTimeout: 5000
+  socketTimeout: 10000
+  defaultKeepAlive: 30
+
+domain:
+  defaultIp: 127.0.0.1
+  defaultUrl: https://secure2.premierinn.com.staging.nativ-systems.com
+  regex:
+    - .*\.premierinn\.com
+    - .*\.premierinn\.de
+    - .*\.nativ-systems\.com
+    - .*\.whitbread\.digital
+
+feign:
+  hotelcard:
+    name: hotelcard
+    url: http://localhost:${wiremock.server.port:1}
+
+browser:
+  defaults:
+    windowSize: "FULL_SCREEN"
+    colourDepth: "1"
+    javaEnabled: true
+    language: "en-GB"
+    screenHeight: 100
+    screenWidth: 100
+    timezone: "0"
+
+spring:
+  cache:
+    type: simple
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
+cdh:
+  enableDataFetch: true

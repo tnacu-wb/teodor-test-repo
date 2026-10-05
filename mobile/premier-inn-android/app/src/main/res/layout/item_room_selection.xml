@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/generic_margin_4"
+    android:background="@drawable/booking_pre_stay_details_card_shape"
+    android:padding="@dimen/generic_padding_16"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/item_room_name"
+            style="@style/Header4Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="1sp"
+            tools:text="Room 1" />
+
+        <TextView
+            android:id="@+id/item_guest_name"
+            style="@style/BodySmallRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Lucas" />
+
+        <TextView
+            android:id="@+id/item_children"
+            style="@style/BodySmallRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:text="1 child" />
+
+        <TextView
+            android:id="@+id/item_upsells"
+            style="@style/BodySmallRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/generic_padding_8"
+            tools:text="1x Continental Breakfast" />
+
+        <TextView
+            android:id="@+id/item_room_upsell_info"
+            style="@style/BodySmallBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_4"
+            android:background="@drawable/upsell_info_background"
+            android:backgroundTint="@color/light_grey_3_30"
+            android:maxLines="2"
+            android:paddingHorizontal="@dimen/generic_padding_8"
+            android:paddingVertical="@dimen/generic_padding_4"
+            android:textSize="@dimen/subtext_text_size_13"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

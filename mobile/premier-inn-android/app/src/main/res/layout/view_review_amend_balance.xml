@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:elevation="@dimen/generic_elevation_2">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/generic_margin_16"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/generic_margin_16"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/amend_balance_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Header2"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:layout_marginEnd="@dimen/generic_margin_4"
+        app:layout_constraintEnd_toStartOf="@id/amend_balance_amount"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Balance outstanding" />
+
+    <TextView
+        android:id="@+id/amend_balance_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/BodySmall"
+        android:layout_marginTop="@dimen/generic_margin_4"
+        android:layout_marginBottom="@dimen/generic_margin_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/amend_balance_title"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@id/amend_balance_title"
+        tools:text="To be paid on arrival" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/amend_balance_amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Header2"
+        android:gravity="end"
+        app:layout_constraintBottom_toBottomOf="@id/amend_balance_title"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintTop_toTopOf="@id/amend_balance_title"
+        tools:text="£125.30" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

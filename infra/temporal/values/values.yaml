@@ -1,0 +1,157 @@
+# Common values for Whitbread Temporal deployment
+# Only values that are identical across ALL environments
+# Layered: values.yaml → nonprod.yaml → <env>.yaml (non-prod) or values.yaml → prod.yaml (prod)
+
+temporal:
+  enabled: true
+  
+  # Disable Helm hooks for schema setup — run the schema Job as a regular
+  # resource rather than a pre-install hook. The datastore is external Serverless
+  # Aurora, and the Job retries (backoffLimit: 100) until Aurora is reachable and
+  # accepting connections, so it does not need to run as a hook.
+  schema:
+    useHelmHooks: false
+    backoffLimit: 100
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000
+      seccompProfile:
+        type: RuntimeDefault
+
+  server:
+    # Pin the server image tag. The upstream temporal 1.6.0 chart otherwise
+    # defaults the server image to its own appVersion, so a future dependency
+    # bump (Chart.yaml/Chart.lock) would silently roll every environment onto a
+    # new Temporal server version — a change that can require a DB schema
+    # migration and is not something a routine chart bump should trigger
+    # unattended. Pinning here decouples the deployed server version from the
+    # chart version; bump this explicitly (with the matching schema update) when
+    # upgrading Temporal. Value matches temporal chart 1.6.0's appVersion, i.e.
+    # the version currently running, so this pin is a no-op on today's clusters.
+    image:
+      repository: temporalio/server
+      tag: "1.31.2"
+
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        memory: 1.5Gi
+    
+    deploymentStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 0
+        maxSurge: 1
+    
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000
+      seccompProfile:
+        type: RuntimeDefault
+    
+    podDisruptionBudget:
+      minAvailable: 1
+    
+    config:
+      persistence:
+        datastores:
+          default:
+            sql:
+              driver: "postgres12"
+              pluginName: "postgres12"
+              databaseName: "temporal"
+              connectProtocol: "tcp"
+              user: "temporal"
+              maxConns: 20
+              maxIdleConns: 20
+              maxConnLifetime: "1h"
+              # connectAddr, password, existingSecret differ per environment
+          
+          visibility:
+            sql:
+              driver: "postgres12"
+              pluginName: "postgres12"
+              databaseName: "temporal_visibility"
+              connectProtocol: "tcp"
+              user: "temporal"
+              maxConns: 10
+              maxIdleConns: 10
+              maxConnLifetime: "1h"
+              # connectAddr, password, existingSecret differ per environment
+  
+  web:
+    enabled: true
+    replicaCount: 2
+
+    # Pin the Web UI image tag for the same reason as server.image above
+    # (decouple from the chart's default). Matches what is deployed today.
+    image:
+      repository: temporalio/ui
+      tag: "2.52.0"
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        memory: 512Mi
+    
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000
+      seccompProfile:
+        type: RuntimeDefault
+    
+    podDisruptionBudget:
+      minAvailable: 1
+    
+    service:
+      type: ClusterIP
+      port: 8080
+  
+  # Kyverno cluster policy: all pods must set pod-level securityContext
+  # with runAsNonRoot=true and seccompProfile=RuntimeDefault
+  admintools:
+    enabled: true
+
+    # Pin the admin-tools image tag (kept in lockstep with the server version;
+    # temporalio/admin-tools is versioned alongside temporalio/server).
+    image:
+      repository: temporalio/admin-tools
+      tag: "1.31.2"
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000
+      seccompProfile:
+        type: RuntimeDefault
+  
+  # Istio service mesh integration
+  podLabels:
+    sidecar.istio.io/inject: "true"
+  
+  serviceAccount:
+    create: true
+    name: temporal
+
+# NetworkPolicy — restricts database access to Temporal pods only
+networkPolicy:
+  enabled: true
+
+# Temporal Web UI ingress via Istio Gateway + ExternalDNS
+# ExternalDNS automatically creates DNS records from Gateway hosts
+temporalUI:
+  gateway:
+    enabled: false
+    host: ""

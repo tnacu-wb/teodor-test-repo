@@ -1,0 +1,109 @@
+@startuml
+entity "PMS Adapter Service" as PMS
+participant HotelAvailabilityController as Controller
+participant HotelAvailabilityInPort as InboundPort
+participant HotelAvailabilityOutPort as OutboundPort
+participant OhipAvailabilityClient as OhipClient
+participant RulesAgentClient as RulesClient
+participant ApiLimitsClient as ApiLimitsClient
+participant OhipWebClient as OhipWebClient
+participant RulesAgentWebClient as RulesWebClient
+
+PMS -> Controller: GET /ohip/hotels/{hotelId}/availabilities\n?arrivalDate={{arrivalDate}}\n&departureDate={{departureDate}}
+Controller -> InboundPort: getHotelAvailability
+
+InboundPort -> InboundPort: getAvailabilityResult
+activate InboundPort #LightBlue
+  InboundPort -> OutboundPort: getHotelAvailability (CompletableFuture + join)
+
+  OutboundPort -> OhipClient: getRoomTypes
+  OhipClient -> OhipWebClient: get (Mono + block)
+  OhipClient <-- OhipWebClient: RoomTypesResponseDto
+  OutboundPort <-- OhipClient: RoomTypesResponseDto
+
+  OutboundPort -> OutboundPort: convertWbRoomTypesToPmsRoomTypes
+
+  OutboundPort -> OutboundPort: getHotelInventory
+  activate OutboundPort #Blue
+    alt totalDays > 90
+      OutboundPort -> OutboundPort: getMultipleChunkHotelInventoryList
+      activate OutboundPort #Yellow
+        loop for each chunk
+          OutboundPort -> OhipClient: getHotelInventory
+          OhipClient -> OhipWebClient: get
+          OhipClient <-- OhipWebClient: Mono<HotelInventoryDto>
+          OutboundPort <-- OhipClient: Mono<HotelInventoryDto>
+        end
+        OutboundPort <-- OutboundPort: Mono<List<HotelInventoryDto>>
+      deactivate OutboundPort #Yellow
+    else
+      OutboundPort -> OutboundPort: getSingleChunkHotelInventoryList
+      activate OutboundPort #Orange
+        OutboundPort -> OhipClient: getHotelInventory
+        OhipClient -> OhipWebClient: get
+        OhipClient <-- OhipWebClient: Mono<HotelInventoryDto>
+        OutboundPort <-- OhipClient: Mono<HotelInventoryDto>
+      deactivate OutboundPort #Orange
+    end
+  OutboundPort <-- OutboundPort: Mono<List<HotelInventoryDto>>
+  deactivate OutboundPort #Blue
+
+  alt ratePlanCode is empty && promotionCode is empty
+    OutboundPort -> OutboundPort: getRatePlanSets
+    activate OutboundPort #Red
+      OutboundPort -> RulesClient: getBookingChannelInfo
+      RulesClient -> RulesWebClient: get (Mono + block)
+      RulesClient <-- RulesWebClient: BookingChannelInfoResponseDto
+      OutboundPort <-- RulesClient: BookingChannelInfoResponseDto
+      OutboundPort <-- OutboundPort: List<String>
+    deactivate OutboundPort #Red
+    OutboundPort -> OutboundPort: findHotelAvailabilitiesByRatePlanSets
+    activate OutboundPort #Pink
+      OutboundPort -> ApiLimitsClient: getHotelAvailabilityResponses
+      ApiLimitsClient -> ApiLimitsClient: getHotelAvailabilityList
+      activate ApiLimitsClient #Yellow
+        loop intervals
+          ApiLimitsClient -> ApiLimitsClient: CompletableFuture.supplyAsync
+          activate ApiLimitsClient #Blue
+            ApiLimitsClient -> OhipClient: getHotelAvailabilityRequest
+            ApiLimitsClient <-- OhipClient: Mono<HotelAvailabilityDetailsDto>
+            ApiLimitsClient -> ApiLimitsClient: Mono.block()
+            ApiLimitsClient <-- ApiLimitsClient: HotelAvailabilityDetailsDto
+          deactivate ApiLimitsClient #Blue
+        end
+        ApiLimitsClient <-- ApiLimitsClient: List<CompletableFuture<HotelAvailabilityDetailsDto>>
+      deactivate ApiLimitsClient #Yellow
+      ApiLimitsClient -> ApiLimitsClient: CompletableFuture.join
+      OutboundPort <-- ApiLimitsClient: HotelAvailabilityDetailsDto
+      OutboundPort <-- OutboundPort: Mono<List<HotelAvailabilityDetailsDto>>
+    deactivate OutboundPort
+  else
+    OutboundPort -> OutboundPort: findHotelAvailabilitiesByRatePlanCode
+    activate OutboundPort #Green
+      OutboundPort -> ApiLimitsClient: getHotelAvailabilityResponses
+      OutboundPort <-- ApiLimitsClient: HotelAvailabilityDetailsDto
+      OutboundPort <-- OutboundPort: Mono<List<HotelAvailabilityDetailsDto>>
+    deactivate OutboundPort #Green
+  end
+
+
+  InboundPort <-- OutboundPort: AvailabilityResult (Mono + zip + map + block)
+  InboundPort -> InboundPort: hotelAvailabilityResult.setRoomRates()
+  InboundPort <-- InboundPort: AvailabilityResult
+deactivate InboundPort #LightBlue
+
+InboundPort -> InboundPort: getPromotionRates
+activate InboundPort #LightGreen
+  InboundPort -> OutboundPort: getHotelAvailability (CompletableFuture + join)
+  InboundPort <-- OutboundPort: AvailabilityResult
+  InboundPort -> InboundPort: hotelAvailabilityResult.setRoomRates()
+  InboundPort <-- InboundPort: AvailabilityResult
+deactivate InboundPort #LightGreen
+
+InboundPort -> InboundPort: setPromotionalBaseRate
+InboundPort -> InboundPort: checkForCotsAvailability
+InboundPort -> InboundPort: checkMealsIncluded
+
+Controller <-- InboundPort: AvailabilityResult
+PMS <-- Controller: AvailabilityResponseDto
+@enduml

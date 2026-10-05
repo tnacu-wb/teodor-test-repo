@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/generalInfoContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/generic_padding_16">
+
+    <com.whitbread.premierinn.common.view.ShapeableNetworkImageView
+        android:id="@+id/hotelImage"
+        android:layout_width="@dimen/generic_margin_44"
+        android:layout_height="@dimen/generic_margin_44"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/CornerRounded8" />
+
+    <TextView
+        android:id="@+id/headerTitle"
+        style="@style/Header4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:text="@string/booking_details_get_room_key_instructions"
+        android:textColor="@color/full_black"
+        app:layout_constraintBottom_toBottomOf="@+id/hotelImage"
+        app:layout_constraintStart_toEndOf="@id/hotelImage"
+        app:layout_constraintTop_toTopOf="@id/hotelImage"
+        tools:text="@string/booking_details_get_room_key_instructions" />
+
+    <ImageView
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:padding="@dimen/generic_padding_8"
+        android:src="@drawable/ic_close_dark"
+        android:background="@drawable/ic_oval_grey"
+        app:layout_constraintBottom_toBottomOf="@+id/hotelImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/hotelImage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

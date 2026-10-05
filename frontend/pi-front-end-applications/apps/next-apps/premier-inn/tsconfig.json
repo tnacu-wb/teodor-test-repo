@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "baseUrl": "./src",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "paths": {
+      "framer-motion": ["../../../../node_modules/framer-motion/types/index.d.ts"],
+      "@hookform/resolvers/yup": ["../../../../node_modules/@hookform/resolvers/yup/dist/index"],
+      "~public/*": ["../public/*"],
+      "~pages/*": ["./pages/*"],
+      "~components/*": ["./components/*"],
+      "~components": ["./components/index.ts"],
+      "~types/*": ["./types/*"],
+      "~store/*": ["./store/*"],
+      "~store": ["./store/index.ts"],
+      "~hooks/*": ["./hooks/*"],
+      "~utils/*": ["./utils/*"],
+      "~services/*": ["./services/*"],
+      "~services": ["./services/index.ts"],
+      "~styles/*": ["./styles/*"],
+      "~queries/*": ["./queries/*"],
+      "~queries": ["./queries/index.ts"],
+      "~page-helper/*": ["./page-helper/*"],
+      "~mocks/*": ["./mocks/*"],
+      "~assets/*": ["../assets/*"]
+    },
+    "incremental": false
+  },
+  "exclude": ["node_modules", ".yarn", ".next", "**/*.test.ts", "**/*.test.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"]
+}

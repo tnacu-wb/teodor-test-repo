@@ -1,0 +1,265 @@
+name: GraphQL CI and Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/*'
+      - 'hotfix/release*'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+    paths:
+      - 'graphql/**'
+      - '.github/workflows/build-graphql.yaml'
+      - '.github/workflows/ci-graphql.yaml'
+      - '.github/workflows/scripts/graphql/*.sh'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  APP_NAME: opera-apollo-subgraphs
+  AWS_REGION: eu-west-1
+
+jobs:
+  build:
+    name: Validate and build GraphQL
+    if: >-
+      github.event_name == 'pull_request' ||
+      github.event_name == 'workflow_dispatch' ||
+      vars.GRAPHQL_CD_ENABLED == 'true'
+    # Must grant at least what build-graphql.yaml's validate-and-build job
+    # requests: a called workflow cannot hold permissions the caller lacks, and
+    # the workflow-level default here is contents:read only (actions:none).
+    permissions:
+      actions: read
+      contents: read
+    uses: ./.github/workflows/build-graphql.yaml
+    secrets: inherit
+
+  image-build:
+    name: Build and publish GraphQL image
+    if: github.event_name == 'push' && vars.GRAPHQL_CD_ENABLED == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    outputs:
+      image-tag: ${{ steps.image-tag.outputs.tag }}
+      image-repository: ${{ steps.image.outputs.repository }}
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download Apollo artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build.outputs.artifact-name }}
+          path: graphql-artifact
+
+      - name: Extract Apollo artifact
+        env:
+          ARTIFACT_PATH: graphql-artifact/opera-apollo-subgraphs.tar
+          GRAPHQL_DIR: graphql
+        run: bash .github/workflows/scripts/graphql/extract-graphql-artifact.sh
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+        with:
+          role-to-assume: arn:aws:iam::327347623470:role/GitHubActionsECRPushRole
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@03f1aad4c6c7ffd436567f42f9384779290529bd # v2.1.7
+
+      - name: Resolve image tag
+        id: image-tag
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          COMMIT_SHA: ${{ github.sha }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          APP_VERSION: ${{ needs.build.outputs.apollo-version }}
+        run: bash .github/workflows/scripts/resolve-image-tag.sh
+
+      - name: Build and push image to ECR
+        id: image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+        run: bash .github/workflows/scripts/graphql/build-push-graphql-image.sh
+
+  image-scan:
+    name: Scan GraphQL image
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Download Apollo artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build.outputs.artifact-name }}
+          path: graphql-artifact
+
+      - name: Extract Apollo artifact
+        env:
+          ARTIFACT_PATH: graphql-artifact/opera-apollo-subgraphs.tar
+          GRAPHQL_DIR: graphql
+        run: bash .github/workflows/scripts/graphql/extract-graphql-artifact.sh
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+        with:
+          role-to-assume: arn:aws:iam::327347623470:role/GitHubActionsECRPushRole
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@03f1aad4c6c7ffd436567f42f9384779290529bd # v2.1.7
+
+      - name: Resolve image tag
+        id: image-tag
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          COMMIT_SHA: ${{ github.sha }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          APP_VERSION: ${{ needs.build.outputs.apollo-version }}
+        run: bash .github/workflows/scripts/resolve-image-tag.sh
+
+      - name: Build image for scanning
+        id: image
+        env:
+          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+        run: bash .github/workflows/scripts/graphql/build-graphql-image.sh
+
+      - name: Generate token for PR comment
+        id: generate-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.PIPELINE_APP_ID }}
+          private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Run Prisma scan for GraphQL
+        uses: ./.github/actions/prisma-image-scan
+        with:
+          image-name: ${{ steps.image.outputs.image-name }}
+          prisma-user: ${{ secrets.PRISMA_ACCESS_KEY_ID }}
+          prisma-password: ${{ secrets.PRISMA_SECRET_KEY }}
+          github-token: ${{ steps.generate-token.outputs.token }}
+          post-pr-comment: 'true'
+          continue-on-error: 'true'
+
+  which-env:
+    name: Resolve GraphQL environment
+    if: github.event_name == 'push' && vars.GRAPHQL_CD_ENABLED == 'true'
+    needs: image-build
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.deployment-env.outputs.environment-lower }}
+      graph-environment: ${{ steps.deployment-env.outputs.environment }}
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Resolve target environment
+        id: deployment-env
+        env:
+          REF: ${{ github.ref }}
+        run: bash .github/workflows/scripts/graphql/resolve-graphql-environment.sh
+
+  deployment-check:
+    name: GraphQL deployment check
+    if: github.event_name == 'push' && vars.GRAPHQL_CD_ENABLED == 'true'
+    needs: [image-build, which-env]
+    runs-on: ${{ format('{0}-default-runner-scale-set', needs.which-env.outputs.environment) }}
+    timeout-minutes: 30
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Verify deployment
+        uses: ./.github/actions/release-check
+        with:
+          app-name: ${{ env.APP_NAME }}
+          image-tag: ${{ needs.image-build.outputs.image-tag }}
+          namespace: apollo
+          check-timeout: "600"
+
+  dit-sync:
+    name: Update GraphQL development GitOps tag
+    if: github.event_name == 'push' && github.ref_name == 'main' && vars.GRAPHQL_CD_ENABLED == 'true'
+    needs: [image-build, deployment-check]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Update development GitOps tag
+        uses: ./.github/actions/gitops-tag-update
+        with:
+          app-name: ${{ env.APP_NAME }}
+          image-tag: ${{ needs.image-build.outputs.image-tag }}
+          github-app-id: ${{ vars.PIPELINE_APP_ID }}
+          github-app-private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+
+  publish-schema:
+    name: Publish GraphQL schemas
+    if: github.event_name == 'push' && vars.GRAPHQL_CD_ENABLED == 'true'
+    needs: [deployment-check, which-env]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Use LTS Node version
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22.23.0'
+
+      - name: Install Rover CLI
+        run: npm install --global @apollo/rover
+
+      - name: Publish schemas
+        env:
+          APOLLO_KEY: ${{ secrets.OPERA_APOLLO_APIKEY }}
+          TARGET_ENVIRONMENT: ${{ needs.which-env.outputs.graph-environment }}
+          BEFORE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: bash .github/workflows/scripts/graphql/publish-graphql-schemas.sh

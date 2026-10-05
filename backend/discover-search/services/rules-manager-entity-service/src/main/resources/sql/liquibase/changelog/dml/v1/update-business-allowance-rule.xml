@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet author="mihai.pitu" id="update-business-allowance-rule">
+    <update schemaName="rules_engine"
+      tableName="business_allowance_rule">
+      <column name="source_id" value="premierInnBreakfast"/>
+      <where>source_id='premierInn'</where>
+    </update>
+    <update schemaName="rules_engine"
+      tableName="business_allowance_rule">
+      <column name="source_id" value="continentalBreakfast"/>
+      <where>source_id='continental'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update-business-allowance-additionalCharges-transaction-false">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_transaction_code" value="false"/>
+      <where>pms='OP' AND source_id='anyAdditionalCharges' AND target_id='ALL'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update-business-allowance-dinner-target-id-to-FBNA">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="FBNA"/>
+      <column name="is_transaction_code" value="false"/>
+      <where>pms='OP' AND source_id='dinner' AND target_id='156'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update-business-allowance-dinner-target-id-to-FB">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="FB"/>
+      <column name="is_transaction_code" value="false"/>
+      <where>pms='OP' AND source_id='alcohol' AND target_id='157'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update-business-allowance-135-target-id-to-WIFI">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="WIFI"/>
+      <column name="is_transaction_code" value="false"/>
+      <where>pms='OP' AND source_id='ultimateWifi' AND target_id='135'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update-business-allowance-142-target-id-to-PARK">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="PARK"/>
+      <column name="is_transaction_code" value="false"/>
+      <where>pms='OP' AND source_id='carParking' AND target_id='142'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update-business-allowance-10-target-id-to-ROOM">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="ROOM"/>
+      <column name="is_transaction_code" value="false"/>
+      <where>pms='OP' AND source_id='accommodation' AND target_id='10'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="gabriela.ciurea" id="update-aem_id_1">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="boxedBreakfast"/>
+      <where>source_type='PACKAGE' AND source_id='OBFBOX'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="gabriela.ciurea" id="update-aem_id_2">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="childrensBreakfast"/>
+      <where>source_type='PACKAGE' AND source_id='BFCHDF'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="gabriela.ciurea" id="update-aem_id_3">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="premierInnBreakfast"/>
+      <where>source_type='PACKAGE' AND (source_id='PIBBEV' OR source_id='BFADBF')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="gabriela.ciurea" id="update-aem_id_4">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="continentalBreakfast"/>
+      <where>source_type='PACKAGE' AND source_id='BFADCT'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="gabriela.ciurea" id="update-aem_id_5">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="mealDeal"/>
+      <where>source_type='PACKAGE' AND (source_id='MDBEVA' OR source_id='MD2DIN' OR
+        source_id='MDBFST')
+      </where>
+    </update>
+  </changeSet>
+
+  <changeSet author="gabriela.ciurea" id="update-aem_id_6">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" valueComputed="source_id"/>
+      <where>source_type IN ('ALLOWANCE', 'ACCOMMODATION')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="alin.bucea" id="update-business-allowance-all-breakfasts-target-id-to-BREAK">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="BREAK"/>
+      <column name="is_transaction_code" value="false"/>
+      <where>pms='OP' AND source_id in ('BFCHDF', 'BFADCT','BFADBF','OBFBOX', 'PIBBEV', 'boxedBreakfast',
+        'continentalBreakfast', 'premierInnBreakfast')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="alin.bucea" id="update-business-allowance-mealDeal-target-id-to-17">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="17"/>
+      <where>pms='OP' AND source_id='mealDeal' AND target_id='154'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update-business-allowance-not-applicable-daily">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='BFCHDF' AND target_id='BREAK'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='BFADBF' AND target_id='BREAK'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='BFADCT' AND target_id='BREAK'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='MDBEVA' AND target_id='157'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='MD2DIN' AND target_id='156'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='MDBFST' AND target_id='155'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='premierInnBreakfast' AND target_id='BREAK'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='continentalBreakfast' AND target_id='BREAK'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='mealDealBreakfast' AND target_id='155'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='mealDealDinner' AND target_id='156'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='mealDealBeverage' AND target_id='157'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='carParking' AND target_id='PARK'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='ultimateWifi' AND target_id='WIFI'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='anyAdditionalCharges' AND target_id='ALL'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='accommodation' AND target_id='ROOM'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="alin.bucea" id="update-business-allowance-business-notes-mandatory">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_notes_mandatory" value="true"/>
+      <where>pms='OP' AND source_type='ALLOWANCE' AND source_id in ('dinner', 'alcohol','carParking')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="alin.bucea" id="update-business-allowance-revert-business-notes-mandatory">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_notes_mandatory" value="false"/>
+      <where>pms='OP' AND source_type='ALLOWANCE' AND source_id not in ('dinner', 'alcohol','carParking')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update-business-allowance-delete-individual-mealDeal-allowances">
+    <delete schemaName="rules_engine" tableName="business_allowance_rule">
+      <where>pms='OP' AND source_id='mealDealBreakfast' AND target_id='155'</where>
+    </delete>
+    <delete schemaName="rules_engine" tableName="business_allowance_rule">
+      <where>pms='OP' AND source_id='mealDealDinner' AND target_id='156'</where>
+    </delete>
+    <delete schemaName="rules_engine" tableName="business_allowance_rule">
+      <where>pms='OP' AND source_id='mealDealBeverage' AND target_id='157'</where>
+    </delete>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update-business-allowance-mealDeal-target-id-17-to-FOOD">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="FOOD"/>
+      <column name="is_transaction_code" value="false"/>
+      <column name="is_applicable_daily" value="false"/>
+      <where>pms='OP' AND source_id='mealDeal' AND target_id='17'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="update-business-allowance-mealDeal-packages-to-FOOD">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="FOOD"/>
+      <column name="is_transaction_code" value="false"/>
+      <where>pms='OP' AND source_id='MDBFST' AND target_id='155'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="FOOD"/>
+      <column name="is_transaction_code" value="false"/>
+      <where>pms='OP' AND source_id='MD2DIN' AND target_id='156'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="target_id" value="FOOD"/>
+      <column name="is_transaction_code" value="false"/>
+      <where>pms='OP' AND source_id='MDBEVA' AND target_id='157'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="octavian.pinzariu" id="update-business-allowance-business-ultimateWifi-notes-mandatory">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_notes_mandatory" value="true"/>
+      <where>pms='OP' AND source_type='ALLOWANCE' AND source_id = 'ultimateWifi'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="insert-business-allowance-cityTax">
+    <insert tableName="business_allowance_rule">
+      <column name="pms" value="OP"/>
+      <column name="source_id" value="CITYTAX"/>
+      <column name="target_id" value="CITY"/>
+      <column name="source_type" value="PACKAGE"/>
+      <column name="aem_id" value="cityTax"/>
+      <column name="is_transaction_code" value="false"/>
+      <column name="is_applicable_daily" value="false"/>
+      <column name="is_notes_mandatory" value="false"/>
+    </insert>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="update-aem_id_7">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="ultimateWifi"/>
+      <where>source_type='PACKAGE' AND (source_id='FI24HR')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="update-is_transaction_code">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_transaction_code" value="false"/>
+      <where>source_type='PACKAGE' AND (source_id='FI24HR')</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="simona.vusdea" id="is_applicable_daily">
+  <update schemaName="rules_engine" tableName="business_allowance_rule">
+    <column name="is_applicable_daily" value="false"/>
+    <where>pms='OP' AND source_id='FI24HR' AND target_id='WIFI'</where>
+  </update>
+  </changeSet>
+
+  <changeSet author="gabriel.simon" id="update-aem_id_8">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="continentalBundle" />
+      <where>source_type='ALLOWANCE' AND source_id='continentalBundle'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="lighterBundle" />
+      <where>source_type='ALLOWANCE' AND source_id='lighterBundle'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="breakfastRollBundle" />
+      <where>source_type='ALLOWANCE' AND source_id='breakfastRollBundle'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="kidsBundle" />
+      <where>source_type='PACKAGE' AND source_id='BFGCHD'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="continentalBundle" />
+      <where>source_type='PACKAGE' AND source_id='BFGCON'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="lighterBundle" />
+      <where>source_type='PACKAGE' AND source_id='BFGLGH'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="aem_id" value="breakfastRollBundle" />
+      <where>source_type='PACKAGE' AND source_id='BFGROL'</where>
+    </update>
+    <rollback>
+      <update schemaName="rules_engine" tableName="business_allowance_rule">
+        <column name="aem_id" value="boxedBreakfast" />
+        <where>source_type IN ('ALLOWANCE','PACKAGE') AND source_id IN ('continentalBundle','lighterBundle',
+          'breakfastRollBundle','BFGCHD','BFGCON','BFGLGH','BFGROL')</where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="gabriel.simon" id="update-business-allowance-breakfast-bundles-notes-mandatory">
+    <update schemaName="rules_engine" tableName="business_allowance_rule">
+      <column name="is_notes_mandatory" value="false" />
+      <where>source_type='ALLOWANCE' AND source_id IN ('continentalBundle','lighterBundle', 'breakfastRollBundle')</where>
+    </update>
+    <rollback>
+      <update schemaName="rules_engine" tableName="business_allowance_rule">
+        <column name="is_notes_mandatory" value="true" />
+        <where>source_type='ALLOWANCE' AND source_id IN ('continentalBundle','lighterBundle', 'breakfastRollBundle')</where>
+      </update>
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>

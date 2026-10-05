@@ -1,0 +1,10 @@
+@startuml
+entity "Experience Service" as AppSync
+entity "Payment Methods Entity Service" as PMD
+entity "Hotel Reservation Entity Service" as RSV
+
+AppSync -> PMD: POST /v1/payment-methods (with body basketReference/selected payment method)
+PMD -> RSV: GET /reservations/basket/{basketReference}
+PMD <- RSV: Reservation details (hotelId, hotel deposit policy OA/D1, departureDate)
+AppSync <- PMD: 200 OK or 400 BAD_REQUEST (if the payment method is not valid)
+@enduml

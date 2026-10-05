@@ -1,0 +1,11 @@
+export { BartHomePage } from './home.page';
+export { BuyOurBedPage } from './buyOurBed.page';
+export { BartHotelDetailsPage } from './hotelDetails.page';
+export { LocalTaxesPage } from './localTaxes.page';
+export { NewHotelsPage } from './newHotels.page';
+export { PressePage } from './presse.page';
+export { ResetMyAccountPage } from './resetMyAccount.page';
+export { BartSearchConsolePage } from './searchConsole.page';
+export { BartSearchResultsPage } from './searchResults.page';
+export { TermsAndConditionsPage } from './termsAndConditions.page';
+export { ThingsToDoPage } from './thingsToDo.page';

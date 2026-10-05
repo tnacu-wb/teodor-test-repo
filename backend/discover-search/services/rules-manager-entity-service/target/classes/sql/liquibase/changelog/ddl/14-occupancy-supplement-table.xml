@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="sradivoi-wb" id="create_table_occupancy_supplement" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="occupancy_supplement"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="occupancy_supplement">
+            <column name="rule_id" autoIncrement="true" remarks="rule_id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="occupancy_supplement_pkey"/>
+            </column>
+
+            <column name="ref_rule_id" type="integer">
+                <constraints nullable="true" foreignKeyName="occupancy_supplement_ref_rule_id_fkey"
+                             references="occupancy_supplement(rule_id)"/>
+            </column>
+
+            <column name="status" type="VARCHAR(20)" defaultValue="NEW">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_modified_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="enable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
+            </column>
+
+            <column name="disable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
+            </column>
+
+            <column name="hotel_id" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="pricing" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

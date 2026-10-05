@@ -1,0 +1,99 @@
+@startuml
+!pragma teoz true
+
+actor User as USR
+entity "Front End App" as FE
+entity "Reservation Experience Service" as RE
+entity "Reservation Entity Service" as R
+entity "Basket Experience Service" as BSKE
+entity "Basket Service" as BSK
+entity "PMS Adapter Service" as PMS
+entity "3rd Party Deals Service" as TPD
+entity "Dynamo DB/SQL DB" as DB
+entity "WB Payments Service" as P
+entity "3CP" as 3CP
+entity "Async Order Processor" as OP
+
+USR -> FE: Book now
+FE -> RE: graphql reservations
+RE -> R: POST /reservations
+
+group Basket not created
+    R -> BSK: POST /v1/baskets
+    BSK -> BSK: - Create new cart\n- Generate new unique reservation number
+    BSK --> R: return reservation number
+    & BSK -> DB: save basket (async)
+end
+
+group For each room
+    R -> R: set reservation number
+end
+
+R -> PMS: POST /v1/reservations
+PMS -> R: return reservation(source) ids
+R -> BSK: POST /v1/baskets/{resNo}/items
+BSK --> R: OK 200
+& BSK -> DB: save basket (async)
+
+
+R --> RE: OK 200
+RE --> FE: OK 200
+
+FE -> RE: graphql get upsells
+RE -> R: GET /hotels/{hotelId}/upsells
+R --> RE: upsell details
+RE --> FE: upsell details
+
+USR -> FE: Select upsell item(s)
+FE -> RE: graphql select upsell items
+RE -> R: POST /reservations/{reservationNo}/upsells
+R -> PMS: PUT /hotels/{hotelId}/reservations/{reservationId}
+PMS --> R: return updated reservation
+R -> PMS: GET /hotels/{hotelId}/reservations/{reservationId}/rateInfo
+PMS --> R: return updated price info
+R -> BSK: PUT /v1/baskets/{resNo}/totalPrice
+& BSK -> DB: save basket (async)
+BSK --> R: OK 200
+R --> RE: OK 200
+RE --> FE: OK 200
+FE -> BSKE: graphql query get basket
+BSKE -> BSK: GET /v1/baskets/{resNo}
+BSK --> BSKE: return refreshed basked details
+BSKE --> FE: return refreshed basked details
+
+FE -> TPD: GET /deals/{hotelId}
+TPD --> FE: return deals info
+
+USR -> FE: Select 3rd party deals
+FE -> TPD: POST /deals/{hotelId}
+TPD -> BSK: PUT /v1/baskets/{uuid}/items
+BSK -> DB: save basket (async)
+BSK --> TPD: OK 200
+TPD --> FE: OK 200
+
+USR -> FE: Pay now
+FE -> BSKE: graphql pay now
+BSKE -> BSK: POST /v1/baskets/{resNo}/pay
+BSK -> DB: getBasket(resNo)
+DB --> BSK: return basket
+BSK -> R: GET /reservations/{reservationId}/totalPrice
+R --> BSK: OK 200
+BSK -> P: POST /payments
+P --> BSK: return IFrame
+BSK --> BSKE: return IFrame
+BSKE --> FE: return IFrame
+
+USR -> FE: Enter/confirm payment
+FE -> 3CP
+3CP --> FE: redirect request
+FE -> P
+P -> FE: remove IFrame script & redirect to basket endpoint
+FE -> BSKE: graphql confirm
+BSKE -> BSK: POST /v1/baskets/{basketReference}/confirm
+BSK -> P: GET /payments/{paymentId}
+P --> BSK: return payment confirmation
+BSK -> OP: enque new order process request
+OP --> BSK: return ack
+BSK -> FE: - Accepted 202 status\n- Reservation number\n- URI to check final status
+
+@enduml

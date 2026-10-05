@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant "UI/IoS/Android" as Client
+participant "PibaRegistrationController" as Controller
+participant "PibaRegistrationService" as Service
+participant "WorldlineTransformer" as WLTransformer
+participant "WebServiceTemplate" as WSTemplate
+participant "WorldLineRegistrationResponseValidator" as Validator
+
+
+Client -> Controller : /piba/registration/info/{registration-code}
+Controller -> Service : getInfo(registration-code)
+Service -> WLTransformer : toRegistrationGetInfoSoapRequest(registrationCode)
+WLTransformer -> Service : RegistrationGetInfo(with schema/details set based on configs)
+Service -> WSTemplate : marshalSendAndReceive(uri,requestPayload,requestCallback)
+WSTemplate -> Service : RegistrationGetInfoResponse
+Service -> Validator : validate(RegistrationGetInfoResponse)
+Service -> WLTransformer : toRegistrationInfoResponse(response)
+WLTransformer -> Service : RegistrationInfoResponse
+Service -> Controller : RegistrationInfoResponse
+Controller -> Client : Return registrationInfoResponse response
+
+
+@enduml

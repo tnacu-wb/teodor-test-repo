@@ -1,0 +1,22 @@
+{
+  "id" : "e4315f45-7978-4708-8b9c-f59da942918a",
+  "request" : {
+    "urlPath" : "/v1/rules/max-arrival-date",
+    "method" : "GET",
+    "queryParameters" : {
+      "channelId" : {
+        "equalTo" : ""
+      }
+    }
+  },
+  "response" : {
+    "status" : 422,
+    "body" : "{\"errCode\":401,\"globalErrTextTemplate\":\"validation.error.form\",\"details\":[{\"elementId\":\"channelId\",\"errTextTemplate\":\"must not be blank\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "e4315f45-7978-4708-8b9c-f59da942918a",
+  "priority" : 1
+}

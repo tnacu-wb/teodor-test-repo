@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant "UI/IoS/Android" as Client
+participant "PibaRegistrationController" as Controller
+participant "PibaRegistrationService" as Service
+participant "WorldlineTransformer" as WLTransformer
+participant "WebServiceTemplate" as WSTemplate
+participant "WorldLineRegistrationResponseValidator" as Validator
+participant "PibaGuidServiceClient" as pibaGuld
+
+
+Client -> Controller : Post -/piba/registration/submit
+Controller -> Service : submit(registrationSubmitRequest,authorization)
+Service -> WLTransformer : toRegistrationSubmitSoapRequest(registrationSubmitRequest)
+WLTransformer -> Service : RegistrationSubmit(with schema/details set based on configs)
+WLTransformer -> WLTransformer : populateRegistrationDetailsType(RegistrationDetails)
+Service -> WSTemplate : marshalSendAndReceive(uri,requestPayload,requestCallback)
+WSTemplate -> Service : RegistrationSubmitResponse
+Service -> Validator : validate(RegistrationSubmitResponse)
+Service -> Service : saveTetherInformation
+Service -> pibaGuld : savePibaGuid(PibaTetheredGuidRequest)
+Service -> WLTransformer : toRegistrationSubmitResponse(RegistrationSubmitResponse)
+WLTransformer -> Service : RegistrationSubmitResp
+Service -> Controller : RegistrationSubmitResp
+Controller -> Client : Return RegistrationSubmitResp response
+
+
+@enduml

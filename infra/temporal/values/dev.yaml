@@ -1,0 +1,65 @@
+# Dev environment overrides
+# Layered: values.yaml → nonprod.yaml → dev.yaml
+#
+# Dev uses Serverless Aurora (provisioned by Infra). The shared Aurora
+# connection settings — credentials via ESO `existingSecret`, connection pools,
+# and TLS — live in nonprod.yaml. This file only sets the dev-specific Aurora
+# writer endpoint plus dev capacity/resource overrides.
+
+temporal:
+  server:
+    # TEMPORARY STOPGAP (SRE-352): reduced to a single replica while opera-dev is
+    # capacity-constrained (node group at max, overnight-descale recovery). At 2
+    # replicas the frontend/history/matching pods could not schedule (Insufficient
+    # cpu); with the frontend pods unschedulable, the temporal-web UI had no
+    # frontend to reach and returned HTTP 500.
+    # `replicaCount` is the effective control: the upstream temporal chart (1.6.0)
+    # has no HorizontalPodAutoscaler template, so the `autoscaling` block below is
+    # inert (does not create an HPA). Kept for parity/future use only.
+    # REVERT to replicaCount: 2 once cluster capacity is restored.
+    replicaCount: 1
+
+    # NOTE: the temporal 1.6.0 chart has no HorizontalPodAutoscaler template, so
+    # this block is inert (creates no HPA). Kept disabled so it can't silently
+    # activate if a future chart version starts honoring these values; scaling in
+    # dev is controlled by replicaCount above.
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage: 80
+
+    # Dev-tuned resource requests. The common default (values.yaml) requests
+    # 500m CPU / 1Gi per server pod, sized for production-like load. Each of the
+    # four server-role deployments (frontend, history, matching, worker) carries
+    # this PLUS an Istio sidecar (~100m/128Mi), so at 500m the pods struggle to
+    # schedule on the 2-vCPU (m5.large) dev nodes — the root cause of the
+    # "Insufficient cpu" Pending pods. Temporal server components idle well below
+    # this in dev, so request less to fit; the memory limit stays at 1Gi as a
+    # safety ceiling. Prod keeps the higher values via prod.yaml.
+    resources:
+      requests:
+        cpu: 150m
+        memory: 512Mi
+      limits:
+        memory: 1Gi
+
+    config:
+      persistence:
+        datastores:
+          # Aurora Serverless writer endpoint (eu-west-1), anchored once and
+          # reused for both datastores. All other connection settings
+          # (credentials, pools, TLS) are inherited from nonprod.yaml.
+          default:
+            sql:
+              connectAddr: &auroraAddr "temporal-dev.cluster-cdsnnftjn3jo.eu-west-1.rds.amazonaws.com:5432"
+          visibility:
+            sql:
+              connectAddr: *auroraAddr
+
+# Temporal Web UI — ExternalDNS creates DNS record automatically
+temporalUI:
+  gateway:
+    enabled: true
+    host: "temporal-ui.dev.opera.whitbread.digital"

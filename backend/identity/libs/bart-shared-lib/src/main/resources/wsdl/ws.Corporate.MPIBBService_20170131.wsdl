@@ -1,0 +1,192 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://corporate.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             targetNamespace="http://corporate.micros.com/1.0">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://corporate.micros.com/1.0">
+            <s:include schemaLocation="../xsd/bart-business-10.xsd"/>
+            <s:element name="MPIDismiss">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:MPIDismissRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="MPIDismissRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element name="dismiss" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="MPIDismissResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="MPIDismissResult" type="s0:MPIDismissResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="MPIDismissResponse">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="MPILink">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:MPILinkRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="MPILinkRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="MPILinkResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="MPILinkResult" type="s0:MPILinkResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="MPILinkResponse">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="MPILogin">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:MPILoginRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="MPILoginRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" name="sessionID" type="s:string"/>
+                    <s:element name="loginMethod">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="EMAIL"/>
+                                <s:enumeration value="PHONE"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="emailAddress" type="s:string"/>
+                    <s:element minOccurs="0" name="password" type="s:string"/>
+                    <s:element minOccurs="0" name="telephoneNumber" type="s:string"/>
+                    <s:element minOccurs="0" name="pin" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="MPILoginResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="MPILoginResult" type="s0:MPILoginResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="MPILoginResponse">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="numberOfFutureStays" type="s:long"/>
+                    <s:element name="numberOfPastStays" type="s:long"/>
+                    <s:element name="numberOfCancelledBookings" type="s:long"/>
+                    <s:element name="companyName">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="40"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="address" type="s0:Address"/>
+                    <s:element name="contact" type="s0:SelfRegisterContact"/>
+                    <s:element name="isExistingCompany" type="s:boolean"/>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="SelfRegisterContact">
+                <s:complexContent>
+                    <s:extension base="s0:Person">
+                        <s:sequence>
+                            <s:element name="emailAddress" type="s:string"/>
+                            <s:element name="phoneNumber" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+        </s:schema>
+    </types>
+    <message name="MPIDismissSoapIn">
+        <part name="parameters" element="s0:MPIDismiss"/>
+    </message>
+    <message name="MPIDismissSoapOut">
+        <part name="parameters" element="s0:MPIDismissResponse"/>
+    </message>
+    <message name="MPILinkSoapIn">
+        <part name="parameters" element="s0:MPILink"/>
+    </message>
+    <message name="MPILinkSoapOut">
+        <part name="parameters" element="s0:MPILinkResponse"/>
+    </message>
+    <message name="MPILoginSoapIn">
+        <part name="parameters" element="s0:MPILogin"/>
+    </message>
+    <message name="MPILoginSoapOut">
+        <part name="parameters" element="s0:MPILoginResponse"/>
+    </message>
+    <portType name="MPIBBServiceSoap">
+        <operation name="MPIDismiss">
+            <input message="s0:MPIDismissSoapIn"/>
+            <output message="s0:MPIDismissSoapOut"/>
+        </operation>
+        <operation name="MPILink">
+            <input message="s0:MPILinkSoapIn"/>
+            <output message="s0:MPILinkSoapOut"/>
+        </operation>
+        <operation name="MPILogin">
+            <input message="s0:MPILoginSoapIn"/>
+            <output message="s0:MPILoginSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="MPIBBServiceSoap" type="s0:MPIBBServiceSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="MPIDismiss">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.MPIBBService.MPIDismiss" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="MPILink">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.MPIBBService.MPILink" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="MPILogin">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.MPIBBService.MPILogin" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="MPIBBService">
+        <port name="MPIBBServiceSoap" binding="s0:MPIBBServiceSoap">
+            <soap:address location="https://alpha2.bookings.premierinn.com:443/csp/sql/ws.Corporate.MPIBBService.cls"/>
+        </port>
+    </service>
+</definitions>

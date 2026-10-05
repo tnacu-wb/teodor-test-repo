@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://corporate.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="http://corporate.micros.com/1.0">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://corporate.micros.com/1.0">
+            <s:element name="FindEmployees">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:FindEmployeeRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="FindEmployeeRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element minOccurs="0" name="searchCriteria" type="s:string"/>
+                    <s:element minOccurs="0" name="awaitingApproval" type="s:boolean"/>
+                    <s:element minOccurs="0" name="recordsPerPage" type="s:long"/>
+                    <s:element minOccurs="0" name="pageRequired" type="s:long"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="FindEmployeesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="FindEmployeesResult" type="s0:FindEmployee1Response"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="FindEmployee1Response">
+                <s:sequence>
+                    <s:element name="employee" type="s0:ArrayOfFindEmployee1FindEmployee1"/>
+                    <s:element name="endOfFile" type="s:boolean"/>
+                    <s:element minOccurs="0" name="awaitingApproval" type="s:boolean"/>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                    <s:element minOccurs="0" name="lock" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfFindEmployee1FindEmployee1">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="FindEmployee1" nillable="true" type="s0:FindEmployee1"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="FindEmployee1">
+                <s:complexContent>
+                    <s:extension base="s0:Person">
+                        <s:sequence>
+                            <s:element name="employeeID" type="s:string"/>
+                            <s:element name="companyID" type="s:string"/>
+                            <s:element name="emailAddress" type="s:string"/>
+                            <s:element name="guestHistoryNumber" type="s:string"/>
+                            <s:element minOccurs="0" name="employeeStatus">
+                                <s:simpleType>
+                                    <s:restriction base="s:string">
+                                        <s:enumeration value="ACTIVE"/>
+                                        <s:enumeration value="INACTIVE"/>
+                                        <s:enumeration value="SUSPENDED"/>
+                                        <s:enumeration value="DEACTIVATED"/>
+                                    </s:restriction>
+                                </s:simpleType>
+                            </s:element>
+                            <s:element minOccurs="0" name="accessLevel">
+                                <s:simpleType>
+                                    <s:restriction base="s:string">
+                                        <s:enumeration value="STAYER"/>
+                                        <s:enumeration value="SELF"/>
+                                        <s:enumeration value="BOOKER"/>
+                                        <s:enumeration value="SUPER"/>
+                                    </s:restriction>
+                                </s:simpleType>
+                            </s:element>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="Person">
+                <s:sequence>
+                    <s:element minOccurs="0" name="title">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="Mr"/>
+                                <s:enumeration value="Mrs"/>
+                                <s:enumeration value="Ms"/>
+                                <s:enumeration value="Miss"/>
+                                <s:enumeration value="Master"/>
+                                <s:enumeration value="Dr"/>
+                                <s:enumeration value="Lord"/>
+                                <s:enumeration value="Lady"/>
+                                <s:enumeration value="Sir"/>
+                                <s:enumeration value="Col"/>
+                                <s:enumeration value="Prof"/>
+                                <s:enumeration value="Rev"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="firstName" type="s:string"/>
+                    <s:element minOccurs="0" name="lastName" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOferrorError">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="s0:Error"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Error">
+                <s:sequence>
+                    <s:element minOccurs="0" name="errorCode">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="5"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="errorDescription" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </types>
+    <message name="FindEmployeesSoapIn">
+        <part name="parameters" element="s0:FindEmployees"/>
+    </message>
+    <message name="FindEmployeesSoapOut">
+        <part name="parameters" element="s0:FindEmployeesResponse"/>
+    </message>
+    <portType name="FindEmployeeServiceSoap">
+        <operation name="FindEmployees">
+            <input message="s0:FindEmployeesSoapIn"/>
+            <output message="s0:FindEmployeesSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="FindEmployeeServiceSoap" type="s0:FindEmployeeServiceSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="FindEmployees">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.FindEmployeeService.FindEmployees" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="FindEmployeeService">
+        <port name="FindEmployeeServiceSoap" binding="s0:FindEmployeeServiceSoap">
+            <soap:address location="https://alpha2.bookings.premierinn.com:443/csp/sql/ws.Corporate.FindEmployeeService.cls"/>
+        </port>
+    </service>
+</definitions>

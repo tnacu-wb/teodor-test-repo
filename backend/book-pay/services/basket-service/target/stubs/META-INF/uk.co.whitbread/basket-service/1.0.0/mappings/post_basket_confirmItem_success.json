@@ -1,0 +1,26 @@
+{
+  "id" : "f8032720-564b-48ef-bafa-a916d818fa92",
+  "request" : {
+    "urlPath" : "/v1/baskets/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/items/1234/acks",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['status'] == 1)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['reqAction'] == 'CANCEL')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['description'] == 'test description')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['reported_at'] == '2022-06-30T07:08:24.698635')]"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "f8032720-564b-48ef-bafa-a916d818fa92"
+}

@@ -1,0 +1,8 @@
+containerEnvs:
+  - name: spring_profiles_active
+    value: TBD
+  - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: appd-app-agent-envs-secret
+        key: app_dynamics_prod_key

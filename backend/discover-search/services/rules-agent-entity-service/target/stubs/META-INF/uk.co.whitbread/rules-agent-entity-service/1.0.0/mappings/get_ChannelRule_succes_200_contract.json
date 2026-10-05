@@ -1,0 +1,31 @@
+{
+  "id" : "c59c4510-f0fe-4188-9bd1-bfeaa8944912",
+  "request" : {
+    "urlPath" : "/v1/rules/channel-info",
+    "method" : "GET",
+    "queryParameters" : {
+      "channel" : {
+        "equalTo" : "PI"
+      },
+      "subchannel" : {
+        "equalTo" : "WEB"
+      },
+      "language" : {
+        "equalTo" : "EN"
+      },
+      "pms" : {
+        "equalTo" : "OP"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"sourceId\":\"44\",\"ratePlanSets\":[\"PBF\",\"PBN\"],\"requestDetails\":{\"channel\":\"PI\",\"subchannel\":\"WEB\",\"language\":\"EN\",\"pms\":\"OP\"}}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "c59c4510-f0fe-4188-9bd1-bfeaa8944912",
+  "priority" : 1
+}

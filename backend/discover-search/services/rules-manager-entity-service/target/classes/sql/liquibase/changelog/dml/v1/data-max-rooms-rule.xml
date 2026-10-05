@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="tudor.codrea" id="init_data_max_rooms_rule" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="max_rooms_rule"/>
+
+                <sqlCheck expectedResult="0">select count(*) from rules_engine.max_rooms_rule</sqlCheck>
+            </and>
+        </preConditions>
+
+        <loadData tableName="max_rooms_rule" file="sql/liquibase/data/max_rooms_rule_data.csv"/>
+    </changeSet>
+
+    <changeSet author="Lingeswaran" id="max_rooms_rule_distribution">
+        <loadData tableName="max_rooms_rule"
+          file="sql/liquibase/data/max_rooms_rule_data.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="Naveen" id="max_rooms_rule_travel_industry_rate">
+        <loadData tableName="max_rooms_rule"
+          file="sql/liquibase/data/max_rooms_rule_data_travel_industry_rate.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="mircea.caraiman" id="update_max_rooms_rule_9_rooms_PI_BB">
+        <update schemaName="rules_engine" tableName="max_rooms_rule">
+            <column name="max_rooms" value="9"/>
+            <where>channel_id IN ('PI','BB')</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="mircea.caraiman" id="update_max_rooms_rule_4_rooms_PI_BB">
+        <update schemaName="rules_engine" tableName="max_rooms_rule">
+            <column name="max_rooms" value="4"/>
+            <where>channel_id IN ('PI','BB')</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="Lingeswaran" id="max_rooms_rule_distressed_inventory_rate">
+        <loadData tableName="max_rooms_rule"
+                  file="sql/liquibase/data/max_rooms_rule_data_distressed_inventory_rate.csv"
+                  primaryKey="rule_id"/>
+    </changeSet>
+
+</databaseChangeLog>

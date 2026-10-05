@@ -1,0 +1,49 @@
+{
+  "id" : "3eaa1a71-dd2e-495d-b2ab-fd19f684a9a8",
+  "request" : {
+    "urlPath" : "/v1/baskets/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/payment-webhook",
+    "method" : "POST",
+    "headers" : {
+      "X-WHIT-API-KEY" : {
+        "equalTo" : "dummy header that will fail"
+      },
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['reference'] == 'LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['paymentId'] == '67827113162D')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['paymentStatus'] == 'SUCCESS')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['bookingReference'] == 'LONHOL5778172')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['countryCode'] == 'GB')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['language'] == 'en')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['firstName'] == 'Lari')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['lastName'] == 'Mil')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['channel'] == 'WEB')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['last4Digits'] == '1234')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['cardSchemeId'] == 'VI')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['token'] == '4216333880397891103')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['expiry'] == '04/24')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['fraudCheckDecision'] == '')]"
+    } ]
+  },
+  "response" : {
+    "status" : 401,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "3eaa1a71-dd2e-495d-b2ab-fd19f684a9a8"
+}

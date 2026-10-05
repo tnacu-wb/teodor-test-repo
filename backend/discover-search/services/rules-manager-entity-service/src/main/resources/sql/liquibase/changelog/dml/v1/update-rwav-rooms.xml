@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet author="cmanitiu-wb" id="update-rwav-rooms">
+    <update schemaName="rules_engine"
+      tableName="room_substitution_rule">
+      <column name="offer_order" value="129"/>
+      <where>pms_room_type='VDOUBL' AND special_request = 'SING'</where>
+    </update>
+    <update schemaName="rules_engine"
+      tableName="room_substitution_rule">
+      <column name="offer_order" value="130"/>
+      <where>pms_room_type='VZPDBL' AND special_request = 'SING'</where>
+    </update>
+    <update schemaName="rules_engine"
+      tableName="room_substitution_rule">
+      <column name="offer_order" value="136"/>
+      <where>pms_room_type='VPPDBL' AND special_request = 'SING' AND room_type = 'SB'</where>
+    </update>
+    <update schemaName="rules_engine"
+      tableName="room_substitution_rule">
+      <column name="offer_order" value="123"/>
+      <where>pms_room_type='VDOUBL' AND special_request = 'DBLE'</where>
+    </update>
+    <update schemaName="rules_engine"
+      tableName="room_substitution_rule">
+      <column name="offer_order" value="124"/>
+      <where>pms_room_type='VZPDBL' AND special_request = 'DBLE'</where>
+    </update>
+    <update schemaName="rules_engine"
+      tableName="room_substitution_rule">
+      <column name="offer_order" value="130"/>
+      <where>pms_room_type='VPPDBL' AND special_request = 'DBLE'</where>
+    </update>
+    <update schemaName="rules_engine"
+      tableName="room_substitution_rule">
+      <column name="offer_order" value="112"/>
+      <where>pms_room_type='VZPDBL' AND special_request = 'TW2S'</where>
+    </update>
+    <update schemaName="rules_engine"
+      tableName="room_substitution_rule">
+      <column name="offer_order" value="138"/>
+      <where>pms_room_type='VPPDBL' AND special_request = 'SING' AND room_type = 'DB'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>

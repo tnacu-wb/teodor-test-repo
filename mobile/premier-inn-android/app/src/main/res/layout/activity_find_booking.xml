@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/ll_find_booking_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:descendantFocusability="beforeDescendants"
+              android:focusableInTouchMode="true"
+              android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="?attr/actionBarSize"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/rl_find_booking_error_get_booking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/metallic_pearl_seventy_percent"
+                android:orientation="horizontal"
+                android:padding="@dimen/generic_padding_16"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_find_booking_error"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_error"/>
+
+                <TextView
+                    android:id="@+id/find_booking_get_booking_error_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/generic_margin_8"
+                    android:text="@string/find_booking_error_get_booking"
+                    android:textColor="@color/error_red"
+                    style="@style/Body"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/generic_margin_24"
+                android:layout_marginTop="@dimen/generic_margin_40"
+                android:text="@string/find_booking_sub_heading"
+                android:textColor="@color/premier_inn_purple_light"
+                style="@style/Header3"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_find_booking_booking_reference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/generic_margin_24"
+                android:layout_marginStart="@dimen/generic_margin_24"
+                android:layout_marginTop="@dimen/generic_margin_24"
+                android:hint="@string/booking_ref"
+                app:hintTextAppearance="@style/TextInputLayout.HintText"
+                app:errorTextAppearance="@style/TextInputLayout.ErrorText">
+
+                <EditText
+                    android:id="@+id/et_find_booking_booking_reference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Body"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapCharacters"
+                    android:labelFor="@+id/til_find_booking_booking_reference"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_find_booking_last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/generic_margin_24"
+                android:layout_marginStart="@dimen/generic_margin_24"
+                android:layout_marginTop="@dimen/generic_margin_24"
+                android:labelFor="@+id/et_find_booking_last_name"
+                android:hint="@string/guest_details_form_last_name"
+                app:hintTextAppearance="@style/TextInputLayout.HintText"
+                app:errorTextAppearance="@style/TextInputLayout.ErrorText">
+
+                <EditText
+                    android:id="@+id/et_find_booking_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Body"
+                    android:imeOptions="actionDone"
+                    android:inputType="textCapWords"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_find_booking_arrival_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/generic_margin_24"
+                android:layout_marginStart="@dimen/generic_margin_24"
+                android:layout_marginTop="@dimen/generic_margin_24"
+                android:hint="@string/arrival_date"
+                android:labelFor="@+id/et_find_booking_arrival_date"
+                app:hintTextAppearance="@style/TextInputLayout.HintText"
+                app:errorTextAppearance="@style/TextInputLayout.ErrorText">
+
+                <EditText
+                    android:id="@+id/et_find_booking_arrival_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Body"
+                    android:focusable="false"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                android:id="@+id/cab_find_booking_find_booking"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                style="@style/Button1"
+                android:layout_marginEnd="@dimen/generic_margin_24"
+                android:layout_marginStart="@dimen/generic_margin_24"
+                android:layout_marginTop="@dimen/generic_margin_40"
+                android:paddingStart="@dimen/generic_padding_12"
+                android:paddingEnd="@dimen/generic_padding_12"
+                android:text="@string/find_booking"
+                app:cab_spinner_color="@color/white"
+                app:cab_background_color="@color/premier_inn_purple_light"
+                app:cab_text_color="@android:color/white"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/generic_margin_40"
+                android:background="@color/grey_light"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

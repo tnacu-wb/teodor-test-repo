@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="cristina.dodu" id="tag_vat_rule_new_meals_packages_data">
+    <tagDatabase tag="version_vat_rule_new_meals_packages_data"/>
+  </changeSet>
+
+  <changeSet author="cristina.dodu" id="vat_rule_new_meals_packages_data">
+    <loadData tableName="vat_rule"
+      file="sql/liquibase/data/vat_rule_new_meals_packages_data.csv"/>
+    <rollback>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'DBDNPR'</where>
+      </delete>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'DBBVPR'</where>
+      </delete>
+      <delete schemaName="rules_engine" tableName="vat_rule">
+        <where>pkg_code = 'DBPROS'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>

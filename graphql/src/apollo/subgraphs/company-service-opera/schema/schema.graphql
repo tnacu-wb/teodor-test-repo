@@ -1,0 +1,466 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    companyDetails(companyId: String!): CompanyDetailsResponse @deprecated(reason: "Use companyDetailsV2 instead of companyDetails")
+    companyDetailsV2(companyId: String!): CompanyDetailsResponseV2
+    companyDetailsV3(companyId: String!): CompanyDetailsResponseV3
+    getCompanyRegistrationQuestionsAndAnswers(companyId: String!): AnsweredQuestions
+    getEmployeeRegistrationQuestionsAndAnswers(companyId: String!, employeeId: String!): AnsweredQuestions
+}
+
+type Mutation {
+    deleteCustomQuestion(companyId: String!, questionId: String!): String
+    createCompanyUserQuestion(companyId: String!, userQuestion: ManagementInformationQuestionCriteria!): String
+    updateBusinessQuestions(companyId: String!, questionId: String!, userQuestion: ManagementInformationQuestionCriteria!): String
+    updateBookingAllowances(companyId: String!, bookingAllowances: BookingAllowancesCriteria!): String
+    updateCompanyDetails(companyId: String!, companySummary: CompanySummary!): String
+    updateCompanyUserQuestion(companyId: String!, questionId: String!, userQuestion: ManagementInformationQuestionCriteria!): String
+    updateBookingAlerts(companyId: String!, bookingAlerts: BookingAlertsCriteria!): String
+}
+
+input ManagementInformationQuestionCriteria {
+    questionId: String
+    label: String
+    mandatory: Boolean
+    managementHeader: String
+    active: Boolean
+    location: QuestionLocation
+    managementInformationAnswer: ManagementInformationAnswerCriteria
+    type: String
+    positionId: Int
+}
+
+enum QuestionLocation {
+    B
+    R
+}
+
+input ManagementInformationAnswerCriteria {
+    answerType: AnswerType
+    answers: [String]
+}
+
+enum AnswerType {
+    F
+    U
+}
+
+type CompanyDetailsResponse {
+    requestedCompany: CompanyInfo
+    companyCellCodes: [CellCode]
+    allowCentralCreditCard: Boolean
+    marketingAllowed: Boolean
+    companyLockedForEditing: Boolean
+    success: Boolean
+}
+
+type CompanyInfo {
+    companyDetails: CompanyDetailsInfo
+    paymentDetails: PaymentDetailsInfo
+    bookingAllowances: BookingAllowancesInfo
+    bookingAlerts: BookingAlertsInfo
+    companyManagementDetails: CompanyManagementQuestions
+    companyType: String
+    companyCellCodes: [CellCode]
+    restrictedRatePlans: [RatePlan]
+    restrictedHotelCodes: [HotelCode]
+    companyStatus: CompanyStatus
+}
+
+type CompanyDetailsInfo {
+    companyName: String
+    alternateCompanyName: String
+    numberOfEmployees: Int
+    companyAddress: AddressInfo
+    mainEmployee: MainEmployee
+    companySector: String
+    averageMonthlyBooking: String
+    numberOfEmployee: String
+}
+
+type AddressInfo {
+    addressLine1: String!
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    addressLine5: String
+    postCode: String!
+    country: String!
+}
+
+type MainEmployee {
+    id: String
+    ghNumber: String
+    emailAddress: String!
+    position: String
+    phoneNumber: String
+    mobileNumber: String
+    textConfirmation: Boolean
+    title: String
+    firstName: String!
+    lastName: String!
+    centralCardId: String
+    address: AddressInfo
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+    dialingCode: String
+    employeeAnswers: EmployeeAnswers
+    guestHistoryNumber: String
+    lockedForEditing: Boolean
+    password: String
+}
+
+input AddressInfoInput {
+    addressLine1: String!
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    addressLine5: String
+    postCode: String!
+    country: String!
+}
+
+enum AccessLevel {
+    STAYER
+    SELF
+    BOOKER
+    SUPER
+    BUSINESS_PAY_MANAGER
+    BUSINESS_PAY_USER
+}
+
+enum EmployeeStatus {
+    ACTIVE
+    INACTIVE
+    SUSPENDED
+    DEACTIVATED
+    PURGED
+}
+
+type EmployeeAnswers {
+    customerReferenceAnswer: String
+    purchaseOrderAnswer: String
+    userDefinedAnswers: [UserDefinedAnswer]
+}
+
+type UserDefinedAnswer {
+    miID: String
+    miAnswer: String
+}
+
+type PaymentDetailsInfo {
+    profileLocked: Boolean
+    allowIndividualCards: Boolean
+    paymentCards: [PaymentCardInfo]
+}
+
+type PaymentCardInfo {
+    cardId: String
+    cardLabel: String
+    cardType: String
+    nameOnCard: String
+    cardNumber: String
+    startDate: String
+    expiryDate: String
+    issueNumber: String
+    cardToken: String
+    billingAddress: AddressInfo
+    cardNotPresentRequired: Boolean
+    cardNotPresent: CardNotPresent
+}
+
+type CardNotPresent {
+    businessAccountUsername: String
+    businessAccountPassword: String
+}
+
+type BookingAllowancesInfo {
+    maxDinnerBudgets: PriceCapLocations
+    extrasCodes: [String]!
+    upsellItemsAllowed: [String]
+    allowAlcohol: Boolean
+    allowCarParking: Boolean
+    allowAdditionalCosts: Boolean
+    allowPremierSaverRates: Boolean
+    allowIndividualCards: Boolean
+    maxNumberOfNights: Int
+}
+
+type PriceCapLocations {
+    uKWide: Price
+    greaterLondon: Price
+    ireland: Price
+}
+
+type Price {
+    amount: Float!
+    currency: String
+}
+
+type BookingAlertsInfo {
+    rateCaps: PriceCapLocations
+    bookingAlertHotels: [String]
+    recipientEmailAddresses: [String]
+    dayOfArrival: Boolean
+    weekendArrival: Boolean
+    passThroughWeekend: Boolean
+    frequency: BookingAlertsFrequency
+}
+
+enum BookingAlertsFrequency {
+    N
+    A
+    D
+    W
+    M
+}
+
+type CompanyManagementQuestions {
+    purchaseOrderManagement: ManagementInformationQuestion
+    customerReferenceManagement: ManagementInformationQuestion
+    userDefinedManagement: [ManagementInformationQuestion]
+}
+
+type ManagementInformationQuestion {
+    questionId: String
+    label: String
+    mandatory: Boolean
+    managementHeader: String
+    active: Boolean
+    location: QuestionLocation
+    managementInformationAnswer: ManagementInformationAnswer
+    type: String
+    positionId: Int
+}
+
+type ManagementInformationAnswer {
+    answerType: AnswerType
+    answers: [String]
+}
+
+type CellCode {
+    type: String!
+    description: String
+}
+
+type RatePlan {
+    code: String!
+}
+
+type HotelCode {
+    code: String!
+}
+
+type CompanyStatus {
+    status: Boolean!
+}
+
+type AnsweredQuestions {
+    purchaseOrderManagement: ManagementInformationQuestionAnswered
+    customerReferenceManagement: ManagementInformationQuestionAnswered
+    userDefinedQuestions: [UserDefinedQuestionAnswered]
+}
+
+type ManagementInformationQuestionAnswered {
+    questionId: String
+    label: String!
+    mandatory: Boolean!
+    managementHeader: String!
+    active: Boolean!
+    location: QuestionLocation!
+    managementInformationAnswer: ManagementInformationAnswer!
+    type: String
+    positionId: Int
+    answer: String!
+}
+
+type UserDefinedQuestionAnswered {
+    questionId: String
+    label: String!
+    mandatory: Boolean!
+    managementHeader: String!
+    active: Boolean!
+    location: QuestionLocation!
+    managementInformationAnswer: ManagementInformationAnswer!
+    type: String
+    positionId: Int
+    userDefinedAnswer: String
+}
+
+input BookingAllowancesCriteria {
+    maxDinnerBudgets: PriceCapLocationsCriteria
+    extrasCodes: [String]!
+    upsellItemsAllowed: [String]
+    allowAlcohol: Boolean
+    allowCarParking: Boolean
+    allowAdditionalCosts: Boolean
+    allowPremierSaverRates: Boolean
+    allowIndividualCards: Boolean
+    maxNumberOfNights: Int
+}
+
+input PriceCapLocationsCriteria {
+    uKWide: PriceCriteria
+    greaterLondon: PriceCriteria
+    ireland: PriceCriteria
+}
+
+input PriceCriteria {
+    amount: Int
+    currency: String
+}
+
+input CompanySummary {
+    companyName: String!
+    alternateCompanyName: String!
+    companyAddress: AddressInfoInput!
+    mainContact: MainContact!
+    companySector: String
+    averageMonthlyBooking: String
+    numberOfEmployee: String
+}
+
+input MainContact {
+    id: String!
+    emailAddress: String!
+    position: String
+    phoneNumber: String
+    mobileNumber: String
+    textConfirmation: Boolean
+    title: String!
+    firstName: String!
+    lastName: String!
+}
+
+input BookingAlertsCriteria {
+    rateCaps: PriceCapLocationsCriteria
+    bookingAlertHotels: [String]
+    recipientEmailAddresses: [String]
+    dayOfArrival: Boolean
+    weekendArrival: Boolean
+    passThroughWeekend: Boolean
+    frequency: BookingAlertsFrequency
+}
+
+type CompanyDetailsResponseV2 {
+    requestedCompany: CompanyInfoV2
+    companyCellCodes: [CellCode]
+    allowCentralCreditCard: Boolean
+    marketingAllowed: Boolean
+    companyLockedForEditing: Boolean
+    success: Boolean
+}
+
+type CompanyInfoV2 {
+    companyDetails: CompanyDetailsInfoV2
+    paymentDetails: PaymentDetailsInfo
+    bookingAllowances: BookingAllowancesInfo
+    bookingAlerts: BookingAlertsInfo
+    companyManagementDetails: CompanyManagementQuestions
+    companyType: String
+    companyCellCodes: [CellCode]
+    restrictedRatePlans: [RatePlan]
+    restrictedHotelCodes: [HotelCode]
+    companyStatus: CompanyStatus
+}
+
+type CompanyDetailsInfoV2 {
+    companyName: String
+    alternateCompanyName: String
+    numberOfEmployees: Int
+    companyAddress: AddressInfo
+    mainEmployee: MainEmployeeV2
+    companySector: String
+    averageMonthlyBooking: String
+    numberOfEmployee: String
+}
+
+type MainEmployeeV2 {
+    id: String
+    ghNumber: String
+    emailAddress: String
+    position: String
+    phoneNumber: String
+    mobileNumber: String
+    textConfirmation: Boolean
+    title: String
+    firstName: String
+    lastName: String
+    centralCardId: String
+    address: AddressInfo
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+    dialingCode: String
+    employeeAnswers: EmployeeAnswers
+    guestHistoryNumber: String
+    lockedForEditing: Boolean
+    password: String
+}
+
+type CompanyDetailsResponseV3 {
+    requestedCompany: CompanyInfoV3
+    companyCellCodes: [CellCode]
+    allowCentralCreditCard: Boolean
+    marketingAllowed: Boolean
+    companyLockedForEditing: Boolean
+    success: Boolean
+}
+
+type CompanyInfoV3 {
+    companyDetails: CompanyDetailsInfoV3
+    paymentDetails: PaymentDetailsInfo
+    bookingAllowances: BookingAllowancesInfo
+    bookingAlerts: BookingAlertsInfo
+    companyManagementDetails: CompanyManagementQuestions
+    companyType: String
+    companyCellCodes: [CellCode]
+    restrictedRatePlans: [RatePlan]
+    restrictedHotelCodes: [HotelCode]
+    companyStatus: CompanyStatus
+}
+
+type CompanyDetailsInfoV3 {
+    companyName: String
+    alternateCompanyName: String
+    numberOfEmployees: Int
+    companyAddress: AddressInfoV2
+    mainEmployee: MainEmployeeV3
+    companySector: String
+    averageMonthlyBooking: String
+    numberOfEmployee: String
+}
+
+type AddressInfoV2 {
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    addressLine5: String
+    postCode: String
+    country: String
+}
+
+type MainEmployeeV3 {
+    id: String
+    ghNumber: String
+    emailAddress: String
+    position: String
+    phoneNumber: String
+    mobileNumber: String
+    textConfirmation: Boolean
+    title: String
+    firstName: String
+    lastName: String
+    centralCardId: String
+    address: AddressInfoV2
+    accessLevel: AccessLevel
+    employeeStatus: EmployeeStatus
+    dialingCode: String
+    employeeAnswers: EmployeeAnswers
+    guestHistoryNumber: String
+    lockedForEditing: Boolean
+    password: String
+}

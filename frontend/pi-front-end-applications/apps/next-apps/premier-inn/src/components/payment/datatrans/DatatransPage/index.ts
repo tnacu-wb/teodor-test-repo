@@ -1,0 +1,1 @@
+export { DatatransPage } from './DatatransPage';

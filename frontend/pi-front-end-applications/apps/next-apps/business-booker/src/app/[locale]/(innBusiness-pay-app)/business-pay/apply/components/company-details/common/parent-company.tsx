@@ -1,0 +1,49 @@
+'use client';
+
+import { FormInput } from '@whitbread-eos/atoms/ui';
+import { formatIBAssetsUrl, useTranslation } from '@whitbread-eos/utils';
+import React from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+
+interface Props {
+  icons: Record<string, string>;
+}
+
+export const ParentCompanyForm = ({ icons }: Readonly<Props>) => {
+  const { t } = useTranslation('payApplication');
+
+  const {
+    control,
+    formState: { errors },
+    trigger,
+  } = useFormContext();
+
+  return (
+    <div data-testid="ParentCompanyForm-container">
+      <h4 data-testid={`title`} className={headingStyle}>
+        {t('companyDetails.parentCompany.label')}
+      </h4>
+      <div className={'mb-8'}>
+        <Controller
+          name="parentCompanyName"
+          control={control}
+          render={({ field }) => (
+            <FormInput
+              {...field}
+              id="ParentCompanyForm"
+              type="text"
+              errors={errors}
+              placeholder={t('companyDetails.parentCompany.name.optional')}
+              errorIcon={formatIBAssetsUrl(icons?.['icon.notification.error'])}
+              onBlur={() => {
+                trigger('parentCompanyName');
+              }}
+            />
+          )}
+        />
+      </div>
+    </div>
+  );
+};
+
+const headingStyle = 'font-bold text-base pb-6';

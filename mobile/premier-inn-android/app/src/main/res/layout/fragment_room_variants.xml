@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/close_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/generic_padding_10"
+        android:src="@drawable/ic_cross" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Header2Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_24"
+        android:lineSpacingExtra="0sp"
+        android:text="@string/room_info_our_rooms" />
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/room_detail_tab_layout"
+        android:background="@drawable/tab_selector_line"
+        style="@style/RoomTypesTabLayout"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_width="wrap_content"
+        app:tabPaddingStart="@dimen/generic_margin_25"
+        app:tabPaddingEnd="@dimen/generic_margin_25"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:tabGravity="fill"
+        app:tabMode="auto" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/room_detail_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

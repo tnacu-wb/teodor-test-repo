@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="WIV-Qo-Aay">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Processing View Controller-->
+        <scene sceneID="mNO-s3-ZY9">
+            <objects>
+                <viewController storyboardIdentifier="ProcessingViewController" id="WIV-Qo-Aay" customClass="ProcessingViewController" customModule="PremierInn" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lXd-CJ-sMM">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="piLeisureLogo" translatesAutoresizingMaskIntoConstraints="NO" id="dT1-v6-uZc">
+                                <rect key="frame" x="60" y="189.5" width="200" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="BOa-Xc-rHg"/>
+                                    <constraint firstAttribute="height" constant="75" id="CYd-3d-hzQ"/>
+                                </constraints>
+                            </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0bQ-iJ-oYZ">
+                                <rect key="frame" x="150" y="274.5" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="f7s-GK-9dK"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="0bQ-iJ-oYZ" firstAttribute="top" secondItem="dT1-v6-uZc" secondAttribute="bottom" constant="10" id="AHy-32-egm"/>
+                            <constraint firstItem="0bQ-iJ-oYZ" firstAttribute="centerX" secondItem="dT1-v6-uZc" secondAttribute="centerX" id="CxD-cV-bpu"/>
+                            <constraint firstItem="dT1-v6-uZc" firstAttribute="centerX" secondItem="f7s-GK-9dK" secondAttribute="centerX" id="EOw-4d-eTU"/>
+                            <constraint firstItem="dT1-v6-uZc" firstAttribute="centerY" secondItem="lXd-CJ-sMM" secondAttribute="centerY" multiplier="0.8" id="KTI-Fq-gko"/>
+                        </constraints>
+                    </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <connections>
+                        <outlet property="loader" destination="0bQ-iJ-oYZ" id="tKx-AX-VOH"/>
+                        <outlet property="premierInnLogo" destination="dT1-v6-uZc" id="sfl-6P-KuQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rD0-fW-PAN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1436" y="85"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="piLeisureLogo" width="195" height="54"/>
+    </resources>
+</document>

@@ -1,0 +1,94 @@
+{
+  "id" : "430cbd1c-620e-486a-ab79-05104ab06d6a",
+  "request" : {
+    "urlPath" : "/v1/reservations/guests",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['basketReference'] == 'AKU-276afd23-b1fd-4cbc-96f1-d0a1f814d4e7')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'TestId')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['reasonForStay'] == 'LEI')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'][?(@.['title'] == 'Mrs')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'][?(@.['firstName'] == 'John')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'][?(@.['lastName'] == 'Carry')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'][?(@.['emailAddress'] == 'john.carry@email.com')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'][?(@.['acceptFutureMailing'] == true)]"
+    }, {
+      "matchesJsonPath" : "$.['booker'][?(@.['mobile'] == '+3905678754')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'][?(@.['landline'] == '+3905678754')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'].['address'][?(@.['addressType'] == 'BUSINESS')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'].['address'][?(@.['postalCode'] == 'WC2N 5DU')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'].['address'][?(@.['addressLine1'] == '4 Brockley Avenue')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'].['address'][?(@.['addressLine2'] == 'addressline2')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'].['address'][?(@.['addressLine3'] == 'addressline3')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'].['address'][?(@.['addressLine4'] == 'addressline4')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'].['address'][?(@.['countryCode'] == 'UK')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'].['address'][?(@.['cityName'] == 'London')]"
+    }, {
+      "matchesJsonPath" : "$.['booker'].['address'][?(@.['companyName'] == 'companyName')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*][?(@.['sameAsBooker'] == 'false')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'][?(@.['title'] == 'Mrs')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'][?(@.['firstName'] == 'Debbie')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'][?(@.['lastName'] == 'Doe')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['address'][?(@.['addressType'] == 'HOME')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['address'][?(@.['postalCode'] == 'EC1A 1BB')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['address'][?(@.['addressLine1'] == '4 Brockley Avenue')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['address'][?(@.['addressLine2'] == 'London District 2 ')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['address'][?(@.['addressLine3'] == 'Greater London - sub district 2 ')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['address'][?(@.['addressLine4'] == 'Greater London - street 22')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['address'][?(@.['countryCode'] == 'GB')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['address'][?(@.['cityName'] == 'London')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['additionalDetails'][?(@.['dob'] == '1996-07-15')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['additionalDetails'][?(@.['nationality'] == 'Briton')]"
+    }, {
+      "matchesJsonPath" : "$.['stayingGuests'][*].['stayingGuestDetails'].['additionalDetails'][?(@.['passportNumber'] == 'ABCD5679')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['sendEmailConfirmation'] == 'true')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['sendEmailInvoice'] == 'true')]"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "body" : "{\"basketReference\":\"AKU-276afd23-b1fd-4cbc-96f1-d0a1f814d4e7\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "430cbd1c-620e-486a-ab79-05104ab06d6a"
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "url": "/PermissionManagement/V1/UpdatePermissions",
+    "method": "POST",
+    "headers" : {
+      "Content-Type" : {
+        "contains" : "application/json"
+      },
+      "Authorization": {
+        "contains" : "123456.access.token"
+      },
+      "Ocp-Apim-Subscription-Key": {
+        "contains": "dummyValue"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matches": ".*Email.*email500@housemark.co.uk.*"
+      }
+    ]
+  },
+  "response": {
+    "status": 500,
+    "bodyFileName": "customer-hub-permissions-500-response.json",
+    "headers": {
+      "Content-Type": "text/html; charset=utf-8"
+    }
+  }
+}

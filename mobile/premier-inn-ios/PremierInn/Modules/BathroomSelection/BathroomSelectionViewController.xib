@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="PremierInnSans-Bold.ttf">
+            <string>PremierInnSans-Bold</string>
+        </array>
+        <array key="PremierInnSans-Regular.ttf">
+            <string>PremierInnSans</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BathroomSelectionViewController" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="continueButton" destination="tus-fO-t1O" id="WlH-2B-e1W"/>
+                <outlet property="continueButtonSpinner" destination="PR3-U9-rQj" id="2VO-MQ-72L"/>
+                <outlet property="continueContainer" destination="peg-Zi-ROC" id="29s-J7-lu4"/>
+                <outlet property="table" destination="tHg-Sj-Eci" id="jo9-Kt-CAh"/>
+                <outlet property="total" destination="b8X-cf-XPc" id="hkx-q9-SOc"/>
+                <outlet property="totalSubButton" destination="fob-Q0-lYg" id="BuU-Wb-OTT"/>
+                <outlet property="view" destination="Bwa-AM-WbO" id="sn5-Fg-AA5"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Bwa-AM-WbO">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="tHg-Sj-Eci">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="596"/>
+                    <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="peg-Zi-ROC">
+                    <rect key="frame" x="0.0" y="596" width="375" height="71"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tus-fO-t1O" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                            <rect key="frame" x="243" y="13.5" width="120" height="44"/>
+                            <color key="backgroundColor" red="0.97647058819999999" green="0.78823529410000004" blue="0.25098039220000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="120" id="4hB-nE-nDO"/>
+                                <constraint firstAttribute="height" constant="44" id="Mai-zY-kc2"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="18"/>
+                            <state key="normal" title="Continue">
+                                <color key="titleColor" red="0.42352941179999998" green="0.18823529410000001" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="4"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="continueButtonDidTap:" destination="-1" eventType="touchUpInside" id="qrs-JZ-o6t"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="£120.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b8X-cf-XPc">
+                            <rect key="frame" x="12" y="8" width="223" height="25"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="25" id="pfb-BF-1qx"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="20"/>
+                            <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fob-Q0-lYg">
+                            <rect key="frame" x="12" y="33" width="223" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="5rb-oY-7ce"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="14"/>
+                            <state key="normal" title="View full breakdown">
+                                <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="breakdownButtonDidTap:" destination="-1" eventType="touchUpInside" id="ud6-vd-HXQ"/>
+                            </connections>
+                        </button>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="PR3-U9-rQj">
+                            <rect key="frame" x="293" y="25" width="20" height="20"/>
+                        </activityIndicatorView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="tus-fO-t1O" firstAttribute="centerY" secondItem="peg-Zi-ROC" secondAttribute="centerY" id="2x3-Fy-vrX"/>
+                        <constraint firstAttribute="height" constant="71" id="4uY-ib-ngG"/>
+                        <constraint firstItem="b8X-cf-XPc" firstAttribute="leading" secondItem="peg-Zi-ROC" secondAttribute="leading" constant="12" id="AYW-E5-Bf7"/>
+                        <constraint firstAttribute="bottom" secondItem="fob-Q0-lYg" secondAttribute="bottom" constant="8" id="KYK-0T-aO9"/>
+                        <constraint firstItem="PR3-U9-rQj" firstAttribute="centerX" secondItem="tus-fO-t1O" secondAttribute="centerX" id="T6L-Mr-l5B"/>
+                        <constraint firstItem="fob-Q0-lYg" firstAttribute="leading" secondItem="peg-Zi-ROC" secondAttribute="leading" constant="12" id="Vcj-U9-VVZ"/>
+                        <constraint firstItem="fob-Q0-lYg" firstAttribute="leading" secondItem="b8X-cf-XPc" secondAttribute="leading" id="ZHt-Fb-HjQ"/>
+                        <constraint firstItem="fob-Q0-lYg" firstAttribute="top" secondItem="b8X-cf-XPc" secondAttribute="bottom" id="lHD-OL-SHA"/>
+                        <constraint firstAttribute="trailing" secondItem="tus-fO-t1O" secondAttribute="trailing" constant="12" id="mbi-42-oJ3"/>
+                        <constraint firstItem="tus-fO-t1O" firstAttribute="leading" secondItem="fob-Q0-lYg" secondAttribute="trailing" constant="8" id="sgs-Lh-VYv"/>
+                        <constraint firstItem="tus-fO-t1O" firstAttribute="leading" secondItem="b8X-cf-XPc" secondAttribute="trailing" constant="8" id="viG-SD-Gcd"/>
+                        <constraint firstItem="b8X-cf-XPc" firstAttribute="top" secondItem="peg-Zi-ROC" secondAttribute="top" constant="8" id="yAk-1M-2fk"/>
+                        <constraint firstItem="PR3-U9-rQj" firstAttribute="centerY" secondItem="tus-fO-t1O" secondAttribute="centerY" id="yXa-5l-GEb"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="8vV-S6-LNM"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="tHg-Sj-Eci" firstAttribute="leading" secondItem="Bwa-AM-WbO" secondAttribute="leading" id="DhN-jh-hQx"/>
+                <constraint firstItem="peg-Zi-ROC" firstAttribute="top" secondItem="tHg-Sj-Eci" secondAttribute="bottom" id="LCy-sX-D7T"/>
+                <constraint firstAttribute="trailing" secondItem="peg-Zi-ROC" secondAttribute="trailing" id="dba-ag-LGp"/>
+                <constraint firstAttribute="trailing" secondItem="tHg-Sj-Eci" secondAttribute="trailing" id="oUW-su-hEK"/>
+                <constraint firstItem="peg-Zi-ROC" firstAttribute="leading" secondItem="Bwa-AM-WbO" secondAttribute="leading" id="qSB-X8-L88"/>
+                <constraint firstItem="8vV-S6-LNM" firstAttribute="bottom" secondItem="peg-Zi-ROC" secondAttribute="bottom" id="wJq-aW-ptY"/>
+                <constraint firstItem="tHg-Sj-Eci" firstAttribute="top" secondItem="Bwa-AM-WbO" secondAttribute="top" id="zlU-pm-4a3"/>
+            </constraints>
+            <point key="canvasLocation" x="24.800000000000001" y="50.824587706146929"/>
+        </view>
+    </objects>
+    <designables>
+        <designable name="tus-fO-t1O">
+            <size key="intrinsicContentSize" width="73" height="33"/>
+        </designable>
+    </designables>
+    <resources>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

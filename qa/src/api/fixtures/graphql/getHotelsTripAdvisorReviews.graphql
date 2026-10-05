@@ -1,0 +1,26 @@
+query getHotelsInformation(
+  $hotelIds: [String!]!
+  $country: String!
+  $language: String!
+  $latitudeRef: Float
+  $longitudeRef: Float
+  $tripAdvisorDataRequired: Boolean
+) {
+  getHotelsInformation(
+    hotelIds: $hotelIds
+    country: $country
+    language: $language
+    latitudeRef: $latitudeRef
+    longitudeRef: $longitudeRef
+    tripAdvisorDataRequired: $tripAdvisorDataRequired
+  ) {
+    hotelId
+    links {
+      detailsPage
+    }
+    tripAdvisorReviews {
+      rating
+      numberOfReviews
+    }
+  }
+}

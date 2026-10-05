@@ -1,0 +1,35 @@
+{
+  "request": {
+    "urlPathPattern": "/rsv/v1/hotels/HOTELT/reservations/rateInfo",
+    "method": "GET",
+    "queryParameters": {
+      "criteriaStartDate": {
+        "equalToDateTime": "now",
+        "truncateExpected": "first hour of day"
+      },
+      "criteriaEndDate": {
+        "equalToDateTime": "now +1 days",
+        "truncateExpected": "first hour of day"
+      },
+      "ratePlanCode": {
+        "equalTo": "DAILY"
+      },
+      "roomType": {
+        "equalTo": "SDB"
+      },
+      "adults": {
+        "equalTo": "1"
+      },
+      "children": {
+        "equalTo": "0"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "ohip_get_rateInfo_SDB_DAILY_success_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

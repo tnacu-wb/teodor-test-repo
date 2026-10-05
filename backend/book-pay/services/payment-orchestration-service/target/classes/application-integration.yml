@@ -1,0 +1,41 @@
+# Integration profile - used for OpenAPI generation during build
+# Temporal is excluded via @Profile("!integration") on TemporalConfig
+
+integrations:
+  datatrans:
+    base-url: ${DATATRANS_BASE_URL:https://api.sandbox.datatrans.com}
+    merchant-password: ${DATATRANS_MERCHANT_PASSWORD:sandbox-password}
+    connect-timeout: 10s
+    read-timeout: 15s
+    merchant-id:
+      prefix: "deWB-"
+      default-merchant-id: "deWB-default"
+      provisioned-hotels:
+        - HARHOR
+        - GRESOU
+    webhook:
+      callback-base-url: http://localhost:9200
+      hmac-key: integration-test-hmac-key
+      validation-enabled: false
+    reconciliation:
+      initial-delay: 2s
+      poll-interval: 1s
+      max-duration: 10s
+      enabled: false
+  payment:
+    workflow:
+      timeout: 30m
+  basket:
+    base-url: http://localhost:8080
+
+payment:
+  security:
+    allowed-return-url-hosts:
+      - "premierinn.com"
+      - "www.premierinn.com"
+      - "premierinn.digital"
+      - "localhost"
+  events:
+    topics:
+      payment-authorised: payment-authorised
+      booking-completed: booking-completed

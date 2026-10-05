@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="linda.szasz" id="init_data_room_substitution_rule" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="room_substitution_rule"/>
+
+                <sqlCheck expectedResult="0">select count(*) from rules_engine.room_substitution_rule</sqlCheck>
+            </and>
+        </preConditions>
+
+        <loadData tableName="room_substitution_rule" file="sql/liquibase/data/room_substitution_rule_data.csv"/>
+    </changeSet>
+
+    <changeSet author="linda.szasz" id="update-room-substitution-accessible-room-type">
+        <update schemaName="rules_engine"
+          tableName="room_substitution_rule">
+            <column name="room_type" value="DIS"/>
+            <where>room_type='Accessible'</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="linda.szasz" id="update-room-substitution-double-room-type">
+        <update schemaName="rules_engine"
+          tableName="room_substitution_rule">
+            <column name="room_type" value="DB"/>
+            <where>room_type='Double'</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="linda.szasz" id="update-room-substitution-family-room-type">
+        <update schemaName="rules_engine"
+          tableName="room_substitution_rule">
+            <column name="room_type" value="FAM"/>
+            <where>room_type='Family'</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="linda.szasz" id="update-room-substitution-single-room-type">
+        <update schemaName="rules_engine"
+          tableName="room_substitution_rule">
+            <column name="room_type" value="SB"/>
+            <where>room_type='Single'</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="linda.szasz" id="update-room-substitution-twin-room-type">
+        <update schemaName="rules_engine"
+          tableName="room_substitution_rule">
+            <column name="room_type" value="TWIN"/>
+            <where>room_type='Twin'</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="linda.szasz" id="add_new_room_substitution_rules">
+        <loadUpdateData tableName="room_substitution_rule"
+          file="sql/liquibase/data/room_substitution_new_rules_data.csv" primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="linda.szasz" id="addColumn-special_request-in-room-substitution">
+        <addColumn schemaName="rules_engine"
+          tableName="room_substitution_rule">
+            <column name="special_request" type="varchar(255)" defaultValue="">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="linda.szasz" id="addColumn-accessible_special_request-in-room-substitution">
+        <addColumn schemaName="rules_engine"
+          tableName="room_substitution_rule">
+            <column name="accessible_special_request" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="linda.szasz" id="addColumn-pkg_code-in-room-substitution">
+        <addColumn schemaName="rules_engine"
+          tableName="room_substitution_rule">
+            <column name="pkg_code" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="linda.szasz" id="add_specialRequest-accessibleSpecialRequest-pckCode-to-entries">
+        <loadUpdateData tableName="room_substitution_rule"
+          file="sql/liquibase/data/room_substitution_rule_specialRequest_and_pckCode.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="tudor.codrea" id="addColumn-channel-in-room-substitution">
+        <addColumn schemaName="rules_engine"
+                   tableName="room_substitution_rule">
+            <column name="channel" type="varchar(255)" defaultValue="">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="tudor.codrea" id="addColumn-channel-values-to-entries">
+        <loadUpdateData tableName="room_substitution_rule"
+                        file="sql/liquibase/data/room_substitution_rule_add_channel_values.csv"
+                        primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="octavian.salcianu" id="add-bb-channel-room-substitution-rules">
+        <loadUpdateData tableName="room_substitution_rule"
+          file="sql/liquibase/data/room_substitution_rule_bb_channel_values.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="alexandra.stefan" id="add-distr-channel-room-substitution-rules">
+        <loadUpdateData tableName="room_substitution_rule"
+          file="sql/liquibase/data/room_substitution_rule_distr_channel_values.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="oana.rachiteanu" id="add-distr-channel-fam-room-substitution-rules">
+        <loadUpdateData tableName="room_substitution_rule"
+          file="sql/liquibase/data/room_substitution_rule_distr_channel_FAM_values.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="octavian.horvat" id="delete_FMTRPL_for_FAM_substitution">
+        <delete schemaName="rules_engine" tableName="room_substitution_rule">
+            <where>(room_type='FAM' AND adults=1 AND children=2 AND channel!='CCUI'
+                AND (pms_room_type='FMTHRE' OR pms_room_type='FMTRPL' OR pms_room_type='FMTRSC') )</where>
+        </delete>
+    </changeSet>
+
+    <changeSet author="ootla.rajasekhar" id="add-distr-channel-fam-room-substitution-rules_V1">
+        <loadUpdateData tableName="room_substitution_rule"
+          file="sql/liquibase/data/room_substitution_rule_distr_channel_FAM_values_V1.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="mircea.caraiman" id="update-PI-FAM-room-1a-1c-substitution-rules">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="5"/>
+            <where>rule_id=265</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="6"/>
+            <where>rule_id=262</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="7"/>
+            <where>rule_id=266</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="8"/>
+            <where>rule_id=251</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="9"/>
+            <where>rule_id=261</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="10"/>
+            <where>rule_id=252</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="11"/>
+            <where>rule_id=250</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="103"/>
+            <where>rule_id=263</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="104"/>
+            <where>rule_id=264</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="105"/>
+            <where>rule_id=255</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="106"/>
+            <where>rule_id=256</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="107"/>
+            <where>rule_id=268</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="108"/>
+            <where>rule_id=267</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="109"/>
+            <where>rule_id=272</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="110"/>
+            <where>rule_id=253</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="111"/>
+            <where>rule_id=254</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="112"/>
+            <where>rule_id=983</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="112"/>
+            <where>rule_id=968</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="mircea.caraiman" id="update-BB-FAM-room-1a-1c-substitution-rules">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="5"/>
+            <where>rule_id=737</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="6"/>
+            <where>rule_id=734</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="7"/>
+            <where>rule_id=738</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="8"/>
+            <where>rule_id=723</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="9"/>
+            <where>rule_id=733</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="10"/>
+            <where>rule_id=724</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="11"/>
+            <where>rule_id=722</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="103"/>
+            <where>rule_id=735</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="104"/>
+            <where>rule_id=736</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="105"/>
+            <where>rule_id=727</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="106"/>
+            <where>rule_id=728</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="107"/>
+            <where>rule_id=740</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="108"/>
+            <where>rule_id=739</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="109"/>
+            <where>rule_id=744</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="110"/>
+            <where>rule_id=725</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="111"/>
+            <where>rule_id=726</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="112"/>
+            <where>rule_id=992</where>
+        </update>
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="offer_order" value="112"/>
+            <where>rule_id=1007</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>

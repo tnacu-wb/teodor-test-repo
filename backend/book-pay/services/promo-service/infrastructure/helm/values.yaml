@@ -1,0 +1,265 @@
+# Values for promo-service.
+#
+# Shaped for the shared `opera-app-chart` (whitbread-eos/helm-central-charts), which is
+# what .github/workflows/ci-matrix-deploy.yaml installs. The chart reads the pod spec
+# from `deployment.*` and gates optional resources on a `create` flag — keys outside
+# those names are silently ignored, so an unset `deployment.containerEnvs` renders
+# `env: null` and the pod starts with no environment at all.
+#
+# Derived from microservices-gitops/opera-dev/apps/promo-service.yaml. Not carried over:
+# `imageAutomation` — the pipeline --sets it false and pins the tag it just built.
+# (That release declares no canary, so there is nothing to drop here.)
+#
+# Overridden per-deploy by ci-matrix-deploy.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create
+
+applicationName: promo-service
+namespace: opera-be
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/promo-service
+  pullPolicy: Always
+  tag: "develop"
+
+imagePullSecrets:
+  - name: regcred
+
+deployment:
+  create: true
+  # Bumping this string is the manual way to force a rollout when nothing else in the
+  # values changed; the chart folds it into the pod template's checksum/values label.
+  checksumValues: r3
+  replicaCount: 1
+
+  # IRSA: the promotion-code S3 bucket is reached with the role annotated on this
+  # ServiceAccount, not with static credentials.
+  serviceAccount: opera-promotion-code-account
+
+  containerPorts:
+    - containerPort: 9137
+      protocol: TCP
+      name: http
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=80 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # ── Postgres ─────────────────────────────────────────────────────────────
+    # None of these have defaults in application.yml — the datasource URL is assembled
+    # from them — so a missing key fails startup, which is what should happen when a
+    # service cannot reach its own database.
+    - name: Cluster_Read_End_Point
+      valueFrom:
+        secretKeyRef:
+          name: promo-service-postgres-credentials
+          key: read_endpoint
+    - name: Cluster_Write_End_Point
+      valueFrom:
+        secretKeyRef:
+          name: promo-service-postgres-credentials
+          key: write_endpoint
+    - name: Database_Name
+      valueFrom:
+        secretKeyRef:
+          name: promo-service-postgres-credentials
+          key: database_name
+    - name: Database_User_Name
+      valueFrom:
+        secretKeyRef:
+          name: promo-service-postgres-credentials
+          key: database_username
+    - name: Database_Password
+      valueFrom:
+        secretKeyRef:
+          name: promo-service-postgres-credentials
+          key: database_password
+
+    # ── Auth tenants ─────────────────────────────────────────────────────────
+    - name: CCUI_TENANT_AUDIENCE
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: ccui_tenant_audience
+    - name: CCUI_TENANT_NAMESPACE
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: ccui_tenant_namespace
+    - name: CCUI_TENANT_ISSUER
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: ccui_tenant_issuer
+    - name: CCUI_TENANT_JWK_URI
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: ccui_tenant_jwk_uri
+    - name: PI_BB_TENANT_AUDIENCE
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: pi_bb_tenant_audience
+    - name: PI_BB_TENANT_NAMESPACE
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: pi_bb_tenant_namespace
+    - name: PI_BB_TENANT_ISSUER
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: pi_bb_tenant_issuer
+    - name: PI_BB_TENANT_JWK_URI
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: pi_bb_tenant_jwk_uri
+
+    # ── Hikari pool for the bulk-copy datasource ─────────────────────────────
+    # These bind to CopyDataSourceProperties (@ConfigurationProperties("copy-datasource"))
+    # by relaxed binding, NOT through the explicit ${COPY_DATASOURCE_*} placeholders in
+    # application.yml. Every value below is identical to that file's default, so they
+    # are documentation of the intended pool rather than an override — kept as-is from
+    # the GitOps release so the two do not drift.
+    - name: COPY_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE
+      value: "40"
+    - name: COPY_DATASOURCE_HIKARI_MINIMUM_IDLE
+      value: "20"
+    - name: COPY_DATASOURCE_HIKARI_CONNECTION_TIMEOUT
+      value: "120000"
+    - name: COPY_DATASOURCE_HIKARI_IDLE_TIMEOUT
+      value: "600000"
+    - name: COPY_DATASOURCE_HIKARI_MAX_LIFETIME
+      value: "1800000"
+    - name: COPY_DATASOURCE_HIKARI_LEAK_DETECTION_THRESHOLD
+      value: "600000"
+
+    # ── S3 (promotion code uploads) ──────────────────────────────────────────
+    - name: AWS_S3_MAX_RETRY
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: aws_s3_max_retry
+    - name: AWS_S3_VALID_FOR_MINUTES
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: aws_s3_valid_for_minutes
+    - name: AWS_S3_PROMO_BUCKET_NAME
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: aws_s3_promo_bucket_name
+    - name: AWS_REGION
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: aws_region
+
+    # ── Downstream and feature flags ─────────────────────────────────────────
+    - name: OHIP_HOST
+      value: ohip-adapter-service
+    - name: UNLEASH_ENVIRONMENT
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: unleashEnvironment
+    - name: UNLEASH_URL
+      valueFrom:
+        configMapKeyRef:
+          name: promo-service-configmap
+          key: unleashUrl
+    - name: UNLEASH_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: unleash-enterprise-secrets
+          key: token
+
+  dns:
+    ndots: 3
+
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - sh
+          - -c
+          - sleep 20
+  terminationGracePeriodSeconds: 90
+
+  livenessProbe:
+    httpGet:
+      path: /v1/promo/actuator/health/liveness
+      port: 9137
+    initialDelaySeconds: 90
+    periodSeconds: 30
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
+
+  readinessProbe:
+    httpGet:
+      path: /v1/promo/actuator/health/readiness
+      port: 9137
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
+
+  # requests.memory tracks limits.memory because the heap is sized off the memory LIMIT
+  # (-XX:MaxRAMPercentage above).
+  resources:
+    requests:
+      cpu: 400m
+      memory: 1400Mi
+    limits:
+      memory: 1400Mi
+
+service:
+  create: true
+  name: promo-service
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 9137
+      protocol: TCP
+      name: port9137
+
+autoscaling:
+  create: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 120
+
+configMap:
+  create: true
+  data:
+    aws_s3_max_retry: '2'
+    aws_s3_valid_for_minutes: '5'
+    aws_s3_promo_bucket_name: promotion-code-dev
+    aws_region: eu-west-1
+    ccui_tenant_audience: https://api.dev.whitbread.digital
+    ccui_tenant_issuer: https://dev-whitbread-digital.eu.auth0.com/
+    ccui_tenant_jwk_uri: https://dev-whitbread-digital.eu.auth0.com/.well-known/jwks.json
+    ccui_tenant_namespace: https://ccui.opera.whitbread.digital
+    pi_bb_tenant_audience: https://wbodetest.eu.auth0.com/api/v2/
+    pi_bb_tenant_issuer: https://auth0.premierinn.digital/
+    pi_bb_tenant_jwk_uri: https://auth0.premierinn.digital/.well-known/jwks.json
+    pi_bb_tenant_namespace: https://premierinn.com
+    unleashEnvironment: dev
+    unleashUrl: https://whitbread.edge.getunleash.io/api
+
+istio:
+  create: true
+  auth: false
+  gateway: opera-api
+  regex:
+    enabled: true
+    pattern: ^\/v\d+\/promo.*

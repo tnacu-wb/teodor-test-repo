@@ -1,0 +1,441 @@
+server:
+  port: 9103
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "hotel-reservation-entity-service"
+    description: "Whitbread Hotel Reservation Entity Microservice"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  endpoints:
+    web:
+      base-path: /v1/reservations/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  level:
+    io:
+      getunleash: TRACE
+    brave: WARN
+    org.springframework.cache: info
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+spring:
+  application:
+    name: hotel-reservation-entity-service
+  jackson:
+    deserialization:
+      fail-on-null-for-primitives: false
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      key-prefix: "Hotel-Reservation-Entity-Service"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+
+distribution:
+  meals:
+    11: PREMIER_BREAKFAST
+    12: CONTINENTAL_BREAKFAST
+    17: MEAL_DEAL
+    18: BOXED_BREAKFAST
+    15: CONTINENTAL_BUNDLE
+    14: LIGHTER_BUNDLE
+    20: BREAKFAST_ROLL_BUNDLE
+  fixedRateAuthority: "SCOPE_RATE_PRICE::WRITE"
+
+package:
+  groups:
+    MDP: ${MDP_PACKAGES:MDBFST,MDBEVA,MD2DIN}
+
+config:
+  whitbread-privilege:
+    companyId: ${COMPANY_ID:12015058}
+  service:
+    ohip:
+      host: http://${OHIP_HOST:localhost:9100}/ohip
+      connectionTimeoutMillis: 5000
+      responseTimeoutMillis: 10000
+      reservationEndpoint: "/v1/reservations"
+      reservationsPackagesEndpoint: "/v1/reservations/ancillaries"
+      confirmReservationEndpoint: "/v1/reservations/confirm"
+      reservationGuestEndpoint: "/v1/reservations/guests"
+      reservationBookerEndpoint: "/v1/reservations/booker"
+      updateEmailReservationEndpoint: "/v1/reservations/email"
+      updateReservationRateCodeEndpoint: "/v1/reservations/rate-code"
+      updateRoomTypeEndpoint: "/v1/reservations/roomTypeUpdate"
+      cancelEndpoint: "/v1/reservations/cancel"
+      cancelReservationEndpoint: "/v1/reservations/cancellations"
+      externalReservationEndpoint: "/v1/reservations/external"
+      reservationIdEndpoint: "/v1/reservation/reservationId"
+      updateDiscountEndpoint: "/v1/reservations/discount"
+      updateCompanyQuestionAndAnswerRequestEndpoint: "/v1/reservations/questions-and-answers"
+      updateBusinessItemsEndpoint: "/v1/reservations/business"
+      updateSpecialRequestsEndpoint: "/v1/reservations/special-requests"
+      hotelInfoEndpoint: "/hotels/{hotelId}/info"
+      searchBookingsEndpoint: "/v1/reservations/search"
+      updateReasonForStayEndpoint: "/v1/reservations/reasonForStay"
+      updateReservationOverrideReasonsEndpoint: "/v1/reservations/overrideReasons"
+      updateReservationCcAgentIdEndpoint: "/v1/reservations/ccAgentId"
+      depositsEndpoint: "/v1/reservations/deposits"
+      cancelPoliciesEndpoint: "/v1/reservations/cancellationPolicies"
+      marketingPreferencesEndpoint: "/v1/reservations/marketingPreferences"
+      copyReservationsEndpoint: "/v1/reservations/copy"
+      amendSummaryDetails: "/v1/reservations/amend/getDetailsForAmend"
+      updateReservations: "/v1/reservations"
+      bookingAllowancesEndpoint: "/v1/reservations/bookingAllowances"
+      confirmAmend: "/v1/reservations/confirmAmend"
+      confirmAmendForSingleCall: "/v1/reservations/confirmAmendSingleCall"
+      availabilityByIdsEndpoint: "/hotels/availabilities/distr"
+      availabilityByIdsEndpointV2: "/v2/hotels/availabilities/distr"
+      ratePlansEndpoint: "/ratePlans"
+      charityPackagesDetailsEndpoint: "/hotels/{hotelId}/packages/donations"
+      reservationsByBasketReservationIds: "/v1/reservations/basket"
+      moveReservationPaymentEndpoint: "/v1/reservations/movePaymentDetails"
+      generatedDepositFoliosEndpoint: "/v1/reservations/deposit-folios"
+      routingInstructionsEndpoint: "/v1/reservations/routingInstructions"
+      memosEndpoint: "/v1/reservations/memos"
+      attachProfileToReservationsEndpoint: "/v1/reservations/profiles"
+      packagesEndpoint: "/hotels/{hotelId}/packages"
+      changeLogEndpoint: "/v1/hotels/{hotelId}/reservations/changeLog"
+      updateReservationSingleCall: "/v1/reservations/update"
+      createProfilesEndPoint: "/v1/reservations/create/profile"
+      fileAttachmentEndpoint: "/v1/reservations/attachments"
+      preCheckInStatus: "/v1/reservations/pre-checkin"
+      updateExternalReferenceEndpoint: "/v1/reservations/externalRef"
+      reservationsPackagesScheduledEndpoint: "/v1/reservations/ancillaries/scheduled"
+      linkReservationToLeisureCustomerEndpoint: "/v1/reservations/link-leisure-customer"
+      reservationsPreferencesEndpoint: "/v1/reservations/preferences"
+      reservationsAlertsEndpoint: "/v1/reservations/alerts"
+      updateCancellationPoliciesEndpoint: "/v1/reservations/cancel-policies"
+      updateUdfc20Endpoint: "/reservations/characterudfs"
+    basket:
+      host: http://${BASKET_SERVICE_HOST:localhost:9104}
+      basketEndpoint: "/v1/baskets/{basket-reference}"
+      basketByReferenceEndpoint: "/v1/baskets"
+      createEndpoint: "/v1/baskets"
+      addItemEndpoint: "/v1/baskets/{basket-reference}/items"
+      cancelEndpoint: "/v1/baskets/{basket-reference}/cancel"
+      erroredBookingEndpoint: "/v1/baskets/{basket-reference}/erroredBooking"
+      updateAllowancesEndpoint: "/v1/baskets/{basket-reference}/allowances"
+      updateOccupancySupplementEndpoint: "/v1/baskets/{basket-reference}/occupancy"
+      stayItemType: "STAY"
+      stayConfirmationData: "hotelId, sourceId"
+      refundEndpoint: "/v1/baskets/{basketReference}/refund"
+      removeItemEndpoint: "/v1/baskets/{basket-reference}/items/{itemId}"
+      saveChargesEndpoint: "/v1/baskets/deposit-folios"
+      chargesByReservationIdEndpoint: "/v1/baskets/deposit-folios/{reservationId}"
+      linkAmendReservations: "/v1/baskets/{basket-reference}/linkAmendReservations"
+      emailConfirmationEndpoint: "v1/baskets/email"
+      initiatePaymentEndpoint: "/v1/baskets/{basketReference}/pay"
+      processAmendEndpoint: "/v1/baskets/{basketReference}/process-amend"
+      initiateCcuiPaymentProcess: "/v1/baskets/ccui/{basketReference}/pay"
+      chargesByReservationIdsEndpoint: "/v1/baskets/deposit-folios"
+      removeItemsEndpoint: "/v1/baskets/{basket-reference}/items"
+      change-status-endpoint: "/v1/baskets/{bookingRef}/changeStatus"
+      addPromotionToBasketEndpoint: "/v1/baskets/{basket-reference}/promotions"
+      changeIdContextEndpoint: "/v1/baskets/{bookingRef}/changeIdContext"
+      createReservationEndpoint: "/v1/baskets/reservations"
+    hotel-entity:
+      host: http://${HOTEL_ENTITY_HOST:localhost:9102}
+      hotelsAvailabilityV2Endpoint: "/v2/hotels/availabilities/distr"
+    rules:
+      host: http://${RULES_AGENT_HOST:localhost:9108}
+      amendmentRulesEndpoint: "/v1/rules/amendments"
+      maxRoomRulesEndpoint: "/v1/rules/max-rooms"
+      maxNightsRulesEndpoint: "/v1/rules/max-nights"
+      maxRoomOccupancyEndpoint: "/v1/rules/max-room-occupancy"
+      channelBasedOnSourceIdEndpoint: "/v1/rules/source-info"
+      vatCodesEndpoint: "/v1/rules/vat-codes"
+      businessAllowanceEndpoint: "/v1/rules/allowances"
+      singleOccupancySupplementEndpoint: "/v1/rules/occupancy-supplement"
+      wbRoomTypes:
+        - "DB"
+        - "SB"
+        - "FAM"
+        - "DIS"
+        - "TWIN"
+    content:
+      host: http://${CONTENT_SERVICE_HOST:localhost:9106}
+      contentIndexHeaderEndpoint: "/v1/content/header/data"
+      businessNotesEndpoint: "/v1/content/businessNotes"
+      hotelPaymentInformation: "/v1/content/hotels/{hotelId}/payment-information"
+      hotelInformationEndpoint: "/v1/content/hotels/{hotelId}/information"
+      hotelRateInformationEndpoint: "/v1/content/booking/hotelRateInformation"
+      searchRulesEndpoint: "/v1/content/searchrules"
+    cdh:
+      host: http://${CDH_ADAPTER_HOST:localhost:9119}
+      reservationSearchEndpoint: "/v1/cdh/reservation/search"
+      employeeEndpoint: "/v1/cdh/account/employee"
+    hotel-account:
+      host: http://${HOTEL_ACCOUNT_HOST:localhost:9020}
+      updateCustomerEndpoint: "/customers/hotels/{customer-id}"
+    promotion:
+      host: http://${PROMO_SERVICE_HOST:localhost:9137}
+      promoKindEndpoint: "/v1/promo/batches/promo-kind"
+
+auth:
+  tenants:
+    - name: "CCUI Tenant"
+      audience: ${CCUI_TENANT_AUDIENCE}
+      namespace:  ${CCUI_TENANT_NAMESPACE}
+      issuer:  ${CCUI_TENANT_ISSUER:}
+      jwkUri:  ${CCUI_TENANT_JWK_URI:https://dev-whitbread-digital.eu.auth0.com/.well-known/jwks.json}
+    - name: "PI BB Tenant"
+      audience:  ${PI_BB_TENANT_AUDIENCE}
+      namespace:  ${PI_BB_TENANT_NAMESPACE}
+      issuer:  ${PI_BB_TENANT_ISSUER}
+      jwkUri:  ${PI_BB_TENANT_JWK_URI:https://auth0.premierinn.digital/.well-known/jwks.json}
+    - name: "Distribution Tenant"
+      audience: ${DISTR_TENANT_AUDIENCE}
+      namespace: ${DISTR_TENANT_NAMESPACE}
+      issuer: ${DISTR_TENANT_ISSUER}
+      jwkUri: ${DISTR_TENANT_JWK_URI:https://dist-whitbread-digital.eu.auth0.com/.well-known/jwks.json}
+
+business-booker:
+  negociated-rate-plan-set:
+    - "BDB"
+    - "BMD"
+    - "NEG"
+    - "BFL"
+    - "OTA"
+
+integration-tests:
+  feature-flag-overrides:
+    enabled: ${INTEGRATION_TESTS_FEATURE_FLAG_OVERRIDES_ENABLED:false}
+
+feature-flags:
+  ccui-amend-piba:
+    key: "release_ccui_cyan_amend-piba-uk"
+    fallback: false
+  save-allowances-in-basket:
+    key: "release_pi_bb_ccui_distr_web4_save-allowances-in-basket"
+    fallback: false
+  use-basket-allowances:
+    key: "release_pi_bb_ccui_distr_web4_use-basket-allowances"
+    fallback: false
+  enable-amend-pay-now:
+    key: "enable_amend_pay_now"
+    fallback: true
+  apply-occupancy-supplement:
+    key: "release_pi_ccui_distr_web3_occupancy_supplement"
+    fallback: false
+  pi_search_by_opera_confirmation:
+    key: "release_pi_search_opera_conf_number"
+    fallback: false
+  ccui_search_by_opera_confirmation:
+    key: "release_ccui_search_opera_conf_number"
+    fallback: false
+  ccui-agent-id-log:
+    key: "release_ccui_agent_id_log"
+    fallback: false
+  aem-search-rules:
+    key: "release_pi_bb_ccui_aem_search_rules"
+    fallback: false
+  max-rooms-amend:
+    key: "release_pi_bb_ccui_maxrooms_amend"
+    fallback: false
+  enable-absolute-deadline:
+    key: "release_enable_absolute_deadline"
+    fallback: false
+  release_pi_bb_mobile_de_reg_card:
+    key: "release_pi_bb_mobile_de_reg_card"
+    fallback: false
+  release_pi_bb_mobile_check_out:
+    key: "release_pi_bb_mobile_check_out"
+    fallback: false
+  company-name-feature-flag:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false
+  mobile_ciol_piba:
+    key: "mobile_ciol_piba"
+    fallback: false
+  mobile_ciol_piba_cnp:
+    key: "mobile_ciol_piba_cnp"
+    fallback: false
+  release-pi-ccui-city-tax-uk:
+    key: "release_pi_ccui_city_tax_uk"
+    fallback: false
+  mobile_digital_key:
+    key: "mobile_digital_key"
+    fallback: false
+  mobile_accepts_ota_booking:
+    key: "mobile_accepts_ota_booking"
+    fallback: false
+  mobile-preRegistered-repurpose:
+    key: "mobile_preRegistered_repurpose"
+    fallback: false
+  mobile_ciol_prepaid_3rdparty:
+    key: "mobile_ciol_prepaid_3rdparty"
+    fallback: false
+  set-default-payment-method-DS:
+    key: "release_set_default_payment_method_DS"
+    fallback: false
+  set-cnpBooking-alerts:
+    key: "release_set_cnp_booking_alerts"
+    fallback: false
+
+opera:
+  confirmation:
+    config:
+      bic:
+        enabled: ${OPERA_CONFIRMATION_CONFIG_BIC_ENABLED:false}
+
+promotion:
+  promotionalPackages: ${PROMOTIONAL_PACKAGES:}
+
+thirdpartybooking:
+  subchannel: PI.MOBILE, BB.MOBILE, KIOSK.WEB
+  providersExcluded: ${PROVIDERS:}
+  daysWithinArrival: ${DAYS_WITHIN_ARRIVAL_FOR_THIRD_PARTY:1}
+
+ciol:
+  rules:
+    maxRooms: ${CIOL_MAX_ROOMS:4}
+    daysWithinArrival: ${DAYS_WITHIN_ARRIVAL:2}
+    ciolRatesExcluded: ${CIOL_RATES}
+    ciolHotels: ${CIOL_HOTELS:FRAMTI}
+    ciolCountryCodes: ${CIOL_COUNTRY_CODES:GB}
+    ciolEmails: ${CIOL_EMAILS:test@test.com}
+    deRegCardRooms: ${DE_REG_CARD_ROOMS:1}
+    deRegCardHotels: ${DE_REG_CARD_HOTELS:FRAWES}
+
+cool:
+  rules:
+    daysUntilDeparture: ${COOL_DAYS_UNTIL_DEPARTURE:0}
+    startingHour: ${COOL_STARTING_HOUR:5}
+    endingHour: ${COOL_ENDING_HOUR:12}
+    endingHourLco: ${COOL_ENDING_HOUR_LCO:14}
+    coolReservationStatus: ${COOL_RSV_STATUS:InHouse}
+    pilotHotels: ${COOL_PILOT_HOTELS:HEAPTI,FRAMTI,STUAIR,LONEUS}
+
+qrcode:
+  inputCharset: ISO-8859-1
+  width: 394
+  height: 394
+  filename: qr.png
+
+digitalkey:
+  rules:
+    maxRooms: ${DK_MAX_ROOMS:1}
+    dkHotels: ${DK_HOTELS:LINMIL}
+    reservationStatues: ${DK_RESERVATION_STATUES:Reserved,InHouse}
+
+universal-login:
+  api-key: ${UNIVERSAL_LOGIN_API_KEY:}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'

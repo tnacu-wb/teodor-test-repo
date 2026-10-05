@@ -1,0 +1,459 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    basket(basketReference: String): Basket
+    basketStatus(basketReference: String!) : BasketStatusResponse
+    eckohRecordingStatus(basketReference: String!): EckohPaymentStatus
+}
+
+type Mutation {
+    initiateEckohPayment(basketReference: String!, eckohPaymentRequest: EckohPaymentRequest): EckohPayment!
+    initiateCcuiPayment(basketReference: String!, initiateCcuiPaymentCriteria: InitiateCcuiPaymentCriteria): CcuiPaymentConfirmation!
+    confirmPreCheckIn(basketReference: String, isCiol: Boolean): BasketStatusResponse
+    sendEmailOption(basketReference: String!, sendEmailCriteria: SendEmailCriteria!): String
+    updateDiscount(updateDiscountRequest: UpdateDiscountRequest): String
+    updateReservation(updateReservationCriteria:UpdateReservationCriteria!): UpdateReservationResponse
+    confirmPreCheckOut(basketReference: String): BasketStatusResponse
+    backgroundCharge(basketReference: String!, token: String!): BackgroundChargeResponse
+}
+
+type Basket {
+    hotelId: String
+    bookingReference: String
+    reference: String
+    createdAt: String
+    lastModifiedAt: String
+    userId: String
+    status: String
+    paymentStatus: String
+    paymentID: String
+    paymentOption: String
+    sendMail: Boolean
+    lockingTime: String
+    itemTypes: [String]
+    items: [BasketItem]
+    basketError: BasketError
+    isErroredBooking: Boolean
+    bookingAllowances: [BookingAllowance]
+    isCheckInOnlinePay: Boolean
+    isSecureBooking: Boolean
+    idContext: String
+    promotionCode: String
+    promoKind: BasketPromoKind
+}
+
+enum BasketPromoKind {
+    LANDING_PAGE
+    SITE_WIDE
+    GENERIC
+    UNIQUE
+}
+
+type BasketItem {
+    type: String
+    sourceId: String
+    details: [String]
+}
+
+type BasketError {
+    code: String
+    description: String
+    type: String
+}
+
+type BookingAllowance {
+    allowance: String
+    budget: String
+}
+
+type BasketStatusResponse {
+    basketReference: String
+    basketStatus: String
+    createdAt: String
+    basketError: BasketError
+    retryPayment: Boolean
+}
+
+type EckohPaymentStatus {
+    status: String!
+}
+
+input EckohPaymentRequest {
+    requestId: String!
+    payment: PaymentEckohRequest!
+    booking: BookingEckohRequest!
+}
+
+input PaymentEckohRequest {
+    type: String!
+}
+
+input BookingEckohRequest {
+    agent: AgentEckohRequest!
+    type: String!
+    language: String!
+    journey: String!
+    channel: String!
+    businessSite: BusinessSiteEckohRequest!
+}
+
+input AgentEckohRequest {
+    email: String!
+    name: String!
+}
+
+input BusinessSiteEckohRequest {
+    identifier: String!
+    type: String!
+    name: String!
+    location: String!
+    country: String!
+}
+
+type EckohPayment {
+    paymentId: String!
+}
+
+input InitiateCcuiPaymentCriteria {
+    subPaymentType: String
+    paymentOption: String!
+    ccuiExtraItems: CcuiExtraItems
+    paymentRequest: CcuiPaymentCriteria
+}
+
+input CcuiExtraItems {
+    sendMail: Boolean
+    cardPresent: Boolean
+    addressCompanyName: String
+    accountCompanyItems: AccountCompanyItems
+    nonguaranteedItems: NonguaranteedItems
+    businessItems: BusinessItems
+}
+
+input AccountCompanyItems {
+    companyNumber: String
+    charges: String
+    companyId: String
+}
+
+input NonguaranteedItems {
+    typeOfCaller: String
+}
+
+input BusinessItems {
+    purchaseOrderNumber: String!
+    customReferenceNumber: String!
+    businessAllowances: [BusinessAllowance]
+    businessNotes: String
+}
+
+input BusinessAllowance {
+    budget: Float!
+    allowance: String!
+    isAuthorised: Boolean!
+}
+
+input CcuiPaymentCriteria {
+    requestId: String!
+    payment: PaymentCcuiCriteria!
+    booking: BookingCcuiCriteria!
+}
+
+input PaymentCcuiCriteria {
+    card: CardCcui!
+    billing: BillingCcui!
+    subType: String!
+    type: String!
+}
+
+input CardCcui {
+    cardHolderFirstName: String!
+    cardHolderLastName: String!
+    cardHolderAddress: AddressCcuiRequest!
+}
+
+input BillingCcui {
+    address: AddressCcuiRequest
+    email: String
+    firstName: String
+    lastName: String
+    telephone: String
+    title: String
+    differentBillingAddress: Boolean
+    bookerIsNotGuest: Boolean
+}
+
+
+input AddressCcuiRequest {
+    country: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    cityName: String
+    postalCode: String
+    companyName: String
+    addressType: String
+}
+
+input BookingCcuiCriteria {
+    businessSite: BusinessSite!
+    channel: String!
+    language: String!
+    journey: String!
+    type: String!
+    arrivalDate: String
+    departureDate: String
+}
+
+input BusinessSite {
+    identifier: String!
+    name: String!
+    type: String!
+    location: String!
+}
+
+type CcuiPaymentConfirmation {
+    reference: String!
+    status: String!
+}
+
+input SendEmailCriteria {
+    sendEmail: Boolean!
+}
+
+input UpdateDiscountRequest {
+    basketReference: String
+    discountAmount: Float
+}
+
+input UpdateReservationCriteria {
+    basketReference: String!
+    hotelId: String!
+    requestId: String!
+    reservationGuest: ReservationGuest!
+    ancillaries: Ancillaries!
+    createPayment: CreateReservationPayment!
+    priceBreakdownNeeded: String
+}
+
+input CreateReservationPayment {
+    booking: BookingRequest!
+    payment: PaymentRequest!
+    businessAccount: BusinessAccount
+    specialRequests: [String]
+    bookingNotes: [String]
+}
+
+input ReservationGuest {
+    reasonForStay: String!
+    booker: Booker!
+    stayingGuests: [StayingGuest!]!
+    sendEmailConfirmation: Boolean
+    sendEmailInvoice: Boolean
+}
+
+input Ancillaries {
+    arrivalDate: String!
+    departureDate: String!
+    roomsSelections: [RoomPackageSelectionBasketInput]
+}
+
+type UpdateReservationResponse {
+    reservationByIdList: [ReservationByIdList]
+    totalCost: Float
+    hotelId: String
+    currencyCode: String
+    bookingReference: String
+}
+
+type ReservationByIdList {
+    roomStay: RoomStayDetails
+    reservationPackageList: [ReservationPackagesDetailsUpdateResResp]
+}
+
+type ReservationPackagesDetailsUpdateResResp {
+    vatTax: Float
+}
+
+input StayingGuest {
+    sameAsBooker: Boolean!
+    stayingGuestDetails: StayingGuestDetails
+    accompanyingGuestDetails: AccompanyingGuestDetails
+    language: String
+    reservationId: String
+    isAccompanyingGuest: Boolean
+}
+
+input StayingGuestDetails {
+    title: String
+    firstName: String!
+    lastName: String!
+    employeeAccountId: String
+    emailAddress: String
+    address: GuestAddress
+    additionalDetails: StayingGuestAdditionalDetails
+    profileId: String
+}
+
+input StayingGuestAdditionalDetails {
+    dob: String
+    passportNumber: String
+    nationality: String
+}
+
+input AccompanyingGuestDetails {
+    title: String
+    firstName: String
+    lastName: String
+    emailAddress: String
+    employeeAccountId: String
+    additionalDetails: StayingGuestAdditionalDetails
+}
+
+input BookingRequest {
+    businessSite: BusinessSite!
+    channel: String!
+    journey: String!
+    language: String!
+    rooms: [RoomType!]!
+    type: String!
+    arrivalDate: String
+    departureDate: String
+    leadGuest: GuestRequest
+}
+
+input GuestRequest {
+    name: String!
+    previousBookings: Int
+    registered: Boolean
+    registeredSince: String
+}
+
+input RoomType {
+    adultsNumber: Int!
+    rate: String!
+    type: String!
+}
+
+input PaymentRequest {
+    billing: Billing!
+    card: CardRequest
+    environment: String!
+    subType: String!
+    type: String!
+    sca: Sca
+    businessItems: BusinessItems
+    pibaCardPresent: Boolean
+    paypalNonce: String
+    paypalDeviceData: String
+}
+
+input Sca {
+    captureMethod: String
+    protocolVersion: String
+    eci: Int
+    xid: String!
+    dsTransactionID: String
+    transStatus: String
+    cavv: Int
+    authorisedAmount: Float
+}
+
+input BusinessAccount {
+    purchaseOrder: String
+    customerReference: String
+    cardNotPresentAuth: String
+    breakfastCodeReq: Int
+    dinnerAllowance: Float
+    alcoholAllowed: String
+    carParkingAllowed: String
+    wifiAllowed: String
+    otherChargesAllowed: String
+}
+
+input Booker {
+    title: String
+    firstName: String!
+    lastName: String!
+    emailAddress: String
+    mobile: String
+    landline: String
+    acceptFutureMailing: Boolean
+    language: String
+    address: GuestAddress
+}
+
+input RoomPackageSelectionBasketInput {
+    packagesSelection: [PackageSelectionBasketInput]
+}
+
+input PackageSelectionBasketInput {
+    id: String
+    price: Float
+    noOfSelections: Int
+}
+
+type RoomStayDetails {
+    ratesPerNight: [RatePerNightUpdateResResponse]
+}
+
+type RatePerNightUpdateResResponse {
+    cityTaxPerNight: Float
+}
+
+input GuestAddress {
+    addressType: String
+    postalCode: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    countryCode: String
+    cityName: String
+    companyName: String
+    addressId: String
+}
+
+input Billing {
+    address: AddressRequest!
+    cardBillingAddress: AddressRequest
+    differentBillingAddress: Boolean
+    bookerIsNotGuest: Boolean
+    email: String!
+    firstName: String!
+    lastName: String!
+    telephone: String
+    title: String!
+}
+
+input AddressRequest {
+    addressType: String
+    companyName: String
+    country: String
+    addressLine1: String!
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    cityName: String
+    postalCode: String
+}
+
+input CardRequest {
+    cardholderName: String!
+    cardType: String!
+    expiryMonth: String!
+    expiryYear: String!
+    token: String!
+    cnpRequired: Boolean
+    logoUrl: String
+    type: String
+    last4Digits: String
+}
+
+type BackgroundChargeResponse {
+    basketReference: String
+}

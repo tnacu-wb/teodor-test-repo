@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_WINDOWSLESS_Rooms">
+        <loadUpdateData tableName="room_substitution_rule"
+                        file="sql/liquibase/data/room_substitution_rule_WINDOWSLESS_Rooms.csv"
+                        primaryKey="rule_id"/>
+
+        <rollback>
+            <delete schemaName="rules_engine" tableName="room_substitution_rule">
+                <where>rule_id BETWEEN 2101 AND 2168</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_WINDOWSLESS_Rooms_add_rooms">
+        <loadUpdateData tableName="room_substitution_rule"
+          file="sql/liquibase/data/room_substitution_rule_WINDOWSLESS_Rooms_add_rooms.csv"
+          primaryKey="rule_id"/>
+
+        <rollback>
+            <delete schemaName="rules_engine" tableName="room_substitution_rule">
+                <where>rule_id BETWEEN 2169 AND 2172</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_ZL_to_DIS">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="room_type" value="DIS"/>
+            <where>rule_id IN (2101, 2102, 2103, 2104)</where>
+        </update>
+        <rollback>
+            <update schemaName="rules_engine" tableName="room_substitution_rule">
+                <column name="room_type" value="ZL"/>
+                <where>rule_id IN (2101, 2102, 2103, 2104)</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_ZL_to_DB_2113_2116">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="room_type" value="DB"/>
+            <where>rule_id IN (2113, 2114, 2115, 2116)</where>
+        </update>
+        <rollback>
+            <update schemaName="rules_engine" tableName="room_substitution_rule">
+                <column name="room_type" value="ZL"/>
+                <where>rule_id IN (2113, 2114, 2115, 2116)</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_DB_to_SB_2117_2120">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="room_type" value="SB"/>
+            <where>rule_id IN (2117, 2118, 2119, 2120)</where>
+        </update>
+        <rollback>
+            <update schemaName="rules_engine" tableName="room_substitution_rule">
+                <column name="room_type" value="DB"/>
+                <where>rule_id IN (2117, 2118, 2119, 2120)</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_DB_to_SB_2121_2128">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="room_type" value="SB"/>
+            <where>rule_id IN (2121, 2122, 2123, 2124, 2125, 2126, 2127, 2128)</where>
+        </update>
+        <rollback>
+            <update schemaName="rules_engine" tableName="room_substitution_rule">
+                <column name="room_type" value="DB"/>
+                <where>rule_id IN (2121, 2122, 2123, 2124) AND rule_id IN (2125, 2126, 2127, 2128)</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_ZL_to_DIS_and_special_request_2129_2132">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="room_type" value="DIS"/>
+            <column name="special_request" value="DBLE"/>
+            <where>rule_id IN (2129, 2130, 2131, 2132)</where>
+        </update>
+        <rollback>
+            <update schemaName="rules_engine" tableName="room_substitution_rule">
+                <column name="room_type" value="ZL"/>
+                <column name="special_request" value="DBLE or TWIN"/>
+                <where>rule_id IN (2129, 2130, 2131, 2132)</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_ZL_to_DB_2141_2144">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="room_type" value="DB"/>
+            <where>rule_id IN (2141, 2142, 2143, 2144)</where>
+        </update>
+        <rollback>
+            <update schemaName="rules_engine" tableName="room_substitution_rule">
+                <column name="room_type" value="ZL"/>
+                <where>rule_id IN (2141, 2142, 2143, 2144)</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_ZL_to_TWIN_2145_2148">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="room_type" value="TWIN"/>
+            <where>rule_id IN (2145, 2146, 2147, 2148)</where>
+        </update>
+        <rollback>
+            <update schemaName="rules_engine" tableName="room_substitution_rule">
+                <column name="room_type" value="ZL"/>
+                <where>rule_id IN (2145, 2146, 2147, 2148)</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_ZL_to_DIS_and_description_2149_2152">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="room_type" value="DIS"/>
+            <column name="special_request" value="DBLE"/>
+            <where>rule_id IN (2149, 2150, 2151, 2152)</where>
+        </update>
+        <rollback>
+            <update schemaName="rules_engine" tableName="room_substitution_rule">
+                <column name="room_type" value="ZL"/>
+                <column name="special_request" value="DBLE or TWIN"/>
+                <where>rule_id IN (2149, 2150, 2151, 2152)</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_ZL_to_DB_2161_2164">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="room_type" value="DB"/>
+            <where>rule_id IN (2161, 2162, 2163, 2164)</where>
+        </update>
+        <rollback>
+            <update schemaName="rules_engine" tableName="room_substitution_rule">
+                <column name="room_type" value="ZL"/>
+                <where>rule_id IN (2161, 2162, 2163, 2164)</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="adrian.santa" id="update_room_substitution_rule_ZL_to_TWIN_2165_2168">
+        <update schemaName="rules_engine" tableName="room_substitution_rule">
+            <column name="room_type" value="TWIN"/>
+            <where>rule_id IN (2165, 2166, 2167, 2168)</where>
+        </update>
+        <rollback>
+            <update schemaName="rules_engine" tableName="room_substitution_rule">
+                <column name="room_type" value="ZL"/>
+                <where>rule_id IN (2165, 2166, 2167, 2168)</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

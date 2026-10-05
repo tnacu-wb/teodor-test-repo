@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="Amruta" id="tag_amendment_rule_new_site_wide_discount_data">
+    <tagDatabase tag="version_amendment_rule_new_site_wide_discount_data"/>
+  </changeSet>
+
+  <changeSet author="Amruta" id="amendment_rule_new_site_wide_discount_data">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amendment_rule_add_site_wide_discount.csv"/>
+    <rollback>
+      <delete schemaName="rules_engine" tableName="amendment_rule">
+        <where>rate_type IN ('FX30R', 'FX20RU', 'FX10RU', 'FX20R', 'FX15R')</where>
+      </delete>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>

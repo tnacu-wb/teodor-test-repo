@@ -1,0 +1,244 @@
+name: Python Tools CI
+
+# Generic CI for every Python tool under tools/python/<name>/.
+#
+# One workflow serves all Python tools: it detects which tool directories
+# changed, then for each one derives its details from the tool's own files
+# (python version from .python-version, image name from pyproject `name` under
+# the whitbreaddigital/ org prefix, tests via `python -m unittest`, and lint
+# via `pylint` against the tool's own .pylintrc) and builds it. Adding a new
+# Python tool means dropping it under tools/python/<name>/ — no edit to this
+# workflow.
+#
+# Prerequisites for a new tool to build+push cleanly on merge to main:
+#   - a pyproject.toml (the detector uses it as the tool marker, and the test
+#     job reads requires-python from it as a fallback);
+#   - preferably a .python-version file — the test job uses it when present and
+#     otherwise falls back to the minimum from pyproject's requires-python;
+#   - if it ships a Dockerfile, an ECR repository named
+#     whitbreaddigital/<pyproject name> must already exist — this workflow does
+#     NOT create it, so request it first (see the infra ECR-repo request process).
+#
+# On a pull request: tests only. On push to main: tests, then (if the tool has
+# a Dockerfile) an inline image build + ECR push + Prisma scan. Deployment is
+# owned by the gitops repos; nothing here writes to them.
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/python/**'
+      - '.github/workflows/ci-python-tools.yaml'
+      - '.github/workflows/scripts/detect-changed-python-tools.sh'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/python/**'
+      - '.github/workflows/ci-python-tools.yaml'
+      - '.github/workflows/scripts/detect-changed-python-tools.sh'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Cancel superseded runs on PRs (cheap, and only the latest commit matters),
+  # but NOT on push to main: cancelling an in-flight push run could drop a
+  # merged commit's image build/push. So only cancel for non-push events.
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
+jobs:
+  detect:
+    name: Detect changed Python tools
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      tools: ${{ steps.detect.outputs.tools }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+      - name: Detect changed tools
+        id: detect
+        env:
+          # PR: diff against the merge base. Push: diff against the previous tip
+          # (github.event.before) so only changed tools run. workflow_dispatch:
+          # BASE_SHA stays empty → the detector selects every tool (full rebuild).
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: bash .github/workflows/scripts/detect-changed-python-tools.sh
+
+  # Test job — runs on every event (PR, push, dispatch). Deliberately has NO
+  # id-token permission: it never assumes an AWS role, so it doesn't need it.
+  test:
+    name: ${{ matrix.tool.name }} (test)
+    needs: detect
+    if: ${{ needs.detect.outputs.tools != '[]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: ${{ fromJson(needs.detect.outputs.tools) }}
+    defaults:
+      run:
+        working-directory: ${{ matrix.tool.path }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      # Prefer an explicit .python-version; otherwise fall back to the minimum
+      # from pyproject's requires-python (e.g. ">=3.14" -> "3.14"). The detector
+      # keys off pyproject.toml, so a tool with only that file still resolves a
+      # version here instead of failing.
+      - name: Resolve Python version
+        id: meta
+        run: |
+          set -euo pipefail
+          if [[ -f .python-version ]]; then
+            PYVER="$(tr -d '[:space:]' < .python-version)"
+          else
+            PYVER="$(sed -n 's/^requires-python[[:space:]]*=[[:space:]]*"[^0-9]*\([0-9][0-9.]*\).*/\1/p' pyproject.toml | head -1)"
+          fi
+          if [[ -z "${PYVER}" ]]; then
+            echo "::error::No .python-version and no resolvable requires-python in pyproject.toml" >&2
+            exit 1
+          fi
+          echo "python-version=${PYVER}" >> "$GITHUB_OUTPUT"
+      - name: Install uv
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
+      - name: Set up Python
+        env:
+          PYTHON_VERSION: ${{ steps.meta.outputs.python-version }}
+        run: uv python install "${PYTHON_VERSION}"
+      - name: Install dependencies
+        run: uv sync --locked --no-build
+      - name: Run unit tests
+        run: uv run --locked --no-build python -m unittest
+      # Lint against the tool's own .pylintrc (stacks/tools.md mandates pylint).
+      # pylint is run ephemerally via `uv run --with` so it need not be a project
+      # dependency — this keeps pyproject.toml/uv.lock byte-for-byte per the
+      # import (Requirement 2.3). Skipped for tools that ship no .pylintrc.
+      #
+      # --fail-on=E,F --fail-under=0 makes the step fail ONLY on error/fatal
+      # messages (Requirement 7.4), not on convention/refactor/warning or a
+      # score threshold — so the full report still prints for visibility.
+      - name: Lint
+        run: |
+          set -euo pipefail
+          if [[ -f .pylintrc ]]; then
+            uv run --with pylint pylint --rcfile=.pylintrc --fail-on=E,F --fail-under=0 *.py
+          else
+            echo "No .pylintrc in $(pwd); skipping pylint."
+          fi
+
+  # Build + push job — only on push to main, and only for tools with a
+  # Dockerfile. id-token: write lives HERE (needed for OIDC role assumption),
+  # so PR/dispatch test runs never get that privilege.
+  build:
+    name: ${{ matrix.tool.name }} (build)
+    needs: [detect, test]
+    if: ${{ github.event_name == 'push' && needs.detect.outputs.tools != '[]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      id-token: write
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: ${{ fromJson(needs.detect.outputs.tools) }}
+    steps:
+      # Shallow checkout: the build job performs no git operations (unlike
+      # detect, which diffs commit ranges and needs fetch-depth: 0).
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      # Derive per-tool details from the tool's own files. Skips the whole job
+      # (via has-dockerfile) for tools that don't ship a Dockerfile.
+      - name: Resolve tool metadata
+        id: meta
+        working-directory: ${{ matrix.tool.path }}
+        env:
+          TOOL_NAME: ${{ matrix.tool.name }}
+        run: |
+          set -euo pipefail
+          # Image name: whitbreaddigital/<pyproject name>, falling back to the
+          # directory name. The org prefix is the fixed Whitbread convention.
+          PKG_NAME="$(sed -n 's/^name[[:space:]]*=[[:space:]]*"\(.*\)"/\1/p' pyproject.toml | head -1)"
+          PKG_NAME="${PKG_NAME:-${TOOL_NAME}}"
+          # App version from the tool's own pyproject.toml so main-line image
+          # tags reflect the tool's declared version (fallback 1.0.0).
+          APP_VERSION="$(sed -n 's/^version[[:space:]]*=[[:space:]]*"\(.*\)"/\1/p' pyproject.toml | head -1)"
+          APP_VERSION="${APP_VERSION:-1.0.0}"
+          echo "image-name=whitbreaddigital/${PKG_NAME}" >> "$GITHUB_OUTPUT"
+          echo "app-version=${APP_VERSION}" >> "$GITHUB_OUTPUT"
+          HAS_DOCKERFILE=false; [[ -f Dockerfile ]] && HAS_DOCKERFILE=true
+          echo "has-dockerfile=${HAS_DOCKERFILE}" >> "$GITHUB_OUTPUT"
+
+      - name: Configure AWS credentials
+        if: steps.meta.outputs.has-dockerfile == 'true'
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+        with:
+          role-to-assume: arn:aws:iam::327347623470:role/GitHubActionsECRPushRole
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: eu-west-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        if: steps.meta.outputs.has-dockerfile == 'true'
+        uses: aws-actions/amazon-ecr-login@03f1aad4c6c7ffd436567f42f9384779290529bd # v2.1.7
+
+      - name: Resolve image tag
+        id: image-tag
+        if: steps.meta.outputs.has-dockerfile == 'true'
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          COMMIT_SHA: ${{ github.sha }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          APP_VERSION: ${{ steps.meta.outputs.app-version }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: bash .github/workflows/scripts/resolve-image-tag.sh
+
+      # All workflow expressions below reach shell via env: rather than direct
+      # ${{ }} interpolation, so a crafted value (e.g. a tool path or pyproject
+      # name) can't break out of the command. Avoids CodeQL's expression-
+      # injection query (codeql.yml is in this repo).
+      - name: Build image
+        id: build
+        if: steps.meta.outputs.has-dockerfile == 'true'
+        # BUILD_TIMESTAMP surfaces on every Dynatrace event as build.timestamp;
+        # preserved for tools that use it. Harmless build arg for tools that don't.
+        env:
+          IMAGE_NAME: ${{ steps.meta.outputs.image-name }}
+          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+          TOOL_PATH: ${{ matrix.tool.path }}
+        run: |
+          set -euo pipefail
+          docker build \
+            --build-arg BUILD_TIMESTAMP="$(date -u '+%Y-%m-%d %H:%M:%S UTC')" \
+            -t "${IMAGE_NAME}:${IMAGE_TAG}" \
+            "${TOOL_PATH}"
+
+      # Prisma scan runs BEFORE the push so a failing scan actually gates: a
+      # vulnerable image never reaches ECR (and therefore the gitops repos).
+      # The image is built and available in the local daemon at this point.
+      - name: Prisma image scan
+        if: steps.meta.outputs.has-dockerfile == 'true'
+        uses: ./.github/actions/prisma-image-scan
+        with:
+          image-name: "${{ steps.meta.outputs.image-name }}:${{ steps.image-tag.outputs.tag }}"
+          prisma-user: ${{ secrets.PRISMA_ACCESS_KEY_ID }}
+          prisma-password: ${{ secrets.PRISMA_SECRET_KEY }}
+
+      - name: Push to ECR
+        if: steps.meta.outputs.has-dockerfile == 'true'
+        env:
+          IMAGE_NAME: ${{ steps.meta.outputs.image-name }}
+          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          set -euo pipefail
+          IMG="${IMAGE_NAME}:${IMAGE_TAG}"
+          ECR_TAG="${ECR_REGISTRY}/${IMG}"
+          docker tag "${IMG}" "${ECR_TAG}"
+          docker push "${ECR_TAG}"

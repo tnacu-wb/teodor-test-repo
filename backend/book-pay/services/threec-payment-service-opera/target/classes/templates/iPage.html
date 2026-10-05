@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+</head>
+<body style="position: absolute; top: 50%; transform: translateY(-50%); width: 100%;">
+<div th:replace="fragments.html :: loadingWheel"></div>
+<h1 style="text-align: center;" class="wb-heading--h3">Loading...</h1>
+<form name="Form1" id="Form1" method="post" th:action="${providerUrl}">
+    <input type="hidden" name="XXX_IPGSESSION_XXX" th:value="${session}">
+    <input type="hidden" id="content_language" name="content_language" th:value="${language}">
+    <input type="hidden" id="merchant_script_data_1" name="merchant_script_data_1" th:value="${merchantData}">
+    <script>document.getElementById("Form1").submit();</script>
+</form>
+</body>
+</html>

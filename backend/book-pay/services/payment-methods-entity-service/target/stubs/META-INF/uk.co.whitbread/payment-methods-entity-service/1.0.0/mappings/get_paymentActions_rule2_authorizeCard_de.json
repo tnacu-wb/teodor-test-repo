@@ -1,0 +1,21 @@
+{
+  "id" : "0e3a7f2e-58f8-4ca5-b1e0-f67bda1f904d",
+  "request" : {
+    "urlPath" : "/v1/payment-methods/payment-actions/BASKET_DE_AUTHORIZE",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"displayPaymentPage\":true,\"paymentActions\":[{\"chargeType\":\"AUTHORIZE_CARD\",\"price\":{\"amount\":0.0,\"currency\":\"EUR\"},\"order\":1}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "0e3a7f2e-58f8-4ca5-b1e0-f67bda1f904d"
+}

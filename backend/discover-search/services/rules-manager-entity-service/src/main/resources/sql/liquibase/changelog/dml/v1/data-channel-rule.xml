@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet author="octavian.salcianu" id="init_data_channel_rule" runOnChange="true">
+    <preConditions onFail="MARK_RAN">
+      <and>
+        <tableExists tableName="channel_rule"/>
+
+        <sqlCheck expectedResult="0">select count(*) from rules_engine.channel_rule</sqlCheck>
+      </and>
+    </preConditions>
+
+    <loadData tableName="channel_rule" file="sql/liquibase/data/channel_rule_data.csv"/>
+    <loadData tableName="channel_rate_plan_sets" file="sql/liquibase/data/channel_rate_plan_sets_data.csv"/>
+  </changeSet>
+
+  <changeSet author="octavian.pinzariu" id="add_ccui_de_rule">
+    <loadData tableName="channel_rule" file="sql/liquibase/data/channel_rule_data_ccui.csv"/>
+    <loadData tableName="channel_rate_plan_sets" file="sql/liquibase/data/channel_rate_plan_sets_data_ccui.csv"/>
+  </changeSet>
+  
+  <changeSet author="octavian.horvat" id="delete_channelRule_ratePlanSets_for_CCUI">
+    <delete schemaName="rules_engine"
+      tableName="channel_rate_plan_sets">
+      <where>(ref_channel_rule_id=14 or ref_channel_rule_id=3) AND
+        (rate_plan_set='BMD' OR rate_plan_set='BDB' OR rate_plan_set='NEGOCIATED')</where>
+    </delete>
+  </changeSet>
+
+  <changeSet author="octavian.horvat" id="delete_channel_ratePlanSets_for_BB">
+    <delete schemaName="rules_engine"
+      tableName="channel_rate_plan_sets">
+      <where>(ref_channel_rule_id=10 OR ref_channel_rule_id=11 OR ref_channel_rule_id=12 OR ref_channel_rule_id=13)
+        AND (rate_plan_set='BMD' OR rate_plan_set='BDB')</where>
+    </delete>
+  </changeSet>
+
+  <changeSet author="octavian.horvat" id="delete_channel_ratePlanSets_for_DISTR">
+    <delete schemaName="rules_engine"
+            tableName="channel_rate_plan_sets">
+      <where>(ref_channel_rule_id=4 OR ref_channel_rule_id=5 OR ref_channel_rule_id=6 OR ref_channel_rule_id=7)
+        AND (rate_plan_set='BMD' OR rate_plan_set='BDB' OR rate_plan_set='DCN')</where>
+    </delete>
+  </changeSet>
+
+  <changeSet author="mircea.caraiman" id="add_channel_rate_plan_set_bb_bfl">
+    <loadData tableName="channel_rate_plan_sets" file="sql/liquibase/data/channel_rate_plan_sets_data_bb_bfl.csv"/>
+  </changeSet>
+
+  <changeSet author="claudiu.abrudan" id="add_new_rule_for_discounts">
+    <loadData tableName="channel_rule"
+      file="sql/liquibase/data/channel_rule_data_discount.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="claudiu.abrudan" id="add_new_rate_plan_set_for_discounts">
+    <loadData tableName="channel_rate_plan_sets"
+      file="sql/liquibase/data/channel_rate_plan_sets_data_discount.csv"/>
+  </changeSet>
+
+  <changeSet author="jilani.shaik" id="add_channel_rule_data_v1">
+    <loadData tableName="channel_rule"
+      file="sql/liquibase/data/channel_rule_data_v1.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="jilani.shaik" id="add_channel_rate_plan_sets_data_v1">
+    <loadData tableName="channel_rate_plan_sets"
+      file="sql/liquibase/data/channel_rate_plan_sets_data_v1.csv"/>
+  </changeSet>
+
+  <changeSet author="marius.hofenpradli" id="add_ccui_bfl_rule">
+    <loadData tableName="channel_rate_plan_sets"
+      file="sql/liquibase/data/channel_rate_plan_sets_data_ccui_bfl.csv"/>
+  </changeSet>
+
+  <changeSet author="harshul.rathore" id="add_new_rule_for_third_party">
+    <loadData tableName="channel_rule" file="sql/liquibase/data/channel_rule_data_third_party.csv"/>
+    <rollback>
+      <delete tableName="channel_rule">
+        <where>source_id = '46'</where>
+      </delete>
+      <delete tableName="channel_rule">
+        <where>source_id = '48'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="harshul.rathore" id="add_new_rule_for_rate_plan_sets_third_party">
+    <loadData tableName="channel_rate_plan_sets" file="sql/liquibase/data/channel_rate_plan_sets_data_third_party.csv"/>
+    <rollback>
+      <delete tableName="channel_rate_plan_sets">
+        <where>ref_channel_rule_id = '19'</where>
+      </delete>
+      <delete tableName="channel_rate_plan_sets">
+        <where>ref_channel_rule_id = '20'</where>
+      </delete>
+    </rollback>
+    </changeSet>
+
+  <changeSet author="harshul.rathore" id="update_rule_for_third_party">
+    <update tableName="channel_rule">
+      <column name="channel" value="OTA"/>
+      <where>source_id = '36'</where>
+    </update>
+    <rollback>
+      <update tableName="channel_rule">
+        <column name="channel" value="DISTR"/>
+        <where>source_id = '36'</where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="tudor.osan" id="add_new_rule_for_derbysoft">
+    <loadData tableName="channel_rule" file="sql/liquibase/data/channel_rule_data_derbysoft.csv"/>
+  </changeSet>
+
+  <changeSet author="tudor.osan" id="add_new_rule_for_rate_plan_sets_derbysoft">
+    <loadData tableName="channel_rate_plan_sets" file="sql/liquibase/data/channel_rate_plan_sets_data_derbysoft.csv"/>
+  </changeSet>
+</databaseChangeLog>

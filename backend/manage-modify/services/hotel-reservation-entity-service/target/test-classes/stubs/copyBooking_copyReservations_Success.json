@@ -1,0 +1,21 @@
+{
+  "request": {
+    "urlPath": "/v1/reservations/copy",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$..hotelId",
+          "contains": "GLACIT"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "copyBooking_copyReservations_Success.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

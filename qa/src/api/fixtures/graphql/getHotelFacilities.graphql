@@ -1,0 +1,12 @@
+query getHotelFacilities($hotelId: String!, $language: String!, $country: String!) {
+  hotelInformation(hotelId: $hotelId, language: $language, country: $country) {
+    hotelFacilities {
+      code
+      description
+      icon
+      isVisible
+      name
+      weight
+    }
+  }
+}

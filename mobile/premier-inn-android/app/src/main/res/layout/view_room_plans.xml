@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/invalid_discount_code_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/error_notification_background"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/invalid_discount_code_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="@dimen/generic_margin_12"
+            android:contentDescription="@string/information_banner_info_txt"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_notifications_info"
+            app:tint="@color/new_error_red"
+            app:layout_constraintEnd_toStartOf="@+id/invalid_discount_code_message_text"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/invalid_discount_code_message_text"
+            style="@style/BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_8"
+            android:layout_marginEnd="@dimen/generic_margin_12"
+            android:layout_marginBottom="@dimen/generic_margin_12"
+            android:textColor="@color/grey_dark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/invalid_discount_code_icon"
+            app:layout_constraintTop_toTopOf="@id/invalid_discount_code_icon"
+            tools:text="This discount code is not valid for the selected dates" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/rates_city_tax_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:gravity="end"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:text="@string/hotel_details_city_tax_included"/>
+
+    <LinearLayout
+        android:id="@+id/view_room_plan_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- Room rates will be added here dynamically -->
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_32"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:background="@color/grey_light_x"/>
+</LinearLayout>

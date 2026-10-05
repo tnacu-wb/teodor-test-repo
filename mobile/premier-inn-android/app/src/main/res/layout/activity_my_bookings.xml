@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/my_bookings_find_booking_toolbar_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/my_bookings_add_booking_nav_button"
+            android:textColor="@android:color/white"
+            style="@style/BodySmallSemiBold"/>
+
+        <ProgressBar
+            android:id="@+id/my_bookings_progress"
+            android:layout_width="@dimen/toolbar_progress_bar_width"
+            android:layout_height="@dimen/toolbar_progress_bar_height"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/generic_margin_8"
+            android:visibility="invisible"
+            tools:visibility="visible"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+        android:id="@+id/my_bookings_infoMessageBoxView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/BodySmallSemiBold"
+        android:gravity="center_vertical"
+        android:padding="@dimen/generic_padding_14"
+        android:src="@drawable/ic_tick"
+        android:textColor="@color/white"
+        android:background="@color/teal"
+        android:visibility="gone"
+        tools:text="Your booking has been updated, please pay £XX.XX upon arrival"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/my_bookings_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="@dimen/generic_padding_16"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:listitem="@layout/item_my_bookings"/>
+
+        <include
+            android:id="@+id/my_bookings_empty_state_logged_out"
+            layout="@layout/view_my_bookings_no_bookings_logged_out"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+        <include
+            android:id="@+id/my_bookings_empty_state_logged_in"
+            layout="@layout/view_my_bookings_no_bookings_logged_in"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+        <FrameLayout
+            android:id="@+id/my_booking_progress_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ProgressBar
+                android:id="@+id/pb_address_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+
+    </FrameLayout>
+
+
+</LinearLayout>

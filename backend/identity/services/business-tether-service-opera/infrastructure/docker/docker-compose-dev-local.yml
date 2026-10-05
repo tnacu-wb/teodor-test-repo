@@ -1,0 +1,25 @@
+discovery:
+  image: 228079755329.dkr.ecr.eu-west-1.amazonaws.com/whitbread/discovery-service:latest
+  environment:
+    spring.profiles.active: local
+  ports:
+    - "8761:8761"
+redis:
+  image: redis:latest
+  ports:
+    - "6379:6379"
+businesstether:
+  image: whitbread/business-tether-service
+  environment:
+    _JAVA_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5064"
+    spring.profiles.active: local
+  ports:
+   - "9047:9047"
+gateway:
+  image: 228079755329.dkr.ecr.eu-west-1.amazonaws.com/whitbread/gateway-service:latest
+  environment:
+    spring.profiles.active: local
+  ports:
+   - "10000:10000"
+  links:
+    - business-tether-service

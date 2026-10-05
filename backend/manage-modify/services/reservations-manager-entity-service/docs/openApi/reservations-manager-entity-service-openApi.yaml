@@ -1,0 +1,1204 @@
+openapi: 3.1.0
+info:
+  description: <p>TBU</p>
+  title: Reservation Manager Entity API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9116
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /v1/bookings/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/bookings/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/bookings/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/bookings/actuator/metrics:
+    get:
+      operationId: listNames
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /v1/bookings/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metric
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /v1/bookings/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /v1/bookings/cancel:
+    post:
+      operationId: cancelBooking
+      parameters:
+      - in: query
+        name: bookingChannelDto
+        required: true
+        schema:
+          $ref: "#/components/schemas/BookingChannelDto"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelBookingRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CancelBookingResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - booking-controller
+  /v1/bookings/confirmation:
+    post:
+      operationId: sendBookingConfirmationEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResendConfirmationEmailRequestDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - booking-controller
+  /v1/bookings/history:
+    get:
+      operationId: getBookingsHistory
+      parameters:
+      - in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: bookingChannelDto
+        required: true
+        schema:
+          $ref: "#/components/schemas/BookingChannelDto"
+      - in: query
+        name: bookingHistoryRequest
+        required: true
+        schema:
+          $ref: "#/components/schemas/BookingRequestDto"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - booking-controller
+    post:
+      operationId: retrieveBookingHistory
+      parameters:
+      - in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingHistoryRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - booking-controller
+  /v1/bookings/information:
+    get:
+      operationId: getBookingInformation
+      parameters:
+      - in: query
+        name: bookingChannelDto
+        required: true
+        schema:
+          $ref: "#/components/schemas/BookingChannelDto"
+      - in: query
+        name: bookingRequestDto
+        required: true
+        schema:
+          $ref: "#/components/schemas/BookingInfoRequestDto"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingInfoResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - booking-controller
+  /v1/bookings/invoice:
+    post:
+      operationId: resendBookingInvoiceEmail
+      parameters:
+      - in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: bookingChannelDto
+        required: true
+        schema:
+          $ref: "#/components/schemas/BookingChannelDto"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResendInvoiceEmailRequestDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - booking-controller
+  /v1/bookings/invoices/download:
+    post:
+      operationId: downloadBookingInvoices
+      parameters:
+      - in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DownloadBookingInvoicesRequestDto"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoiceDownloadResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - booking-controller
+  /v1/bookings/upcomingBookings:
+    get:
+      operationId: getUpcomingBookingsForInnBusiness
+      parameters:
+      - in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: upcomingBookingsRequestDto
+        required: true
+        schema:
+          $ref: "#/components/schemas/UpcomingBookingsRequestDto"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpcomingBookingsResponseDto"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      tags:
+      - booking-controller
+components:
+  schemas:
+    BookingChannelDto:
+      type: object
+      properties:
+        channel:
+          type: string
+        subchannel:
+          type: string
+    BookingDetailsDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+          format: date
+        basketReference:
+          type: string
+        bookingReference:
+          type: string
+        bookingStatus:
+          type: string
+        cancellationInfoResponse:
+          $ref: "#/components/schemas/CancellationInfoResponseDto"
+        cityTaxTotal:
+          $ref: "#/components/schemas/BookingPriceDto"
+        departureDate:
+          type: string
+          format: date
+        dinnerAllowance:
+          $ref: "#/components/schemas/BookingPriceDto"
+        donationsPackage:
+          $ref: "#/components/schemas/BookingPackagesDetailsDto"
+        hotelCode:
+          type: string
+        hotelHasCityTaxForLeisure:
+          type: boolean
+        newTotal:
+          $ref: "#/components/schemas/BookingPrice"
+        nights:
+          type: integer
+          format: int32
+        noOfRooms:
+          type: integer
+          format: int32
+        outstandingAmount:
+          $ref: "#/components/schemas/BookingPrice"
+        payment:
+          $ref: "#/components/schemas/PaymentCard"
+        paymentOption:
+          type: string
+        prepaidAmount:
+          $ref: "#/components/schemas/BookingPriceDto"
+        previousTotal:
+          $ref: "#/components/schemas/BookingPrice"
+        rateDescription:
+          type: string
+        rateType:
+          type: string
+        refund:
+          $ref: "#/components/schemas/BookingPriceDto"
+        rooms:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingRoomDto"
+        sourceSystem:
+          type: string
+        totalCost:
+          $ref: "#/components/schemas/BookingPrice"
+    BookingDto:
+      type: object
+      properties:
+        amendable:
+          type: boolean
+        arrivalDate:
+          type: string
+          format: date
+        basketStatus:
+          type: string
+          enum:
+          - OPEN
+          - PROCESSING
+          - AMENDING
+          - COMPLETED
+          - AMENDED
+          - CANCELLED
+          - PAY_PENDING
+          - AMEND_FAILED
+          - FAILED
+          - PRE_CHECKED_IN
+          - CIOL_FAILED
+          - PRE_CHECKED_OUT
+          - CIOL_RC_FAILED
+        bookedBy:
+          type: string
+        bookingFee:
+          $ref: "#/components/schemas/PriceDto"
+        bookingReference:
+          type: string
+        bookingStatus:
+          type: string
+          enum:
+          - FUTURE
+          - PAST
+          - CANCELLED
+          - CHECKED_IN
+        cancelable:
+          type: boolean
+        cancellationId:
+          type: string
+        cancelled:
+          type: boolean
+        carDataRequired:
+          type: boolean
+        cellCodeLegend:
+          type: string
+        checkInDate:
+          type: string
+        checkInOnline:
+          type: boolean
+        checkInOnlineAvailable:
+          type: boolean
+        checkedIn:
+          type: boolean
+        ciolErrorLabelKey:
+          type: string
+        cityTax:
+          $ref: "#/components/schemas/PriceDto"
+        customerReference:
+          type: string
+        departureDate:
+          type: string
+          format: date
+        digitalKeyEligible:
+          type: boolean
+        frequentBooking:
+          type: string
+        guestHistoryNumber:
+          type: string
+        historyRecordNumber:
+          type: integer
+          format: int32
+        hotelCode:
+          type: string
+        hotelCountry:
+          type: string
+        hotelName:
+          type: string
+        isCheckInOnlineAvailable:
+          type: boolean
+        isDigitalKeyEligible:
+          type: boolean
+        leadGuest:
+          type: string
+        leadGuestSurname:
+          type: string
+        mpibooking:
+          type: boolean
+        noOfNights:
+          type: integer
+          format: int32
+        noOfRooms:
+          type: integer
+          format: int32
+        outstandingAmount:
+          $ref: "#/components/schemas/PriceDto"
+        paymentStatus:
+          type: string
+        prePaidAmount:
+          $ref: "#/components/schemas/PriceDto"
+        promotionText:
+          type: string
+        purchaseOrder:
+          type: string
+        rateClass:
+          type: string
+        rateName:
+          type: string
+        roomTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomTypesDto"
+        sourceSystem:
+          type: string
+        totalCost:
+          $ref: "#/components/schemas/PriceDto"
+    BookingHistoryRequestDto:
+      type: object
+      properties:
+        business:
+          type: boolean
+        channel:
+          type: string
+        continuationToken:
+          type: string
+        filterType:
+          type: string
+          enum:
+          - NAME
+          - ARRIVAL_DATE
+          - CONFIRM_NUMBER
+        filterValue:
+          type: string
+        includeCheckInBookings:
+          type: boolean
+        pageIndex:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        sortOrder:
+          type: string
+          enum:
+          - DEFAULT
+        subchannel:
+          type: string
+        typeOfBooking:
+          type: string
+          enum:
+          - FUTURE
+          - PAST
+          - CANCELLED
+          - CHECKED_IN
+    BookingInfoRequestDto:
+      type: object
+      properties:
+        arrival:
+          type: string
+        bookingReference:
+          type: string
+        country:
+          type: string
+        hotelId:
+          type: string
+        language:
+          type: string
+        sourceSystem:
+          type: string
+        surname:
+          type: string
+        token:
+          type: string
+    BookingInfoResponseDto:
+      type: object
+      properties:
+        checkInTime:
+          type: string
+        checkOutTime:
+          type: string
+        reservationDetails:
+          $ref: "#/components/schemas/BookingDetailsDto"
+        sessionId:
+          type: string
+    BookingPackagesDetailsDto:
+      type: object
+      properties:
+        description:
+          type: string
+        noSelections:
+          type: integer
+          format: int32
+        packageCode:
+          type: string
+        totalPrice:
+          $ref: "#/components/schemas/BookingPriceDto"
+    BookingPrice:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+    BookingPriceDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+    BookingRequestDto:
+      type: object
+      properties:
+        business:
+          type: boolean
+        continuationToken:
+          type: string
+        filterType:
+          type: string
+          enum:
+          - NAME
+          - ARRIVAL_DATE
+          - CONFIRM_NUMBER
+        filterValue:
+          type: string
+        includeCheckInBookings:
+          type: boolean
+        pageIndex:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        sortOrder:
+          type: string
+          enum:
+          - DEFAULT
+        typeOfBooking:
+          type: string
+          enum:
+          - FUTURE
+          - PAST
+          - CANCELLED
+          - CHECKED_IN
+    BookingResponseDto:
+      type: object
+      properties:
+        bookings:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingDto"
+        continuationToken:
+          type: string
+        pageIndex:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalSize:
+          type: integer
+          format: int32
+        totals:
+          $ref: "#/components/schemas/TypesTotalsDto"
+    BookingRoomDto:
+      type: object
+      properties:
+        adults:
+          type: integer
+          format: int32
+        adultsMeal:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingPackagesDetailsDto"
+          uniqueItems: true
+        children:
+          type: integer
+          format: int32
+        cot:
+          type: boolean
+        extrasItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingPackagesDetailsDto"
+          uniqueItems: true
+        guest:
+          $ref: "#/components/schemas/GuestDto"
+        kidsMeal:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingPackagesDetailsDto"
+          uniqueItems: true
+        roomCost:
+          $ref: "#/components/schemas/BookingPriceDto"
+        roomId:
+          type: string
+        roomType:
+          type: string
+    CancelBookingRequestDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+        basketReference:
+          type: string
+        bookingReference:
+          type: string
+          minLength: 1
+        country:
+          type: string
+        hotelId:
+          type: string
+          example: LONSTM
+        language:
+          type: string
+        paymentOption:
+          type: string
+        sourceSystem:
+          type: string
+        token:
+          type: string
+      required:
+      - bookingReference
+    CancelBookingResponseDto:
+      type: object
+      properties:
+        bookingReference:
+          type: string
+        cancellationId:
+          type: string
+        sourceSystem:
+          type: string
+    CancellationInfoResponseDto:
+      type: object
+      properties:
+        aemLabelKey:
+          type: string
+        amendable:
+          type: boolean
+        cancelable:
+          type: boolean
+        ruleCompliant:
+          type: boolean
+    DownloadBookingInvoicesRequestDto:
+      type: object
+      properties:
+        bookingRef:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        channel:
+          type: string
+          enum:
+          - PI
+          - BB
+        hotelBrand:
+          type: string
+        lang:
+          type: string
+          enum:
+          - EN
+          - DE
+        subChannel:
+          type: string
+      required:
+      - bookingRef
+      - channel
+      - lang
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "001"
+          minLength: 1
+        details:
+          type: array
+          example:
+          - Error message
+          items:
+            type: string
+      required:
+      - code
+      - details
+    GalleryImageDto:
+      type: object
+      properties:
+        alt:
+          type: string
+        caption:
+          type: string
+        iconSrc:
+          type: string
+        imageSrc:
+          type: string
+        thumbnailSrc:
+          type: string
+    GuestDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        title:
+          type: string
+    InvoiceDownloadDto:
+      type: object
+      properties:
+        bookingRef:
+          type: string
+        expiresAt:
+          type: string
+        fileName:
+          type: string
+        invoiceMeta:
+          $ref: "#/components/schemas/InvoiceMetaDto"
+        language:
+          type: string
+          enum:
+          - EN
+          - DE
+        mimeType:
+          type: string
+        url:
+          type: string
+    InvoiceDownloadResponseDto:
+      type: object
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: "#/components/schemas/InvoiceDownloadDto"
+    InvoiceMetaDto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+        invoiceNumber:
+          type: string
+        issuedDate:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    LinksDto:
+      type: object
+      properties:
+        detailsPage:
+          type: string
+    PaymentCard:
+      type: object
+      properties:
+        cardType:
+          type: string
+    PersonDetailsDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        title:
+          type: string
+      required:
+      - firstName
+      - lastName
+      - title
+    PriceDto:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+      required:
+      - amount
+    ResendConfirmationEmailRequestDto:
+      type: object
+      properties:
+        bookingReference:
+          type: string
+        email:
+          type: string
+        hotelId:
+          type: string
+        sessionId:
+          type: string
+        sourceSystem:
+          type: string
+    ResendInvoiceEmailRequestDto:
+      type: object
+      properties:
+        bookingReference:
+          type: string
+        email:
+          type: string
+        hotelId:
+          type: string
+        invoiceRecordNumber:
+          type: string
+        language:
+          type: string
+        sessionId:
+          type: string
+        sourceSystem:
+          type: string
+    RoomTypesDto:
+      type: object
+      properties:
+        bookingStatus:
+          type: string
+        carDataPresent:
+          type: boolean
+        personDetails:
+          $ref: "#/components/schemas/PersonDetailsDto"
+        roomType:
+          type: string
+    ThumbnailImageDto:
+      type: object
+      properties:
+        imageSrc:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    TopSectionImageDto:
+      type: object
+      properties:
+        alt:
+          type: string
+        caption:
+          type: string
+        iconSrc:
+          type: string
+        imageSrc:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        thumbnailSrc:
+          type: string
+    TypesTotalsDto:
+      type: object
+      properties:
+        cancelled:
+          type: integer
+          format: int32
+        checkedIn:
+          type: integer
+          format: int32
+        past:
+          type: integer
+          format: int32
+        upcoming:
+          type: integer
+          format: int32
+    UpcomingBookingsRequestDto:
+      type: object
+      properties:
+        channel:
+          type: string
+        country:
+          type: string
+        language:
+          type: string
+        subchannel:
+          type: string
+      required:
+      - country
+      - language
+    UpcomingBookingsResponseDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+          format: date
+        arrivalTime:
+          type: string
+        bookingReference:
+          type: string
+        bookings:
+          type: integer
+          format: int32
+        brand:
+          type: string
+        departureDate:
+          type: string
+          format: date
+        departureTime:
+          type: string
+        galleryImages:
+          type: array
+          items:
+            $ref: "#/components/schemas/GalleryImageDto"
+        hotelName:
+          type: string
+        links:
+          $ref: "#/components/schemas/LinksDto"
+        stays:
+          type: integer
+          format: int32
+        thumbnailImages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ThumbnailImageDto"
+        topSectionImages:
+          type: array
+          items:
+            $ref: "#/components/schemas/TopSectionImageDto"

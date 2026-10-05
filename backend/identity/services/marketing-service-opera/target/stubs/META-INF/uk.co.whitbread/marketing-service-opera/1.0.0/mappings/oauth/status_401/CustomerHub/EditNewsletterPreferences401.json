@@ -1,0 +1,38 @@
+{
+  "id" : "efca3915-62f6-4eea-a8fa-54df2bf80601",
+  "request" : {
+    "url" : "/marketing/hotels/newsletter/edit",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['userId'] == 'name.surname')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*][?(@.['contactChannelType'] == 'Email')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*][?(@.['contactChannelValue'] == 'unauthorized@gmail.com')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*][?(@.['contactChannelPermission'] == 'false')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['brandCodes'][?(@ == 'WINN')]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['contentPermission'][?(@.['secondParty'] == true)]"
+    }, {
+      "matchesJsonPath" : "$.['subscriptionData'][*].['contentPermission'][?(@.['thirdParty'] == true)]"
+    } ]
+  },
+  "response" : {
+    "status" : 401,
+    "body" : "{\"code\":\"3001\",\"details\":[\"You do not have permission to view this directory or page.\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "efca3915-62f6-4eea-a8fa-54df2bf80601"
+}

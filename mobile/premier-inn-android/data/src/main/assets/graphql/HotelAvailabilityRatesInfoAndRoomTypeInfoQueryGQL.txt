@@ -1,0 +1,62 @@
+query hotelAvailabilityRatesAndRoomTypeInfo ($availabilitySearchCriteria: AvailabilitySearchCriteria!, $language: String!, $country: String!, $hotelId: String!, $brand: String!, $channel: String!) {
+    hotelAvailability (availabilitySearchCriteria: $availabilitySearchCriteria) {
+        hotelId
+        startDate
+        endDate
+        available
+        limitedAvailability
+        roomRates {
+            ratePlanCode
+            promotionCode
+            cellCode
+            promotionCode
+            roomTypes {
+                roomType
+                adults
+                children
+                cotRequested
+                rooms {
+                    pmsRoomType
+                    silentSubstitution
+                    roomClass
+                    cotAvailable
+                    specialRequests
+                    roomPriceBreakdown {
+                      currencyCode
+                      packageCode
+                      baseRateAmount
+                      packageAmount
+                      dailyPrices {
+                        date
+                        netPrice
+                      }
+                      totalNetAmount
+                    }
+                }
+            }
+        }
+    }
+
+         ratesInformationV2(brand: $brand, channel: $channel, language: $language, country: $country, hotelId: $hotelId) {
+             rateClassifications {
+               rateClassification
+               rateOrder
+               rateNotes
+               rateName
+               rateLongDescription
+               rateDescription
+               rateTags
+             }
+           }
+
+          roomTypeInformation(brand: $brand, country: $country, language: $language) {
+            roomTypes {
+              roomTypeCode
+              roomCategory
+              roomLabel
+              roomDescription
+              roomImage
+              groupId
+            }
+         }
+}

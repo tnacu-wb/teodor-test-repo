@@ -1,0 +1,368 @@
+schema {
+    query: Query
+}
+
+type Query {
+    hotelAvailabilities(availabilitiesSearchCriteria: AvailabilitiesSearchCriteria): HotelAvailabilities
+    hotelAvailabilitiesV2(availabilitiesSearchCriteria: AvailabilitiesSearchCriteria): HotelAvailabilities
+    hotelAvailabilityInfo(availabilityCriteria: AvailabilityInfoCriteria, brand: String!, language: String!, country: String!, hotelId: String!, channel: String, ratePlans: [String]): HotelAvailabilityInfo
+}
+
+input AvailabilityInfoCriteria {
+    arrival: String!
+    departure: String!
+    rooms: [RoomSearchInfo!]!
+    hotel: HotelInfo!
+    companyId: String
+    ratePlanCodes: [String]
+    bookingChannel: BookingChannelCriteriaInfo
+    promotionCode: String
+}
+
+input HotelInfo {
+    identifier: String!
+}
+
+input RoomSearchInfo {
+    roomType: String!
+    pmsRoomType: String
+    adultsNumber: Int!
+    childrenNumber: Int!
+    cotRequired: Boolean
+}
+
+input BookingChannelCriteriaInfo {
+    channel: ChannelInfo!
+    subchannel: String!
+    language: String
+}
+
+enum ChannelInfo {
+    PI
+    BB
+    CCUI
+    DISTR
+    EMPLOYEE
+}
+
+type HotelAvailabilityInfo {
+    hotelId: String!
+    startDate: String!
+    endDate: String!
+    available: Boolean!
+    limitedAvailability: Boolean!
+    mlos: Boolean!
+    roomRates: [HotelAvailabilityRoomRateInfo]!
+}
+
+type HotelAvailabilityRoomRateInfo {
+    ratePlanCode: String!
+    rateClassification: HotelContentRateExtraInfo
+    rateDisplaySet: String
+    cellCode: String
+    twinRoomTypeAvailability: Boolean
+    globalCompanyId: String
+    roomTypes: [HotelAvailabilityRoomTypeInfo!]!
+    promotionCode: String
+}
+
+type HotelAvailabilityRoomTypeInfo {
+    roomType: String!
+    adults: Int!
+    children: Int!
+    cotRequested: Boolean!
+    rooms: [HotelAvailabilityRoomInfo!]!
+}
+
+type HotelAvailabilityRoomInfo {
+    pmsRoomType: String!
+    silentSubstitution: Boolean!
+    roomClass: String!
+    roomClassOrder: RoomClassOrderInfo!
+    cotAvailable: Boolean
+    specialRequests: [String]
+    roomPriceBreakdown: RoomPriceBreakdownInfo!
+    mealsIncluded: MealsIncludedInfo
+    numberOfRoomsAvailable: Int
+    roomTypeDetails: RoomTypeInfo!
+}
+
+type RoomTypeInfo {
+    roomTypeCode: [String]
+    roomCategory: String
+    roomLabel: String
+    roomDescription: String
+    roomImage: String
+    groupId: String
+}
+
+type RoomClassOrderInfo {
+    code: String!
+    order: Int!
+    availableUpgrades: [String]
+}
+
+type MealsIncludedInfo {
+    breakfast: Boolean
+    dinner: Boolean
+    mealName: String
+}
+
+type RoomPriceBreakdownInfo {
+    totalNetAmount: Float!
+    totalGrossAmount: Float
+    totalTaxAmount: Float
+    packageAmount: Float
+    baseRateAmount: Float
+    packageCode: String
+    currencyCode: String!
+    dailyPrices: [DailyPriceInfo!]!
+}
+type DailyPriceInfo {
+    date: String!
+    netPrice: Float!
+}
+
+type HotelContentRateExtraInfo {
+    rateClassification: String!
+    ratePlanCode: String
+    rateOrder: String
+    rateName: String!
+    rateDescription: String
+    rateLongDescription: String
+    additionalDescription: String
+    rateNotes: String
+    rateCategory: String
+    rateTags: [String]
+}
+
+
+input AvailabilitiesSearchCriteria {
+    place: Place
+    startDate: String
+    endDate: String
+    rooms: [Room!]!
+    country: String!
+    language: String!
+    oldWorldChannel: String!
+    channel: String!
+    subChannel: String!
+    companyId: String
+    sort: String
+    sortOption: SortOption
+    page: Int
+    initialPageSize: Int
+    lazyLoadPageSize: Int
+    filters: [String!]
+    ratePlanCodes: [String]
+    promotionCode: String
+    brand: String @deprecated(reason: "Brand is derived internally from hotel information")
+}
+
+type Coordinates {
+    latitude: Float!
+    longitude: Float!
+}
+
+type FacilityItem {
+    code: String
+    name: String
+    description: String
+    weight: Int
+    icon: String
+    isVisible: Boolean
+}
+
+type HotelAddress {
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    country: String
+    postalCode: String
+}
+
+type HotelAvailabilities {
+    multiHotelAvailabilities: [SingleHotelAvailability]
+    promotionsInformation: PromotionsInformation
+    total: Int
+    page: Int
+    pageSize: Int
+}
+
+type Links {
+    detailsPage: String!
+}
+
+type LowestRoomRate {
+    netTotal: Float!
+    currencyCode: String!
+}
+
+type MessagingFlag {
+    text: String
+    description: String
+    color: String
+}
+
+type FlagDetail {
+    text: String
+    textColour: String
+    backgroundColour: String
+    backgroundImage: String
+}
+
+type HotelFlags {
+    isEnabled: Boolean
+    flagOverlay: FlagDetail
+    flagBanner: FlagDetail
+}
+
+input Place {
+    location: String!
+    locationFormat: String!
+    radiusUnit: String!
+    radius: Int!
+}
+
+input Room {
+    type: String
+    adultsNumber: Int!
+    childrenNumber: Int!
+}
+
+type ShortHotelAvailability {
+    distance: Float
+    unit: String
+    lowestRoomRate: LowestRoomRate
+    available: Boolean
+    limitedAvailability: Boolean
+    hasMlosRestriction: Boolean
+    pmsSource: String
+    cellCode: String
+    numberOfRoomsAvailable: Int
+}
+
+type ShortHotelInformation {
+    brand: String!
+    thumbnailImages: [ThumbnailImage!]!
+    hotelFacilities: [FacilityItem!]!
+    links: Links
+    hotelOpeningDate: String
+    messagingFlag: MessagingFlag
+    hotelFlags: HotelFlags
+    coordinates: Coordinates
+    satNavDirections: String
+    address: HotelAddress
+}
+
+type SingleHotelAvailability {
+    hotelId: String!
+    name: String!
+    hotelAvailability: ShortHotelAvailability
+    hotelInformation: ShortHotelInformation
+}
+
+input SortOption {
+    rcPriceModifier: Float!
+    rcDistanceModifier: Float!
+    rcHubModifier: Float
+}
+
+type ThumbnailImage {
+    imageSrc: String
+    tags: [String!]!
+}
+
+type PromotionsInformation {
+    showPromo: Boolean
+    isWithinPromoWindow: Boolean
+    promotionCode: String
+    landingPage: String
+    promoBannerColour: String
+    promoBannerIcon: String
+    promoBannerTitle: String
+    promoBannerSubtitle: String
+    promoInvalidMessage: String
+    promoExpiredMessage: String
+    promoAmendMessage: String
+    promoBookingInfo: PromoBookingInfo
+    promoBox: PromoBoxLabels
+    termsLink: String
+    appPromoBannerTitle: String
+    appPromoBannerSubtitle: String
+    appPromoInvalidMessage: String
+    appPromoExpiredMessage: String
+    appPromoAmendMessage: String
+    promoKind: ContentPromoKind
+    promoBoxStatus: PromoBoxStatus
+    promoBoxMessageKey: String
+    errorRateAndRoomMessage: String
+    promoBannerVisibility: [String] 
+}
+
+enum PromoBoxStatus {
+    EMPTY
+    INVALID
+    CODE_ALREADY_APPLIED
+    CODE_EXPIRED
+    UNAVAILABLE
+    SUCCESS
+    MIN_ROOMS_NOT_MET 
+    MAX_ROOMS_EXCEEDED 
+}
+
+enum ContentPromoKind {
+    LANDING_PAGE
+    SITE_WIDE
+    GENERIC
+    UNIQUE
+}
+
+type PromoBoxLabels  {
+    title: String
+    button: String
+    whenInvalid: String
+    whenMultipleRedeem: String
+    whenSuccess: String
+    whenEmpty: String
+    whenCodeExpired: String
+    whenUnavailable: String
+    whenCodeAlreadyApplied: String
+    whenMinRoomsNotMet: String
+    whenMaxRoomsExceeded: String 
+}
+
+type PromoBookingInfo {
+    ratePlanCode: String
+    promotionCode: String
+}
+
+
+type PromotionsConfig {
+    promoItems: [PromotionItem!]!
+    metaPromoRateMappingDtos: [MetaPromoRateMappingDtos!]!
+}
+
+type MetaPromoRateMappingDtos {
+    rate: String!
+    code: String!
+}
+
+type PromotionItem {
+    enabled: Boolean!
+    promoCode: String!
+    landingPage: String
+    numberOfNights: Int
+    maxRooms: Int
+    bookingStartDate: String
+    bookingEndDate: String
+    stayStartDate: String
+    stayEndDate: String
+    promoBannerColour: String
+    promoBannerIcon: String
+    promoBannerTitle: String
+    promoBannerSubtitle: String
+    promoInvalidMessage: String
+    promoExpiredMessage: String
+}
+

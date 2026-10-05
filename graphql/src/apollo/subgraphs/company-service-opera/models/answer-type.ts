@@ -1,0 +1,4 @@
+enum AnswerType {
+  F,
+  U
+}

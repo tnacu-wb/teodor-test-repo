@@ -1,0 +1,18 @@
+<html>
+<head>
+    <title>3-D Secure V2 Authentication</title>
+</head>
+<body>
+    <script type="text/javascript">
+        [(${commentStart})]
+        try {
+            parent.postMessage("{\"threeDSecureV2\": true, \"sessionId\": \"[[${sessionId}]]\", \"datacashReference\":  \"[[${datacashReference}]]\", \"gatewayRecommendation\": \"[[${gatewayRecommendation}]]\", \"transactionId\":  \"[[${transactionId}]]\", \"success\":  [[${success}]]}", "[(${domainUrl})]");
+        } catch (error) {
+            if (console) {
+                console.log(error);
+            }
+        }
+        [(${commentEnd})]
+    </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+export const COMPANY_DATA_ULTIMATE_WIFI = '5';

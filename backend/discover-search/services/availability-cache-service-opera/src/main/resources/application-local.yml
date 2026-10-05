@@ -1,0 +1,93 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      key-prefix: "Availability-Cache-Service-Opera"
+      content-entity-service-key-prefix: "Content-Entity-Service"
+      use-key-prefix: true
+
+  datasource:
+    reader:
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: postgres
+    hikari:
+      connectionTimeout: 10000
+      idleTimeout: 240000
+      maxLifetime: 300000
+      maxPoolSize: 10
+
+  data:
+    redis:
+      cluster:
+        max-redirects: 5
+        nodes: localhost:6379
+      ssl:
+        enabled: false
+
+  liquibase:
+    # Old - keep it if you want to keep using the old approach
+    change-log: classpath:sql/liquibase/changelog/db.changelog-master.xml
+
+    # New - the modern, right Liquibase approach
+    # change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/postgres
+    user: postgres
+    password: postgres
+
+config:
+  httpClient:
+    connectionTimeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+    responseTimeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  service:
+    content-service:
+      host: ${CONTENT_SERVICE_HOST:http://localhost:9106}
+      hotelInformationEndpoint: "/v1/content/hotels/{hotelId}/information"
+      globalConfigEndpoint: "/v1/content/global-config"
+    rules-agent:
+      host: ${RULES_AGENT_HOST:http://localhost:9108}
+      roomSubstitutionEndpoint: "/v1/rules/room-substitutions"
+      wbRoomTypes:
+        - "SB"
+        - "DB"
+        - "FAM"
+        - "TWIN"
+        - "DIS"
+
+feign-clients:
+  aem:
+    url: https://www.beta.premierinn.digital
+  snowdrop:
+    host: https://api-uat.whitbread.co.uk
+
+feign:
+  content-service:
+    url: http://localhost:9058
+
+low:
+  inventory:
+    threshold: 5
+
+enable:
+  citytax:
+    currency: false
+
+db:
+  batchSize: 1
+
+data:
+  validation:
+    enabled: true
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'

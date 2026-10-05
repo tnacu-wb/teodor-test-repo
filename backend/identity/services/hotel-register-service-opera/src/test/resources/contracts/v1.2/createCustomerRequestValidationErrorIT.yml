@@ -1,0 +1,34 @@
+description: Should return validation error
+request:
+  method: POST
+  url: /customers/hotels?business=false
+  headers:
+    Content-Type: application/json
+  body:
+    {
+      "bookingPreference": {
+        "reason": "BUSINESS",
+        "roomRequirements": {
+          "adults": 1,
+          "children": 0,
+          "cotRequired": false,
+          "hotelBrand": "PI",
+          "smoking": false,
+          "type": "DB"
+        }
+      },
+      "companyId": "",
+      "companyName": ""
+    }
+response:
+  status: 400
+  headers:
+    Content-Type: application/json
+  body:
+       {  
+           "code":"001",
+           "details":[
+              "password must not be null",
+              "contactDetail must not be null"
+           ]
+        }

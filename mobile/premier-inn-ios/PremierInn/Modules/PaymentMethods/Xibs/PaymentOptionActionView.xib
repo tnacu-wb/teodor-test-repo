@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="PremierInnSans-Regular.ttf">
+            <string>PremierInnSans</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PaymentOptionActionView" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zeg-rq-boC">
+                    <rect key="frame" x="16" y="0.0" width="304" height="1"/>
+                    <color key="backgroundColor" red="0.85490196078431369" green="0.88235294117647056" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="Juh-gR-VBh"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Grr-lr-ohO">
+                    <rect key="frame" x="16" y="17.5" width="248" height="21"/>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
+                    </accessibility>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="1S2-dR-hq4"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                    <color key="textColor" red="0.31764705882352939" green="0.11764705882352941" blue="0.38431372549019605" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="navigationChevron" translatesAutoresizingMaskIntoConstraints="NO" id="1L8-3y-j01">
+                    <rect key="frame" x="280" y="16" width="24" height="24"/>
+                    <color key="tintColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                    </accessibility>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="24" id="GLB-CX-t1S"/>
+                        <constraint firstAttribute="height" constant="24" id="n5n-sN-JbR"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="1L8-3y-j01" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="24Z-GB-jg6"/>
+                <constraint firstAttribute="trailing" secondItem="1L8-3y-j01" secondAttribute="trailing" constant="16" id="KGe-8p-r2l"/>
+                <constraint firstAttribute="trailing" secondItem="Zeg-rq-boC" secondAttribute="trailing" id="Ohx-VN-Ogv"/>
+                <constraint firstItem="1L8-3y-j01" firstAttribute="leading" secondItem="Grr-lr-ohO" secondAttribute="trailing" constant="16" id="ROW-dg-hVD"/>
+                <constraint firstItem="Zeg-rq-boC" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="bPE-Hu-CW6"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="1L8-3y-j01" secondAttribute="bottom" constant="16" id="bej-jy-yPZ"/>
+                <constraint firstItem="Grr-lr-ohO" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="gUY-fX-IhW"/>
+                <constraint firstItem="Zeg-rq-boC" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="olN-Ai-dED"/>
+                <constraint firstItem="Grr-lr-ohO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="pV5-x0-oNx"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="action" destination="Grr-lr-ohO" id="AXd-XS-R3a"/>
+                <outlet property="horizontalDividerLeftSpacingConstraint" destination="olN-Ai-dED" id="7KO-mb-yO7"/>
+                <outlet property="separatorView" destination="Zeg-rq-boC" id="gt3-8V-CeK"/>
+            </connections>
+            <point key="canvasLocation" x="132" y="154"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="navigationChevron" width="24" height="24"/>
+    </resources>
+</document>

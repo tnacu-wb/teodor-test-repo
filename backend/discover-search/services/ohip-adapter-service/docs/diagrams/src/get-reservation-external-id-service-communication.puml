@@ -1,0 +1,13 @@
+@startuml
+entity "Reservation Entity Service" as A
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OHIP
+entity OPERA
+
+A -> PMS: GET /adp/v1/reservations/external?externalReferenceId={{externalReferenceId}}
+PMS -> OHIP: GET /ohip/v1/reservations/external?externalReferenceId={{externalReferenceId}}
+OHIP -> OPERA: GET /rsv/v1/reservations?externalReferenceIds={{externalReferenceIds}}&fetchInstructions=Reservation
+OHIP <- OPERA: ReservationsDetailsDto
+PMS <- OHIP: ReservationsDetailsDto
+A <- PMS: ReservationsDetailsDto
+@enduml

@@ -1,0 +1,60 @@
+query getSearchBookingsResults(
+  $bookingReference: String!
+  $bookerLastName: String!
+  $guestLastName: String!
+  $bookerPostcode: String!
+  $hotelId: String!
+  $bookerEmail: String!
+  $bookerPhone: String!
+  $arrivalDate: String!
+  $cancellationDate: String!
+  $companyName: String!
+  $thirdPartyBookingReferenceNumber: String!
+  $limit: Int!
+  $offset: Int!
+) {
+  searchBookings(
+    searchBookingsCriteria: {
+      bookingReference: $bookingReference
+      bookerLastName: $bookerLastName
+      guestLastName: $guestLastName
+      bookerPostcode: $bookerPostcode
+      hotelId: $hotelId
+      bookerEmail: $bookerEmail
+      bookerPhone: $bookerPhone
+      arrivalDate: $arrivalDate
+      cancellationDate: $cancellationDate
+      companyName: $companyName
+      thirdPartyBookingReferenceNumber: $thirdPartyBookingReferenceNumber
+      limit: $limit
+      offset: $offset
+      }
+  ) {
+    bookings {
+      bookingReference
+      currencyCode
+      hotelId
+      sourcePms
+      status
+      hotelName
+      stayingGuests {
+        firstName
+        lastName
+        title
+      }
+      totalCost
+      booker {
+        firstName
+        lastName 
+        title
+      }
+      arrivalDate
+      departureDate
+    }
+    limit
+    hasMore
+    offset
+    totalPages
+    totalResults
+  }
+}

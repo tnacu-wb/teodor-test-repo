@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        app:cardElevation="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/generic_padding_16"
+        app:cardBackgroundColor="@color/light_grey_5"
+        app:cardCornerRadius="@dimen/card_default_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/need_help_title"
+                style="@style/Header4Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/generic_margin_16"
+                android:text="@string/need_help"
+                android:textAlignment="viewStart"
+                android:textColor="@color/grey_dark"
+                app:layout_constraintBottom_toTopOf="@id/call_us_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/call_us_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_8"
+                android:background="@drawable/call_us_card_shape"
+                android:paddingHorizontal="@dimen/generic_padding_4"
+                android:paddingVertical="@dimen/generic_padding_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/need_help_title">
+
+                <ImageView
+                    android:id="@+id/view_call_us_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:contentDescription="@string/call_us"
+                    android:focusable="true"
+                    android:padding="@dimen/generic_padding_8"
+                    android:src="@drawable/ic_call_outline"
+                    app:layout_constraintBottom_toTopOf="@id/view_call_us_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/view_call_us_label"
+                    style="@style/BodySmallRegular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/generic_margin_4"
+                    android:text="@string/call_us"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_dark"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_call_us_button" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/view_call_us_description"
+                style="@style/SubtextRegular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_8"
+                android:layout_marginBottom="@dimen/generic_padding_16"
+                android:textAlignment="viewStart"
+                android:textColor="@color/grey_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/call_us_container"
+                tools:text="@string/call_view_cost" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

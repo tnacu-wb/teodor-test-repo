@@ -1,0 +1,32 @@
+{
+  "id" : "2e8424c0-7ace-4a00-b98f-e1a64f2badee",
+  "request" : {
+    "url" : "/marketing/hotels/newsletter/get",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['requestId'] == 'fsytdfxusdgcilugasld')]"
+    }, {
+      "matchesJsonPath" : "$.['contactChannel'][?(@.['contactChannelType'] == 'Email')]"
+    }, {
+      "matchesJsonPath" : "$.['contactChannel'][?(@.['contactChannelValue'] == 'email500@housemark.co.uk')]"
+    }, {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'WINN')]"
+    } ]
+  },
+  "response" : {
+    "status" : 500,
+    "body" : "{\"code\":\"3001\",\"details\":[\"Unknown error.\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "2e8424c0-7ace-4a00-b98f-e1a64f2badee"
+}

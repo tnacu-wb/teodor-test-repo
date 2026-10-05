@@ -1,0 +1,249 @@
+Starting test worker 18
+https://whitbread.yourzephyr.com/flex/html5/tcr/467;testcaseId=1282640;viewType=list;pageSize=50;pageView=search;offset=0;searchText=testcaseId%20%3D%20380779;searchType=zql;inRelease=true;currentIndex=1;usageHistoryGridSize=50
+-> Given I want to book a room as a PI guest user
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_web_push_notifications=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_ib_user_pilot=false
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_ib_user_pilot=false,release_pi_web_push_notifications=true
+Get reservations for hotel id "HEAPTI", surname "Testersons", arrivalStartDate "Wed Sep 02 2026 19:34:11 GMT+0300 (Eastern European Summer Time)", limit "1000", offset "0".
+Switch to default content from IFrame
+Room found for the period: 2026-09-21 - 2026-09-22
+-> When I navigate to Destination landing page (DLP)
+Navigating to DLP: hotels/england/west-midlands/birmingham.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+Validating DLP page loaded
+-> Then I should see that the DLP page is displayed with its elements
+Dismissing notification popup if present
+Getting DLP path from URL
+Validate Dlp Content Service against API
+Validate Hotel title, description and picture
+Validate Seo section
+Validating DLP page elements
+-> When I check the custom notification prompt
+                        And I click “Allow”
+-> Then the custom prompt closes, the close count is increased by one and the last closed time is updated
+-> When I check Trip Advisor on Grid view
+-> Then I can click on reviews link & a new tab will open with HDP focused on reviews section.
+Validating TripAdvisor section with 12 reviews
+Validating TripAdvisor review link opens to: /de/de/hotels/england/west-midlands/birmingham/birmingham-city-centre-exchange-square.html
+Clicking TripAdvisor review link
+Navigating to DLP: hotels/england/west-midlands/birmingham.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+-> When I click on "Map View"
+-> Then the page should change from a list view to a map view
+Switching to map view
+-> When I check hotel card pins from the Map view
+-> Then each hotel will display:   
+                        - hotel image
+                        - hotel name
+                        - distance from the location
+                        - facilities
+                        - TripAdvisor rating
+                        - option to go to the hotel detail page
+Validating map view cards for 14 hotels
+-> When I click on a map pin
+                        And I click on the hotel card details
+-> Then I am redirected to the Hotel detail page for that hotel
+                        And "Back" action from HDP brings me back on DLP - Map view
+Clicking map marker at hotel index 0
+Clicking view hotel button on map card
+Validating hotel details page loaded
+Validating DLP page loaded
+Verifying map view is active
+Switching to grid view
+-> When I check the search results in map view, after loading more hotels
+-> Then I should see that the extended list of hotels from "Show more" - Grid view, are visible on the Map view also
+Validating hotel list elements in grid view
+Validating hotel distance is displayed
+Validating all hotel cards show distance
+-> When I check the hotels list from Grid view, after loading more hotels
+-> Then I should see all hotels displayed in the list
+Clicking show more until all hotels loaded
+Clicking show more button
+Get hotels list for Destination landing page from Dictionary
+Validating hotel list elements in grid view
+Getting hotel card count
+Validating map pins match grid cards
+Getting hotel card count
+Switching to map view
+Validating map pins count: 14
+Switching to grid view
+-> When I go to another Destination landing page where Distance from search is not available (restricted from AEM)
+-> Then I should see that the Distance from search is not displayed on hotel cards, on both Grid and Map view
+Navigating to DLP: hotels/england/bedfordshire/luton.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+Validating DLP page loaded
+Dismissing notification popup if present
+Getting DLP path from URL
+Validating all hotel cards hide distance
+Switching to map view
+Validating map view hides hotel distance
+-> When I search for a specific PI brand Hotel for 1 room for 2 adults for 1 night and click on the Search button.
+Opening hotel details page: /hotels/england/greater-london/london/london-heathrow-airport-m4j4.html
+Navigating to localized path: /hotels/england/greater-london/london/london-heathrow-airport-m4j4.html?ARRdd=02&ARRmm=9&ARRyyyy=2026&NIGHTS=2&ROOMS=1&ADULT1=1&CHILD1=0&COT1=0&INTTYP1=DB
+Pre-setting consent cookies
+Dismissing notification popup if present
+Clearing location input field
+Searching hotels: London Heathrow Airport (M4/J4) (2026-09-21 to 2026-09-22)
+Validating hotel details page loaded
+Validating navigated to hotel with slug: /hotels/england/greater-london/london/london-heathrow-airport-m4j4.html
+-> Then I should be directed to Hotel details page of my selected hotel.
+Validating hotel title: London Heathrow Airport (M4/J4) Hotel
+-> When I select FLEX rate available and check the Booking summary panel
+Selecting flex rate option
+Getting selected room name
+-> Then it should be populated with the selected rate and room class information
+Getting selected rate name
+Validating booking summary rate plan: Flex
+Validating total price rate
+Clicking see breakdown link
+Extracting prices and dates per night
+Getting total room price from HDP breakdown
+Extracting prices and dates per night
+Validating prices per night in HDP breakdown
+-> When I click on Book now button.
+Clicking book now button
+Closing Premier Plus upgrade modal if present
+Handling bathroom selection page if displayed
+-> Then I'll be directed to the Ancillaries page to continue the flow
+Validating ancillaries page loaded
+Extracting basket reference ID from URL
+Created reservation with "AQN-3be2d204-ef83-4ba6-af3b-23dd26b391fd" basket reference for "HEAPTI" hotel id.
+Extracting basket reference ID from URL
+Validate basket status OPEN equals expected status OPEN
+Expanding booking summary section on mobile if needed
+-> When I select "Breakfast" for both adults and check the Booking summary panel.
+-> Then I should see the meals cost added to my reservation per night for each adult 
+            for which was selected from each room
+Getting booking summary total
+Expanding booking summary section on mobile if needed
+Adding breakfast for 2 adults
+Getting booking summary total
+Expanding booking summary section on mobile if needed
+Validating adult meals for room 0: Unbegrenztes Frühstücksbuffet
+Expanding booking summary section on mobile if needed
+-> When I click on the continue button from the Ancillaries page panel
+Clicking continue button
+-> Then I should be directed to Guest details
+Validating guest details page loaded
+Expanding booking summary on mobile if needed
+Click leisure Radio Button
+Filling booker information: John Smith
+Selecting manual address entry
+Filling address: 10 Gatwick Road, RH6 0PH
+Reading normalised guest details from form
+-> When I choose the booking purpose as 'Leisure'
+                     ->  And click on the Continue button
+Clicking continue to payment
+-> Then I should be directed to the Payments page
+Validating payment page loaded
+Getting total cost from payment page
+-> When I check the booking summary from the Payments page with £3 donation
+-> Then  I should see that the donation is included in the total price.
+Getting total cost from payment page
+Validating total cost: £91 (GBP)
+Getting total cost from payment page
+-> When I select the pay on arrival option 
+                    -> And guarantee the reservation with a New Credit/ Debit card
+                    -> And click on Continue button
+-> Then I should be directed to the Payment Details page to enter my Card details
+Selecting pay on arrival payment option
+Selecting PIBA card payment type
+Clicking continue to payment details
+-> When I fill in the details for my New BAC card and click the Confirm button.
+Switching to payment details iframe
+Entering card details for: Test PIBA Cardholder
+Switching to payment details iframe
+Submitting payment
+Confirming payment via 3D Secure challenge
+Waiting for booking confirmation page after 3D Secure
+-> Then I should be directed to the Booking Confirmation page having the booking information displayed and confirmed.
+Validate Booking confirmation page was reached
+Get booking reference from Confirm booking page
+Validate booking details intro section on Confirm booking page
+Validate room details section for room 1 on Confirm booking page
+Validate hotel directions section on Confirm booking page
+Validate total cost amount and payment message on Confirm booking page
+Validate hotel
+Validate staying dates
+Validate rooms occupancy
+Validate room types
+Validate rates per night
+Validate room total price
+Validate meals for all rooms
+Validate total cost details
+Validate payment card number is correct
+-> When I check in Opera UI platform for my newly submitted reservation
+-> Then I should see the reservation having the same details as the ones submitted from the PI website
+Validate city tax is correctly applied. Expected false
+Validate Guest Details
+Validate billing booker
+Validate reason for stay=LEI
+[Confirmation] API cross-validation completed successfully
+-> When I check in Opera UI platform the payment type and methods for my reservation
+-> When I want to amend a reservation, and I click on the Manage booking and Submit the booking reference and Arrival date
+Pre-setting consent cookies
+Dismissing notification popup if present
+Validate Manage Booking modal is visible
+Search booking with information: bookingReference = AQN5042850, bookingSurname = Smith, arrivalDate = 2026-09-21
+Close date picker by clicking outside of it
+-> Then Booking information Card should be displayed
+Validate Manage booking page was reached
+-> When I edit the room to change the room type to Family by adding a child
+Clicking Amend Booking button
+Validating amendment page loaded
+Clicking Room and Guests section
+Editing room at index 0
+Selecting 1 children for room
+Selecting room type: Familie
+Clicking check availability button
+Clicking update room button
+Validating room 0 info card contains: Familienzimmer
+Validating room 0 successfully updated
+Validating adults/children for rooms: 0 (2 adults, 1 children)
+-> Then the changes should be successfully saved and the total price remains the same in the booking summary side of the screen
+Validating total cost is unchanged at £91
+Validating total cost amount £91 and currency GBP
+-> When I press Confirm changes button
+Clicking confirm changes button
+-> Then I am being redirected to the booking confirmation page and all the changes made for that reservation are reflected in the page
+Validate Booking confirmation page was reached
+Validate amend success notification that is displayed=true
+Validate adults and children number
+Validate the Room type label using: Familienzimmer
+Validate total cost amount and currency
+Total cost - Validate that the correct amount and currency symbol are displayed
+Validate basket status COMPLETED equals expected status COMPLETED
+Validating booking reference: AQN5042850
+Validating lead guest name for room 0: John Smith
+Validating room 0 guests: 2 Erwachsene, 1 Kind
+Validating Pay On Arrival total cost: £91
+[Amendment] Amendment flow completed successfully
+Pre-setting consent cookies
+Dismissing notification popup if present
+Validate Manage Booking modal is visible
+Search booking with information: bookingReference = AQN5042850, bookingSurname = Smith, arrivalDate = 2026-09-21
+Close date picker by clicking outside of it
+Validate Manage booking page was reached
+-> When I cancel the booking
+Clicking Cancel Booking button
+Confirming cancellation in modal
+Validating cancellation success message for booking: AQN5042850
+-> Then I should see Booking status as 'Cancelled'
+Validate payment status is COMPLETED
+Validate Reservation is cancelled in opera
+Get reservations 5102351 for hotel id "HEAPTI".
+Pre-setting consent cookies
+Dismissing notification popup if present
+Validate Manage Booking modal is visible
+Search booking with information: bookingReference = AQN5042850, bookingSurname = Smith, arrivalDate = 2026-09-21
+Close date picker by clicking outside of it
+Validate Manage booking page was reached
+Validating booking reference ID is: AQN5042850
+Validating cancelled BIC with 1 room(s)
+[Cancellation] Cancellation flow completed successfully
+Last URL: https://www.uat.premierinn.digital/de/de/account/dashboard?bookingReference=AQN5042850

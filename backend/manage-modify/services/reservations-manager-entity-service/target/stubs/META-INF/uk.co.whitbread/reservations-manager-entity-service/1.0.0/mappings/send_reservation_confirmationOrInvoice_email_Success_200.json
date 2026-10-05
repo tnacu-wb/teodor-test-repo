@@ -1,0 +1,27 @@
+{
+  "id" : "49d5cd27-6d88-410d-b840-a375d3872ed2",
+  "request" : {
+    "urlPath" : "/v1/bookings/confirmation",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "WB-Authorization" : {
+        "equalTo" : "Bearer dummy-token"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['email'] == 'test@mail.com')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'DUNCRO')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['bookingReference'] == 'AKU8375015')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "49d5cd27-6d88-410d-b840-a375d3872ed2"
+}

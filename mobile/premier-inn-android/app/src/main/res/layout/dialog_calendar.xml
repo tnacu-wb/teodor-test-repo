@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/calendar_base"
+    android:layout_width="340dp"
+    android:layout_height="560dp"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="340dp"
+        android:layout_height="560dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary">
+
+                <TextView
+                    android:id="@+id/label_calendar_arrival_date"
+                    style="@style/CalendarArrivalDateStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/generic_margin_16"
+                    android:layout_marginTop="@dimen/generic_margin_16"
+                    android:text="@string/select_arrival_date" />
+
+                <ImageView
+                    android:id="@+id/view_cancel_calendar"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:padding="@dimen/generic_padding_16"
+                    android:src="@drawable/ic_cross" />
+
+                <TextView
+                    android:id="@+id/label_today_date"
+                    style="@style/TodayDateLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/label_calendar_arrival_date"
+                    android:layout_marginTop= "@dimen/generic_margin_10"
+                    android:layout_marginBottom="@dimen/generic_margin_16"
+                    tools:text="Wed 3rd May" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textview_calendar_today_button"
+                style="@style/TodayButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="@dimen/generic_padding_20"
+                android:text="@string/today"
+                android:visibility="invisible"
+                tools:visibility="visible" />
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/view_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/generic_margin_16"
+                app:mcv_arrowColor="?attr/colorPrimary"
+                app:mcv_calendarMode="month"
+                app:mcv_dateTextAppearance="@style/CalendarDateTextAppearance"
+                app:mcv_firstDayOfWeek="monday"
+                app:mcv_headerTextAppearance="@style/CalendarMonthTextAppearance"
+                app:mcv_leftArrowMask="@drawable/ic_calendar_left"
+                app:mcv_rightArrowMask="@drawable/ic_calendar_right"
+                app:mcv_showOtherDates="decorated_disabled"
+                app:mcv_tileHeight="72dp"
+                app:mcv_tileWidth="44dp"
+                app:mcv_weekDayTextAppearance="@style/CalendarWeekDayTextAppearance" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

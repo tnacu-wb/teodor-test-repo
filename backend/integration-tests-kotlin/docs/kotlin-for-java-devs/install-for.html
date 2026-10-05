@@ -1,0 +1,1073 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inside installFor</title>
+<style>
+  :root {
+    --paper: #FFF0E5;
+    --surface: #FFFFFF;
+    --surface-2: #F6E5D5;
+    --ink: #10162F;
+    --ink-soft: #585E74;
+    --line: #E8D5C3;
+    --border: #10162F;
+    --accent: #3A10E5;
+    --accent-soft: #FFFAE5;
+    --java: #6E4A00;
+    --java-soft: #FFD300;
+    --code-bg: #10162F;
+    --code-ink: #EDEFFB;
+    --code-kw: #FFD300;
+    --code-str: #6FE0B2;
+    --code-type: #A8C3FF;
+    --code-cmt: #7E86A5;
+    --on-accent: #FFFFFF;
+    --good: #2E6B3E;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #10162F;
+      --surface: #1A2141;
+      --surface-2: #262E55;
+      --ink: #EFF1FB;
+      --ink-soft: #9AA1C0;
+      --line: #2A3158;
+      --border: #4A528F;
+      --accent: #A09CFF;
+      --accent-soft: #2B2508;
+      --java: #E8C05A;
+      --java-soft: #5C4D00;
+      --code-bg: #0A0E24;
+      --code-ink: #E8EBF8;
+      --on-accent: #10162F;
+      --good: #7FBE8F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0C102A;
+    --surface: #151A3A;
+    --surface-2: #232A56;
+    --ink: #EFF1FB;
+    --ink-soft: #9AA1C0;
+    --line: #262D58;
+    --border: #454E8F;
+    --accent: #8D9CFF;
+    --accent-soft: #232B63;
+    --java: #E8C05A;
+    --java-soft: #3A3113;
+    --code-bg: #0A0E24;
+    --code-ink: #E8EBF8;
+    --good: #7FBE8F;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  .sans { font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  code, pre {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.86em;
+  }
+  p > code, li > code, td > code, h2 > code, h3 > code, dt > code {
+    background: var(--surface-2);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .wrap {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 46rem);
+    gap: 3rem;
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+  @media (max-width: 58rem) {
+    .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    nav.toc { display: none; }
+  }
+
+  header.masthead {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 2.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  h1 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    text-wrap: balance;
+    margin-top: 0.5rem;
+  }
+  .standfirst {
+    margin-top: 0.9rem;
+    max-width: 46rem;
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    padding-top: 2.5rem;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.85rem;
+  }
+  nav.toc .toc-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.6rem;
+  }
+  nav.toc ol { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+  nav.toc a {
+    display: block;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 0.22rem 0.6rem;
+    border-left: 2px solid var(--line);
+  }
+  nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-left-color: var(--accent); }
+  nav.toc ol ol a { padding-left: 1.4rem; font-size: 0.8rem; }
+
+  main { padding-top: 2.5rem; min-width: 0; }
+  main > section + section { margin-top: 3.5rem; }
+  h2 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    padding-top: 0.5rem;
+  }
+  h2 .index {
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    margin-right: 0.4rem;
+  }
+  h3 {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+  section > p, section > ul, section > ol { margin-top: 0.9rem; }
+  section li + li { margin-top: 0.35rem; }
+  a { color: var(--accent); }
+
+  /* code panels */
+  .panel {
+    margin-top: 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--code-bg);
+  }
+  .panel-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.4rem 0.6rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .panel-bar .file {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    margin-left: auto;
+    padding-left: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tab {
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    background: none;
+    color: var(--ink-soft);
+    padding: 0.28rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .tab[aria-selected="true"].kt { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .tab[aria-selected="true"].jv { background: var(--java-soft); color: var(--ink); border-color: var(--border); border-radius: 999px; }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .panel pre {
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    color: var(--code-ink);
+    line-height: 1.55;
+  }
+  .panel pre[hidden] { display: none; }
+  .k { color: var(--code-kw); font-weight: 600; }
+  .s { color: var(--code-str); }
+  .t { color: var(--code-type); }
+  .c { color: var(--code-cmt); font-style: italic; }
+  .hl { background: rgba(255, 211, 0, 0.10); display: inline-block; width: 100%; }
+
+  /* feature cards */
+  article.feature {
+    margin-top: 2.2rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--line);
+  }
+  .feature-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem; }
+  .kw-chip {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--java-soft);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+  }
+  .java-analogy {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+  .java-analogy::before { content: "Java nearest thing: "; font-weight: 600; }
+  article.feature > p { margin-top: 0.8rem; }
+
+  details.without {
+    margin-top: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  details.without > summary {
+    cursor: pointer;
+    padding: 0.6rem 0.9rem;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    list-style: none;
+  }
+  details.without > summary::-webkit-details-marker { display: none; }
+  details.without > summary::before { content: "▸ "; color: var(--ink-soft); }
+  details.without[open] > summary::before { content: "▾ "; }
+  details.without > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  details.without .inner { padding: 0 0.9rem 0.9rem; }
+  details.without .inner p { margin-top: 0.5rem; }
+  details.without .panel { margin-top: 0.6rem; }
+
+  /* frame diagram */
+  .frame {
+    margin-top: 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.82rem;
+  }
+  .frame-row { display: flex; align-items: center; gap: 0.8rem; padding: 0.55rem 0.9rem; }
+  .frame-row + .frame-row { border-top: 1px solid var(--line); }
+  .frame-row.supplied { background: var(--accent-soft); }
+  .frame-row.yours { background: var(--surface); }
+  .frame-row .who {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex: 0 0 6.5rem;
+  }
+  .frame-row.supplied .who { color: var(--java); }
+  .frame-row.yours .who { color: var(--ink-soft); }
+  .frame-row .what { min-width: 0; overflow-x: auto; white-space: nowrap; }
+
+  table {
+    margin-top: 1rem;
+    border-collapse: collapse;
+    width: 100%;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.88rem;
+  }
+  th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+  .table-scroll { overflow-x: auto; }
+
+  .callout {
+    margin-top: 1.1rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--java-soft);
+    background: var(--surface);
+    border-radius: 8px;
+  }
+  .callout.warn { border-left-color: var(--java-soft); }
+  .callout p + p { margin-top: 0.5rem; }
+
+  footer.colophon {
+    margin-top: 4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="eyebrow">integration-tests-kotlin · docs for Java developers</p>
+  <h1>Inside installFor</h1>
+  <p class="standfirst">
+    How a <code>Booking</code> becomes WireMock mappings: selection, leftover checks,
+    ownership stamping, and registration. Each Kotlin keyword in that path is explained
+    against the nearest Java idea. No Kotlin experience assumed.
+  </p>
+</header>
+
+<div class="wrap">
+
+<nav class="toc sans" aria-label="Contents">
+  <p class="toc-title">Contents</p>
+  <ol>
+    <li><a href="#why">Why this function exists</a></li>
+    <li><a href="#writing">Writing a call</a></li>
+    <li><a href="#flow">The install sequence</a></li>
+    <li><a href="#kotlin">Kotlin, feature by feature</a>
+      <ol>
+        <li><a href="#f-data">data class + copy</a></li>
+        <li><a href="#f-ext">Extension functions</a></li>
+        <li><a href="#f-default">Default + named arguments</a></li>
+        <li><a href="#f-buildlist">buildList + labeled return</a></li>
+        <li><a href="#f-null">?.let, ?:, orEmpty</a></li>
+        <li><a href="#f-select">require + filterNot + in</a></li>
+        <li><a href="#f-suspend">suspend</a></li>
+        <li><a href="#f-internal">internal</a></li>
+      </ol>
+    </li>
+    <li><a href="#cheatsheet">Cheat sheet</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section id="why">
+  <h2><span class="index">1</span>Why this function exists</h2>
+  <p>
+    Journeys run concurrently against four shared WireMock instances. A scenario that
+    hand-picks mappings — or forgets to scope them — either misses the call it meant to
+    mock, or silently consumes another scenario's stub. <code>installFor</code> is the
+    one function that turns scenario data into registered mappings, and it does four
+    jobs that must not diverge:
+  </p>
+  <ul>
+    <li><strong>Select.</strong> <code>Booking</code> describes the world, not one
+        endpoint. One table — <code>defaultStubsFor</code> — decides which logical stubs
+        that world needs.</li>
+    <li><strong>Adjust loudly.</strong> <code>excluded</code> may drop entries from
+        that table, but only IDs the Booking actually selected. A typo fails before
+        any WireMock call, naming the plan.</li>
+    <li><strong>Own.</strong> Every mapping gets this scenario's
+        <code>wb-test-id</code> matcher stamped on in one place. A builder cannot omit
+        it and leave a mapping that serves traffic but survives cleanup.</li>
+    <li><strong>Register.</strong> Each mapping is POSTed to the right WireMock Admin,
+        then recorded as evidence under the stub's ID.</li>
+  </ul>
+  <p>
+    The same <code>MockInstaller.installFor</code> is the local provisioning API's only
+    entry point. A journey and a <code>POST /mock-sessions</code> walk the same path.
+  </p>
+
+  <div class="frame" role="img" aria-label="Diagram: you supply Booking data and optional overrides; the framework selects, validates, scopes, and registers">
+    <div class="frame-row yours"><span class="who sans">you write</span><span class="what">Booking(companies = listOf(company))</span></div>
+    <div class="frame-row yours"><span class="who sans">you write</span><span class="what">installFor(booking)   ← optional excluded</span></div>
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">selectedStubs: defaultStubsFor + unknown-ID check + filterNot</span></div>
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">scopedTo(testId) stamps baggage: wb-test-id=&lt;testId&gt;</span></div>
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">WireMock Admin POST /__admin/mappings  (one call per mapping)</span></div>
+    <div class="frame-row supplied"><span class="who sans">supplied</span><span class="what">evidence: recordInstalledStub(stub.id, mapping, testId)</span></div>
+  </div>
+
+  <p>
+    The Java instinct is a helper that loops a list of stub builders. That helper would
+    still let you pass an ID the Booking never selected, and still let a builder forget
+    the test-ID matcher. Here both mistakes fail at the compiler's neighbour: a leftover
+    check throws, and ownership is applied after the builder returns.
+  </p>
+</section>
+
+<section id="writing">
+  <h2><span class="index">2</span>Writing a call</h2>
+  <p>
+    Inside a scenario, <code>installFor</code> already knows <code>testId</code>. You
+    pass the Booking and, when the happy-path defaults are wrong for this scenario, the
+    IDs to drop.
+  </p>
+
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">What it replaces</button>
+      <span class="file">journeys/companyentity/GetCompanyByIdSpec.kt · journeys/ohip/GetDepositsForReservationIdSpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code>scenario(<span class="s">"GET /v1/companies/id/{id} returns company when id is a corporate id"</span>) {
+    <span class="k">val</span> company = <span class="t">Companies</span>.NEILL_TECHNICAL_SERVICES
+    <span class="k">val</span> booking = <span class="t">Booking</span>(companies = listOf(company))
+
+    installFor(booking)                          <span class="c">// every default this Booking selects</span>
+    <span class="c">// … typed-client call, expect …</span>
+}
+
+scenario(<span class="s">"an Opera deposit lookup failure returns the OHIP deposit error"</span>) {
+    <span class="k">val</span> booking = depositBooking(reservationId = <span class="s">"6004304"</span>)
+    <span class="k">val</span> room = booking.room
+
+    <span class="c">// Exceptional: a downstream rejection cannot coexist as normal Booking world state.</span>
+    installFor(booking, excluded = setOf(<span class="t">OPERA_RESERVATION_DEPOSITS_STUB_ID</span>))
+    installStub(reservationDepositsOperaFailure(booking, room))
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="c">// The shape this replaces: pick stubs by hand, stamp ownership by hand.</span>
+<span class="c">// Each line is forgettable; an unknown ID is silent.</span>
+List&lt;<span class="t">PlannedStub</span>&gt; stubs = defaultStubsFor(booking);
+stubs.removeIf(s -&gt; s.id().equals(<span class="s">"booking.opera.company-profile-search"</span>));
+<span class="k">for</span> (<span class="t">PlannedStub</span> stub : stubs) {
+    wiremock.stub(stampTestId(stub, testId));   <span class="c">// forgettable</span>
+}</code></pre>
+  </div>
+
+  <p>Three author shapes:</p>
+  <div class="table-scroll"><table>
+    <tr><th>Call</th><th>Use when</th></tr>
+    <tr><td><code>installFor(booking)</code></td><td>The Booking's defaults are the world this scenario needs.</td></tr>
+    <tr><td><code>installFor(booking, excluded = setOf(ID))</code></td><td>A default must never reach WireMock. The ID must be one this Booking selected.</td></tr>
+    <tr><td><code>installStub(stub)</code></td><td>A mapping outside the Booking gates, or a later moment in the journey. Direct install, with the stub's own unique ID.</td></tr>
+  </table></div>
+
+  <p>
+    Overriding a default combines the last two shapes: pass the default's ID in
+    <code>excluded</code>, then <code>installStub</code> the override. The override
+    never reuses the default's ID — every custom or error stub declares its own unique
+    stub ID in the <code>custom.&lt;upstream&gt;.&lt;name&gt;</code> style and lives
+    under <code>stubs/&lt;upstream&gt;/custom</code>, so evidence and cleanup identify
+    it unambiguously. That is why <code>GetReservationsByIdsSpec</code> excludes the
+    GET stub (ID <code>booking.opera.get-reservation</code>) and then
+    <code>installStub(getReservationEmpty(…))</code>, whose ID is
+    <code>opera.get-reservation.empty</code>: the empty variant is a different stub
+    with its own identity.
+  </p>
+
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">The Java shape</button>
+      <span class="file">journeys/ohip/GetReservationsByIdsSpec.kt</span>
+    </div>
+    <pre data-lang="kt"><code>installFor(booking, excluded = setOf(<span class="t">OPERA_RESERVATION_GET_STUB_ID</span>))
+installStub(getReservationEmpty(hotelId = booking.hotel.hotelId, reservationId = room.reservationId!!))</code></pre>
+    <pre data-lang="jv" hidden><code>installFor(booking, Set.of(OPERA_RESERVATION_GET_STUB_ID));
+installStub(getReservationEmpty(booking.hotel().hotelId(), room.reservationId()));</code></pre>
+  </div>
+
+  <p>
+    An unknown excluded ID throws
+    <code>IllegalArgumentException</code> before any Admin request, and the message
+    always names <code>This Booking selected: …</code> so you can see the actual plan.
+  </p>
+  <div class="table-scroll"><table>
+    <tr><th>Mistake</th><th>What throws</th></tr>
+    <tr><td>Exclude an ID the Booking did not select</td><td><code>Unknown stub IDs in excluded</code></td></tr>
+  </table></div>
+  <div class="callout warn">
+    <p>
+      <strong><code>installStub</code> is not checked against the plan.</strong> A
+      directly installed stub supplies its own ID and <code>WireMockTarget</code>; only
+      <code>excluded</code> is validated against what the Booking selected.
+    </p>
+  </div>
+</section>
+
+<section id="flow">
+  <h2><span class="index">3</span>The install sequence</h2>
+  <p>
+    Two public functions sit on the author side. <code>ScenarioScope.installFor</code>
+    fills in <code>testId</code> and forwards. <code>MockInstaller.installFor</code> is
+    the shared implementation journeys and provisioning both call.
+  </p>
+
+  <div class="frame" role="img" aria-label="Call tree from a scenario installFor down to WireMock Admin">
+    <div class="frame-row yours"><span class="who sans">you write</span><span class="what">ScenarioScope.installFor(booking, excluded)</span></div>
+    <div class="frame-row supplied"><span class="who sans">forwards</span><span class="what">MockInstaller.installFor(booking, testId, excluded)</span></div>
+    <div class="frame-row supplied"><span class="who sans">selects</span><span class="what">selectedStubs → defaultStubsFor(booking)</span></div>
+    <div class="frame-row supplied"><span class="who sans">selects</span><span class="what">cdhStubs + worldlineStubs + datatransStubs + aemStubs + operaStubs</span></div>
+    <div class="frame-row supplied"><span class="who sans">validates</span><span class="what">unknown excluded IDs → throw, no I/O</span></div>
+    <div class="frame-row supplied"><span class="who sans">adjusts</span><span class="what">filterNot { it.id in excluded }</span></div>
+    <div class="frame-row supplied"><span class="who sans">scopes</span><span class="what">stub.scopedTo(testId)   ← copy + baggage matcher</span></div>
+    <div class="frame-row supplied"><span class="who sans">registers</span><span class="what">wiremock[target].stub(mapping)  then recordInstalledStub</span></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Same logic in Java terms</button>
+      <span class="file">testkit/JourneySpec.kt · testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="c">// ScenarioScope — testId is already in scope:</span>
+<span class="k">suspend fun</span> installFor(
+    booking: <span class="t">Booking</span>,
+    excluded: <span class="t">Set</span>&lt;<span class="t">String</span>&gt; = emptySet(),
+) {
+    mockInstaller.installFor(
+        booking = booking,
+        testId = testId,
+        excluded = excluded,
+    )
+}
+
+<span class="c">// MockInstaller — the shared implementation:</span>
+<span class="k">suspend fun</span> installFor(
+    booking: <span class="t">Booking</span>,
+    testId: <span class="t">String</span>,
+    excluded: <span class="t">Set</span>&lt;<span class="t">String</span>&gt; = emptySet(),
+) {
+    <span class="k">val</span> selected = selectedStubs(booking, excluded)
+
+    <span class="k">if</span> (selected.isEmpty()) {
+        <span class="k">if</span> (excluded.isEmpty()) {
+            evidenceSink?.recordEmptyPlan(<span class="s">"Booking"</span>, testId)
+        } <span class="k">else</span> {
+            evidenceSink?.recordFullyExcludedPlan(<span class="s">"Booking"</span>, excluded, testId)
+        }
+        <span class="k">return</span>
+    }
+
+    <span class="k">for</span> (stub <span class="k">in</span> selected) {
+        installStub(stub, testId)
+    }
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="c">// ScenarioScope hides testId; MockInstaller is the one implementation:</span>
+<span class="k">void</span> installFor(<span class="t">Booking</span> booking,
+               <span class="t">Set</span>&lt;<span class="t">String</span>&gt; excluded) {
+    mockInstaller.installFor(booking, testId, excluded);
+}
+
+<span class="t">List</span>&lt;<span class="t">PlannedStub</span>&gt; selected = selectedStubs(booking, excluded);
+<span class="k">if</span> (selected.isEmpty()) {
+    <span class="k">if</span> (evidenceSink != <span class="k">null</span>) {
+        <span class="k">if</span> (excluded.isEmpty()) evidenceSink.recordEmptyPlan(<span class="s">"Booking"</span>, testId);
+        <span class="k">else</span> evidenceSink.recordFullyExcludedPlan(<span class="s">"Booking"</span>, excluded, testId);
+    }
+    <span class="k">return</span>;
+}
+<span class="k">for</span> (<span class="t">PlannedStub</span> stub : selected) {
+    installStub(stub, testId);
+}</code></pre>
+  </div>
+
+  <p>
+    An empty Booking is a successful no-op: it records empty-plan evidence and does not
+    talk to WireMock. When exclusions empty a plan that did select stubs, the recorded
+    evidence is a fully-excluded plan instead, naming the excluded IDs. A failed registration is not rolled back at failure time; cleanup
+    later finds whatever did get in by the test-ID matcher, so a partial install is still
+    reclaimed.
+  </p>
+
+  <h3>What a stub is</h3>
+  <p>
+    Each public stub builder returns one <code>PlannedStub</code>: an ID, a WireMock
+    target, and an ordered list of mappings. The constructor rejects an empty mappings
+    list. Builders return <em>unscoped</em> mappings; <code>installStub</code> stamps
+    ownership just before registration, for both the default path and a direct
+    <code>installStub</code> call.
+  </p>
+
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      <span class="file">stubs/PlannedStub.kt · stubs/opera/OperaReservationDepositsStubs.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">data class</span> <span class="t">PlannedStub</span>(
+    <span class="k">val</span> id: <span class="t">String</span>,
+    <span class="k">val</span> target: <span class="t">WireMockTarget</span>,
+    <span class="k">val</span> mappings: <span class="t">List</span>&lt;<span class="t">StubMapping</span>&gt;,
+)
+
+<span class="k">const val</span> <span class="t">OPERA_RESERVATION_DEPOSITS_STUB_ID</span> = <span class="s">"booking.opera.reservation-deposits"</span>
+
+<span class="k">fun</span> reservationDeposits(booking: <span class="t">Booking</span>, rooms: <span class="t">List</span>&lt;<span class="t">BookingRoom</span>&gt;): <span class="t">PlannedStub</span> =
+    <span class="t">PlannedStub</span>(
+        id = <span class="t">OPERA_RESERVATION_DEPOSITS_STUB_ID</span>,
+        target = <span class="t">WireMockTarget</span>.OPERA,
+        mappings = rooms.map { room -&gt; reservationDepositsMapping(booking, room) },
+    )</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">public record</span> <span class="t">PlannedStub</span>(<span class="t">String</span> id, <span class="t">WireMockTarget</span> target, <span class="t">List</span>&lt;<span class="t">StubMapping</span>&gt; mappings) {
+    <span class="k">public</span> <span class="t">PlannedStub</span> {
+        <span class="k">if</span> (mappings.isEmpty()) <span class="k">throw new</span> <span class="t">IllegalArgumentException</span>(…);
+    }
+}</code></pre>
+  </div>
+
+  <h3>Exclude, in place</h3>
+  <p>
+    A deposit Booking selects the reservation-deposits default among its Opera reads.
+    Excluding it drops that one ID and keeps the remaining defaults in order; the
+    override then arrives by <code>installStub</code>, under its own ID:
+  </p>
+
+  <div class="frame" role="img" aria-label="Diagram: defaults, then exclude, then the list that gets installed, then the direct install">
+    <div class="frame-row supplied"><span class="who sans">defaults</span><span class="what">opera-reads · opera-amounts · opera-deposits · opera-folios · …</span></div>
+    <div class="frame-row yours"><span class="who sans">excluded</span><span class="what">booking.opera.reservation-deposits              ← dropped</span></div>
+    <div class="frame-row supplied"><span class="who sans">installed</span><span class="what">opera-reads · opera-amounts · opera-folios · …   ← order of remaining defaults kept</span></div>
+    <div class="frame-row yours"><span class="who sans">installStub</span><span class="what">custom.opera.reservation-deposits-failure       ← own ID, direct install</span></div>
+  </div>
+
+  <p>
+    That algebra is <code>selectedStubs</code>. After the unknown-ID check it is one
+    collection operation: drop excluded IDs.
+  </p>
+
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Same logic in Java terms</button>
+      <span class="file">stubs/DefaultStubs.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">fun</span> selectedStubs(
+    booking: <span class="t">Booking</span>,
+    excluded: <span class="t">Set</span>&lt;<span class="t">String</span>&gt; = emptySet(),
+): <span class="t">List</span>&lt;<span class="t">PlannedStub</span>&gt; {
+    <span class="k">val</span> defaults = defaultStubsFor(booking)
+    <span class="k">val</span> planIds = defaults.mapTo(<span class="t">LinkedHashSet</span>()) { it.id }
+    <span class="k">val</span> unknownExcluded = excluded.filterNotTo(<span class="t">LinkedHashSet</span>()) { it <span class="k">in</span> planIds }
+    require(unknownExcluded.isEmpty()) {
+        <span class="s">"Unknown stub IDs in excluded: $unknownExcluded.\nThis Booking selected: $planIds."</span>
+    }
+    <span class="k">return</span> defaults.filterNot { it.id <span class="k">in</span> excluded }
+}
+
+<span class="k">fun</span> defaultStubsFor(booking: <span class="t">Booking</span>): <span class="t">List</span>&lt;<span class="t">PlannedStub</span>&gt; =
+    cdhStubs(booking) +
+        worldlineStubs(booking) +
+        datatransStubs(booking) +
+        aemStubs(booking) +
+        operaStubs(booking)</code></pre>
+    <pre data-lang="jv" hidden><code><span class="t">List</span>&lt;<span class="t">PlannedStub</span>&gt; defaults = defaultStubsFor(booking);
+<span class="t">Set</span>&lt;<span class="t">String</span>&gt; planIds = defaults.stream()
+    .map(<span class="t">PlannedStub</span>::id).collect(toCollection(<span class="t">LinkedHashSet</span>::<span class="k">new</span>));
+<span class="t">Set</span>&lt;<span class="t">String</span>&gt; unknownExcluded = excluded.stream()
+    .filter(id -&gt; !planIds.contains(id)).collect(toCollection(<span class="t">LinkedHashSet</span>::<span class="k">new</span>));
+<span class="k">if</span> (!unknownExcluded.isEmpty()) {
+    <span class="k">throw new</span> <span class="t">IllegalArgumentException</span>(
+        <span class="s">"Unknown stub IDs in excluded: "</span> + unknownExcluded
+            + <span class="s">".\nThis Booking selected: "</span> + planIds + <span class="s">"."</span>);
+}
+<span class="k">return</span> defaults.stream()
+    .filter(s -&gt; !excluded.contains(s.id()))
+    .toList();</code></pre>
+  </div>
+
+  <h3>Ownership, then Admin</h3>
+  <p>
+    <code>scopedTo</code> copies the stub and overwrites any existing test-ID header
+    matcher, so a directly installed stub that already carried a foreign test ID still
+    belongs to this scenario. Then each mapping is registered in declared order, and evidence is
+    recorded only after WireMock accepts it.
+  </p>
+
+  <div class="panel">
+    <div class="panel-bar" role="tablist" aria-label="Language">
+      <button class="tab kt" role="tab" aria-selected="true">Kotlin (real code)</button>
+      <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      <span class="file">testkit/mocks/MockInstaller.kt</span>
+    </div>
+    <pre data-lang="kt"><code><span class="k">internal fun</span> <span class="t">PlannedStub</span>.scopedTo(testId: <span class="t">String</span>): <span class="t">PlannedStub</span> =
+    copy(
+        mappings = mappings.map { mapping -&gt;
+            mapping.copy(
+                request = mapping.request.copy(
+                    headers = mapping.request.headers.orEmpty() +
+                        (BAGGAGE_HEADER <span class="k">to</span> testIdHeaderMatcher(testId)),
+                ),
+            )
+        },
+    )
+
+<span class="k">internal suspend fun</span> installStub(stub: <span class="t">PlannedStub</span>, testId: <span class="t">String</span>) {
+    <span class="k">val</span> scoped = stub.scopedTo(testId)
+    <span class="k">for</span> (mapping <span class="k">in</span> scoped.mappings) {
+        wiremock[scoped.target].stub(mapping)
+        evidenceSink?.recordInstalledStub(scoped.id, mapping, testId)
+    }
+}</code></pre>
+    <pre data-lang="jv" hidden><code><span class="k">static</span> <span class="t">PlannedStub</span> scopedTo(<span class="t">PlannedStub</span> stub, <span class="t">String</span> testId) {
+    <span class="t">List</span>&lt;<span class="t">StubMapping</span>&gt; scoped = <span class="k">new</span> <span class="t">ArrayList</span>&lt;&gt;();
+    <span class="k">for</span> (<span class="t">StubMapping</span> mapping : stub.mappings()) {
+        <span class="t">Map</span>&lt;<span class="t">String</span>, <span class="t">StringValuePattern</span>&gt; headers =
+            <span class="k">new</span> <span class="t">LinkedHashMap</span>&lt;&gt;(mapping.request().headers() == <span class="k">null</span>
+                ? Map.of() : mapping.request().headers());
+        headers.put(BAGGAGE_HEADER, testIdHeaderMatcher(testId));
+        scoped.add(mapping.withRequest(mapping.request().withHeaders(headers)));
+    }
+    <span class="k">return</span> stub.withMappings(scoped);
+}</code></pre>
+  </div>
+</section>
+
+<section id="kotlin">
+  <h2><span class="index">4</span>Kotlin, feature by feature</h2>
+  <p>
+    Each card explains one feature the install path actually uses: what it is, the
+    nearest Java concept, and — expand the panel — what the code would look like
+    without it. Everyday basics also used here (<code>val</code>, <code>for</code>,
+    <code>if</code>) sit in the cheat sheet.
+  </p>
+
+  <article class="feature" id="f-data">
+    <div class="feature-head">
+      <h3><span class="kw-chip">data class</span> <span class="kw-chip">copy</span></h3>
+      <span class="java-analogy sans">a record, plus a generated wither for every property</span>
+    </div>
+    <p>
+      A <code>data class</code> is Kotlin's record: <code>equals</code>,
+      <code>hashCode</code>, <code>toString</code>, and component accessors come free.
+      <code>copy(…)</code> is the wither — named arguments name only the fields that
+      change, the rest stay. <code>scopedTo</code> is three nested copies: stub →
+      mapping → request, overlaying the baggage matcher on the headers map. Without
+      <code>copy</code> that would be three hand-written builders.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code>stub.copy(mappings = mappings.map { mapping -&gt;
+    mapping.copy(request = mapping.request.copy(headers = …))
+})</code></pre>
+      <pre data-lang="jv" hidden><code><span class="c">// Java 16+ record: you write the wither (or a builder) yourself</span>
+<span class="k">public</span> <span class="t">PlannedStub</span> withMappings(<span class="t">List</span>&lt;<span class="t">StubMapping</span>&gt; mappings) {
+    <span class="k">return new</span> <span class="t">PlannedStub</span>(id, target, mappings);
+}</code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-ext">
+    <div class="feature-head">
+      <h3><span class="kw-chip">fun T.f()</span> extension functions</h3>
+      <span class="java-analogy sans">a static helper(T, …), callable as if it were a method of T</span>
+    </div>
+    <p>
+      <code>fun PlannedStub.scopedTo(testId: String)</code> is compiled as a static
+      function whose first parameter is the receiver. At the call site it reads
+      <code>stub.scopedTo(testId)</code>. Putting ownership on the type, not on a
+      utilities class, is what keeps both install paths — defaults and
+      <code>installStub</code> — on one operation.
+    </p>
+    <details class="without">
+      <summary>What would the code look like without it?</summary>
+      <div class="inner">
+        <p>
+          A <code>StubOwnership.scope(stub, testId)</code> helper, and every caller
+          remembering to call it. The extension does not add power; it makes the
+          forgetting shape look wrong, because an unscoped stub going into
+          <code>wiremock.stub</code> no longer has a named verb sitting on it.
+        </p>
+      </div>
+    </details>
+  </article>
+
+  <article class="feature" id="f-default">
+    <div class="feature-head">
+      <h3><span class="kw-chip">= default</span> <span class="kw-chip">name =</span> default and named arguments</h3>
+      <span class="java-analogy sans">telescoping overloads; /* name= */ comments, but compiler-checked</span>
+    </div>
+    <p>
+      <code>excluded</code> defaults to empty, which is why
+      the happy path is <code>installFor(booking)</code>. Named arguments let a scenario
+      pass only the exclusion it needs — <code>excluded = setOf(…)</code> — without a
+      builder and without an argument-order trap. The same names are used when
+      <code>ScenarioScope</code> forwards to <code>MockInstaller</code>, so
+      <code>testId</code> cannot be swapped with a string that happened to sit next to it.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code>installFor(booking)
+installFor(booking, excluded = setOf(<span class="t">OPERA_RESERVATION_GET_STUB_ID</span>))
+installStub(getReservationEmpty(hotelId = hotelId, reservationId = reservationId))</code></pre>
+      <pre data-lang="jv" hidden><code>installFor(booking);
+installFor(booking, Set.of(OPERA_RESERVATION_GET_STUB_ID));
+installStub(getReservationEmpty(hotelId, reservationId));
+<span class="c">// swap the two strings and it still compiles; nothing names them at the call site</span></code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-buildlist">
+    <div class="feature-head">
+      <h3><span class="kw-chip">buildList</span> <span class="kw-chip">return@</span> a list builder, and a return that is not the function</h3>
+      <span class="java-analogy sans">new ArrayList&lt;&gt;() + add; a labeled break out of a lambda</span>
+    </div>
+    <p>
+      <code>defaultStubsFor</code> concatenates one private function per upstream.
+      Each of those functions is a <code>buildList { … }</code> block: Kotlin gives you
+      a mutable list as <code>this</code> and you <code>add(…)</code> into it. The
+      Booking gates live at the top of that block, one visible
+      <code>if</code> / <code>let</code> per stub.
+    </p>
+    <p>
+      <code>return@buildList</code> exits the <em>lambda</em>, not
+      <code>cdhStubs</code> as a whole — though here they are the same, because the
+      function <em>is</em> that lambda. It is how
+      <code>booking.loggedUser ?: return@buildList</code> stops adding CDH stubs once
+      there is no logged-in user, without nested <code>if (user != null)</code> wrapping
+      the rest of the table.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">private fun</span> cdhStubs(booking: <span class="t">Booking</span>): <span class="t">List</span>&lt;<span class="t">PlannedStub</span>&gt; =
+    buildList {
+        <span class="k">if</span> (booking.companies.isNotEmpty()) {
+            add(companySearch(booking.companies))
+        }
+        <span class="k">val</span> user = booking.loggedUser ?: <span class="k">return@buildList</span>
+        user.companySpend?.let { add(companySpend(user, it)) }
+        user.employeeSpend?.let { add(employeeSpend(user, it)) }
+        <span class="k">val</span> tetheredAccount = user.tetheredAccount ?: <span class="k">return@buildList</span>
+        add(cdhRegistrationDetails(user, tetheredAccount))
+        <span class="c">// …</span>
+    }</code></pre>
+      <pre data-lang="jv" hidden><code><span class="k">private</span> <span class="t">List</span>&lt;<span class="t">PlannedStub</span>&gt; cdhStubs(<span class="t">Booking</span> booking) {
+    <span class="t">List</span>&lt;<span class="t">PlannedStub</span>&gt; stubs = <span class="k">new</span> <span class="t">ArrayList</span>&lt;&gt;();
+    <span class="k">if</span> (!booking.companies().isEmpty()) {
+        stubs.add(companySearch(booking.companies()));
+    }
+    <span class="t">User</span> user = booking.loggedUser();
+    <span class="k">if</span> (user == <span class="k">null</span>) <span class="k">return</span> stubs;
+    <span class="k">if</span> (user.companySpend() != <span class="k">null</span>) stubs.add(companySpend(user, user.companySpend()));
+    <span class="c">// …</span>
+    <span class="k">return</span> stubs;
+}</code></pre>
+    </div>
+    <details class="without">
+      <summary>Why a labeled return, not a plain return?</summary>
+      <div class="inner">
+        <p>
+          Inside a lambda, a bare <code>return</code> would return from the
+          <em>enclosing function</em> — here that is the same, but the compiler still
+          wants the label when the lambda is inlined, and the label documents the
+          intent: stop filling this list. Java's equivalent is just
+          <code>return stubs;</code> from the helper, because Java has no
+          non-local return from a lambda.
+        </p>
+      </div>
+    </details>
+  </article>
+
+  <article class="feature" id="f-null">
+    <div class="feature-head">
+      <h3><span class="kw-chip">?.</span> <span class="kw-chip">?:</span> <span class="kw-chip">orEmpty</span></h3>
+      <span class="java-analogy sans">if (x != null); x != null ? x : default; null-to-empty collection</span>
+    </div>
+    <p>
+      <code>String?</code> is a type that admits null; plain <code>String</code> does
+      not. <code>x?.let { add(…) }</code> runs the block only when x is non-null —
+      that is most of the Booking gates. <code>?:</code> is Elvis: "this, or else that".
+      <code>orEmpty()</code> turns a nullable list or map into an empty one, which is
+      how <code>scopedTo</code> overlays the baggage matcher onto
+      <code>headers</code> that may not exist yet.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code>booking.aem?.footer?.let { add(footer(it)) }
+<span class="k">val</span> user = booking.loggedUser ?: <span class="k">return@buildList</span>
+mapping.request.headers.orEmpty() + (BAGGAGE_HEADER <span class="k">to</span> matcher)</code></pre>
+      <pre data-lang="jv" hidden><code><span class="k">if</span> (booking.aem() != <span class="k">null</span> &amp;&amp; booking.aem().footer() != <span class="k">null</span>) {
+    stubs.add(footer(booking.aem().footer()));
+}
+<span class="t">User</span> user = booking.loggedUser();
+<span class="k">if</span> (user == <span class="k">null</span>) <span class="k">return</span> stubs;
+<span class="t">Map</span> headers = mapping.request().headers() == <span class="k">null</span>
+    ? Map.of() : mapping.request().headers();</code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-select">
+    <div class="feature-head">
+      <h3><span class="kw-chip">require</span> <span class="kw-chip">filterNot</span> <span class="kw-chip">in</span></h3>
+      <span class="java-analogy sans">checkArgument-style guard; Stream.filter; contains, but as an operator</span>
+    </div>
+    <p>
+      <code>require(condition) { message }</code> throws
+      <code>IllegalArgumentException</code> with the lazily built message when the
+      condition is false — Java's <code>if (!ok) throw new IllegalArgumentException(…)</code>
+      in one line. The <code>$unknownExcluded</code> inside the message is a string
+      template: the value is interpolated, no <code>+</code> concatenation. After that
+      guard, selection is one line: <code>filterNot { it.id in excluded }</code> is
+      "drop members whose ID is in the set" — <code>in</code> is
+      <code>contains</code> with the operands flipped.
+      <code>mapTo</code> and <code>filterNotTo</code> are <code>map</code> /
+      <code>filterNot</code> that write straight into the destination collection you
+      pass, here a <code>LinkedHashSet</code> so the error message keeps plan order.
+    </p>
+    <details class="without">
+      <summary>Why not mutate the defaults list?</summary>
+      <div class="inner">
+        <p>
+          A mutable pass would mix validation and deletion in one loop,
+          and a later reader could not see that unknown IDs never reach WireMock.
+          The immutable pipeline keeps "throw" before "I/O" as a visible seam: if
+          you are past the <code>require</code>, the plan is legal.
+        </p>
+      </div>
+    </details>
+  </article>
+
+  <article class="feature" id="f-suspend">
+    <div class="feature-head">
+      <h3><span class="kw-chip">suspend</span> coroutines</h3>
+      <span class="java-analogy sans">CompletableFuture / virtual threads, with blocking-style syntax</span>
+    </div>
+    <p>
+      Installing a mapping is an HTTP call to WireMock Admin.
+      <code>suspend</code> marks a function that can pause at that I/O without blocking
+      a thread. The code still reads top to bottom. One rule matters day to day: a
+      <code>suspend</code> function can only be called from another
+      <code>suspend</code> function (or a coroutine builder). Scenario blocks are
+      already suspend, so <code>installFor(booking)</code> is a direct call.
+    </p>
+    <div class="panel">
+      <div class="panel-bar" role="tablist" aria-label="Language">
+        <button class="tab kt" role="tab" aria-selected="true">Kotlin</button>
+        <button class="tab jv" role="tab" aria-selected="false">Java</button>
+      </div>
+      <pre data-lang="kt"><code><span class="k">suspend fun</span> installFor(booking: <span class="t">Booking</span>, testId: <span class="t">String</span>, …) {
+    <span class="k">for</span> (stub <span class="k">in</span> selected) {
+        installStub(stub, testId)     <span class="c">// also suspend; looks synchronous</span>
+    }
+}</code></pre>
+      <pre data-lang="jv" hidden><code><span class="t">CompletableFuture</span>&lt;<span class="t">Void</span>&gt; installFor(<span class="t">Booking</span> booking, <span class="t">String</span> testId) {
+    <span class="k">return</span> selectedStubs(booking).stream()
+        .reduce(<span class="t">CompletableFuture</span>.completedFuture(<span class="k">null</span>),
+            (acc, stub) -&gt; acc.thenCompose(v -&gt; installStub(stub, testId)),
+            (a, b) -&gt; a.thenCompose(v -&gt; b));
+}</code></pre>
+    </div>
+  </article>
+
+  <article class="feature" id="f-internal">
+    <div class="feature-head">
+      <h3><span class="kw-chip">internal</span></h3>
+      <span class="java-analogy sans">package-private, but for the whole compiled module</span>
+    </div>
+    <p>
+      <code>MockInstaller</code> and <code>scopedTo</code> are <code>internal</code>:
+      visible anywhere in this module, invisible outside it. Journeys never construct a
+      <code>MockInstaller</code> — <code>JourneySpec</code> does that per scenario, with
+      the evidence sink already wired. Provisioning constructs one without a sink.
+      Making the installer public would invite a second install path that skipped
+      leftover checks or ownership.
+    </p>
+  </article>
+</section>
+
+<section id="cheatsheet">
+  <h2><span class="index">5</span>Cheat sheet</h2>
+  <div class="table-scroll"><table>
+    <tr><th>Kotlin</th><th>One-line meaning</th><th>Java nearest thing</th></tr>
+    <tr><td><code>val x: T</code></td><td>final local / property</td><td><code>final T x</code></td></tr>
+    <tr><td><code>const val</code></td><td>compile-time constant (stub IDs)</td><td><code>static final String</code></td></tr>
+    <tr><td><code>fun f(x: T = default)</code></td><td>caller may omit x</td><td>telescoping overloads</td></tr>
+    <tr><td><code>listOf</code> / <code>setOf</code></td><td>immutable list / set literals</td><td><code>List.of</code> / <code>Set.of</code></td></tr>
+    <tr><td><code>for (x in list)</code></td><td>iterate</td><td>enhanced for-loop</td></tr>
+    <tr><td><code>x!!</code></td><td>assert non-null; throws if null</td><td>dereferencing a <code>@Nullable</code></td></tr>
+    <tr><td><code>f(id = x)</code></td><td>argument labeled with its parameter name, compiler-checked</td><td><code>/* id= */ x</code> comment, unchecked</td></tr>
+    <tr><td><code>data class</code></td><td>record-like: equals, hashCode, copy</td><td><code>record</code> + hand-written withers</td></tr>
+    <tr><td><code>copy(x = newX)</code></td><td>clone changing only named fields</td><td><code>withX(newX)</code></td></tr>
+    <tr><td><code>fun T.f()</code></td><td>static helper callable as a method of T</td><td><code>static f(T, …)</code></td></tr>
+    <tr><td><code>buildList { add(x) }</code></td><td>build a List with a mutable receiver</td><td><code>new ArrayList&lt;&gt;(); add</code></td></tr>
+    <tr><td><code>return@label</code></td><td>return from the named lambda, not the outer function</td><td><code>return</code> from a helper / labeled break</td></tr>
+    <tr><td><code>a + b</code> on lists</td><td>concatenate into a new list</td><td><code>addAll</code> into a new list</td></tr>
+    <tr><td><code>x?.let { }</code></td><td>run block only if x non-null</td><td><code>if (x != null)</code></td></tr>
+    <tr><td><code>x ?: y</code></td><td>x if non-null, else y</td><td><code>x != null ? x : y</code></td></tr>
+    <tr><td><code>x.orEmpty()</code></td><td>empty collection if x is null</td><td><code>x == null ? List.of() : x</code></td></tr>
+    <tr><td><code>id in set</code></td><td>membership test</td><td><code>set.contains(id)</code></td></tr>
+    <tr><td><code>filterNot { }</code></td><td>keep elements for which the predicate is false</td><td><code>stream().filter(not(…))</code></td></tr>
+    <tr><td><code>mapTo(dest) { }</code> / <code>filterNotTo(dest) { }</code></td><td>map / filterNot straight into a destination collection</td><td><code>stream()…collect(toCollection(…))</code></td></tr>
+    <tr><td><code>require(ok) { msg }</code></td><td>throw IllegalArgumentException(msg) when not ok</td><td><code>if (!ok) throw new IllegalArgumentException(msg)</code></td></tr>
+    <tr><td><code>"got $x"</code></td><td>string template, value interpolated</td><td><code>"got " + x</code></td></tr>
+    <tr><td><code>suspend</code></td><td>can pause at I/O, non-blocking</td><td>CompletableFuture / virtual threads</td></tr>
+    <tr><td><code>internal</code></td><td>visible in this module only</td><td>package-private, module-wide</td></tr>
+    <tr><td><code>a to b</code></td><td>creates a <code>Pair(a, b)</code>, used in map literals</td><td><code>Map.entry(a, b)</code></td></tr>
+  </table></div>
+
+  <div class="callout">
+    <p>
+      <strong>Where to read next:</strong> the real code —
+      <code>src/main/.../testkit/mocks/MockInstaller.kt</code>,
+      <code>src/main/.../stubs/DefaultStubs.kt</code>,
+      <code>src/main/.../stubs/PlannedStub.kt</code>, and the author wrapper in
+      <code>src/integrationTest/.../testkit/JourneySpec.kt</code>. The leftover-check
+      contract is pinned by
+      <code>src/test/.../stubs/SelectedStubsTest.kt</code>; install behaviour by
+      <code>src/test/.../testkit/mocks/MockInstallerTest.kt</code>. The other caller is
+      <code>src/main/.../provisioning/MockProvisioningApplication.kt</code>. For the
+      prose contract, see <code>docs/TEST_FRAMEWORK_GUIDE.md</code> ("Plan Changes").
+    </p>
+  </div>
+</section>
+
+<footer class="colophon">
+  <p>integration-tests-kotlin · docs/kotlin-for-java-devs · self-contained page, no external assets. Update it when selectedStubs, MockInstaller.installFor, or the ScenarioScope install helpers change.</p>
+</footer>
+
+</main>
+</div>
+
+<script>
+  document.querySelectorAll('.panel').forEach(panel => {
+    const tabs = panel.querySelectorAll('.tab');
+    const pres = panel.querySelectorAll('pre[data-lang]');
+    if (tabs.length < 2) return;
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+        tab.setAttribute('aria-selected', 'true');
+        const lang = tab.classList.contains('kt') ? 'kt' : 'jv';
+        pres.forEach(pre => { pre.hidden = pre.dataset.lang !== lang; });
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="1dp"
+        android:minHeight="?attr/actionBarSize" />
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/criteria_content_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical" />
+
+            <com.whitbread.premierinn.common.view.InfoMessageBoxView
+                android:id="@+id/innBusiness_info_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginBottom="@dimen/generic_margin_4"
+                android:animateLayoutChanges="true"
+                android:background="@drawable/information_notification_background"
+                android:elevation="1dp"
+                android:padding="@dimen/generic_padding_16"
+                android:src="@drawable/ic_info"
+                android:visibility="gone"
+                app:iconTintColor="@color/information_blue"
+                tools:itemCount="1"
+                android:text="@string/inn_business_info_box_title"
+                tools:text="@string/inn_business_info_box_title"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/criteria_add_room"
+                style="@style/RoundedLargeButton.Transparent"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginStart="@dimen/default_medium_margin"
+                android:layout_marginEnd="@dimen/default_medium_margin"
+                android:layout_marginBottom="@dimen/default_medium_margin"
+                android:gravity="center"
+                android:text="@string/criteria_add_room" />
+        </LinearLayout>
+    </ScrollView>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/default_medium_margin">
+
+        <LinearLayout
+            android:id="@+id/criteria_done"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/purple_button_background"
+            android:minHeight="@dimen/room_criteria_done_button"
+            android:orientation="vertical"
+            android:padding="@dimen/generic_padding_4">
+
+            <TextView
+                android:id="@+id/criteria_done_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/done"
+                android:textColor="@color/white"
+                android:background="@null"
+                style="@style/Header3"/>
+
+            <TextView
+                android:id="@+id/criteria_done_subtext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="@color/white"
+                style="@style/BodySmall"
+                tools:text="(1 adult)" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

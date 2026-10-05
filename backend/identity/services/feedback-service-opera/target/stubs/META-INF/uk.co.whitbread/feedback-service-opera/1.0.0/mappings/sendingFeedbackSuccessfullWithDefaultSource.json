@@ -1,0 +1,65 @@
+{
+  "id" : "c8377670-518f-4359-8c61-574550a2aba2",
+  "request" : {
+    "url" : "/feedback",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['title'] == 'Feedback Form')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_contacttype'] == 130570009)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_reasonforcontact'] == 2)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfbookingrefifapplicable'] == 'AB12345')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfcontactnumber'] == '+447724547605')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfdateofstayifapplicable'] == '2018-02-14')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfemailaddress'] == 'dimitris.damilos@whitbread.com')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_summary'] == 'This was a weird hotel')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wffeedbacktype'] == 130570000)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wffirstname'] == 'Walter')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfhotelname'] == 'ABEMAI')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfididntbookthroughpremierinncom'] == false)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wflastname'] == 'White')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfpostcode'] == 'AB1 2CD')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfreasonforfeedback'] == 'Restaurant/Bar experience')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wftypeofvisit'] == 'Dinner')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_loyaltycardnumber'] == 'my-loyalty-card-num')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfchecknumber'] == 'check-number')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfsleep'] == false)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfreported'] == true)]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"caseReferenceId\":\"SUCCESS-TICKET-ID\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "c8377670-518f-4359-8c61-574550a2aba2"
+}

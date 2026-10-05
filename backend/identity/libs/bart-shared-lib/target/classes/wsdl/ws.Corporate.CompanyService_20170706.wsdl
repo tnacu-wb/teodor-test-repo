@@ -1,0 +1,1237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:bb="http://corporate.micros.com/1.0"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://corporate.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             targetNamespace="http://corporate.micros.com/1.0">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://corporate.micros.com/1.0">
+            <s:include schemaLocation="../xsd/bart-business-10.xsd"/>
+			<s:complexType name="ClientHeader">
+                <s:sequence>
+                    <s:element name="languageCode" type="s:string" minOccurs="1" />
+                    <s:element name="countryCode" type="s:string" minOccurs="1" />
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Login">
+                <s:sequence>
+                    <s:element name="username" type="s:string" minOccurs="1" />
+                    <s:element name="password" type="s:string" minOccurs="1" />
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Source">
+                <s:sequence>
+                    <s:element name="bookingChannel" type="s:string" minOccurs="1" />
+                </s:sequence>
+            </s:complexType>
+            <s:element name="AddEmployee">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:AddEmployeeRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="AddEmployeeRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employee" type="s0:Employee"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="AddEmployeeResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="AddEmployeeResult" type="s0:AddEmployeeResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="AddEmployeeResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element minOccurs="0" name="activationKey" type="s:string"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="FindEmployees">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:FindEmployeeRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="FindEmployeeRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element minOccurs="0" name="searchCriteria" type="s:string"/>
+                    <s:element minOccurs="0" name="awaitingApproval" type="s:boolean"/>
+                    <s:element minOccurs="0" name="recordsPerPage" type="s:long"/>
+                    <s:element minOccurs="0" name="pageRequired" type="s:long"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="FindEmployeesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="FindEmployeesResult" type="s0:FindEmployeeResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="FindEmployeeResponse">
+                <s:sequence>
+                    <s:element name="employee" type="s0:ArrayOfFindEmployeeFindEmployee"/>
+                    <s:element name="endOfFile" type="s:boolean"/>
+                    <s:element minOccurs="0" name="awaitingApproval" type="s:boolean"/>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                    <s:element minOccurs="0" name="lock" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfFindEmployeeFindEmployee">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="FindEmployee" nillable="true" type="s0:FindEmployee"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="FindEmployee">
+                <s:complexContent>
+                    <s:extension base="s0:Person">
+                        <s:sequence>
+                            <s:element name="employeeID" type="s:string"/>
+                            <s:element name="companyID" type="s:string"/>
+                            <s:element name="emailAddress" type="s:string"/>
+                            <s:element minOccurs="0" name="employeeStatus">
+                                <s:simpleType>
+                                    <s:restriction base="s:string">
+                                        <s:enumeration value="ACTIVE"/>
+                                        <s:enumeration value="INACTIVE"/>
+                                        <s:enumeration value="SUSPENDED"/>
+                                        <s:enumeration value="DEACTIVATED"/>
+                                    </s:restriction>
+                                </s:simpleType>
+                            </s:element>
+                            <s:element minOccurs="0" name="accessLevel">
+                                <s:simpleType>
+                                    <s:restriction base="s:string">
+                                        <s:enumeration value="STAYER"/>
+                                        <s:enumeration value="SELF"/>
+                                        <s:enumeration value="BOOKER"/>
+                                        <s:enumeration value="SUPER"/>
+                                    </s:restriction>
+                                </s:simpleType>
+                            </s:element>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GetCompanyDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:GetCompanyDetailsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetCompanyDetailsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetCompanyDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="GetCompanyDetailsResult" type="s0:GetCompanyDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetCompanyDetailsResponse">
+                <s:sequence>
+                    <s:element name="companyDetails" type="s0:CompanyDetails"/>
+                    <s:element name="cellCodes" type="s0:ArrayOfListItemListItem"/>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                    <s:element minOccurs="0" name="locked" type="s:boolean"/>
+                    <s:element name="allowCentralCC" type="s:boolean"/>
+                    <s:element name="allowMarketing" type="s:boolean"/>
+                    <s:element minOccurs="0" name="maxNumberOfNights" type="s:long"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CompanyDetails">
+                <s:sequence>
+                    <s:element name="basicCompanyDetails" type="s0:BasicCompanyDetails"/>
+                    <s:element minOccurs="0" name="setupDetails" type="s0:CompanySetupDetails"/>
+                    <s:element minOccurs="0" name="companyPaymentDetails" type="s0:CompanyPaymentDetails"/>
+                    <s:element minOccurs="0" name="companyMIDetails" type="s0:CompanyMIDetails"/>
+                    <s:element minOccurs="0" name="bookingAllowances" type="s0:BookingAllowances"/>
+                    <s:element minOccurs="0" name="bookingAlerts" type="s0:BookingAlerts"/>
+                    <s:element minOccurs="0" name="numberOfEmployees" type="s:decimal"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CompanyPaymentDetails">
+                <s:sequence>
+                    <s:element name="locked" type="s:boolean"/>
+                    <s:element name="individualCards" type="s:boolean"/>
+                    <s:element name="paymentCards" type="s0:ArrayOfPaymentCardPaymentCard"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfPaymentCardPaymentCard">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="PaymentCard" nillable="true" type="s0:PaymentCard"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="PaymentCard">
+                <s:sequence>
+                    <s:element minOccurs="0" name="cardID" type="s:decimal"/>
+                    <s:element name="cardLabel" type="s:string"/>
+                    <s:element name="cardType" type="s:string"/>
+                    <s:element name="cardNumber" type="s:decimal"/>
+                    <s:element name="nameOnCard" type="s:string"/>
+                    <s:element minOccurs="0" name="startDate" type="s:string"/>
+                    <s:element name="endDate" type="s:string"/>
+                    <s:element minOccurs="0" name="issueNumber">
+                        <s:simpleType>
+                            <s:restriction base="s:decimal">
+                                <s:maxInclusive value="99"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="billingAddress" type="bb:Address"/>
+                    <s:element name="cardNotPresentRequired" type="s:boolean"/>
+                    <s:element minOccurs="0" name="cardNotPresent" type="s0:CardNotPresent"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CardNotPresent">
+                <s:sequence>
+                    <s:element name="businessAccountUsername" type="s:string"/>
+                    <s:element name="businessAccountPassword" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ProfilePaymentOption">
+                <s:complexContent>
+                    <s:extension base="s0:PaymentCard">
+                        <s:sequence>
+                            <s:element name="prepay" type="s:boolean"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="CompanyMIDetails">
+                <s:sequence>
+                    <s:element name="purchaseOrderMIQuestion" type="s0:MIQuestion"/>
+                    <s:element name="customerReferenceMIQuestion" type="s0:MIQuestion"/>
+                    <s:element name="userDefinedMIQuestion" type="s0:ArrayOfMIQuestionMIQuestion"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="MIQuestion">
+                <s:sequence>
+                    <s:element minOccurs="0" name="id" type="s:decimal"/>
+                    <s:element name="label" type="s:string"/>
+                    <s:element name="mandatory" type="s:boolean"/>
+                    <s:element name="MIHeader" type="s:string"/>
+                    <s:element name="location">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="B"/>
+                                <s:enumeration value="R"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="miAnswers" type="s0:MIAnswers"/>
+                    <s:element name="active" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="MIAnswers">
+                <s:sequence>
+                    <s:element name="type">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="F"/>
+                                <s:enumeration value="U"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="answers" type="s0:ArrayOfanswersItemString"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfanswersItemString">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="answersItem" nillable="true" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfMIQuestionMIQuestion">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="MIQuestion" nillable="true" type="s0:MIQuestion"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="BookingAllowances">
+                <s:sequence>
+                    <s:element minOccurs="0" name="extrasCodes" type="s0:ArrayOfextrasCodesItemString"/>
+                    <s:element minOccurs="0" name="maxDinnerBudgetUKWide" type="s0:Price"/>
+                    <s:element minOccurs="0" name="maxDinnerBudgetGreaterLondon" type="s0:Price"/>
+                    <s:element minOccurs="0" name="maxDinnerBudgetIreland" type="s0:Price"/>
+                    <s:element minOccurs="0" name="allowAlcohol" type="s:boolean"/>
+                    <s:element minOccurs="0" name="allowCarParking" type="s:boolean"/>
+                    <s:element minOccurs="0" name="allowAdditionalCosts" type="s:boolean"/>
+                    <s:element minOccurs="0" name="allowPremierSaverRates" type="s:boolean"/>
+                    <s:element name="individualCards" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfextrasCodesItemString">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="extrasCodesItem" nillable="true" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Price">
+                <s:sequence>
+                    <s:element name="amount" type="s:decimal"/>
+                    <s:element name="currency" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="BookingAlerts">
+                <s:sequence>
+                    <s:element name="dayOfArrivalAlert" type="s:boolean"/>
+                    <s:element name="weekendArrivalAlert" type="s:boolean"/>
+                    <s:element name="passThroughWeekendAlert" type="s:boolean"/>
+                    <s:element name="rateCapAlertAmountUKWide" type="s0:Price"/>
+                    <s:element name="rateCapAlertAmountGreaterLondon" type="s0:Price"/>
+                    <s:element name="rateCapAlertAmountIreland" type="s0:Price"/>
+                    <s:element name="bookingAlertHotels" type="s0:ArrayOfbookingAlertHotelsItemString"/>
+                    <s:element name="recipientEmailAddresses" type="s0:ArrayOfrecipientEmailAddressesItemString"/>
+                    <s:element name="frequency">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="A"/>
+                                <s:enumeration value="D"/>
+                                <s:enumeration value="W"/>
+                                <s:enumeration value="M"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfbookingAlertHotelsItemString">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="bookingAlertHotelsItem" nillable="true" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfrecipientEmailAddressesItemString">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="recipientEmailAddressesItem" nillable="true" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfListItemListItem">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="ListItem" nillable="true" type="s0:ListItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ListItem">
+                <s:sequence>
+                    <s:element name="code" type="s:string"/>
+                    <s:element name="description" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetEmployeeDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:GetEmployeeDetailsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetEmployeeDetailsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employeeID" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetEmployeeDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="GetEmployeeDetailsResult" type="s0:GetEmployeeDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetEmployeeDetailsResponse">
+                <s:sequence>
+                    <s:element name="employee" type="s0:Employee"/>
+                    <s:element name="lockedForEditing" type="s:boolean"/>
+                    <s:element name="employeeStatus">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="ACTIVE"/>
+                                <s:enumeration value="INACTIVE"/>
+                                <s:enumeration value="SUSPENDED"/>
+                                <s:enumeration value="DEACTIVATED"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetEmployeeList">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:GetEmployeeListRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetEmployeeListRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element minOccurs="0" name="centralCardID" type="s:string"/>
+                    <s:element name="fullListMarker" type="s:boolean"/>
+                    <s:element minOccurs="0" name="recordsPerPage" type="s:long"/>
+                    <s:element minOccurs="0" name="pageRequired" type="s:long"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetEmployeeListResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="GetEmployeeListResult" type="s0:GetEmployeeListResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetEmployeeListResponse">
+                <s:sequence>
+                	<s:element minOccurs="0" name="userDefinedFields" type="s0:CompanyMIDetails"/>
+                    <s:element name="header" type="s:string"/>
+                    <s:element name="data" type="s0:ExportData"/>
+                    <s:element name="numberOfRecords" type="s:string"/>
+                    <s:element name="endOfFile" type="s:boolean"/>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ExportData">
+                <s:sequence>
+                    <s:element minOccurs="0" name="records" type="s0:ArrayOfrecordsItemString"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfrecordsItemString">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="recordsItem" nillable="true">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="500"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="InviteEmployee">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:InviteEmployeeRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="InviteEmployeeRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="centralCard" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="emailAddresses">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="3000"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="InviteEmployeeResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="InviteEmployeeResult" type="s0:InviteEmployeeResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="InviteEmployeeResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="activationKey" type="s:string"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="RemoveCentralCard">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:RemovePaymentCardRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="RemovePaymentCardRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element minOccurs="0" name="employeeID" type="s:string"/>
+                    <s:element name="cardID" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="RemoveCentralCardResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="RemoveCentralCardResult" type="s0:RemoveCentralCardResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="RemoveCentralCardResult">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UnsubscribeAlerts">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UnsubscribeAlertsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UnsubscribeAlertsRequest">
+                <s:sequence>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="userName" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UnsubscribeAlertsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UnsubscribeAlertsResult" type="s0:UnsubscribeAlertsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UnsubscribeAlertsResponse">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateBookingAlerts">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpdateBookingAlertsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateBookingAlertsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="bookingAlerts" type="s0:BookingAlerts"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateBookingAlertsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpdateBookingAlertsResult" type="s0:UpdateBookingAlertsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateBookingAlertsResponse">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateBookingAllowances">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpdateBookingAllowancesRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateBookingAllowancesRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="bookingAllowances" type="s0:BookingAllowances"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateBookingAllowancesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpdateBookingAllowancesResult" type="s0:UpdateBookingAllowancesResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateBookingAllowancesResponse">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateCompanyDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpdateCompanyDetailsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateCompanyDetailsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="alternateCompanyName" type="s:string"/>
+                    <s:element name="basicCompanyDetails" type="s0:BasicCompanyDetails"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateCompanyDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpdateCompanyDetailsResult" type="s0:UpdateCompanyDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateCompanyDetailsResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateCompanyMIDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpdateCompanyMIDetailsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateCompanyMIDetailsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="companyMIDetails" type="s0:CompanyMIDetails"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateCompanyMIDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpdateCompanyMIDetailsResult" type="s0:UpdateCompanyMIDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateCompanyMIDetailsResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="ufdIDs" type="s0:ArrayOfListItemListItem"/>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateCompanyPaymentDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpdateCompanyPaymentDetailsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateCompanyPaymentDetailsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="paymentCards" type="s0:ArrayOfPaymentCardPaymentCard"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateCompanyPaymentDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpdateCompanyPaymentDetailsResult" type="s0:UpdateCompanyPaymentDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateCompanyPaymentDetailsResponse">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                    <s:element name="cardResponse" type="s0:ArrayOfListItemListItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateCompanySetupDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpdateCompanySetupDetailsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateCompanySetupDetailsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="setupDetails" type="s0:CompanySetupDetails"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateCompanySetupDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpdateCompanySetupDetailsResult" type="s0:UpdateCompanySetupDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateCompanySetupDetailsResponse">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateDashboardMessage">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpdateDashboardMessageRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateDashboardMessageRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="dashboardMessage">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="400"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateDashboardMessageResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpdateDashboardMessageResult" type="s0:UpdateDashboardMessageResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateDashboardMessageResponse">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateEmployeeAccessLevel">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpdateEmployeeAccessLevelRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateEmployeeAccessLevelRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employee" type="s0:AccessLevels"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="AccessLevels">
+                <s:sequence>
+                    <s:element name="employeeID" type="s:string"/>
+                    <s:element name="accessLevel">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="STAYER"/>
+                                <s:enumeration value="SELF"/>
+                                <s:enumeration value="BOOKER"/>
+                                <s:enumeration value="SUPER"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateEmployeeAccessLevelResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpdateEmployeeAccessLevelResult" type="s0:UpdateEmployeeAccessLevelResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateEmployeeAccessLevelResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateEmployeeDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UpdateEmployeeDetailsRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateEmployeeDetailsRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employee" type="s0:Employee"/>
+                    <s:element name="employeeStatus">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="ACTIVE"/>
+                                <s:enumeration value="INACTIVE"/>
+                                <s:enumeration value="SUSPENDED"/>
+                                <s:enumeration value="DEACTIVATED"/>
+                                <s:enumeration value="PURGED"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UpdateEmployeeDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UpdateEmployeeDetailsResult" type="s0:UpdateEmployeeDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UpdateEmployeeDetailsResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UploadEmployees">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:UploadEmployeesRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UploadEmployeesRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="header">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="500"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="data" type="s0:ExportData"/>
+                    <s:element name="endOfFile" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="UploadEmployeesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="UploadEmployeesResult" type="s0:UploadEmployeesResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="UploadEmployeesResponse">
+                <s:sequence>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="bb:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </types>
+	<message name="AuthorizationRequestSoapIn">
+        <part name="ClientHeader" type="s0:ClientHeader"/>
+        <part name="Login" type="s0:Login"/>
+    </message>
+    <message name="SourceRequestSoapIn">
+        <part name="Source" type="s0:Source"/>
+    </message>
+    <message name="AddEmployeeSoapIn">
+        <part name="parameters" element="s0:AddEmployee"/>
+    </message>
+    <message name="AddEmployeeSoapOut">
+        <part name="parameters" element="s0:AddEmployeeResponse"/>
+    </message>
+    <message name="FindEmployeesSoapIn">
+        <part name="parameters" element="s0:FindEmployees"/>
+    </message>
+    <message name="FindEmployeesSoapOut">
+        <part name="parameters" element="s0:FindEmployeesResponse"/>
+    </message>
+    <message name="GetCompanyDetailsSoapIn">
+        <part name="parameters" element="s0:GetCompanyDetails"/>
+    </message>
+    <message name="GetCompanyDetailsSoapOut">
+        <part name="parameters" element="s0:GetCompanyDetailsResponse"/>
+    </message>
+    <message name="GetEmployeeDetailsSoapIn">
+        <part name="parameters" element="s0:GetEmployeeDetails"/>
+    </message>
+    <message name="GetEmployeeDetailsSoapOut">
+        <part name="parameters" element="s0:GetEmployeeDetailsResponse"/>
+    </message>
+    <message name="GetEmployeeListSoapIn">
+        <part name="parameters" element="s0:GetEmployeeList"/>
+    </message>
+    <message name="GetEmployeeListSoapOut">
+        <part name="parameters" element="s0:GetEmployeeListResponse"/>
+    </message>
+    <message name="InviteEmployeeSoapIn">
+        <part name="parameters" element="s0:InviteEmployee"/>
+    </message>
+    <message name="InviteEmployeeSoapOut">
+        <part name="parameters" element="s0:InviteEmployeeResponse"/>
+    </message>
+    <message name="RemoveCentralCardSoapIn">
+        <part name="parameters" element="s0:RemoveCentralCard"/>
+    </message>
+    <message name="RemoveCentralCardSoapOut">
+        <part name="parameters" element="s0:RemoveCentralCardResponse"/>
+    </message>
+    <message name="UnsubscribeAlertsSoapIn">
+        <part name="parameters" element="s0:UnsubscribeAlerts"/>
+    </message>
+    <message name="UnsubscribeAlertsSoapOut">
+        <part name="parameters" element="s0:UnsubscribeAlertsResponse"/>
+    </message>
+    <message name="UpdateBookingAlertsSoapIn">
+        <part name="parameters" element="s0:UpdateBookingAlerts"/>
+    </message>
+    <message name="UpdateBookingAlertsSoapOut">
+        <part name="parameters" element="s0:UpdateBookingAlertsResponse"/>
+    </message>
+    <message name="UpdateBookingAllowancesSoapIn">
+        <part name="parameters" element="s0:UpdateBookingAllowances"/>
+    </message>
+    <message name="UpdateBookingAllowancesSoapOut">
+        <part name="parameters" element="s0:UpdateBookingAllowancesResponse"/>
+    </message>
+    <message name="UpdateCompanyDetailsSoapIn">
+        <part name="parameters" element="s0:UpdateCompanyDetails"/>
+    </message>
+    <message name="UpdateCompanyDetailsSoapOut">
+        <part name="parameters" element="s0:UpdateCompanyDetailsResponse"/>
+    </message>
+    <message name="UpdateCompanyMIDetailsSoapIn">
+        <part name="parameters" element="s0:UpdateCompanyMIDetails"/>
+    </message>
+    <message name="UpdateCompanyMIDetailsSoapOut">
+        <part name="parameters" element="s0:UpdateCompanyMIDetailsResponse"/>
+    </message>
+    <message name="UpdateCompanyPaymentDetailsSoapIn">
+        <part name="parameters" element="s0:UpdateCompanyPaymentDetails"/>
+    </message>
+    <message name="UpdateCompanyPaymentDetailsSoapOut">
+        <part name="parameters" element="s0:UpdateCompanyPaymentDetailsResponse"/>
+    </message>
+    <message name="UpdateCompanySetupDetailsSoapIn">
+        <part name="parameters" element="s0:UpdateCompanySetupDetails"/>
+    </message>
+    <message name="UpdateCompanySetupDetailsSoapOut">
+        <part name="parameters" element="s0:UpdateCompanySetupDetailsResponse"/>
+    </message>
+    <message name="UpdateDashboardMessageSoapIn">
+        <part name="parameters" element="s0:UpdateDashboardMessage"/>
+    </message>
+    <message name="UpdateDashboardMessageSoapOut">
+        <part name="parameters" element="s0:UpdateDashboardMessageResponse"/>
+    </message>
+    <message name="UpdateEmployeeAccessLevelSoapIn">
+        <part name="parameters" element="s0:UpdateEmployeeAccessLevel"/>
+    </message>
+    <message name="UpdateEmployeeAccessLevelSoapOut">
+        <part name="parameters" element="s0:UpdateEmployeeAccessLevelResponse"/>
+    </message>
+    <message name="UpdateEmployeeDetailsSoapIn">
+        <part name="parameters" element="s0:UpdateEmployeeDetails"/>
+    </message>
+    <message name="UpdateEmployeeDetailsSoapOut">
+        <part name="parameters" element="s0:UpdateEmployeeDetailsResponse"/>
+    </message>
+    <message name="UploadEmployeesSoapIn">
+        <part name="parameters" element="s0:UploadEmployees"/>
+    </message>
+    <message name="UploadEmployeesSoapOut">
+        <part name="parameters" element="s0:UploadEmployeesResponse"/>
+    </message>
+    <portType name="CompanySetupSoap">
+        <operation name="AddEmployee">
+            <input message="s0:AddEmployeeSoapIn"/>
+            <output message="s0:AddEmployeeSoapOut"/>
+        </operation>
+        <operation name="FindEmployees">
+            <input message="s0:FindEmployeesSoapIn"/>
+            <output message="s0:FindEmployeesSoapOut"/>
+        </operation>
+        <operation name="GetCompanyDetails">
+            <input message="s0:GetCompanyDetailsSoapIn"/>
+            <output message="s0:GetCompanyDetailsSoapOut"/>
+        </operation>
+        <operation name="GetEmployeeDetails">
+            <input message="s0:GetEmployeeDetailsSoapIn"/>
+            <output message="s0:GetEmployeeDetailsSoapOut"/>
+        </operation>
+        <operation name="GetEmployeeList">
+            <input message="s0:GetEmployeeListSoapIn"/>
+            <output message="s0:GetEmployeeListSoapOut"/>
+        </operation>
+        <operation name="InviteEmployee">
+            <input message="s0:InviteEmployeeSoapIn"/>
+            <output message="s0:InviteEmployeeSoapOut"/>
+        </operation>
+        <operation name="RemoveCentralCard">
+            <input message="s0:RemoveCentralCardSoapIn"/>
+            <output message="s0:RemoveCentralCardSoapOut"/>
+        </operation>
+        <operation name="UnsubscribeAlerts">
+            <input message="s0:UnsubscribeAlertsSoapIn"/>
+            <output message="s0:UnsubscribeAlertsSoapOut"/>
+        </operation>
+        <operation name="UpdateBookingAlerts">
+            <input message="s0:UpdateBookingAlertsSoapIn"/>
+            <output message="s0:UpdateBookingAlertsSoapOut"/>
+        </operation>
+        <operation name="UpdateBookingAllowances">
+            <input message="s0:UpdateBookingAllowancesSoapIn"/>
+            <output message="s0:UpdateBookingAllowancesSoapOut"/>
+        </operation>
+        <operation name="UpdateCompanyDetails">
+            <input message="s0:UpdateCompanyDetailsSoapIn"/>
+            <output message="s0:UpdateCompanyDetailsSoapOut"/>
+        </operation>
+        <operation name="UpdateCompanyMIDetails">
+            <input message="s0:UpdateCompanyMIDetailsSoapIn"/>
+            <output message="s0:UpdateCompanyMIDetailsSoapOut"/>
+        </operation>
+        <operation name="UpdateCompanyPaymentDetails">
+            <input message="s0:UpdateCompanyPaymentDetailsSoapIn"/>
+            <output message="s0:UpdateCompanyPaymentDetailsSoapOut"/>
+        </operation>
+        <operation name="UpdateCompanySetupDetails">
+            <input message="s0:UpdateCompanySetupDetailsSoapIn"/>
+            <output message="s0:UpdateCompanySetupDetailsSoapOut"/>
+        </operation>
+        <operation name="UpdateDashboardMessage">
+            <input message="s0:UpdateDashboardMessageSoapIn"/>
+            <output message="s0:UpdateDashboardMessageSoapOut"/>
+        </operation>
+        <operation name="UpdateEmployeeAccessLevel">
+            <input message="s0:UpdateEmployeeAccessLevelSoapIn"/>
+            <output message="s0:UpdateEmployeeAccessLevelSoapOut"/>
+        </operation>
+        <operation name="UpdateEmployeeDetails">
+            <input message="s0:UpdateEmployeeDetailsSoapIn"/>
+            <output message="s0:UpdateEmployeeDetailsSoapOut"/>
+        </operation>
+        <operation name="UploadEmployees">
+            <input message="s0:UploadEmployeesSoapIn"/>
+            <output message="s0:UploadEmployeesSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="CompanySetupSoap" type="s0:CompanySetupSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="AddEmployee">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.AddEmployee" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="FindEmployees">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.FindEmployees" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="GetCompanyDetails">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.GetCompanyDetails" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="GetEmployeeDetails">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.GetEmployeeDetails" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="GetEmployeeList">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.GetEmployeeList" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="InviteEmployee">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.InviteEmployee" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="RemoveCentralCard">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.RemoveCentralCard" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UnsubscribeAlerts">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UnsubscribeAlerts" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpdateBookingAlerts">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UpdateBookingAlerts" style="document"/>
+            <input>
+			    <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpdateBookingAllowances">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UpdateBookingAllowances" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpdateCompanyDetails">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UpdateCompanyDetails" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpdateCompanyMIDetails">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UpdateCompanyMIDetails" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpdateCompanyPaymentDetails">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UpdateCompanyPaymentDetails" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpdateCompanySetupDetails">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UpdateCompanySetupDetails" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpdateDashboardMessage">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UpdateDashboardMessage" style="document"/>
+            <input>
+				<soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpdateEmployeeAccessLevel">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UpdateEmployeeAccessLevel" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UpdateEmployeeDetails">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UpdateEmployeeDetails" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="UploadEmployees">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.CompanyService.UploadEmployees" style="document"/>
+            <input>
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="ClientHeader" />
+                <soap:header use="literal" message="s0:AuthorizationRequestSoapIn" part="Login" />
+                <soap:header use="literal" message="s0:SourceRequestSoapIn" part="Source" />
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="CompanySetup">
+        <port name="CompanySetupSoap" binding="s0:CompanySetupSoap">
+            <soap:address location="http://inntouch.slough.microsdc.com/csp/sql/ws.Corporate.CompanyService.cls"/>
+        </port>
+    </service>
+</definitions>

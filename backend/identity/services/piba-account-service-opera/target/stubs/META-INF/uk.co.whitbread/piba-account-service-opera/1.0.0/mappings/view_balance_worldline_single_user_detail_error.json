@@ -1,0 +1,30 @@
+{
+  "id" : "6ee85dab-319c-4813-b313-daddc930849d",
+  "request" : {
+    "url" : "/piba/account/balance",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "company-id" : {
+        "equalTo" : "123"
+      },
+      "employee-id" : {
+        "equalTo" : "43"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value8"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"currentBalances\":[{\"schemeCustomerId\":0,\"outstanding\":null,\"newTransactions\":null,\"available\":null,\"creditLimit\":null,\"currentBalance\":null,\"interimPayments\":null,\"tetheredGuid\":null,\"accountName\":null,\"accountNumber\":null,\"registrationRoles\":null,\"errorCode\":\"Error while retrieving tethered user details\"}],\"totalRecordCount\":1}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "6ee85dab-319c-4813-b313-daddc930849d"
+}

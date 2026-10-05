@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- No <parent> — pure aggregator -->
+
+    <groupId>uk.co.whitbread</groupId>
+    <artifactId>digital-monorepo</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+
+    <name>digital-monorepo</name>
+    <description>Whitbread Digital Monorepo</description>
+
+    <modules>
+        <!-- Infrastructure (built first) -->
+        <module>parents/service-parent</module>
+        <module>parents/library-parent</module>
+
+        <!-- Discover & Search -->
+        <module>discover-search/services/content-entity-service</module>
+        <module>discover-search/services/hotel-entity-service</module>
+        <module>discover-search/services/ohip-adapter-service</module>
+        <module>discover-search/services/availability-business-events-service-opera</module>
+        <module>discover-search/services/content-service-opera</module>
+        <module>discover-search/services/hotel-info-service-opera</module>
+        <module>discover-search/services/availability-cache-service-opera</module>
+        <module>discover-search/services/rules-manager-entity-service</module>
+        <module>discover-search/services/rules-agent-entity-service</module>
+        <module>discover-search/services/hotel-review-service</module>
+        <module>discover-search/services/ocd-adapter-service</module>
+        <module>discover-search/services/opera-token-service</module>
+        <module>discover-search/services/on-demand-refresh-service-opera</module>
+
+        <!-- Book & Pay -->
+        <module>book-pay/libs/coding-convention-rules</module>
+        <module>book-pay/libs/commons-entity-exceptions</module>
+        <module>book-pay/libs/commons-exceptions</module>
+        <module>book-pay/libs/commons-logging</module>
+        <module>book-pay/libs/qas-address-lookup-lib</module>
+        <module>book-pay/services/address-lookup-entity-service</module>
+        <module>book-pay/services/basket-async-order-processor</module>
+        <module>book-pay/services/basket-confirmation-processor</module>
+        <module>book-pay/services/hotel-payment-service-opera</module>
+        <module>book-pay/services/payment-orchestration-service</module>
+        <module>book-pay/services/table-reservation-service</module>
+        <module>book-pay/services/basket-service</module>
+        <module>book-pay/services/refund-request-processor</module>
+        <module>book-pay/services/threec-payment-service-opera</module>
+        <module>book-pay/services/payment-methods-entity-service</module>
+        <module>book-pay/services/promo-service</module>
+
+        <!-- Identity -->
+        <module>identity/libs/common-auth0</module>
+        <module>identity/libs/commons-auth0</module>
+        <module>identity/libs/commons-azure-email-service</module>
+        <module>identity/libs/commons-cdh-lib</module>
+        <module>identity/libs/commons-entity-validators</module>
+        <module>identity/libs/commons-validators</module>
+        <module>identity/libs/bart-shared-lib</module>
+        <module>identity/libs/worldline-ba-api-lib</module>
+        <module>identity/services/piba-account-service-opera</module>
+        <module>identity/services/spending-entity-service</module>
+        <module>identity/services/cdh-adapter-service</module>
+        <module>identity/services/account-entity-service</module>
+        <module>identity/services/company-service-opera</module>
+        <module>identity/services/business-tether-service-opera</module>
+        <module>identity/services/hotel-account-service-opera</module>
+        <module>identity/services/hotel-card-service-opera</module>
+        <module>identity/services/hotel-register-service-opera</module>
+        <module>identity/services/bulk-employee-upload-service-opera</module>
+        <module>identity/services/hotel-login-service-opera</module>
+        <module>identity/services/piba-registration-service-opera</module>
+        <module>identity/services/company-employee-service-opera</module>
+        <module>identity/services/pay-app-entity-service</module>
+        <module>identity/services/feedback-service-opera</module>
+        <module>identity/services/company-entity-service</module>
+        <module>identity/services/company-reporting-service</module>
+        <module>identity/services/hotel-countries-service-opera</module>
+        <module>identity/services/marketing-service-opera</module>
+
+        <!-- Manage & Modify -->
+        <module>manage-modify/services/hotel-reservation-entity-service</module>
+        <module>manage-modify/services/hotel-dashboard-service-opera</module>
+        <module>manage-modify/services/reservations-manager-entity-service</module>
+
+        <!-- Arrive Stay Leave -->
+        <module>arrive-stay-leave/services/hotel-wallet-service-opera</module>
+        <module>arrive-stay-leave/services/kiosk-checkin-service</module>
+        <module>arrive-stay-leave/services/digital-key-service</module>
+    </modules>
+
+    <properties>
+        <revision>1.0.0</revision>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- Flatten Maven Plugin: resolves ${revision} in installed/deployed POMs -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.7.3</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

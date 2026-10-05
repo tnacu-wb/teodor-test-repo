@@ -1,0 +1,24 @@
+{
+  "id" : "087b9717-c66e-4b58-92b7-dd82e3fc68ad",
+  "request" : {
+    "url" : "/marketing/newsletter/channel/CHNL39288_28a5d984-7782-4e93-99a5-b2e9f8a746f3/confirm",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['customerId'] == '122434')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['contactType'] == 'email')]"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "087b9717-c66e-4b58-92b7-dd82e3fc68ad"
+}

@@ -1,0 +1,11 @@
+@startuml
+entity GraphQL_endpoint
+title Retrieve Room types Information from AEM
+
+entity "content-entity-service" as CES
+entity AEM
+
+GraphQL_endpoint-> CES  ++: GET /room-type?language={language}&country={country}&brand={brand}
+CES -> AEM: GET /{country}/{language}/content-service.room-types.detail/brand/{brand}.json
+GraphQL_endpoint<- CES -- : return room type information
+@enduml

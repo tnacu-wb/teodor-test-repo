@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="PremierInnSans-Bold.ttf">
+            <string>PremierInnSans-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VenueFullyBookedCell" id="gTV-IL-0wX" customClass="VenueFullyBookedCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="285" height="136"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="285" height="136"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hN2-eS-hUt">
+                        <rect key="frame" x="0.0" y="0.0" width="285" height="136"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T6a-tq-KV9" userLabel="Image Container">
+                                <rect key="frame" x="20" y="20" width="100" height="75"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.94999999999999996" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wTm-Ex-BQz">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="75"/>
+                                    </imageView>
+                                    <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gd3-YI-cHc">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="75"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gBa-Ln-0Wd">
+                                        <rect key="frame" x="18.5" y="24.5" width="63" height="26.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sold out" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A53-8i-hNs" customClass="RoundedCornersLabel" customModule="PremierInn" customModuleProvider="target">
+                                                <rect key="frame" x="5" y="5" width="53" height="16.5"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="14"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="A53-8i-hNs" firstAttribute="top" secondItem="gBa-Ln-0Wd" secondAttribute="top" constant="5" id="AxC-2M-qeE"/>
+                                            <constraint firstAttribute="bottom" secondItem="A53-8i-hNs" secondAttribute="bottom" constant="5" id="hJQ-vS-KuI"/>
+                                            <constraint firstItem="A53-8i-hNs" firstAttribute="leading" secondItem="gBa-Ln-0Wd" secondAttribute="leading" constant="5" id="jSG-ZA-2Zy"/>
+                                            <constraint firstAttribute="trailing" secondItem="A53-8i-hNs" secondAttribute="trailing" constant="5" id="qdn-XC-erD"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="wTm-Ex-BQz" firstAttribute="centerY" secondItem="T6a-tq-KV9" secondAttribute="centerY" id="2rE-vK-3kM"/>
+                                    <constraint firstItem="wTm-Ex-BQz" firstAttribute="centerX" secondItem="T6a-tq-KV9" secondAttribute="centerX" id="AdF-q7-Or4"/>
+                                    <constraint firstAttribute="width" secondItem="T6a-tq-KV9" secondAttribute="height" multiplier="4:3" id="Ogh-dm-cf7"/>
+                                    <constraint firstItem="gd3-YI-cHc" firstAttribute="width" secondItem="wTm-Ex-BQz" secondAttribute="width" id="PgO-kN-fgU"/>
+                                    <constraint firstItem="wTm-Ex-BQz" firstAttribute="height" secondItem="T6a-tq-KV9" secondAttribute="height" id="brF-VR-fVn"/>
+                                    <constraint firstItem="gd3-YI-cHc" firstAttribute="centerY" secondItem="wTm-Ex-BQz" secondAttribute="centerY" id="cCc-tU-aML"/>
+                                    <constraint firstAttribute="width" constant="100" id="e3o-qf-Klt"/>
+                                    <constraint firstItem="gd3-YI-cHc" firstAttribute="centerX" secondItem="wTm-Ex-BQz" secondAttribute="centerX" id="kKz-ux-aed"/>
+                                    <constraint firstItem="gBa-Ln-0Wd" firstAttribute="centerX" secondItem="T6a-tq-KV9" secondAttribute="centerX" id="pvs-ex-abb"/>
+                                    <constraint firstItem="wTm-Ex-BQz" firstAttribute="width" secondItem="T6a-tq-KV9" secondAttribute="width" id="qUe-t7-oB2"/>
+                                    <constraint firstItem="gd3-YI-cHc" firstAttribute="height" secondItem="wTm-Ex-BQz" secondAttribute="height" id="rS5-4e-9yb"/>
+                                    <constraint firstItem="gBa-Ln-0Wd" firstAttribute="centerY" secondItem="T6a-tq-KV9" secondAttribute="centerY" id="ucy-wS-9u1"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="London Kings Cross" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="8gC-oS-BCT">
+                                <rect key="frame" x="130" y="20" width="97.5" height="42"/>
+                                <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="18"/>
+                                <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6U4-ji-u8d" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                                <rect key="frame" x="172" y="83" width="93" height="33"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="33" id="Uli-wh-HxK"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="16"/>
+                                <color key="tintColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                <state key="normal" title="Edit dates">
+                                    <color key="titleColor" red="0.31764705879999999" green="0.1176470588" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="editButtonDidTap:" destination="gTV-IL-0wX" eventType="touchUpInside" id="JjI-3C-ojb"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sRs-F6-5Ab" userLabel="Line">
+                                <rect key="frame" x="0.0" y="135" width="285" height="1"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="JHI-df-KtY"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="6U4-ji-u8d" secondAttribute="bottom" constant="20" id="0J0-Px-BIE"/>
+                            <constraint firstItem="T6a-tq-KV9" firstAttribute="leading" secondItem="hN2-eS-hUt" secondAttribute="leading" constant="20" id="EYK-h5-LmL"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="8gC-oS-BCT" secondAttribute="trailing" id="HmE-Tl-cWW"/>
+                            <constraint firstItem="sRs-F6-5Ab" firstAttribute="leading" secondItem="hN2-eS-hUt" secondAttribute="leading" id="Q4S-dj-X27"/>
+                            <constraint firstItem="6U4-ji-u8d" firstAttribute="top" relation="greaterThanOrEqual" secondItem="8gC-oS-BCT" secondAttribute="bottom" constant="8" symbolic="YES" id="Wjg-sC-cv6"/>
+                            <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="T6a-tq-KV9" secondAttribute="bottom" priority="750" id="XJS-Qt-fP1"/>
+                            <constraint firstItem="8gC-oS-BCT" firstAttribute="top" secondItem="T6a-tq-KV9" secondAttribute="top" id="gcq-Ft-Ih2"/>
+                            <constraint firstAttribute="trailing" secondItem="sRs-F6-5Ab" secondAttribute="trailing" id="hh5-UL-BQZ"/>
+                            <constraint firstItem="8gC-oS-BCT" firstAttribute="leading" secondItem="T6a-tq-KV9" secondAttribute="trailing" constant="10" id="ica-Bh-hsj"/>
+                            <constraint firstItem="T6a-tq-KV9" firstAttribute="top" secondItem="hN2-eS-hUt" secondAttribute="top" constant="20" id="jmH-VV-oPr"/>
+                            <constraint firstAttribute="trailing" secondItem="6U4-ji-u8d" secondAttribute="trailing" constant="20" id="nUH-aY-r2v"/>
+                            <constraint firstAttribute="bottom" secondItem="sRs-F6-5Ab" secondAttribute="bottom" id="v23-vD-xGE"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="top" secondItem="hN2-eS-hUt" secondAttribute="top" id="0My-rq-wUc"/>
+                <constraint firstItem="hN2-eS-hUt" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="HWy-RV-tNH"/>
+                <constraint firstAttribute="trailing" secondItem="hN2-eS-hUt" secondAttribute="trailing" id="cAh-Dt-nZo"/>
+                <constraint firstAttribute="bottom" secondItem="hN2-eS-hUt" secondAttribute="bottom" id="mfp-u8-5oY"/>
+            </constraints>
+            <size key="customSize" width="-33" height="-291"/>
+            <connections>
+                <outlet property="editDatesButton" destination="6U4-ji-u8d" id="Rzw-N8-DZf"/>
+                <outlet property="fullyBookedLabel" destination="A53-8i-hNs" id="xhn-Ih-aPx"/>
+                <outlet property="hotelImage" destination="wTm-Ex-BQz" id="cyk-7B-XZm"/>
+                <outlet property="hotelName" destination="8gC-oS-BCT" id="TsP-ze-RO7"/>
+            </connections>
+            <point key="canvasLocation" x="-27.1875" y="-121.47887323943662"/>
+        </collectionViewCell>
+    </objects>
+    <designables>
+        <designable name="6U4-ji-u8d">
+            <size key="intrinsicContentSize" width="93" height="19"/>
+        </designable>
+        <designable name="A53-8i-hNs">
+            <size key="intrinsicContentSize" width="53" height="16.5"/>
+        </designable>
+    </designables>
+</document>

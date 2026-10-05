@@ -1,0 +1,107 @@
+query hotelInformation ($language: String!, $hotelId: String!, $country: String!) {
+    hotelInformation (language: $language, hotelId: $hotelId, country: $country) {
+        brand
+        name
+        hotelDescription
+        galleryImages {
+            imageSrc
+        }
+
+        messagingFlag {
+            color,
+            text
+        }
+
+        announcement {
+            showAnnouncement
+            startDate
+            endDate
+            icon
+            text
+            type
+        }
+        importantInfo {
+            infoItems {
+                text
+                priority
+                startDate
+                endDate
+            }
+        }
+        hotelFacilities {
+            code
+            name
+            description
+            icon
+            isVisible
+        }
+        topSectionImages {
+            imageSrc
+            tags
+        }
+        roomConfiguration {
+            tabItems {
+                roomType
+                roomName
+                roomDescription
+                facilities {
+                    code
+                    name
+                    description
+                    weight
+                    icon
+                    isVisible
+                }
+                images {
+                    imageSrc
+                    thumbnailSrc
+                    caption
+                    iconSrc
+                }
+            }
+        }
+        parkingDescription
+        links {
+            detailsPage
+        }
+        restaurant {
+            menus {
+                name
+                description
+                imageSrc
+                menuSrc
+                menuLabel
+                disclaimer
+            }
+            logoSrc
+            name
+            description
+        }
+        address {
+            addressLine1
+            addressLine2
+            addressLine3
+            country
+            postalCode
+        }
+        county
+        satNavDirections
+        directions
+        transportInformation
+        contactDetails {
+              hotelNationalPhone
+              phone
+            }
+        coordinates {
+            latitude
+            longitude
+       }
+        ancillaryCloseout {
+            items {
+               startDate
+               endDate
+               upsellCodes
+            }
+        }
+    }
+}

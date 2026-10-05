@@ -1,0 +1,14 @@
+redis:
+  image: redis:latest
+  ports:
+    - "6379:6379"
+hotelinfo:
+  image: whitbreaddigital/hotel-info-service
+  environment:
+    _JAVA_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5064"
+    spring.profiles.active: local
+  ports:
+   - "5068:5068"
+   - "80:9018"
+  links:
+    - redis

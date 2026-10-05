@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "opera-ohip-app.fullname" . }}
+  labels:
+    {{- include "opera-ohip-app.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "opera-ohip-app.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow application traffic from the Istio ingress gateway only.
+    - ports:
+        - protocol: TCP
+          port: {{ .Values.containerPort }}
+      from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: istio-system
+    # Allow the Istio control plane / monitoring namespace to scrape Envoy's
+    # Prometheus metrics (15090). Scoped to istio-system.
+    - ports:
+        - protocol: TCP
+          port: 15090
+      from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: istio-system
+    # Allow the Istio health/status port (15021) from ANY source. With sidecar
+    # injection, Istio rewrites kubelet liveness/readiness probes to this port,
+    # and the probe originates from the node/kubelet — whose IP cannot be matched
+    # by a namespace/pod selector. Leaving `from` unset (all sources) ensures a
+    # NetworkPolicy-enforcing CNI does not block probes and cause spurious
+    # restarts. 15021 only serves Envoy health/readiness, so this is safe to
+    # expose. Istio also uses it for readiness checks between pods.
+    - ports:
+        - protocol: TCP
+          port: 15021

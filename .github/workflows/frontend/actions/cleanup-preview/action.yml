@@ -1,0 +1,278 @@
+name: Cleanup frontend preview
+description: Remove Helm releases, deployments, environments, and PR metadata for a frontend preview.
+
+inputs:
+  branch-name:
+    description: Pull-request source branch whose Helm releases should be removed.
+    required: true
+  pr-number:
+    description: Pull-request number whose environments should be removed.
+    required: true
+  pipeline-app-id:
+    description: GitHub App ID used for cleanup API calls.
+    required: true
+  pipeline-app-private-key:
+    description: GitHub App private key used for cleanup API calls.
+    required: true
+  post-pr-comment:
+    description: Whether to post a cleanup summary on the pull request.
+    required: false
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare cleanup identity
+      id: identity
+      uses: ./.github/frontend/actions/deployment-identity
+      with:
+        branch-name: ${{ inputs.branch-name }}
+        pr-number: ${{ inputs.pr-number }}
+
+    - name: Set up Helm
+      uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
+
+    - name: Uninstall Helm releases
+      continue-on-error: true
+      shell: bash
+      env:
+        SANITIZED_BRANCH: ${{ steps.identity.outputs.sanitized-branch }}
+        PR_NUMBER: ${{ steps.identity.outputs.pr-number }}
+      run: |
+        [[ -n "${PR_NUMBER}" ]] || { echo "No PR_NUMBER resolved; skipping Helm uninstall."; exit 0; }
+        apps=("premier-inn" "business-booker" "ccui")
+        for app in "${apps[@]}"; do
+          # Primary: ephemeral releases are now named <app>-pr-<n>.
+          # Legacy fallback: releases created before the PR-based rename used
+          # <app>-<sanitized-branch>. Both are uninstalled; --ignore-not-found
+          # makes the miss a harmless no-op.
+          for release_name in "${app}-pr-${PR_NUMBER}" "${app}-${SANITIZED_BRANCH}"; do
+            echo "Uninstalling Helm release: ${release_name}"
+            helm uninstall "$release_name" \
+              --namespace opera-fe \
+              --ignore-not-found || true
+          done
+        done
+
+    - name: Generate GitHub App token
+      id: token
+      uses: actions/create-github-app-token@v3
+      with:
+        client-id: ${{ inputs.pipeline-app-id }}
+        private-key: ${{ inputs.pipeline-app-private-key }}
+        owner: ${{ github.repository_owner }}
+
+    - name: Delete deployments and environments
+      uses: actions/github-script@v9
+      with:
+        github-token: ${{ steps.token.outputs.token }}
+        script: |
+          const prNumber = '${{ steps.identity.outputs.pr-number }}';
+          const appNames = ['premier-inn', 'business-booker', 'ccui'];
+          const formatError = (error) => {
+            const status = error?.status ?? 'unknown';
+            const message = error?.message ?? 'No error message';
+            const apiMessage = error?.response?.data?.message;
+            return `status=${status}, message=${message}${apiMessage ? `, api_message=${apiMessage}` : ''}`;
+          };
+
+          if (!prNumber) {
+            core.warning('No valid PR number found; skipping environment cleanup.');
+            return;
+          }
+
+          const environmentsDeleted = [];
+          const environmentsNotFound = [];
+
+          for (const appName of appNames) {
+            const environmentName = `${appName}-PR-${prNumber}`;
+            core.info(`Processing environment: ${environmentName}`);
+
+            try {
+              const deployments = await github.rest.repos.listDeployments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                environment: environmentName,
+              });
+
+              core.info(`Found ${deployments.data.length} deployment(s) in environment '${environmentName}'.`);
+              if (deployments.data.length > 0) {
+                core.info(`Deployment IDs: ${deployments.data.map(d => d.id).join(', ')}`);
+              }
+
+              for (const deployment of deployments.data) {
+                try {
+                  await github.request('DELETE /repos/{owner}/{repo}/deployments/{deployment_id}', {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    deployment_id: deployment.id,
+                  });
+                  core.info(`Deployment ${deployment.id} deleted from ${environmentName}`);
+                } catch (error) {
+                  if (error?.status === 404) {
+                    core.info(`Deployment ${deployment.id} already deleted (404).`);
+                  } else if (error?.status === 403) {
+                    core.warning(`Forbidden deleting deployment ${deployment.id} from ${environmentName}: ${formatError(error)}`);
+                  } else if (error?.status === 422) {
+                    core.info(`Deployment ${deployment.id} appears active; marking inactive and retrying delete.`);
+                    try {
+                      await github.rest.repos.createDeploymentStatus({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        deployment_id: deployment.id,
+                        state: 'inactive',
+                        description: 'Marking inactive before cleanup deletion',
+                      });
+
+                      await github.request('DELETE /repos/{owner}/{repo}/deployments/{deployment_id}', {
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        deployment_id: deployment.id,
+                      });
+
+                      core.info(`Deployment ${deployment.id} deleted from ${environmentName} after inactivation.`);
+                    } catch (retryError) {
+                      core.warning(`Failed to delete deployment ${deployment.id} after inactivation: ${formatError(retryError)}`);
+                    }
+                  } else {
+                    core.warning(`Unexpected error deleting deployment ${deployment.id} from ${environmentName}: ${formatError(error)}`);
+                  }
+                }
+              }
+
+              try {
+                await github.request('DELETE /repos/{owner}/{repo}/environments/{environment_name}', {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  environment_name: environmentName,
+                });
+                core.info(`Environment '${environmentName}' deleted`);
+                environmentsDeleted.push(environmentName);
+              } catch (error) {
+                if (error?.status === 404) {
+                  core.info(`Environment '${environmentName}' not found (404).`);
+                  environmentsNotFound.push(environmentName);
+                } else if (error?.status === 403) {
+                  core.info(`Environment '${environmentName}' retained (insufficient permission with GitHub App token): ${formatError(error)}`);
+                } else {
+                  core.warning(`Unexpected error deleting environment '${environmentName}': ${formatError(error)}`);
+                }
+              }
+            } catch (error) {
+              if (error?.status === 404) {
+                try {
+                  await github.request('GET /repos/{owner}/{repo}/environments/{environment_name}', {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    environment_name: environmentName,
+                  });
+                  core.warning(`Environment '${environmentName}' exists, but deployments API returned 404. This usually indicates token visibility/scope mismatch.`);
+                } catch (envCheckError) {
+                  if (envCheckError?.status === 404) {
+                    core.info(`Deployments not found for environment '${environmentName}' (404).`);
+                    environmentsNotFound.push(environmentName);
+                  } else {
+                    core.warning(`Unable to verify environment '${environmentName}' after deployment 404: ${formatError(envCheckError)}`);
+                  }
+                }
+              } else if (error?.status === 403) {
+                core.warning(`Skipping cleanup for '${environmentName}': ${formatError(error)}`);
+                core.warning('Token cannot access deployments/environment details in this repository context.');
+              } else {
+                core.warning(`Error processing environment '${environmentName}': ${formatError(error)}`);
+              }
+            }
+          }
+
+          core.info(`Cleanup summary - Deleted: ${environmentsDeleted.length}, NotFound: ${environmentsNotFound.length}`);
+          if (environmentsDeleted.length > 0) {
+            core.info(`Environments deleted: ${environmentsDeleted.join(', ')}`);
+          }
+          if (environmentsNotFound.length > 0) {
+            core.info(`Environments not found: ${environmentsNotFound.join(', ')}`);
+          }
+
+    - name: Remove ephemeral-active label from PR
+      # The label gates redeploy-on-commit (ci-fe.yaml). Once the environment is torn
+      # down it must be cleared, otherwise reopening the PR (which replays the existing
+      # labels) would auto-redeploy without a fresh "Ephemeral UP" request.
+      uses: actions/github-script@v9
+      with:
+        github-token: ${{ steps.token.outputs.token }}
+        script: |
+          const prNumber = Number('${{ steps.identity.outputs.pr-number }}');
+          if (!Number.isInteger(prNumber) || prNumber <= 0) {
+            core.info('No valid PR number resolved; skipping label removal.');
+            return;
+          }
+          try {
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              name: 'ephemeral-active',
+            });
+            core.info(`Removed 'ephemeral-active' label from PR #${prNumber}.`);
+          } catch (error) {
+            // 404 = label was not applied (or already gone); nothing to clean up.
+            if (error?.status === 404) {
+              core.info(`PR #${prNumber} had no 'ephemeral-active' label; nothing to remove.`);
+            } else {
+              core.warning(`Could not remove 'ephemeral-active' label from PR #${prNumber}: ${error?.message ?? error}`);
+            }
+          }
+
+    - name: Post cleanup comment on PR
+      if: ${{ inputs.post-pr-comment == 'true' }}
+      uses: actions/github-script@v9
+      with:
+        github-token: ${{ steps.token.outputs.token }}
+        script: |
+          const issueNumber = '${{ steps.identity.outputs.pr-number }}';
+          const prNumber = '${{ steps.identity.outputs.pr-number }}';
+          const appNames = ['premier-inn', 'business-booker', 'ccui'];
+
+          if (!issueNumber) {
+            core.info('No PR number available; skipping cleanup comment.');
+            return;
+          }
+
+          try {
+            const environmentsList = appNames.map(app => `\`${app}-PR-${prNumber}\``).join(', ');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(issueNumber),
+              body: `✅ PR resources cleaned up:\n- Helm releases (premier-inn, business-booker, ccui) uninstalled from \`opera-fe\`\n- Environments cleaned: ${environmentsList}`
+            });
+          } catch (error) {
+            if (error?.status === 403) {
+              core.warning('Skipping cleanup comment: token lacks permission to comment on this PR.');
+              core.warning(`GitHub API response: ${error.message}`);
+              return;
+            }
+            throw error;
+          }
+
+    - name: Checkout shared scripts
+      uses: actions/checkout@v7
+      with:
+        repository: whitbread-eos/wbd-workflows-templates
+        ref: test-ephermal-pib-ccui
+        token: ${{ steps.token.outputs.token }}
+        path: shared-chart
+
+    - name: Set up Python
+      uses: actions/setup-python@v7
+      with:
+        python-version: "3.11"
+
+    # - name: Remove ephemeral environments from GitHub Pages
+    #   shell: bash
+    #   env:
+    #     GH_TOKEN: ${{ steps.token.outputs.token }}
+    #     GITHUB_REPOSITORY: ${{ github.repository }}
+    #     ACTION: remove
+    #     SANITIZED_BRANCH: ${{ steps.identity.outputs.sanitized-branch }}
+    #     PR_NUMBER: ${{ steps.identity.outputs.pr-number }}
+    #   run: bash shared-chart/ephemeral-page/sync_page.sh

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <FrameLayout
+        android:id="@+id/gallery"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_pager_gallery_height"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.whitbread.premierinn.common.view.gallery.finite.implementations.BadgedFiniteGallery
+            android:id="@+id/hotel_details_top_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/hotel_details_hub_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/green"
+            android:padding="@dimen/generic_padding_10"
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_hubo_logo_banner"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/hotel_details_zip_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/zip_red"
+            android:padding="@dimen/generic_padding_10"
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_zip_logo_banner"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/counter"
+            style="@style/Subtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/generic_padding_24"
+            android:layout_marginBottom="@dimen/generic_margin_8"
+            android:background="@drawable/counter_background"
+            android:paddingHorizontal="@dimen/generic_padding_8"
+            android:paddingVertical="@dimen/generic_padding_2"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="1/10" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/hotel_details_hotel_name"
+        style="@style/LargeTitleBold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/default_medium_margin"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gallery"
+        app:lineHeight="@dimen/line_height_32"
+        tools:text="hub by Premier Inn - London Spitalfields, Brick Lane" />
+</androidx.constraintlayout.widget.ConstraintLayout>

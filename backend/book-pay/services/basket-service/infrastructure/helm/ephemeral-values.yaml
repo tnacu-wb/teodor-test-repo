@@ -1,0 +1,194 @@
+# Ephemeral (per-PR) values for basket-service.
+#
+# ci-matrix-deploy-eph.yaml layers this file OVER the backend stack defaults at
+# backend/infrastructure/helm/ephemeral-values.yaml:
+#
+#   opera-app-chart/values.yaml  <  stack ephemeral defaults  <  THIS FILE  <  --set
+#
+# Everything generic to a PR release — canary/autoscaling/pdb/istio/prometheus off,
+# replicaCount 1, the trimmed lifecycle and grace period, ndots, probe TIMINGS,
+# imagePullSecrets, namespace — is inherited and is not repeated here.
+#
+# Overridden per-deploy by ci-matrix-deploy-eph.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create, ephemeral
+#
+# ── Shared dev state, not a private copy ─────────────────────────────────────
+#
+# A PR release of basket-service reads and writes the SAME DynamoDB tables, the same
+# Redis cluster and the same Kafka topics as the shared dev deployment — none of those
+# are provisioned per-PR. Two consequences worth knowing before using one:
+#   * a basket written by a PR release is visible to dev, and vice versa;
+#   * a change to the persisted basket shape needs to stay readable by dev, or dev
+#     breaks for as long as the PR release is up.
+# The one thing that IS isolated is the Kafka consumer group — see below.
+
+applicationName: basket-service
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/basket-service
+
+deployment:
+  # IRSA for the DynamoDB tables. The ServiceAccount is cluster-scoped and name-stable,
+  # so a PR release can use it directly; without it every DynamoDB call is denied.
+  serviceAccount: basket-service
+
+  containerPorts:
+    - containerPort: 9104
+      protocol: TCP
+      name: http
+    # Not published through the Service — reach it with
+    # `kubectl port-forward -n opera-be deploy/<release> 5005:5005`.
+    - containerPort: 5005
+      protocol: TCP
+      name: debug
+
+  containerEnvFrom:
+    # Cluster-provisioned and shared, so its fixed name is safe here. `optional: true`
+    # because nothing in .github/workflows creates it: absent, the app falls back to
+    # application.yml's localhost:9092 and Kafka publishing fails — a degraded
+    # environment rather than a pod stuck in CreateContainerConfigError with
+    # `helm --wait` timing out.
+    - configMapRef:
+        name: kafka-bootstrap-config
+        optional: true
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=70 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # ── Kafka ────────────────────────────────────────────────────────────────
+    - name: TOPICS_ORDERS
+      value: orders-dev
+    - name: TOPICS_REFUNDS
+      value: refunds-dev
+    # basket-service is a CONSUMER of payment-authorised, and application.yml defaults
+    # that group to `basket-service-payment-authorised` — the same group the shared dev
+    # pod uses. Left alone, a PR release would be handed live partitions and would eat
+    # the dev deployment's payment-authorised events. Its own group means its own
+    # offsets. The name is a constant, so concurrent PR releases of THIS service share
+    # one group and split the partitions between them.
+    - name: KAFKA_PAYMENT_AUTHORISED_GROUP_ID
+      value: basket-service-payment-authorised-eph
+    - name: KAFKA_PAYMENT_AUTHORISED_CONCURRENCY
+      value: '1'
+
+    # ── DynamoDB ─────────────────────────────────────────────────────────────
+    # `optional: true` throughout: nothing in .github/workflows creates these secrets,
+    # and a hard secretKeyRef to a missing one leaves the pod in
+    # CreateContainerConfigError forever while `helm --wait` times out. Optional, the
+    # app falls back to application.yml's table names (newBasket, PrepaidBookingCharges)
+    # and DynamoDB calls fail against tables that do not exist — the rest of the service
+    # still boots and is testable.
+    - name: DYNAMODB_TABLE_BASKET_NAME
+      valueFrom:
+        secretKeyRef:
+          name: new-basket-service
+          key: basket_dynamodb_table_name
+          optional: true
+    - name: DYNAMODB_TABLE_BASKET_REGION
+      valueFrom:
+        secretKeyRef:
+          name: new-basket-service
+          key: basket_dynamodb_table_region
+          optional: true
+    - name: DYNAMODB_TABLE_PREPAID_BOOKING_CHARGES_NAME
+      valueFrom:
+        secretKeyRef:
+          name: prepaid-booking-charges
+          key: prepaid_booking_charges_dynamodb_table_name
+          optional: true
+
+    # ── Downstream services ──────────────────────────────────────────────────
+    # Shared dev instances, not per-PR copies. Bare hostnames because every one of these
+    # publishes port 80 on its Service. To wire this release to a PR release of one of
+    # them instead, change the value on the branch to <service>-pr-<n>.
+    - name: RESERVATION_HOST
+      value: hotel-reservation-entity-service
+    - name: CONTENT_HOST
+      value: content-entity-service
+    - name: THREEC_HOST
+      value: threec-payment-service-opera
+    - name: HOTEL_ENTITY_HOST
+      value: hotel-entity-service
+    - name: REFUND_REQUEST_PROCESSOR
+      value: refund-request-processor
+    - name: CDH_ADAPTER_HOST
+      value: cdh-adapter-service
+    - name: RULES_AGENT_HOST
+      value: rules-agent-entity-service
+    - name: OHIP_HOST
+      value: ohip-adapter-service
+    - name: PROMO_SERVICE_HOST
+      value: promo-service
+    - name: MARKETING_HOST
+      value: http://marketing-service-opera
+
+    # ── Auth tenants ─────────────────────────────────────────────────────────
+    # Inlined rather than read from basket-service-configmap: the chart would name a
+    # created ConfigMap after the PR release, so a hard-coded configMapKeyRef could
+    # never resolve. None of these have defaults in application.yml, so leaving them
+    # out would fail startup outright.
+    - name: CCUI_TENANT_AUDIENCE
+      value: https://api.dev.whitbread.digital
+    - name: CCUI_TENANT_ISSUER
+      value: https://dev-whitbread-digital.eu.auth0.com/
+    - name: CCUI_TENANT_JWK_URI
+      value: https://dev-whitbread-digital.eu.auth0.com/.well-known/jwks.json
+    - name: CCUI_TENANT_NAMESPACE
+      value: https://ccui.opera.whitbread.digital
+    - name: PI_BB_TENANT_AUDIENCE
+      value: https://wbodetest.eu.auth0.com/api/v2/
+    - name: PI_BB_TENANT_ISSUER
+      value: https://auth0.premierinn.digital/
+    - name: PI_BB_TENANT_JWK_URI
+      value: https://auth0.premierinn.digital/.well-known/jwks.json
+    - name: PI_BB_TENANT_NAMESPACE
+      value: https://premierinn.com
+
+    # ── Feature flags and cache ──────────────────────────────────────────────
+    - name: UNLEASH_ENVIRONMENT
+      value: dev
+    - name: UNLEASH_URL
+      value: https://whitbread.edge.getunleash.io/api
+    - name: UNLEASH_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: unleash-enterprise-secrets
+          key: token
+          optional: true
+    - name: CACHE_TYPE
+      value: redis
+    - name: REDIS_ENDPOINT
+      value: clustercfg.opera-dev.jynzd4.memorydb.eu-west-1.amazonaws.com:6379
+    - name: CITY_TAX
+      value: CITYTAX, CITYEXP
+
+  readinessProbe:
+    httpGet:
+      path: /v1/baskets/actuator/health/readiness
+      port: 9104
+
+  livenessProbe:
+    httpGet:
+      path: /v1/baskets/actuator/health/liveness
+      port: 9104
+
+  # The largest service in the stack, so its PR release gets more than the stack default
+  # 1024Mi. Only memory is stated; requests.cpu (50m) merges through. requests.memory is
+  # pinned to limits.memory because the heap is sized off the limit.
+  resources:
+    requests:
+      memory: 1536Mi
+    limits:
+      memory: 1536Mi
+
+service:
+  name: basket-service
+  ports:
+    - port: 80
+      targetPort: 9104
+      protocol: TCP
+      name: port9104

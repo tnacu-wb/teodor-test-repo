@@ -1,0 +1,3 @@
+import SilentSubstitutionNotificationWrapper from './SilentSubstitutionNotificationWrapper.component';
+
+export default SilentSubstitutionNotificationWrapper;

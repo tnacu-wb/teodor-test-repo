@@ -1,0 +1,121 @@
+server:
+  port: 9110
+  servlet:
+    contextPath: "/aop/"
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "basket-async-order-processor"
+    description: "Whitbread Basket Async Processor"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+config:
+  service:
+    reservation:
+      host: http://${RESERVATION_HOST:localhost:9103}
+      confirmReservationEndpoint: "/v1/reservations/confirm"
+      status:
+        reserved: "RESERVED"
+      cancelReservationEndpoint: "/v1/reservations/cancellations/rollback"
+      amendReservationEndpoint: "/v1/reservations/amend/confirmAmend"
+    basket:
+      host: http://${BASKET_SERVICE_HOST:localhost:9104}
+      basketStatusEndpoint: "/v1/baskets/{basket-reference}"
+basket:
+  event:
+    order:
+      prefix:
+        stayOrderPrefix: "STAY"
+        amendOrderPrefix: "AMEND"
+  topics:
+    ack: ${TOPICS_ACK:ack}
+    orders:
+      name: ${TOPICS_ORDERS:orders}
+      concurrency: ${KAFKA_ORDERS_CONCURRENCY:2}
+  kafka:
+    bootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    groupId: ${KAFKA_GROUP_ID:basket-order}
+    requestTimeout: ${KAFKA_REQUEST_TIMEOUT:480000}
+    heartBeatInterval: ${KAFKA_HEARTBEAT_INTERVAL:1000}
+    maxPollInterval: ${KAFKA_MAX_POLL_INTERVAL:900000}
+    maxPollRecords: ${KAFKA_MAX_POLL_RECORDS:100}
+    sessionTimeout: ${KAFKA_SESSION_TIMEOUT:600000}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics

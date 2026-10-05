@@ -1,0 +1,30 @@
+@startuml
+entity "OHIP Adapter Service" as OHIP
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as WebClient
+entity OPERA
+
+OHIP -> Controller: GET /v1/reservations/cancellationPolicies
+Controller -> InboundPort: getCancellationPolicies
+InboundPort -> OutboundPort: getCancellationPolicies
+OutboundPort -> WebClient: getCancellationPolicies
+
+group reservationId
+    WebClient -> OPERA: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}?fetchInstructions=ReservationPolicies
+    WebClient <- OPERA: Reservation
+end
+group ratePlanCode and arrivalDate
+    WebClient -> OPERA: GET /rsv/config/v0/cancelpolicies?hotelIds={{HotelId}}
+    WebClient <- OPERA: CancellationPolicyDetails
+    WebClient -> OPERA: GET /rsv/config/v0/hotels/{{HotelId}}/policyschedules?policyType=Cancellation&ratePlanCodes={{RatePlanCode}}
+    WebClient <- OPERA: PolicySchedulesDetails
+end
+
+
+OutboundPort <- WebClient: CancellationPoliciesResponse
+InboundPort <- OutboundPort: CancellationPoliciesResponse
+Controller <- InboundPort: CancellationPoliciesResponse
+OHIP <- Controller: CancellationPoliciesResponse
+@enduml

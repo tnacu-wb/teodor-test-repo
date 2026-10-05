@@ -1,0 +1,108 @@
+schema {
+    mutation: Mutation
+}
+
+type Mutation {
+    createAccount(createAccountRequest: CreateAccountRequest!): CreateAccountResponse!
+    updateMarketingPreferences(updateMarketingPreferencesRequest: UpdateMarketingPreferencesRequest!): String
+}
+
+input ContactDetail {
+    title: String
+    firstName: String!
+    lastName: String!
+    emailAddress: String
+    mobile: String!
+    address: GuestAddress
+}
+
+input CreateAccountRequest {
+    country: String
+    language: String
+    captcha: String
+    password: String!
+    contactDetail: ContactDetail
+    basketReference: String
+    updatePreferencesRequest: UpdatePreferencesRequestV2
+}
+
+input UpdatePreferencesRequestV2 {
+    contactType: String
+    optIn: Boolean
+    doubleOptIn: Boolean
+    secondPartyOptIn: Boolean
+    thirdPartyVendorsOptIn: Boolean
+    brandCodes: [String]
+    customer: MarketingCustomer
+    contactSubType: ContactSubType
+    sourceDetails: OptionalSourceDetails
+    contactValue: String
+}
+
+input MarketingCustomer {
+    title: String
+    firstName: String
+    lastName: String
+    nationality: String
+    userId: String
+    countryOfResidence: String
+    customerId: String
+    language: String
+}
+
+enum ContactSubType {
+    mobile
+    landline
+}
+
+input OptionalSourceDetails {
+    channel: String
+    journey: String
+    locale: String
+}
+
+input CustomerDetails {
+    title: String
+    firstName: String
+    lastName: String
+    nationality: String
+    userId: String
+    countryOfResidence: String
+    customerId: String
+    language: String
+}
+
+input GuestAddress {
+    addressType: String
+    postalCode: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    countryCode: String
+    cityName: String
+    companyName: String
+    addressId: String
+}
+
+type CreateAccountResponse {
+    success: Boolean!
+    sessionId: String
+    customerId: String
+    existingCompany: Boolean
+    existingEmployee: Boolean
+}
+
+input SourceDetails {
+    channel: String!
+    journey: String
+    locale: String
+}
+
+input UpdateMarketingPreferencesRequest {
+    brandCodes: [String!]
+    optIn: Boolean!
+    doubleOptIn: Boolean!
+    customer: CustomerDetails!
+    sourceDetails: SourceDetails!
+}

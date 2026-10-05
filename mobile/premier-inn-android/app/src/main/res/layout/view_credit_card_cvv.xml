@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/et_credit_card_cvv"
+        style="@style/Header3Regular"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:background="@drawable/shape_black_line"
+        android:ems="10"
+        android:hint="@string/card_details_form_cvv"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:maxLength="3"
+        android:paddingStart="@dimen/generic_padding_14"
+        android:paddingEnd="@dimen/generic_padding_14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_credit_card_cvv_error"
+        style="@style/BodySmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/card_details_form_cvv_validation_error"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_credit_card_cvv_text"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/iv_credit_card_cvv_icon"
+        android:layout_width="36dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:scaleType="centerCrop"
+        android:src="@drawable/accesibility_label_state_bg"
+        app:layout_constraintStart_toEndOf="@+id/et_credit_card_cvv"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_credit_card_cvv_text"
+        style="@style/BodySmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:minLines="2"
+        android:text="@string/card_details_form_cvv_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_credit_card_cvv_error"
+        app:layout_constraintStart_toEndOf="@+id/et_credit_card_cvv"
+        app:layout_constraintTop_toBottomOf="@+id/iv_credit_card_cvv_icon" />
+
+    <com.whitbread.premierinn.common.view.InfoMessageBoxView
+        android:id="@+id/cvvMessageBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:background="@drawable/shape_grey_stroke_white_background"
+        android:padding="@dimen/generic_padding_16"
+        android:src="@drawable/ic_info"
+        android:text="@string/card_details_authenticate_info"
+        app:iconTintColor="@color/teal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_credit_card_cvv_error" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

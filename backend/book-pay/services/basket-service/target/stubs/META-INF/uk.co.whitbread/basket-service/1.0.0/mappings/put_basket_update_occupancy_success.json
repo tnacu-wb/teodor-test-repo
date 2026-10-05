@@ -1,0 +1,27 @@
+{
+  "id" : "d88980ab-40ab-4bee-aba2-be5beafa72d3",
+  "request" : {
+    "urlPath" : "/v1/baskets/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/occupancy",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "If-Match" : {
+        "equalTo" : "1684426938941"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$.['items'][*][?(@.['type'] == 'STAY')]"
+    }, {
+      "matchesJsonPath" : "$.['items'][*][?(@.['sourceId'] == '1234')]"
+    }, {
+      "matchesJsonPath" : "$.['items'][*][?(@.['hasOccupancySup'] == true)]"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "d88980ab-40ab-4bee-aba2-be5beafa72d3"
+}

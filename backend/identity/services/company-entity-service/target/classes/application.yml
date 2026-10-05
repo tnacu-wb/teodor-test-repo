@@ -1,0 +1,131 @@
+server:
+  port: 9118
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "company-entity-service"
+    description: "Company Entity Microservice"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /v1/companies/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  level:
+    sun.rmi: OFF
+    sun.management: OFF
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - firstName
+        - lastName
+        - surname
+        - email
+
+spring:
+  jackson:
+    deserialization:
+      fail-on-null-for-primitives: false
+  sleuth:
+    propagation:
+      type: aws
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+config:
+  service:
+    ohip:
+      host: http://${OHIP_HOST:localhost:9100}/ohip
+      companiesProfile: "/v1/profile/companies"
+      companyProfile: "/v1/profile/company/{corporateId}"
+      companyProfileByCompanyId: "/v1/profile/company/id/{companyId}"
+      negotiatedRatesByCompanyProfileId: "/{profileId}/negotiatedRates"
+    cdh:
+      host: http://${CDH_HOST:localhost:9119}
+      companiesEndpoint: "/v1/cdh/account/companies"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+logging:
+  configuration:
+    logger: custom
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-qa
+        - opera-dev
+        - opera-perf
+        - opera-uat
+        - opera-dit
+        - opera-sit
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-hulk
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

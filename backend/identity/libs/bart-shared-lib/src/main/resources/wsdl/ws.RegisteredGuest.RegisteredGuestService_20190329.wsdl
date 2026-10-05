@@ -1,0 +1,1060 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+			 xmlns:s="http://www.w3.org/2001/XMLSchema"
+			 xmlns:s0="http://bartws.micros.com/1.13"
+			 xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			 targetNamespace="http://bartws.micros.com/1.13">
+	<types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://bartws.micros.com/1.13">
+			<s:include schemaLocation="../xsd/bart-common-error-113.xsd"/>
+			<s:include schemaLocation="../xsd/bart-common-price-113.xsd"/>
+			<s:element name="ChangePasswordRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="ChangePasswordDetails" type="s0:ChangePasswordRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="ChangePasswordRequest">
+				<s:sequence>
+					<s:element minOccurs="0" name="registeredEmail" type="s:string"/>
+					<s:element minOccurs="0" name="registeredTelephoneNumber" type="s:string"/>
+					<s:element name="passwordToken" type="s:string"/>
+					<s:element name="newPassword" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="ChangePasswordRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="ChangePasswordRequestResult" type="s0:ChangePasswordResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="ChangePasswordResponse">
+				<s:sequence>
+					<s:element name="passwordChanged" type="s:boolean"/>
+					<s:element minOccurs="0" name="passwordChangedError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_NEW_PASSWORD"/>
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="INVALID_EMAIL_ADDRESS"/>
+								<s:enumeration value="INVALID_REGISTERED_TELEPHONE_NUMBER"/>
+								<s:enumeration value="INVALID_PASSWORD_TOKEN"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="CopyInvoiceRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="CopyInvoiceDetails" type="s0:CopyInvoiceRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="CopyInvoiceRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="historyRecordNumbers" type="s0:ArrayOfhistoryRecordNumbersItemLong"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfhistoryRecordNumbersItemLong">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="historyRecordNumbersItem" nillable="true"
+							   type="s:long"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="CopyInvoiceRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="CopyInvoiceRequestResult" type="s0:CopyInvoiceResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="CopyInvoiceResponse">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="copyInvoiceError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="SESSION_ID_NOT_FOUND"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="invoices" type="s0:ArrayOfInvoiceInvoices"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfInvoiceInvoices">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Invoice" nillable="true" type="s0:Invoices"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Invoices">
+				<s:sequence>
+					<s:element minOccurs="0" name="historyRecordNumber" type="s:long"/>
+					<s:element name="copyInvoiceSuccess" type="s:boolean"/>
+					<s:element minOccurs="0" name="copyInvoiceError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="USER_NOT_LOGGED_IN"/>
+								<s:enumeration value="NO_REGISTERED_EMAIL_ADDRESS"/>
+								<s:enumeration value="INVALID_STAY_NUMBER"/>
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="CreateRegisteredGuestRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="CreateRegisteredGuestDetails"
+								   type="s0:CreateRegisteredGuestRequest1"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="CreateRegisteredGuestRequest1">
+				<s:sequence>
+					<s:element name="guestDetails" type="s0:RegisteredGuest"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RegisteredGuest">
+				<s:sequence>
+					<s:element name="title" type="s:string"/>
+					<s:element name="firstName" type="s:string"/>
+					<s:element name="lastName" type="s:string"/>
+					<s:element name="address" type="s0:Address"/>
+					<s:element name="addressType">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="HOME"/>
+								<s:enumeration value="BUSINESS"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="companyName" type="s:string"/>
+					<s:element minOccurs="0" name="companyID" type="s:string"/>
+					<s:element minOccurs="0" name="existingPassword" type="s:string"/>
+					<s:element minOccurs="0" name="businessUse" type="s:boolean"/>
+					<s:element name="emailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="electronicInvoiceRequired" type="s:boolean"/>
+					<s:element minOccurs="0" name="guestHistoryNumber" type="s:string"/>
+					<s:element minOccurs="0" name="telephoneNumbers" type="s0:ArrayOfTelephoneRegisteredTelephone"/>
+					<s:element name="registeredGuestPassword">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:minLength value="8"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="registeredPaymentCard" type="s0:RegisteredPaymentCard"/>
+					<s:element minOccurs="0" name="registeredGuestPreferences"
+							   type="s0:ArrayOfRegisteredGuestPreferenceRegisteredGuestPreference"/>
+					<s:element minOccurs="0" name="ivrRegistered" type="s0:ivrRegistered"/>
+					<s:element name="receiveFutureMailings" type="s:boolean"/>
+					<s:element minOccurs="0" name="additionalGuestNames"
+							   type="s0:ArrayOfAdditionalGuestNameAdditionalGuestNames"/>
+					<s:element minOccurs="0" name="loyaltyStatuses" type="s0:ArrayOfLoyaltyStatusLoyaltyStatus"/>
+					<s:element minOccurs="0" name="carRegistration">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="10"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="nationality">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="3"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="passport" type="s0:Passport"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Address">
+				<s:sequence>
+					<s:element name="addressLine1" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine2" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine3" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine4" type="s:string"/>
+					<s:element minOccurs="0" name="addressLine5" type="s:string"/>
+					<s:element minOccurs="0" name="countryCode" type="s:string"/>
+					<s:element minOccurs="0" name="postCode" type="s:string"/>
+					<s:element minOccurs="0" name="companyName" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfTelephoneRegisteredTelephone">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="Telephone" nillable="true"
+							   type="s0:RegisteredTelephone"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RegisteredTelephone">
+				<s:sequence>
+					<s:element name="numberType">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="TELEPHONE"/>
+								<s:enumeration value="MOBILE"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="telephoneNumber" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RegisteredPaymentCard">
+				<s:sequence>
+					<s:element name="cardType" type="s:string"/>
+					<s:element name="cardNumber" type="s:string"/>
+					<s:element name="expiryDate" type="s:string"/>
+					<s:element minOccurs="0" name="startDate" type="s:string"/>
+					<s:element minOccurs="0" name="issueNumber" type="s:string"/>
+					<s:element name="cardHolderName" type="s:string"/>
+					<s:element minOccurs="0" name="useExistingCard" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfRegisteredGuestPreferenceRegisteredGuestPreference">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="RegisteredGuestPreference" nillable="true"
+							   type="s0:RegisteredGuestPreference"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RegisteredGuestPreference">
+				<s:sequence>
+					<s:element minOccurs="0" name="roomType">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="FAM"/>
+								<s:enumeration value="DB"/>
+								<s:enumeration value="TWIN"/>
+								<s:enumeration value="DIS"/>
+								<s:enumeration value="SB"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="adults" type="s:long"/>
+					<s:element minOccurs="0" name="children" type="s:long"/>
+					<s:element minOccurs="0" name="cotRequired" type="s:boolean"/>
+					<s:element minOccurs="0" name="breakfastCode" type="s:long"/>
+					<s:element minOccurs="0" name="prePay" type="s:boolean"/>
+					<s:element minOccurs="0" name="preferredConfirmationMethod">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="EMAIL"/>
+								<s:enumeration value="SMS"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="preferredLanguage" type="s:string"/>
+				</s:sequence>
+				<s:attribute name="hotelBrand" type="s:string"/>
+			</s:complexType>
+			<s:complexType name="ivrRegistered">
+				<s:sequence>
+					<s:element minOccurs="0" name="ivrType">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="TELEPHONE"/>
+								<s:enumeration value="MOBILE"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="ivrPin">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="6"/>
+								<s:minLength value="6"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="existingPin">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="6"/>
+								<s:minLength value="6"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfAdditionalGuestNameAdditionalGuestNames">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="AdditionalGuestName" nillable="true"
+							   type="s0:AdditionalGuestNames"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="AdditionalGuestNames">
+				<s:sequence>
+					<s:element minOccurs="0" name="additionalTitle" type="s:string"/>
+					<s:element minOccurs="0" name="additionalFirstName" type="s:string"/>
+					<s:element minOccurs="0" name="additionalLastName" type="s:string"/>
+					<s:element minOccurs="0" name="additionalNationality">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="3"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="additionalPassport" type="s0:Passport"/>
+					<s:element minOccurs="0" name="additionalCarRegistration">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="10"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="additionalEmailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="additionalTelephone" type="s:string"/>
+					<s:element minOccurs="0" name="additionalMobile" type="s:string"/>
+					<s:element minOccurs="0" name="additionalGuestHistory" type="s:string"/>
+					<s:element minOccurs="0" name="additionalGuestID" type="s:long"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Passport">
+				<s:sequence>
+					<s:element minOccurs="0" name="passportNumber">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="15"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="placeOfIssue">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="25"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfLoyaltyStatusLoyaltyStatus">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="LoyaltyStatus" nillable="true"
+							   type="s0:LoyaltyStatus"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="LoyaltyStatus">
+				<s:sequence>
+					<s:element minOccurs="0" name="programCode">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="10"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="programStatus" type="s:boolean"/>
+					<s:element minOccurs="0" name="dateEnrolled" type="s:date"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="CreateRegisteredGuestRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="CreateRegisteredGuestRequestResult" type="s0:CreateRegisteredGuestResponse1"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="CreateRegisteredGuestResponse1">
+				<s:sequence>
+					<s:element name="registrationSuccess" type="s:boolean"/>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="createRegisteredGuestError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="INVALID_NUMBER_OF_DIGITS_IN_CREDIT_CARD_NUMBER"/>
+								<s:enumeration value="INVALID_LUHN_CHECK_DIGIT"/>
+								<s:enumeration value="EMAIL_ALREADY_REGISTERED"/>
+								<s:enumeration value="TELEPHONE_NUMBER_ALREADY_REGISTERED"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+					<s:element minOccurs="0" name="regularGuestErrors"
+							   type="s0:ArrayOfRegularGuestUpdateErrorRegularGuestUpdateError"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfRegularGuestUpdateErrorRegularGuestUpdateError">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="RegularGuestUpdateError" nillable="true"
+							   type="s0:RegularGuestUpdateError"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RegularGuestUpdateError">
+				<s:sequence>
+					<s:element name="field">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="SESSIONID"/>
+								<s:enumeration value="GHN"/>
+								<s:enumeration value="ID"/>
+								<s:enumeration value="SURNAME"/>
+								<s:enumeration value="TITLE"/>
+								<s:enumeration value="FORENAME"/>
+								<s:enumeration value="EMAIL"/>
+								<s:enumeration value="TELEPHONE"/>
+								<s:enumeration value="MOBILE"/>
+								<s:enumeration value="NATIONALITY"/>
+								<s:enumeration value="PASSPORT_NUMBER"/>
+								<s:enumeration value="PASSPORT_POI"/>
+								<s:enumeration value="CARREG"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="errorType">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="REQUIRED_FIELD"/>
+								<s:enumeration value="SESSION_NO_LONGER_VALID"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="ForgottenPasswordRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="ForgottenPasswordDetails" type="s0:ForgottenPasswordRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="ForgottenPasswordRequest">
+				<s:sequence>
+					<s:element name="loginMethod">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="EMAIL"/>
+								<s:enumeration value="TELEPHONE"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="registeredEmailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="registeredTelephoneNumber" type="s:string"/>
+					<s:element name="url">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="250"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="ForgottenPasswordRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="ForgottenPasswordRequestResult" type="s0:ForgottenPasswordResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="ForgottenPasswordResponse">
+				<s:sequence>
+					<s:element name="passwordToken" type="s:string"/>
+					<s:element name="success" type="s:boolean"/>
+					<s:element minOccurs="0" name="forgottenPasswordError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="NOT_A_REGISTERED_ACCOUNT"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfRoomTypeRoomTypes">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="RoomType" nillable="true" type="s0:RoomTypes"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RoomTypes">
+				<s:sequence>
+					<s:element name="roomType">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="FAM"/>
+								<s:enumeration value="DB"/>
+								<s:enumeration value="TWIN"/>
+								<s:enumeration value="DIS"/>
+								<s:enumeration value="SB"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element name="bookingStatus">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="BOOKED"/>
+								<s:enumeration value="CANCELLED"/>
+								<s:enumeration value="RELEASED"/>
+								<s:enumeration value="PREPAID"/>
+								<s:enumeration value="ARRIVED"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="carDataPresent" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="IsEmailRegistered">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="request" type="s0:IsEmailRegisteredRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="IsEmailRegisteredRequest">
+				<s:sequence>
+					<s:element minOccurs="0" name="emailAddress" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="IsEmailRegisteredResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="IsEmailRegisteredResult" type="s0:IsEmailRegisteredResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="IsEmailRegisteredResponse">
+				<s:sequence>
+					<s:element name="isRegistered" type="s:boolean"/>
+					<s:element minOccurs="0" name="isRegisteredError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="LoyaltyProgramEnrolmentRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="LoyaltyProgramEnrolmentDetails"
+								   type="s0:LoyaltyProgramEnrolmentRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="LoyaltyProgramEnrolmentRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="emailAddress" type="s:string"/>
+					<s:element name="programCode">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:maxLength value="10"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="LoyaltyProgramEnrolmentRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="LoyaltyProgramEnrolmentRequestResult"
+								   type="s0:LoyaltyProgramEnrolmentResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="LoyaltyProgramEnrolmentResponse">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="updateSuccess" type="s:boolean"/>
+					<s:element minOccurs="0" name="loyaltyProgramEnrolmentError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="SESSION_ID_NOT_FOUND"/>
+								<s:enumeration value="EMAIL_ADDRESS_NOT_REGISTERED"/>
+								<s:enumeration value="LOYALTY_PROGRAM_NOT_FOUND"/>
+								<s:enumeration value="GUEST_ALREADY_ENROLLED_IN_LOYALTY_PROGRAM"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="PastStaysRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="PastStaysDetails" type="s0:PastStaysRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="PastStaysRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="emailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="telephoneNumber" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="PastStaysRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="PastStaysRequestResult" type="s0:PastStaysResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="PastStaysResponse">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="pastStays" type="s0:ArrayOfPastStayPastStays"/>
+					<s:element minOccurs="0" name="pastStaysError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="USER_NOT_LOGGED_IN"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfPastStayPastStays">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="PastStay" nillable="true" type="s0:PastStays"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="PastStays">
+				<s:sequence>
+					<s:element name="historyRecordNumber" type="s:long"/>
+					<s:element name="hotelCode" type="s:string"/>
+					<s:element name="arrivalDate" type="s:date"/>
+					<s:element name="departureDate" type="s:date"/>
+					<s:element name="guestName" type="s:string"/>
+					<s:element name="roomNumber" type="s:string"/>
+					<s:element name="invoiceValue" type="s0:Price"/>
+					<s:element minOccurs="0" name="purchaseOrder" type="s:string"/>
+					<s:element minOccurs="0" name="customerReference" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="RegisteredGuestLoginRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="RegisteredGuestLoginDetails"
+								   type="s0:RegisteredGuestLoginRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="RegisteredGuestLoginRequest">
+				<s:sequence>
+					<s:element name="loginMethod">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="EMAIL"/>
+								<s:enumeration value="PHONE"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="emailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="password" type="s:string"/>
+					<s:element minOccurs="0" name="telephoneNumber" type="s:string"/>
+					<s:element minOccurs="0" name="pin" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="RegisteredGuestLoginRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="RegisteredGuestLoginRequestResult" type="s0:RegisteredGuestLoginResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="RegisteredGuestLoginResponse">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="ezineSubscribed" type="s:boolean"/>
+					<s:element name="guestDetails" type="s0:RegisteredGuest"/>
+					<s:element minOccurs="0" name="inHouse" type="s:boolean"/>
+					<s:element minOccurs="0" name="nextArrival" type="s0:NextArrival"/>
+					<s:element minOccurs="0" name="loginRegisteredGuestError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="EMAIL_ADDRESS_NOT_REGISTERED"/>
+								<s:enumeration value="TELEPHONE_NUMBER_NOT_REGISTERED"/>
+								<s:enumeration value="INVALID_GUEST_LOGIN"/>
+								<s:enumeration value="ACCOUNT_LOCKED"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="NextArrival">
+				<s:sequence>
+					<s:element name="hotelCode" type="s:string"/>
+					<s:element name="historyRecordNumber" type="s:long"/>
+					<s:element name="arrivalDate" type="s:date"/>
+					<s:element name="departureDate" type="s:date"/>
+					<s:element name="checkInOnline" type="s:boolean"/>
+					<s:element name="isCheckedIn" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="RegisteredGuestUpdateRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="RegisteredGuestUpdateDetails"
+								   type="s0:RegisteredGuestUpdateRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="RegisteredGuestUpdateRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="guestDetails" type="s0:RegisteredGuest"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="RegisteredGuestUpdateRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="RegisteredGuestUpdateRequestResult" type="s0:RegisteredGuestUpdateResponse1"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="RegisteredGuestUpdateResponse1">
+				<s:sequence>
+					<s:element name="updateSuccess" type="s:boolean"/>
+					<s:element minOccurs="0" name="registeredGuestUpdateError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="USER_NOT_LOGGED_IN"/>
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="INVALID_NUMBER_OF_DIGITS_IN_CREDIT_CARD_NUMBER"/>
+								<s:enumeration value="INVALID_LUHN_CHECK_DIGIT"/>
+								<s:enumeration value="EMAIL_ALREADY_REGISTERED"/>
+								<s:enumeration value="TELEPHONE_NUMBER_ALREADY_REGISTERED"/>
+								<s:enumeration value="INVALID_EXISTING_PASSWORD"/>
+								<s:enumeration value="INVALID_EXISTING_PIN"/>
+								<s:enumeration value="NO_REGISTERED_CARD_ON_FILE"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+					<s:element minOccurs="0" name="regularGuestErrors"
+							   type="s0:ArrayOfRegularGuestUpdateErrorRegularGuestUpdateError"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="RegularGuestUpdate">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="request" type="s0:RegularGuestUpdateRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="RegularGuestUpdateRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="additionalGuests"
+							   type="s0:ArrayOfAdditionalGuestNameAdditionalGuestNames"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="RegularGuestUpdateResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="RegularGuestUpdateResult" type="s0:RegularGuestUpdateResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="RegularGuestUpdateResponse">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="updateSuccess" type="s:boolean"/>
+					<s:element minOccurs="0" name="additionalGuests"
+							   type="s0:ArrayOfAdditionalGuestNameAdditionalGuestNames"/>
+					<s:element minOccurs="0" name="errors"
+							   type="s0:ArrayOfRegularGuestUpdateErrorRegularGuestUpdateError"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="UnsubscribeRequest">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="UnsubscribeDetails" type="s0:UnsubscribeRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="UnsubscribeRequest">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="emailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="telephoneNumber" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="UnsubscribeRequestResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="UnsubscribeRequestResult" type="s0:UnsubscribeResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="UnsubscribeResponse">
+				<s:sequence>
+					<s:element name="sessionID" type="s:string"/>
+					<s:element name="unsubscribeSuccess" type="s:boolean"/>
+					<s:element minOccurs="0" name="unsubscribeError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="SESSION_ID_NOT_FOUND"/>
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="USER_NOT_LOGGED_IN"/>
+								<s:enumeration value="UNSUBSCRIBE_FAILED"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+		</s:schema>
+	</types>
+	<message name="ChangePasswordRequestSoapIn">
+		<part name="parameters" element="s0:ChangePasswordRequest"/>
+	</message>
+	<message name="ChangePasswordRequestSoapOut">
+		<part name="parameters" element="s0:ChangePasswordRequestResponse"/>
+	</message>
+	<message name="CopyInvoiceRequestSoapIn">
+		<part name="parameters" element="s0:CopyInvoiceRequest"/>
+	</message>
+	<message name="CopyInvoiceRequestSoapOut">
+		<part name="parameters" element="s0:CopyInvoiceRequestResponse"/>
+	</message>
+	<message name="CreateRegisteredGuestRequestSoapIn">
+		<part name="parameters" element="s0:CreateRegisteredGuestRequest"/>
+	</message>
+	<message name="CreateRegisteredGuestRequestSoapOut">
+		<part name="parameters" element="s0:CreateRegisteredGuestRequestResponse"/>
+	</message>
+	<message name="ForgottenPasswordRequestSoapIn">
+		<part name="parameters" element="s0:ForgottenPasswordRequest"/>
+	</message>
+	<message name="ForgottenPasswordRequestSoapOut">
+		<part name="parameters" element="s0:ForgottenPasswordRequestResponse"/>
+	</message>
+	<message name="IsEmailRegisteredSoapIn">
+		<part name="parameters" element="s0:IsEmailRegistered"/>
+	</message>
+	<message name="IsEmailRegisteredSoapOut">
+		<part name="parameters" element="s0:IsEmailRegisteredResponse"/>
+	</message>
+	<message name="LoyaltyProgramEnrolmentRequestSoapIn">
+		<part name="parameters" element="s0:LoyaltyProgramEnrolmentRequest"/>
+	</message>
+	<message name="LoyaltyProgramEnrolmentRequestSoapOut">
+		<part name="parameters" element="s0:LoyaltyProgramEnrolmentRequestResponse"/>
+	</message>
+	<message name="PastStaysRequestSoapIn">
+		<part name="parameters" element="s0:PastStaysRequest"/>
+	</message>
+	<message name="PastStaysRequestSoapOut">
+		<part name="parameters" element="s0:PastStaysRequestResponse"/>
+	</message>
+	<message name="RegisteredGuestLoginRequestSoapIn">
+		<part name="parameters" element="s0:RegisteredGuestLoginRequest"/>
+	</message>
+	<message name="RegisteredGuestLoginRequestSoapOut">
+		<part name="parameters" element="s0:RegisteredGuestLoginRequestResponse"/>
+	</message>
+	<message name="RegisteredGuestUpdateRequestSoapIn">
+		<part name="parameters" element="s0:RegisteredGuestUpdateRequest"/>
+	</message>
+	<message name="RegisteredGuestUpdateRequestSoapOut">
+		<part name="parameters" element="s0:RegisteredGuestUpdateRequestResponse"/>
+	</message>
+	<message name="RegularGuestUpdateSoapIn">
+		<part name="parameters" element="s0:RegularGuestUpdate"/>
+	</message>
+	<message name="RegularGuestUpdateSoapOut">
+		<part name="parameters" element="s0:RegularGuestUpdateResponse"/>
+	</message>
+	<message name="UnsubscribeRequestSoapIn">
+		<part name="parameters" element="s0:UnsubscribeRequest"/>
+	</message>
+	<message name="UnsubscribeRequestSoapOut">
+		<part name="parameters" element="s0:UnsubscribeRequestResponse"/>
+	</message>
+	<portType name="RegisteredGuestSoap">
+		<operation name="ChangePasswordRequest">
+			<input message="s0:ChangePasswordRequestSoapIn"/>
+			<output message="s0:ChangePasswordRequestSoapOut"/>
+		</operation>
+		<operation name="CopyInvoiceRequest">
+			<input message="s0:CopyInvoiceRequestSoapIn"/>
+			<output message="s0:CopyInvoiceRequestSoapOut"/>
+		</operation>
+		<operation name="CreateRegisteredGuestRequest">
+			<input message="s0:CreateRegisteredGuestRequestSoapIn"/>
+			<output message="s0:CreateRegisteredGuestRequestSoapOut"/>
+		</operation>
+		<operation name="ForgottenPasswordRequest">
+			<input message="s0:ForgottenPasswordRequestSoapIn"/>
+			<output message="s0:ForgottenPasswordRequestSoapOut"/>
+		</operation>
+		<operation name="IsEmailRegistered">
+			<input message="s0:IsEmailRegisteredSoapIn"/>
+			<output message="s0:IsEmailRegisteredSoapOut"/>
+		</operation>
+		<operation name="LoyaltyProgramEnrolmentRequest">
+			<input message="s0:LoyaltyProgramEnrolmentRequestSoapIn"/>
+			<output message="s0:LoyaltyProgramEnrolmentRequestSoapOut"/>
+		</operation>
+		<operation name="PastStaysRequest">
+			<input message="s0:PastStaysRequestSoapIn"/>
+			<output message="s0:PastStaysRequestSoapOut"/>
+		</operation>
+		<operation name="RegisteredGuestLoginRequest">
+			<input message="s0:RegisteredGuestLoginRequestSoapIn"/>
+			<output message="s0:RegisteredGuestLoginRequestSoapOut"/>
+		</operation>
+		<operation name="RegisteredGuestUpdateRequest">
+			<input message="s0:RegisteredGuestUpdateRequestSoapIn"/>
+			<output message="s0:RegisteredGuestUpdateRequestSoapOut"/>
+		</operation>
+		<operation name="RegularGuestUpdate">
+			<input message="s0:RegularGuestUpdateSoapIn"/>
+			<output message="s0:RegularGuestUpdateSoapOut"/>
+		</operation>
+		<operation name="UnsubscribeRequest">
+			<input message="s0:UnsubscribeRequestSoapIn"/>
+			<output message="s0:UnsubscribeRequestSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="RegisteredGuestSoap" type="s0:RegisteredGuestSoap">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+		<operation name="ChangePasswordRequest">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.ChangePasswordRequest"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="CopyInvoiceRequest">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.CopyInvoiceRequest"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="CreateRegisteredGuestRequest">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.CreateRegisteredGuestRequest"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="ForgottenPasswordRequest">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.ForgottenPasswordRequest"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="IsEmailRegistered">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.IsEmailRegistered"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="LoyaltyProgramEnrolmentRequest">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.LoyaltyProgramEnrolmentRequest"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="PastStaysRequest">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.PastStaysRequest"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="RegisteredGuestLoginRequest">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.RegisteredGuestLoginRequest"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="RegisteredGuestUpdateRequest">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.RegisteredGuestUpdateRequest"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="RegularGuestUpdate">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.RegularGuestUpdate"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="UnsubscribeRequest">
+			<soap:operation
+					soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.RegisteredGuestService.UnsubscribeRequest"
+					style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="RegisteredGuest">
+		<port name="RegisteredGuestSoap" binding="s0:RegisteredGuestSoap">
+			<soap:address
+					location="http://inntouch.slough.microsdc.com/csp/sql/ws.RegisteredGuest.RegisteredGuestService.cls"/>
+		</port>
+	</service>
+</definitions>

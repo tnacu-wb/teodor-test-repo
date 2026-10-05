@@ -1,0 +1,51 @@
+server:
+  compression.enabled: true
+
+swagger:
+  api:
+    version: "1.2.2-DNRQ-15000"
+    path: https://api.swaggerhub.com/apis/whitbread/content-service/${swagger.api.version}/swagger.yaml
+    token: eaaab7b2-ab2e-4471-b01f-ed3d901c144f
+
+info:
+  build:
+    groupId: '@project.groupId@'
+    artifact: '@project.artifactId@'
+    description: '@project.description@'
+    version: '@project.version@'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+
+feign-clients:
+  aem:
+    url: http://localhost:${wiremock.server.port:0}
+    resource: content-service/room-types
+    ratesResource: content-service/rate-classifications
+    cookiePoliciesResource: content-service/cookie-policies
+    bookingNotificationsResource: content-service/booking-info-messages
+    username: user
+    password: pass
+
+spring:
+  cache:
+    type: none
+
+cache:
+  default:
+    ttl: 5000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: disable-caching
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration
+      - org.springframework.boot.data.redis.autoconfigure.DataRedisRepositoriesAutoConfiguration

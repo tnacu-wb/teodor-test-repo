@@ -1,0 +1,101 @@
+server:
+  port: 9060
+
+hotel:
+  search:
+    default:
+      maxNights: 14
+      gqtMaxNights: 28
+      page: 1
+      size: 40
+    distribution:
+      maxNights: 364
+      maxRooms: 9
+
+feign:
+  content-service:
+    name: content-service
+    url: http://localhost:${wiremock.server.port:1}
+
+rate-classifications:
+  hotels:
+    - BRIMTI
+
+low:
+  inventory:
+    threshold: 10
+
+spring:
+  datasource:
+    platform: postgres
+    driver-class-name: org.postgresql.Driver
+    reader:
+      pattern: get*, find*
+    writer:
+      pattern: add*, update*, delete*, dbBatchUpdate*
+    hikari:
+      #connection timeout is set to 10 seconds
+      connectionTimeout: 10000
+      #idle timeout of connections in the pool is set to 4 mins
+      idleTimeout: 240000
+      #max lifetime of a connection in the pool is set to 5 mins
+      maxLifetime: 300000
+      maxPoolSize: 12
+
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    hibernate:
+      ddl-auto: create
+      default_schema: avail_cache
+    show-sql: true
+    generate-ddl: false
+  liquibase:
+    enabled: false
+
+enable:
+  citytax:
+    currency: false
+
+db:
+  batchSize: 1
+
+data:
+  validation:
+    enabled: false
+
+hibernate:
+  dialect: org.hibernate.dialect.PostgreSQLDialect
+
+config:
+  httpClient:
+    connectionTimeout: 10000
+    responseTimeout: 30
+
+feign-clients:
+  aem:
+    url: https://www.beta.premierinn.digital
+    country: gb
+    language: en
+    resource: email/email-landing-page-locations.model.json
+    username: ${AEM_USERNAME}
+    password: ${AEM_PASSWORD}
+  snowdrop:
+    host: api-uat.whitbread.co.uk
+    authentication:
+      enabled: true
+      username: ${SNOWDROP_USERNAME}
+      password: ${SNOWDROP_PASSWORD}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: increase-batch-size
+
+db:
+  # Number of sql blocks to be executed each time
+  batchSize: 50

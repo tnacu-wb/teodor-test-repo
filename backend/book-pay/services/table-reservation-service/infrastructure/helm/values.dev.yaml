@@ -1,0 +1,48 @@
+containerEnvs:
+  - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: appd-app-agent-envs-secret
+        key: app_dynamics_dev_key
+  - name: username
+    valueFrom:
+      secretKeyRef:
+        name: restaurant-zonal-secrets
+        key: username
+  - name: Password
+    valueFrom:
+      secretKeyRef:
+        name: restaurant-zonal-secrets
+        key: Password
+  - name: AEM_CREDENTIALS_ENV_PASS
+    valueFrom:
+      secretKeyRef:
+        name: aem-credentials
+        key: password
+  - name: AEM_CREDENTIALS_ENV_USER
+    valueFrom:
+      secretKeyRef:
+        name: aem-credentials
+        key: user
+  - name: AEM_URL
+    valueFrom:
+      configMapKeyRef:
+        name: table-reservation-service-configmap
+        key: aem_url
+  - name: ZONAL_URL
+    valueFrom:
+      configMapKeyRef:
+        name: table-reservation-service-configmap
+        key: zonal_url
+  - name: LABEL_URL
+    valueFrom:
+      configMapKeyRef:
+        name: table-reservation-service-configmap
+        key: label_url
+
+
+
+configMap:
+  aem_url: https://restaurantname.dev.premierinn.digital/en-gb
+  zonal_url: https://api-staging.liveres.co.uk
+  label_url: https://www.dev.premierinn.digital/etc/designs/global/dictionaries/restaurants/i18n.jsondict.en

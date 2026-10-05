@@ -1,0 +1,11 @@
+query getCountries($country: String!, $language: String!, $site: String!) {
+  countries(country: $country, language: $language, site: $site) {
+    countries {
+      countryCode
+      countryName
+      dialingCode
+      flagSrc
+      passportRequired
+    }
+  }
+}

@@ -1,0 +1,11 @@
+query partialAddress($searchTerm: String!, $countryCode: String) {
+  partialAddress(
+    partialAddressCriteria: {
+      searchTerm: $searchTerm
+      countryCode: $countryCode
+    }
+  ) {
+    id
+    addressText
+  }
+}

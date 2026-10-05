@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bs_plan_your_trip"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/generic_margin_16"
+    android:layout_marginStart="@dimen/generic_margin_16"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="@dimen/bs_plan_your_trip_peek_height"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <View
+        android:layout_width="38dp"
+        android:layout_height="6dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:background="@color/mint_dark" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextSwitcher
+                android:id="@+id/tsw_plan_your_trip_miles_distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/generic_margin_8"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16" />
+
+            <TextView
+                android:id="@+id/tv_plan_your_trip_address_line1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                style="@style/Body"
+                tools:text="15 Bath Road, Houndslow" />
+
+            <TextView
+                android:id="@+id/tv_plan_your_trip_address_line2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                style="@style/Body"
+                tools:text="London, 2W6 2AB" />
+
+            <TextView
+                android:id="@+id/tv_plan_your_trip_telephone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                style="@style/Body"
+                android:visibility="gone"
+                tools:text="Tel: 020 2233 4442"
+                tools:visibility="visible" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginBottom="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_16"
+                android:background="?dividerColor" />
+
+            <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                android:id="@+id/cab_plan_your_trip_get_directions"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                style="@style/Button1"
+                android:layout_marginBottom="@dimen/generic_margin_16"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:text="@string/plan_your_trip_get_directions_button"
+                app:cab_background_color="@color/premier_inn_purple_light"
+                app:cab_text_color="@android:color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_8"
+                android:text="@string/plan_your_trip_directions_title"
+                android:textColor="?attr/colorPrimary"
+                style="@style/Header3" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/generic_margin_16"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_6"
+                android:background="?dividerColor" />
+
+            <TextView
+                android:id="@+id/tv_plan_your_trip_directions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                style="@style/Body"
+                tools:text="Situated on A39 which links Truro to Falmouth. Next to the Carnon Inn Table Table" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_16"
+                android:text="@string/plan_your_trip_hotel_parking_title"
+                android:textColor="?attr/colorPrimary"
+                style="@style/Header3" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/generic_margin_16"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                android:layout_marginTop="@dimen/generic_margin_6"
+                android:background="?dividerColor" />
+
+            <TextView
+                android:id="@+id/tv_plan_your_trip_hotel_parking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/generic_margin_16"
+                android:layout_marginEnd="@dimen/generic_margin_16"
+                android:layout_marginStart="@dimen/generic_margin_16"
+                style="@style/Body"
+                tools:text="There is no on-site parking available at this hotel. Chargebale off-site parking is available at Tower Gateway Station NPC" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

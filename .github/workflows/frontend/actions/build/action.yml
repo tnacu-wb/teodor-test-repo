@@ -1,0 +1,128 @@
+name: Build frontend applications
+description: Validate, build, version, package, and upload all frontend applications.
+
+inputs:
+  node-version:
+    description: Node.js version used for the frontend build.
+    required: true
+  run-full-validation:
+    description: Whether to run lint, tests, typecheck, and coverage upload.
+    required: true
+  target-environment:
+    description: Backend environment used while generating API schema types.
+    required: false
+    default: ""
+outputs:
+  business-booker-version:
+    description: Version read from the business-booker package.
+    value: ${{ steps.business-booker-version.outputs.business-booker-version }}
+  ccui-version:
+    description: Version read from the ccui package.
+    value: ${{ steps.ccui-version.outputs.ccui-version }}
+  premier-inn-version:
+    description: Version read from the premier-inn package.
+    value: ${{ steps.premier-inn-version.outputs.premier-inn-version }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v7
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      run: |
+        npm install -g yarn
+        yarn
+
+    - name: Pre-build
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      run: bash "$GITHUB_ACTION_PATH/pre-build.sh"
+
+    - name: Generate API Schema types
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      env:
+        TARGET_ENV: ${{ inputs.target-environment }}
+      run: yarn type-generate --targetEnv="$TARGET_ENV"
+
+    - name: Build all projects
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      run: yarn build
+
+    - name: Run Lint on all projects
+      if: ${{ inputs.run-full-validation == 'true' }}
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      run: yarn lint
+
+    - name: Test all projects
+      if: ${{ inputs.run-full-validation == 'true' }}
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      run: bash "$GITHUB_ACTION_PATH/run-tests-with-retry.sh"
+
+    - name: Run Typecheck on all projects
+      if: ${{ inputs.run-full-validation == 'true' }}
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      run: yarn type-check
+
+    - name: Get business-booker version
+      id: business-booker-version
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      run: bash "$GITHUB_ACTION_PATH/get-app-version.sh" business-booker
+
+    - name: Get ccui version
+      id: ccui-version
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      run: bash "$GITHUB_ACTION_PATH/get-app-version.sh" ccui
+
+    - name: Get premier-inn version
+      id: premier-inn-version
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      run: bash "$GITHUB_ACTION_PATH/get-app-version.sh" premier-inn
+
+    - name: Tar artifacts
+      shell: bash
+      working-directory: frontend/pi-front-end-applications
+      run: bash "$GITHUB_ACTION_PATH/package-artifacts.sh"
+
+    - name: Save business-booker artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: business-booker
+        path: frontend/pi-front-end-applications/business-booker.tar
+        retention-days: 1
+
+    - name: Save ccui artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: ccui
+        path: frontend/pi-front-end-applications/ccui.tar
+        retention-days: 1
+
+    - name: Save premier-inn artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: premier-inn
+        path: frontend/pi-front-end-applications/premier-inn.tar
+        retention-days: 1
+
+    - name: Save lcov.info
+      if: ${{ inputs.run-full-validation == 'true' }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: lcov.info
+        path: |
+          frontend/pi-front-end-applications/apps/next-apps/**/coverage/**
+          frontend/pi-front-end-applications/pi-components-catalog/**/coverage/**
+          frontend/pi-front-end-applications/pi-components-catalog/pages/**/coverage/**
+        retention-days: 1

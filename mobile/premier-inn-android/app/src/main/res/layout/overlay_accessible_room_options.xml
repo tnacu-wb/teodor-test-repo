@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/default_medium_margin">
+
+    <ImageButton
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_cross"
+        android:tint="@color/premier_inn_purple"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_gravity="end"/>
+
+    <com.whitbread.premierinn.common.view.roomtype.RoomTypeView
+        android:id="@+id/option_double"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_accessible_double"
+        app:name="@string/accessible_double_name"
+        app:description="@string/accessible_double_description"
+        app:foregroundColor="@color/grey_dark"
+        app:backgroundDrawable="@drawable/accessible_room_option_bg"
+        android:layout_marginTop="@dimen/default_medium_margin"/>
+
+    <com.whitbread.premierinn.common.view.roomtype.RoomTypeView
+        android:id="@+id/option_twin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_accessible_twin"
+        app:name="@string/accessible_twin_name"
+        app:description="@string/accessible_twin_description"
+        app:foregroundColor="@color/grey_dark"
+        app:backgroundDrawable="@drawable/accessible_room_option_bg"
+        android:layout_marginTop="@dimen/default_medium_margin"/>
+
+</LinearLayout>

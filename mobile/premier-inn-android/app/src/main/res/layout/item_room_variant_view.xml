@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:background="@drawable/shape_hotel_details_saver_rate_background">
+
+        <com.whitbread.premierinn.common.view.NetworkImageView
+            android:id="@+id/room_detail_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="176dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@id/room_detail_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/room_detail_label"
+            style="@style/BodyBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/room_detail_image_view" />
+
+        <TextView
+            android:id="@+id/room_detail_description"
+            style="@style/BodySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_4"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/room_detail_label" />
+
+        <TextView
+            android:id="@+id/room_detail_features"
+            style="@style/BodySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/room_detail_description"
+            tools:text="Comfort\nA kind size super comfy bed\n\nConvinience\nTea and Coffee\n\nConnectivity\nStandard Wi-Fi and TV" />
+
+        <TextView
+            android:id="@+id/room_detail_additional_info"
+            style="@style/BodySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:layout_marginBottom="@dimen/generic_margin_16"
+            android:textColor="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/room_detail_features"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="If any guests would prefer a wet room in particular, please check with the hotel before booking." />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/disclaimerText"
+        style="@style/SubtextSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:textColor="@color/grey"
+        tools:text="Disclaimer" />
+</LinearLayout>

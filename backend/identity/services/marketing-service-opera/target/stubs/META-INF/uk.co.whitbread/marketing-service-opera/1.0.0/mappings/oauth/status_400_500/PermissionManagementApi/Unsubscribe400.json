@@ -1,0 +1,26 @@
+{
+  "id" : "1c2dae33-0dcf-441b-bd00-87981e24cdcf",
+  "request" : {
+    "url" : "/marketing/newsletter/channel/HNL39288_28a5d984-7782-4e93-99a5-b2e9f8a746f3/unsubscribe",
+    "method" : "DELETE",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['customerId'] == '122434')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['contactType'] == 'email')]"
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "body" : "{\"code\":\"001\",\"details\":[\"brandCodes must not be null\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "1c2dae33-0dcf-441b-bd00-87981e24cdcf"
+}

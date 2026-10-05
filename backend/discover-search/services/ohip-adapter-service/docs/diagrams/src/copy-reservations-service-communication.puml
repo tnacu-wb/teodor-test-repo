@@ -1,0 +1,45 @@
+@startuml
+entity "User" as USER
+entity "AppSync" as A
+entity "Reservation Entity Service" as RES
+entity "Basket Service" as BSK
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OHIP
+entity "OPERA" as OPERA
+
+USER -> A:  GraphQL copyBooking(basketReference)
+A -> RES: POST /v1/reservations/copy
+
+RES -> BSK: GET /v1/baskets/{basketReference}
+RES <- BSK: DTO with reservationIds, hotelId
+
+RES -> BSK: POST /v1/baskets
+RES <- BSK: DTO with temporaryBasketReference
+
+RES -> PMS: POST /v1/reservations/copy
+PMS -> OHIP: POST /v1/reservations/copy
+
+loop for each reservationId
+    OHIP -> OPERA: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/\n?fetchInstructions=Reservation&fetchInstructions=InventoryItems\n&fetchInstructions=ReservationPolicies&fetchInstructions=Packages
+    OHIP <- OPERA: Reservation
+end
+
+loop for each reservation
+    OHIP -> OPERA: POST /rsv/v1/hotels/{{HotelId}}/reservations
+    OHIP <- OPERA: 201 Created
+end
+
+loop for each created reservation
+    OHIP -> OPERA: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/\n?fetchInstructions=Reservation&fetchInstructions=InventoryItems\n&fetchInstructions=ReservationPolicies&fetchInstructions=Packages
+    OHIP <- OPERA: Reservation with createDateTime
+end
+
+PMS <- OHIP: DTO with new reservation ids
+RES <- PMS: DTO with new reservation ids
+
+RES -> BSK: POST /v1/baskets/{{temporaryBasketReference}}/items
+RES <- BSK: 200
+
+A <- RES: new basketReference
+USER <- A: new basketReference
+@enduml

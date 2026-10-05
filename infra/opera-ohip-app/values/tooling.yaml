@@ -1,0 +1,29 @@
+# ce-tooling cluster values (shared internal tool)
+# Layered: values.yaml -> nonprod.yaml -> tooling.yaml
+# Deployed to ce-tooling cluster alongside Temporal, not per-environment clusters.
+
+# OHIP config (non-sensitive).
+# appKey is an API credential (x-app-key) and is NOT set here — it is synced from
+# CyberArk into the app secret (see templates/external-secret.yaml) and injected
+# as <ENV>_OHIP_APP_KEY.
+ohip:
+  uat:
+    baseUrl: "https://whitbce1ua.whb.hospitality-api.eu-frankfurt-1.ocs.oc-test.com"
+    scope: "urn:opc:hgbu:ws:__myscopes__"
+    enterpriseId: "WHBPI"
+  sit:
+    baseUrl: "https://whitbce3ua.whb.hospitality-api.eu-frankfurt-1.ocs.oc-test.com"
+    scope: "urn:opc:hgbu:ws:__myscopes__"
+    enterpriseId: "WHBPI"
+  perf:
+    baseUrl: "https://whitbce5ua.whb.hospitality-api.eu-frankfurt-1.ocs.oc-test.com"
+    scope: "urn:opc:hgbu:ws:__myscopes__"
+    enterpriseId: "WHBPI"
+
+# CyberArk safe for ce-tooling cluster
+cyberark:
+  safe: digital-team-ce-tooling
+
+# ExternalDNS creates the DNS record automatically from this host
+virtualService:
+  host: ohip-app.tooling.opera.whitbread.digital

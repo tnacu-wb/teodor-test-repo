@@ -1,0 +1,31 @@
+@startuml
+
+title Validate Reset Password Key
+
+actor User
+participant "Whitbread page" as Client
+participant "GraphQL Layer" as gql
+participant "Hotel Account Service" as HAS
+participant "Auth0" as AUT
+
+User -> Client: Open reset password URL in the e-mail
+Client -> gql: Mutation validateResetKey
+gql -> HAS: POST /auth/hotels/validate-reset-key\n(resetKey)
+HAS -> AUT: Get Auth0 user by resetKey
+AUT --> HAS: Return user
+alt user exists in Auth0
+  HAS -> HAS: Validate resetKey is valid
+  alt resetKey is valid
+    HAS -> HAS:  Return valid=true +\nuser e-mail address
+  else resetKey is not valid
+    HAS -> HAS: Return valid=false
+  end
+else user not found
+  HAS -> HAS: Return valid=false
+end
+
+HAS -> gql: ValidateResetKeyResponse
+gql -> Client:
+Client -> User:
+
+@enduml

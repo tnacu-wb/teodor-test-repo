@@ -1,0 +1,36 @@
+schema {
+    mutation: Mutation
+}
+
+type Mutation {
+    addFeedback(feedback: FeedbackCriteria!): FeedbackResponse
+}
+
+input FeedbackCriteria {
+    whb_wfsource: String
+    title: String!
+    whb_wfbookingrefifapplicable: String
+    whb_wfcontactnumber: String!
+    whb_wfdateofstayifapplicable: String
+    whb_wfemailaddress: String!
+    whb_wfreasonforfeedback: String!
+    whb_summary: String!
+    whb_wffeedbacktype: Int!
+    whb_wffirstname: String!
+    whb_wflastname: String!
+    whb_wfpostcode: String!
+    whb_wfhotelname: String
+    whb_wfididntbookthroughpremierinncom: Boolean!
+    whb_contacttype: Int!
+    whb_reasonforcontact: Int!
+    whb_wftypeofvisit: String
+    whb_loyaltycardnumber: String
+    whb_wfchecknumber: String
+    whb_dateofvisit: String
+    whb_wfsleep: Boolean
+    whb_wfreported: Boolean
+}
+
+type FeedbackResponse {
+    caseReferenceId: String
+}

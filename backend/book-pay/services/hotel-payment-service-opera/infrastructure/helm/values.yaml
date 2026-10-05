@@ -1,0 +1,159 @@
+# Values for hotel-payment-service-opera.
+#
+# Shaped for the shared `opera-app-chart` (whitbread-eos/helm-central-charts), which is
+# what .github/workflows/ci-matrix-deploy.yaml installs. The chart reads the pod spec
+# from `deployment.*` and gates optional resources on a `create` flag — keys outside
+# those names are silently ignored, so an unset `deployment.containerEnvs` renders
+# `env: null` and the pod starts with no environment at all.
+#
+# Derived from microservices-gitops/opera-dev/apps/hotel-payment-service-opera.yaml.
+# Not carried over: `imageAutomation` (the pipeline --sets it false and pins the tag it
+# just built) and `canary` (a Flagger Canary takes ownership of the Service's
+# .spec.selector / .spec.ports[].name and the VirtualService's .spec.http, which then
+# collides with Helm's server-side apply on the next upgrade of the same release).
+#
+# Overridden per-deploy by ci-matrix-deploy.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create
+
+applicationName: hotel-payment-service-opera
+namespace: opera-be
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/hotel-payment-service-opera
+  pullPolicy: Always
+  tag: "develop"
+
+imagePullSecrets:
+  - name: regcred
+
+deployment:
+  create: true
+  replicaCount: 1
+
+  containerPorts:
+    - containerPort: 9019
+      protocol: TCP
+      name: http
+
+  containerEnvFrom:
+    - configMapRef:
+        name: hotel-payment-service-opera-configmap
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=80 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    - name: HOTEL_CARD_URL
+      value: hotel-card-service-opera
+    - name: BART_HOST
+      valueFrom:
+        configMapKeyRef:
+          name: hotel-payment-service-opera-configmap
+          key: bart_host
+    # DOMAIN_DEFAULT_URL and DOMAIN_DEFAULT_IP have no defaults in application.yml, so a
+    # missing key fails startup rather than producing a half-configured service.
+    - name: DOMAIN_DEFAULT_URL
+      valueFrom:
+        configMapKeyRef:
+          name: hotel-payment-service-opera-configmap
+          key: domain_default_url
+    - name: DOMAIN_DEFAULT_IP
+      valueFrom:
+        configMapKeyRef:
+          name: hotel-payment-service-opera-configmap
+          key: domain_default_ip
+    - name: CDH_ENABLE_DATA_FETCH
+      valueFrom:
+        configMapKeyRef:
+          name: hotel-payment-service-opera-configmap
+          key: cdh_enable_data_fetch
+    - name: BART_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: bart-credentials
+          key: bart_username
+    - name: BART_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: bart-credentials
+          key: bart_password
+
+  dns:
+    ndots: 3
+
+  # This service is a slow starter: liveness is held off for 7 minutes so a JVM still
+  # booting is never restarted mid-start, while readiness begins at 60s and is allowed
+  # 24 failures at 10s — 300s of grace before the pod is given up on.
+  livenessProbe:
+    httpGet:
+      path: /hotel-payment-service/actuator/health/liveness
+      port: 9019
+    initialDelaySeconds: 420
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
+
+  readinessProbe:
+    httpGet:
+      path: /hotel-payment-service/actuator/health/readiness
+      port: 9019
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 24
+
+  # NOTE: requests.memory is BELOW limits.memory while the heap is sized off the LIMIT
+  # (-XX:MaxRAMPercentage=80 above), so a fully-grown heap occupies 500Mi the pod never
+  # reserved and the pod is evictable under node pressure. Carried over as-is from the
+  # GitOps release rather than silently retuned; raising requests to 1500Mi is the fix
+  # if evictions show up.
+  resources:
+    requests:
+      cpu: 200m
+      memory: 1000Mi
+    limits:
+      memory: 1500Mi
+
+service:
+  create: true
+  name: hotel-payment-service-opera
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 9019
+      protocol: TCP
+      name: port9019
+
+autoscaling:
+  create: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 120
+
+configMap:
+  create: true
+  data:
+    bart_host: https://alpha2.digitalbookings.premierinn.com/
+    domain_default_url: https://secure2.beta.premierinn.digital/
+    domain_default_ip: 127.0.0.1
+    cdh_enable_data_fetch: 'true'
+
+# The actuator prefix is published alongside /payment because the Flagger metric
+# templates and the smoke tests address it through the gateway.
+istio:
+  create: true
+  auth: false
+  gateway: opera-api
+  regex:
+    enabled: true
+    pattern: \/payment\/.*|\/hotel-payment-service\/actuator.*
+
+prometheusSpring:
+  create: true
+  path: /hotel-payment-service/actuator/prometheus

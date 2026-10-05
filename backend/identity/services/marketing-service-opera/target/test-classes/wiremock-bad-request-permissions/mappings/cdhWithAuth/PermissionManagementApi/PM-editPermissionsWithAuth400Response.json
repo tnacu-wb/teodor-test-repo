@@ -1,0 +1,29 @@
+{
+  "request": {
+    "url": "/PermissionManagement/V1/UpdatePermissions",
+    "method": "POST",
+    "headers" : {
+      "Content-Type" : {
+        "contains" : "application/json"
+      },
+      "Authorization": {
+        "contains" : "123456.access.token"
+      },
+      "Ocp-Apim-Subscription-Key": {
+        "contains": "dummyValue"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matches": ".*userId.*badrequest.*"
+      }
+    ]
+  },
+  "response": {
+    "status": 400,
+      "bodyFileName": "customer-hub-permissions-400-response.json",
+    "headers": {
+      "Content-Type": "text/html; charset=utf-8"
+    }
+  }
+}

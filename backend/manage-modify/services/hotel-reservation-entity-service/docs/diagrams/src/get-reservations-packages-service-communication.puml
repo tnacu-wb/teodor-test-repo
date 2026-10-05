@@ -1,0 +1,23 @@
+@startuml
+
+entity "AppSync" as A
+entity "Reservation Entity Service" as R
+entity "BASKET" as BSK
+entity "OHIP Adapter Service" as OHIP
+entity "OHIP Adapter Service" as OAD
+entity "OPERA" as OPERA
+
+A -> R: graphql get reservations packages
+
+R -> BSK: GET /bsk/v1/baskets/{basketReference}
+R <- BSK: DTO with reservationIds, hotelId
+R -> OHIP: GET /v1/reservation/ancillaries
+OHIP -> OAD: GET /v1/reservation/ancillaries
+OAD -> OPERA: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/\n?fetchInstructions=Reservation&fetchInstructions=InventoryItems\n&fetchInstructions=ReservationPolicies&fetchInstructions=Packages
+OPERA -> OAD: Reservation
+OAD -> OHIP:  ReservationsPackages
+OHIP -> R: ReservationsPackages
+
+R -> A: basketReference
+
+@enduml

@@ -1,0 +1,14 @@
+server:
+  port: 9126
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1 # Fix for M1 macs as described here https://stackoverflow.com/questions/60074168/java-lang-illegalstateexception-no-server-alpnprocessors-wiremock
+
+spring:
+  cache:
+    type: none

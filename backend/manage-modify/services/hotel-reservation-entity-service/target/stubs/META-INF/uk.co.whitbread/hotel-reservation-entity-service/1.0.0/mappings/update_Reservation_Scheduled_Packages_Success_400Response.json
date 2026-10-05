@@ -1,0 +1,35 @@
+{
+  "id" : "317297ab-bf30-4c07-8f69-efe82b6d9f61",
+  "request" : {
+    "urlPath" : "/v1/reservations/ancillaries/scheduled",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'TestId')]"
+    }, {
+      "matchesJsonPath" : "$.['reservations'][*][?(@.['reservationsId'] == '12345')]"
+    }, {
+      "matchesJsonPath" : "$.['reservations'][*].['addPackages'][*][?(@.['id'] == 'PIBTEST')]"
+    }, {
+      "matchesJsonPath" : "$.['reservations'][*].['addPackages'][*][?(@.['noOfSelections'] == 1)]"
+    }, {
+      "matchesJsonPath" : "$.['reservations'][*].['addPackages'][*].['scheduledDates'][?(@ == '2021-08-20')]"
+    }, {
+      "matchesJsonPath" : "$.['reservations'][*].['removePackages'][*][?(@.['id'] == 'PIBTEST')]"
+    }, {
+      "matchesJsonPath" : "$.['reservations'][*].['removePackages'][*][?(@.['noOfSelections'] == 1)]"
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "317297ab-bf30-4c07-8f69-efe82b6d9f61"
+}

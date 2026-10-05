@@ -1,0 +1,25 @@
+query amendSummary ($originalBasketRef: String!, $copyBasketRef: String!, $token: String, $bookingChannel: BookingChannelCriteria!, $country: String!) {
+   amendSummary(originalBasketRef: $originalBasketRef, copyBasketRef: $copyBasketRef, token: $token, bookingChannel: $bookingChannel, country: $country) {
+            previousTotal
+            balancePaid
+            payOnArrival
+            refund
+            nonRefundable
+            totalCost
+            balanceAuthorised
+            paymentOptions {
+              payNow
+              payOnArrival
+            }
+             paymentCardDetails {
+              cardNumberMasked
+              token
+              expirationDate
+              cardType
+              cardHolderName
+              cardNumberLast4Digits
+              cardName
+              cardLogoSrc
+            }
+   }
+}

@@ -1,0 +1,195 @@
+server:
+  port: 9033
+
+swagger:
+  api:
+    version: 1.0.0
+
+info:
+    build:
+      groupId: 'uk.co.whitbread'
+      artifact: 'feedback-service-opera'
+      description: 'Whitbread Feedback Service Opera'
+      version: '1.0.0'
+      git:
+        originUrl: '@git.remote.origin.url@'
+        branch: '@git.branch@'
+        commit:
+          id: '@git.commit.id@'
+          time: '@git.commit.time@'
+          message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+
+security:
+  oauth2:
+    host: ${SECURITY_OAUTH2_HOST}
+    baseUrl: https://${security.oauth2.host}
+    authorityUrl:
+      url: ${security.oauth2.baseUrl}/${security.oauth2.tenant}
+    tenant: ${OAUTH2_TENANT}
+    clientId: ${OAUTH2_CLIENTID}
+    clientSecret: ${OAUTH2_CLIENTSECRET}
+    credentials:
+      username: ${SECURITY_OAUTH2_USERNAME}
+      password: ${OAUTH2_PASSWORD}
+
+crm:
+  api:
+    version: 4.0
+  host: ${CRM_HOST}
+  baseUrl: https://${crm.host}
+  incidents:
+    path: api/data/v8.2/incidents
+    feedback:
+      url: ${crm.baseUrl}/${crm.incidents.path}
+    caseid:
+      url: ${crm.incidents.feedback.url}({guid})?$select=ticketnumber
+    contactType: ${CRM_INCIDENTS_CONTACT_TYPE}
+  defaultFeedbackSource: ${CRM_DEFAULT_FEEDBACK_SOURCE}
+
+logging.request.time: ${LOGGING_REQUEST_TIME_ENABLED}
+
+encrypt:
+  failOnError: ${ENCRYPT_FAIL_ON_ERROR_ENABLED}
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /feedback-service/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+          - opera-dev
+          - opera-qa
+          - opera-uat
+          - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+logging:
+  level:
+    uk.co.whitbread: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+logging:
+  level:
+    uk.co.whitbread: debug
+    org.apache.http.client.protocol: error
+    org.apache.http.wire: debug
+    org.springframework.cloud.openfeign: debug
+    org.springframework.ws.client.MessageTracing: trace
+
+logging.request.time: true
+
+crm:
+  api:
+    version: 4.0
+  host: whitbreadguestrelationsdev2.crm4.dynamics.com
+  baseUrl: https://${crm.host}
+  incidents:
+    path: api/data/v8.2/incidents
+    feedback:
+      url: ${crm.baseUrl}/${crm.incidents.path}
+    caseid:
+      url: ${crm.incidents.feedback.url}({guid})?$select=ticketnumber
+    contactType: /contacts(23DFB87B-0C00-E811-A951-000D3AB50A67)
+  defaultFeedbackSource: https://www.premierinn.com
+
+security:
+  oauth2:
+    host: login.microsoftonline.com
+    baseUrl: https://${security.oauth2.host}
+    authorityUrl:
+      url: ${security.oauth2.baseUrl}/${security.oauth2.tenant}
+    tenant: tenant
+    clientId: clientId
+    clientSecret: clientSecret
+    credentials:
+      username: svc_dev_pi_casemanagement@whitbread.com
+      password: password
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

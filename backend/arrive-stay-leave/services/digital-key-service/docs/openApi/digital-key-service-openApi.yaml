@@ -1,0 +1,495 @@
+openapi: 3.1.0
+info:
+  title: Sample API Documentation
+  description: <p>TBU</p>
+servers:
+- url: http://localhost:9169
+  description: Generated server url
+tags:
+- name: Actuator
+  description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+paths:
+  /v1/digital-key/register-mobile-device:
+    post:
+      tags:
+      - digital-key-controller
+      summary: Register Mobile Device For Android Digital Key Provisioning.
+      operationId: registerMobileDevice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterMobileDeviceRequest"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterMobileDeviceResponse"
+  /v1/digital-key/provision:
+    post:
+      tags:
+      - digital-key-controller
+      summary: Digital Key Pass Provision with OTP
+      operationId: passProvisioningWithOtp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OtpProvisionRequest"
+        required: true
+      responses:
+        "400":
+          description: 'Error Occurred '
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json: {}
+        "404":
+          description: Resource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/digital-key/google-wallet-provisioning-with-otp:
+    post:
+      tags:
+      - digital-key-controller
+      summary: Google Wallet Provisioning with OTP.
+      operationId: googleWalletProvisioningWithOtp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoogleWalletProvisioningRequest"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GoogleWalletProvisioningResponse"
+  /v1/digital-key/generate-otp:
+    post:
+      tags:
+      - digital-key-controller
+      summary: Generate OTP
+      operationId: generateOtp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OtpRequest"
+        required: true
+      responses:
+        "400":
+          description: 'Error Occurred '
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json: {}
+        "404":
+          description: Resource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/digital-key/checkIn:
+    post:
+      tags:
+      - check-in-controller
+      operationId: checkInEndPoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckInRequestDto"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckInResponseDto"
+  /v1/digital-key/actuator:
+    get:
+      tags:
+      - Actuator
+      summary: Actuator root web endpoint
+      operationId: links
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+  /v1/digital-key/actuator/prometheus:
+    get:
+      tags:
+      - Actuator
+      summary: Actuator web endpoint 'prometheus'
+      operationId: scrape
+      parameters:
+      - name: format
+        in: query
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - name: includedNames
+        in: query
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+  /v1/digital-key/actuator/info:
+    get:
+      tags:
+      - Actuator
+      summary: Actuator web endpoint 'info'
+      operationId: info
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/json:
+              schema:
+                type: object
+  /v1/digital-key/actuator/health:
+    get:
+      tags:
+      - Actuator
+      summary: Actuator web endpoint 'health'
+      operationId: health
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        errCode:
+          type: integer
+          format: int32
+        debugMessage:
+          type: string
+        globalErrTextTemplate:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+    RegisterMobileDeviceRequest:
+      type: object
+      properties:
+        shortPropertyCode:
+          type: string
+          minLength: 1
+        bookingReference:
+          type: string
+          minLength: 1
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        deviceId:
+          type: string
+          minLength: 1
+        deviceManufacturer:
+          type: string
+          minLength: 1
+        deviceModel:
+          type: string
+          minLength: 1
+        osVersion:
+          type: string
+          minLength: 1
+        appVersion:
+          type: string
+          minLength: 1
+      required:
+      - appVersion
+      - bookingReference
+      - deviceId
+      - deviceManufacturer
+      - deviceModel
+      - firstName
+      - lastName
+      - osVersion
+      - shortPropertyCode
+    Dormakaba:
+      type: object
+      properties:
+        token:
+          type: string
+        endpointId:
+          type: string
+    RegisterMobileDeviceResponse:
+      type: object
+      properties:
+        mobileDeviceId:
+          type: string
+        dormakaba:
+          $ref: "#/components/schemas/Dormakaba"
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string
+    OtpProvisionRequest:
+      type: object
+      properties:
+        bookingReference:
+          type: string
+        otpCode:
+          type: string
+        email:
+          type: string
+        reservationId:
+          type: string
+    GoogleWalletProvisioningRequest:
+      type: object
+      properties:
+        otpCode:
+          type: string
+          minLength: 1
+        otpType:
+          type: string
+          minLength: 1
+        otpDestination:
+          type: string
+          minLength: 1
+        shortPropertyCode:
+          type: string
+          minLength: 1
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        bookingReference:
+          type: string
+          minLength: 1
+        linkingToken:
+          type: string
+          minLength: 1
+        walletUserId:
+          type: string
+          minLength: 1
+      required:
+      - bookingReference
+      - firstName
+      - lastName
+      - linkingToken
+      - otpCode
+      - otpDestination
+      - otpType
+      - shortPropertyCode
+      - walletUserId
+    GoogleWalletProvisioningResponse:
+      type: object
+      properties:
+        provisioningUrl:
+          type: string
+        credentialToken:
+          type: string
+    OtpRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+      required:
+      - email
+    CheckInRequestDto:
+      type: object
+      properties:
+        reservationId:
+          type: string
+          minLength: 1
+        hotelId:
+          type: string
+          minLength: 1
+      required:
+      - hotelId
+      - reservationId
+    CheckInResponseDto:
+      type: object
+      properties:
+        roomNumber:
+          type: string
+        checkInStatus:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean

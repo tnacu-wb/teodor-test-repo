@@ -1,0 +1,75 @@
+server:
+  port: 9039
+
+swagger:
+  api:
+    version: 2.17
+    path: https://api.swaggerhub.com/apis/whitbread/Employee-API/${swagger.api.version}/swagger.yaml
+    token: eaaab7b2-ab2e-4471-b01f-ed3d901c144f
+
+spring:
+  cache:
+    type: none
+
+cache:
+  default:
+    ttl: 300
+
+company:
+  employee:
+    cache:
+      companyEmployee:
+        name: companyEmployee
+        ttl: 86400
+
+feign:
+  hotelaccount:
+    name: hotelaccount
+    url: localhost:${wiremock.server.port:0}
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    org.springframework.cloud.openfeign: trace
+
+auth:
+  tenants:
+    - name: "PI BB Tenant"
+      audience: http://localhost/api/v2/
+      namespace: http://localhost
+      issuer: http://localhost/
+      jwkUri: http://localhost/.well-known/jwks.json
+  management:
+    domain: http://localhost:${wiremock.server.port:1}
+    clientId: clientId_test
+    clientSecret: clientSecret_test
+    audience: http://mock-audience/api/v2/
+    connection: Connection-Test
+    lazyMigrationEnabled: true
+  encryption:
+    key: aZCGss97HqRj4r8XraMV+6XO15T7q+yxN3q1TTLoqOU=
+
+cdh:
+  oauth-client:
+    host:  http://localhost:${wiremock.server.port:0}
+    token-url: http://localhost/oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: https://localhost/AccountServices/V1
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: testKey
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'

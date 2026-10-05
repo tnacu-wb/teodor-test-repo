@@ -1,0 +1,52 @@
+{
+  "id" : "b33498e9-7c1f-44ee-a02b-b562cb9dca11",
+  "request" : {
+    "urlPath" : "/v1/baskets/deposit-folios",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*][?(@.['reservationId'] == '123reservation')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*][?(@.['paymentNo'] == '1')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*][?(@.['transactionCode'] == 't-code')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*][?(@.['postingQuantity'] == '12')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*][?(@.['postingReference'] == 'p-ref')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*].['chargeAmount'][?(@.['amount'] == 12.4)]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*].['chargeAmount'][?(@.['currencyCode'] == 'US')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*][?(@.['transactionCode'] == 't-code2')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*][?(@.['postingQuantity'] == '13')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*].['chargeAmount'][?(@.['currencyCode'] == 'US2')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*][?(@.['reservationId'] == '123reservation123')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*][?(@.['transactionCode'] == 't-code123')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*][?(@.['postingQuantity'] == '12123')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*][?(@.['postingReference'] == 'p-ref123')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*][?(@.['transactionCode'] == 't-code2123')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*][?(@.['postingQuantity'] == '13123')]"
+    }, {
+      "matchesJsonPath" : "$.['prepaidDeposits'][*].['charges'][*].['chargeAmount'][?(@.['currencyCode'] == 'US123')]"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "b33498e9-7c1f-44ee-a02b-b562cb9dca11"
+}

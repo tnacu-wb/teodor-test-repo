@@ -1,0 +1,45 @@
+{
+  "id" : "aab5d0a6-a66a-4ae2-8a07-a21f6bbff3af",
+  "request" : {
+    "url" : "/marketing/newsletter/email/email_success@gmail.com",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "Authentication" : {
+        "equalTo" : "Bearer dummyToken"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['optIn'] == false)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['secondPartyOptIn'] == true)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['thirdPartyVendorsOptIn'] == true)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['doubleOptIn'] == false)]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['countryOfResidence'] == 'DE')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['title'] == 'Mr')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['firstName'] == 'liam')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['lastName'] == 'wilson')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['nationality'] == 'GB')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['language'] == 'de')]"
+    }, {
+      "matchesJsonPath" : "$.['customer'][?(@.['userId'] == 'liam.wilson.test1')]"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "aab5d0a6-a66a-4ae2-8a07-a21f6bbff3af"
+}

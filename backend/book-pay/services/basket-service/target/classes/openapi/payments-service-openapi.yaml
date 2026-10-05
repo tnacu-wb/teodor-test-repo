@@ -1,0 +1,1049 @@
+openapi: 3.0.1
+info:
+  title: 3C Payment Service REST API
+  version: 1.5.16
+servers:
+  - description: Generated server url
+    url: http://localhost:9001
+paths:
+  "/payments":
+    post:
+      operationId: createPayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PaymentRequest"
+      responses:
+        '200':
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/PaymentResponse"
+          description: Successful operation
+      summary: Creates a payment resource.
+      tags:
+        - Payments
+    put:
+      operationId: updateBookingReference
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateBookingReferenceRequest"
+      responses:
+        '202':
+          description: Successful operation
+      summary: Updates booking reference for Payments.
+      tags:
+        - Payments
+  "/payments/eckoh/webhook":
+    post:
+      operationId: paymentWebhook
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              "$ref": "#/components/schemas/WebHookEckohFormData"
+      responses:
+        '204':
+          description: Successful operation
+      summary: Webhook from Eckoh CallGuard service submission existing payment resource.
+      tags:
+        - Payments
+  "/payments/{paymentId}":
+    get:
+      operationId: getPayment
+      parameters:
+        - description: Payment resource id
+          in: path
+          name: paymentId
+          required: true
+          schema:
+            type: string
+        - description: Action
+          in: query
+          name: action
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/PaymentResponse"
+          description: Successful operation
+      summary: Retrieves a payment resource.
+      tags:
+        - Payments
+  "/payments/{paymentId}/complete":
+    get:
+      operationId: paymentRedirect
+      parameters:
+        - description: Payment resource id
+          in: path
+          name: paymentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+      summary: Redirect from iPage existing payment resource.
+      tags:
+        - Payments
+  "/payments/{paymentId}/refund":
+    post:
+      operationId: transactionRefund
+      parameters:
+        - description: Payment resource id
+          in: path
+          name: paymentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successful operation
+      summary: Transactional refund for existing payment resource.
+      tags:
+        - Payments
+  "/payments/{paymentId}/webhook":
+    post:
+      operationId: paymentWebhook_1
+      parameters:
+        - description: Payment resource id
+          in: path
+          name: paymentId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              "$ref": "#/components/schemas/WebHookFormData"
+      responses:
+        '204':
+          description: Successful operation
+      summary: Webhook from 3CP post iPage submission existing payment resource.
+      tags:
+        - Payments
+  "/reconcile":
+    post:
+      operationId: reconcileSite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ReconciliationRequest"
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+      summary: Request to start reconciliation process for a site.
+      tags:
+        - Reconciliation
+  "/refunds":
+    post:
+      operationId: refund
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RefundRequest"
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/RefundResponse"
+          description: Successful operation
+      summary: Request to process refund.
+      tags:
+        - Refund
+  "/tokenise":
+    post:
+      deprecated: true
+      operationId: tokeniseCard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreateTokenRequest"
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreateTokenResponse"
+          description: Successful operation
+        '400':
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GenericErrorResponse"
+          description: Error Response
+        '500':
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GenericErrorResponse"
+          description: Error Response
+      summary: 'Deprecated: This endpoint will be decommissioned, please use POST
+        /token instead. Tokenises a payment card.'
+      tags:
+        - Tokenisation
+  "/tokens":
+    post:
+      operationId: createToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreateTokenRequest"
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreateTokenResponse"
+          description: Successful operation
+        '400':
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GenericErrorResponse"
+          description: Error Response
+        '500':
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GenericErrorResponse"
+          description: Error Response
+      summary: Create a token for a payment card.
+      tags:
+        - Tokens
+    put:
+      operationId: updateToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateTokenRequest"
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UpdateTokenResponse"
+          description: Successful operation
+        '400':
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GenericErrorResponse"
+          description: Error Response
+        '500':
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GenericErrorResponse"
+          description: Error Response
+      summary: Update a token with cardholder information.
+      tags:
+        - Tokens
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          description: Country Code
+          example: GB
+          default: GB
+        line1:
+          type: string
+          description: Address line 1
+          example: Whitbread Group PLC
+        line2:
+          type: string
+          description: Address line 2
+          example: Houghton Hall Business Park
+        line3:
+          type: string
+          description: Address line 3
+          example: Porz Avenue
+        line4:
+          type: string
+          description: Address line 4
+          example: Dunstable
+        postalCode:
+          type: string
+          description: Postal code.
+          example: LU5 5XE
+      description: Card holder address
+    Agent:
+      type: object
+      properties:
+        email:
+          type: string
+          description: E-mail address of agent.
+          example: sean.connery@whitbread.com
+        name:
+          type: string
+          description: Full name of agent.
+          example: Mr Sean Connery
+      description: Information regarding the agent that does the booking on behalf
+        of the customer.
+    Amount:
+      required:
+        - currency
+        - minorUnits
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Currency of payment.
+          example: GBP
+          enum:
+            - GBP
+            - EUR
+        minorUnits:
+          minimum: 0
+          type: integer
+          description: Minor units of payment..e.g 1 == £0.01 or €0.01
+          format: int32
+          example: 1
+      description: Information on amount to process refund for.
+    Billing:
+      type: object
+      properties:
+        address:
+          "$ref": "#/components/schemas/Address"
+        email:
+          type: string
+          description: Booker email address.
+          example: example@email.com
+        firstName:
+          type: string
+          description: Card holder first name.
+          example: James
+        lastName:
+          type: string
+          description: Card holder last name.
+          example: Bond
+        telephone:
+          type: string
+          description: Booker telephone number.
+          example: '0789110237'
+        title:
+          type: string
+          description: name title.
+          example: Mr
+      description: Billing information for payment.
+    Booking:
+      required:
+        - businessSite
+        - channel
+        - journey
+        - type
+      type: object
+      properties:
+        agent:
+          "$ref": "#/components/schemas/Agent"
+        arrivalDate:
+          type: string
+          description: Arrival date of the booking.
+          format: date
+          example: '2021-11-25'
+        bookingReference:
+          type: string
+          example: GAA9657235
+        businessSite:
+          "$ref": "#/components/schemas/BusinessSite"
+        channel:
+          type: string
+          description: Type of booking channel that the payment is for.
+          example: PI
+          enum:
+            - APPS_ANDROID
+            - APPS_IOS
+            - BB
+            - CCC
+            - GDS
+            - PI
+            - FRONT_DESK
+            - WEB
+            - DISTR
+        departureDate:
+          type: string
+          description: Departure date of the booking.
+          format: date
+          example: '2021-11-26'
+        journey:
+          type: string
+          description: Type of customer journey the payment is for.
+          example: BOOKING
+          enum:
+            - BOOKING
+            - CIOL
+            - AMEND
+            - REFUND
+            - SECURITY_CHECK
+        language:
+          type: string
+          description: Chosen ISO 639-1 language of the customer making the booking.
+            Only applicable for ECOMM payment type.
+          example: en
+          enum:
+            - en
+            - de
+        leadGuest:
+          "$ref": "#/components/schemas/Guest"
+        reference:
+          type: string
+          description: Basket id
+          example: GAA-a8f7be49-7dc4-4d31-9e23-3bb74717ce41
+        rooms:
+          type: array
+          description: Information on the rooms being booked.
+          items:
+            "$ref": "#/components/schemas/Room"
+        type:
+          type: string
+          description: Type of booking the payment is for.
+          example: PAY_NOW
+          enum:
+            - PAY_NOW
+            - PAY_ON_ARRIVAL
+    BusinessSite:
+      required:
+        - identifier
+        - type
+      type: object
+      properties:
+        additionalServices:
+          type: array
+          items:
+            type: string
+            description: List of additional options included as part of the booking..
+              e.g breakfast, wifi
+            example: wifi
+        country:
+          type: string
+          description: The country that the business site is in.
+          example: GB
+        identifier:
+          type: string
+          description: The unique site identifier.
+          example: LONHOL
+        location:
+          type: string
+          description: The city/town that the business site is in.
+          example: London
+        name:
+          type: string
+          description: The name of the site.
+          example: London Holborn Premier Inn
+        type:
+          type: string
+          description: Type of business site.
+          example: HOTEL
+          enum:
+            - HOTEL
+            - RESTAURANT
+            - OTHER
+      description: Information on the site the booking is for. A site can be a hotel,
+        restaurant or another entity run by Whitbread.
+    Card:
+      type: object
+      properties:
+        cvv:
+          type: string
+          description: CVV for the payment card/token.
+          example: '222'
+        expiryMonth:
+          type: string
+          description: Expiry month for the payment card/token.
+          format: MM
+          example: '01'
+        expiryYear:
+          type: string
+          description: Expiry year for the payment card/token.
+          format: YY
+          example: '21'
+        token:
+          type: string
+          description: 3C Payment token.
+          example: '4943056398164344242'
+      description: Customers card for refund of the payment.
+    CardHolder:
+      type: object
+      properties:
+        address:
+          "$ref": "#/components/schemas/Address"
+        cardHolderName:
+          type: string
+          description: Name of the card holder.
+          example: Mr Liam Wilson
+        email:
+          type: string
+          description: Booker email address.
+          example: example@email.com
+      description: Information regarding the booking being made.
+    CreateTokenRequest:
+      required:
+        - cardHolder
+        - cardNumber
+        - expiryMonth
+        - expiryYear
+        - requestId
+      type: object
+      properties:
+        cardHolder:
+          "$ref": "#/components/schemas/CardHolder"
+        cardNumber:
+          type: string
+          description: Information on the type of Payment to process.
+        countryCode:
+          type: string
+        expiryMonth:
+          type: string
+          description: Information on the type of Payment to process.
+        expiryYear:
+          type: string
+          description: Information on the type of Payment to process.
+        requestId:
+          type: string
+          description: Unique reference for transaction provided by consumer.
+          example: a0a9f782-98ee-468c-9839-30c487c832a3
+    CreateTokenResponse:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
+          description: Created token
+    EckohException:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int64
+        message:
+          type: string
+    EckohResponse:
+      type: object
+      properties:
+        content:
+          type: string
+        exception:
+          "$ref": "#/components/schemas/EckohException"
+        expiry:
+          type: string
+        maskedPan:
+          type: string
+        reference:
+          type: string
+        result:
+          type: string
+        resultCode:
+          type: integer
+          format: int64
+        scheme:
+          type: string
+        token:
+          type: string
+        type:
+          type: string
+    EckohWebhookError:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    GenericErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+        timestamp:
+          type: string
+    Guest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full name of guest.
+          example: Mr James Bond
+        previousBookings:
+          type: integer
+          description: How many previous bookings the customer has made.
+          format: int32
+          example: 10
+        registered:
+          type: boolean
+          description: Whether the guest is registered with a Premier Inn account.
+          example: true
+        registeredSince:
+          type: string
+          description: How long the guest has been registered with a Premier Inn Account.
+          format: date
+          example: '2021-11-26'
+      description: Information regarding the lead guest of the booking.
+    Mit:
+      type: object
+      properties:
+        scaReference:
+          type: string
+          description: scaReference
+          example: '43686363637'
+        type:
+          type: string
+          description: type
+          example: N
+          enum:
+            - N
+            - L
+            - S
+            - R
+      description: Information about the mit payment
+    Payment:
+      required:
+        - amount
+        - billing
+        - subType
+        - type
+      type: object
+      properties:
+        amount:
+          "$ref": "#/components/schemas/Amount"
+        billing:
+          "$ref": "#/components/schemas/Billing"
+        card:
+          "$ref": "#/components/schemas/Card"
+        cardPresent:
+          type: boolean
+        environment:
+          type: string
+          description: Browser window host name where ECOMM payment is being processed
+            via iPage.
+          example: https://www.premierinn.com
+        mit:
+          "$ref": "#/components/schemas/Mit"
+        settlementReference:
+          type: string
+          description: 18-digit BART reference used in PAY_NOW transactions only
+          example: '123456789012345678'
+        paypalNonce:
+          type: string
+          description: Nonce string receive from UI after Paypal Authorization
+          example: 'c0737cdb-1ae8-11df-4a31-71e6702fb072'
+        paypalDeviceData:
+          type: string
+          description: String generated by the Paypal SDK in the UI from the device making the payment
+          example: '{\"correlation_id\":\"5792b50d35525fd075fbdc132b62c986\"}'
+        subType:
+          type: string
+          description: Sub type of payment to process.
+          example: ECOMM
+          enum:
+            - ECOMM
+            - MOTO
+            - ECKOH
+            - PAYPAL
+            - MIT
+            - SAVE_CARD
+            - AUTHORIZE_CARD
+            - SECURE_BOOKING
+            - MIT_CC
+        type:
+          type: string
+          description: Type of payment to process.
+          example: CARD
+          enum:
+            - CARD
+            - PIBA
+            - PIBA_EU
+            - PAYPAL
+            - WALLET_APPLE
+            - WALLET_GOOGLE
+    PaymentRequest:
+      required:
+        - booking
+        - payment
+        - requestId
+        - sessionId
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int32
+        booking:
+          "$ref": "#/components/schemas/Booking"
+        bookingType:
+          type: string
+        channel:
+          type: string
+        countryCode:
+          type: string
+        hotelCode:
+          type: string
+        language:
+          type: string
+        payment:
+          "$ref": "#/components/schemas/Payment"
+        paymentSubType:
+          type: string
+        requestId:
+          type: string
+          description: Unique reference for transaction provided by consumer.
+          example: a0a9f782-98ee-468c-9839-30c487c832a3
+        sessionId:
+          type: string
+          description: BART Session Id
+    PaymentResponse:
+      type: object
+      properties:
+        booking:
+          "$ref": "#/components/schemas/Booking"
+        bookingReference:
+          type: string
+        createdOn:
+          type: string
+          format: date-time
+        payment:
+          "$ref": "#/components/schemas/Payment"
+        paymentId:
+          type: string
+        paymentStatus:
+          type: string
+        providerResponse:
+          "$ref": "#/components/schemas/ProviderResponse"
+        refunded:
+          type: boolean
+        refundedOn:
+          type: string
+          format: date-time
+        requestId:
+          type: string
+        revisedSolution:
+          type: boolean
+    ProviderResponse:
+      type: object
+      properties:
+        eckohResponse:
+          "$ref": "#/components/schemas/EckohResponse"
+        providerReference:
+          type: string
+        threecResponse:
+          "$ref": "#/components/schemas/ThreeCResponse"
+        transactionReference:
+          type: string
+    ReconciliationRequest:
+      required:
+        - businessSite
+        - requestId
+      type: object
+      properties:
+        businessSite:
+          "$ref": "#/components/schemas/BusinessSite"
+        requestId:
+          type: string
+          description: Unique reference for transaction provided by consumer.
+          example: a0a9f782-98ee-468c-9839-30c487c832a3
+    Refund:
+      required:
+        - amount
+        - card
+        - reason
+        - type
+      type: object
+      properties:
+        amount:
+          "$ref": "#/components/schemas/Amount"
+        card:
+          "$ref": "#/components/schemas/Card"
+        reason:
+          type: string
+          description: Reason for refund.
+        type:
+          type: string
+          description: Type of refund to process.
+          example: CARD
+          enum:
+            - CARD
+            - PIBA
+            - PIBA_EU
+            - WALLET_APPLE
+            - WALLET_GOOGLE
+            - PAYPAL
+    RefundRequest:
+      required:
+        - booking
+        - refund
+        - requestId
+      type: object
+      properties:
+        booking:
+          "$ref": "#/components/schemas/Booking"
+        hotelCode:
+          type: string
+        refund:
+          "$ref": "#/components/schemas/Refund"
+        requestId:
+          type: string
+          description: Unique reference for transaction provided by consumer.
+          example: a0a9f782-98ee-468c-9839-30c487c832a3
+    RefundResponse:
+      type: object
+      properties:
+        booking:
+          "$ref": "#/components/schemas/Booking"
+        paymentId:
+          type: string
+        providerResponse:
+          "$ref": "#/components/schemas/ProviderResponse"
+        refund:
+          "$ref": "#/components/schemas/Refund"
+        refundId:
+          type: string
+        refunded:
+          type: boolean
+        refundedOn:
+          type: string
+          format: date-time
+        requestId:
+          type: string
+    Room:
+      type: object
+      properties:
+        adults:
+          type: integer
+          description: Number of adults in room being booked.
+          format: int32
+          example: 2
+        rate:
+          type: string
+          description: Rate type for the room being booked.
+          example: SV344
+        type:
+          type: string
+          description: Type of room being booked.
+          example: FAM
+      description: Information on the rooms being booked.
+    ThreeCResponse:
+      type: object
+      properties:
+        authCode:
+          type: string
+        avsResult:
+          type: string
+        binRange:
+          type: string
+        cardSchemeId:
+          type: string
+        cardSchemeName:
+          type: string
+        cardholderFirstName:
+          type: string
+        cardholderLastName:
+          type: string
+        date:
+          type: string
+        expiry:
+          type: string
+        fraudCheckDecision:
+          type: string
+        fraudCheckRequestId:
+          type: string
+        fraudCheckResult:
+          type: string
+        fraudCheckResultReason:
+          type: string
+        iPageHtml:
+          type: string
+        last4Digits:
+          type: string
+        providerReason:
+          type: string
+        providerResult:
+          type: string
+        providerStatus:
+          type: string
+        providerStatusText:
+          type: string
+        providerUrl:
+          type: string
+        scaReference:
+          type: string
+        sessionId:
+          type: string
+        status:
+          type: string
+        template:
+          type: string
+        threeDSIndicator:
+          type: string
+        time:
+          type: string
+        token:
+          type: string
+    UpdateBookingReferenceRequest:
+      required:
+        - bookingReference
+        - paymentId
+      type: object
+      properties:
+        bookingReference:
+          type: string
+          description: Booking Confirmation Number
+          example: BR260692A
+        paymentId:
+          type: string
+          description: Payment Id
+          example: a4a63ec9-1065-4f91-8625-5fe7a7c5432c
+    UpdateTokenRequest:
+      required:
+        - cardHolderAddress
+        - cardHolderFirstName
+        - cardHolderLastName
+        - requestId
+        - token
+      type: object
+      properties:
+        cardHolderAddress:
+          "$ref": "#/components/schemas/Address"
+        cardHolderFirstName:
+          type: string
+          description: Card holder first name
+        cardHolderLastName:
+          type: string
+          description: Card holder last name
+        requestId:
+          type: string
+          description: Unique reference for transaction provided by consumer.
+          example: a0a9f782-98ee-468c-9839-30c487c832a3
+        token:
+          type: string
+          description: Token number
+    UpdateTokenResponse:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token number
+    WebHookEckohFormData:
+      type: object
+      properties:
+        exception:
+          "$ref": "#/components/schemas/EckohWebhookError"
+        expiry:
+          type: string
+        masked_pan:
+          type: string
+        payment_id:
+          type: string
+        reference:
+          type: string
+        result:
+          type: string
+        result_code:
+          type: string
+        scheme:
+          type: string
+        token:
+          type: string
+        type:
+          type: string
+    WebHookFormData:
+      type: object
+      properties:
+        3DSIndicator:
+          type: string
+        AuthorisationCode:
+          type: string
+        CardExpiry:
+          type: string
+        CardNumberFirst6:
+          type: string
+        CardType:
+          type: string
+        CardTypeName:
+          type: string
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        ReturnCode:
+          type: string
+        SCATransRef:
+          type: string
+        TokenExpiry:
+          type: string
+        TokenNo:
+          type: string
+        TxID:
+          type: string
+        TxState:
+          type: string
+        card_pan_last4digits:
+          type: string
+        fraud_check_decision:
+          type: string
+        fraud_check_result:
+          type: string
+        fraud_check_result_reason:
+          type: string
+        ref:
+          type: string
+    TokenRefundResponse:
+      type: object
+      properties:
+        paymentId:
+          type: string
+        refunded:
+          type: boolean
+        requestId:
+          type: string
+        refundId:
+          type: string
+    TokenRefundRequest:
+      type: object
+      example: null
+      properties:
+        booking:
+          $ref: '#/components/schemas/Booking'
+        hotelCode:
+          type: string
+        refund:
+          $ref: '#/components/schemas/Refund'
+        requestId:
+          type: string
+      required:
+        - booking
+        - hotelCode
+        - refund
+        - requestId

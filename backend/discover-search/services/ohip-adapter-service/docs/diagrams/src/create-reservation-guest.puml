@@ -1,0 +1,21 @@
+@startuml
+entity "OHIP Adapter Service" as OHIP
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant HotelReservationOutboundPort as OutboundPort
+participant HotelReservationWebClient as WebClient
+entity Opera as Opera
+
+OHIP -> Controller: POST /v1/reservations/guests
+Controller -> InboundPort: createReservationGuest
+InboundPort -> OutboundPort: createReservationGuest
+OutboundPort -> WebClient: createReservationGuest
+
+WebClient -> Opera: PUT /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}
+WebClient <- Opera: ChangeReservationDetails
+
+OutboundPort <- WebClient: ReservationGuestResponse
+InboundPort <- OutboundPort: ReservationGuestResponse
+Controller <- InboundPort: ReservationGuestResponse
+OHIP <- Controller: ReservationGuestResponseDto
+@enduml

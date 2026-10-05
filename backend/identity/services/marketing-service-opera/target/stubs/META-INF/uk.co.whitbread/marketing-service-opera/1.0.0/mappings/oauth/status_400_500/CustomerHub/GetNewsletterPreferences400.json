@@ -1,0 +1,32 @@
+{
+  "id" : "f97d324a-44b6-4502-856f-59fae440fc5a",
+  "request" : {
+    "url" : "/marketing/hotels/newsletter/get",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['requestId'] == 'fsytdfxusdgcilugasld')]"
+    }, {
+      "matchesJsonPath" : "$.['contactChannel'][?(@.['contactChannelType'] == 'Telephone')]"
+    }, {
+      "matchesJsonPath" : "$.['contactChannel'][?(@.['contactChannelValue'] == '+447777777777')]"
+    }, {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'PINN')]"
+    }, {
+      "matchesJsonPath" : "$.['brandCodes'][?(@ == 'WINN')]"
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "body" : "{\"code\":\"3001\",\"details\":[\"Required properties not found or invalid. Please ensure request contains all required properties. Ensure brand codes supplied are valid.\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "f97d324a-44b6-4502-856f-59fae440fc5a"
+}

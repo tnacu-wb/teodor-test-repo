@@ -1,0 +1,206 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://bartws.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="http://bartws.micros.com/1.0">
+	<types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://bartws.micros.com/1.0">
+			<s:element name="Subscribe">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="subscriptionRequest" type="s0:SubscriptionRequest2015"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="SubscriptionRequest2015">
+				<s:sequence>
+					<s:element minOccurs="0" name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="firstName" type="s:string"/>
+					<s:element minOccurs="0" name="lastName" type="s:string"/>
+					<s:element minOccurs="0" name="emailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="countryCode" type="s:string"/>
+					<s:element minOccurs="0" name="isBusinessTravel" type="s:boolean"/>
+					<s:element minOccurs="0" name="receiveRestaurantInfo" type="s:string"/>
+					<s:element minOccurs="0" name="regions" type="s0:ArrayOfSubscriptionElementSubscriptionElement"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfSubscriptionElementSubscriptionElement">
+				<s:sequence>
+					<s:element maxOccurs="unbounded" minOccurs="0" name="SubscriptionElement" nillable="true" type="s0:SubscriptionElement"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="SubscriptionElement">
+				<s:sequence>
+					<s:element minOccurs="0" name="regionId" type="s:string"/>
+					<s:element minOccurs="0" name="subscribed" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="SubscribeResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="SubscribeResult" type="s0:SubscriptionResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="SubscriptionResponse">
+				<s:sequence>
+					<s:element minOccurs="0" name="successful" type="s:boolean"/>
+					<s:element minOccurs="0" name="subscriptionResponseError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ErrorDetails">
+				<s:sequence>
+					<s:element minOccurs="0" name="errorMessage" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="SubscriptionStatus">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="subscriptionStatusRequest" type="s0:SubscriptionStatusRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="SubscriptionStatusRequest">
+				<s:sequence>
+					<s:element minOccurs="0" name="emailID" type="s:string"/>
+					<s:element minOccurs="0" name="fullSearch" type="s:boolean"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="SubscriptionStatusResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="SubscriptionStatusResult" type="s0:SubscriptionStatusResponse2015"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="SubscriptionStatusResponse2015">
+				<s:sequence>
+					<s:element minOccurs="0" name="subscribed" type="s:boolean"/>
+					<s:element minOccurs="0" name="sessionID" type="s:string"/>
+					<s:element minOccurs="0" name="firstName" type="s:string"/>
+					<s:element minOccurs="0" name="lastName" type="s:string"/>
+					<s:element minOccurs="0" name="emailAddress" type="s:string"/>
+					<s:element minOccurs="0" name="countryCode" type="s:string"/>
+					<s:element minOccurs="0" name="isBusinessTravel" type="s:boolean"/>
+					<s:element minOccurs="0" name="receiveRestaurantInfo" type="s:string"/>
+					<s:element minOccurs="0" name="regions" type="s0:ArrayOfSubscriptionElementSubscriptionElement"/>
+					<s:element minOccurs="0" name="subscriptionStatusResponseError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="USER_NOT_FOUND"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="Unsubscribe">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" name="unsubscribeRequest" type="s0:UnsubscribeRequest"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="UnsubscribeRequest">
+				<s:sequence>
+					<s:element minOccurs="0" name="email" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="UnsubscribeResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element name="UnsubscribeResult" type="s0:UnsubscribeResponse"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="UnsubscribeResponse">
+				<s:sequence>
+					<s:element minOccurs="0" name="unsubscribeSuccessful" type="s:boolean"/>
+					<s:element minOccurs="0" name="unsubscribeError">
+						<s:simpleType>
+							<s:restriction base="s:string">
+								<s:enumeration value="INVALID_DATA_IN_FIELD"/>
+								<s:enumeration value="MISSING_MANDATORY_FIELD"/>
+								<s:enumeration value="USER_NOT_FOUND"/>
+							</s:restriction>
+						</s:simpleType>
+					</s:element>
+					<s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+				</s:sequence>
+			</s:complexType>
+		</s:schema>
+	</types>
+	<message name="SubscribeSoapIn">
+		<part name="parameters" element="s0:Subscribe"/>
+	</message>
+	<message name="SubscribeSoapOut">
+		<part name="parameters" element="s0:SubscribeResponse"/>
+	</message>
+	<message name="SubscriptionStatusSoapIn">
+		<part name="parameters" element="s0:SubscriptionStatus"/>
+	</message>
+	<message name="SubscriptionStatusSoapOut">
+		<part name="parameters" element="s0:SubscriptionStatusResponse"/>
+	</message>
+	<message name="UnsubscribeSoapIn">
+		<part name="parameters" element="s0:Unsubscribe"/>
+	</message>
+	<message name="UnsubscribeSoapOut">
+		<part name="parameters" element="s0:UnsubscribeResponse"/>
+	</message>
+	<portType name="EzineService2015Soap">
+		<operation name="Subscribe">
+			<input message="s0:SubscribeSoapIn"/>
+			<output message="s0:SubscribeSoapOut"/>
+		</operation>
+		<operation name="SubscriptionStatus">
+			<input message="s0:SubscriptionStatusSoapIn"/>
+			<output message="s0:SubscriptionStatusSoapOut"/>
+		</operation>
+		<operation name="Unsubscribe">
+			<input message="s0:UnsubscribeSoapIn"/>
+			<output message="s0:UnsubscribeSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="EzineService2015Soap" type="s0:EzineService2015Soap">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+		<operation name="Subscribe">
+			<soap:operation soapAction="http://bartws.micros.com/1.0/ws.ElectronicMagazine.ElectronicMagazineService2015.Subscribe" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="SubscriptionStatus">
+			<soap:operation soapAction="http://bartws.micros.com/1.0/ws.ElectronicMagazine.ElectronicMagazineService2015.SubscriptionStatus" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Unsubscribe">
+			<soap:operation soapAction="http://bartws.micros.com/1.0/ws.ElectronicMagazine.ElectronicMagazineService2015.Unsubscribe" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="EzineService2015">
+		<port name="EzineService2015Soap" binding="s0:EzineService2015Soap">
+			<soap:address location="https://bookings.premierinn.com:443/csp/sql/ws.ElectronicMagazine.ElectronicMagazineService2015.cls"/>
+		</port>
+	</service>
+</definitions>

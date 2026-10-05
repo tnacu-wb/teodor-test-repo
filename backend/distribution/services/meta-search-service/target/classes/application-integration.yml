@@ -1,0 +1,28 @@
+server:
+  port: 9115
+
+amazon:
+  dynamodb:
+    tableName: integration-availabilities
+    endpoint: http://localhost:1
+    accessKey: integration-key
+    secretKey: integration-secret
+    region: eu-west-1
+    maxRetry: 0
+    irsa: false
+
+security:
+  xWhitKeyWBValue: integration-wb-key
+  xWhitKeyValue: integration-meta-key
+  xWhitKey: X-WHIT-API-KEY
+
+hotel:
+  codes: ABETIR,ABECOC
+  roomTypes: DOUBLE,SINGLE,FAMILY,ACCESSIBLE,TWIN
+  maxNights: 9
+
+config:
+  service:
+    content:
+      host: http://localhost:1
+      hotelInformationEndpoint: /v1/content/hotels/{hotelId}/information

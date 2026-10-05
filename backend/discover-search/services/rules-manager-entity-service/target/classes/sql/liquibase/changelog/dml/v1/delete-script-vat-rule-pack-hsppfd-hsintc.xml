@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="rajesh.nad" id="tag_delete-script-vat-rule-pack-hsppfd-hsintc">
+    <tagDatabase tag="version_delete-script-vat-rule-pack-hsppfd-hsintc" />
+  </changeSet>
+
+  <changeSet author="rajesh.nad" id="delete-script-vat-rule-pack-hsppfd-hsintc">
+    <delete schemaName="rules_engine" tableName="vat_rule">
+      <where>pkg_code = 'HSINTC'</where>
+    </delete>
+
+    <delete schemaName="rules_engine" tableName="vat_rule">
+      <where>pkg_code = 'HSPPFD'</where>
+    </delete>
+
+  </changeSet>
+
+</databaseChangeLog>

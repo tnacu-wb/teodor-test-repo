@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:s="http://www.w3.org/2001/XMLSchema"
+             xmlns:s0="http://corporate.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             targetNamespace="http://corporate.micros.com/1.0">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://corporate.micros.com/1.0">
+            <s:include schemaLocation="../xsd/bart-business-10.xsd"/>
+            <s:element name="GetUser">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:GetUserRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetUserRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetUserResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="GetUserResult" type="s0:GetUserResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetUserResponse">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element name="companyID" type="s:string"/>
+                    <s:element name="employee" type="s0:EmployeeExtended"/>
+                    <s:element name="basicCompanyDetails" type="s0:BasicCompanyDetails"/>
+                    <s:element minOccurs="0" name="setupDetails" type="s0:CompanySetupDetails"/>
+                    <s:element minOccurs="0" name="numberOfEmployees" type="s:decimal"/>
+                    <s:element minOccurs="0" name="upcomingBookings"
+                               type="s0:ArrayOfUpcomingBookingSummaryUpcomingBookingSummary"/>
+                    <s:element name="setupProgress">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="COMPANY_DETAILS"/>
+                                <s:enumeration value="PAYMENT_OPTIONS"/>
+                                <s:enumeration value="MANAGEMENT_INFORMATION"/>
+                                <s:enumeration value="BOOKING_ALLOWANCES"/>
+                                <s:enumeration value="BOOKING_ALERTS"/>
+                                <s:enumeration value="COMPLETE"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="miSetupRequired" type="s:boolean"/>
+                    <s:element name="changeCompanyName" type="s:boolean"/>
+                    <s:element minOccurs="0" name="awaitingApproval" type="s:decimal"/>
+                    <s:element minOccurs="0" name="tetheredGuid" type="s:string"/>
+                    <s:element minOccurs="0" name="MyPILink" type="s:string"/>
+                    <s:element name="dismissMPILink" type="s:boolean"/>
+                    <s:element name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="EmployeeExtended">
+                <s:complexContent>
+                    <s:extension base="s0:Employee">
+                        <s:sequence>
+                            <s:element minOccurs="0" name="ghCreation" type="s:date"/>
+                            <s:element minOccurs="0" name="totalStays" type="s:long"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+        </s:schema>
+    </types>
+    <message name="GetUserSoapIn">
+        <part name="parameters" element="s0:GetUser"/>
+    </message>
+    <message name="GetUserSoapOut">
+        <part name="parameters" element="s0:GetUserResponse"/>
+    </message>
+    <portType name="GuestDetailsSoap">
+        <operation name="GetUser">
+            <input message="s0:GetUserSoapIn"/>
+            <output message="s0:GetUserSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="GuestDetailsSoap" type="s0:GuestDetailsSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="GetUser">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.GuestDetailsService.GetUser"
+                            style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GuestDetails">
+        <port name="GuestDetailsSoap" binding="s0:GuestDetailsSoap">
+            <soap:address
+                    location="https://alpha2.bookings.premierinn.com:443/csp/sql/ws.Corporate.GuestDetailsService.cls"/>
+        </port>
+    </service>
+</definitions>

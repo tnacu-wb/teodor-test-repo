@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="sradivoi-wb" id="occupancy_supplement_load-non-prod" context="non-prod">
+        <loadData tableName="occupancy_supplement"
+                  file="sql/liquibase/data/occupancy_supplement_data_non_prod_v1.csv"
+                  primaryKey="rule_id"/>
+    </changeSet>
+
+</databaseChangeLog>

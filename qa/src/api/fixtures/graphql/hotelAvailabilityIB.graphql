@@ -1,0 +1,83 @@
+query hotelAvailability(
+  $hotelId: String!
+  $arrival: String!
+  $departure: String!
+  $rooms: [RoomSearch!]!
+  $brand: String!
+  $country: String!
+  $language: String!
+  $bookingChannel: BookingChannelCriteria!
+  $channel: String
+  $ratePlanCodes: [String]
+  $promotionCode: String
+  ) {
+    hotelAvailability(
+      availabilitySearchCriteria: {
+        arrival: $arrival
+        departure: $departure
+        rooms: $rooms
+        hotel: { identifier: $hotelId }
+        bookingChannel: $bookingChannel
+        ratePlanCodes: $ratePlanCodes
+        promotionCode: $promotionCode
+        }
+      ) {
+        hotelId
+        startDate
+        endDate
+        available
+        limitedAvailability
+        mlos
+        roomRates {
+          ratePlanCode
+          promotionCode
+          cellCode
+          roomTypes {
+            roomType
+            adults
+            children
+            cotRequested
+            rooms {
+              pmsRoomType
+              silentSubstitution
+              cotAvailable
+              roomClass
+              specialRequests
+              roomPriceBreakdown {
+                totalNetAmount
+                baseRateAmount
+                currencyCode
+                packageCode
+                packageAmount
+                dailyPrices {
+                  date
+                  netPrice
+                }
+              }
+              numberOfRoomsAvailable
+            }
+          }
+        }
+      }
+      ratesInformation(
+        brand: $brand
+        country: $country
+        language: $language
+        hotelId: $hotelId
+        channel: $channel
+      ) {
+        rateClassifications {
+          rateClassification
+          rateDescription
+          rateName
+          rateOrder
+          rateCategory
+        }
+      }
+      hotelInventory(hotelId: $hotelId, dateRangeEnd: $departure, dateRangeStart: $arrival) {
+        roomTypeInventories {
+          availableCount
+          code
+        }
+      }
+    }

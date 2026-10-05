@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="cristina.dodu" id="data-max-room-occupancy-rule-update-CCUI-HUB">
+    <update schemaName="rules_engine" tableName="max_room_occupancy_rule">
+      <column name="family_room" value="false"/>
+      <column name="twin_room" value="false"/>
+      <where>channel_id = 'CCUI' AND brand = 'HUB'</where>
+    </update>
+  </changeSet>
+  <changeSet author="cristina.dodu" id="data-max-room-occupancy-rule-update-CCUI-HUB-inactive">
+    <update schemaName="rules_engine" tableName="max_room_occupancy_rule">
+      <column name="status" value="INACTIVE"/>
+      <where>channel_id = 'CCUI' AND brand = 'HUB' and
+        single_room=false and double_room=false and twin_room=false and accessible_room=false and
+        family_room=false
+      </where>
+    </update>
+  </changeSet>
+</databaseChangeLog>

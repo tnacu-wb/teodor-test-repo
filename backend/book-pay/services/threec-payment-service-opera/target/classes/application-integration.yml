@@ -1,0 +1,199 @@
+server:
+  port: 9020
+
+3c:
+  server:  http://localhost:8080 #mock server
+  endpoints:
+    initialise: /ipage/Service/_2019_09_v1_3_0/IPGService/Initialise
+    transactions: /mxg/Service/_2017_02_v5_2_0/transactions
+    tokenCreate: /mxg/service/_2011_02_v5_1_0/Token.asmx/CreateToken
+    tokenUpdate: /mxg/service/_2011_02_v5_1_0/Token.asmx/ManageToken
+    refund: /mxg/Service/_2017_02_v5_2_0/transactions/%s
+    reconciliation: /mxg/Service/_2019_01_v5_4_0/Reconcile/StartNew
+  iPage:
+    title: Contacting Payment Provider
+    providerUrl: ${3c.server}/iPage/Service/_2006_05_v1_0_1/service.aspx
+    stubMode: false
+  timeout:
+    connection: 5000
+    response: 5000
+  refunds:
+    status: CS,CQ
+  provider:
+    success: CS,CQ,AA
+    failure: AD,RE,AR,3E
+  noTransaction:
+    code: 711,752
+  fraudCheck:
+    valid: ACCEPT
+  mit:
+    success:
+      result: 0
+      trxState: CQ
+  emerchant:
+    validation:
+      code: LxElfdYBDqCH70ZKVP5eFXn9K
+  username:
+    default: DEFAULT
+    tokenisation: eWB-TOKEN
+    tokenisationDE: eWB-TOKEN
+  fraud:
+    enabled: true
+    mode: 5
+    default:
+  connection:
+    keepAlive: true
+    maxConnections: 16
+    maxIdleTime: 20
+    maxLifetime: 60
+    acquiredTimeout: 45
+    evictTimeout: 120
+  ttl:
+    initial: 10
+    final: 20
+  response:
+    tokenisationResponseCodes: 0, 700
+
+paypal:
+  paypalConfigData:
+    enablePaypalConfigData: false
+  paypalTestCard:
+    enablePaypalTestCard: false
+
+bart:
+  username: mal-alpha
+  password: alpha2
+  host: http://localhost:8080
+  connection-manager:
+    max-total: 200
+    default-max-per-route: 200
+  connection-manager-timeout: 5000
+  connection-timeout: 5000
+  socket-timeout: 10000
+  defaultKeepAlive: 30
+  serviceUrl:
+    booking: ${bart.host}/csp/sql/ws.Booking.BookingService3.cls
+  session:
+    extension: true
+
+webhook:
+  environment: http://localhost:8080 #mock server
+  success: ${webhook.environment}/payments/%s/webhook
+  failure: ${webhook.environment}/payments/%s/webhook
+
+redirect:
+  environment: http://localhost:8080 #mock server
+  success: ${redirect.environment}/payments/%s/complete
+  failure: ${redirect.environment}/payments/%s/complete
+  defaultUrl: https://secure2.beta.premierinn.digital/
+  regex:
+    - .*localhost.*
+    - .*\.premierinn\.com
+    - .*\.premierinn\.de
+    - .*\.whitbread\.digital
+    - .*\.premierinn\.digital
+    -
+
+spring:
+  main:
+    web-application-type: reactive
+  cloud:
+    bus:
+      enabled: false
+
+swagger:
+  api:
+    version: 1.5.0_snapshot
+    path: https://api.swaggerhub.com/apis/whitbread/3CPayment-API/${swagger.api.version}/swagger.json
+    token: fab83388-6058-44c5-a820-df726c1d6566
+
+springdoc:
+  writer-with-order-by-keys: true
+  packagesToScan: uk.co.whitbread.payments
+
+whitbread:
+  api:
+    key: X-WHIT-API-KEY
+    value: kasUAsiohjasAJSKIS9whkasjbsjkdKALShinash
+
+hotel:
+  codes:
+    list: LONALD, LKEBAR, LONLEI, LONTOL, CARROA, FRAMTI, DUBAIR, SWACIT, PERMIL, BELTIT
+
+hotel-booking:
+  keepAlive: true
+  maxConnections: 16
+  maxIdleTime: 20
+  maxLifetime: 60
+  acquiredTimeout: 45
+  evictTimeout: 120
+  makeBookingEndpoint: "/{booking-id}/book"
+  url: http://localhost
+
+basket-booking:
+  keepAlive: true
+  maxConnections: 16
+  maxIdleTime: 20
+  maxLifetime: 60
+  acquiredTimeout: 45
+  evictTimeout: 120
+  makeBookingEndpoint: "/{booking-id}/book"
+  schema: http
+  port: 8080
+
+hotel-card:
+  keepAlive: true
+  maxConnections: 16
+  maxIdleTime: 20
+  maxLifetime: 60
+  acquiredTimeout: 45
+  evictTimeout: 120
+  saveCardEndpoint: "/v2/customers/cards"
+
+planetBartCardTypeMappings:
+  VS: VI
+
+revisedSolution:
+  featureEnabled: true
+  mobileAppEnabled: false
+  motoBookingEnabled: false
+  androidAppEnabled: true
+  iosAppEnabled: false
+  hotelList: LKEBAR, HAMHOF, LONSTM ,BANBRI ,DONTAB ,DUBSOU ,DUNCRO ,EDIPAR ,GLACIT ,GLAPAC ,GRESOU ,HAYSTO ,HIGHCL ,IOFMAN ,IPSMTI ,LONEUS ,LUTREG ,MAIWAT ,MANOLD ,NEWDRO ,NEWTHY ,PRENOR ,WORHIG ,LONKIN ,DUSOST ,BERALX
+
+eckoh:
+  enabled: true
+
+amazon:
+  dynamodb:
+    endpoint: http://localhost:8000 #will be overwritten in tests
+    tableName: threec-payment-test
+    accessKey: testKey
+    secretKey: testSecret
+    irsa: false
+    maxConcurrency: 150
+    maxPendingConnectionAcquires: 10_000
+    connectionAcquisitionTimeout: 30
+    connectionTimeout: 30
+    readTimeout: 30
+    apiCallAttemptTimeout: 30
+
+logging:
+  configuration:
+    logger: default
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'default:production.unleash-insecure-api-token'
+
+feature-flags:
+  mock-payment-return-code:
+    key: "release_pi_bb_mock_payment_return_code"
+    fallback: false
+  release-piba-cnp-iframe-split:
+    key: "release_piba_cnp_iframe_split"
+    fallback: false

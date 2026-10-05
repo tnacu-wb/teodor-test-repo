@@ -1,0 +1,103 @@
+query bookingConfirmation($basketReference: String!, $country: String!, $language: String!)  {
+bookingConfirmation(basketReference: $basketReference, country: $country, language: $language) {
+      bookingReference
+      balanceOutstanding
+      bookingFlowId
+      currencyCode
+      hotelId
+      infoMessages
+      newTotal
+      policyCode
+      previousTotal
+      reservationByIdList {
+      reservationId
+      reservationStatus
+        billing {
+          address {
+            addressLine1
+            addressLine2
+            addressLine3
+            addressLine4
+            country
+            postalCode
+          }
+          email
+          firstName
+          lastName
+          telephone
+          title
+        }
+        depositPolicies {
+          amountDue {
+            amount
+            currencyCode
+          }
+          amountPaid {
+            amount
+            currencyCode
+          }
+          policyCode
+        }
+        reservationGuestList {
+          givenName
+          surName
+          nameTitle
+          email
+          additionalDetails {
+            dob
+            passportNumber
+            nationality
+          }
+          isAccompanyingGuest
+        }
+        reservationPackageList {
+          packageCode
+          computedPrice
+          description
+          totalQuantity
+          unitPrice
+        }
+        roomStay {
+          accessibleRoom {
+            isAccessible
+            phoneNumber
+          }
+          adultsNumber
+          arrivalDate
+          childrenNumber
+          cot
+          departureDate
+          rateExtraInfo {
+            rateClassification
+            rateDescription
+            rateLongDescription
+            rateName
+            rateNotes
+            rateOrder
+          }
+          ratePlanCode
+          ratesPerNight {
+            pricePerNight
+            startDate
+          }
+          roomExtraInfo {
+            roomDescription
+            roomName
+            roomType
+          }
+          roomPrice
+          roomType
+        }
+        preferences {
+            code
+            preferenceType
+        }
+      }
+      totalCost
+      upgradeToFlex {
+        amount
+        currency
+        flexRateCode
+      }
+    }
+}

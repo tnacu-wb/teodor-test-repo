@@ -1,0 +1,168 @@
+server:
+  port: "@application.port@"
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "@project.version@"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+config:
+  service:
+    customers:
+      host: http://${HOTEL_REGISTER_HOST:localhost:9027}
+      registrationEndpoint: "/customers/hotels"
+    marketing:
+      host: ${MARKETING_URL}
+      newsletterPreferencesEndpoint: "/marketing/newsletter/email/"
+      internalNewsletterPreferencesEndpoint: "/internal/marketing/newsletter"
+      azureFDID: ${AZURE_FDID}
+      apimSubscriptionKey: ${APIM_SUBSCRIPTION_KEY}
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+feature-flags:
+  company-name-validation:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false
+
+management:
+  endpoints:
+    web:
+      base-path: /v1/account/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - hotelCode
+        - hotelName
+        - password
+        - azureFDID
+        - apimSubscriptionKey
+        - passport
+        - firstName
+        - lastName
+        - email
+        - mobile
+spring:
+  sleuth:
+    propagation:
+      type: aws
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-qa
+        - opera-dev
+        - opera-perf
+        - opera-uat
+        - opera-dit
+        - opera-sit
+
+config:
+  service:
+    marketing:
+      host: ${MARKETING_URL}
+      newsletterPreferencesEndpoint: "/marketing/newsletter/email/"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-hulk
+        - opera-wanda
+config:
+  service:
+    marketing:
+      host: ${MARKETING_URL}
+      newsletterPreferencesEndpoint: "/marketing/newsletter/email/"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+---
+spring.config.activate.on-profile: local
+
+logging:
+  configuration:
+    logger: custom
+
+config:
+  service:
+    customers:
+      host: "https://api.uat.eks.whitbread.digital"
+      registrationEndpoint: "/customers/hotels"
+    marketing:
+      host: "https://api.uat.eks.whitbread.digital"
+      newsletterPreferencesEndpoint: "/marketing/newsletter/email/"
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'

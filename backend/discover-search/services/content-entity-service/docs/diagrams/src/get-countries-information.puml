@@ -1,0 +1,12 @@
+@startuml
+entity GraphQL_endpoint
+title Retrieve Countries Information from AEM
+
+entity "content-entity-service" as CES
+entity AEM
+
+GraphQL_endpoint-> CES  ++: GET /content/countries?language={language}&country={country}&site={site}
+CES -> AEM: GET /{country}/{language}/content-service.countries.detail/site/{site}.json
+GraphQL_endpoint<- CES -- : return countries information
+
+@enduml

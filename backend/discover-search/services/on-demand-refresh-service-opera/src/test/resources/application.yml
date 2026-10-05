@@ -1,0 +1,106 @@
+server:
+  port: 9099
+
+spring:
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+  datasource:
+    reader:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      #jdbc-url: jdbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: docker
+    writer:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      #jdbc-url: jdbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: docker
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    enabled: false
+  sql:
+    init:
+      platform: postgres
+      schema-locations: classpath:schema_test.sql
+      mode: always
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    properties:
+      org:
+        scheduler:
+          instanceName: OnDemandRefreshScheduler
+          instanceId: AUTO
+          skipUpdateCheck: true
+          jobFactory:
+            class: org.quartz.simpl.SimpleJobFactory
+        threadPool:
+          class: org.quartz.simpl.SimpleThreadPool
+          threadPriority: 5
+          threadCount: 3
+          threadsInheritContextClassLoaderOfInitializingThread: true
+        jobStore:
+          class: org.quartz.impl.jdbcjobstore.JobStoreTX
+          driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+          dataSource: quartzDataSource
+          useProperties: true
+          isClustered: true
+
+logging:
+  level:
+    uk.co.whitbread.ondemandrefreshservice: INFO
+
+config:
+  httpClient:
+    connectionTimeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+    responseTimeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  service:
+    ocd-adapter:
+      host: ${OCD_ADAPTER_SERVICE_HOST:http://localhost:9134}
+      offerEndpoint: "/ocd/v1/hotels/{hotelCode}/offer"
+    ohip:
+      host: http://localhost:${wiremock.server.port:0}
+      username: ${OPERA_USERNAME:user}
+      password: ${OPERA_PASSWORD:password}
+      appkey: ${OPERA_APP_KEY:appKey}
+      clientId: ${OPERA_CLIENT_ID:client}
+      clientSecret: ${OPERA_CLIENT_SECRET:secret}
+      wireTapAccessToken: false
+      isClientCredentialsEnabled: true
+      enterpriseId: testId
+      authEndpoint: ${OPERA_AUTH_ENDPOINT:oauth/v1/tokens}
+      scope: ${OPERA_SCOPE:}
+      tokenRefreshClockSkew: ${OPERA_TOKEN_REFRESH_SKEW:15}
+      dailyRatePlansEndpoint: "/rtp/v1/hotels/{HotelId}/ratePlans/{RatePlanCode}/schedules"
+      hotelInventoryEndpoint: "/inv/v1/hotels/{HotelId}/hotelInventory"
+      hotelMigrationStatusEndpoint: "/ent/config/v1/hotels/{HotelId}/hotelDetails"
+      searchRateRestrictionCriteriaEndpoint: "/par/v1/hotels/{HotelId}/restrictions"
+
+
+ondemandrefresh:
+  interval: 30
+  #scheduledRefreshCronJob: 0 0 2 ? * * *
+  #below expression only for testing purposes
+  scheduledRefreshCronJob: 0 0/15 * ? * * *
+  maxDays: 90
+  maxRange: 365
+  jobDelay: 120
+
+db:
+  # Number of sql blocks to be executed each time
+  batchSize: 50
+  maxRetryLimit: 2

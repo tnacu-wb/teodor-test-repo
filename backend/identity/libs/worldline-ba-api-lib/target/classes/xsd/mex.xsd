@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           targetNamespace="worldline.mst.bsm.api.b2b.pi.messages.v1.1"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:messages="worldline.mst.bsm.api.b2b.pi.messages.v1.1"
+           xmlns:data="worldline.mst.bsm.api.b2b.pi.data.v1.1">
+  <xs:element name="cnpHostedPageInitiate">
+    <xs:annotation>
+      <xs:documentation>CNP Initiates and returns the hosted page session</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CNPHostedPageInitiateRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpHostedPageInitiateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CNPHostedPageInitiateResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpHostedPageResult">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CNPHostedPageResultRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpHostedPageResultResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CNPHostedPageResultResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpGetDigitsForCheckTelephoneBooking">
+    <xs:annotation>
+      <xs:documentation>Get digits to query for CNP Telephone bookings</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CNPGetDigitsForCheckTelephoneBookingRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpGetDigitsForCheckTelephoneBookingResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CNPGetDigitsForCheckTelephoneBookingResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpCheckTelephoneBookingBySessionID">
+    <xs:annotation>
+      <xs:documentation>Get digits to query for CNP Telephone bookings</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CNPCheckTelephoneBookingBySessionIDRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpCheckTelephoneBookingBySessionIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CNPCheckTelephoneBookingBySessionIDResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpCheckMemorableWord">
+    <xs:annotation>
+      <xs:documentation>CNP Check where either memorable word or password is known</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CNPCheckMemorableWordRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpCheckMemorableWordResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CNPCheckMemorableWordResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpCheckTelephoneBooking">
+    <xs:annotation>
+      <xs:documentation>CNP Check where only two characters of memorable word or password are passed</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CNPCheckTelephoneBookingRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpCheckTelephoneBookingResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CNPCheckTelephoneBookingResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpCheckTetheredUser">
+    <xs:annotation>
+      <xs:documentation>CNP Check where TetheredUserGuid is known</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CNPCheckTetheredUserRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cnpCheckTetheredUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CNPCheckTetheredUserResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="creditProposeNewLimit">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CreditProposeNewLimitRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="creditProposeNewLimitGetStatus">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CreditProposeNewLimitGetStatusRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="creditProposeNewLimitGetStatusResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CreditProposeNewLimitGetStatusResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="creditProposeNewLimitResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CreditProposeNewLimitResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardActivate">
+    <xs:annotation>
+      <xs:documentation>R4 activates a card</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountCardActivateRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardActivateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountCardActivateResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardAdd">
+    <xs:annotation>
+      <xs:documentation>R4 adds a new card</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountCardAddRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardAddResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response">
+          <xs:complexType>
+            <xs:complexContent mixed="false">
+              <xs:extension base="data:CustomerAccountCardAddResponseType"/>
+            </xs:complexContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardCancel">
+    <xs:annotation>
+      <xs:documentation>R5 cancel and optionally replace with a card with same details but new card number</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountCardCancelRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardCancelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountCardCancelResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardInvite">
+    <xs:annotation>
+      <xs:documentation>R5 invite someone to be a registered card holder</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountCardInviteCardHolderRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardInviteResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountCardInviteCardholderResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardList">
+    <xs:annotation>
+      <xs:documentation>R4 lists cards for role of user</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountCardListRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountCardListResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardRenew">
+    <xs:annotation>
+      <xs:documentation>R5 replace a card with same details and same number</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountCardRenewRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardRenewResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountCardRenewResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardUpdate">
+    <xs:annotation>
+      <xs:documentation>R5 update a cards details (this may result in new plastic being issued)</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountCardUpdateRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardUpdateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountCardUpdateResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardView">
+    <xs:annotation>
+      <xs:documentation>R4 returns all details for a card</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountCardViewRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCardViewResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountCardViewResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCostCentreList">
+    <xs:annotation>
+      <xs:documentation>R4 lists cost centres for an account</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountCostCentreListRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountCostCentreListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountCostCentreListResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountInvoiceDownload">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountInvoiceDownloadRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountInvoiceDownloadResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountInvoiceDownloadResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountInvoiceList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountInvoiceListRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountInvoiceListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountInvoiceListResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountRegisteredUserList">
+    <xs:annotation>
+      <xs:documentation>R5 list registered users</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountRegisteredUserListRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountRegisteredUserListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountRegisteredUserListResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountViewCurrentBalances">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountViewCurrentBalancesRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountViewCurrentBalancesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountViewCurrentBalancesResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountViewTransactions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:CustomerAccountViewTransactionsRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="customerAccountViewTransactionsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:CustomerAccountViewTransactionsResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="endSession">
+    <xs:annotation>
+      <xs:documentation>Ends the specified session (log out)</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:EndSessionRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="endSessionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:EndSessionResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="loginTetheredUser">
+    <xs:annotation>
+      <xs:documentation>Login a previously tethered user</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:LoginTetheredUserRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="loginTetheredUserResponse">
+    <xs:annotation>
+      <xs:documentation>Returns details about the new session (NewSessionType)</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:LoginTetheredUserResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="refreshSession">
+    <xs:annotation>
+      <xs:documentation>Extends the specified session</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:RefreshSessionRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="refreshSessionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:RefreshSessionResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="registrationAuthenticate">
+    <xs:annotation>
+      <xs:documentation>Submit authentication answers supplied by registrant as part of registration</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:RegistrationAuthenticateRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="registrationAuthenticateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:RegistrationAuthenticateResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="registrationGetInfo">
+    <xs:annotation>
+      <xs:documentation>Get info for registration code</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:RegistrationGetInfoRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="registrationGetInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:RegistrationGetInfoResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="registrationSubmit">
+    <xs:annotation>
+      <xs:documentation>Submits user registration details and performs "tether"</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:RegistrationSubmitRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="registrationSubmitResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:RegistrationSubmitResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tetherByAccountNumber">
+    <xs:annotation>
+      <xs:documentation>Tether (link) PI and Worldline user accounts. This method uses link code and account number (from invoice)</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:TetherByAccountNumberRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tetherByAccountNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:TetherByAccountNumberResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tetherByCardNumber">
+    <xs:annotation>
+      <xs:documentation>Tether (link) PI and Worldline user accounts. This method uses link code and card number</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:TetherByCardNumberRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tetherByCardNumberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:TetherByCardNumberResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tetheredUserDetailsGet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:TetheredUserDetailsGetRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tetheredUserDetailsGetResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:TetheredUserDetailsGetResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="updateMemorableWord">
+    <xs:annotation>
+      <xs:documentation>Update the memorable word for the current user session</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Request" type="data:UpdateMemorableWordRequestType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="updateMemorableWordResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Response" type="data:UpdateMemorableWordResponseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

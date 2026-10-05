@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://bartws.micros.com/1.13" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="http://bartws.micros.com/1.13">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://bartws.micros.com/1.13">
+            <s:include schemaLocation="../xsd/bart-common-error-113.xsd"/>
+            <s:element name="GetUser">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="getUserRequest" type="s0:GetUserRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetUserRequest">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetUserResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="GetUserResult" type="s0:GetUserResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetUserResponse">
+                <s:sequence>
+                    <s:element name="sessionID" type="s:string"/>
+                    <s:element minOccurs="0" name="ezineSubscribed" type="s:boolean"/>
+                    <s:element name="guestDetails" type="s0:RegisteredGuest"/>
+                    <s:element minOccurs="0" name="inHouse" type="s:boolean"/>
+                    <s:element minOccurs="0" name="nextArrival" type="s0:NextArrival"/>
+                    <s:element minOccurs="0" name="registeredGuestUpdateError">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="USER_NOT_LOGGED_IN"/>
+                                <s:enumeration value="INVALID_DATA_IN_FIELD"/>
+                                <s:enumeration value="MISSING_MANDATORY_FIELD"/>
+                                <s:enumeration value="INVALID_NUMBER_OF_DIGITS_IN_CREDIT_CARD_NUMBER"/>
+                                <s:enumeration value="INVALID_LUHN_CHECK_DIGIT"/>
+                                <s:enumeration value="EMAIL_ALREADY_REGISTERED"/>
+                                <s:enumeration value="TELEPHONE_NUMBER_ALREADY_REGISTERED"/>
+                                <s:enumeration value="INVALID_EXISTING_PASSWORD"/>
+                                <s:enumeration value="INVALID_EXISTING_PIN"/>
+                                <s:enumeration value="NO_REGISTERED_CARD_ON_FILE"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="errorDetail" type="s0:ErrorDetails"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="RegisteredGuest">
+                <s:sequence>
+                    <s:element name="title" type="s:string"/>
+                    <s:element name="firstName" type="s:string"/>
+                    <s:element name="lastName" type="s:string"/>
+                    <s:element name="address" type="s0:Address"/>
+                    <s:element name="addressType">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="HOME"/>
+                                <s:enumeration value="BUSINESS"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="companyName" type="s:string"/>
+                    <s:element minOccurs="0" name="companyID" type="s:string"/>
+                    <s:element minOccurs="0" name="existingPassword" type="s:string"/>
+                    <s:element minOccurs="0" name="businessUse" type="s:boolean"/>
+                    <s:element name="emailAddress" type="s:string"/>
+                    <s:element minOccurs="0" name="electronicInvoiceRequired" type="s:boolean"/>
+                    <s:element minOccurs="0" name="guestHistoryNumber" type="s:string"/>
+                    <s:element minOccurs="0" name="guestHistoryCreated" type="s:date"/>
+                    <s:element minOccurs="0" name="telephoneNumbers" type="s0:ArrayOfTelephoneRegisteredTelephone"/>
+                    <s:element name="registeredGuestPassword">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:minLength value="8"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="registeredPaymentCard" type="s0:RegisteredPaymentCard"/>
+                    <s:element minOccurs="0" name="registeredGuestPreferences" type="s0:ArrayOfRegisteredGuestPreferenceRegisteredGuestPreference"/>
+                    <s:element minOccurs="0" name="ivrRegistered" type="s0:ivrRegistered"/>
+                    <s:element name="receiveFutureMailings" type="s:boolean"/>
+                    <s:element minOccurs="0" name="additionalGuestNames" type="s0:ArrayOfAdditionalGuestNameAdditionalGuestNames"/>
+                    <s:element minOccurs="0" name="loyaltyStatuses" type="s0:ArrayOfLoyaltyStatusLoyaltyStatus"/>
+                    <s:element minOccurs="0" name="carRegistration">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="10"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="nationality">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="3"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="passport" type="s0:Passport"/>
+                    <s:element minOccurs="0" name="totalStays" type="s:long"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Address">
+                <s:sequence>
+                    <s:element name="addressLine1" type="s:string"/>
+                    <s:element minOccurs="0" name="addressLine2" type="s:string"/>
+                    <s:element minOccurs="0" name="addressLine3" type="s:string"/>
+                    <s:element minOccurs="0" name="addressLine4" type="s:string"/>
+                    <s:element minOccurs="0" name="addressLine5" type="s:string"/>
+                    <s:element minOccurs="0" name="countryCode" type="s:string"/>
+                    <s:element minOccurs="0" name="postCode" type="s:string"/>
+                    <s:element minOccurs="0" name="companyName" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfTelephoneRegisteredTelephone">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="Telephone" nillable="true" type="s0:RegisteredTelephone"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="RegisteredTelephone">
+                <s:sequence>
+                    <s:element name="numberType">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="TELEPHONE"/>
+                                <s:enumeration value="MOBILE"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="telephoneNumber" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="RegisteredPaymentCard">
+                <s:sequence>
+                    <s:element name="cardType" type="s:string"/>
+                    <s:element name="cardNumber" type="s:string"/>
+                    <s:element name="expiryDate" type="s:string"/>
+                    <s:element minOccurs="0" name="startDate" type="s:string"/>
+                    <s:element minOccurs="0" name="issueNumber" type="s:string"/>
+                    <s:element name="cardHolderName" type="s:string"/>
+                    <s:element minOccurs="0" name="useExistingCard" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfRegisteredGuestPreferenceRegisteredGuestPreference">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="RegisteredGuestPreference" nillable="true" type="s0:RegisteredGuestPreference"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="RegisteredGuestPreference">
+                <s:sequence>
+                    <s:element minOccurs="0" name="roomType">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="FAM"/>
+                                <s:enumeration value="DB"/>
+                                <s:enumeration value="TWIN"/>
+                                <s:enumeration value="DIS"/>
+                                <s:enumeration value="SB"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="adults" type="s:long"/>
+                    <s:element minOccurs="0" name="children" type="s:long"/>
+                    <s:element minOccurs="0" name="cotRequired" type="s:boolean"/>
+                    <s:element minOccurs="0" name="breakfastCode" type="s:long"/>
+                    <s:element minOccurs="0" name="prePay" type="s:boolean"/>
+                    <s:element minOccurs="0" name="preferredConfirmationMethod">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="EMAIL"/>
+                                <s:enumeration value="SMS"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="preferredLanguage" type="s:string"/>
+                </s:sequence>
+                <s:attribute name="hotelBrand" type="s:string"/>
+            </s:complexType>
+            <s:complexType name="ivrRegistered">
+                <s:sequence>
+                    <s:element minOccurs="0" name="ivrType">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:enumeration value="TELEPHONE"/>
+                                <s:enumeration value="MOBILE"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="ivrPin">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="6"/>
+                                <s:minLength value="6"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="existingPin">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="6"/>
+                                <s:minLength value="6"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfAdditionalGuestNameAdditionalGuestNames">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="AdditionalGuestName" nillable="true" type="s0:AdditionalGuestNames"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="AdditionalGuestNames">
+                <s:sequence>
+                    <s:element minOccurs="0" name="additionalTitle" type="s:string"/>
+                    <s:element minOccurs="0" name="additionalFirstName" type="s:string"/>
+                    <s:element minOccurs="0" name="additionalLastName" type="s:string"/>
+                    <s:element minOccurs="0" name="additionalNationality">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="3"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="additionalPassport" type="s0:Passport"/>
+                    <s:element minOccurs="0" name="additionalCarRegistration">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="10"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="additionalEmailAddress" type="s:string"/>
+                    <s:element minOccurs="0" name="additionalTelephone" type="s:string"/>
+                    <s:element minOccurs="0" name="additionalMobile" type="s:string"/>
+                    <s:element minOccurs="0" name="additionalGuestHistory" type="s:string"/>
+                    <s:element minOccurs="0" name="additionalGuestID" type="s:long"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Passport">
+                <s:sequence>
+                    <s:element minOccurs="0" name="passportNumber">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="15"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="placeOfIssue">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="25"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfLoyaltyStatusLoyaltyStatus">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="LoyaltyStatus" nillable="true" type="s0:LoyaltyStatus"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="LoyaltyStatus">
+                <s:sequence>
+                    <s:element minOccurs="0" name="programCode">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="10"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="programStatus" type="s:boolean"/>
+                    <s:element minOccurs="0" name="dateEnrolled" type="s:date"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="NextArrival">
+                <s:sequence>
+                    <s:element name="hotelCode" type="s:string"/>
+                    <s:element name="historyRecordNumber" type="s:long"/>
+                    <s:element name="arrivalDate" type="s:date"/>
+                    <s:element name="departureDate" type="s:date"/>
+                    <s:element name="checkInOnline" type="s:boolean"/>
+                    <s:element name="isCheckedIn" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </types>
+    <message name="GetUserSoapIn">
+        <part name="parameters" element="s0:GetUser"/>
+    </message>
+    <message name="GetUserSoapOut">
+        <part name="parameters" element="s0:GetUserResponse"/>
+    </message>
+    <portType name="GuestDetailsSoap">
+        <operation name="GetUser">
+            <input message="s0:GetUserSoapIn"/>
+            <output message="s0:GetUserSoapOut"/>
+        </operation>
+    </portType>
+    <binding name="GuestDetailsSoap" type="s0:GuestDetailsSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="GetUser">
+            <soap:operation soapAction="http://bartws.micros.com/1.13/ws.RegisteredGuest.GuestDetailsService.GetUser" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GuestDetails">
+        <port name="GuestDetailsSoap" binding="s0:GuestDetailsSoap">
+            <soap:address location="https://bookings.premierinn.com:443/csp/sql/ws.RegisteredGuest.GuestDetailsService.cls"/>
+        </port>
+    </service>
+</definitions>

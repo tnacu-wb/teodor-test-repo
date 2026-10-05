@@ -1,0 +1,21 @@
+@startuml
+entity "Reservation Entity Service" as A
+entity "OHIP Adapter Service" as OHIP
+entity "OHIP Adapter Service" as OHIP
+entity OPERA
+
+A -> OHIP: GET /adp/v1/reservations/cancellationPolicies?basketReference={{basketReference}}?hotelId={{hotelId}}?ratePlanCode={{ratePlanCode}}?arrivalDate={{arrivalDate}}
+OHIP -> OHIP: GET /ohip/v1/reservations/cancellationPolicies?basketReference={{basketReference}}?hotelId={{hotelId}}?ratePlanCode={{ratePlanCode}}?arrivalDate={{arrivalDate}}
+group reservationId
+    OHIP -> OPERA: GET /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}?fetchInstructions=ReservationPolicies
+    OHIP <- OPERA: Reservation
+end
+group ratePlanCode and arrivalDate
+    OHIP -> OPERA: GET /rsv/config/v0/cancelpolicies?hotelIds={{HotelId}}
+    OHIP <- OPERA: CancellationPolicyDetails
+    OHIP -> OPERA: GET /rsv/config/v0/hotels/{{HotelId}}/policyschedules?policyType=Cancellation&ratePlanCodes={{RatePlanCode}}
+    OHIP <- OPERA: PolicySchedulesDetails
+end
+OHIP <- OHIP: CancellationPoliciesResponse
+A <- OHIP: CancellationPoliciesResponse
+@enduml

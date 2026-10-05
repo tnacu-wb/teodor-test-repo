@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/recent_searches_title"
+        style="@style/BodySemiBold"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/generic_margin_24"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Recent search"
+        android:text="@string/recent_search_title"/>
+
+    <TextView
+        android:id="@+id/recent_searches_clear"
+        style="@style/BodySemiBold"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/generic_margin_24"
+        android:layout_marginTop="@dimen/generic_margin_8"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:textColor="@color/premier_inn_purple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Clear"
+        android:text="@string/search_activity_clear"/>
+
+    <LinearLayout
+        android:id="@+id/recent_search_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_40"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/recent_searches_clear"
+        app:layout_constraintStart_toStartOf="@+id/recent_searches_title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="tudor.codrea" id="init_data_max_arrival_date_rule" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="max_arrival_date_rule"/>
+
+                <sqlCheck expectedResult="0">select count(*) from rules_engine.max_arrival_date_rule</sqlCheck>
+            </and>
+        </preConditions>
+
+        <loadData tableName="max_arrival_date_rule" file="sql/liquibase/data/max_arrival_date_rule_data.csv"/>
+    </changeSet>
+     <changeSet author="akshay.v" id="max_arrival_date_rule_update">
+         <loadData tableName="max_arrival_date_rule"
+          file="sql/liquibase/data/max_arrival_date_rule_data.csv"
+          primaryKey="rule_id"/>
+     </changeSet>
+</databaseChangeLog>

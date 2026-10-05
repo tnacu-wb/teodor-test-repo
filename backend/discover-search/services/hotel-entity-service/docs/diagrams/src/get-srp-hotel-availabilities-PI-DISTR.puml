@@ -1,0 +1,44 @@
+@startuml
+entity "Experience Service" as A
+entity "Hotel Entity Service" as AES
+entity "SnowDrop Service" as SNO
+entity "AvailabilityCache Service" as AC
+entity "Migration Status Service" as MSS
+entity "Redis" as CACHE
+
+activate AES
+A -> AES: GET v1/hotels/availabilities
+
+activate CACHE
+AES -> CACHE: get HotelAvailabilities
+
+alt [cache_hit]
+  AES <- CACHE: List<HotelAvailabilities>
+  deactivate CACHE
+  A <- AES: List<HotelAvailabilities> (page 1)
+else [cache_miss]
+  AES ->> AES++: GET GetHotelsLocationsFromSearch
+
+  activate SNO
+  AES -> SNO: GET /v1/search/hotels
+  SNO -> AES: List<HotelsLocations>
+  deactivate SNO
+
+  activate AC
+  AES -> AC: GET hotels availabilities (all pages)
+  AC -> AES: List<HotelAvailabilities>
+  deactivate AC
+
+  activate MSS
+  AES -> MSS: Get migrated hotels
+  MSS -> AES: List<Hotels>
+  deactivate MSS
+
+  AES -> AES: Retrieve Opera hotels from list of migrated hotels
+
+  A <- AES: List<HotelAvailabilities> (page 1)
+
+  AES -> CACHE: save HotelAvailabilities
+end
+
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+entity "Experience Service" as AppSync
+entity "Payment Methods Entity Service" as PMD
+entity "Hotel Reservation Entity Service" as RSV
+entity "Content Entity Service" as CONTENT
+entity "Accounts Service" as CDH
+
+AppSync -> PMD: GET /v1/payment-methods/?basketReference=<>&language=<>&country=<>&userId=<>&userType=<> (+JWT Authorization header)
+PMD -> RSV: GET /reservations/basket/{basketReference}
+PMD <- RSV: Reservation details (hotelId, hotel deposit policy OA/D1, departureDate)
+PMD -> CONTENT: GET /hotels/{hotelId}/payment-information?language=<>&country=<>
+PMD <- CONTENT: Hotel Accepted Card Types (for 3CP payment provider)
+PMD -> CDH: GET /customers/hotels/{customerId}?business=<>
+PMD <- CDH: Customer Saved Cards
+AppSync <- PMD: Available payment methods along with their payment options
+@enduml

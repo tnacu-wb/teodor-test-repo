@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:animateLayoutChanges="true">
+
+            <include
+                android:id="@+id/companyView"
+                layout="@layout/item_landing_company"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/generic_margin_48"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/landing_card_view"
+                app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+                app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+
+            <ImageView
+                android:id="@+id/piLogo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/generic_margin_100"
+                android:layout_marginEnd="@dimen/generic_margin_100"
+                android:visibility="visible"
+                tools:visibility="visible"
+                android:src="@drawable/ic_logo_premierinn"
+                app:layout_constraintBottom_toTopOf="@id/top_barrier"
+                app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+                app:layout_constraintStart_toStartOf="@id/guidelineStart"/>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.35" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/generic_margin_16" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/generic_margin_16" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/top_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="top"
+                app:constraint_referenced_ids="landing_card_view, versionLabel"
+                />
+
+            <include
+                android:id="@+id/versionLabel"
+                layout="@layout/build_version_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/generic_margin_8"
+                app:layout_constraintBottom_toTopOf="@id/landing_card_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/landing_card_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:transitionName="@string/search_bar_transition"
+                app:cardCornerRadius="@dimen/generic_corner_radius_4"
+                app:cardElevation="@dimen/generic_elevation_2"
+                app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+                app:layout_constraintStart_toStartOf="@id/guidelineStart"
+                app:layout_constraintTop_toTopOf="@id/guidelineTop">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include
+                        android:id="@+id/item_landing_where_to_location"
+                        layout="@layout/item_landing_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <include
+                        android:id="@+id/item_landing_date"
+                        layout="@layout/item_landing_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toStartOf="@id/item_landing_room"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/item_landing_where_to_location" />
+
+                    <include
+                        android:id="@+id/item_landing_room"
+                        layout="@layout/item_landing_room"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/item_landing_date"
+                        app:layout_constraintTop_toBottomOf="@id/item_landing_where_to_location" />
+
+                    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+                        android:id="@+id/landing_search_button"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        style="@style/Button1"
+                        android:layout_marginEnd="@dimen/generic_margin_8"
+                        android:layout_marginStart="@dimen/generic_margin_8"
+                        android:layout_marginBottom="@dimen/generic_margin_8"
+                        android:layout_marginTop="@dimen/generic_margin_8"
+                        android:text="@string/landing_search_text"
+                        android:paddingStart="@dimen/generic_padding_10"
+                        android:paddingEnd="@dimen/generic_padding_10"
+                        app:layout_constraintTop_toBottomOf="@+id/item_landing_room"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:cab_spinner_color="@color/white"
+                        app:cab_text_color="@android:color/white"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <include
+                android:id="@+id/view_coronavirus_frame_layout"
+                style="@style/Body"
+                layout="@layout/view_coronavirus_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/dashboard_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:background="@drawable/view_dashboard_background"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        app:behavior_hideable="false"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+
+    <FrameLayout
+        android:id="@+id/progress_bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="10dp">
+
+        <ProgressBar
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

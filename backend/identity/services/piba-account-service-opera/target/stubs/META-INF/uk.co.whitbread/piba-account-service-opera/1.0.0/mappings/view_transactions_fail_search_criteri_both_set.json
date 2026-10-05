@@ -1,0 +1,44 @@
+{
+  "id" : "4c3c08ec-1ad8-44d0-84d9-c7bec2e93de3",
+  "request" : {
+    "url" : "/piba/account/transactions",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "session-id" : {
+        "equalTo" : "13245312321345"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value10"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['schemeCustomerId'] == '782216')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['tetheredUserGuid'] == '9a2cf458-9c10-461b-8dad-a8b5712653cc')]"
+    }, {
+      "matchesJsonPath" : "$.['searchCriteria'].['dateSearch'][?(@.['dateFrom'] == '2020-01-01')]"
+    }, {
+      "matchesJsonPath" : "$.['searchCriteria'].['dateSearch'][?(@.['dateTo'] == '2021-03-15')]"
+    }, {
+      "matchesJsonPath" : "$.['searchCriteria'].['dateSearch'][?(@.['transactionTypes'] == 'Both')]"
+    }, {
+      "matchesJsonPath" : "$.['searchCriteria'].['invoiceNumberSearch'][?(@.['invoiceNumber'] == 5)]"
+    }, {
+      "matchesJsonPath" : "$.['pagingRequest'][?(@.['page'] == 5)]"
+    }, {
+      "matchesJsonPath" : "$.['pagingRequest'][?(@.['maximumDisplayRows'] == 10)]"
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "body" : "{\"code\":\"001\",\"details\":[\"searchCriteria Invalid selection criteria\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "4c3c08ec-1ad8-44d0-84d9-c7bec2e93de3"
+}

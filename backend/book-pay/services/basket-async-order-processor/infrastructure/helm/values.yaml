@@ -1,0 +1,169 @@
+# Values for basket-async-order-processor.
+#
+# Shaped for the shared `opera-app-chart` (whitbread-eos/helm-central-charts), which is
+# what .github/workflows/ci-matrix-deploy.yaml installs. The chart reads the pod spec
+# from `deployment.*` and gates optional resources on a `create` flag — keys outside
+# those names are silently ignored, so an unset `deployment.containerEnvs` renders
+# `env: null` and the pod starts with no environment at all.
+#
+# Derived from microservices-gitops/opera-dev/apps/basket-async-order-processor.yaml.
+# Not carried over from there: `imageAutomation` (the pipeline --sets it false and pins
+# the tag it just built) and `canary` (a Flagger Canary takes ownership of the Service's
+# .spec.selector / .spec.ports[].name and the VirtualService's .spec.http, which then
+# collides with Helm's server-side apply on the next upgrade of the same release).
+#
+# Overridden per-deploy by ci-matrix-deploy.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create
+
+applicationName: basket-async-order-processor
+namespace: opera-be
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/basket-async-order-processor
+  pullPolicy: Always
+  tag: "develop"
+
+imagePullSecrets:
+  - name: regcred
+
+deployment:
+  create: true
+  replicaCount: 1
+
+  containerPorts:
+    - containerPort: 9110
+      protocol: TCP
+      name: http
+
+  containerEnvFrom:
+    - configMapRef:
+        name: basket-async-order-processor-configmap
+    # Cluster-provisioned, not owned by this release: supplies KAFKA_BOOTSTRAP_SERVERS,
+    # which application.yml otherwise defaults to localhost:9092.
+    - configMapRef:
+        name: kafka-bootstrap-config
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=80 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    - name: RESERVATION_HOST
+      value: hotel-reservation-entity-service
+    - name: KAFKA_ORDERS_CONCURRENCY
+      value: '3'
+    - name: TOPICS_ACK
+      value: ack-dev
+    - name: TOPICS_ORDERS
+      value: orders-dev
+    # Consumer tuning lives in the ConfigMap so it can be changed without a redeploy of
+    # the image; the values themselves are at the bottom of this file.
+    - name: KAFKA_GROUP_ID
+      valueFrom:
+        configMapKeyRef:
+          name: basket-async-order-processor-configmap
+          key: groupId
+    - name: KAFKA_REQUEST_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: basket-async-order-processor-configmap
+          key: requestTimeout
+    - name: KAFKA_HEARTBEAT_INTERVAL
+      valueFrom:
+        configMapKeyRef:
+          name: basket-async-order-processor-configmap
+          key: heartBeatInterval
+    - name: KAFKA_MAX_POLL_INTERVAL
+      valueFrom:
+        configMapKeyRef:
+          name: basket-async-order-processor-configmap
+          key: maxPollInterval
+    - name: KAFKA_MAX_POLL_RECORDS
+      valueFrom:
+        configMapKeyRef:
+          name: basket-async-order-processor-configmap
+          key: maxPollRecords
+    - name: KAFKA_SESSION_TIMEOUT
+      valueFrom:
+        configMapKeyRef:
+          name: basket-async-order-processor-configmap
+          key: sessionTimeout
+
+  dns:
+    ndots: 3
+
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - sh
+          - -c
+          - sleep 20
+  terminationGracePeriodSeconds: 90
+
+  livenessProbe:
+    httpGet:
+      path: /aop/actuator/health/liveness
+      port: 9110
+    initialDelaySeconds: 90
+    periodSeconds: 30
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
+
+  readinessProbe:
+    httpGet:
+      path: /aop/actuator/health/readiness
+      port: 9110
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
+
+  # requests.memory tracks limits.memory because the heap is sized off the memory LIMIT
+  # (-XX:MaxRAMPercentage above).
+  resources:
+    requests:
+      cpu: 400m
+      memory: 1400Mi
+    limits:
+      memory: 1400Mi
+
+service:
+  create: true
+  name: basket-async-order-processor
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 9110
+      protocol: TCP
+      name: port9110
+
+# Pinned at one replica: this is a Kafka consumer, and adding pods only reshuffles
+# partition assignments rather than adding throughput at the current partition count.
+autoscaling:
+  create: true
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 120
+
+configMap:
+  create: true
+  data:
+    groupId: basket-order-dev
+    requestTimeout: '30000'
+    heartBeatInterval: '1000'
+    maxPollInterval: '900000'
+    maxPollRecords: '30'
+    sessionTimeout: '45000'
+
+# Prefix rather than regex: the service's whole surface sits under its context path.
+istio:
+  create: true
+  auth: false
+  gateway: opera-api
+  prefix: /aop/

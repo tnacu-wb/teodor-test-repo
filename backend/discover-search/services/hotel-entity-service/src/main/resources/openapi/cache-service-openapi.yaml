@@ -1,0 +1,39 @@
+openapi: 3.0.1
+info:
+  description: <p>List of PJO's needed to read from cache<p>
+  title: Cache POJO's
+  version: 1.0.0
+paths:
+  /fakepath:
+    get:
+      summary: fake path to generate object
+      operationId: getRequiredPojo
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelsWithFacilityFilterResult'
+components:
+  schemas:
+    HotelsWithFacilityFilterResult:
+      type: object
+      title: HotelsWithFacilityFilterResult
+      required:
+        - hotelIds
+      properties:
+        hotelIds:
+          type: array
+          items:
+            type: string
+    HotelsOpeningSoonResult:
+      type: object
+      title: HotelsOpeningSoonResult
+      required:
+        - hotelIds
+      properties:
+        hotelIds:
+          type: array
+          items:
+            type: string

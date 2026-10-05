@@ -1,0 +1,149 @@
+server:
+  port: 9019
+  shutdown: graceful
+
+swagger:
+  api:
+    version: 1.0.0
+
+info:
+  build:
+    groupId: 'uk.co.whitbread'
+    artifact: 'hotel-payment-service-opera'
+    description: 'Whitbread Hotel Payment Service'
+    version: '1.0.0'
+    git:
+      originUrl: '@git.remote.origin.url@'
+      branch: '@git.branch@'
+      commit:
+        id: '@git.commit.id@'
+        time: '@git.commit.time@'
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /hotel-payment-service/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+domain:
+  defaultIp: ${DOMAIN_DEFAULT_IP}
+  defaultUrl: ${DOMAIN_DEFAULT_URL}
+  regex:
+    - .*localhost.*
+    - .*\.premierinn\.com
+    - .*\.premierinn\.de
+    - .*\.nativ-systems\.com
+    - .*\.whitbread\.digital
+    - .*\.premierinn\.digital
+
+feign:
+  hotelcard:
+    name: hotel-card-service
+    url: http://${HOTEL_CARD_URL:localhost:9030}
+
+spring:
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
+browser:
+  defaults:
+    windowSize: "FULL_SCREEN"
+    colourDepth: "1"
+    javaEnabled: true
+    language: "en-GB"
+    screenHeight: 900
+    screenWidth: 1440
+    timezone: "0"
+
+encrypt:
+  failOnError: false
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - opera-uat
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    uk.co.whitbread: debug
+    feign: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+logging:
+  level:
+    org.springframework.ws.client.MessageTracing: trace
+    uk.co.whitbread: debug
+
+bart:
+  password: alpha2
+  username: mal-alpha
+  host: http://localhost:${wiremock.server.port:0}
+
+domain:
+  defaultUrl: https://localhost:8080

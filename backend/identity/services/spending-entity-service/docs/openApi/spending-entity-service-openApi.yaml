@@ -1,0 +1,593 @@
+openapi: 3.1.0
+info:
+  description: <p>TBU</p>
+  title: Spending entity API Documentation
+  version: 3.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9132
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /v1/spending/accountSpending:
+    get:
+      operationId: getAccountSpending
+      parameters:
+      - example: Bearer ===
+        in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      - example: PIBA_5f2e7e40-b4fd-42e2-958a-b8b24b61a9d1
+        in: query
+        name: pibaAccountId
+        required: true
+        schema:
+          type: string
+      - example: 11-2024
+        in: query
+        name: fromMonthYear
+        required: true
+        schema:
+          type: string
+      - example: 09-2025
+        in: query
+        name: toMonthYear
+        required: true
+        schema:
+          type: string
+      - example: EN
+        in: query
+        name: language
+        required: false
+        schema:
+          type: string
+          enum:
+          - DE
+          - EN
+      - example: GB
+        in: query
+        name: scheme
+        required: false
+        schema:
+          type: string
+          enum:
+          - DE
+          - GB
+      - example: 5f2e7e40-b4fd-42e2-958a-b8b24b61a9d1
+        in: query
+        name: tetheredUserGuid
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountSpendingResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves account spending information
+      tags:
+      - spending-controller
+  /v1/spending/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: "#/components/schemas/Link"
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/spending/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/spending/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/spending/actuator/prometheus:
+    get:
+      operationId: scrape
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - CONTENT_TYPE_004
+          - CONTENT_TYPE_OPENMETRICS_100
+          - CONTENT_TYPE_PROTOBUF
+      - in: query
+        name: includedNames
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/openmetrics-text;version=1.0.0;charset=utf-8:
+              schema:
+                type: object
+            application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited:
+              schema:
+                type: object
+            text/plain;version=0.0.4;charset=utf-8:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Actuator web endpoint 'prometheus'
+      tags:
+      - Actuator
+  /v1/spending/companySpending:
+    get:
+      operationId: getCompanySpending
+      parameters:
+      - example: Bearer ===
+        in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      - example: 11-2024
+        in: query
+        name: fromMonthYear
+        required: true
+        schema:
+          type: string
+      - example: 09-2025
+        in: query
+        name: toMonthYear
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanySpendingResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves company spending information
+      tags:
+      - spending-controller
+  /v1/spending/employeeSpend:
+    get:
+      operationId: getEmployeeSpend
+      parameters:
+      - example: Bearer ===
+        in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      - example: 11-2024
+        in: query
+        name: fromMonthYear
+        required: true
+        schema:
+          type: string
+      - example: 09-2025
+        in: query
+        name: toMonthYear
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeSpendResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves employee spending information
+      tags:
+      - spending-controller
+  /v1/spending/paymentInfo:
+    get:
+      operationId: getPaymentInfo
+      parameters:
+      - example: Bearer ===
+        in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      - example: 1234567
+        in: query
+        name: accountId
+        required: true
+        schema:
+          type: string
+      - example: 17b02526-a0bc-1111-90d7-fb7fdae31147
+        in: query
+        name: tetherUserGuid
+        required: false
+        schema:
+          type: string
+      - example: 1
+        in: query
+        name: page
+        required: true
+        schema:
+          type: number
+          minimum: 1
+      - example: 1
+        in: query
+        name: size
+        required: true
+        schema:
+          type: number
+          minimum: 1
+      - example: true
+        in: query
+        name: nonInvoiceOnly
+        required: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentInfoResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves payment info information for specified account
+      tags:
+      - spending-controller
+  /v1/spending/upcomingSpending:
+    get:
+      operationId: getUpcomingSpending
+      parameters:
+      - example: Bearer ===
+        in: header
+        name: WB-Authorization
+        required: true
+        schema:
+          type: string
+      - example: 123456
+        in: query
+        name: accountId
+        required: true
+        schema:
+          type: string
+      - example: 123456
+        in: query
+        name: tetheredUserGuid
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountSpendingResponseDto"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Retrieves upcoming spending information for specified account
+      tags:
+      - spending-controller
+components:
+  schemas:
+    AccountSpendingDto:
+      type: object
+      properties:
+        bookingValue:
+          type: number
+        month:
+          type: integer
+          format: int32
+        noOfBookings:
+          type: integer
+          format: int32
+        pibaAccountId:
+          type: string
+        year:
+          type: integer
+          format: int32
+    AccountSpendingResponseDto:
+      type: object
+      properties:
+        accountSpendingDtoList:
+          type: array
+          items:
+            $ref: "#/components/schemas/AccountSpendingDto"
+    CompanySpendingDto:
+      type: object
+      properties:
+        bookingCurrency:
+          type: string
+        bookingValue:
+          type: number
+        companyAccountId:
+          type: string
+        month:
+          type: integer
+          format: int32
+        noOfBookings:
+          type: integer
+          format: int32
+        year:
+          type: integer
+          format: int32
+    CompanySpendingResponseDto:
+      type: object
+      properties:
+        companySpendingDtoList:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompanySpendingDto"
+    EmployeeSpendResponseDto:
+      type: object
+      properties:
+        bookingCurrency:
+          type: string
+        bookingValue:
+          type: number
+        companyAccountId:
+          type: string
+        employeeAccountId:
+          type: string
+        month:
+          type: integer
+          format: int32
+        noOfBookings:
+          type: integer
+          format: int32
+        year:
+          type: integer
+          format: int32
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    PaymentDto:
+      type: object
+      properties:
+        failureReason:
+          type: string
+        paymentDate:
+          type: string
+        paymentDescription:
+          type: string
+        paymentFailed:
+          type: boolean
+        paymentValue:
+          $ref: "#/components/schemas/PaymentValueDto"
+    PaymentInfoResponseDto:
+      type: object
+      properties:
+        errors:
+          type: string
+        payments:
+          type: array
+          items:
+            $ref: "#/components/schemas/PaymentDto"
+    PaymentValueDto:
+      type: object
+      properties:
+        currencyCode:
+          type: string
+        currencySymbol:
+          type: string
+        value:
+          type: string
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string

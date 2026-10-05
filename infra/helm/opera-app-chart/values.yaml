@@ -1,0 +1,187 @@
+# Default values
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+applicationName: "my-application-name"
+namespace: "my-application-namespace"
+releaseStage: ""
+
+# Marks a short-lived per-PR release. Set by ci-matrix-deploy-eph.yaml.
+# When true the chart skips progressive-delivery resources (the Flagger Canary),
+# because Flagger claims ownership of the Service .spec.selector / .ports[].name
+# and the VirtualService .spec.http, which then conflicts with Helm's
+# server-side apply on every subsequent upgrade of the PR release.
+ephemeral: false
+image:
+  repository: ""
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+imagePullSecrets:
+  - name: regcred
+
+imageAutomation:
+  create: false
+  pattern: ""
+
+deployment:
+  checksumValues: "restart-it-9000"
+  create: false
+  replicaCount: 1
+  containerEnvs:
+  containerEnvFrom:
+  livenessProbe:
+  readinessProbe:
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - sh
+          - '-c'
+          - sleep 20
+  terminationGracePeriodSeconds: 90
+  containerPorts:
+  dns:
+    ndots: 3
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 9001
+    runAsGroup: 9001
+    seccompProfile:
+      type: RuntimeDefault
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 500Mi
+  nodeSelector:
+    # dedicated: my-app
+  tolerations:
+    # - key: "dedicated"
+    #   operator: "Equal"
+    #   value: "my-app"
+    #   effect: "NoSchedule"
+prometheus:
+  value:
+    create: false
+    path: xyz
+    port: 0000
+configMap:
+  create: false
+  data:
+autoscaling:
+  create: false
+  minReplicas: 0
+  maxReplicas: 0
+  targetCPUUtilizationPercentage: 80
+  scaleDownStabilizationSeconds: 300
+  scaleUpStabilizationSeconds: 180
+pdb:
+  create: false
+  # minAvailable: 1
+  # maxUnavailable: 3
+service:
+  create: false
+  name:
+  ports:
+    - port:
+      targetPort:
+      protocol: TCP
+      name:
+  type: ClusterIP
+istio:
+  create: false
+  auth: false
+  gateway:
+  regex:
+    pattern:
+  prefix:
+  # Leave empty for a long-lived release: the VirtualService claims hosts ["*"]
+  # on its gateway and matches on `prefix`/`regex` above.
+  #
+  # Set it to the release's own hostname for a per-PR release. The
+  # VirtualService then claims only that hostname and matches on :authority, so
+  # it routes alongside the long-lived release instead of competing with it for
+  # a path prefix. Set by ci-fe.yaml from the deployment identity.
+  host: ""
+canary:
+  create: false
+  analysis:
+    interval: 1m
+    threshold: 5
+    maxWeight: 100
+    stepWeight: 10
+  metrics:
+    - name: request-success-rate
+      interval: 3m
+      thresholdRange:
+        min: 99
+    - name: request-duration
+      interval: 3m
+      thresholdRange:
+        max: 500
+  loadtests:
+  # - name: load-test-get
+  #   path: /service-path-to-be-provided # path is mandatory
+  #   parameters: # all parameters are optional
+  #     #concurrent_requests: 2 # -c - Number  of requests to run concurrently. Default: 2
+  #     #rate_limit: 5 # -q - Rate limit, in queries per second (QPS). Default: 5
+  #     #duration: 1m # -z - Duration of application to send requests. Default: 1m
+  #     #header: "Accept: text/html" # -H Custom HTTP header. Default: none
+  #     #number_of_requests: 200 # -n - Number of requests to run. Default is 200.
+  #     #request_timeout: 20 # -t - Timeout for each request in seconds. Use 0 for infinite. Default is 20.
+  #     #authentication: username:password # -a - Basic authentication, username:password. Default: none
+  #     method:
+  #       type: GET # -m  HTTP method, GET or POST. Default GET
+  #       #body: # -d - HTTP request body. Mandatory for POST method. Default: none.
+  # - name: load-test-post
+  #   url: http://flagger-loadtester.flagger/
+  #   path : /service-path-to-be-provided
+  #   parameters:
+  #     #concurrent_requests: 2 # -c - Number  of requests to run concurrently. Default: 2
+  #     method:
+  #         type: POST
+  #         body: "{test:value}"
+  whscripts:
+  # - name: smoke-test
+  #   script: smoke-test.sh
+  #   parameters:
+  #     smoke_workflow_branch: develop
+  #     tests_branch: opera
+  #     opera_env: dev
+prometheusSpring:
+  create: false
+  path: ''
+  scrape_port: ''    
+
+circuitBreaker:
+  create: false
+  host: "host-to-be-provided"
+  workloadSelector:
+    matchLabels: {}
+      # app: to-be-specified-service
+  trafficPolicy:
+    # connectionPool:
+    #   tcp:
+    #     maxConnections: 100
+    #   http:
+    #     http2MaxRequests: 1000
+    #     maxRequestsPerConnection: 10
+    # outlierDetection:
+    #   consecutive5xxErrors: 7
+    #   interval: 5m
+    #   baseEjectionTime: 15m
+  subsets: []
+  # - name: testversion
+  #   labels:
+  #     version: v3
+  #   trafficPolicy:
+  #     loadBalancer:
+  #       simple: ROUND_ROBIN

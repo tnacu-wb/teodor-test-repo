@@ -1,0 +1,22 @@
+{
+  "id" : "e338e24e-2848-4b80-a45f-b4216edbaeaa",
+  "request" : {
+    "urlPath" : "/v1/baskets/ccui/discount",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['basketReference'] == 'LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['discountAmount'] == 0.2)]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "e338e24e-2848-4b80-a45f-b4216edbaeaa"
+}

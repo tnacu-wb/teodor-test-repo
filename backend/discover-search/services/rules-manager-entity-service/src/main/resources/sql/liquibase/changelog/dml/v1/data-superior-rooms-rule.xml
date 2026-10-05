@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet author="marina.baban" id="superior_rooms_rules">
+    <loadUpdateData tableName="room_substitution_rule"
+      file="sql/liquibase/data/superior_rooms_rules.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="tudor.osan" id="superior_rooms_rules_distribution">
+    <loadUpdateData tableName="room_substitution_rule"
+      file="sql/liquibase/data/superior_rooms_rules_distr.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+</databaseChangeLog>

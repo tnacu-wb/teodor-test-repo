@@ -1,0 +1,4 @@
+export enum paymentSteps {
+  PAYMENT_DETAILS = 'PAYMENT_DETAILS',
+  CARD_DETAILS = 'CARD_DETAILS',
+}

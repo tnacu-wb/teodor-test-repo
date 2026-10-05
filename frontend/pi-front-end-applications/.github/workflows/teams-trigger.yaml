@@ -1,0 +1,54 @@
+name: Kiro Teams Change Request Resolver
+
+on:
+  # Fired when someone posts a change request in the watched Teams channel.
+  # The Teams side (Power Automate flow) POSTs to
+  # https://api.github.com/repos/<org>/<repo>/dispatches with this event_type and
+  # a client_payload of exactly three fields, e.g.
+  #   {"changes_requested": "...", "attachements": [], "message_id": "1787582381329"}
+  # See TEAMS_WEBHOOK_SETUP.md for the wiring.
+  repository_dispatch:
+    types:
+      - teams-message
+      - teams-change-request
+
+  # Manual trigger, so the workflow can be tested without going through Teams.
+  workflow_dispatch:
+    inputs:
+      changes_requested:
+        description: "The change request text as posted in the Teams channel"
+        required: true
+        type: string
+      attachements:
+        description: 'Attachment URLs as a JSON array, e.g. ["https://..."]'
+        required: false
+        type: string
+        default: "[]"
+      message_id:
+        description: "Teams message id — used for the branch name and the thread reply"
+        required: true
+        type: string
+
+# The reusable workflow needs these to push a branch and open the PR.
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+# One run per Teams message; don't cancel an in-progress resolution.
+concurrency:
+  group: kiro-teams-${{ github.event.client_payload.message_id || github.event.inputs.message_id }}
+  cancel-in-progress: false
+
+jobs:
+  resolve-teams-request:
+    uses: whitbread-eos/wbd-workflows-templates/.github/workflows/ci-teams-issue-resolver.yaml@test-teams-kiro-integration
+    secrets: inherit
+    with:
+      changes_requested: ${{ github.event.client_payload.changes_requested || github.event.inputs.changes_requested }}
+      # client_payload.attachements arrives as a JSON array; workflow_dispatch sends
+      # it as a string. toJSON() normalises the array case to a JSON string and
+      # yields "null" when the field is absent (handled by the resolver).
+      attachements: ${{ github.event_name == 'repository_dispatch' && toJSON(github.event.client_payload.attachements) || github.event.inputs.attachements || '[]' }}
+      message_id: ${{ github.event.client_payload.message_id || github.event.inputs.message_id }}
+      teams_event_type: ${{ github.event.action || 'manual' }}

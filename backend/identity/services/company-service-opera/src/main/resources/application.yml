@@ -1,0 +1,234 @@
+server:
+  port: 9022
+
+encrypt:
+  failOnError: false
+
+swagger:
+  api:
+    version: "@project.version@"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:redis}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+management:
+  endpoints:
+    web:
+      base-path: /company-service/actuator
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+upsellItemsAllowances:
+  premierBreakfast: 11,15
+  continentalBreakfast: 12
+  mealDeal: 17,15
+  wiFi: 135,136,137
+  hubBreakfast: 18
+
+feign:
+  hotelaccount:
+    name: hotelaccount
+    url: http://${HOTEL_ACCOUNT_URL:localhost:9020}
+  client:
+    config:
+      hotelaccount:
+        connectTimeout: 20000
+        readTimeout: 20000
+
+cache:
+  default:
+    ttl: 300
+
+hotel:
+  company:
+    cache:
+      hotelCompany:
+        name: hotelCompany
+        ttl: 86400
+
+auth:
+  management:
+    domain: ${AUTH_MNGMT_DOMAIN}
+    clientId: ${AUTH0_CLIENT_ID}
+    clientSecret: ${AUTH0_CLIENT_SECRET}
+    audience: ${AUTH_MNGMT_AUDIENCE}
+    connection: ${AUTH_MNGMT_CONNECTION}
+    lazyMigrationEnabled: ${AUTH_MNGMT_IS_LAZY_MIGARATION_ENABLED}
+  tenants:
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+
+azure:
+  generic-email-service:
+    host: ${AZURE-EMAIL-HOST}
+    username: ${AZURE_GENERIC_EMAIL_SERVICE_USERNAME}
+    password: ${AZURE_GENERIC_EMAIL_SERVICE_PASSWORD}
+    subscription-key-header-name: Ocp-Apim-Subscription-Key
+    subscription-key: ${AZURE_GENERIC_EMAIL_SERVICE_SUBSCRIPTION_KEY}
+
+cdh:
+  oauth-client:
+    host: ${CDH-OAUTH-HOST}
+    token-url: ${AZURE_OAUTH_CLIENT_TOKEN_URL}/oauth2/v2.0/token
+    client-id: ${AZURE_OAUTH_CLIENT_CLIENT_ID}
+    client-secret: ${AZURE_OAUTH_CLIENT_CLIENT_SECRET}
+    scope: ${CDH-OAUTH-SCOPE}
+    grant-type: ${CDH-OAUTH-GRANT}
+    enabled: ${CDH-OAUTH-IS-ENABLED}
+  api:
+    host: ${CDH-API-HOST}
+    is-oauth: ${CDH-API-IS-OAUTH}
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: ${ACCOUNT_SERVICES_OAUTH_SUBSCRIPTION_KEY}
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+feature-flags:
+  company-name-validation:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: false
+  cdh-api-deprecation:
+    key: "release_pi_cdh_api_deprecation"
+    fallback: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: disable-caching
+  cache:
+    type: none
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-dit
+        - opera-uat
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+
+logging:
+  level:
+    uk.co.whitbread: debug
+    org.springframework.ws.client.MessageTracing.sent: TRACE
+    org.springframework.ws.client.MessageTracing.received: TRACE
+    org.springframework.cloud.openfeign: trace
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

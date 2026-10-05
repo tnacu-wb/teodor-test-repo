@@ -1,0 +1,1797 @@
+openapi: 3.0.1
+info:
+  description: API Documentation
+  title: Hotel account Microservice API Documentation
+  version: 1.0.0
+servers:
+- description: Generated server url
+  url: http://localhost:9020
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /auth/hotels/forgot-password:
+    post:
+      description: Maps the ForgotPassword operation as a resource
+      operationId: forgotPassword_1
+      parameters:
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+          default: gb
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgottenPasswordRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgottenPasswordResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Triggers the forget password process
+      tags:
+      - Hotel Authentication operations
+    put:
+      description: Resets password for non logged in users
+      operationId: resetPassword
+      parameters:
+      - in: header
+        name: password-token
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      - in: header
+        name: country
+        required: false
+        schema:
+          type: string
+          default: gb
+      - in: header
+        name: language
+        required: false
+        schema:
+          type: string
+          default: en
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePasswordResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to update the password for
+        an existing customer resource
+      tags:
+      - Hotel Authentication operations
+  /auth/hotels/memorable-word/reset:
+    post:
+      description: Maps the MemorableWordReset operation as a resource
+      operationId: resetMemorableWord
+      parameters:
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: BCQR98267
+        description: Session Id
+        in: header
+        name: session-id
+        required: true
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: CBT
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetMemorableWordRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetMemorableWordResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePasswordResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePasswordResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Triggers the reset memorable word process
+      tags:
+      - Hotel Authentication operations
+  /customers/hotels/search:
+    post:
+      description: search Customer
+      operationId: searchCustomer
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/SearchCustomerRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Bad Request: missing input data"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Unauthorized Error: provided token is invalid or has expired"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Not Found: no Customer Account exists"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "413":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Too Many Records: refine your search criteria"
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: unrecoverable error server-side"
+      summary: This endpoint searches for customer/s based on criteria
+      tags:
+      - Hotel Customer operations
+  /customers/hotels/{customer-id}:
+    delete:
+      description: Delete Customer
+      operationId: deleteCustomer
+      parameters:
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulDeleteResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Bad request, check input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Something went wrong on our side
+      tags:
+      - Hotel Customer operations
+    get:
+      description: Get Customer
+      operationId: getCustomer_1
+      parameters:
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - deprecated: true
+        in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: hotel-brand
+        required: false
+        schema:
+          type: string
+          default: PI
+          enum:
+          - HUB
+          - PI
+          - PID
+          - CBT
+          - ZIP
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Bad Request: check you send customer-id and session-id"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Unauthorized Error: Provided token is invalid or has expired"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Not Found: account not found for given customer-id and session-id"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: unrecoverable error server-side"
+      summary: This endpoint retrieves the details of an existing customer resource
+      tags:
+      - Hotel Customer operations
+    put:
+      description: Update Customer
+      operationId: updateCustomer
+      parameters:
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - deprecated: true
+        in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to update an existing customer
+        resource
+      tags:
+      - Hotel Customer operations
+  /customers/hotels/{customer-id}/password:
+    put:
+      deprecated: true
+      description: Customer Password Change
+      operationId: changePassword
+      parameters:
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: password-token
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePasswordResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to update the password for
+        an existing customer resource
+      tags:
+      - Hotel Customer operations
+  /customers/hotels/{customer-id}/stays:
+    get:
+      description: Customer Stay
+      operationId: getAccountStays
+      parameters:
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - deprecated: true
+        in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      - in: query
+        name: bbStaysRequest
+        required: true
+        schema:
+          $ref: '#/components/schemas/BBStaysRequest'
+      - in: query
+        name: pageIndex
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          minimum: 1
+      - in: query
+        name: pageSize
+        required: false
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+      - content:
+          '*/*':
+            schema:
+              type: boolean
+              default: "false"
+        description: Business Booker or Guest
+        in: query
+        name: business
+      - content:
+          '*/*':
+            schema:
+              type: string
+        description: Employee id for business booker
+        in: query
+        name: employeeId
+      - content:
+          '*/*':
+            schema:
+              type: string
+        description: Employee id for business booker
+        in: query
+        name: companyId
+      - content:
+          '*/*':
+            schema:
+              type: string
+              enum:
+              - "FUTURE, CANCELLED, PAST"
+        description: "This is booking type for business booker. When no booking type\
+          \ is specified, this endpoint retrieves all stays regardless of the type."
+        in: query
+        name: typeOfBooking
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaysResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to retrieve all the future
+        stays of an existing customer resource
+      tags:
+      - Hotel Customer operations
+    post:
+      description: Customer Stay
+      operationId: retrieveAccountStays
+      parameters:
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - deprecated: true
+        in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BBStaysRequestV2'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaysResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: This endpoint provides the functionality to retrieve all the future
+        stays of an existing customer resource
+      tags:
+      - Hotel Customer operations
+  /customers/internal/{customer-id}:
+    get:
+      description: Get Customer
+      operationId: getCustomer
+      parameters:
+      - in: path
+        name: customer-id
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: hotel-brand
+        required: false
+        schema:
+          type: string
+          default: PI
+          enum:
+          - HUB
+          - PI
+          - PID
+          - CBT
+          - ZIP
+      - in: header
+        name: session-id
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: bookingChannel
+        required: false
+        schema:
+          type: string
+          default: WEB
+          enum:
+          - MOBILE
+          - WEB
+          - WEB_DE
+          - CBT
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Bad Request: check you send customer-id and session-id"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Unauthorized Error: Provided token is invalid or has expired"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Not Found: account not found for given customer-id and session-id"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: unrecoverable error server-side"
+      summary: This endpoint retrieves the details of an existing customer resource
+      tags:
+      - Hotel Customer operations Cached for internal use only
+  /hotel-account-service/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /hotel-account-service/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /hotel-account-service/actuator/health/**:
+    get:
+      operationId: health-path
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health-path'
+      tags:
+      - Actuator
+  /hotel-account-service/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /hotel-account-service/actuator/metrics:
+    get:
+      operationId: metrics
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /hotel-account-service/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metrics-requiredMetricName
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /v2/auth/hotels/forgot-password:
+    post:
+      description: Maps the ForgotPassword operation as a resource
+      operationId: forgotPassword
+      parameters:
+      - in: query
+        name: business
+        required: false
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgottenPasswordRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgottenPasswordResponse'
+          description: All Good!
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You did something wrong check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Server Error: Our bad something went wrong on our side"
+      summary: Triggers the forget password process
+      tags:
+      - Hotel Authentication V2 operations
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        companyName:
+          type: string
+        countryCode:
+          type: string
+          pattern: "^[A-Z]{1,3}$"
+        countryCodeISO:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        line5:
+          type: string
+        postCode:
+          type: string
+        type:
+          type: string
+          enum:
+          - HOME
+          - BUSINESS
+      required:
+      - countryCode
+      - line1
+    BBStaysRequest:
+      type: object
+      properties:
+        business:
+          type: boolean
+        companyId:
+          type: string
+        continuationToken:
+          type: string
+        employeeId:
+          type: string
+        filterType:
+          type: string
+          enum:
+          - NAME
+          - ARRIVAL_DATE
+          - CONFIRM_NUMBER
+        filterValue:
+          type: string
+        includeCheckInBookings:
+          type: boolean
+        sortOrder:
+          type: string
+          enum:
+          - DEFAULT
+        typeOfBooking:
+          type: string
+          enum:
+          - FUTURE
+          - PAST
+          - CANCELLED
+    BBStaysRequestV2:
+      type: object
+      properties:
+        business:
+          type: boolean
+        companyId:
+          type: string
+        continuationToken:
+          type: string
+        employeeId:
+          type: string
+        filterType:
+          type: string
+          enum:
+          - NAME
+          - ARRIVAL_DATE
+          - CONFIRM_NUMBER
+        filterValue:
+          type: string
+        includeCheckInBookings:
+          type: boolean
+        pageIndex:
+          type: integer
+          format: int32
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        sortOrder:
+          type: string
+          enum:
+          - DEFAULT
+        typeOfBooking:
+          type: string
+          enum:
+          - FUTURE
+          - PAST
+          - CANCELLED
+    BaseContact:
+      type: object
+      properties:
+        carRegistration:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobile:
+          type: string
+        nationality:
+          type: string
+          maxLength: 3
+          minLength: 0
+        passport:
+          $ref: '#/components/schemas/Passport'
+        telephone:
+          type: string
+        title:
+          type: string
+      required:
+      - email
+      - firstName
+      - lastName
+      - title
+    BillingAddress:
+      type: object
+      properties:
+        companyName:
+          type: string
+        countryCode:
+          type: string
+        countryCodeISO:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        line5:
+          type: string
+        postCode:
+          type: string
+        type:
+          type: string
+          enum:
+          - HOME
+          - BUSINESS
+    BookingPreference:
+      type: object
+      properties:
+        foodPreference:
+          type: integer
+          format: int64
+        preselectWifi:
+          type: boolean
+        reason:
+          type: string
+          enum:
+          - LEISURE
+          - BUSINESS
+        roomRequirements:
+          $ref: '#/components/schemas/RoomCriteria'
+        wantSmsConfirmations:
+          type: boolean
+    Business:
+      type: object
+      properties:
+        accessLevel:
+          type: string
+          enum:
+          - STAYER
+          - SELF
+          - BOOKER
+          - SUPER
+        awaitingApproval:
+          type: integer
+          format: int64
+        centralCard:
+          type: string
+        customerReferenceAnswer:
+          type: string
+        dismissMPILink:
+          type: boolean
+        employeeId:
+          type: string
+        miSetupRequired:
+          type: boolean
+        myPILink:
+          type: string
+        purchaseOrderAnswer:
+          type: string
+        tethered:
+          type: boolean
+    ChangePasswordRequest:
+      type: object
+      description: The Customer JSON payload
+      properties:
+        newPassword:
+          type: string
+      required:
+      - newPassword
+    ChangePasswordResponse:
+      type: object
+      properties:
+        passwordChanged:
+          type: boolean
+      required:
+      - passwordChanged
+    ContactDetail:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        carRegistration:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobile:
+          type: string
+        nationality:
+          type: string
+          maxLength: 3
+          minLength: 0
+        passport:
+          $ref: '#/components/schemas/Passport'
+        telephone:
+          type: string
+        title:
+          type: string
+      required:
+      - address
+      - email
+      - firstName
+      - lastName
+      - title
+    Customer:
+      type: object
+      properties:
+        additionalGuests:
+          type: array
+          items:
+            $ref: '#/components/schemas/BaseContact'
+        bookingPreference:
+          $ref: '#/components/schemas/BookingPreference'
+        business:
+          $ref: '#/components/schemas/Business'
+        businessUse:
+          type: boolean
+        companyId:
+          type: string
+        companyName:
+          type: string
+          deprecated: true
+        contactDetail:
+          $ref: '#/components/schemas/ContactDetail'
+        customerAccountId:
+          type: string
+        guestHistoryCreation:
+          type: string
+          format: date
+        guestHistoryNumber:
+          type: string
+          deprecated: true
+        paymentPreference:
+          $ref: '#/components/schemas/PaymentPreference'
+        sessionId:
+          type: string
+          deprecated: true
+        tetheredGuid:
+          type: string
+          writeOnly: true
+        totalStays:
+          type: integer
+          format: int64
+    CustomerRequest:
+      type: object
+      properties:
+        additionalGuests:
+          type: array
+          items:
+            $ref: '#/components/schemas/BaseContact'
+        bookingPreference:
+          $ref: '#/components/schemas/BookingPreference'
+        companyId:
+          type: string
+        companyName:
+          type: string
+          deprecated: true
+        contactDetail:
+          $ref: '#/components/schemas/ContactDetail'
+        guestHistoryNumber:
+          type: string
+        guestId:
+          type: integer
+          format: int64
+        marketingPreference:
+          $ref: '#/components/schemas/MarketingPreference'
+        newPassword:
+          type: string
+        password:
+          type: string
+        paymentPreference:
+          $ref: '#/components/schemas/PaymentPreference'
+    CustomerResponse:
+      type: object
+      properties:
+        customerId:
+          type: string
+        sessionId:
+          type: string
+        success:
+          type: boolean
+      required:
+      - success
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+      required:
+      - code
+      - details
+    ForgottenPasswordRequest:
+      type: object
+      properties:
+        url:
+          type: string
+        username:
+          type: string
+      required:
+      - username
+    ForgottenPasswordResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required:
+      - success
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    MarketingPreference:
+      type: object
+      properties:
+        regionPreferences:
+          type: array
+          items:
+            type: string
+        wantRestaurantNews:
+          type: boolean
+    Passport:
+      type: object
+      properties:
+        countryOfIssue:
+          type: string
+        number:
+          type: string
+    PaymentCard:
+      type: object
+      properties:
+        billingAddress:
+          $ref: '#/components/schemas/BillingAddress'
+        cardHolderName:
+          type: string
+        cardID:
+          type: string
+        cardLabel:
+          type: string
+        cardNumber:
+          type: string
+        cardToken:
+          type: string
+        cardType:
+          type: string
+        cnpBusinessAccountPassword:
+          type: string
+        cnpBusinessAccountUsername:
+          type: string
+        cnpRequired:
+          type: boolean
+        expiryDate:
+          type: string
+        issueNumber:
+          type: string
+        startDate:
+          type: string
+    PaymentPreference:
+      type: object
+      properties:
+        electronicInvoiceRequired:
+          type: boolean
+        paymentCard:
+          $ref: '#/components/schemas/PaymentCard'
+    PersonDetails:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        title:
+          type: string
+      required:
+      - firstName
+      - lastName
+      - title
+    Price:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+      required:
+      - amount
+      - currency
+    ResetMemorableWordRequest:
+      type: object
+      properties:
+        companyId:
+          type: string
+        employeeId:
+          type: string
+        ipAddress:
+          type: string
+        memorableWord:
+          type: string
+        secret:
+          type: string
+        worldlineSession:
+          type: string
+      required:
+      - companyId
+      - employeeId
+      - ipAddress
+      - memorableWord
+      - secret
+      - worldlineSession
+    ResetMemorableWordResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required:
+      - success
+    ResetPasswordRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+        newPassword:
+          type: string
+      required:
+      - customerId
+      - newPassword
+    RoomCriteria:
+      type: object
+      properties:
+        adults:
+          type: integer
+          format: int64
+          minimum: 0
+        children:
+          type: integer
+          format: int64
+          minimum: 0
+        cotRequired:
+          type: boolean
+        hotelBrand:
+          type: string
+          enum:
+          - HUB
+          - PI
+          - PID
+          - CBT
+          - ZIP
+        lettingType:
+          type: string
+        type:
+          type: string
+      required:
+      - adults
+      - children
+      - cotRequired
+      - type
+    RoomTypes:
+      type: object
+      properties:
+        bookingStatus:
+          type: string
+        carDataPresent:
+          type: boolean
+        leadGuest:
+          type: string
+          deprecated: true
+        personDetails:
+          $ref: '#/components/schemas/PersonDetails'
+        roomType:
+          type: string
+    SearchCustomerRequest:
+      type: object
+      properties:
+        addressLine:
+          type: string
+        companyName:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobile:
+          type: string
+        postCode:
+          type: string
+        telephone:
+          type: string
+    Stay:
+      type: object
+      properties:
+        amendable:
+          type: boolean
+        arrivalDate:
+          type: string
+          format: date
+          example: 2015-10-20
+        bookedBy:
+          type: string
+        bookingDate:
+          type: string
+          format: date
+        bookingFee:
+          $ref: '#/components/schemas/Price'
+        bookingStatus:
+          type: string
+          enum:
+          - FUTURE
+          - PAST
+          - CANCELLED
+        cancelable:
+          type: boolean
+        cancellationId:
+          type: string
+        cancelled:
+          type: boolean
+        carDataRequired:
+          type: boolean
+        cellCodeLegend:
+          type: string
+        checkInDate:
+          type: string
+          example: 2015-10-20
+        checkInOnline:
+          type: boolean
+        checkedIn:
+          type: boolean
+        cityTax:
+          $ref: '#/components/schemas/Price'
+        confirmationNumber:
+          type: string
+        customerReference:
+          type: string
+        departureDate:
+          type: string
+          format: date
+          example: 2015-10-20
+        frequentBooking:
+          type: string
+        guestHistoryNumber:
+          type: string
+        historyRecordNumber:
+          type: integer
+          format: int32
+        hotelCode:
+          type: string
+        hotelName:
+          type: string
+        leadGuest:
+          type: string
+        leadGuestSurname:
+          type: string
+        mpibooking:
+          type: boolean
+        noOfRooms:
+          type: integer
+          format: int32
+        outstandingAmount:
+          $ref: '#/components/schemas/Price'
+        paymentStatus:
+          type: string
+        prePaidAmount:
+          $ref: '#/components/schemas/Price'
+        promotionText:
+          type: string
+        purchaseOrder:
+          type: string
+        rateClass:
+          type: string
+        rateName:
+          type: string
+        roomTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomTypes'
+        totalCost:
+          $ref: '#/components/schemas/Price'
+      required:
+      - arrivalDate
+      - departureDate
+      - hotelCode
+    StaysResponse:
+      type: object
+      properties:
+        continuationToken:
+          type: string
+        pageIndex:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        sessionId:
+          type: string
+        stays:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stay'
+        totalSize:
+          type: integer
+          format: int32
+        totals:
+          $ref: '#/components/schemas/StaysTypesTotals'
+    StaysTypesTotals:
+      type: object
+      properties:
+        cancelled:
+          type: integer
+          format: int32
+        checkedIn:
+          type: integer
+          format: int32
+        past:
+          type: integer
+          format: int32
+        upcoming:
+          type: integer
+          format: int32
+    SuccessfulDeleteResponse:
+      type: object
+      properties:
+        customerId:
+          type: string
+        sessionId:
+          type: string
+        success:
+          type: boolean

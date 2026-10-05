@@ -1,0 +1,1982 @@
+schema {
+    query: Query
+}
+
+type Query {
+    countries(language: String!, country: String!, site: String!): CountryInformation
+    labels(language: String!, country: String!): Labels
+    categoryLabels(language: String!, country: String!, category: String!, labels: [String!]): CategoryLabels
+    cookieConsent(country: String!, language: String!, brand: String!): CookieConsent
+    seoInformation(page: String!, hotelId: String, language: String!, country: String!, bookingFlowId: String): SeoInformation
+    getHotelsInformation(hotelIds: [String!]!, country: String!, language: String!, latitudeRef: Float, longitudeRef: Float, tripAdvisorDataRequired: Boolean, stayStartDate: String, stayEndDate: String): [HotelInformationOptional]
+    allHotelsShortInformation(country: String!, language: String!): [HotelShortInformation]
+    footer(language: String!, country: String!, site: String!): Footer
+    hotelInformation(language: String!, hotelId: String!, country: String!, bookingChannel: BookingChannelCriteria, stayStartDate: String, stayEndDate: String): HotelInformation
+    hotelInformationBySlug(slug: String!, language: String!, country: String!, stayStartDate: String, stayEndDate: String): HotelInformationBySlug
+    maxRoomsLimitation(channel: Channel!): MaxRoomsLim!
+    headerInformation(language: String!, country: String!, businessBooker: Boolean): HeaderInformation
+    roomClassConfig(channel: Channel!, brand: String, country: String, language: String): RoomClassConfig
+    priceFinderConfig(channel: Channel!, brand: String, country: String, language: String, path: String): PriceFinderConfig
+    ratesInformation(brand: String!, language: String!, country: String!, hotelId: String!, channel: String, ratePlans: [String]): RatesInformation! @deprecated(reason: "Use ratesInformationV2 instead")
+    ratesInformationV2(brand: String!, language: String!, country: String!, hotelId: String!, channel: String, ratePlans: [String]): ContentRatesInformation!
+    roomTypeInformation(brand: String!, language: String!, country: String!, hotelId: String): RoomTypeInformation
+    getCardManagementLabels(language: String!): CardManagementInfoInnB
+    bookingFlowInformation(language: String!, country: String!, bookingFlowId: String!, hotelId: String!): BookingFlowInformation
+    dlpInformation(language: String!, country: String!, dlpPath: String!): DlpInformation
+    searchInformation(language: String!, country: String!): SearchInformation
+    getPageData(language: String!, country: String!): PageData
+    globalConfig(channel: Channel!, brand: String, country: String, language: String): GlobalConfig
+    homepageAppsContent(channel: Channel!, subchannel: String!, language: String!, country: String!): HomepageAppsContent
+    maxNightsLimitation(channel: Channel!): MaxNightsLim!
+    maxArrivalDateLimitation(channel: Channel!): MaxArrivalDateLim!
+    roomOccupancyLimitations(channel: Channel!, brand: String): RoomOccupancyLimitations
+    promotionsInformation(promotionsInformationCriteria: PromotionsInformationCriteria!): PromotionsInformation
+}
+
+input PromotionsInformationCriteria {
+    country: String!
+    language: String!
+    channel: String!
+    brand: String!
+    promotionCode: String
+    bookingDate: String
+    stayStartDate: String!
+    stayEndDate: String!
+    basketReference: String
+    isPromoBox: Boolean
+    rateName: String
+    roomClass: String
+    subChannel: String
+    noOfRooms: Int
+}
+
+type PromotionsInformation {
+    showPromo: Boolean
+    isWithinPromoWindow: Boolean
+    promotionCode: String
+    landingPage: String
+    promoBannerColour: String
+    promoBannerIcon: String
+    promoBannerTitle: String
+    promoBannerSubtitle: String
+    promoInvalidMessage: String
+    promoExpiredMessage: String
+    promoAmendMessage: String
+    promoBookingInfo: PromoBookingInfo
+    promoBox: PromoBoxLabels
+    termsLink: String
+    appPromoBannerTitle: String
+    appPromoBannerSubtitle: String
+    appPromoInvalidMessage: String
+    appPromoExpiredMessage: String
+    appPromoAmendMessage: String
+    promoKind: ContentPromoKind
+    promoBoxStatus: PromoBoxStatus
+    promoBoxMessageKey: String
+    errorRateAndRoomMessage: String
+    promoBannerVisibility: [String] 
+}
+
+enum PromoBoxStatus {
+    EMPTY
+    INVALID
+    CODE_ALREADY_APPLIED
+    CODE_EXPIRED
+    UNAVAILABLE
+    SUCCESS
+    MIN_ROOMS_NOT_MET 
+    MAX_ROOMS_EXCEEDED 
+}
+
+enum ContentPromoKind {
+    LANDING_PAGE
+    SITE_WIDE
+    GENERIC
+    UNIQUE
+}
+
+type PromoBoxLabels {
+    title: String
+    button: String
+    whenInvalid: String
+    whenMultipleRedeem: String
+    whenSuccess: String
+    whenEmpty: String
+    whenCodeExpired: String
+    whenUnavailable: String
+    whenCodeAlreadyApplied: String
+    whenMinRoomsNotMet: String 
+    whenMaxRoomsExceeded: String 
+}
+
+type PromoBookingInfo {
+    ratePlanCode: String
+    promotionCode: String
+}
+
+type GlobalConfig {
+    maxRoomsLim: MaxRoomsLim!
+    roomClassConfig: [RoomClassOrder!]
+    roomUpgradeOptions: RoomUpgradeOptions
+    promotionsConfig: PromotionsConfig
+}
+
+type PromotionsConfig {
+    promoItems: [PromotionItem!]!
+    metaPromoRateMappingDtos: [MetaPromoRateMappingDtos!]!
+}
+
+type MetaPromoRateMappingDtos {
+    rate: String!
+    code: String!
+}
+
+type PromotionItem {
+    enabled: Boolean!
+    promoCode: String!
+    landingPage: String
+    numberOfNights: Int
+    maxRooms: Int
+    bookingStartDate: String
+    bookingEndDate: String
+    stayStartDate: String
+    stayEndDate: String
+    promoBannerColour: String
+    promoBannerIcon: String
+    promoBannerTitle: String
+    promoBannerSubtitle: String
+    promoInvalidMessage: String
+    promoExpiredMessage: String
+}
+
+type RoomUpgradeOptions {
+    priceText: String
+    primaryButtonText: String
+    secondaryButtonText: String
+    roomUpgrades: [RoomUpgrade]
+}
+
+type RoomUpgrade {
+    roomClass: String
+    heading: String
+    imageUrl: String
+    description: String
+}
+
+type HomepageAppsContent {
+    logo: String
+    heading: String
+    destinationCards: [AppsCard]
+    contentCards: [AppsContentCard]
+    promoCards: [AppsCard]
+    notification: Notification
+}
+
+type AppsCard {
+    imagePath: String!
+    imageTag: String
+    title: String!
+    subtitle: String
+    linkPath: String
+    openLinkInApp: Boolean
+    order: Int!
+    trackingId: String
+    latitude: String
+    longitude: String
+}
+
+type AppsContentCard {
+    imagePath: String!
+    imageTag: String
+    title: String
+    subtitle: String
+    linkPath: String
+    openLinkInApp: Boolean
+    order: Int!
+    trackingId: String
+}
+
+type Notification {
+    type: String!
+    title: String
+    message: String!
+    linkLabel: String
+    linkPath: String
+    openLinkInApp: Boolean
+    dismissible: Boolean
+}
+
+type PageData {
+    layoutEndpoint: String!
+    cardManagementEndpoint: String!
+    commonIconsEndpoint: String!
+    userManagementEndpoint: String!
+    profileManagementEndpoint: String!
+    companyManagementEndpoint: String!
+    homepageEndpoint: String!
+    spendingReportingEndpoint: String!
+    payApplicationEndpoint: String!
+    authEndpoint: String!
+    notificationsEndpoint: String!
+    innbContactUsEndpoint: String!
+}
+
+type DlpInformation {
+    seo: BasicSeoInformation!
+    breadcrumbs: [Breadcrumb!]
+    title: String!
+    description: String
+    picture: String
+    hotels: [OrderedHotelCode!]!
+    coordinates: CoordinatesOptionalDlp
+    why: Why
+    faq: [Faq]
+    dlps: Dlp
+    promos: [Promo]
+    thingsToDo: ThingsToDo
+}
+
+type OrderedHotelCode {
+    code: String!
+    order: Int!
+}
+
+type Why {
+    title: String
+    description: String
+    picture: String
+    whyItems: [WhyItem]
+}
+
+type WhyItem {
+    itemIcon: String
+    itemTitle: String
+    itemDescription: String
+}
+
+type Dlp {
+    title: String
+    dlpItems: [DlpItem]
+}
+
+type DlpItem {
+    picture: String
+    title: String
+    link: String
+    order: Int
+}
+
+type BasicSeoInformation{
+    pageTitle: String
+    pageDescription: String
+    hreflangs: [Hreflang]
+    geoJsonLd: String
+}
+
+type CardManagementInfoInnB{
+    cardManagementContent: CardManagementContentInnB
+    commonIcons: CommonIconsInnB
+}
+
+type CardManagementContentInnB {
+    title: String!
+    tabs: TabsInnB!
+    applyBanner: BannerInnB!
+    creditBox: CreditBoxInnB!
+    expenseBox: ExpenseBoxInnB!
+    invoicesBox: InvoicesBoxInnB!
+    linkAccountBanner: LinkAccountBannerInnB!
+    cardManagement: CardManagementInnB!
+    filters: FiltersInnB!
+    columns: ColumnsInnB!
+    cardHolder: CardHolderInnB!
+    cardStatus: CardStatusInnB!
+    download: DownloadInnB!
+    newCard: NewCardInnB!
+    badge: BadgeInnB!
+}
+
+type BadgeInnB {
+    accountHolder: String
+}
+
+type CommonIconsInnB {
+    payment: PaymentTypesInnB
+    chevron: ChevronInnB
+    notification: NotificationInnB
+    arrow: ArrowInnB
+}
+
+type ChevronInnB {
+    up: String
+    right: String
+    left: String
+    down: String
+    upPurple: String
+    rightPurple: String
+    leftPurple: String
+    downPurple: String
+}
+
+type NotificationInnB {
+    error: String
+    info: String
+    question: String
+    success: String
+    alert: String
+}
+
+type ArrowInnB {
+    up: String
+    right: String
+    left: String
+    down: String
+}
+
+type PaymentTypesInnB{
+    visa: String
+    piba: String
+    amex: String
+    pibaEuro: String
+    mastercard: String
+}
+type TabsInnB{
+    centrallyStored: CentrallyStoredInnB!
+    centrallyStoredTitle: String!
+    innBusinessPay: String!
+}
+
+type CentrallyStoredInnB {
+    description: String
+}
+
+type BannerInnB {
+    title: String
+    subtitle: String
+    applyNowButton: String
+    linkAccountButton: String
+    image: String
+}
+
+type CreditBoxInnB{
+    icon: String
+    title: String
+    subtitle: String
+}
+
+type ExpenseBoxInnB {
+    icon: String
+    title: String
+    subtitle: String
+}
+
+type InvoicesBoxInnB{
+    icon: String
+    title: String
+    subtitle: String
+}
+
+type LinkAccountBannerInnB {
+    title: String
+    subtitle: String
+    linkAccountButton: String
+}
+
+type CardManagementInnB {
+    title: String
+    info: String
+}
+
+type FiltersInnB {
+    show: String
+    cancelledCards: String
+    myCards: String
+}
+
+type ColumnsInnB {
+    cardId: String
+    cardLabel: String
+    expiry: String
+    yourCard: String
+    cardHolderName: String
+    cardHolderRegistered: String
+    cardNumber: String
+    cardStatus: String
+    edit: String
+}
+
+type CardHolderInnB {
+    options: OptionsCardHolderInnB
+}
+
+type OptionsCardHolderInnB{
+    resendCode: String
+    registered: String
+}
+
+type CardStatusInnB {
+    options: OptionsCardStatusInnB
+}
+
+type OptionsCardStatusInnB {
+    activate: String
+    active: String
+    dispatching: String
+    cancelled: String
+    expired: String
+}
+
+type DownloadInnB {
+    icon: String
+    label: String
+}
+
+type NewCardInnB{
+    icon: String
+    label: String
+}
+
+type Labels {
+    piBookings: String!
+    main: String!
+    booking: String!
+    piPreCheckIn: String!
+    piGroupBooking: String!
+    extras: String!
+    promotions: String!
+}
+
+type CountryInformation {
+    countries: [CountryDetails]
+}
+
+type CountryDetails {
+    countryCode: String!
+    countryCodeLegacy: String
+    countryName: String!
+    passportRequired: Boolean
+    dialingCode: String!
+    flagSrc: String!
+    nationality: String
+}
+
+type CategoryLabels {
+    labels: String!
+}
+
+type CookieConsent {
+    cookiePolicies: CookiePolicies
+}
+
+type CookiePolicies {
+    brand: String
+    introView: IntroView
+    config: CookieDurationConfig
+    manageView: ManageView
+}
+
+type CookieDurationConfig {
+    cookieOptOutExpiryDays: String
+    cookieOptInExpiryDays: String
+}
+
+type IntroView {
+    title: String
+    description: String
+    manageButtonText: String
+    acceptAllButtonText: String
+    necessaryOnlyButtonText: String
+}
+
+type ManageView {
+    title: String
+    description: String
+    saveSettingsButtonText: String
+    alwaysActiveText: String
+    cookieGroup: [CookieGroup]
+}
+
+type CookieGroup {
+    cookieName: String
+    title: String
+    description: String
+    isAlwaysActive: Boolean
+    toggleLabel: String
+}
+
+type SeoInformation{
+    pageTitle: String
+    pageDescription: String
+    cardImageUrl: String
+    faviconUrl: String
+    icons: [Icon]
+    msIcons: [MsIcon]
+    faq: Faq
+    hreflangs: [Hreflang]
+}
+type Icon{
+    rel: String
+    sizes: String
+    href: String
+}
+
+type MsIcon{
+    name: String
+    content: String
+}
+
+type Faq{
+    title: String
+    faqItems: [FaqItem]
+}
+
+type FaqItem{
+    question: String
+    answer: String
+}
+
+type Promo{
+    picture: String
+    title: String
+    description: String
+    linkText: String
+    linkUrl: String
+    linkTarget: String
+    order: Int
+}
+
+type ThingsToDo{
+    title: String
+    items: [ToDoItem]
+}
+
+type ToDoItem{
+    picture: String
+    title: String
+    link: String
+    target: String
+    order: Int
+}
+
+type Hreflang{
+    hreflang: String
+    href: String
+}
+
+type HotelInformationOptional {
+    brand: String
+    name: String
+    title: String
+    hotelId: String
+    headline: String
+    countryCodeISO: String
+    galleryImages: [ImageItem]
+    announcement: Announcement
+    hotelFacilities: [FacilityItem]
+    hotelOpeningDate: String
+    roomConfiguration: RoomConfiguration
+    parkingDescription: String
+    links: LinksOptional
+    restaurant: RestaurantInfo
+    address: AddressOptional
+    coordinates: CoordinatesOptional
+    satNavDirections: String
+    directions: String
+    transportInformation: [String]
+    whatThreeWords: String
+    hotelDescription: String
+    contactDetails: ContactDetails
+    messagingFlag: MessagingFlag
+    hotelFlags: HotelFlags
+    importantInfo: ImportantInfo
+    bookingFlow: BookingFlow
+    accessibilityInfo: AccessibilityInfo
+    topSectionImages: [TopSectionImage]
+    paymentCodeTypes: [PaymentCodeTypes]
+    currencyCode: String
+    languageCode: String
+    timeZone: String
+    checkOutTime: String
+    checkInTime: String
+    county: String
+    ancillaryCloseout: AncillaryCloseout
+    tripAdvisorReviews: TripAdvisorReviews
+    distanceFromReference: Float
+    cityTax: CityTax
+    seo: HotelSeoInformation
+}
+
+type ImageItem {
+    imageSrc: String
+    thumbnailSrc: String
+    alt: String
+    caption: String
+    iconSrc: String
+}
+
+type Announcement {
+    title: String
+    announcementSource: String
+    showAnnouncement: String
+    startDate: String
+    endDate: String
+    fullBannerLink: String
+    fullBannerLinkNewTab: String
+    icon: String
+    text: String
+    bbText: String
+    type: String
+}
+
+type FacilityItem {
+    code: String
+    name: String
+    description: String
+    weight: Int
+    icon: String
+    isVisible: Boolean
+}
+
+type RoomConfiguration {
+    tabGroups: [TabGroup]
+    tabItems: [TabItem]
+}
+
+type TabGroup {
+    groupId: String
+    groupName: String
+}
+
+type TabItem {
+    roomType: String
+    roomName: String
+    roomDescription: String
+    roomTypeCode: String
+    fileReference: String
+    rateGridRoomDescription: String
+    facilities: [FacilityItem]
+    images: [ImageItem]
+}
+
+type LinksOptional {
+    detailsPage: String
+}
+
+type RestaurantInfo {
+    menus: [Menu]
+    logoSrc: String
+    name: String
+    description: String
+    bookingCardImage: String
+    bookingCardTitle: String
+    bookingCardDescription: String
+    bookingCardBackgroundImage: String
+}
+
+type Menu {
+    name: String
+    description: String
+    imageSrc: String
+    menuSrc: String
+    menuLabel: String
+    disclaimer: String
+}
+
+type AddressOptional {
+    addressType: String
+    companyName: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    cityName: String
+    countryCode: String
+    country: String
+    postalCode: String
+}
+
+type CoordinatesOptionalDlp {
+    latitude: Float
+    longitude: Float
+    hideHotelDistance: Boolean
+}
+
+type CoordinatesOptional {
+    latitude: Float
+    longitude: Float
+}
+
+type ContactDetails {
+    phone: String
+    hotelNationalPhone: String
+    email: String
+}
+
+type MessagingFlag {
+    text: String
+    description: String
+    color: String
+}
+
+type FlagDetail {
+    text: String
+    textColour: String
+    backgroundColour: String
+    backgroundImage: String
+}
+
+type HotelFlags {
+    isEnabled: Boolean
+    flagOverlay: FlagDetail
+    flagBanner: FlagDetail
+}
+
+type ImportantInfo {
+    title: String
+    infoItems: [InfoItem]
+}
+
+type InfoItem {
+    text: String
+    htmlText: String
+    priority: String
+    startDate: String
+    endDate: String
+    hideOnHdp: Boolean
+    hideOnBookingFlow: Boolean
+}
+
+type BookingFlow {
+    bookingFlowItems: [BookingFlowItem]
+}
+
+type BookingFlowItem {
+    bookingId: String
+    rateCode: String
+    rateCategory: String
+}
+
+type AccessibilityInfo {
+    header: String
+    text: String
+    linkText: String
+    phoneNumber: String
+}
+
+type TopSectionImage {
+    imageSrc: String
+    thumbnailSrc: String
+    alt: String
+    caption: String
+    iconSrc: String
+    tags: [String]
+}
+
+type PaymentCodeTypes {
+    code: String
+    feeAmount: String
+    feeCurrency: String
+    paymentOnly: String
+    listOrder: String
+    name: String
+    schemeLogo: String
+}
+
+type AncillaryCloseout {
+    noMealsHeading: String
+    noMealsMessage: String
+    items:[Items]
+}
+
+type Items {
+    text: String
+    startDate: String
+    endDate: String
+    serviceCode: String
+    upsellCodes: String
+}
+
+type TripAdvisorReviews{
+    awards: [Awards]
+    rating: Float
+    subRatings: [SubRatings]
+    name: String
+    address: String
+    reviews: [Reviews]
+    numberOfReviews: Int
+    writeReview: String
+    webUrl: String
+    locationId: String
+    hotelCode: String
+}
+
+type Awards{
+    awardType: String
+    year: String
+    image: String
+}
+
+type SubRatings{
+    ratingImageUrl: String
+    value: Float
+    localisedName: String
+}
+
+type Reviews{
+    publishedDate: String
+    rating: Float
+    tripType: String
+    title: String
+    text: String
+    user: User
+}
+
+type User {
+    username: String
+    location: String
+}
+
+type Footer {
+    copyrightInfo: String
+    socialMediaIcons: [SocialMediaIcons]
+    tabs: [Tabs]
+    newsletterSignup: NewsletterSignup
+    bottomLinks: [LinkItems]
+}
+
+type SocialMediaIcons {
+    linkSrc: String
+    label: String
+    iconSrc: String
+}
+
+type Tabs {
+    name: String
+    intro: Intro
+    columns: [Columns]
+}
+
+type Intro {
+    name: String
+    description: String
+}
+
+type Columns {
+    name: String
+    linkItems: [LinkItems]
+}
+
+type NewsletterSignup {
+    introViewTitle: String
+    introViewText: String
+    signUpButtonText: String
+}
+
+type LinkItems {
+    name: String
+    linkSrc: String
+    openInNewTab: Boolean
+}
+
+input BookingChannelCriteria {
+    channel: Channel!
+    subchannel: String!
+    language: String
+}
+
+type HotelInformationBySlug {
+    brand: String!
+    name: String!
+    hotelId: String!
+    headline: String!
+    countryCodeISO: String
+    galleryImages: [ImageItem!]!
+    announcement: Announcement
+    hotelFacilities: [FacilityItem!]!
+    hotelOpeningDate: String
+    roomConfiguration: RoomConfiguration
+    parkingDescription: String!
+    links: Links
+    title: String
+    restaurant: RestaurantInfo
+    address: Address!
+    coordinates: Coordinates!
+    satNavDirections: String!
+    directions: String!
+    transportInformation: [String!]!
+    whatThreeWords: String
+    hotelDescription: String
+    contactDetails: ContactDetails
+    messagingFlag: MessagingFlag
+    hotelFlags: HotelFlags
+    importantInfo: ImportantInfo
+    bookingFlow: BookingFlow
+    accessibilityInfo: AccessibilityInfo
+    topSectionImages: [TopSectionImage]
+    faq: Faq
+    facts: Facts
+    breadcrumb: [Breadcrumb!]
+    tripAdvisorReviews: TripAdvisorReviews
+    roomClassConfiguration: [RoomClassConfiguration]
+    cityTax: CityTax
+    seo: HotelSeoInformation
+}
+
+type CityTax {
+    isCityTaxHotel: Boolean
+    isCityTaxBusinessHotel: Boolean
+    cityTaxWebUrl: String
+    amount: Float
+    percentage: Float
+    calculation: String
+    posting: String
+    vat: Float
+    maxNights: Int
+    effectiveFrom: String
+    bookingDateFrom: String
+}
+
+type RoomClassConfiguration {
+  code: String!
+  title: String!
+}
+
+type Address {
+    addressType: String
+    companyName: String
+    addressLine1: String!
+    addressLine2: String!
+    addressLine3: String!
+    addressLine4: String
+    cityName: String
+    countryCode: String
+    country: String!
+    postalCode: String!
+}
+
+type Facts {
+    factItems: [FactItem!]!
+}
+
+type Breadcrumb {
+    title: String!
+    link: String!
+}
+
+type FactItem {
+    title: String!
+    description: String!
+}
+
+
+type HotelInformation {
+    brand: String!
+    name: String!
+    title: String
+    hotelId: String!
+    headline: String!
+    galleryImages: [ImageItem!]!
+    announcement: Announcement
+    hotelFacilities: [FacilityItem!]!
+    hotelOpeningDate: String
+    roomConfiguration: RoomConfiguration
+    parkingDescription: String!
+    links: Links
+    restaurant: RestaurantInfo
+    address: Address!
+    coordinates: Coordinates!
+    satNavDirections: String!
+    directions: String!
+    transportInformation: [String!]!
+    whatThreeWords: String
+    hotelDescription: String
+    contactDetails: ContactDetails
+    messagingFlag: MessagingFlag
+    hotelFlags: HotelFlags
+    importantInfo: ImportantInfo
+    bookingFlow: BookingFlow
+    accessibilityInfo: AccessibilityInfo
+    topSectionImages: [TopSectionImage]
+    paymentCodeTypes: [PaymentCodeTypes]
+    currencyCode: String
+    languageCode: String
+    timeZone: String
+    checkOutTime: String
+    checkInTime: String
+    county: String
+    countryCodeISO: String
+    isKioskQRCodeScanEnabled: Boolean
+    bookRestaurantCta: BookRestaurantCta
+    ancillaryCloseout: AncillaryCloseout
+    tripAdvisorReviews: TripAdvisorReviews
+    cityTax: CityTax
+    seo: HotelSeoInformation
+    isDataTransEnabled: Boolean
+}
+
+type HotelSeoInformation {
+    geoJsonLd: String
+}
+
+type Links {
+    detailsPage: String!
+}
+
+type Coordinates {
+    latitude: Float!
+    longitude: Float!
+}
+
+enum Channel {
+    PI
+    BB
+    CCUI
+    DISTR
+    EMPLOYEE
+}
+
+type MaxRoomsLim {
+    maxRooms: Int!
+    maxRoomsAmend: Int!
+}
+
+
+type HeaderInformation {
+    content: Content!
+    form: Form!
+    datePicker: DatePicker!
+    results: Results!
+    announcement: AnnouncementHeader
+    config: Config!
+    contactBanner: ContactBanner
+    innBusinessHeader(language: String!, country: String!): InnBusinessHeader
+}
+
+type InnBusinessHeader {
+    content: ContentInnB!
+    layout: LayoutInnB!
+}
+
+type LayoutInnB {
+    manageAccount: ManageAccountInnB
+    menu: MenuInnB
+    help: HelpInnB
+    sidebar: SidebarInnB
+}
+
+type SidebarInnB {
+    collapse: String
+    expand: String
+}
+
+
+type ManageAccountInnB {
+    cards: CardsInnB
+    profile: ProfileInnB
+    title: String
+    employees: EmployeesInnB
+}
+
+type EmployeesInnB {
+    title: String
+    icon: String
+    link: String
+}
+
+type MenuInnB {
+    home: HomeInnB
+    spending: SpendingInnB
+    manage: ManageInnB
+    bookings: BookingsInnB
+    contact: ContactInnB
+}
+
+type BookingsInnB {
+    label: String
+    icon: String
+    iconActive: String
+}
+
+type ManageInnB {
+    label: String
+    icon: String
+    iconActive: String
+    options: OptionsInnB!
+}
+
+type OptionsInnB {
+    employees: String
+    allowances: String
+    alerts: String
+    cards: String
+    questions: String
+    company: String
+}
+
+type SpendingInnB {
+    label: String
+    icon: String
+    iconActive: String
+}
+
+type HomeInnB {
+    label: String
+    icon: String
+    iconActive: String
+}
+
+type HelpInnB {
+    needHelp: String
+    tour: TourInnB
+    contact: ContactInnB
+    faq: FaqInnB
+}
+
+type FaqInnB {
+    label: String
+    icon: String
+}
+
+type ContactInnB {
+    label: String
+    icon: String
+    iconActive: String
+}
+
+type TourInnB {
+    label: String
+    icon: String
+}
+
+type CardsInnB {
+    title: String
+    icon: String
+    link: String
+}
+
+type ProfileInnB {
+    title: String
+    text: String
+    link: String
+}
+
+type ContentInnB {
+    header: HeaderInnB!
+    global: GlobalInnB!
+    countries: [CountryInnB!]!
+    form: FormInnB!
+    authentication: AuthenticationInnB!
+    results: InnBResults
+    contactBanner: ContactBanner
+}
+
+type AuthenticationInnB{
+    myProfile: String
+    logoutButton: String
+}
+
+type FormInnB {
+    where: String
+    whereIcon: String
+    calendarIcon: String
+    guestIcon: String
+    whereDismissIcon: String
+    hotelsLabel: String
+    search: String
+    searchIcon: String
+    searchEdit: String
+    datePicker: DatePickerInnB!
+    room: String!
+    adultsHelperText: String!
+    childrenHelperText: String!
+    includeCot: String
+    cotLimit: String
+    roomType: String
+    removeRoom: String
+    invalidLocation: String
+    invalidNights: String
+    invalidRooms: String
+}
+
+type DatePickerInnB{
+    months: [String!]!
+    weekdaysShort: [String!]!
+    reset: String!
+    done: String!
+    checkOut: String
+}
+
+type HeaderInnB {
+    image: String
+    imageAlt: String
+}
+
+type GlobalInnB {
+    today: String
+    tomorrow: String
+    adult: String
+    adults: String
+    child: String
+    children: String
+    room: String
+    rooms: String
+    night: String
+    nights: String
+    single: String
+    double: String
+    accessible: String
+    twin: String
+    family: String
+    adultsLabel: String
+    childrenLabel: String
+    addRoom: String
+    addRoomIcon: String
+    done: String
+    brand: BrandInnB
+}
+
+type BrandInnB {
+    piLogo: String
+    pidLogo: String
+    hubLogo: String
+    zipLogo: String
+}
+
+type CountryInnB {
+    code: String!
+    language: String
+    flagUrl: String
+    url: String!
+}
+
+type Content {
+    global: Global
+    menu: MenuContentHeader
+    countries: [Country!]!
+    header: Header!
+    subNav: [SubNav!]!
+    authentication: Authentication!
+    favicon: Favicon
+    hero: Hero
+}
+
+type Hero {
+    backgroundColor: String
+    bottomCaptionShow: Boolean
+    bottomCaptionShadow: Boolean
+    subHeadingText: String
+    subHeadingFontColor: String
+    backgroundImage: String
+    headingFontColor: String
+    subHeadingFontShadow: Boolean
+    headingTextShort: String
+    subHeadingFontWeight: String
+    bottomCaptionArrowShow: Boolean
+    bottomCaptionText: String
+    subHeadingShow: Boolean
+    headingFontShadow: Boolean
+    footnotePosRight: Boolean
+    headingTextLong: String
+    headingFontWeight: String
+}
+
+type Favicon {
+    faviconUrl: String!
+    icons: [Icon!]
+    msIcons: [MsIcon!]
+}
+
+type Global {
+    addRoom: String!
+    done: String!
+    room: String!
+    roomLabel: String!
+    single: String!
+    double: String!
+    twin: String!
+    accessible: String!
+    family: String!
+    adult: String!
+    adults: String!
+    child: String!
+    children: String!
+    night: String!
+    rooms: String!
+    adultsLabel: String
+    childrenLabel: String
+    today: String!
+    tomorrow: String!
+    brand: Brand
+    promotions: [Promotions]
+    offers: [Offer]
+    thirdParties: String
+    accessibleOrBarrierFree: String
+}
+
+type Promotions {
+    maxRooms: Int!
+    maxRoomsAmend: Int!
+    numberOfNights: Int!
+    page: String!
+    promoCode: String!
+    enabled: Boolean
+}
+
+type Offer {
+    maxRooms: Int!
+    cellCode: String!
+    page: String!
+    numberOfNights: Int!
+    corporateId: String
+    ratePlanCode: String
+}
+
+type Brand {
+    piLogo: String!
+    pidLogo: String
+    zipLogo: String!
+    pi: String!
+    hub: String!
+    pid: String
+    zip: String!
+    hubLogo: String!
+    hubBadge: String
+    zipBadge: String
+    hubHdpLogo: String
+}
+
+type MenuContentHeader {
+    mobileMenuButton: String!
+    language: String
+    business: String
+    languageButton: String!
+    tick: String
+    logIn: String!
+    discoverPI: String
+    findBooking: String!
+    bookHotel: String!
+    guestAccount: String
+    changeLogs: String
+    agentMemo: String
+    promoCode: String
+}
+
+type Country {
+    language: String!
+    flagUrl: String!
+}
+
+type Header {
+    image: String!
+}
+
+type SubNav {
+    title: String!
+    navOptions: [NavOption!]!
+}
+
+type NavOption {
+    title: String!
+    url: String!
+}
+
+type Authentication {
+    login: Login!
+    forgottenPassword: ForgottenPassword!
+    signUpButton: String
+    logoutButton: String!
+    resetPassword: ResetPassword
+    goBackButton: String
+    accountDescription: String
+}
+
+type Login {
+    leisure: LoginLeisure!
+    business: LoginBusiness!
+    businessAccountCard: BusinessAccountCard
+    passwordPlaceholder: String!
+    forgotPassword: String!
+    signupMessage: String
+    signupLink: String
+    rememberMeLabel: String
+    badCredentialsError: String
+    sessionExpired: String
+    invalidEmail: String
+}
+
+type LoginLeisure {
+    formLabel: String!
+    emailPlaceholder: String!
+    loginButton: String!
+    signupButton: String
+    tab: String
+}
+
+type LoginBusiness {
+    companyActivateFailBody: String
+    companyActivateFailTitle: String
+    companyActivateSuccessBody: String
+    companyActivateSuccessTitle: String
+    doubleOptInFailMessage: String
+    doubleOptInSuccessMessage: String
+    emailPlaceholder: String!
+    employeeActivationSuccessTitle: String
+    formLabel: String!
+    loginButton: String!
+    loginInfoNotification: String
+    signupButton: String
+    tab: String
+    tabMobile: String
+    bookingEmailMaxLengthMsg: String
+    bookingLoginRequiredText: String
+    bookingsInvalidEmailMsg: String
+    businessLogin: String
+    travelForBusiness: String
+    businessDomain: String
+}
+
+type BusinessAccountCard {
+    buttonLabel: String
+    textBody: String
+    tab: String
+    title: String
+    tabMobile: String
+    banner: Banner
+}
+
+type Banner {
+    imagePath: String
+}
+
+type ForgottenPassword {
+    leisure: ForgottenPasswordLeisure!
+    business: ForgottenPasswordBusiness!
+    backToLogin: String!
+    backToYourDetails: String
+    cancel: String!
+    notRegisteredError: String
+    emailSentHeader: String
+    genericError: String
+    emailSentMessage: String
+}
+
+type ForgottenPasswordLeisure {
+    formLabel: String!
+    emailPlaceholder: String!
+    formTitle: String!
+    submitButton: String!
+}
+
+type ForgottenPasswordBusiness {
+    formLabel: String!
+    emailPlaceholder: String!
+    formTitle: String!
+    submitButton: String!
+}
+
+type ResetPassword {
+    criteria: String
+    criteriaDescription: String
+    email: String
+    invalidPassword: String
+    invalidPasswordConfirmation: String
+    logInButton: String
+    password: String
+    passwordConfirmation: String
+    passwordMin: String
+    passwordRequired: String
+    passwordRequirementsAllowed: String
+    passwordRequirementsIdentical: String
+    passwordRequirementsMin: String
+    resetPasswordTitle: String
+    submitButton: String
+    successMessage: String
+}
+
+type Form {
+    childrenHelperText: String
+    adultsHelperText: String
+    includeCot: String
+    cotLimit: String
+    removeRoom: String!
+    checkout: String!
+    roomType: String
+    where: String!
+    invalidLocation: String!
+    invalidPastDate: String!
+    invalidDate: String!
+    invalidNights: String!
+    invalidRooms: String!
+    snowdropError: String!
+    snowdropErrorRetry: String!
+    invalidFutureDate: String!
+    findBookingTitle: String
+    findBookingDescription: String
+    bookingReferenceLabel: String
+    bookingSurnameLabel: String
+    arrivalDateLabel: String
+    invalidReference: String!
+    invalidSurname: String!
+    bookingInvalid: String
+    searchBookingError: String
+}
+
+type DatePicker {
+    reset: String
+    invalidDate: String
+    checkOut: String
+}
+
+type Results {
+    notifications: Notifications!
+}
+
+type Notifications {
+    emp01groupBookingMessage: String
+    groupBookingHeader: String
+    groupBookingMessage: String!
+    ccuiGroupBookingMessage: String
+    noResults: String!
+    availabilitiesErrorMessage: String
+    groupBookingFormPageMessage: String
+    errorTitle: String
+}
+
+type AnnouncementHeader {
+    text: String
+    type: String
+    browserCompatibilityMessage: String
+}
+
+enum ChatBotStatus {
+    SHOW_ALL_PAGES
+    SHOW_LIMITED_PAGES
+    HIDE
+}
+
+type AmazonChatConfig {
+    amazonChatUrl: String
+    chatIcon: String
+    amazonAuthUrl: String
+    amazonChatId: String
+    amazonChatSnippetId: String
+    chatBotStatus: ChatBotStatus!
+    webChatEnabledPages: [String!]
+}
+
+type Config {
+    roomCodes: RoomCodes!
+    api: Api
+    bookingSearch: BookingSearch
+    promotionBanner: PromotionBanner
+    authentication: AuthenticationConfig!
+    amazonChat: AmazonChatConfig
+}
+
+type ContactBanner {
+    type: String
+    text: String
+    date: String
+    enabledPages: [String]
+}
+
+type BookingSearch {
+    show: Boolean
+    dashboardRedirect: DashboardRedirect
+}
+
+type DashboardRedirect {
+    bookingReference: String
+    url: String
+    cookie: Cookie
+}
+
+type Cookie {
+    domain: String
+    name: String
+    minutesTillExpiry: String
+}
+
+type RoomCodes {
+    double: String!
+    family: String!
+    accessible: String!
+    single: String!
+    twin: String!
+}
+
+type PromotionBanner {
+    enabled: Boolean
+    icon: String
+    title: String
+    description: String
+    terms: String
+    srpNotificationTitle: String
+    srpNotificationText: String
+}
+
+type Api {
+    bookingChannel: BookingChannel
+}
+
+type BookingChannel {
+    business: String!
+    leisure: String!
+}
+
+type AuthenticationConfig{
+    accountLinks: [AccountLink]!
+    business: Business
+    businessAccountCardRedirectPath: String
+}
+
+type Business {
+    businessAccountLinks: [BusinessAccountLink]
+}
+
+type BusinessAccountLink {
+    title: String
+    subMenuLinks: [SubMenuLink]
+}
+
+type SubMenuLink {
+    title: String
+    url: String
+}
+
+type AccountLink {
+    title: String
+    url: String
+    icon: String
+}
+
+type RoomClassConfig {
+    roomClassConfig: [RoomClassOrder!]
+}
+
+type RoomClassOrder {
+    code: String!
+    order: Int!
+    availableUpgrades: [String]
+}
+
+type PriceFinderConfig {
+    priceFinderConfig: PriceFinderViewResponse
+}
+
+type PriceFinderViewResponse {
+    priceFinderViews: [PriceFinderViews]
+}
+
+type PriceFinderViews {
+    path: String
+    bannerImage: String
+    bannerColour: String
+    bannerHeadline: String
+    bannerSubtext: String
+    termsLabel: String
+    dateRangeStart: String
+    dateRangeEnd: String
+    checkinDate: String
+    highlightedPriceRangeStep: Int
+    highlightedPriceRangeMin: Int
+    highlightedPriceRangeMax: String
+    highlightedPricePrimaryColour: String
+    highlightedPriceSecondaryColour: String
+    filterRoomSelected: String
+    locationId: String
+    locationName: String
+    locationRadius: Float
+    hotelCodes: [HotelCodes]
+    destinations: [Destinations]
+    infoMessages: [InfoMessages]
+    seoMetaTitle: String
+    seoMetaDescription: String
+    seoCardImageUrl: String
+    seoRobots: String
+    seoHreflangs: [SeoHreflangs]
+}
+
+type HotelCodes {
+    code: String
+    order: Int
+}
+
+type Destinations {
+    locations: [Locations]
+
+}
+
+type Locations {
+    locationId: String
+    locationName: String
+    locationOrder: Int
+}
+
+type InfoMessages {
+    messageTitle: String
+    messageSubtitle: String
+    messageType: String
+    messageOrder: Int
+}
+
+type SeoHreflangs {
+    hreflang: String
+    href: String
+}
+
+type RatesInformation {
+    rateClassifications: [RateExtraInfo]!
+}
+
+type ContentRatesInformation {
+    rateClassifications: [ContentRateExtraInfo]!
+}
+
+type RateExtraInfo {
+    rateClassification: String!
+    ratePlanCode: String
+    rateOrder: String
+    rateName: String!
+    rateDescription: String
+    rateLongDescription: String
+    additionalDescription: String
+    rateNotes: String
+    rateCategory: String
+}
+
+type ContentRateExtraInfo {
+    rateClassification: String!
+    ratePlanCode: String
+    rateOrder: String
+    rateName: String!
+    rateDescription: String
+    rateLongDescription: String
+    additionalDescription: String
+    rateNotes: String
+    rateCategory: String
+    rateTags: [String]
+}
+
+type RoomTypeInformation {
+    roomTypes: [RoomTypeDetails]!
+}
+
+type RoomTypeDetails {
+    roomTypeCode: [String]
+    roomCategory: String
+    roomLabel: String
+    roomDescription: String
+    roomImage: String
+    groupId: String
+}
+
+type BookingFlowInformation{
+    brand: String
+    bookingFlowSteps: [BookingFlowStep]
+    bookingSpinnerConfig : [BookingSpinnerConfig]
+}
+
+type BookingFlowStep{
+    id: String
+    step: String
+    title: String
+}
+
+type BookingSpinnerConfig {
+    order: String
+    seconds: String
+    text: String
+}
+
+type SearchInformation {
+    content: SrpContent!
+    config: SrpConfig!
+}
+
+type SrpContent {
+    results: SrpResults
+    filter: SrpFilter
+    totalHotels: String!
+    map: SrpMap
+    global: SrpGlobal
+    dynamicFilters: [DynamicFilters]
+}
+
+type SrpResults {
+    result: SrpResult
+    notifications: SrpNotifications
+    menu: SrpMenu
+}
+
+type SrpResult {
+    fullyBooked: String!
+    availabilityWarning: String!
+    openingSoon: String!
+    openingOn: String!
+    distanceUnitPlural: String!
+    fromLocation: String!
+    priceFrom: String!
+    viewDetails: String!
+    facilities: SrpFacilities
+    promotions: SrpPromotions
+}
+
+type SrpFacilities {
+    premierPlusRoom: String!
+    standardExtraRoom: String!
+    businessRoom: String!
+    parking: String!
+    noParking: String!
+    freeParking: String!
+}
+
+type SrpPromotions {
+    discountApplied: String
+    discountUnavailable: String
+}
+
+type SrpNotifications {
+    fullyBooked: String!
+    openingSoon: String!
+    noFilteredHotels: String
+    availabilitiesErrorMessage: String
+    errorTitle: String
+}
+
+type SrpMenu {
+    price: String
+    distance: String
+    recommended: String
+    mapLong: String
+    listLong: String
+    filtersLong: String
+    map: String
+    list: String
+    filter: String
+}
+
+type SrpFilter {
+    label: SrpLabel
+    code: SrpCode
+    info: SrpInfo
+}
+
+type SrpLabel {
+    freeParking: String
+    parking: String
+    restaurant: String
+    header: String
+    airCon: String
+    chargeableOffsiteParking: String
+    chargeableOnsiteParking: String
+    lift: String
+    meet: String
+    apply: String
+    reset: String
+    facilities: String
+}
+
+type SrpCode {
+    restaurant: String
+    airCon: String
+    chargeableOffsiteParking: String
+    chargeableOnsiteParking: String
+    lift: String
+    meet: String
+    freeParking: [String]
+}
+
+type SrpInfo {
+    lift: String
+}
+
+type SrpMap {
+    controlText: String
+    list: String
+}
+
+type SrpGlobal {
+    brand: SrpBrand
+}
+
+type SrpBrand {
+    zipLogoWhite: String!
+    hubLogoWhite: String!
+    piLogo: String!
+    zipLogo: String!
+    hubLogo: String!
+    pi: String!
+    hub: String!
+    zip: String!
+    hubBadge: String
+    zipBadge: String
+}
+
+type DynamicFilters {
+    groupTitle: String
+    groupOperator: GroupOperator
+    groupItems: [GroupItems]
+}
+
+enum GroupOperator {
+    AND
+    OR
+}
+
+type GroupItems {
+    label: String
+    info: String
+    codes: String
+    queryParam: String
+}
+
+type SrpConfig {
+    api: SrpApi
+}
+
+type SrpApi {
+    initialPageSize: String!
+    radius: String!
+    lazyLoadPageSize: String!
+}
+
+type MaxNightsLim {
+    maxNights: Int!
+}
+
+type MaxArrivalDateLim {
+    maxArrivalDate: Int!
+}
+
+type RoomOccupancyLimitations {
+    roomOccupancies: [RoomOccupancy!]!
+}
+
+type RoomOccupancy {
+    adultsNumber: Int!
+    childrenNumber: Int!
+    acceptedRoomTypes: [String!]!
+}
+
+type HotelShortInformation {
+    code: String!
+    title: String
+    brand: String
+    hotelPagePath: String
+}
+
+type InnBResults{
+    notifications: InnBNotifications
+}
+
+type InnBNotifications {
+    groupBookingHeader: String
+    groupBookingFormPageMessage: String
+}
+
+type BookRestaurantCta {
+    bookingCardCtaText: String
+    bookingCardCtaLink: String
+    bookingCardTrackingId: String
+}

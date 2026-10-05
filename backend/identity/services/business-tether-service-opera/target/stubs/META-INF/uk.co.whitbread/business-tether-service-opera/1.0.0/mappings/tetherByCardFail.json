@@ -1,0 +1,28 @@
+{
+  "id" : "9c21a9d5-4e9f-4f18-beae-b8f09adf72c0",
+  "request" : {
+    "urlPath" : "/business/tether",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json;charset=UTF-8"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['linkCode'] == 'mtr-36s-unk')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['linkId'] == 3089500110017600027)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['memorableWord'] == 'word')]"
+    } ]
+  },
+  "response" : {
+    "status" : 500,
+    "body" : "{\"code\":\"ValidationError\",\"details\":[\"TetherFailCardNotCorrectAccount\"]}",
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "9c21a9d5-4e9f-4f18-beae-b8f09adf72c0"
+}

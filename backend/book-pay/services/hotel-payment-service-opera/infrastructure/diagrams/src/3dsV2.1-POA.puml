@@ -1,0 +1,43 @@
+@startuml
+
+title __3DS v2.1 Flow for Pay Now__ \n\n *Searching for a hotel, holding the hotel and card BIN validation omitted
+actor Browser #red
+Browser -> AEM: Check authenticationRequired flag
+AEM -> Browser: authenticationRequired flag
+alt AEM authenticationRequired is true
+Browser -> Browser: Show CVV entry
+Browser -> Hotel_Payment: 3DS validation \n **POST to payment/hotels**
+Hotel_Payment -> BART: CardValidationRequest
+BART -> DataCash: "fraudonly" request
+DataCash -> BART: "fraudonly" response
+BART -> DataCash: "initiate_authentication" request
+DataCash -> BART: initiate_authentication" response
+BART -> Hotel_Payment: CardValidationRequestResponse with redirect html
+Hotel_Payment -> Browser: Response with **threeDSecureRequired=true** and **redirectHtml**
+Browser -> Browser: Render HTML in browser
+Browser -> Hotel_Payment: Card Authentication request \n **POST to payment/authentication**
+Hotel_Payment -> BART: CardAuthentication Request with redirect URL
+BART -> DataCash: "authenticate_payer" request
+DataCash -> BART: "authenticate_payer" response
+BART -> Hotel_Payment: CardAuthentication Response with redirect HTML
+Hotel_Payment -> Browser: Response with redirectHtml
+Browser -> Browser: Render HTML
+Browser -> Browser: HTML form submitted (automatically for frictionless)
+Browser -> Hotel_Payment: Browser redirect to **POST to payment/authentication/{sessionId}/complete**
+Hotel_Payment-> Browser: Returns html with post message to parent window
+Browser -> Browser: Handles post message
+
+end
+
+Browser -> Hotel_Booking: MakeABooking request
+Hotel_Booking -> BART: BookingConfirmRequest
+BART -> DataCash: "retrieve_emv3ds_authentication_status" request
+DataCash -> BART: "retrieve_emv3ds_authentication_status" response
+BART -> DataCash: "auth emv3ds" request
+DataCash -> BART: "auth emv3ds" response
+BART -> DataCash: "fulfil" request
+DataCash -> BART: "fulfil" response
+BART -> Hotel_Booking: BookingConfirmRequestResponse
+Hotel_Booking -> Browser: Booking confirmation response
+Browser -> Browser: Confirmation Page
+@enduml

@@ -1,0 +1,30 @@
+{
+  "id" : "fbed812f-9dd7-4676-a391-6bc31a41955c",
+  "request" : {
+    "url" : "/piba/account/balance",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "company-id" : {
+        "equalTo" : "123"
+      },
+      "employee-id" : {
+        "equalTo" : "55"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value7"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"currentBalances\":[{\"schemeCustomerId\":782810,\"outstanding\":{\"amount\":8653.44,\"currencyCode\":\"GBP\"},\"newTransactions\":{\"amount\":507.53,\"currencyCode\":\"GBP\"},\"available\":{\"amount\":97.98,\"currencyCode\":\"GBP\"},\"creditLimit\":{\"amount\":3000.0,\"currencyCode\":\"GBP\"},\"currentBalance\":{\"amount\":2902.02,\"currencyCode\":\"GBP\"},\"interimPayments\":{\"amount\":0.0,\"currencyCode\":\"GBP\"},\"tetheredGuid\":\"CE3C22D3-D413-4FB2-8219-1160FEE0FC21\",\"accountName\":\"100216\",\"accountNumber\":\"3089503200100301\",\"registrationRoles\":[\"ACCOUNT_HOLDER\"]},{\"schemeCustomerId\":782831,\"outstanding\":{\"amount\":0.0,\"currencyCode\":\"GBP\"},\"newTransactions\":{\"amount\":0.0,\"currencyCode\":\"GBP\"},\"available\":{\"amount\":10000.0,\"currencyCode\":\"GBP\"},\"creditLimit\":{\"amount\":10000.0,\"currencyCode\":\"GBP\"},\"currentBalance\":{\"amount\":0.0,\"currencyCode\":\"GBP\"},\"interimPayments\":{\"amount\":0.0,\"currencyCode\":\"GBP\"},\"tetheredGuid\":\"1EA0F9EF-A09B-479A-AD27-148BC6B19483\",\"accountName\":\"07734435\",\"accountNumber\":\"3000003200100301\",\"registrationRoles\":[\"ACCOUNT_HOLDER\"]}],\"totalRecordCount\":2}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "fbed812f-9dd7-4676-a391-6bc31a41955c"
+}

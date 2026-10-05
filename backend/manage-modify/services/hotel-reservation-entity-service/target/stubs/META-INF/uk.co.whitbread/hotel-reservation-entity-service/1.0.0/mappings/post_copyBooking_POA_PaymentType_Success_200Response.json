@@ -1,0 +1,32 @@
+{
+  "id" : "fa71a3e2-01e9-4b84-97c1-30cd9068ba05",
+  "request" : {
+    "urlPath" : "/v1/reservations/copy",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['originalBasketReference'] == 'AEG5222658')]"
+    }, {
+      "matchesJsonPath" : "$.['bookingChannel'][?(@.['channel'] == 'PI')]"
+    }, {
+      "matchesJsonPath" : "$.['bookingChannel'][?(@.['subchannel'] == 'WEB')]"
+    }, {
+      "matchesJsonPath" : "$.['bookingChannel'][?(@.['language'] == 'EN')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['token'] == 'token')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"copyBasketReference\":\"AEG5621201\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "fa71a3e2-01e9-4b84-97c1-30cd9068ba05"
+}

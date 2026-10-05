@@ -1,0 +1,13 @@
+@startuml
+entity ExperienceLayer
+title Retrieve Search Results Data from AEM
+
+autonumber
+
+entity "content-entity-service" as CES
+entity AEM
+
+ExperienceLayer -> CES  ++: GET /v1/content/searchresults/data?country={country}&language={language}
+CES -> AEM: GET /{country}/{language}/search.searchresults.data.json
+ExperienceLayer <- CES -- : return search results data
+@enduml

@@ -1,0 +1,11 @@
+config:
+  service:
+    basket:
+      host: http://${BASKET_HOST:localhost:9104}
+    threec:
+      host: http://${THREEC_HOST:localhost:9001}
+      paymentsEndpoint: "/payments"
+      refundsEndpoint: "/refunds"
+      threecKey: X-WHIT-API-KEY
+      threecValue: ${THREEC_PAYMENT_SERVICE_API_VALUE}
+      operaPilotHotelCodes: ${PILOT_HOTEL_LIST}

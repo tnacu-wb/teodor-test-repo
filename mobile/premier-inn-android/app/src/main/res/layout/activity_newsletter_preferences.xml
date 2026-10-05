@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/default_medium_margin"
+                android:paddingLeft="@dimen/default_medium_margin"
+                android:paddingTop="@dimen/default_extra_large_margin"
+                android:paddingEnd="@dimen/default_medium_margin"
+                android:paddingRight="@dimen/default_medium_margin">
+
+                <TextView
+                    style="@style/Header3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/newsletter_prefs_your_email"/>
+
+                <TextView
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_large_margin"
+                    android:layout_marginBottom="@dimen/default_large_margin"
+                    android:text="@string/newsletter_prefs_body" />
+
+                <TextView
+                    android:id="@+id/newsletter_prefs_email"
+                    style="@style/Header4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_large_margin"
+                    android:textColor="@color/teal" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/mint_dark_fifty_percent" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

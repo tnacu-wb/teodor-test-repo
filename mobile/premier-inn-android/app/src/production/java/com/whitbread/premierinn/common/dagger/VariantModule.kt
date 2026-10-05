@@ -1,0 +1,91 @@
+package com.whitbread.premierinn.common.dagger
+
+import android.content.Context
+import android.content.SharedPreferences
+import com.auth0.android.authentication.AuthenticationAPIClient
+import com.auth0.android.authentication.storage.SecureCredentialsManager
+import com.whitbread.premierinn.api.Auth0Configuration
+import com.whitbread.premierinn.common.AppConfiguration
+import com.whitbread.premierinn.common.ProductionConfiguration
+import com.whitbread.premierinn.common.dagger.retrofitConfiguration.ProductionOkHttpClientBuilder
+import com.whitbread.premierinn.common.retrofitConfiguration.ConsumerType
+import com.whitbread.premierinn.data.authentication.AuthenticationRepositoryImpl
+import com.whitbread.premierinn.data.common.AppPackageDetails
+import com.whitbread.premierinn.data.common.ErrorLogger
+import com.whitbread.premierinn.domain.authentication.repository.AuthenticationRepository
+import com.whitbread.premierinn.domain.common.usecase.IsFeatureOn
+import com.whitbread.premierinn.domain.resource.repository.ContentManagedResourceRepository
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import javax.inject.Named
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object VariantModule {
+    @Provides
+    @Singleton
+    fun provideConfiguration(
+        isFeatureOn: IsFeatureOn,
+        preferences: SharedPreferences
+    ): AppConfiguration {
+        return ProductionConfiguration(isFeatureOn, preferences)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        context: Context, appPackageDetails: AppPackageDetails,
+        resourceRepository: ContentManagedResourceRepository
+    ): OkHttpClient {
+        return ProductionOkHttpClientBuilder(
+            context,
+            resourceRepository,
+            appPackageDetails,
+            ConsumerType.RX
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("NonRxOkHttpClient")
+    fun provideNonRxOkHttpClient(
+        context: Context, appPackageDetails: AppPackageDetails,
+        resourceRepository: ContentManagedResourceRepository
+    ): OkHttpClient {
+        return ProductionOkHttpClientBuilder(
+            context,
+            resourceRepository,
+            appPackageDetails,
+            ConsumerType.NON_RX
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuth0Configuration(): Auth0Configuration {
+        return Auth0Configuration.Production
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthenticationRepository(
+        appConfiguration: AppConfiguration,
+        client: AuthenticationAPIClient,
+        errorLogger: ErrorLogger,
+        secureCredentialsManager: SecureCredentialsManager
+    ): AuthenticationRepository {
+        return AuthenticationRepositoryImpl(
+            client,
+            secureCredentialsManager,
+            errorLogger,
+            appConfiguration.isLive,
+            appConfiguration.isPreLive,
+            appConfiguration.graphQLUrl
+        )
+    }
+
+}

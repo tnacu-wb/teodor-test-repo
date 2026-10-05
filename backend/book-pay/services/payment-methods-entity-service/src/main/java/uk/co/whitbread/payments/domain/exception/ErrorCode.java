@@ -1,0 +1,38 @@
+package uk.co.whitbread.payments.domain.exception;
+
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
+public enum ErrorCode {
+
+  DIGITAL_USER_ACCOUNT_NOT_OBTAINED_EXCEPTION(Constants.INTERNAL_SERVER_EXCEPTION, 201),
+  DIGITAL_VALIDATE_PAYMENT_EXCEPTION(Constants.GENERIC_VALIDATION_EXCEPTION, 202),
+  DIGITAL_EXTRACT_DEPARTURE_DATE_EXCEPTION(Constants.INTERNAL_SERVER_EXCEPTION, 203),
+  DIGITAL_EXTRACT_ARRIVAL_DATE_EXCEPTION(Constants.INTERNAL_SERVER_EXCEPTION, 205),
+  DIGITAL_POLICY_CODE_EXCEPTION(Constants.INTERNAL_SERVER_EXCEPTION, 206),
+  DIGITAL_RESERVATION_NOT_FOUND_EXCEPTION(Constants.INTERNAL_SERVER_EXCEPTION, 306),
+
+  FIND_CENTRAL_STORED_CARD_EXCEPTION(Constants.INTERNAL_SERVER_EXCEPTION, 518),
+  GET_PAYPAL_TOKEN_EXCEPTION(Constants.INTERNAL_SERVER_EXCEPTION, 519),
+  IMPROPER_CALL_EXCEPTION(Constants.GENERIC_BUSINESS_EXCEPTION, 520),
+  FIND_CUSTOMER_ACCOUNT_EXCEPTION(Constants.GENERIC_BUSINESS_EXCEPTION, 521),
+  FIND_CUSTOMER_ACCOUNT_2_EXCEPTION(Constants.INTERNAL_SERVER_EXCEPTION, 522),
+  FIND_COMPANY_BAD_REQUEST_EXCEPTION(Constants.GENERIC_BUSINESS_EXCEPTION, 523),
+  FIND_COMPANY_EXCEPTION(Constants.INTERNAL_SERVER_EXCEPTION, 524);
+
+  private final String message;
+  private final int code;
+
+  public static class Constants {
+
+    public static final String INTERNAL_SERVER_EXCEPTION = "internal.server.exception";
+    public static final String GENERIC_VALIDATION_EXCEPTION = "generic.validation.exception";
+    public static final String GENERIC_BUSINESS_EXCEPTION = "generic.business.exception";
+
+    private Constants() {
+    }
+  }
+}

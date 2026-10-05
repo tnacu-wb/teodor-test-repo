@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://corporate.micros.com/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             targetNamespace="http://corporate.micros.com/1.0">
+    <types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://corporate.micros.com/1.0">
+            <s:element name="CheckExistingCompany">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" name="request" type="s0:CheckExistingCompanyRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="CheckExistingCompanyRequest">
+                <s:sequence>
+                    <s:element name="companyName">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="40"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="address" type="s0:Address"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Address">
+                <s:sequence>
+                    <s:element name="addressLine1">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="35"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="addressLine2">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="35"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="addressLine3">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="35"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="addressLine4">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="35"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="addressLine5">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="35"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element name="postCode" type="s:string"/>
+                    <s:element name="country">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="30"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CheckExistingCompanyResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element name="CheckExistingCompanyResult" type="s0:CheckExistingCompanyResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="CheckExistingCompanyResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" name="isExistingCompany" type="s:boolean"/>
+                    <s:element minOccurs="0" name="success" type="s:boolean"/>
+                    <s:element minOccurs="0" name="errors" type="s0:ArrayOferrorError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOferrorError">
+                <s:sequence>
+                    <s:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="s0:Error"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="Error">
+                <s:sequence>
+                    <s:element minOccurs="0" name="errorCode">
+                        <s:simpleType>
+                            <s:restriction base="s:string">
+                                <s:maxLength value="5"/>
+                            </s:restriction>
+                        </s:simpleType>
+                    </s:element>
+                    <s:element minOccurs="0" name="errorDescription" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </types>
+    <message name="CheckExistingCompanySoapIn">
+        <part name="parameters" element="s0:CheckExistingCompany"/>
+    </message>
+    <message name="CheckExistingCompanySoapOut">
+        <part name="parameters" element="s0:CheckExistingCompanyResponse"/>
+    </message>
+    <portType name="UtilityServiceSoap">
+        <operation name="CheckExistingCompany">
+            <input message="s0:CheckExistingCompanySoapIn"/>
+            <output message="s0:CheckExistingCompanySoapOut"/>
+        </operation>
+    </portType>
+    <binding name="UtilityServiceSoap" type="s0:UtilityServiceSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="CheckExistingCompany">
+            <soap:operation soapAction="http://corporate.micros.com/1.0/ws.Corporate.UtilityService.CheckExistingCompany" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="UtilityService">
+        <port name="UtilityServiceSoap" binding="s0:UtilityServiceSoap">
+            <soap:address location="http://inntouch.slough.microsdc.com/csp/sql/ws.Corporate.UtilityService.cls"/>
+        </port>
+    </service>
+</definitions>

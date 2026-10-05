@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autonumber
+participant Client
+participant "On-Demand Refresh Svc" as ODRS
+participant "Opera OHIP Svc" as OPHS
+database Database as DB
+Client -> ODRS : /refresh/hotels?hotelIds=HOTEL123,....
+ODRS -> DB : Verify PMS Source
+alt No Entry in DB or pms_source=BART
+ODRS -> OPHS :  Get hotel migration status \n /ent/config/v0/hotels/{{hotelId}}/hotelDetails
+OPHS -> ODRS : Return migration status
+ODRS -> DB : Save migration status under \n "hotel_migration_status" table
+end
+ODRS -> OPHS : Get Hotel Availabilities
+OPHS -> ODRS : Return Hotel Availabilities
+ODRS -> DB : Save Hotel Availabilities in DB
+@enduml

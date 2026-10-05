@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/generic_margin_16"
+    android:background="@drawable/accessible_info_frame"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Header3"
+        android:drawableStart="@drawable/ic_wheelchair"
+        android:drawablePadding="@dimen/generic_padding_10"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingTop="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:text="@string/hotel_accessibility_panel_title" />
+
+    <TextView
+        android:id="@+id/reception_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/BodySmall"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingTop="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:text="@string/hotel_details_accessibility_reception_info"/>
+
+    <TextView
+        android:id="@+id/call_description"
+        tools:text="For more information about accessible rooms at this hotel, please call our Customer Contact Centre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/BodySmall"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingTop="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_16"/>
+
+    <FrameLayout
+        android:id="@+id/call_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_24"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_8"
+        android:background="@drawable/button_hotel_details_read_more"
+        android:clickable="true"
+        android:focusable="true">
+        <TextView
+            android:id="@+id/call_btn_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/BookingDetailsButtonText"
+            android:drawableStart="@drawable/ic_call"
+            android:drawablePadding="@dimen/generic_padding_12"
+            android:layout_margin="@dimen/generic_margin_12"
+            tools:text="Call" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/email_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_marginBottom="@dimen/generic_margin_24"
+        android:background="@drawable/button_hotel_details_read_more"
+        android:clickable="true"
+        android:focusable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/BookingDetailsButtonText"
+            android:drawableStart="@drawable/ic_email"
+            android:drawablePadding="@dimen/generic_padding_12"
+            android:layout_margin="@dimen/generic_margin_12"
+            android:text="@string/hotel_details_accessibility_email_us" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:background="@color/mint_dark_fifty_percent" />
+
+    <TextView
+        android:id="@+id/accessible_room_type_info_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        style="@style/BodySmall"
+        android:layout_marginTop="@dimen/generic_margin_minus_1"
+        android:background="@drawable/accesibility_label_state_bg"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_chevron_right_accessibility"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:text="@string/hotel_details_accessible_rooms_link"
+        android:textColor="@color/premier_inn_purple_light" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_minus_1"
+        android:background="@color/mint_dark_fifty_percent" />
+
+    <TextView
+        android:id="@+id/accessibility_info_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        style="@style/BodySmall"
+        android:layout_marginTop="@dimen/generic_margin_minus_1"
+        android:background="@drawable/accesibility_label_state_bg"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_chevron_right_accessibility"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/generic_padding_16"
+        android:paddingEnd="@dimen/generic_padding_16"
+        android:text="@string/hotel_details_disabled_access_information_link"
+        android:textColor="@color/premier_inn_purple_light" />
+</LinearLayout>

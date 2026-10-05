@@ -1,0 +1,284 @@
+server:
+  port: 9117
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "meta-updater-service"
+    description: "Whitbread Meta Updater Service"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  endpoints:
+    web:
+      base-path: /v1/meta-updater/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+feature-flags:
+  availabilities-from-postgres:
+    key: "release_availabilities_from_postgres"
+    fallback: false
+  delta-sync-enabled:
+    key: "release_delta_sync_enabled"
+    fallback: false
+
+logging:
+  level:
+    io:
+      getunleash: TRACE
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+
+meta-updater:
+  scheduler:
+    enabled: true
+    availabilities:
+      refresh: ${CRON_JOB_EXPRESSION}
+      full-sync: ${FULL_SYNC_CRON_EXPRESSION}
+      delta-sync: ${DELTA_SYNC_CRON_EXPRESSION}
+
+scheduler:
+  batchDeleteTime: 15
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  application:
+    name: meta-updater-service
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: ${HIBERNATE_DDL_AUTO}
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${AVAILABILITY_CACHE_POSTGRES_DB_HOST_READER}:${AVAILABILITY_CACHE_POSTGRES_DB_PORT}/${AVAILABILITY_CACHE_POSTGRES_DB_NAME}
+    username: ${AVAILABILITY_CACHE_POSTGRES_DB_USERNAME}
+    password: ${AVAILABILITY_CACHE_POSTGRES_DB_PASSWORD}
+
+hotel:
+  codes: ${HOTEL_CODES}
+  maxNights: 9
+  hotelProcessingThreads: ${HOTEL_PROCESSING_THREADS}
+  roomTypesMap:
+    DB: DOUBLE
+    TWIN: TWIN
+    FAM: FAMILY
+    SB: SINGLE
+    DIS: ACCESSIBLE
+
+amazon:
+  dynamodb:
+    irsa: true
+
+config:
+  rules:
+    host: ${RULES_AGENT_ENTITY_HOST}
+    roomSubstitutionEndpoint: "/v1/rules/room-substitutions"
+    cache: "room-substitution"
+    expiry: "0 0 2 * * *"
+  availability:
+    host: ${META_PROXY_HOST}
+    path: "/v1/meta-proxy/availabilities"
+
+---
+spring.config.activate.on-profile: local
+
+config:
+  rules:
+    host: https://restapi.dev.premierinn.digital
+    roomSubstitutionEndpoint: "/v1/rules/room-substitutions"
+    cache: "room-substitution"
+    expiry: "0 0 2 * * *"
+  availability:
+    host: https://restapi.dev.premierinn.digital
+    path: "/v1/meta-proxy/availabilities"
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 100
+  sql:
+    init:
+      platform: postgres
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-local
+    syncStateTableName: opera-meta_updater_sync_state-local
+    endpoint: http://localhost:8000
+    accessKey: key
+    secretKey: secret
+    region: eu-west-1
+    maxRetry: 2
+    irsa: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+logging:
+  level:
+    io:
+      getunleash: OFF
+  configuration:
+    logger: custom
+
+hotel:
+  codes: LONEUS,FRAMTI,DRECIT,BIRTOB,WIECIT,MATBAK,SAACIT,SAAKON,BIRLON,WIRGLE,CHETWI,STUBAD,DERTHY,LONCHI,KARCAW,BERAIR,DUNTOB,DREPRA,BOUWES,DOVDUK,DUBSOU,CHETGI,PASCIT,REGCIT,NURHOF,NURACO,NUROPH,GLABAL,MONPOR,DARCIT,CASMOT,HIGPAP,STUAIR,STUCIN,STUEUR,STUACO,BRACIT,LEIOST,LEIHOF,BOUCEN,GLOWHE,ABEGAV,LONBRD,CHETOW,GILHON,STHMIC,HERBLA,REAPTI,UCKASH,LEISWE
+  maxNights: 9
+  hotelProcessingThreads: 1
+  roomTypesMap:
+    DB: DOUBLE
+    TWIN: TWIN
+    FAM: FAMILY
+    SB: SINGLE
+    DIS: ACCESSIBLE
+
+---
+spring.config.activate.on-profile: opera-dev
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-dev
+    syncStateTableName: opera-meta-updater-sync-state-dev
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-dit
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-dit
+    syncStateTableName: opera-meta-updater-sync-state-dit
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-perf
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-perf
+    syncStateTableName: opera-meta-updater-sync-state-perf
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-sit
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-sit
+    syncStateTableName: opera-meta-updater-sync-state-sit
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-uat
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-uat
+    syncStateTableName: opera-meta-updater-sync-state-uat
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-ce
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-ce
+    syncStateTableName: opera-meta-updater-sync-state-ce
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-demo
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-demo
+    syncStateTableName: opera-meta-updater-sync-state-demo
+    region: eu-west-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-hulk
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-hulk
+    syncStateTableName: opera-meta-updater-sync-state-hulk
+    region: eu-central-1
+    irsa: true
+
+---
+spring.config.activate.on-profile: opera-wanda
+
+amazon:
+  dynamodb:
+    tableName: opera-meta_hotel_availabilities-hulk
+    syncStateTableName: opera-meta-updater-sync-state-hulk
+    region: eu-central-1
+    irsa: true

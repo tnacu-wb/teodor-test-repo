@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/generic_padding_16"
+    android:paddingTop="@dimen/generic_padding_16"
+    android:paddingEnd="@dimen/generic_padding_16"
+    android:paddingBottom="@dimen/generic_padding_8">
+
+    <TextView
+        android:id="@+id/arriving_date_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Header4Regular"
+        android:gravity="start|center_vertical"
+        android:maxLines="1"
+        android:text="@string/calendar_arriving"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/start_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Header2Regular"
+        android:gravity="start|center_vertical"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/arriving_date_label"
+        tools:text="Mon 22 Apr" />
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/generic_padding_16"
+        android:rotation="180"
+        android:src="@drawable/ic_arrow_back_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/departure_date_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Header4Regular"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:text="@string/calendar_leaving"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/arrow"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/end_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Header2Regular"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/arrow"
+        app:layout_constraintTop_toBottomOf="@id/departure_date_label"
+        tools:text="Thu 9 May" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,32 @@
+{
+  "id" : "ae38617a-2e65-486b-a84b-39acd2d47a7b",
+  "request" : {
+    "urlPath" : "/v1/baskets/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/linkAmendReservations",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "If-Match" : {
+        "equalTo" : "1684426938941"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['channel'] == 'PI')]"
+    }, {
+      "matchesJsonPath" : "$.['linkAmendReservations'][?(@.['Key1'] == 'Value1')]"
+    }, {
+      "matchesJsonPath" : "$.['linkAmendReservations'][?(@.['Key2'] == 'Value2')]"
+    }, {
+      "matchesJsonPath" : "$.['linkAmendReservations'][?(@.['Key3'] == 'Value3')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "ae38617a-2e65-486b-a84b-39acd2d47a7b"
+}

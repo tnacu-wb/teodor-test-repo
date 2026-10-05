@@ -1,0 +1,108 @@
+name: Build Tool
+
+on:
+  workflow_call:
+    inputs:
+      tool-name:
+        required: true
+        type: string
+        description: 'Name of the tool to build (directory name under tools/)'
+
+# id-token: write is NOT granted at workflow scope: the lint-and-build job builds
+# untrusted PR code and must not receive an OIDC token. It is granted only on the
+# docker-build-and-push job, which needs it to assume the ECR push role.
+permissions:
+  contents: read
+
+env:
+  AWS_REGION: eu-west-1
+  ECR_REGISTRY: 327347623470.dkr.ecr.eu-west-1.amazonaws.com
+  ECR_REPOSITORY_PREFIX: whitbreaddigital
+
+jobs:
+  lint-and-build:
+    name: Lint & Build ${{ inputs.tool-name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
+        with:
+          # Pinned major; package.json engines is a range (>=22) which
+          # node-version-file cannot resolve to a concrete version.
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: tools/${{ inputs.tool-name }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: tools/${{ inputs.tool-name }}
+        run: npm ci
+
+      - name: Lint
+        working-directory: tools/${{ inputs.tool-name }}
+        run: npm run lint --if-present
+
+      - name: Type check
+        working-directory: tools/${{ inputs.tool-name }}
+        run: npm run type-check --if-present
+
+      - name: Build
+        working-directory: tools/${{ inputs.tool-name }}
+        run: npm run build
+
+  docker-build-and-push:
+    name: Docker Build & Push ${{ inputs.tool-name }}
+    needs: lint-and-build
+    # main only: this job holds id-token: write and builds the (PR-controlled)
+    # Dockerfile, so it must not run on pull requests where it would expose an
+    # OIDC-capable job to untrusted code. PR image validity is covered by the
+    # lint-and-build job's `npm run build`.
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3
+
+      - name: Resolve image metadata
+        id: meta
+        env:
+          # Consume the input via a quoted env var rather than interpolating it
+          # directly into the shell body (prevents script injection — CodeQL).
+          TOOL_NAME: ${{ inputs.tool-name }}
+        run: |
+          VERSION=$(jq -r '.version' "tools/${TOOL_NAME}/package.json")
+          IMAGE="${ECR_REGISTRY}/${ECR_REPOSITORY_PREFIX}/${TOOL_NAME}"
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      # The whole job is gated to main (see job-level `if`), so the AWS/push
+      # steps no longer need their own ref guards.
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@451ce2a72e8d729a59ebeaacab82dbce58e7af4c # v6
+        with:
+          role-to-assume: arn:aws:iam::327347623470:role/GitHubActionsECRPushRole
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@d539f0932e70871a027e9d5a9d8fc38589180a64 # v2
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6
+        with:
+          context: tools/${{ inputs.tool-name }}
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.version }}
+            ${{ steps.meta.outputs.image }}:${{ github.sha }}
+            ${{ steps.meta.outputs.image }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

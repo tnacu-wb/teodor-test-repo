@@ -1,0 +1,148 @@
+server:
+  port: 9020
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1 # Fix for M1 macs as described here https://stackoverflow.com/questions/60074168/java-lang-illegalstateexception-no-server-alpnprocessors-wiremock
+
+aws:
+  access:
+    key: ${AWS_KEY:key}
+    secret-key: ${AWS_SECRET:secret}
+  region: ${AWS_REGION:eu-west-1}
+  dynamodb:
+    end-point:
+      url: ${DYNAMODB_URL:http://localhost:8000/}
+    region: ${DYNAMODB_TABLE_BASKET_REGION:eu-west-1}
+
+basket:
+  cleanUpTimeSeconds:
+    openStatus: 1800
+    processingStatus: 1800
+    amendingStatus: 1800
+    amendedStatus: 1800
+    payPendingStatus: 1800
+    completedStatus: 63113904  # 2 years
+    cancelledStatus: 31556952  # 1 year
+    amendFailedStatus: 31556952 # 1 year
+    failedStatus: 31556952  #1 year
+    preCheckedInStatus: 63113904
+    preCheckedOutStatus: 63113904  # 2 years
+    ciolRcFailedStatus: 63113904  # 2 years
+  basketValidityMillis: 1680000 # 28 minutes
+  root.fields: hotelId, paymentID
+  basketValidity: 1680000 # 28 minutes
+  basketStatusPolling: 120000 # 2 minutes
+  successfulThreeCResponse: 01,0000,0
+  topics:
+    refunds: refunds
+    orders: orders
+    notifications: notifications
+    paymentAuthorised: payment-authorised
+    paymentAuthorisedPartitions: 3
+    paymentAuthorisedReplicas: 1
+  kafka:
+    consumer:
+      paymentAuthorised:
+        groupId: basket-service-payment-authorised
+        concurrency: 1
+
+distribution:
+  meals:
+    11: PREMIER_BREAKFAST
+    12: CONTINENTAL_BREAKFAST
+    17: MEAL_DEAL
+    18: BOXED_BREAKFAST
+
+  mailSuppressionSorceCodes: 38,43
+
+dynamodb_table_basket: newBasket
+
+config:
+  service:
+    threec:
+      host: http://localhost:${wiremock.server.port:0}
+      paymentsEndpoint: "/payments"
+      tokensEndpoint: "/tokens"
+    reservation:
+      host: http://localhost:${wiremock.server.port:0}
+      reservationEndpoint: "/v1/reservations/basket/{basketReference}"
+      discountEndpoint: "/v1/reservations/discount"
+      marketingPreferencesEndpoint: "/v1/reservations/marketingPreferences"
+      businessItemsEndpoint: "/v1/reservations/business"
+      companyQuestionAndAnswerEndpoint: "/v1/reservations/questions-and-answers"
+      routingInstructionsEndpoint: "/v1/reservations/routingInstructions"
+    content:
+      host: http://localhost:${wiremock.server.port:0}
+      paymentInformationEndpoint: "/v1/content/hotels/{hotelId}/payment-information"
+      businessNotesEndpoint: "/v1/content/businessNotes"
+    marketing:
+      host: http://localhost:${wiremock.server.port:0}
+      marketingNewsletterEndpoint: "/marketing/newsletter/{contactType}/{contactValue}"
+      defaultBrandCode: PINN
+      defaultLanguage: en
+      defaultContactType: email
+      defaultJourney: BOOKINGFLOW
+      defaultChannel: WEB
+    rules-agent:
+      host:  http://localhost:${wiremock.server.port:0}/v1/rules
+      businessAllowanceEndpoint: "/allowances"
+    ohip:
+      host: http://localhost:${wiremock.server.port:0}/ohip
+      reservationGuestEndpoint: "/v1/reservation/updateBillingAddress"
+      customReferenceNumberEndpoint: "/v1/reservations/customReferenceNumber"
+
+spring:
+  profiles:
+    active: test
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  cache:
+    type: none
+
+amazon:
+  dynamodb:
+    endpoint: http://localhost:8000
+    tableName: newBasket
+    tableNamePrepaidDeposit: PrepaidBookingCharges
+    accessKey: key
+    secretKey: secret
+    region: eu-west-1
+    irsa: false
+
+logging:
+  configuration:
+    logger: default
+
+feature-flags:
+  save-allowances-in-basket:
+    key: "release_pi_bb_ccui_distr_web4_save-allowances-in-basket"
+    fallback: false
+  piba-booking:
+    key: "release_pi_bb_ccui_distr_piba_booking"
+    fallback: false
+  threecp-return-codes-mapping:
+    key: "release_pi_bb_ccui_threecp_return_codes_mapping"
+    fallback: true
+  paypal-error-mapping:
+    key: "release_pi_bb_paypal_error_mapping"
+    fallback: false
+  company-name-feature-flag:
+    key: "release_pi_bb_ccui_web1_company_name_validation"
+    fallback: true
+  mobile-preRegistered-repurpose:
+    key: "mobile_preRegistered_repurpose"
+    fallback: false
+
+io:
+  getunleash:
+    enabled: false
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'

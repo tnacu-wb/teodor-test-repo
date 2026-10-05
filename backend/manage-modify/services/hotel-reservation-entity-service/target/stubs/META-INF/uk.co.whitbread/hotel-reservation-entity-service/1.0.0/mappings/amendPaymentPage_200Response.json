@@ -1,0 +1,44 @@
+{
+  "id" : "f646a650-357e-409f-a026-c33a2317acba",
+  "request" : {
+    "urlPath" : "/v1/reservations/amend/paymentOptions",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "queryParameters" : {
+      "originalBookingRef" : {
+        "equalTo" : "AQN-6af52126-37b6-434f-8ab4-e8be7b7d52d0"
+      },
+      "tempBookingRef" : {
+        "equalTo" : "AKU-276afd23-b1fd-4cbc-96f1-d0a1f814d4e8"
+      },
+      "token" : {
+        "equalTo" : "1234567890"
+      },
+      "bookingChannel.channel" : {
+        "equalTo" : "CCUI"
+      },
+      "bookingChannel.subchannel" : {
+        "equalTo" : "WEB"
+      },
+      "bookingChannel.language" : {
+        "equalTo" : "EN"
+      },
+      "country" : {
+        "equalTo" : "gb"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"discount\":0,\"paymentOption\":{\"payNow\":false,\"payOnArrival\":true},\"paymentType\":\"PIBA\",\"cardPresent\":{\"display\":true,\"value\":false},\"eckoh\":{\"display\":true,\"enabled\":false},\"cardHolderName\":{\"display\":true,\"name\":\"Cristi\",\"surname\":\"Christian\"},\"billingAddress\":{\"display\":true},\"emailPreference\":{\"display\":true,\"send\":true,\"emailAddress\":\"ourtestaccount@mailinator.com\"},\"allowances\":{\"display\":true,\"values\":[{\"allowance\":\"BFADCT\",\"budget\":null},{\"allowance\":\"mealDeal\",\"budget\":null},{\"allowance\":\"accommodation\",\"budget\":null}]},\"purchaseOrder\":{\"display\":true,\"value\":null},\"companyRef\":{\"display\":true,\"value\":\"biciclete srl\"},\"a2cDetails\":{\"display\":false,\"number\":null,\"name\":null,\"address\":null,\"postcode\":null},\"preAuthCharges\":{\"display\":false,\"charges\":null},\"hotelCode\":\"LONEUS\",\"hotelName\":\"London Euston\",\"brand\":\"PI\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "f646a650-357e-409f-a026-c33a2317acba"
+}

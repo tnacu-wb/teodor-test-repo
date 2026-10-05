@@ -1,0 +1,59 @@
+schema {
+    query: Query
+}
+
+type Query {
+    roomSubstitutionLimitations(roomSubstitutionCriteria: RoomSubstitutionCriteria!): RoomSubstitutionLimitations!
+    occupancySupplement(hotelIds: [String]!): [OccupancySupplement]
+    vatRules(vatRegion: String!, pkgCodeArr:[String]!): VATRulesResponse
+    searchResourceId(roleIdList: String!): [String]!
+    paypalStatus(channel: Channel!, country: String!, hotelId: String!): PaypalStatus!
+}
+
+enum Channel {
+    PI
+    BB
+    CCUI
+    DISTR
+    EMPLOYEE
+}
+
+input RoomSubstitutionCriteria {
+    adults: Int!
+    children: Int!
+    roomType: String!
+    pms: String!
+    channel: Channel!
+}
+
+type RoomSubstitutionLimitations {
+    substitutionList: [RoomSubstitution]!
+}
+
+type RoomSubstitution {
+    type: String!
+    specialRequest: String!
+    silent: Boolean
+    accessibleSpecialRequest: String
+    codePackage: String
+}
+
+type OccupancySupplement {
+    hotelId: String!
+    pricing: Float!
+}
+
+type VATRulesResponse {
+    vatRegion: String
+    tranCodes: [TransactionCode]!
+}
+
+type TransactionCode {
+    pkgCode: String!
+    tranCode: String!
+}
+
+type PaypalStatus {
+    isPayPalPaymentEnabled: Boolean!
+    generatedAt: String!
+}

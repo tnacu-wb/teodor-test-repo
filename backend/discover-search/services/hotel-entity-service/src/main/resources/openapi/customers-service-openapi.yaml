@@ -1,0 +1,595 @@
+openapi: 3.0.1
+info:
+  title: Account Services REST API Documentation
+  version: 1.0.0
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  /company/{companyId}:
+    get:
+      operationId: findCompany
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            type: string
+            example: null
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: null
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetailsResponse'
+        '404':
+          description: Resource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        '400':
+          description: 'Error Occurred '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+components:
+  schemas:
+    CompanyDetailsResponse:
+      type: object
+      example: null
+      properties:
+        success:
+          type: boolean
+          example: null
+        companyLockedForEditing:
+          type: boolean
+          example: null
+        marketingAllowed:
+          type: boolean
+          example: null
+        allowCentralCreditCard:
+          type: boolean
+          example: null
+        companyCellCodes:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/CellCode'
+        requestedCompany:
+          type: object
+          example: null
+          $ref: '#/components/schemas/Company'
+    Company:
+      type: object
+      example: null
+      properties:
+        companyDetails:
+          type: object
+          example: null
+          $ref: '#/components/schemas/CompanyDetails'
+        paymentDetails:
+          type: object
+          example: null
+          $ref: '#/components/schemas/PaymentDetails'
+        bookingAllowances:
+          type: object
+          example: null
+          $ref: '#/components/schemas/BookingAllowances'
+        bookingAlerts:
+          type: object
+          example: null
+          $ref: '#/components/schemas/BookingAlerts'
+        companyManagementDetails:
+          type: object
+          example: null
+          $ref: '#/components/schemas/CompanyManagementQuestions'
+        companyCellCodes:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/CellCode'
+        restrictedRatePlans:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/RatePlan'
+        restrictedHotelCodes:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/HotelCode'
+        companyStatus:
+          type: object
+          example: null
+          $ref: '#/components/schemas/CompanyStatus'
+    CellCode:
+      type: object
+      example: null
+      properties:
+        type:
+          type: string
+          example: null
+        description:
+          type: string
+          example: null
+    CompanyStatus:
+      type: object
+      example: null
+      properties:
+        status:
+          type: boolean
+          example: null
+    HotelCode:
+      type: object
+      example: null
+      properties:
+        code:
+          type: string
+          example: null
+    RatePlan:
+      type: object
+      example: null
+      properties:
+        code:
+          type: string
+          example: null
+    CompanyManagementQuestions:
+      type: object
+      example: null
+      properties:
+        purchaseOrderManagement:
+          type: object
+          example: null
+          $ref: '#/components/schemas/ManagementInformationQuestion'
+        customerReferenceManagement:
+          type: object
+          example: null
+          $ref: '#/components/schemas/ManagementInformationQuestion'
+        userDefinedManagement:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/ManagementInformationQuestion'
+    ManagementInformationQuestion:
+      type: object
+      example: null
+      properties:
+        questionId:
+          type: string
+          example: null
+        label:
+          type: string
+          example: null
+        managementHeader:
+          type: string
+          example: null
+        mandatory:
+          type: boolean
+          example: null
+        active:
+          type: boolean
+          example: null
+        type:
+          type: string
+          example: null
+        location:
+          type: string
+          enum:
+            - B
+            - R
+          example: null
+        managementInformationAnswer:
+          type: object
+          example: null
+          $ref: '#/components/schemas/ManagementInformationAnswer'
+    ManagementInformationAnswer:
+      type: object
+      example: null
+      properties:
+        answers:
+          type: array
+          example: null
+          items:
+            type: string
+        answerType:
+          type: string
+          enum:
+            - F
+            - U
+          example: null
+    BookingAlerts:
+      type: object
+      example: null
+      properties:
+        rateCaps:
+          type: object
+          example: null
+          $ref: '#/components/schemas/PriceCapLocations'
+        bookingAlertHotels:
+          type: array
+          example: null
+          items:
+            type: string
+        recipientEmailAddresses:
+          type: array
+          example: null
+          items:
+            type: string
+        dayOfArrival:
+          type: boolean
+          example: null
+        weekendArrival:
+          type: boolean
+          example: null
+        passThroughWeekend:
+          type: boolean
+          example: null
+        frequency:
+          type: string
+          enum:
+            - N
+            - A
+            - D
+            - W
+            - M
+          example: null
+    PriceCapLocations:
+      type: object
+      example: null
+      properties:
+        uKWide:
+          type: object
+          example: null
+          $ref: '#/components/schemas/Price'
+        greaterLondon:
+          type: object
+          example: null
+          $ref: '#/components/schemas/Price'
+        ireland:
+          type: object
+          example: null
+          $ref: '#/components/schemas/Price'
+    Price:
+      type: object
+      example: null
+      properties:
+        amount:
+          type: integer
+          example: null
+          minimum: 0
+          maximum: 1000
+        currency:
+          type: string
+          example: null
+    BookingAllowances:
+      type: object
+      example: null
+      properties:
+        maxDinnerBudgets:
+          type: object
+          example: null
+          $ref: '#/components/schemas/PriceCapLocations'
+        extrasCodes:
+          type: array
+          example: null
+          items:
+            type: string
+        upsellItemsAllowed:
+          type: array
+          example: null
+          items:
+            type: string
+        allowAlcohol:
+          type: boolean
+          example: null
+        allowCarParking:
+          type: boolean
+          example: null
+        allowAdditionalCharges:
+          type: boolean
+          example: null
+        allowPremierSaverRates:
+          type: boolean
+          example: null
+        allowIndividualCards:
+          type: boolean
+          example: null
+        maxNumberOfNights:
+          type: integer
+          example: null
+    PaymentDetails:
+      type: object
+      example: null
+      properties:
+        profileLocked:
+          type: boolean
+          example: null
+        allowIndividualCards:
+          type: boolean
+          example: null
+        paymentCards:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/PaymentCard'
+    PaymentCard:
+      type: object
+      example: null
+      properties:
+        cardId:
+          type: integer
+          example: null
+        cardLabel:
+          type: string
+          example: null
+        cardType:
+          type: string
+          example: null
+        nameOnCard:
+          type: string
+          example: null
+        cardNumber:
+          type: string
+          example: null
+        startDate:
+          type: string
+          example: null
+        expiryDate:
+          type: string
+          example: null
+        issueNumber:
+          type: string
+          example: null
+        cardToken:
+          type: string
+          example: null
+        billingAddress:
+          type: object
+          example: null
+          $ref: '#/components/schemas/Address'
+        cardNotPresentRequired:
+          type: boolean
+          example: null
+    Address:
+      type: object
+      example: null
+      properties:
+        addressLine1:
+          type: string
+          example: null
+        addressLine2:
+          type: string
+          example: null
+        addressLine3:
+          type: string
+          example: null
+        addressLine4:
+          type: string
+          example: null
+        addressLine5:
+          type: string
+          example: null
+        postCode:
+          type: string
+          example: null
+        country:
+          type: string
+          example: null
+    CompanyDetails:
+      type: object
+      example: null
+      properties:
+        companyName:
+          type: string
+          example: null
+        alternateCompanyName:
+          type: string
+          example: null
+        numberOfEmployees:
+          type: integer
+          example: null
+        companyAddress:
+          type: object
+          example: null
+          $ref: '#/components/schemas/Address'
+        mainEmployee:
+          type: object
+          example: null
+          $ref: '#/components/schemas/Employee'
+    Employee:
+      type: object
+      example: null
+      properties:
+        id:
+          type: string
+          example: null
+        ghNumber:
+          type: string
+          example: null
+        emailAddress:
+          type: string
+          example: null
+        position:
+          type: string
+          example: null
+        phoneNumber:
+          type: string
+          example: null
+        mobileNumber:
+          type: string
+          example: null
+        textConfirmation:
+          type: boolean
+          example: null
+        title:
+          type: string
+          example: null
+        firstName:
+          type: string
+          example: null
+        lastName:
+          type: string
+          example: null
+        centralCardId:
+          type: string
+          example: null
+        address:
+          type: object
+          example: null
+          $ref: '#/components/schemas/Address'
+        accessLevel:
+          type: string
+          enum:
+            - STAYER
+            - SELF
+            - BOOKER
+            - SUPER
+          example: null
+        employeeStatus:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - SUSPENDED
+            - DEACTIVATED
+            - PURGED
+          example: null
+        dialingCode:
+          type: string
+          example: null
+        employeeAnswers:
+          type: object
+          example: null
+          $ref: '#/components/schemas/EmployeeAnswers'
+    EmployeeAnswers:
+      type: object
+      example: null
+      properties:
+        customerReferenceAnswer:
+          type: string
+          example: null
+        purchaseOrderAnswer:
+          type: string
+          example: null
+        userDefinedAnswers:
+          type: array
+          example: null
+          items:
+            $ref: '#/components/schemas/UserDefinedAnswer'
+    UserDefinedAnswer:
+      type: object
+      example: null
+      properties:
+        miID:
+          type: string
+          example: null
+        miAnswer:
+          type: string
+          example: null
+    ExceptionResponse:
+      type: object
+      example: null
+      properties:
+        debugMessage:
+          type: string
+          example: null
+        errorCode:
+          type: string
+          example: null
+        message:
+          type: string
+          example: null
+        status:
+          type: string
+          enum:
+            - 100 CONTINUE
+            - 101 SWITCHING_PROTOCOLS
+            - 102 PROCESSING
+            - 103 CHECKPOINT
+            - 200 OK
+            - 201 CREATED
+            - 202 ACCEPTED
+            - 203 NON_AUTHORITATIVE_INFORMATION
+            - 204 NO_CONTENT
+            - 205 RESET_CONTENT
+            - 206 PARTIAL_CONTENT
+            - 207 MULTI_STATUS
+            - 208 ALREADY_REPORTED
+            - 226 IM_USED
+            - 300 MULTIPLE_CHOICES
+            - 301 MOVED_PERMANENTLY
+            - 302 FOUND
+            - 302 MOVED_TEMPORARILY
+            - 303 SEE_OTHER
+            - 304 NOT_MODIFIED
+            - 305 USE_PROXY
+            - 307 TEMPORARY_REDIRECT
+            - 308 PERMANENT_REDIRECT
+            - 400 BAD_REQUEST
+            - 401 UNAUTHORIZED
+            - 402 PAYMENT_REQUIRED
+            - 403 FORBIDDEN
+            - 404 NOT_FOUND
+            - 405 METHOD_NOT_ALLOWED
+            - 406 NOT_ACCEPTABLE
+            - 407 PROXY_AUTHENTICATION_REQUIRED
+            - 408 REQUEST_TIMEOUT
+            - 409 CONFLICT
+            - 410 GONE
+            - 411 LENGTH_REQUIRED
+            - 412 PRECONDITION_FAILED
+            - 413 PAYLOAD_TOO_LARGE
+            - 413 REQUEST_ENTITY_TOO_LARGE
+            - 414 URI_TOO_LONG
+            - 414 REQUEST_URI_TOO_LONG
+            - 415 UNSUPPORTED_MEDIA_TYPE
+            - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+            - 417 EXPECTATION_FAILED
+            - 418 I_AM_A_TEAPOT
+            - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+            - 420 METHOD_FAILURE
+            - 421 DESTINATION_LOCKED
+            - 422 UNPROCESSABLE_ENTITY
+            - 423 LOCKED
+            - 424 FAILED_DEPENDENCY
+            - 425 TOO_EARLY
+            - 426 UPGRADE_REQUIRED
+            - 428 PRECONDITION_REQUIRED
+            - 429 TOO_MANY_REQUESTS
+            - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+            - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+            - 500 INTERNAL_SERVER_ERROR
+            - 501 NOT_IMPLEMENTED
+            - 502 BAD_GATEWAY
+            - 503 SERVICE_UNAVAILABLE
+            - 504 GATEWAY_TIMEOUT
+            - 505 HTTP_VERSION_NOT_SUPPORTED
+            - 506 VARIANT_ALSO_NEGOTIATES
+            - 507 INSUFFICIENT_STORAGE
+            - 508 LOOP_DETECTED
+            - 509 BANDWIDTH_LIMIT_EXCEEDED
+            - 510 NOT_EXTENDED
+            - 511 NETWORK_AUTHENTICATION_REQUIRED
+          example: null
+        timestamp:
+          type: string
+          format: date-time
+          example: null

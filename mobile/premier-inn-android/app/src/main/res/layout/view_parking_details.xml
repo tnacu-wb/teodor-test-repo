@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/upsellImageView"
+        android:layout_width="@dimen/parking_details_image_view_size"
+        android:layout_height="@dimen/parking_details_image_view_size"
+        android:layout_marginStart="@dimen/generic_margin_16"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:src="@drawable/ic_map_hotel_head"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/Header4SemiBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/generic_margin_8"
+        android:text="@string/booking_details_parking_text"
+        app:layout_constraintBottom_toBottomOf="@id/upsellImageView"
+        app:layout_constraintStart_toEndOf="@id/upsellImageView"
+        app:layout_constraintTop_toTopOf="@id/upsellImageView" />
+
+    <ImageView
+        android:id="@+id/parkingDetailsCloseImageView"
+        android:layout_width="@dimen/parking_details_close_image_view_size"
+        android:layout_height="@dimen/parking_details_close_image_view_size"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:background="@drawable/roundel_base"
+        android:backgroundTint="@color/grey_88_transparency"
+        android:src="@drawable/ic_cross"
+        android:tint="@color/eclipse"
+        app:layout_constraintBottom_toBottomOf="@id/upsellImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/upsellImageView" />
+
+    <View
+        android:id="@+id/parkingDetailsSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:background="@color/grey_lavender"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/upsellImageView" />
+
+    <TextView
+        android:id="@+id/parkingDetailsDescriptionTextView"
+        style="@style/BodySmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/generic_padding_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/parkingDetailsSeparator"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. " />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

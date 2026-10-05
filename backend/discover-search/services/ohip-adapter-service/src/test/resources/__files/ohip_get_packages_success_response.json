@@ -1,0 +1,174 @@
+{
+  "packageCodesList": {
+    "packageCodes": [
+      {
+        "packageCodeInfo": [
+          {
+            "header": {
+              "primaryDetails": {
+                "description": "Premier Inn Breakfast",
+                "shortDescription": "Premier Inn Breakfast"
+              },
+              "transactionDetails": {
+                "allowance": false,
+                "currency": "GBP",
+                "packagePostingRules": {
+                  "transactionCode": {
+                    "description": "Breakfast",
+                    "code": "11",
+                    "type": "Inclusive"
+                  },
+                  "overageCode": {
+                    "type": "Inclusive"
+                  },
+                  "profitCode": {
+                    "type": "Inclusive"
+                  },
+                  "lossCode": {
+                    "type": "Inclusive"
+                  }
+                }
+              },
+              "postingAttributes": {
+                "addToRate": false,
+                "printSeparateLine": true,
+                "sellSeparate": true,
+                "postNextDay": false,
+                "forecastNextDay": true,
+                "webBookable": false,
+                "formulaFunctionName": "",
+                "catering": false,
+                "postingRhythm": {
+                  "type": "EveryNight"
+                },
+                "priceCalculationRule": "PerAdult",
+                "ticket": false,
+                "inventoryItems": [],
+                "calculatedPrice": 9.5
+              }
+            },
+            "hotelId": "HOTELCODE",
+            "code": "PIBTEST",
+            "group": false
+          },
+          {
+            "header": {
+              "primaryDetails": {
+                "description": "Übernachtungsteuer"
+              },
+              "transactionDetails": {
+                "allowance": false,
+                "currency": "EUR",
+                "packagePostingRules": {
+                  "transactionCode": {
+                    "description": "City Tax",
+                    "code": "160",
+                    "type": "Exclusive"
+                  },
+                  "profitCode": {
+                    "type": "Inclusive"
+                  },
+                  "lossCode": {
+                    "type": "Inclusive"
+                  }
+                }
+              },
+              "postingAttributes": {
+                "addToRate": false,
+                "printSeparateLine": true,
+                "sellSeparate": true,
+                "postNextDay": false,
+                "forecastNextDay": false,
+                "webBookable": false,
+                "formula": "CITY_TAX(RESV_NAME_ID,'*','LEI','N','NET',5,null,'Y','Y','Y')",
+                "formulaFunctionName": "CITY_TAX",
+                "formulaFunctionArguments": [
+                  {
+                    "name": "IN_PURPOSEOFSTAY_START_CHAR",
+                    "value": "'*'",
+                    "position": 2,
+                    "dataType": "VARCHAR2",
+                    "required": false
+                  },
+                  {
+                    "name": "IN_PURPOSEOFSTAY_STAY_LIST",
+                    "value": "'LEI'",
+                    "position": 3,
+                    "dataType": "VARCHAR2",
+                    "required": false
+                  },
+                  {
+                    "name": "IN_AMOUNT_RANGES_YN",
+                    "value": "'N'",
+                    "position": 4,
+                    "dataType": "VARCHAR2",
+                    "required": false
+                  },
+                  {
+                    "name": "IN_ROOM_NET_GROSS",
+                    "value": "'NET'",
+                    "position": 5,
+                    "dataType": "VARCHAR2",
+                    "required": false
+                  },
+                  {
+                    "name": "IN_PERCENTAGE",
+                    "value": "5",
+                    "position": 6,
+                    "dataType": "NUMBER",
+                    "required": false
+                  },
+                  {
+                    "name": "IN_SPECIAL_CALC_RULE",
+                    "value": "null",
+                    "position": 7,
+                    "dataType": "VARCHAR2",
+                    "required": false
+                  },
+                  {
+                    "name": "IN_CHILD1_YN",
+                    "value": "'Y'",
+                    "position": 8,
+                    "dataType": "VARCHAR2",
+                    "required": false
+                  },
+                  {
+                    "name": "IN_CHILD2_YN",
+                    "value": "'Y'",
+                    "position": 9,
+                    "dataType": "VARCHAR2",
+                    "required": false
+                  },
+                  {
+                    "name": "IN_CHILD3_YN",
+                    "value": "'Y'",
+                    "position": 10,
+                    "dataType": "VARCHAR2",
+                    "required": false
+                  },
+                  {
+                    "name": "IN_PACKAGES_TO_INCLUDE",
+                    "position": 11,
+                    "dataType": "VARCHAR2",
+                    "required": false
+                  }
+                ],
+                "catering": false,
+                "postingRhythm": {
+                  "type": "EveryNight"
+                },
+                "priceCalculationRule": "PerPerson",
+                "ticket": false,
+                "inventoryItems": [],
+                "calculatedPrice": 0
+              }
+            },
+            "hotelId": "HOTELCODE",
+            "code": "CITYTAX",
+            "group": false
+          }
+        ]
+      }
+    ]
+  }
+}

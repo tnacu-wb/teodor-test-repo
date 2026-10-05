@@ -1,0 +1,128 @@
+server:
+  port: @application.port@
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "@project.version@"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  endpoints:
+    web:
+      base-path: /v1/addresses/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  configuration:
+    debug:
+      enabled: true
+      response:
+        body: false
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    brave: warn
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+address:
+  lookup:
+    qas:
+      url: ${QAS_URL}/ProOnDemand/V3/ProOnDemandService.asmx
+      auth-token: ${QAS_AUTH_TOKEN}
+      # Using GBX for leisure as front-end needs to know if an address is for a company.
+      country-leisure-data-set-id: GBR
+      country-business-data-set-id: GBB
+      layout-leisure: QADefault
+      layout-business: QADefault
+      connection-manager:
+        max-total: 200
+        default-max-per-route: 200
+      connection-manager-timeout: 5000
+      connection-timeout: 5000
+      socket-timeout: 10000
+      defaultKeepAlive: 30
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

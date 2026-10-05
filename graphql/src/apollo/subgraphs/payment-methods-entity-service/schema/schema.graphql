@@ -1,0 +1,135 @@
+schema {
+    query: Query
+}
+
+type Query {
+    paymentMethods(paymentMethodsCriteria: PaymentMethodsCriteria!): [PaymentMethod]
+    paymentCcuiMethods(paymentCcuiMethodsCriteria: PaymentCcuiMethodsCriteria!): [PaymentCcuiMethod]
+    checkInOnlinePaymentActions(basketReference: String): CheckInOnlinePaymentActionsResponse
+}
+
+input PaymentMethodsCriteria {
+    basketReference: String!
+    language: String!
+    country: String!
+    userType: UserType
+    clientChannel: String
+    flow: String @deprecated(reason: "Use flowType instead")
+    flowType: flowType
+}
+
+enum UserType {
+    LEISURE,
+    BUSINESS,
+    AGENT
+}
+
+enum flowType {
+    CheckInOnline
+}
+
+type PaymentMethod {
+    name: String!
+    type: String!
+    subType: String
+    order: Int!
+    logoSrc: String
+    acceptedCardTypes: [AcceptedCardType]
+    card: Card
+    paymentOptions: [PaymentOption]
+    enabled: Boolean!
+    cnpPreSelected: Boolean!
+    cnpOptionAvailable: Boolean!
+    reasons: [String]
+    bookingAllowances: BusinessBookerBookingAllowances
+    clientId: String
+    clientToken: String
+    paymentProvider: String
+}
+
+type AcceptedCardType {
+    type: String!
+    name: String!
+    logoSrc: String
+}
+
+type Card {
+    token: String!
+    cardNumber: String!
+    expiryMonth: String!
+    expiryYear: String!
+    type: String!
+    cardName: String
+    logoSrc: String!
+    cardHolderName: String!
+    cardType: String!
+    cnpRequired: Boolean!
+}
+
+type PaymentOption {
+    type: String!
+    order: Int!
+    enabled: Boolean!
+}
+
+type BusinessBookerBookingAllowances {
+    allowAlcohol: Boolean!
+    allowCarParking: Boolean!
+    allowAdditionalCosts: Boolean!
+    allowPremierSaverRates: Boolean
+    allowIndividualCards: Boolean
+    maxNumberOfNights: Int
+    maxDinnerBudgets: MaxDinnerBudget!
+}
+
+type MaxDinnerBudget {
+    ukWide: Price!
+    greaterLondon: Price
+    ireland: Price
+}
+
+type Price{
+    amount: Float!
+    currency: String
+}
+
+input PaymentCcuiMethodsCriteria {
+    basketReference: String!
+    language: String!
+    country: String!
+    userId: String
+    changePaymentBIC: Boolean
+    userType: UserType
+}
+
+type PaymentCcuiMethod {
+    name: String!
+    type: String!
+    subType: String
+    order: Int!
+    acceptedCardTypes: [AcceptedCardType]
+    paymentOptions: [PaymentOption]
+    enabled: Boolean!
+    cnpPreSelected: Boolean!
+    cnpOptionAvailable: Boolean!
+    reasons: [String]
+    paymentProvider: String
+}
+
+type CheckInOnlinePaymentActionsResponse{
+    displayPaymentPage : Boolean!
+    paymentActions: [PaymentAction]
+}
+
+type PaymentAction {
+    chargeType : ChargeType!,
+    price: Price!
+}
+
+enum ChargeType {
+    CREDIT_CARD,
+    CARD_ON_FILE,
+    AUTHORIZE_CARD,
+    NO_PAYMENT
+}
+

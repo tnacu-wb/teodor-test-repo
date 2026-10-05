@@ -1,0 +1,71 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant HotelReservationInPort as InboundPort
+participant AmendLogicInPort as AmendLogicInPort
+participant BasketServiceOutPort as BasketOutPort
+participant RulesServiceOutPort as RulesOutPort
+participant BasketWebClient as BasketWebClient
+participant OhipOutPort as OhipOutPort
+participant HotelReservationWebClient as Webclient
+entity "Authentication Service" as Auth
+entity "Basket Service" as BasketService
+entity "Rules Service" as RulesService
+entity "OHIPAdapter Service" as OHIPAdapterService
+
+A -> Controller: PUT /v1/reservations/amendStayDates
+Controller -> InboundPort: amendStayDates
+InboundPort -> BasketOutPort: getBasketById
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+InboundPort -> Auth: validateToken for not logged ind user
+InboundPort <- Auth
+
+InboundPort -> RulesOutPort: validateMaxNightsRule
+RulesOutPort -> RulesService: (getMaxNightsRule) GET /v1/rules/max-nights
+RulesOutPort <- RulesService: MaxNightsRuleResponse
+InboundPort <- RulesOutPort: MaxNightsRuleResponse
+
+InboundPort -> BasketOutPort: getAllReservationsJustByBasketReference
+BasketOutPort -> BasketWebClient: (sendGetBasket) GET /v1/baskets/{basket-reference}
+BasketWebClient -> BasketService
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+InboundPort -> OhipOutPort: getReservationsByIds
+OhipOutPort -> OHIPAdapterService: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+InboundPort <- OhipOutPort: ReservationByBasketRefResponse
+
+InboundPort -> AmendLogicInPort: getAmendOnHoldReservationInterval
+AmendLogicInPort -> InboundPort
+
+InboundPort -> BasketOutPort: createBasket
+InboundPort <- BasketOutPort: BasketResponse
+InboundPort -> OhipOutPort: createReservation
+InboundPort <- OhipOutPort: OhipReservationResponse
+
+InboundPort -> OhipOutPort: updateReservations
+OhipOutPort -> OHIPAdapterService: PUT /v1/reservations
+OhipOutPort <- OHIPAdapterService: 200 OK
+InboundPort <- OhipOutPort: 200 OK
+
+InboundPort -> BasketOutPort: getBasketById(onHoldAvailabilityBasket)
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort -> BasketOutPort: deleteBasket(onHoldAvailabilityBasket)
+BasketOutPort -> BasketWebClient: removeItem
+BasketWebClient -> BasketService: DELETE /v1/baskets/{basket-reference}/items/{itemId}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+InboundPort <- BasketOutPort: BasketResponse
+
+Controller <- InboundPort: AmendStayDatesResponse (basketReferenceId)
+A <- Controller: Amend Stay Dates reservation response
+@enduml

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="zXX-e3-rdg" customClass="CiolPayWithNewCardView" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="104"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credit/ Debit card" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q7S-cK-RNI">
+                    <rect key="frame" x="47.999999999999993" y="16" width="124.33333333333331" height="6"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="BCJ-bL-3Jx"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="ProximaNova-Regular" family="Proxima Nova" pointSize="16"/>
+                    <color key="textColor" red="0.1647058824" green="0.1647058824" blue="0.1647058824" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="9dM-PO-OIb">
+                    <rect key="frame" x="48" y="30" width="192" height="24"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="a5U-Al-snA"/>
+                    </constraints>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="4" id="Pno-r2-d4K">
+                        <size key="itemSize" width="26" height="18"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g9L-9q-9Gx" customClass="RadioButtonView" customModule="PremierInn" customModuleProvider="target">
+                    <rect key="frame" x="16" y="16" width="24" height="24"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="24" id="Ami-Bk-XSK"/>
+                        <constraint firstAttribute="height" constant="24" id="e8L-nF-yMH"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="Tvt-Tu-kgt"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="9dM-PO-OIb" firstAttribute="leading" secondItem="g9L-9q-9Gx" secondAttribute="trailing" constant="8" id="bIq-HP-LlE"/>
+                <constraint firstItem="Q7S-cK-RNI" firstAttribute="top" secondItem="zXX-e3-rdg" secondAttribute="top" constant="16" id="dnp-Jb-owA"/>
+                <constraint firstItem="g9L-9q-9Gx" firstAttribute="leading" secondItem="Tvt-Tu-kgt" secondAttribute="leading" constant="16" id="eqR-3u-wk7"/>
+                <constraint firstItem="g9L-9q-9Gx" firstAttribute="top" secondItem="zXX-e3-rdg" secondAttribute="top" constant="16" id="ftZ-pB-m9r"/>
+                <constraint firstItem="Q7S-cK-RNI" firstAttribute="leading" secondItem="g9L-9q-9Gx" secondAttribute="trailing" constant="8" id="hU8-gx-uds"/>
+                <constraint firstItem="Tvt-Tu-kgt" firstAttribute="trailing" secondItem="9dM-PO-OIb" secondAttribute="trailing" constant="80" id="lUf-hC-4RU"/>
+                <constraint firstItem="Tvt-Tu-kgt" firstAttribute="bottom" secondItem="9dM-PO-OIb" secondAttribute="bottom" constant="16" id="maz-qN-cqk"/>
+                <constraint firstItem="9dM-PO-OIb" firstAttribute="top" secondItem="Q7S-cK-RNI" secondAttribute="bottom" constant="8" id="zH2-Rb-HHb"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="collectionView" destination="9dM-PO-OIb" id="aov-de-EH7"/>
+                <outlet property="methodType" destination="Q7S-cK-RNI" id="9c4-aU-9SD"/>
+                <outlet property="radioButton" destination="g9L-9q-9Gx" id="UKN-6e-ZqF"/>
+            </connections>
+            <point key="canvasLocation" x="132" y="100"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

@@ -1,0 +1,28 @@
+{
+  "id" : "e153c4fc-bff7-42b6-84fa-cbfc267127b5",
+  "request" : {
+    "url" : "/business/tether",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json;charset=UTF-8"
+      },
+      "Authorization" : {
+        "equalTo" : "dummy_value"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['linkCode'] == 'qyg-ujn-xde')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['linkId'] == 3089503200100176)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['memorableWord'] == 'zoo')]"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "body" : "{\"guid\":\"1206577c-30f6-463f-9eff-6bfd046b5cee\"}",
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "e153c4fc-bff7-42b6-84fa-cbfc267127b5"
+}

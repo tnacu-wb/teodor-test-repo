@@ -1,0 +1,15 @@
+<configuration debug="true">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <springProperty scope="context" name="application" source="spring.application.name"/>
+    <springProperty scope="context" name="version" source="info.build.version"/>
+
+    <!-- docs: https://github.com/logstash/logstash-logback-encoder -->
+    <appender name="stash" class="net.logstash.logback.appender.LogstashSocketAppender">
+        <host>elk</host>
+        <port>7050</port>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="stash"/>
+    </root>
+</configuration>

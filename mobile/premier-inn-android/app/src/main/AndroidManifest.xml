@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REPLACED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-sdk tools:overrideLibrary="androidx.security.identity.credential"/>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+        </intent>
+        <intent>
+            <action android:name=
+                "android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+    <application
+        android:name=".PiApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".loading.LoadingActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="${screenOrientation}"
+            android:exported="true"
+            android:theme="@style/AppTheme.FullScreen.Purple">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="https"/>
+                <data android:scheme="http"/>
+                <data android:host="www.premierinn.com"/>
+                <data android:pathPrefix="/gb/en/check-in-online.html"/>
+                <data android:pathPrefix="/de/de/check-in-online.html"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="premierinn" />
+            </intent-filter>
+            <intent-filter  android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="premierinn.onelink.me" />
+            </intent-filter>
+            <intent-filter  android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="premierinnuat.onelink.me" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".landing.LandingActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar.Purple"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name=".gdpr.GdprComposeActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".firsttimedownload.FirstTimeDownloadActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".search.SearchActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".roomcriteria.RoomCriteriaActivity"
+            android:exported="true"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar.White" />
+
+        <activity
+            android:name=".calendar.dialogcalendar.CalendarDialogActivity"
+            android:theme="@style/AppTheme.Dialog.Custom" />
+
+        <activity
+            android:name=".criteria.roomselector.RoomTypeSelectorActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar.White" />
+
+        <activity
+            android:name=".searchresults.SearchResultsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".hoteldetails.HotelDetailsActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.HotelDetails" />
+
+        <activity
+            android:name=".hoteldetails.hotelimagesfullscreen.FullScreenGalleryActivity"
+            android:theme="@style/AppTheme.FullScreen" />
+
+        <activity
+            android:name=".hoteldetails.hotelmapfullscreen.HotelMapFullScreenActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar.MapFullScreen" />
+
+        <activity
+            android:name=".summary.SummaryActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".additionalinformation.AdditionalInformationActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".summarybreakdown.SummaryBreakdownActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".login.LoginActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name=".bookingpreferences.BookingPreferencesActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".guestdetails.GuestDetailsActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".postcodefinder.PostcodeFinderActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".reviewbooking.ReviewBookActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="${applicationId}.review.braintree" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".editguest.EditGuestActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar.SlideTransitionActivity" />
+
+        <activity
+            android:name=".paymentbreakdown.PaymentBreakdownActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".mybookings.MyBookingsActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".plantrip.PlanTripActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".bookingdetails.BookingDetailsActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".threeCp.ThreeCpActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".threeCp.ThreeCpCustomTabActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="com.whitbread.premierinn.planetpayment" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".account.AccountActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".amend.amendguestsrooms.AmendGuestsRoomsActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".amend.amendguestsrooms.AmendAddRoomActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".newsletterpreferences.NewsletterPreferencesActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".resetpassword.ResetPasswordActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar.SlideTransitionActivity" />
+
+        <activity
+            android:name=".importanthotelinfo.ImportantHotelInfoActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar.SlideTransitionActivity" />
+
+        <activity
+            android:name=".shortcutlocationtrampoline.ShortcutLocationTrampolineActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".findbooking.FindBookingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".account.AboutActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ciol.CheckInOnlineActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:permission=""
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.CheckInOnline">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="${applicationId}.pay.braintree" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ciol.CheckOutConfirmationActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.CheckOutConfirmation">
+        </activity>
+
+        <activity
+            android:name=".mealpreferences.MealPreferencesActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".paymentmethods.PaymentMethodsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".editpaymentmethods.EditPaymentMethodsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".roompreferences.RoomPreferencesActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".createaccount.CreateAccountActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".gdpr.GdprActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.Purple" />
+
+        <activity
+            android:name=".personaldetails.PersonalDetailsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".gdpr.GdprDataUseActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <data
+                    android:host="@string/deep_linking_gdpr_data_use"
+                    android:scheme="@string/deep_linking_scheme" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".changepassword.ChangePasswordActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".loading.ForceUpdateActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.Purple" />
+
+        <activity
+            android:name=".loading.BartDowntimeActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.Purple" />
+
+        <activity
+            android:name=".bathroomselection.BathroomSelectionActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".amend.AmendReservationActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".amend.NonAmendableReservationActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".amend.amendreview.ReviewAmendsActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".calendar.maincalendar.HomeCalendarActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppThemeTeal" />
+
+        <activity
+            android:name=".amend.amendcalendar.AmendCalendarActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppThemeTeal" />
+
+        <activity
+            android:name=".calendar.maincalendar.FrequentBookingCalendarActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppThemeTeal" />
+
+        <activity
+            android:name=".notifications.NotificationsActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="com.businessbooker.paymentmethods.BusinessBookerPaymentMethodsActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".alternativeroomselection.AlternativeRoomSelectionActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".amend.amendAndPay.AmendAndPayActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".qrkiosk.QRCodeInfoActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".qrkiosk.QRCodeActivity"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".amend.amendupsells.AmendUpsellsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="${screenOrientation}"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <!-- use an alias in case we want to change the launch activity later without breaking
+             homescreen shortcuts.  Note must be defined after the targetActivity -->
+        <activity-alias
+            android:name=".Launcher"
+            android:label="@string/app_name"
+            android:exported="true"
+            android:targetActivity=".loading.LoadingActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+
+        </activity-alias>
+
+        <meta-data
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_api_key" />
+
+        <!-- https://developers.google.com/maps/documentation/android-sdk/config#specify_requirement_for_apache_http_legacy_library -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/premier_inn_purple" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="notifications.channel.id" />
+
+        <service android:name=".common.pushNotification.PiFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

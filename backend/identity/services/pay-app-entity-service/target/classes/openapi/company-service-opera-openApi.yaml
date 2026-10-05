@@ -1,0 +1,1610 @@
+openapi: 3.0.1
+info:
+  description: API Documentation
+  title: Company API Documentation
+  version: "2.21"
+servers:
+- description: Generated server url
+  url: http://localhost:9022
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /companies/admin/{companyId}/booking-alerts:
+    put:
+      description: Update Company Booking Alerts
+      operationId: updateBookingAlerts
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingAlerts'
+        required: true
+      responses:
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Bad Request: please check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      tags:
+      - Companies Controller
+  /companies/admin/{companyId}/booking-allowances:
+    put:
+      description: Update Company Booking Allowances
+      operationId: updateBookingAllowances
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingAllowances'
+        required: true
+      responses:
+        "204":
+          description: Success. No content.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Bad Request: please check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      tags:
+      - Companies Controller
+  /companies/{companyId}/admin/business-questions/{question-id}:
+    put:
+      description: Update a specific business created question
+      operationId: updateCompanyBusinessQuestion
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: question-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManagementInformationQuestion'
+        required: true
+      responses:
+        "204":
+          description: All good. No content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Please check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: updateCompanyBusinessQuestion
+      tags:
+      - Business and user created questions
+  /companies/{companyId}/admin/employee-questions:
+    post:
+      description: Create a user question for a specific company
+      operationId: createCompanyUserQuestion
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: "8"
+        description: Company Id
+        in: path
+        name: companyId
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: object
+        description: Payload
+        in: query
+        name: payload
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManagementInformationQuestion'
+        required: true
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              description: Unique identifier for the question created.
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Please check your input"
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: You hit the maximum number of questions"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Create a user question
+      tags:
+      - Business and user created questions
+  /companies/{companyId}/admin/employee-questions/{question-id}:
+    delete:
+      description: Remove a user question for a specific company
+      operationId: removeUserQuestion
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: "8"
+        description: Company Id
+        in: path
+        name: companyId
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: "1"
+        description: Question Id
+        in: path
+        name: question-id
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: BCQR98267
+        description: Required for authorization
+        in: header
+        name: session-id
+      responses:
+        "204":
+          description: No content. Operation succeeded.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Please check your input"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Question not found"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Delete a user question
+      tags:
+      - Business and user created questions
+    post:
+      description: Remove a user question for a specific company
+      operationId: deleteUserQuestion
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: "8"
+        description: Company Id
+        in: path
+        name: companyId
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: "1"
+        description: Question Id
+        in: path
+        name: question-id
+        required: true
+      responses:
+        "204":
+          description: No content. Operation succeeded.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Please check your input"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Question not found"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Delete a user question
+      tags:
+      - Business and user created questions
+    put:
+      description: Edit a specific user question for a specific company
+      operationId: updateCompanyUserQuestion
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: question-id
+        required: true
+        schema:
+          type: string
+      - content:
+          '*/*':
+            schema:
+              type: object
+        description: Payload
+        in: query
+        name: payload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManagementInformationQuestion'
+        required: true
+      responses:
+        "204":
+          description: All good. No content
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Please check your input"
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update a specific user question
+      tags:
+      - Business and user created questions
+  /companies/{companyId}/business-questions:
+    get:
+      description: Get the purchase order and customer reference questions
+      operationId: retrieveBusinessQuestions
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessQuestions'
+          description: All good
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessQuestions'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessQuestions'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieve business questions
+      tags:
+      - Business and user created questions
+  /companies/{companyId}/employee-questions:
+    get:
+      description: Get all user created questions for a specific company
+      operationId: getCompanyUserQuestions
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: "8"
+        description: Company Id
+        in: path
+        name: companyId
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ManagementInformationQuestion'
+          description: All good
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ManagementInformationQuestion'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ManagementInformationQuestion'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieve all user questions
+      tags:
+      - Business and user created questions
+  /companies/{companyId}/employees/{employeeId}/registration-questions:
+    get:
+      operationId: retrieveAnsweredQuestionsForAnotherEmployeeId
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: employeeId
+        required: true
+        schema:
+          type: string
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: "22"
+        description: Required for authorization
+        in: header
+        name: company-id
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: "28"
+        description: Required for authorization
+        in: header
+        name: employee-id
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnsweredQuestions'
+          description: All good
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnsweredQuestions'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnsweredQuestions'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: "Only travel managers are authorised. Travel managers can retrieve\
+        \ registration questions and answers from employees, where employee-id in\
+        \ the header refers to travel manager's employee id and employeeId in the\
+        \ path is the employee's he wants to retrieve for.If employee-id in the header\
+        \ and in the path are the same it will return travel manager's registration\
+        \ questions."
+      tags:
+      - Business and user created questions
+  /companies/{companyId}/registration-questions:
+    get:
+      operationId: retrieveAnsweredQuestions
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: "28"
+        description: Required when call is made from the activation link
+        in: header
+        name: employee-id
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnsweredQuestions'
+          description: All good
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Error Occurred: Please check your input"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnsweredQuestions'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnsweredQuestions'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieve registration questions and answers
+      tags:
+      - Business and user created questions
+  /company-service/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /company-service/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /company-service/actuator/health/**:
+    get:
+      operationId: health-path
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health-path'
+      tags:
+      - Actuator
+  /company-service/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /company-service/actuator/metrics:
+    get:
+      operationId: metrics
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics'
+      tags:
+      - Actuator
+  /company-service/actuator/metrics/{requiredMetricName}:
+    get:
+      operationId: metrics-requiredMetricName
+      parameters:
+      - in: path
+        name: requiredMetricName
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+        "400":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'metrics-requiredMetricName'
+      tags:
+      - Actuator
+  /company/admin/{companyId}:
+    put:
+      description: Update company details
+      operationId: updateCompanyDetails
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanySummary'
+        required: true
+      responses:
+        "204":
+          description: No content. Operation succeeded.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Update company details
+      tags:
+      - Company related operations
+  /company/check:
+    get:
+      description: Search for a company by companyName and address
+      operationId: searchByCompanyNameAndAddress
+      parameters:
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: Whitbread
+        description: CompanyName
+        in: query
+        name: companyName
+        required: true
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: 120 Holborn
+        description: AddressLine1
+        in: query
+        name: addressLine1
+      - content:
+          '*/*':
+            schema:
+              type: string
+        description: AddressLine2
+        in: query
+        name: addressLine2
+      - content:
+          '*/*':
+            schema:
+              type: string
+        description: AddressLine3
+        in: query
+        name: addressLine3
+      - content:
+          '*/*':
+            schema:
+              type: string
+        description: AddressLine4
+        in: query
+        name: addressLine4
+      - content:
+          '*/*':
+            schema:
+              type: string
+        description: AddressLine5
+        in: query
+        name: addressLine5
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: EC1N 2TD
+        description: PostresponseCode
+        in: query
+        name: postresponseCode
+      - content:
+          '*/*':
+            schema:
+              type: string
+              default: GB
+        description: Country
+        in: query
+        name: country
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckCompanyResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: /company/check
+      tags:
+      - Company related operations
+  /company/{companyId}:
+    get:
+      description: Retreive all company details
+      operationId: retrieveCompanyDetails
+      parameters:
+      - in: header
+        name: Authorization
+        required: false
+        schema:
+          type: string
+      - in: path
+        name: companyId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetailsResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieve company details
+      tags:
+      - Company related operations
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          example: 120 Holborn
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        addressLine4:
+          type: string
+        addressLine5:
+          type: string
+        country:
+          type: string
+          example: GB
+        postCode:
+          type: string
+          example: EC1N 2TD
+      required:
+      - addressLine1
+      - country
+      - postCode
+    AnsweredQuestions:
+      type: object
+      properties:
+        customerReferenceManagement:
+          $ref: '#/components/schemas/ManagementInformationQuestionAnswered'
+        purchaseOrderManagement:
+          $ref: '#/components/schemas/ManagementInformationQuestionAnswered'
+        userDefinedQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDefinedQuestion'
+    BookingAlerts:
+      type: object
+      properties:
+        bookingAlertHotels:
+          type: array
+          items:
+            type: string
+        dayOfArrival:
+          type: boolean
+        frequency:
+          type: string
+          enum:
+          - "N"
+          - A
+          - D
+          - W
+          - M
+        passThroughWeekend:
+          type: boolean
+        rateCaps:
+          $ref: '#/components/schemas/PriceCapLocations'
+        recipientEmailAddresses:
+          type: array
+          items:
+            type: string
+        weekendArrival:
+          type: boolean
+    BookingAllowances:
+      type: object
+      properties:
+        allowAdditionalCosts:
+          type: boolean
+        allowAlcohol:
+          type: boolean
+        allowCarParking:
+          type: boolean
+        allowIndividualCards:
+          type: boolean
+        allowPremierSaverRates:
+          type: boolean
+        extrasCodes:
+          type: array
+          items:
+            type: string
+        maxDinnerBudgets:
+          $ref: '#/components/schemas/PriceCapLocations'
+        maxNumberOfNights:
+          type: integer
+          format: int64
+        upsellItemsAllowed:
+          type: array
+          items:
+            type: string
+      required:
+      - extrasCodes
+    BusinessQuestions:
+      type: object
+      properties:
+        customerReferenceManagement:
+          $ref: '#/components/schemas/ManagementInformationQuestion'
+        purchaseOrderManagement:
+          $ref: '#/components/schemas/ManagementInformationQuestion'
+    CardNotPresent:
+      type: object
+      properties:
+        businessAccountPassword:
+          type: string
+        businessAccountUsername:
+          type: string
+    CellCode:
+      type: object
+      properties:
+        description:
+          type: string
+        type:
+          type: string
+      required:
+      - type
+    CheckCompanyResponse:
+      type: object
+      properties:
+        existingCompany:
+          type: boolean
+    Company:
+      type: object
+      properties:
+        bookingAlerts:
+          $ref: '#/components/schemas/BookingAlerts'
+        bookingAllowances:
+          $ref: '#/components/schemas/BookingAllowances'
+        companyCellCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CellCode'
+        companyDetails:
+          $ref: '#/components/schemas/CompanyDetails'
+        companyManagementDetails:
+          $ref: '#/components/schemas/CompanyManagementQuestions'
+        companyStatus:
+          $ref: '#/components/schemas/CompanyStatus'
+        paymentDetails:
+          $ref: '#/components/schemas/PaymentDetails'
+        restrictedHotelCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HotelCode'
+        restrictedRatePlans:
+          type: array
+          items:
+            $ref: '#/components/schemas/RatePlan'
+    CompanyDetails:
+      type: object
+      properties:
+        alternateCompanyName:
+          type: string
+        companyAddress:
+          $ref: '#/components/schemas/Address'
+        companyName:
+          type: string
+        mainEmployee:
+          $ref: '#/components/schemas/Employee'
+        numberOfEmployees:
+          type: integer
+          format: int32
+    CompanyDetailsResponse:
+      type: object
+      properties:
+        allowCentralCreditCard:
+          type: boolean
+        companyCellCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CellCode'
+        companyLockedForEditing:
+          type: boolean
+        marketingAllowed:
+          type: boolean
+        requestedCompany:
+          $ref: '#/components/schemas/Company'
+        success:
+          type: boolean
+    CompanyManagementQuestions:
+      type: object
+      properties:
+        customerReferenceManagement:
+          $ref: '#/components/schemas/ManagementInformationQuestion'
+        purchaseOrderManagement:
+          $ref: '#/components/schemas/ManagementInformationQuestion'
+        userDefinedManagement:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManagementInformationQuestion'
+    CompanyStatus:
+      type: object
+      properties:
+        status:
+          type: boolean
+      required:
+      - status
+    CompanySummary:
+      type: object
+      description: Update company request
+      properties:
+        alternateCompanyName:
+          type: string
+        companyAddress:
+          $ref: '#/components/schemas/Address'
+        companyName:
+          type: string
+        mainContact:
+          $ref: '#/components/schemas/MainContact'
+      required:
+      - alternateCompanyName
+      - companyAddress
+      - companyName
+      - mainContact
+    Employee:
+      type: object
+      properties:
+        accessLevel:
+          type: string
+          enum:
+          - STAYER
+          - SELF
+          - BOOKER
+          - SUPER
+        address:
+          $ref: '#/components/schemas/Address'
+        centralCardId:
+          type: string
+        dialingCode:
+          type: string
+        emailAddress:
+          type: string
+        employeeAnswers:
+          $ref: '#/components/schemas/EmployeeAnswers'
+        employeeStatus:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - SUSPENDED
+          - DEACTIVATED
+          - PURGED
+        firstName:
+          type: string
+        ghNumber:
+          type: string
+        id:
+          type: string
+        lastName:
+          type: string
+        mobileNumber:
+          type: string
+        phoneNumber:
+          type: string
+        position:
+          type: string
+        textConfirmation:
+          type: boolean
+        title:
+          type: string
+      required:
+      - emailAddress
+      - firstName
+      - lastName
+      - mobileNumber
+      - phoneNumber
+      - position
+      - title
+    EmployeeAnswers:
+      type: object
+      properties:
+        customerReferenceAnswer:
+          type: string
+        purchaseOrderAnswer:
+          type: string
+        userDefinedAnswers:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDefinedAnswer'
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+      required:
+      - code
+      - details
+    HotelCode:
+      type: object
+      properties:
+        code:
+          type: string
+      required:
+      - code
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    MainContact:
+      type: object
+      properties:
+        emailAddress:
+          type: string
+        firstName:
+          type: string
+        id:
+          type: string
+        lastName:
+          type: string
+        mobileNumber:
+          type: string
+        phoneNumber:
+          type: string
+        position:
+          type: string
+        textConfirmation:
+          type: boolean
+        title:
+          type: string
+      required:
+      - emailAddress
+      - firstName
+      - id
+      - lastName
+      - title
+    ManagementInformationAnswer:
+      type: object
+      properties:
+        answerType:
+          type: string
+          enum:
+          - F
+          - U
+        answers:
+          type: array
+          items:
+            type: string
+    ManagementInformationQuestion:
+      type: object
+      properties:
+        active:
+          type: boolean
+        label:
+          type: string
+        location:
+          type: string
+          enum:
+          - B
+          - R
+        managementHeader:
+          type: string
+        managementInformationAnswer:
+          $ref: '#/components/schemas/ManagementInformationAnswer'
+        mandatory:
+          type: boolean
+        positionId:
+          type: integer
+          format: int32
+        questionId:
+          type: string
+        type:
+          type: string
+      required:
+      - active
+      - label
+      - location
+      - managementHeader
+      - managementInformationAnswer
+      - mandatory
+    ManagementInformationQuestionAnswered:
+      type: object
+      properties:
+        active:
+          type: boolean
+        answer:
+          type: string
+        label:
+          type: string
+        location:
+          type: string
+          enum:
+          - B
+          - R
+        managementHeader:
+          type: string
+        managementInformationAnswer:
+          $ref: '#/components/schemas/ManagementInformationAnswer'
+        mandatory:
+          type: boolean
+        positionId:
+          type: integer
+          format: int32
+        questionId:
+          type: string
+        type:
+          type: string
+      required:
+      - active
+      - answer
+      - label
+      - location
+      - managementHeader
+      - managementInformationAnswer
+      - mandatory
+    PaymentCard:
+      type: object
+      properties:
+        billingAddress:
+          $ref: '#/components/schemas/Address'
+        cardId:
+          type: string
+        cardLabel:
+          type: string
+        cardNotPresent:
+          $ref: '#/components/schemas/CardNotPresent'
+        cardNotPresentRequired:
+          type: boolean
+        cardNumber:
+          type: string
+        cardToken:
+          type: string
+        cardType:
+          type: string
+        expiryDate:
+          type: string
+        issueNumber:
+          type: string
+        nameOnCard:
+          type: string
+        startDate:
+          type: string
+    PaymentDetails:
+      type: object
+      properties:
+        allowIndividualCards:
+          type: boolean
+        paymentCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentCard'
+        profileLocked:
+          type: boolean
+    Price:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int32
+        currency:
+          type: string
+    PriceCapLocations:
+      type: object
+      properties:
+        getuKWide:
+          $ref: '#/components/schemas/Price'
+        greaterLondon:
+          $ref: '#/components/schemas/Price'
+        ireland:
+          $ref: '#/components/schemas/Price'
+    RatePlan:
+      type: object
+      properties:
+        code:
+          type: string
+      required:
+      - code
+    UserDefinedAnswer:
+      type: object
+      properties:
+        miAnswer:
+          type: string
+        miID:
+          type: string
+    UserDefinedQuestion:
+      type: object
+      properties:
+        active:
+          type: boolean
+        label:
+          type: string
+        location:
+          type: string
+          enum:
+          - B
+          - R
+        managementHeader:
+          type: string
+        managementInformationAnswer:
+          $ref: '#/components/schemas/ManagementInformationAnswer'
+        mandatory:
+          type: boolean
+        positionId:
+          type: integer
+          format: int32
+        questionId:
+          type: string
+        type:
+          type: string
+        userDefinedAnswer:
+          type: string
+      required:
+      - active
+      - label
+      - location
+      - managementHeader
+      - managementInformationAnswer
+      - mandatory
+      - userDefinedAnswer

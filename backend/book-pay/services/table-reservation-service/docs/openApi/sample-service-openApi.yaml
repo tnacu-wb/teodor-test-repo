@@ -1,0 +1,425 @@
+openapi: 3.0.1
+info:
+  description: <p>TBU</p>
+  title: Sample API Documentation
+  version: 2.1.0
+servers:
+- description: Generated server url
+  url: http://localhost:9121
+tags:
+- description: Monitor and interact
+  externalDocs:
+    description: Spring Boot Actuator Web API Documentation
+    url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+  name: Actuator
+paths:
+  /event/v1/check:
+    get:
+      operationId: authenticationCheck
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Authentication check
+      tags:
+      - table-reservation-controller
+  /event/v1/slots:
+    get:
+      operationId: slots
+      parameters:
+      - in: query
+        name: from
+        required: true
+        schema:
+          type: string
+          example: null
+      - in: query
+        name: until
+        required: true
+        schema:
+          type: string
+          example: null
+      - in: query
+        name: time
+        required: true
+        schema:
+          type: string
+          example: null
+      - in: query
+        name: adult
+        required: true
+        schema:
+          type: integer
+          format: int32
+          example: null
+      - in: query
+        name: children
+        required: true
+        schema:
+          type: integer
+          format: int32
+          example: null
+      - in: query
+        name: siteId
+        required: true
+        schema:
+          type: string
+          example: null
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Slots
+      tags:
+      - table-reservation-controller
+  /v1/sample/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+                  example: null
+                example: null
+          description: OK
+        "400":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator root web endpoint
+      tags:
+      - Actuator
+  /v1/sample/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+        "400":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health'
+      tags:
+      - Actuator
+  /v1/sample/actuator/health/**:
+    get:
+      operationId: health-path
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+        "400":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'health-path'
+      tags:
+      - Actuator
+  /v1/sample/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            '*/*':
+              example: null
+              schema:
+                type: object
+                example: null
+          description: OK
+        "400":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Actuator web endpoint 'info'
+      tags:
+      - Actuator
+  /v1/sample/hotels/availabilities:
+    get:
+      operationId: getAvailableHotels
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/SampleHotelSearchDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Sample Hotels Availabilities Result
+      tags:
+      - sample-availability-controller
+  /v1/sample/hotels/availabilities/custom:
+    post:
+      operationId: getResponse
+      requestBody:
+        content:
+          application/json:
+            example: null
+            schema:
+              $ref: '#/components/schemas/SampleHotelSearchRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/SampleHotelSearchDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: 'Error Occurred '
+        "404":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "405":
+          content:
+            '*/*':
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Method Not Allowed
+        "500":
+          content:
+            application/json:
+              example: null
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Sample Hotels Availabilities Custom Result
+      tags:
+      - sample-availability-controller
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      example: null
+      properties:
+        code:
+          type: string
+          example: null
+        details:
+          type: array
+          example: null
+          items:
+            type: string
+            example: null
+      required:
+      - code
+      - details
+    Link:
+      type: object
+      example: null
+      properties:
+        href:
+          type: string
+          example: null
+        templated:
+          type: boolean
+          example: null
+    SampleHotelSearchDto:
+      type: object
+      example: null
+      properties:
+        responseData:
+          type: array
+          example: null
+          items:
+            type: object
+            example: null
+    SampleHotelSearchRequestDto:
+      type: object
+      example: null
+      properties:
+        fromDate:
+          type: string
+          example: null
+        hotelName:
+          type: string
+          example: null
+      required:
+      - fromDate
+      - hotelName

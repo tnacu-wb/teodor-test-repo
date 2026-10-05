@@ -1,0 +1,66 @@
+{
+  "id" : "e9733378-3d6f-4479-98c8-f689780a9713",
+  "request" : {
+    "url" : "/feedback",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['whb_wfsource'] == 'https://www.whitbreadinns.co.uk')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['title'] == 'Failing Feedback Form')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_contacttype'] == 130570009)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_reasonforcontact'] == 2)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfbookingrefifapplicable'] == 'AB12345')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfcontactnumber'] == '+447724547605')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfdateofstayifapplicable'] == '2018-02-14')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfemailaddress'] == 'dimitris.damilos@whitbread.com')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_summary'] == 'This was a weird hotel')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wffeedbacktype'] == 130570000)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wffirstname'] == 'Walter')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfhotelname'] == 'ABEMAI')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfididntbookthroughpremierinncom'] == false)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wflastname'] == 'White')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfpostcode'] == 'AB1 2CD')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfreasonforfeedback'] == 'Restaurant/Bar experience')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wftypeofvisit'] == 'Dinner')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_loyaltycardnumber'] == 'my-loyalty-card-num')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfchecknumber'] == 'check-number')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfsleep'] == false)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['whb_wfreported'] == true)]"
+    } ]
+  },
+  "response" : {
+    "status" : 500,
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "e9733378-3d6f-4479-98c8-f689780a9713"
+}

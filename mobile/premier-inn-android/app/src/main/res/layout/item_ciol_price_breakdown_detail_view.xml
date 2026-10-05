@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/generic_margin_16"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/outstandingItemNameTextView"
+        style="@style/BodyMediumRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/generic_margin_16"
+        android:layout_toStartOf="@id/outstandingItemValueTextView"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        tools:text="Outstanding booking balance" />
+
+    <TextView
+        android:id="@+id/outstandingItemValueTextView"
+        style="@style/Header2ExtraBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="$129.00" />
+
+</RelativeLayout>

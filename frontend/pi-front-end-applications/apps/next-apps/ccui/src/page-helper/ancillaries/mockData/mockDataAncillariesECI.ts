@@ -1,0 +1,35 @@
+export const packagesMock = {
+  checkInCheckOutDetails: [
+    {
+      currency: 'GBP',
+      description: null,
+      id: 'FI24HR',
+      imageSrc: null,
+      name: null,
+      order: null,
+      price: 5,
+      available: null,
+    },
+    {
+      currency: 'GBP',
+      description: 'Check in any time from 11am (normal check-in time is 3pm).',
+      id: 'HSCKIN',
+      imageSrc: '/content/dam/global/extras/early-check-in.png',
+      name: 'Early check-in',
+      order: 1,
+      price: 10,
+      available: 3,
+    },
+    {
+      currency: 'GBP',
+      description: 'Check out any time until 2pm (normal check-out time is 12pm).',
+      id: 'HSCOU2',
+      imageSrc: '/content/dam/global/extras/late-checkout.png',
+      name: 'Late check-out',
+      order: 2,
+      price: 15,
+      available: 1,
+    },
+  ],
+  roomSelection: [],
+};

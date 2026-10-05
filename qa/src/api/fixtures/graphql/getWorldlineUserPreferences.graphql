@@ -1,0 +1,21 @@
+query getWorldlineUserPreferences(
+    $tetheredUserGuids: [String]!
+) {
+    getWorldlineUserPreferences(tetheredUserGuids: $tetheredUserGuids) {
+        tetheredUserGuid
+        settings {
+            smsTypeId
+            isSmsSelected
+            smsTypeDescription
+            smsType
+        }
+        details {
+            showSmsStopsToCardholder
+            sendCardsToCardholder
+            accountName
+            roleId
+            accountNumber
+            roleDescription
+        }
+    }
+}

@@ -1,0 +1,276 @@
+package uk.co.whitbread.cdh.adapter.service.generated.models.reservationSearch;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import org.springframework.lang.Nullable;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * AddressDto
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-09-09T08:37:59.335673+03:00[Europe/Bucharest]", comments = "Generator version: 7.14.0")
+public class AddressDto {
+
+  private @Nullable String addressLine1;
+
+  private @Nullable String addressLine2;
+
+  private @Nullable String addressLine3;
+
+  private @Nullable String addressLine4;
+
+  private @Nullable String addressLine5;
+
+  private @Nullable String companyName;
+
+  private @Nullable String countryCode;
+
+  private @Nullable String postCode;
+
+  private @Nullable String type;
+
+  public AddressDto addressLine1(@Nullable String addressLine1) {
+    this.addressLine1 = addressLine1;
+    return this;
+  }
+
+  /**
+   * Get addressLine1
+   * @return addressLine1
+   */
+  
+  @Schema(name = "addressLine1", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("addressLine1")
+  public @Nullable String getAddressLine1() {
+    return addressLine1;
+  }
+
+  public void setAddressLine1(@Nullable String addressLine1) {
+    this.addressLine1 = addressLine1;
+  }
+
+  public AddressDto addressLine2(@Nullable String addressLine2) {
+    this.addressLine2 = addressLine2;
+    return this;
+  }
+
+  /**
+   * Get addressLine2
+   * @return addressLine2
+   */
+  
+  @Schema(name = "addressLine2", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("addressLine2")
+  public @Nullable String getAddressLine2() {
+    return addressLine2;
+  }
+
+  public void setAddressLine2(@Nullable String addressLine2) {
+    this.addressLine2 = addressLine2;
+  }
+
+  public AddressDto addressLine3(@Nullable String addressLine3) {
+    this.addressLine3 = addressLine3;
+    return this;
+  }
+
+  /**
+   * Get addressLine3
+   * @return addressLine3
+   */
+  
+  @Schema(name = "addressLine3", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("addressLine3")
+  public @Nullable String getAddressLine3() {
+    return addressLine3;
+  }
+
+  public void setAddressLine3(@Nullable String addressLine3) {
+    this.addressLine3 = addressLine3;
+  }
+
+  public AddressDto addressLine4(@Nullable String addressLine4) {
+    this.addressLine4 = addressLine4;
+    return this;
+  }
+
+  /**
+   * Get addressLine4
+   * @return addressLine4
+   */
+  
+  @Schema(name = "addressLine4", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("addressLine4")
+  public @Nullable String getAddressLine4() {
+    return addressLine4;
+  }
+
+  public void setAddressLine4(@Nullable String addressLine4) {
+    this.addressLine4 = addressLine4;
+  }
+
+  public AddressDto addressLine5(@Nullable String addressLine5) {
+    this.addressLine5 = addressLine5;
+    return this;
+  }
+
+  /**
+   * Get addressLine5
+   * @return addressLine5
+   */
+  
+  @Schema(name = "addressLine5", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("addressLine5")
+  public @Nullable String getAddressLine5() {
+    return addressLine5;
+  }
+
+  public void setAddressLine5(@Nullable String addressLine5) {
+    this.addressLine5 = addressLine5;
+  }
+
+  public AddressDto companyName(@Nullable String companyName) {
+    this.companyName = companyName;
+    return this;
+  }
+
+  /**
+   * Get companyName
+   * @return companyName
+   */
+  
+  @Schema(name = "companyName", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("companyName")
+  public @Nullable String getCompanyName() {
+    return companyName;
+  }
+
+  public void setCompanyName(@Nullable String companyName) {
+    this.companyName = companyName;
+  }
+
+  public AddressDto countryCode(@Nullable String countryCode) {
+    this.countryCode = countryCode;
+    return this;
+  }
+
+  /**
+   * Get countryCode
+   * @return countryCode
+   */
+  
+  @Schema(name = "countryCode", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("countryCode")
+  public @Nullable String getCountryCode() {
+    return countryCode;
+  }
+
+  public void setCountryCode(@Nullable String countryCode) {
+    this.countryCode = countryCode;
+  }
+
+  public AddressDto postCode(@Nullable String postCode) {
+    this.postCode = postCode;
+    return this;
+  }
+
+  /**
+   * Get postCode
+   * @return postCode
+   */
+  
+  @Schema(name = "postCode", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("postCode")
+  public @Nullable String getPostCode() {
+    return postCode;
+  }
+
+  public void setPostCode(@Nullable String postCode) {
+    this.postCode = postCode;
+  }
+
+  public AddressDto type(@Nullable String type) {
+    this.type = type;
+    return this;
+  }
+
+  /**
+   * Get type
+   * @return type
+   */
+  
+  @Schema(name = "type", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("type")
+  public @Nullable String getType() {
+    return type;
+  }
+
+  public void setType(@Nullable String type) {
+    this.type = type;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    AddressDto addressDto = (AddressDto) o;
+    return Objects.equals(this.addressLine1, addressDto.addressLine1) &&
+        Objects.equals(this.addressLine2, addressDto.addressLine2) &&
+        Objects.equals(this.addressLine3, addressDto.addressLine3) &&
+        Objects.equals(this.addressLine4, addressDto.addressLine4) &&
+        Objects.equals(this.addressLine5, addressDto.addressLine5) &&
+        Objects.equals(this.companyName, addressDto.companyName) &&
+        Objects.equals(this.countryCode, addressDto.countryCode) &&
+        Objects.equals(this.postCode, addressDto.postCode) &&
+        Objects.equals(this.type, addressDto.type);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(addressLine1, addressLine2, addressLine3, addressLine4, addressLine5, companyName, countryCode, postCode, type);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class AddressDto {\n");
+    sb.append("    addressLine1: ").append(toIndentedString(addressLine1)).append("\n");
+    sb.append("    addressLine2: ").append(toIndentedString(addressLine2)).append("\n");
+    sb.append("    addressLine3: ").append(toIndentedString(addressLine3)).append("\n");
+    sb.append("    addressLine4: ").append(toIndentedString(addressLine4)).append("\n");
+    sb.append("    addressLine5: ").append(toIndentedString(addressLine5)).append("\n");
+    sb.append("    companyName: ").append(toIndentedString(companyName)).append("\n");
+    sb.append("    countryCode: ").append(toIndentedString(countryCode)).append("\n");
+    sb.append("    postCode: ").append(toIndentedString(postCode)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+

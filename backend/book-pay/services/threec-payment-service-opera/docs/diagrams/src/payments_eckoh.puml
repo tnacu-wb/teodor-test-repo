@@ -1,0 +1,38 @@
+@startuml
+
+box "Eckoh iFrame"
+    entity "Basket Service" as BASKET
+    entity "3C iPage" as IP
+end box
+
+box "3C Payment MS"
+    boundary "Create Payment" as PE
+    boundary "Webhook" as WH
+end box
+
+box "AWS"
+    database "DynamoDB" as DB
+end box
+
+box "Eckoh DC"
+    entity Eckoh
+end box
+
+BASKET -> PE: Create Payment request
+PE -> DB : Create Payment
+DB -> PE : Return PaymentID
+
+group if payment.subType=ECKOH
+    PE -> PE: Set PaymentID to response
+end group
+
+PE -> BASKET: Return Payment response
+Eckoh -> WH: Send card recording result
+WH -> DB: Store transaction in DB
+WH -> Eckoh: Acknowledge webhook
+BASKET -> PE: Get Payment result
+PE ->  DB: Get transaction result based on PaymentID
+DB -> PE: Schema response
+PE -> BASKET: Return result
+
+@enduml

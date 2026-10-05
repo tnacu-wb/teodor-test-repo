@@ -1,0 +1,25 @@
+package uk.co.whitbread.content.domain.model.roomtype.out;
+
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RoomTypeInformation {
+
+  private List<String> roomTypeCode;
+  private String roomCategory;
+  private String roomLabel;
+  private String roomDescription;
+  private String roomInfoLabel;
+  private String roomInfo;
+  private String gridImage;
+  private String roomImage;
+  private String groupId;
+  private List<String> facilities;
+}

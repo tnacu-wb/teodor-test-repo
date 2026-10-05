@@ -1,0 +1,75 @@
+export enum RoomClass {
+  ST = 'Standard Room',
+  SE = 'Standard Extra Room',
+  PP = 'Premier Plus Room',
+  BG = 'Bigger Room',
+  PSE = 'Pseudo Room',
+  SU = 'Premier Plus Suite',
+  PV = 'Premier Plus with View',
+  SV = 'Standard with View',
+  SF = 'Standard Family Room',
+  PC = 'Premier Plus room with City View',
+  PS = 'Premier Plus room with Sea View',
+  SC = 'Standard room with City View',
+  SS = 'Standard room with Sea View',
+  SW = 'Standard Windowless Room',
+  BW = 'Bigger Windowless Room',
+}
+
+export enum DeRoomClass {
+  ST = 'Standard Zimmer',
+  SE = 'Standard Extra Zimmer',
+  PP = 'Premier Plus Zimmer',
+  BG = 'Größeres Zimmer',
+  PSE = 'Pseudo Room',
+  SU = 'Premier Plus Suite',
+  PV = 'Premier Plus mit Ausblick',
+  SV = 'Standard mit Ausblick',
+  SF = 'Standard Familienzimmer',
+  PC = 'Premier Plus Zimmer mit Stadtblick',
+  PS = 'Premier Plus Zimmer mit Meerblick',
+  SC = 'Standardzimmer mit Stadtblick',
+  SS = 'Standardzimmer mit Meerblick',
+  SW = 'Standard Zimmer ohne Fenster',
+  BW = 'Größeres Zimmer ohne Fenster',
+}
+
+export enum RoomClassLabelByCode {
+  ST = 'pihotelinfo.standardRoomTitle',
+  SE = 'pihotelinfo.businessTitle',
+  PP = 'pihotelinfo.premierPlusTitle',
+  BG = 'pihotelinfo.hubBiggerRoomTitle',
+  PSE = 'pihotelinfo.pseudoRoomTitle',
+  SU = 'pihotelinfo.su.title',
+  PV = 'pihotelinfo.pv.title',
+  SV = 'pihotelinfo.sv.title',
+  SF = 'pihotelinfo.sf.title',
+  PC = 'pihotelinfo.pc.title',
+  PS = 'pihotelinfo.ps.title',
+  SC = 'pihotelinfo.sc.title',
+  SS = 'pihotelinfo.ss.title',
+  SW = 'pihotelinfo.sw.title',
+  BW = 'pihotelinfo.bw.title',
+}
+
+export enum RoomClassCodes {
+  STANDARD_ROOM = 'ST',
+  STANDARD_EXTRA_ROOM = 'SE',
+  PREMIER_PLUS_ROOM = 'PP',
+  BIGGER_ROOM = 'BG',
+  PSEUDO_ROOM = 'PSE',
+  PREMIER_PLUS_SUITE = 'SU',
+  PREMIER_PLUS_VIEW = 'PV',
+  STANDARD_VIEW = 'SV',
+  STANDARD_FAMILY_ROOM = 'SF',
+  PREMIER_PLUS_CITY_VIEW = 'PC',
+  PREMIER_PLUS_SEA_VIEW = 'PS',
+  Standard_CITY_VIEW = 'SC',
+  Standard_SEA_VIEW = 'SS',
+  STANDARD_WINDOWLESS = 'SW',
+  BIGGER_WINDOWLESS = 'BW',
+}
+
+export enum PremPlusAccRoomClassLabelByCode {
+  PP = 'pihotelinfo.premierPlusAccessibleTitle',
+}

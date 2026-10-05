@@ -1,0 +1,204 @@
+server:
+  port: ${SPRING_APPLICATION_PORT:9170}
+  shutdown: graceful
+  compression.enabled: ${SERVER_COMPRESSION_ENABLED:true}
+  compression.mime-types: application/json
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "availability-business-events-service-opera"
+    description: "Availability business events Microservice"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: ${SPRING_JPA_SHOW_SQL:false}
+    generate-ddl: ${SPRING_JPA_GENERATE_DDl:false}
+    hibernate:
+      ddl-auto: ${HIBERNATE_DDL_AUTO:none}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    writer:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://${AVAILABILITY_CACHE_POSTGRES_DB_HOST_WRITER:localhost}:${AVAILABILITY_CACHE_POSTGRES_DB_PORT:5432}/${AVAILABILITY_CACHE_POSTGRES_DB_NAME:postgres}
+      username: ${AVAILABILITY_CACHE_POSTGRES_DB_USERNAME:postgres}
+      password: ${AVAILABILITY_CACHE_POSTGRES_DB_PASSWORD:docker}
+
+hibernate:
+  dialect: org.hibernate.dialect.PostgreSQLDialect
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+feature-flags:
+  city-tax-uk:
+    key: "release_pi_ccui_city_tax_uk"
+    fallback: false
+  city-tax-uk-fallback:
+    key: "release_pi_ccui_city_tax_uk_fallback"
+    fallback: false
+
+springdoc:
+  show-actuator: true
+
+encrypt:
+  failOnError: false
+
+management:
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+  endpoints:
+    web:
+      base-path: /availability-business-events-service/actuator
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+config:
+  service:
+    content:
+      host: ${CONTENT_SERVICE_HOST:http://localhost:9106}
+      globalConfigEndpoint: "/v1/content/global-config"
+    ocd-adapter:
+      host: ${OCD_ADAPTER_SERVICE_HOST:http://localhost:9134}
+      offerEndpoint: "/ocd/v1/hotels/{hotelCode}/offer"
+
+opera:
+  isClientCredentialsEnabled: ${ENABLE_CLIENT_CREDENTIALS:true}
+  wireTapAccessToken: ${WIRE_TAP_ACCESS_TOKEN:false}
+  url: ${OPERA_HOST:whitbce4ua.hospitality-api.eu-frankfurt-1.ocs.oc-test.com}
+  username: ${OPERA_USERNAME:WHBOC001_AWS-MS-SA-CRED387-A}
+  password: ${OPERA_PASSWORD:hT9rn39my9FjGYpY6J2n!UWfn}
+  appkey: ${OPERA_APP_KEY:d1948556-0e40-463a-b07d-bc683b15a6bc}
+  grantType: ${OPERA_GRANT_TYPE}
+  ocimGrantType: ${OPERA_OCIM_GRANT_TYPE:client_credentials}
+  scope: ${OPERA_SCOPE:urn:opc:hgbu:ws:__myscopes__}
+  clientId: ${OPERA_CLIENT_ID:d3f0a49cffd04c81bbc8ee43348f434a}
+  clientSecret: ${OPERA_CLIENT_SECRET:7188b9d6-3c5f-4837-9f8b-25bf5a226b71}
+  enterpriseId: ${ENTERPRISE_ID:WHBPI}
+  enabled: ${OPERA_ENABLED:true}
+  interval: 60
+  serviceUrl:
+    oauth: https://${opera.url}/oauth/v1/tokens
+    subscriptionUrl: wss://${opera.url}
+
+#mockservice:
+  #enabled: ${MOCKSERVICE_ENABLED}
+  #host: ${MOCKSERVICE_HOST}
+  #url: ws://${mockservice.host}/ohipgraphqlmockserver/subscriptions
+
+request:
+  timeout: 10000
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+  datasource:
+    writer:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: docker
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+logging:
+  configuration:
+    logger: default
+  level:
+    uk:
+      co:
+        whitbread:
+          rules:
+            agent: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql: TRACE
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"

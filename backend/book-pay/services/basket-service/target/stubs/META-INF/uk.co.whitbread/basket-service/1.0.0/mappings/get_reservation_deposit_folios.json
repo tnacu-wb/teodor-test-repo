@@ -1,0 +1,21 @@
+{
+  "id" : "929e9fff-6919-40a5-a4a4-e6e6040f1d50",
+  "request" : {
+    "urlPath" : "/v1/baskets/deposit-folios/123reservation",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"prepaidDepositsDto\":[{\"reservationId\":\"123reservation\",\"paymentNo\":11231231,\"charges\":[{\"transactionCode\":\"t-code\",\"postingQuantity\":12,\"postingReference\":\"p-ref\",\"chargeAmount\":{\"amount\":12.4,\"currencyCode\":\"US\"}},{\"transactionCode\":\"t-code2\",\"postingQuantity\":13,\"postingReference\":\"p-ref\",\"chargeAmount\":{\"amount\":12.4,\"currencyCode\":\"US2\"}}]}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "929e9fff-6919-40a5-a4a4-e6e6040f1d50"
+}

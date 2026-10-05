@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="tudor.codrea" id="init_data_max_room_occupancy_rule" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="max_room_occupancy_rule"/>
+
+                <sqlCheck expectedResult="0">select count(*) from rules_engine.max_room_occupancy_rule</sqlCheck>
+            </and>
+        </preConditions>
+
+        <loadData tableName="max_room_occupancy_rule" file="sql/liquibase/data/max_room_occupancy_rule_data.csv"/>
+    </changeSet>
+
+    <changeSet author="claudiu.abrudan" id="max_room_occupancy_rule_distribution">
+        <loadData tableName="max_room_occupancy_rule"
+          file="sql/liquibase/data/max_room_occupancy_rule_data_distr.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="marina.baban" id="add_column_brand">
+        <addColumn schemaName="rules_engine"
+          tableName="max_room_occupancy_rule">
+            <column name="brand" type="VARCHAR(50)" defaultValue="PI">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="marina.baban" id="max_room_occupancy_rule_brand_hub">
+        <loadData tableName="max_room_occupancy_rule"
+          file="sql/liquibase/data/max_room_occupancy_rule_data_brand_hub.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="oana.rachiteanu" id="max_room_occupancy_rule_distr_fam">
+        <loadData tableName="max_room_occupancy_rule"
+          file="sql/liquibase/data/max_room_occupancy_rule_data_distr_FAM.csv"
+          primaryKey="rule_id"/>
+    </changeSet>
+
+    <changeSet author="ootla.rajasekhar" id="max_room_occupancy_rule_distr_fam_V1">
+        <loadData tableName="max_room_occupancy_rule"
+                  file="sql/liquibase/data/max_room_occupancy_rule_data_distr_FAM_V1.csv"
+                  primaryKey="rule_id"/>
+    </changeSet>
+
+</databaseChangeLog>

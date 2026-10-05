@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: meta-search-service
+  cloud:
+    enabled: true
+    config:
+      fail-fast: true
+      discovery:
+        enabled: true
+        serviceId: configserver
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+        - integration
+  cloud:
+    enabled: false
+    config:
+      enabled: false
+      discovery:
+        enabled: false

@@ -1,0 +1,272 @@
+schema {
+    query: Query
+}
+
+type Query {
+    bookingConfirmation(basketReference: String!, country: String!, language: String!, bookingChannel: String, flow: String): BookingConfirmationDetails
+    bookingConfirmationAuthenticated(bookingReference: String!, country: String!, language: String!, bookingChannel: String): BookingConfirmationDetails
+    bookingConfirmationAuthenticatedWithToken(bookingReference: String!, country: String!, language: String!, bookingChannel: String): BookingConfirmationDetails
+}
+
+type BookingConfirmationDetails   {
+    reservationByIdList: [ReservationByIdConfirmationDetails]
+    previousTotal: Float
+    balanceOutstanding: Float
+    totalCostWoDiscount: Float
+    newTotal: Float
+    totalCost: Float
+    policyCode: String
+    hotelId: String
+    hotelName: String
+    currencyCode: String
+    bookingFlowId: String
+    infoMessages: [String]
+    upgradeToFlex: UpgradeToFlex
+    bookingSpinnerConfig : [BookingSpinnerConfig]
+    rateMessage: String
+    bookingReference: String
+    basketReference: String
+    isCnp: Boolean
+    channel: String
+    companyId: String
+    basketStatus: String
+    cityTaxTotal: Float
+    idContext: String @deprecated(reason: "Use isThirdPartyBooking instead")
+    isThirdPartyBooking: Boolean!
+    paymentOption: PaymentOptionEnum
+    upsellsAddonsEnabled: Boolean
+}
+
+type ReservationByIdConfirmationDetails   {
+    reservationId: String
+    reservationGuestList: [Guest]
+    reservationBooker: ReservationBooker
+    roomStay: RoomStayConfirmation
+    rateInfo: RateInfo
+    additionalGuestInfo: AdditionalGuestInfo!
+    depositPolicies: [DepositPolicy]
+    billing: BillingResponse
+    reservationPackageList: [ReservationPackagesDetails]
+    paymentCard: ReservationPaymentCardInfoConfirmation
+    reservationOverrideReasons: ReservationOverrideReasons
+    reservationOverridden: Boolean
+    reservationStatus: String
+    guaranteeCode: String
+    balanceAmount: Float
+    gdsReferenceNumber: String
+    preCheckInStatus: Boolean
+    preferences: [Preference]
+    wifiCode: String
+    deRegCardCompleted: Boolean
+}
+
+type Guest   {
+    givenName: String
+    surName: String
+    nameTitle: String
+    email: String
+    address: ReservationGuestAddress
+    homeAddress: ReservationGuestAddress
+    additionalDetails: StayersAdditionalDetails
+    isAccompanyingGuest: Boolean
+    profileId: String
+    sameAsBooker: Boolean
+}
+
+type ReservationGuestAddress   {
+    addressType: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
+    addressLine4: String
+    postalCode: String
+    cityName: String
+    countryCode: String
+    addressId: String
+}
+
+type StayersAdditionalDetails   {
+    dob: String
+    passportNumber: String
+    nationality: String
+}
+
+type ReservationBooker   {
+	email: String
+	title: String
+	firstName: String!
+	lastName: String!
+	mobile: String
+	landline: String
+	address: Address
+}
+
+type Address   {
+	addressType: String
+	companyName: String
+	addressLine1: String!
+	addressLine2: String!
+	addressLine3: String!
+	addressLine4: String
+	cityName: String
+	countryCode: String
+	country: String!
+	postalCode: String!
+}
+
+type RoomStayConfirmation   {
+    adultsNumber: Int
+    childrenNumber: Int
+    cot: Boolean
+    roomType: String
+    ratePlanCode: String
+    arrivalDate: String
+    departureDate: String
+    checkInTime: String
+    checkOutTime: String
+    rateExtraInfo: RateExtraInfo
+    roomExtraInfo: RoomExtraInfo
+    accessibleRoom: AccessibleRoom
+    roomPrice: Float
+    ratesPerNight: [RatePerNight]
+	cellCode: String
+	roomNumber: String
+	bookingChannel: String
+}
+
+type RateExtraInfo   {
+	rateClassification: String!
+	ratePlanCode: String
+	rateOrder: String
+	rateName: String!
+	rateDescription: String
+	rateLongDescription: String
+	additionalDescription: String
+	rateNotes: String
+	rateCategory: String
+}
+
+type RoomExtraInfo   {
+	roomType: String!
+	roomName: String!
+	roomDescription: String!
+	groupId: String
+}
+
+type AccessibleRoom   {
+    phoneNumber: String
+    isAccessible: Boolean
+}
+
+type RatePerNight   {
+    startDate: String
+    pricePerNight: Float
+	grossPricePerNight: Float
+	vatRate: Float
+    cityTaxPerNight: Float
+	cityTaxAmountBeforeTax: Float
+	cityTaxVat: Float
+}
+
+type RateInfo   {
+    summary: RateInfoSummary
+}
+
+type RateInfoSummary   {
+    details: [RateInfoDetails]
+    gross: Float
+    net: Float
+    deposit: Float
+    totalCostOfStay: Float
+    outStandingCostOfStay: Float
+    guestPay: Float
+    routing: Float
+    currencyCode: String
+    start: String
+    end: String
+    hasSuppressedRate: String
+}
+
+type RateInfoDetails   {
+    summaryDate: String
+    revenue: Float
+    packageDetails: Float
+    tax: Float
+    gross: Float
+    net: Float
+    ratePlanCode: String
+    currencyCode: String
+}
+
+type AdditionalGuestInfo   {
+	purposeOfStay: String!
+	acceptFutureMailing: Boolean
+}
+
+type DepositPolicy   {
+    amountPaid: CurrencyAmountType
+    amountDue: CurrencyAmountType
+    policyCode: String
+}
+
+type CurrencyAmountType   {
+    amount: Float
+    currencyCode: String
+}
+
+type BillingResponse   {
+	address: Address!
+	email: String!
+	firstName: String!
+	lastName: String!
+	telephone: String
+	landline: String
+	title: String
+}
+
+type ReservationPackagesDetails   {
+    packageCode: String
+    description: String
+    unitPrice: Float
+    totalQuantity: Int
+    computedPrice: Float
+    grossPrice: Float
+    vatTax: Float
+    startDate: String
+    endDate: String
+}
+
+type ReservationPaymentCardInfoConfirmation   {
+    cardNumberMasked: String
+    paymentMethod: String
+}
+
+type ReservationOverrideReasons    {
+    reasonCode: String!
+    reasonName: String!
+    callerName: String!
+    managerName: String
+}
+
+type Preference    {
+	code: String
+	preferenceType: String
+}
+
+type UpgradeToFlex    {
+	flexRateCode: String
+	amount: Float
+	currency: String
+}
+
+type BookingSpinnerConfig    {
+     order: String
+     seconds: String
+     text: String
+}
+
+enum PaymentOptionEnum {
+    CC
+    PIBA_CP
+    PIBA_CNP
+}

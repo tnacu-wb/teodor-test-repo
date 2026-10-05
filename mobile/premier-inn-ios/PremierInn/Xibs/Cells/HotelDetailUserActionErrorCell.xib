@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="139" id="KGk-i7-Jjw" customClass="HotelDetailUserActionErrorCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="359" height="139"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="359" height="139"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="itx-GB-Y44" customClass="RoundedCornersButton" customModule="PremierInn" customModuleProvider="target">
+                        <rect key="frame" x="16" y="16" width="327" height="44"/>
+                        <color key="backgroundColor" red="0.97647058823529409" green="0.78823529411764703" blue="0.25098039215686274" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="PeK-g5-jmf"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="18"/>
+                        <state key="normal" title="Show me hotels nearby">
+                            <color key="titleColor" red="0.42352941176470588" green="0.18823529411764706" blue="0.44705882352941173" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="4"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </button>
+                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="EbF-H8-cbO">
+                        <rect key="frame" x="169.5" y="28" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="GgB-7K-tLf"/>
+                            <constraint firstAttribute="height" constant="20" id="msK-u0-cjX"/>
+                        </constraints>
+                    </activityIndicatorView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sk0-H2-q2P" userLabel="Cta Button 2">
+                        <rect key="frame" x="16" y="76" width="327" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="xuW-6d-kci"/>
+                        </constraints>
+                        <color key="tintColor" name="BasePurple"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" image="calendarHDP" title="Change Dates" imagePadding="12" buttonSize="small"/>
+                        <connections>
+                            <action selector="changeDate:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="2tL-Ba-RU6"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="EbF-H8-cbO" firstAttribute="centerX" secondItem="itx-GB-Y44" secondAttribute="centerX" id="08Y-5k-Y6t"/>
+                    <constraint firstAttribute="bottom" secondItem="Sk0-H2-q2P" secondAttribute="bottom" constant="8" id="7ux-GZ-V4u"/>
+                    <constraint firstItem="Sk0-H2-q2P" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="JPp-Pp-UBL"/>
+                    <constraint firstItem="Sk0-H2-q2P" firstAttribute="top" secondItem="itx-GB-Y44" secondAttribute="bottom" constant="16" id="MWQ-kv-VTO"/>
+                    <constraint firstAttribute="trailing" secondItem="Sk0-H2-q2P" secondAttribute="trailing" constant="16" id="arc-Kx-mgc"/>
+                    <constraint firstItem="itx-GB-Y44" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="hyj-nG-zL5"/>
+                    <constraint firstItem="EbF-H8-cbO" firstAttribute="centerY" secondItem="itx-GB-Y44" secondAttribute="centerY" id="qFR-gL-kaK"/>
+                    <constraint firstAttribute="trailing" secondItem="itx-GB-Y44" secondAttribute="trailing" constant="16" id="w15-yH-Mcu"/>
+                    <constraint firstItem="itx-GB-Y44" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="zeC-N8-aaV"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="activityIndicator" destination="EbF-H8-cbO" id="2Em-7t-GTZ"/>
+                <outlet property="ctaButton1" destination="itx-GB-Y44" id="KJI-A9-DpF"/>
+                <outlet property="ctaButton2" destination="Sk0-H2-q2P" id="fur-YU-pPI"/>
+            </connections>
+            <point key="canvasLocation" x="-153.5" y="-180"/>
+        </tableViewCell>
+    </objects>
+    <designables>
+        <designable name="itx-GB-Y44">
+            <size key="intrinsicContentSize" width="190" height="33"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="calendarHDP" width="24" height="24"/>
+        <namedColor name="BasePurple">
+            <color red="0.31764705882352939" green="0.11764705882352941" blue="0.3843137254901961" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

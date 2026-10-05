@@ -1,0 +1,137 @@
+# Polls GitHub Security Advisories for a fixed set of platform dependencies and
+# posts new or updated advisories to a Microsoft Teams channel via webhook.
+#
+# Context: SRE-330. Replaces the Power Automate flow originally documented in
+# https://whitbreadis.atlassian.net/wiki/spaces/DSA/pages/5555912899 — that flow
+# used the GitHub Atom advisory feed (`/security/advisories.atom`), which returns
+# HTTP 406 regardless of Accept header or auth, and its HTTP action required a
+# premium Power Automate license the flow owner didn't have. This workflow calls
+# the GitHub REST API directly and posts straight to a Teams incoming webhook,
+# so Power Automate is no longer part of the pipeline.
+#
+# Ownership: the SRE team (@whitbread-eos/codeowners-sre) owns this notifier —
+# contact them to change the monitored repos, the schedule, or the destination
+# channel. Changes are gated by CODEOWNERS on .github/ (@whitbread-eos/
+# codeowners-devops). To disable it, comment out the `schedule` trigger below
+# (or disable the "GitHub Security Advisory Notifier" workflow in the Actions
+# tab); the `SECURITY_ADVISORY_TEAMS_WEBHOOK` secret and the PIPELINE_APP_*
+# credentials are managed at the repo level.
+name: GitHub Security Advisory Notifier
+
+on:
+  # Scheduled trigger only. No workflow_dispatch: this job holds the app private
+  # key and Teams webhook, and workflow_dispatch runs the workflow YAML from the
+  # dispatcher's chosen ref — so a write-access user could push a branch that
+  # strips any in-file guard and dispatch it to run unreviewed code with those
+  # secrets in scope. A schedule always runs the default branch's reviewed code,
+  # which CODEOWNERS gates. To verify a change before the next scheduled poll,
+  # run the script locally against a test webhook rather than dispatching here.
+  schedule:
+    - cron: "0 */6 * * *" # every 6 hours
+
+permissions:
+  contents: read
+
+# Serialize runs of this workflow so an ad-hoc dispatch overlapping a scheduled
+# run (or a late scheduled run) can't both restore the same dedup cache and post
+# duplicate notifications before either saves updated state. A queued run waits
+# rather than being cancelled, so no scheduled poll is silently dropped.
+concurrency:
+  group: security-advisory-notifier
+  cancel-in-progress: false
+
+jobs:
+  check-advisories:
+    name: Check advisories for ${{ matrix.repo }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      # All four legs post to the same Teams webhook, which throttles above
+      # ~4 requests/second. Running them one at a time keeps the aggregate post
+      # rate equal to a single leg's, so the script's own pacing is sufficient.
+      # Cost is a slower job (~4x), which is irrelevant for a 6-hourly poll.
+      max-parallel: 1
+      matrix:
+        repo:
+          - kedacore/keda
+          - temporalio/temporal
+          - istio/istio
+          - apollographql/router
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Compute cache key
+        id: cache-key
+        run: bash .github/workflows/scripts/security-advisory-compute-cache-key.sh
+        env:
+          REPO: ${{ matrix.repo }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+
+      - name: Restore seen-advisories cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: seen-advisories.json
+          key: ${{ steps.cache-key.outputs.key }}
+          restore-keys: |
+            ${{ steps.cache-key.outputs.prefix }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      # Install from a hash-pinned requirements file with --require-hashes: the
+      # script runs with the app token and Teams webhook in scope, so pin exact
+      # versions and refuse any artifact whose hash doesn't match, rather than
+      # resolving the latest release (and transitive deps) on every scheduled
+      # run. --no-deps because the file already lists the full transitive tree.
+      - name: Install dependencies
+        run: pip install --require-hashes --no-deps -r .github/workflows/scripts/security-advisory-requirements.txt
+
+      # Authenticate the GitHub API reads with the shared pipeline app rather than
+      # a PAT: an installation token on a GHEC org gets 15,000 req/hour (vs 5,000
+      # for a PAT and 60 unauthenticated), is minted per job with a 1-hour life,
+      # and isn't tied to an individual's account or an expiry someone has to
+      # remember to rotate.
+      #
+      # Downscope to metadata:read only. Reading public advisories needs no
+      # permissions at all (the endpoint works unauthenticated — the token is
+      # only here for the rate limit), and metadata:read is the minimum this
+      # action accepts. Setting any permission-* input restricts the token to
+      # exactly that set, so it does NOT inherit the shared app's full
+      # installation permissions — limiting the blast radius if this scheduled
+      # script or its runtime-installed dependency is ever compromised.
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.PIPELINE_APP_ID }}
+          private-key: ${{ secrets.PIPELINE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          permission-metadata: read
+
+      - name: Check advisories and notify Teams
+        id: check
+        run: python .github/workflows/scripts/security-advisory-check.py
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          TEAMS_WEBHOOK: ${{ secrets.SECURITY_ADVISORY_TEAMS_WEBHOOK }}
+          REPO: ${{ matrix.repo }}
+
+      # Save the cache only when the check step actually changed the dedup state
+      # (state_changed=true). The cache key is unique per run, so saving on every
+      # run would upload a fresh, identical entry each no-change poll — needless
+      # churn on a 6-hourly, four-repo schedule. The check step sets the output
+      # from save_state(), which it calls after each successful Teams post, so
+      # this also covers a mid-loop failure: advisories delivered before the
+      # failure were persisted and are still saved (the output survives a failed
+      # step), while a failure before any write leaves the output unset and there
+      # is nothing new to cache. always() keeps the save reachable on failure.
+      - name: Save seen-advisories cache
+        if: ${{ always() && steps.check.outputs.state_changed == 'true' }}
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: seen-advisories.json
+          key: ${{ steps.cache-key.outputs.key }}

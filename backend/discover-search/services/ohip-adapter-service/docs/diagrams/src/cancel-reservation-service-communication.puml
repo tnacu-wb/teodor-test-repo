@@ -1,0 +1,23 @@
+@startuml
+entity "AppSync" as A
+entity "Reservation Entity Service" as RES
+entity "Basket Service" as BSK
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OHIP
+entity "OPERA" as OPERA
+
+A -> RES: graphql cancel reservation
+RES -> BSK: GET /v1/baskets/{basketReference}
+RES <- BSK: DTO with reservationIds, hotelId
+RES -> PMS: POST /v1/reservations/cancellations
+PMS -> OHIP: POST /v1/reservations/cancellations
+OHIP -> OPERA: POST
+loop for each reservationId
+            OHIP -> OPERA: POST /rsv/v1/hotels/{{HotelId}}/reservations/{{ReservationId}}/cancellations
+end
+
+OHIP <- OPERA: OK 200
+PMS <- OHIP: OK 200
+RES <- PMS: OK 200
+A <- RES: basketReference 200
+@enduml

@@ -1,0 +1,13 @@
+mutation updateReservationPreferences(
+    $hotelId: String!
+    $reservationsIds: [String!]
+    $preferencesCollections: [PreferencesCollection!]
+) {
+    updateReservationPreferences(
+        updateReservationPreferencesRequest: {
+            hotelId: $hotelId
+            reservationsIds: $reservationsIds
+            preferencesCollections: $preferencesCollections
+        }
+    )
+}

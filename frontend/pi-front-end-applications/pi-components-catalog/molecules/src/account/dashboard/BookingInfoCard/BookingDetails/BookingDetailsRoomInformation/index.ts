@@ -1,0 +1,3 @@
+import BookingDetailsRoomInformationComponent from './BookingDetailsRoomInformation.component';
+
+export default BookingDetailsRoomInformationComponent;

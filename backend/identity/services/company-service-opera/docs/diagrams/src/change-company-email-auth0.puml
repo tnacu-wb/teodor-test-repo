@@ -1,0 +1,11 @@
+@startuml
+actor User
+participant "Company Details Page" as CDP
+participant "Company Microservice" as MS
+User -> CDP: Change company email
+CDP -> MS: Change company email request
+MS -> Auth0: Change the email of the company's main contact
+MS <- Auth0: Email changed
+CDP <- MS: Update successful
+User <- CDP: Update successful
+@enduml

@@ -1,0 +1,51 @@
+@startuml
+
+box "Booking Flow"
+    actor "PI.COM" as PI
+    entity "3C iPage" as IP
+end box
+
+box "3C Payment MS"
+    boundary "Create Payment" as PE
+    boundary "Update Payment" as UP
+    boundary "Webhook" as WH
+    boundary "Redirect" as RD
+end box
+
+box "AWS"
+    database "DynamoDB" as DB
+end box
+
+entity 3C
+
+entity "Hotel Booking MS" as HB
+entity BART
+
+PI -> PE: Create Payment request
+group if booking.type=PAY_NOW
+PE -> 3C: Initialise request - **serviceAction: 3dspay**
+end group
+group if booking.type=PAY_ON_ARRIVAL
+PE -> 3C: Initialise request - **serviceAction: 3dsauthorise**
+end group
+3C -> PE: Initialise response **ipgSession**
+PE -> PE: map **ipgSession** to **session** and add to Create Payment response
+PE -> PI: Create Payment response
+PI -> IP: Render iPage
+IP -> 3C: submit form
+3C -> WH: Send form data
+WH -> DB: Store transaction in DB
+WH -> 3C: Acknowledge webhook
+3C -> RD: Redirect
+RD -> IP: Redirect html
+IP -> PI: Post message to parent page
+PI -> PI: Handle post message
+PI -> HB: makeBooking request
+HB -> BART: ConfirmBookingRequest
+BART -> HB: ConfirmBookingResponse
+HB -> UP: Update Booking Reference
+UP -> DB: Update Payment with Booking reference
+HB -> PI: makeBooking response
+PI -> PI: confirmation page
+
+@enduml

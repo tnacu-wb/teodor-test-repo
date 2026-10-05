@@ -1,0 +1,50 @@
+description: Should create PI user without postcode (outside UK/Germany)
+request:
+  method: POST
+  url: /customers/hotels?business=false
+  headers:
+    Content-Type: application/json
+  body:
+      {
+        "bookingPreference": {
+          "reason": "BUSINESS",
+          "roomRequirements": {
+            "adults": 1,
+            "children": 0,
+            "cotRequired": false,
+            "hotelBrand": "PI",
+            "smoking": false,
+            "type": "DB"
+          }
+        },
+        "companyId": "",
+        "companyName": "",
+        "contactDetail": {
+          "dialingCode": "44",
+          "address": {
+            "companyName": "",
+            "countryCode": "BR",
+            "line1": "4 New Street",
+            "line3": "New Grove",
+            "line4": "LONDON",
+            "type": "HOME"
+          },
+          "email": "testPIsuccess@test.com",
+          "firstName": "Spongebob",
+          "lastName": "Squarepants",
+          "nationality": "GB",
+          "telephone": "07912312312",
+          "title": "Mr"
+        },
+        "password": "Passw0rd1"
+      }
+response:
+  status: 201
+  headers:
+    Content-Type: application/json
+  body:
+     {
+        "success": true,
+        "existingCompany": false,
+        "existingEmployee": false
+      }

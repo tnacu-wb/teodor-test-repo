@@ -1,0 +1,26 @@
+{
+  "id" : "d406a02d-bd59-48fb-aa91-2280c7f0b471",
+  "request" : {
+    "urlPath" : "/v1/reservations/basket/TestId1234567",
+    "method" : "GET",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "queryParameters" : {
+      "priceBreakdownNeeded" : {
+        "equalTo" : "false"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"reservationByIdList\":[{\"reservationGuestList\":[{\"givenName\":\"Sarah\",\"surName\":\"Smith\"}],\"roomStay\":{\"adultsNumber\":1,\"childrenNumber\":0,\"roomPrice\":5,\"roomType\":\"TWINRM\",\"ratePlanCode\":\"FLEXRATE\",\"arrivalDate\":\"2022-08-20\",\"departureDate\":\"2022-08-21\",\"checkInTime\":\"12:00\",\"checkOutTime\":\"13:00\",\"cellCode\":\"cellCode\",\"roomNumber\":\"120\",\"bookingChannel\":\"PI.com\",\"ratesPerNight\":[{\"startDate\":\"2022-08-20\",\"pricePerNight\":30,\"grossPricePerNight\":null,\"cityTaxPerNight\":0,\"vatRate\":null,\"cityTaxAmountBeforeTax\":null,\"cityTaxVat\":null}]},\"depositPolicies\":[{\"amountPaid\":{\"amount\":0},\"amountDue\":{\"amount\":0},\"policyCode\":\"OA\"}],\"reservationPackageList\":[],\"billing\":{\"address\":{\"companyName\":\"Whitbread\",\"country\":\"AU\",\"addressLine1\":\"Riverside Corporate Park\",\"addressLine2\":\"4 Julius Avenue\",\"postalCode\":\"2113\"},\"email\":\"no email info provided\",\"firstName\":\"Sarah\",\"lastName\":\"Smith\",\"telephone\":\"no telephone info provided\"},\"paymentCard\":{\"cardNumberMasked\":\"XXXXXXXXXXXX1103\",\"token\":\"4216333880397891103\",\"expirationDate\":\"2026-05-31\",\"cardType\":\"Va\"},\"reservationOverrideReasons\":{\"reasonCode\":\"ILL\",\"reasonName\":\"Illness\",\"callerName\":\"John Doe\",\"managerName\":\"James Bond\"},\"reservationOverridden\":true,\"balanceAmount\":60}],\"totalCost\":0,\"policyCode\":\"OA\",\"currencyCode\":\"USD\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "d406a02d-bd59-48fb-aa91-2280c7f0b471"
+}

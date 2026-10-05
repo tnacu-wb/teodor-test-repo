@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="75" id="dQJ-E9-ev7" customClass="BookingSummaryHeaderCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dQJ-E9-ev7" id="Bru-jb-ZeT">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="74.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="RU7-Jz-a1R">
+                        <rect key="frame" x="20" y="15" width="60" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="RU7-Jz-a1R" secondAttribute="height" multiplier="4:3" id="RXi-GB-tn9"/>
+                            <constraint firstAttribute="width" constant="60" id="pCG-Tc-KVC"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="750" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zS7-6n-uSC">
+                        <rect key="frame" x="95" y="15" width="39.5" height="19.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="750" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="et2-Ty-JQc">
+                        <rect key="frame" x="95" y="39.5" width="39.5" height="19.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="et2-Ty-JQc" firstAttribute="top" secondItem="zS7-6n-uSC" secondAttribute="bottom" constant="5" id="FiQ-qA-1E6"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="et2-Ty-JQc" secondAttribute="bottom" constant="10" id="Tcc-lL-EwI"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="et2-Ty-JQc" secondAttribute="trailing" constant="20" id="dr6-Jb-pqX"/>
+                    <constraint firstItem="RU7-Jz-a1R" firstAttribute="top" secondItem="Bru-jb-ZeT" secondAttribute="top" constant="15" id="fYK-Sz-BHZ"/>
+                    <constraint firstItem="zS7-6n-uSC" firstAttribute="top" secondItem="RU7-Jz-a1R" secondAttribute="top" id="nfy-rr-T4Y"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zS7-6n-uSC" secondAttribute="trailing" constant="20" id="pTb-l8-n2I"/>
+                    <constraint firstItem="et2-Ty-JQc" firstAttribute="leading" secondItem="zS7-6n-uSC" secondAttribute="leading" id="udM-On-bQ8"/>
+                    <constraint firstItem="RU7-Jz-a1R" firstAttribute="leading" secondItem="Bru-jb-ZeT" secondAttribute="leading" constant="20" id="vZF-ye-pmU"/>
+                    <constraint firstItem="zS7-6n-uSC" firstAttribute="leading" secondItem="RU7-Jz-a1R" secondAttribute="trailing" constant="15" id="wth-zJ-p2A"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="hotelImage" destination="RU7-Jz-a1R" id="MuO-LO-dbf"/>
+                <outlet property="hotelName" destination="zS7-6n-uSC" id="fOs-xs-xli"/>
+                <outlet property="stayDetails" destination="et2-Ty-JQc" id="WdK-1W-XhG"/>
+            </connections>
+            <point key="canvasLocation" x="53" y="19.5"/>
+        </tableViewCell>
+    </objects>
+</document>

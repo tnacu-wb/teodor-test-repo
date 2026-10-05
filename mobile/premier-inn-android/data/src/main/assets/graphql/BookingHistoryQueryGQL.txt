@@ -1,0 +1,31 @@
+query bookingHistory($bookingHistoryRequest: BookingHistoryRequest!) {
+  bookingHistory(bookingHistoryRequest: $bookingHistoryRequest) {
+    bookings {
+        bookingStatus
+        hotelName
+        arrivalDate
+        bookingReference
+        totalCost {
+            amount
+            currency
+        }
+        hotelCode
+        departureDate
+        noOfRooms
+        prePaidAmount {
+            amount
+            currency
+        }
+        cancelled
+        checkInOnline
+        checkedIn
+        amendable
+        rateName
+        leadGuest
+        leadGuestSurname
+        isCheckInOnlineAvailable
+        basketStatus
+        hotelCountry
+    }
+  }
+}

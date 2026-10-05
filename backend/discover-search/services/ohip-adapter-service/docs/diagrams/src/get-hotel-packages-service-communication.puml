@@ -1,0 +1,13 @@
+@startuml
+entity "Availability Entity Service" as A
+entity "PMS Adapter Service" as PMS
+entity "OHIP Adapter Service" as OHIP
+entity OPERA
+
+A -> PMS: GET /adp/hotels/{hotelId}/packages
+PMS -> OHIP: GET /ohip/hotels/{hotelId}/packages
+OHIP -> OPERA: GET /rtp/v1/packages
+OHIP <- OPERA: Hotel Packages
+PMS <- OHIP: Hotel Packages
+A <- PMS: Hotel Packages
+@enduml

@@ -1,0 +1,4 @@
+export enum CardStatus {
+  CARD_PRESENT = 'CARD_PRESENT',
+  CARD_NOT_PRESENT = 'CARD_NOT_PRESENT',
+}

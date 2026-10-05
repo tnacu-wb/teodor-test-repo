@@ -1,0 +1,10 @@
+@startuml
+entity "Experience Service" as A
+entity "Hotel Entity Service" as AES
+entity "SnowDrop Service" as SNO
+
+A -> AES: GET v1/hotels/{hotelId}/distance
+AES -> SNO: GET /v1/search/hotels
+SNO -> AES: List<HotelDistance>
+A <- AES: Hotel Distance
+@enduml

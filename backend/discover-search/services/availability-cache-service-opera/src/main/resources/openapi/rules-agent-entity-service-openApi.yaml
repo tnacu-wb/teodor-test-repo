@@ -1,0 +1,1076 @@
+openapi: 3.0.1
+info:
+  description: "<p>The service reads all the rules' configuration from DB into memory,\
+    \ handles the incoming requests from the other components and polls periodically\
+    \ (e.g. 60 sec) the database for any updates made by the rule manager service.</p>"
+  title: Rules Agent Entity Service API Documentation
+  version: 2.0.0
+servers:
+  - description: Generated server url
+    url: http://localhost:9108
+tags:
+  - description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+    name: Actuator
+paths:
+  /v1/rules/actuator:
+    get:
+      operationId: links
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Link'
+          description: OK
+      summary: Actuator root web endpoint
+      tags:
+        - Actuator
+  /v1/rules/actuator/health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'health'
+      tags:
+        - Actuator
+  /v1/rules/actuator/health/**:
+    get:
+      operationId: health-path
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'health-path'
+      tags:
+        - Actuator
+  /v1/rules/actuator/info:
+    get:
+      operationId: info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v2+json:
+              schema:
+                type: object
+            application/vnd.spring-boot.actuator.v3+json:
+              schema:
+                type: object
+          description: OK
+      summary: Actuator web endpoint 'info'
+      tags:
+        - Actuator
+  /v1/rules/allowances:
+    get:
+      operationId: getBusinessAllowanceRules
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessAllowanceRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Business Allowances
+      tags:
+        - business-allowance-rule-controller
+  /v1/rules/amendments:
+    get:
+      operationId: getAmendmentRule
+      parameters:
+        - example: Flex
+          in: query
+          name: rateType
+          required: true
+          schema:
+            type: string
+        - example: YYYYMMDD
+          in: query
+          name: arrivalDate
+          required: true
+          schema:
+            type: string
+        - example: YYYYMMDDTHHmmss
+          in: query
+          name: hotelLocalDateTime
+          required: true
+          schema:
+            type: string
+        - example: GB
+          in: query
+          name: hotelCountryCode
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmendmentRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Amendment Rule
+      tags:
+        - amendment-rule-controller
+  /v1/rules/ccui/rbac:
+    get:
+      operationId: getRbacHasAccess
+      parameters:
+        - in: query
+          name: roleIdList
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: resourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RbacRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves hasAccess
+      tags:
+        - rbac-rule-controller
+  /v1/rules/ccui/rbac/resourceId:
+    get:
+      operationId: getAllRbacRule
+      parameters:
+        - example: AGENT_ROLE
+          in: query
+          name: roleIdList
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves All Rbac Rule
+      tags:
+        - rbac-rule-controller
+  /v1/rules/channel-info:
+    get:
+      operationId: getChannelRule
+      parameters:
+        - example: OP
+          in: query
+          name: pms
+          required: true
+          schema:
+            type: string
+        - example: PI
+          in: query
+          name: channel
+          required: true
+          schema:
+            type: string
+        - example: WEB
+          in: query
+          name: subchannel
+          required: true
+          schema:
+            type: string
+        - example: EN
+          in: query
+          name: language
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Channel Rule
+      tags:
+        - channel-rule-controller
+  /v1/rules/max-arrival-date:
+    get:
+      operationId: getMaxArrivalDateRule
+      parameters:
+        - example: CCUI
+          in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaxArrivalDateRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Max Arrival Date Rule
+      tags:
+        - max-limitations-rules-controller
+  /v1/rules/max-nights:
+    get:
+      operationId: getMaxNightsRule
+      parameters:
+        - example: CCUI
+          in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaxNightsRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Max Nights Rule
+      tags:
+        - max-limitations-rules-controller
+  /v1/rules/max-room-occupancy:
+    get:
+      operationId: getMaxRoomOccupancyRule
+      parameters:
+        - example: CCUI
+          in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+        - example: HUB
+          in: query
+          name: brand
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaxRoomOccupancyResponseDto'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Room Occupancy Rule
+      tags:
+        - max-limitations-rules-controller
+  /v1/rules/max-rooms:
+    get:
+      operationId: getMaxRoomsRule
+      parameters:
+        - example: CCUI
+          in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaxRoomsRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Max Rooms Rule
+      tags:
+        - max-limitations-rules-controller
+  /v1/rules/multi-occupancy-supplement:
+    post:
+      operationId: getMultiOccupancySupplementPricing
+      parameters:
+        - in: query
+          name: dictionary
+          required: false
+          schema:
+            type: boolean
+            default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MultiOccupancySupplementRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiOccupancySupplementResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Occupancy Supplement Pricing
+      tags:
+        - occupancy-supplement-controller
+  /v1/rules/occupancy-supplement:
+    get:
+      operationId: getOccupancySupplementPricing
+      parameters:
+        - in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OccupancySupplementResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Occupancy Supplement Pricing
+      tags:
+        - occupancy-supplement-controller
+  /v1/rules/paypal:
+    get:
+      operationId: getPaypalRule
+      parameters:
+        - example: PI
+          in: query
+          name: channelId
+          required: true
+          schema:
+            type: string
+        - example: DE
+          in: query
+          name: country
+          required: true
+          schema:
+            type: string
+        - example: BMIB
+          in: query
+          name: hotelId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaxNightsRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Paypal Rule
+      tags:
+        - paypal-rules-controller
+  /v1/rules/rate-suppressions:
+    get:
+      operationId: getRateSuppressionRule
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateSuppressionRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Rate Suppression Rule
+      tags:
+        - rate-suppression-rule-controller
+  /v1/rules/room-substitutions:
+    get:
+      operationId: getRoomSubstitutionRule
+      parameters:
+        - example: 1
+          in: query
+          name: adults
+          required: true
+          schema:
+            type: integer
+            maximum: 2
+            minimum: 1
+        - example: 0
+          in: query
+          name: children
+          required: true
+          schema:
+            type: integer
+            maximum: 3
+            minimum: 0
+        - example: Double
+          in: query
+          name: roomType
+          required: true
+          schema:
+            type: string
+        - example: OP
+          in: query
+          name: pms
+          required: true
+          schema:
+            type: string
+        - example: PI
+          in: query
+          name: channel
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomSubstitutionRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Room Substitution Rule
+      tags:
+        - room-substitution-rule-controller
+  /v1/rules/source-info:
+    get:
+      operationId: getChannelRuleBasedOnSourceId
+      parameters:
+        - in: query
+          name: sourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Channel Rule based on Source Id
+      tags:
+        - channel-rule-controller
+  /v1/rules/vat-codes:
+    get:
+      operationId: getVatRule
+      parameters:
+        - example: UK
+          in: query
+          name: vatRegion
+          required: true
+          schema:
+            type: string
+        - example: "[MD2DIN,FI24HR]"
+          in: query
+          name: pkgCodeArr
+          required: true
+          schema:
+            type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VatRuleResponseDto'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Retrieves Vat Rule
+      tags:
+        - vat-rule-controller
+components:
+  schemas:
+    AmendmentRequestDetailsDto:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+        hotelCountryCode:
+          type: string
+        hotelLocalDateTime:
+          type: string
+        rateType:
+          type: string
+    AmendmentRuleResponseDto:
+      type: object
+      properties:
+        generatedAt:
+          type: string
+          format: date-time
+        isAmendable:
+          type: boolean
+        requestDetails:
+          $ref: '#/components/schemas/AmendmentRequestDetailsDto'
+    BusinessAllowanceRuleDto:
+      type: object
+      properties:
+        aemId:
+          type: string
+        isApplicableDaily:
+          type: boolean
+        isNotesMandatory:
+          type: boolean
+        isTransactionCode:
+          type: boolean
+        pms:
+          type: string
+        sourceId:
+          type: string
+        sourceType:
+          type: string
+        targetId:
+          type: string
+    BusinessAllowanceRuleResponseDto:
+      type: object
+      properties:
+        businessAllowances:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessAllowanceRuleDto'
+    ChannelRuleRequestDetailsDto:
+      type: object
+      properties:
+        channel:
+          type: string
+        language:
+          type: string
+        pms:
+          type: string
+        subchannel:
+          type: string
+    ChannelRuleResponseDto:
+      type: object
+      properties:
+        generatedAt:
+          type: string
+          format: date-time
+        ratePlanSets:
+          type: array
+          items:
+            type: string
+        requestDetails:
+          $ref: '#/components/schemas/ChannelRuleRequestDetailsDto'
+        sourceId:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        debugMessage:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+        errCode:
+          type: integer
+          format: int32
+        globalErrTextTemplate:
+          type: string
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    MaxArrivalDateRequestDetailsDto:
+      type: object
+      properties:
+        channelId:
+          type: string
+    MaxArrivalDateRuleResponseDto:
+      type: object
+      properties:
+        generatedAt:
+          type: string
+          format: date-time
+        maxArrivalDate:
+          type: integer
+          format: int32
+        requestDetails:
+          $ref: '#/components/schemas/MaxArrivalDateRequestDetailsDto'
+    MaxNightsRequestDetailsDto:
+      type: object
+      properties:
+        channelId:
+          type: string
+    MaxNightsRuleResponseDto:
+      type: object
+      properties:
+        generatedAt:
+          type: string
+          format: date-time
+        maxNights:
+          type: integer
+          format: int32
+        requestDetails:
+          $ref: '#/components/schemas/MaxNightsRequestDetailsDto'
+    MaxRoomOccupancyDataDto:
+      type: object
+      properties:
+        acceptedRoomTypes:
+          type: array
+          items:
+            type: string
+        adultsNumber:
+          type: integer
+          format: int32
+        childrenNumber:
+          type: integer
+          format: int32
+    MaxRoomOccupancyResponseDto:
+      type: object
+      properties:
+        brand:
+          type: string
+        channelId:
+          type: string
+        generatedAt:
+          type: string
+          format: date-time
+        roomOccupancies:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaxRoomOccupancyDataDto'
+    MaxRoomsRequestDetailsDto:
+      type: object
+      properties:
+        channelId:
+          type: string
+    MaxRoomsRuleResponseDto:
+      type: object
+      properties:
+        generatedAt:
+          type: string
+          format: date-time
+        maxRooms:
+          type: integer
+          format: int32
+        requestDetails:
+          $ref: '#/components/schemas/MaxRoomsRequestDetailsDto'
+    MultiOccupancySupplementRequestDto:
+      type: object
+      properties:
+        hotelIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/OccupancySupplementRequestDto'
+      required:
+        - hotelIds
+    MultiOccupancySupplementResponseDto:
+      type: object
+      properties:
+        dictionary:
+          type: object
+          additionalProperties:
+            type: number
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/OccupancySupplementResponseDto'
+    OccupancySupplementRequestDto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+      required:
+        - hotelId
+    OccupancySupplementResponse:
+      type: object
+      properties:
+        hotelId:
+          type: string
+        pricing:
+          type: number
+      required:
+        - hotelId
+        - pricing
+    OccupancySupplementResponseDto:
+      type: object
+      properties:
+        hotelId:
+          type: string
+        pricing:
+          type: number
+    RateSuppressionRuleResponseDto:
+      type: object
+      properties:
+        expiryDate:
+          type: string
+          format: date-time
+        generatedAt:
+          type: string
+          format: date-time
+        rate-suppression-list:
+          type: array
+          items:
+            type: string
+    RbacRuleResponseDto:
+      type: object
+      properties:
+        generatedAt:
+          type: string
+          format: date-time
+        hasAccess:
+          type: boolean
+    RoomSubstitutionDto:
+      type: object
+      properties:
+        accessibleSpecialRequest:
+          type: string
+        codePackage:
+          type: string
+        silent:
+          type: boolean
+        specialRequest:
+          type: string
+        type:
+          type: string
+    RoomSubstitutionRequestDetailsDto:
+      type: object
+      properties:
+        adults:
+          type: integer
+          format: int32
+        channel:
+          type: string
+        children:
+          type: integer
+          format: int32
+        pms:
+          type: string
+        roomType:
+          type: string
+    RoomSubstitutionRuleResponseDto:
+      type: object
+      properties:
+        generatedAt:
+          type: string
+          format: date-time
+        requestDetails:
+          $ref: '#/components/schemas/RoomSubstitutionRequestDetailsDto'
+        substitution-list:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomSubstitutionDto'
+    TransactionCodeDto:
+      type: object
+      properties:
+        pkgCode:
+          type: string
+        tranCode:
+          type: string
+        vatBearing:
+          type: boolean
+    ValidationError:
+      type: object
+      properties:
+        elementId:
+          type: string
+        errTextTemplate:
+          type: string
+    VatRuleResponseDto:
+      type: object
+      properties:
+        generatedAt:
+          type: string
+          format: date-time
+        tranCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionCodeDto'
+        vatRegion:
+          type: string

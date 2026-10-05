@@ -1,0 +1,110 @@
+name: Build Docker Container
+
+on:
+  workflow_dispatch:
+    inputs:
+      service-name:
+        description: 'Name of the service to build (e.g. payment-orchestration-service)'
+        required: true
+        type: string
+      app-version:
+        description: 'App version'
+        required: true
+        type: string
+      image-tag:
+        description: 'Image tag'
+        required: true
+        type: string
+
+jobs:
+  maven-build:
+    name: Maven build
+    runs-on: tooling-default-runner-scale-set
+    permissions:
+      contents: read
+    env:
+      SERVICE_NAME: ${{ inputs.service-name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Resolve service path
+        id: resolve-path
+        run: |
+          matches=(backend/*/services/$SERVICE_NAME)
+          if [[ ${#matches[@]} -eq 0 || ! -d "${matches[0]}" ]]; then
+            echo "::error::Service directory not found: backend/*/services/$SERVICE_NAME"
+            exit 1
+          fi
+          if [[ ${#matches[@]} -gt 1 ]]; then
+            echo "::error::Ambiguous match for $SERVICE_NAME: ${matches[*]}"
+            exit 1
+          fi
+          echo "service-path=${matches[0]}" >> "$GITHUB_OUTPUT"
+          echo "module-path=${matches[0]#backend/}" >> "$GITHUB_OUTPUT"
+
+      - name: Detect Java version
+        id: java-ver
+        run: |
+          SVC_PATH="${{ steps.resolve-path.outputs.service-path }}"
+          if [[ -f "$SVC_PATH/.java-version" ]]; then
+            echo "version=$(cat "$SVC_PATH/.java-version" | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=25" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up JDK
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5
+        with:
+          distribution: 'temurin'
+          java-version: '${{ steps.java-ver.outputs.version }}'
+
+      - name: Write settings.xml
+        env:
+          SETTINGS_XML: ${{ vars.SETTINGS_XML }}
+        run: echo "$SETTINGS_XML" | base64 -d > backend/settings.xml
+
+      # Shares one Maven repository with build-service.yaml and build-library.yaml.
+      # RESTORE ONLY — this is a manual one-off build, so it reads the cache that
+      # ci-be.yaml's seed-maven-cache job owns but never writes to the shared key.
+      # See the comment in build-service.yaml for the full rationale.
+      - name: Restore Maven packages
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('backend/**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2-
+
+      - name: Maven build
+        env:
+          MAVEN_CLI_OPTS: ${{ vars.MAVEN_CLI_OPTS }}
+        working-directory: backend/
+        # Maven build cache on the shared EFS volume — same flags as build-service.yaml.
+        # A cache hit restores the jar the PR's verify job already built and tested.
+        run: |
+          mvn $MAVEN_CLI_OPTS \
+            -Dmaven.build.cache.location=/mnt/efs/maven-build-cache \
+            -Dmaven.build.cache.maxLocalBuildsCached=7 \
+            clean verify -pl "${{ steps.resolve-path.outputs.module-path }}" -am
+
+      # Stage JAR with the name the docker build template expects: $REPO_NAME-$VERSION.jar
+      - name: Stage JAR for upload
+        run: |
+          mkdir -p mvn-artifacts
+          cp backend/${{ steps.resolve-path.outputs.module-path }}/target/${{ inputs.service-name }}-${{ inputs.app-version }}.jar \
+             mvn-artifacts/${{ inputs.service-name }}-${{ inputs.app-version }}.jar
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mvn-artifacts
+          path: mvn-artifacts/
+
+  deploy:
+    needs: maven-build
+    uses: whitbread-eos/wbd-workflows-templates/.github/workflows/manual-container-build-workflow.yaml@feat/SRE-320
+    secrets: inherit
+    with:
+      service-name: ${{ inputs.service-name }}
+      app-version: ${{ inputs.app-version }}
+      image-tag: ${{ inputs.image-tag }}

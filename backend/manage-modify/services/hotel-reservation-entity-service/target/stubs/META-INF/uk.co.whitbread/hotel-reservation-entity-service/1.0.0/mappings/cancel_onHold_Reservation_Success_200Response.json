@@ -1,0 +1,26 @@
+{
+  "id" : "e25bb5aa-8222-4eb7-aed9-a4869768589a",
+  "request" : {
+    "urlPath" : "/v1/reservations/cancellations/on-hold",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'MANOLD')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['basketReference'] == 'TestOnHold')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"basketReference\":\"TestOnHold\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "e25bb5aa-8222-4eb7-aed9-a4869768589a"
+}

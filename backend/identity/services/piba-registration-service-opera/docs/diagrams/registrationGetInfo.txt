@@ -1,0 +1,167 @@
+
+Message: registrationGetInfo 
+Static configurations and code is present for the DE, we would need to check that the configs in appliation.yml/helm charts are correctly configured and works as expected. 
+
+End Point -  /piba/registration/info - 
+PibaRegistrationController.registrationGetInfo() -   pibaRegistrationService.getInfo(registrationInfoRequest.getRegistrationCode());
+ - worldlineRegistrationTransformer.toRegistrationGetInfoSoapRequest(registrationCode) -- main logic to form the RequestSoapInfo 
+
+
+Message structure from the Messages.xsd and data.xsd:
+
+<xs:element name="registrationGetInfo">
+		<xs:annotation>
+			<xs:documentation>Get info for registration code</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Request" type="data:RegistrationGetInfoRequestType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="registrationGetInfoResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Response" type="data:RegistrationGetInfoResponseType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+    Data.xsd:
+    RegistrationGetInfoRequestType:
+    <xs:complexType name="RegistrationGetInfoRequestType">
+		<xs:sequence>
+			<xs:element name="Header" type="tns:HeaderType"/>
+			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+			<xs:element name="RegistrationCode">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+TrustedPartnerCredentialsType:
+	<xs:complexType name="TrustedPartnerCredentialsType">
+		<xs:annotation>
+			<xs:documentation>Trusted partner credentials</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Username">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Password">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+    RegistrationGetInfoResponseType:
+    	<xs:complexType name="RegistrationGetInfoResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ResponseType">
+				<xs:sequence>
+					<xs:element name="RegistrationCodeInfo" type="tns:RegistrationCodeInfoType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Summary information about the supplied registration code (including authentication questions)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+    RegistrationCodeInfoType:
+    	<xs:complexType name="RegistrationCodeInfoType">
+		<xs:sequence>
+			<xs:element name="RegistrationCode">
+				<xs:annotation>
+					<xs:documentation>The verified registration code </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:maxLength value="19"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PrimarySchemeCustomerId" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>Worldline customerId of the overall account</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SchemeCustomerId" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>When a cost centre this will be populated with a *different* value to PrimarySchemeCustomerId otherwise will be identical</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RegistrationRole">
+				<xs:annotation>
+					<xs:documentation>The role that the registration code relates to</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="AuthenticationQuestions" type="tns:RegistrationAuthenticationQuestionType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Authentication questions.  There could be none, 1 or many of these</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+-----------------------------------------------------------
+From Loggers:
+ Sample Request:
+[<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/><SOAP-ENV:Body><ns3:registrationGetInfo xmlns:ns2="worldline.mst.bsm.api.b2b.pi.data.v1.1" 
+    xmlns:ns3="worldline.mst.bsm.api.b2b.pi.messages.v1.1">
+    <ns3:Request>
+    <ns2:Header>
+    <ns2:ClientMessageId>{a6173aca-ea66-48e6-8ce2-4e04f1d4b628}</ns2:ClientMessageId>
+    <ns2:CultureCode>en-GB</ns2:CultureCode>
+    </ns2:Header>
+    <ns2:TrustedPartnerCredentials>
+    <ns2:Username>PremierInnMW</ns2:Username>
+    <ns2:Password><![CDATA[YJih#dxd16]]></ns2:Password>
+    </ns2:TrustedPartnerCredentials>
+    <ns2:RegistrationCode>C5YP-6VZZ-Z422-D96Q</ns2:RegistrationCode>
+    </ns3:Request></ns3:registrationGetInfo>
+    </SOAP-ENV:Body></SOAP-ENV:Envelope>]
+
+Response Structure: 
+
+Received response 
+[<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+<s:Body xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<registrationGetInfoResponse xmlns="worldline.mst.bsm.api.b2b.pi.messages.v1.1">
+<Response><ResultCode xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1">OK</ResultCode>
+<MetaInfo xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1"><MessageGuid>672562bb-b93c-45c8-9a8d-481998285d7d</MessageGuid>
+<TimeStamp>2023-04-25T15:41:25.7755882Z</TimeStamp></MetaInfo>
+<RegistrationCodeInfo xmlns="worldline.mst.bsm.api.b2b.pi.data.v1.1"><RegistrationCode>C5YP-6VZZ-Z422-D96Q</RegistrationCode>
+<PrimarySchemeCustomerId>931176</PrimarySchemeCustomerId><SchemeCustomerId>931176</SchemeCustomerId>
+<RegistrationRole>Cardholder</RegistrationRole><AuthenticationQuestions><QuestionId>1</QuestionId>
+<Question>What is your full card number?</Question></AuthenticationQuestions></RegistrationCodeInfo></Response>
+</registrationGetInfoResponse></s:Body></s:Envelope>] 
+for request [<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header/><SOAP-ENV:Body><ns3:registrationGetInfo xmlns:ns2="worldline.mst.bsm.api.b2b.pi.data.v1.1" xmlns:ns3="worldline.mst.bsm.api.b2b.pi.messages.v1.1"><ns3:Request><ns2:Header><ns2:ClientMessageId>{a6173aca-ea66-48e6-8ce2-4e04f1d4b628}</ns2:ClientMessageId><ns2:CultureCode>en-GB</ns2:CultureCode></ns2:Header><ns2:TrustedPartnerCredentials><ns2:Username>PremierInnMW</ns2:Username><ns2:Password><![CDATA[YJih#dxd16]]></ns2:Password></ns2:TrustedPartnerCredentials><ns2:RegistrationCode>C5YP-6VZZ-Z422-D96Q</ns2:RegistrationCode></ns3:Request></ns3:registrationGetInfo></SOAP-ENV:Body></SOAP-ENV:Envelope>]
+
+

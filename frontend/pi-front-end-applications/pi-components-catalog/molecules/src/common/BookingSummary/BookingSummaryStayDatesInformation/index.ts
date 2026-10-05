@@ -1,0 +1,3 @@
+import BookingSummaryStayDatesInformation from './BookingSummaryStayDatesInformation';
+
+export default BookingSummaryStayDatesInformation;

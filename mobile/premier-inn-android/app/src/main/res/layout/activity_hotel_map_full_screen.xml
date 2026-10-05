@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/toolbar_elevation"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:id="@+id/ll_map_full_view_distance_container"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_full_map_miles_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Header4"
+            android:text="@string/map_full_screen_miles_distance"
+            android:textColor="@color/premier_inn_purple"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Body"
+            android:layout_marginStart="@dimen/generic_margin_5"
+            android:text="@string/map_full_screen_distance_from" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/ll_map_full_view_distance_container">
+
+        <com.whitbread.premierinn.common.view.MapView
+            android:id="@+id/mv_full_screen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:mv_scrollGesturesEnabled="true"
+            app:mv_zoomGesturesEnabled="true"
+            app:mv_rotateGesturesEnabled="true"
+            app:mv_zoomControlsEnabled="false"
+            app:mv_buttonResetEnabled="true"/>
+
+    </FrameLayout>
+</RelativeLayout>

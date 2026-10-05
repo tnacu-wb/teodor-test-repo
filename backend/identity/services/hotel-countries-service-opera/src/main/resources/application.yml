@@ -1,0 +1,201 @@
+server:
+  port: 9031
+  shutdown: graceful
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+encrypt:
+  failOnError: false
+
+spring:
+  cache:
+    type: ${CACHE_TYPE:redis}
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /hotel-countries-service/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    redis:
+      enabled: false
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+# Whitbread Specific
+aem:
+  port: 80
+  countriesFile: admin/pi/countries.xml
+  authentication:
+    enabled: ${AEM_AUTH_ENABLED}
+    username: ${AEM_USERNAME}
+    password: ${AEM_PASSWORD}
+  hostMapping:
+    default: ${AEM_HOST_MAP_DEFAULT}
+    gb-en: ${AEM_HOST_MAP_GB}
+    de-de: ${AEM_HOST_MAP_DE}
+
+feign-clients:
+  aem:
+    name: aem
+    url: ${AEM_URL:https://www.uat.premierinn.digital}
+    country: ${AEM_COUNTRY}
+    language: ${AEM_LANG}
+    resource: admin/pi/countries.xml
+    username: ${AEM_USERNAME}
+    password: ${AEM_PASSWORD}
+
+hotel:
+  countries:
+    cache:
+      hotelCountries:
+        name: hotelCountries
+        ttl: 86400
+
+cache:
+  default:
+    ttl: 5000
+
+logging:
+  level:
+    brave: WARN
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-dit
+        - opera-uat
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+logging:
+  level:
+    uk.co.whitbread: debug
+    openfeign: debug
+    org.springframework.cache: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+logging:
+  level:
+    uk.co.whitbread: debug
+    org.apache.http.client.protocol: error
+    org.apache.http.wire: debug
+    org.springframework.cloud.openfeign: debug
+    org.springframework.ws.client.MessageTracing: trace
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - disable-caching
+  cache:
+    type: none
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

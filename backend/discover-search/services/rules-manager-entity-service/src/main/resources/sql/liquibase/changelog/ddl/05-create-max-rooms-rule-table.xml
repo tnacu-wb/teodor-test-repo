@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="tudor.codrea" id="create_table_max_rooms_rule" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="max_rooms_rule"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="max_rooms_rule">
+            <column name="rule_id" autoIncrement="true" remarks="rule_id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="max_rooms_rule_pkey"/>
+            </column>
+
+            <column name="ref_rule_id" type="integer">
+                <constraints nullable="true" foreignKeyName="max_rooms_rule_ref_rule_id_fkey"
+                    references="max_rooms_rule(rule_id)"/>
+            </column>
+
+            <column name="status" type="VARCHAR(20)" defaultValue="NEW">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_modified_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="enable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
+            </column>
+            <column name="disable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
+            </column>
+
+            <column name="channel_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="max_rooms" type="integer">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

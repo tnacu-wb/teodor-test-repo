@@ -1,0 +1,121 @@
+# Ephemeral (per-PR) values for refund-request-processor.
+#
+# ci-matrix-deploy-eph.yaml layers this file OVER the backend stack defaults at
+# backend/infrastructure/helm/ephemeral-values.yaml:
+#
+#   opera-app-chart/values.yaml  <  stack ephemeral defaults  <  THIS FILE  <  --set
+#
+# Everything generic to a PR release — canary/autoscaling/pdb/istio/prometheus off,
+# replicaCount 1, the trimmed lifecycle and grace period, ndots, probe TIMINGS,
+# imagePullSecrets, namespace — is inherited and is not repeated here.
+#
+# Overridden per-deploy by ci-matrix-deploy-eph.yaml, via --set:
+#   applicationName, service.name, namespace, image.repository, image.tag,
+#   imageAutomation.create, ephemeral
+#
+# Environment is inlined rather than read from `refund-request-processor-configmap`:
+# the chart names its ConfigMap `{{ applicationName }}-configmap` and applicationName is
+# the PR release name here, so a hard-coded configMapKeyRef could never resolve.
+#
+# ── The Kafka consumer group ─────────────────────────────────────────────────
+#
+# KAFKA_GROUP_ID is deliberately NOT the dev group. A PR release joining
+# `basket-refund-dev` would be handed live partitions of `refunds-dev` and would issue
+# real 3C refunds for the shared dev consumer's messages. It gets its own group, and
+# therefore its own offsets. The group name is a constant, so two concurrent PR releases
+# of THIS service share one group and split the partitions between them.
+
+applicationName: refund-request-processor
+
+image:
+  repository: 327347623470.dkr.ecr.eu-west-1.amazonaws.com/whitbreaddigital/refund-request-processor
+
+deployment:
+  containerPorts:
+    - containerPort: 9113
+      protocol: TCP
+      name: http
+    # Not published through the Service — reach it with
+    # `kubectl port-forward -n opera-be deploy/<release> 5005:5005`.
+    - containerPort: 5005
+      protocol: TCP
+      name: debug
+
+  containerEnvFrom:
+    # Cluster-provisioned and shared, so its fixed name is safe here. `optional: true`
+    # because nothing in .github/workflows creates it: absent, the app falls back to
+    # application.yml's localhost:9092 and fails to consume — a degraded environment
+    # rather than a pod stuck in CreateContainerConfigError with `helm --wait` timing out.
+    - configMapRef:
+        name: kafka-bootstrap-config
+        optional: true
+
+  containerEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: opera-dev
+    - name: JAVA_OPTS
+      value: -XX:InitialRAMPercentage=10 -XX:MaxRAMPercentage=70 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+    # ── Kafka ────────────────────────────────────────────────────────────────
+    - name: TOPICS_REFUNDS
+      value: refunds-dev
+    - name: TOPICS_ACK
+      value: ack-dev
+    # See the header: an isolated group so a PR release cannot consume the shared dev
+    # consumer's refund requests.
+    - name: KAFKA_GROUP_ID
+      value: basket-refund-eph
+    - name: KAFKA_REFUNDS_CONCURRENCY
+      value: '1'
+    - name: KAFKA_REQUEST_TIMEOUT
+      value: '30000'
+    - name: KAFKA_HEARTBEAT_INTERVAL
+      value: '1000'
+    - name: KAFKA_MAX_POLL_INTERVAL
+      value: '900000'
+    - name: KAFKA_MAX_POLL_RECORDS
+      value: '30'
+    - name: KAFKA_SESSION_TIMEOUT
+      value: '45000'
+
+    # ── 3C (the payment provider refunds are issued through) ─────────────────
+    # Shared dev instance, addressed by bare hostname (its Service publishes port 80).
+    - name: THREEC_HOST
+      value: threec-payment-service-opera
+    # `optional: true` keeps a missing secret a degraded environment rather than a broken
+    # one: nothing in .github/workflows creates threec-secrets, and a hard secretKeyRef
+    # to a secret absent from opera-be leaves the pod in CreateContainerConfigError
+    # forever while `helm --wait` times out. Without the header value every refund call
+    # is rejected by 3C and the consumer plumbing is still testable.
+    - name: THREEC_PAYMENT_SERVICE_API_VALUE
+      valueFrom:
+        secretKeyRef:
+          name: threec-secrets
+          key: threec-header
+          optional: true
+
+  readinessProbe:
+    httpGet:
+      path: /v1/rrp/actuator/health/readiness
+      port: 9113
+
+  livenessProbe:
+    httpGet:
+      path: /v1/rrp/actuator/health/liveness
+      port: 9113
+
+  # Only memory is stated; requests.cpu (50m) merges through from the stack defaults.
+  # requests.memory is pinned to limits.memory because the heap is sized off the limit.
+  resources:
+    requests:
+      memory: 1024Mi
+    limits:
+      memory: 1024Mi
+
+service:
+  name: refund-request-processor
+  ports:
+    - port: 80
+      targetPort: 9113
+      protocol: TCP
+      name: port9113

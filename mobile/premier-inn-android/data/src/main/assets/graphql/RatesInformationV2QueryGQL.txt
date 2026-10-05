@@ -1,0 +1,14 @@
+query ratesInformationV2($brand: String!, $channel: String, $ratePlans: [String], $language: String!, $country: String!, $hotelId: String!) {
+    ratesInformationV2(brand: $brand, channel: $channel, ratePlans: $ratePlans, language: $language, country: $country, hotelId: $hotelId) {
+             rateClassifications {
+               rateClassification
+               rateOrder
+               rateNotes
+               rateName
+               rateLongDescription
+               rateDescription
+               rateTags
+             }
+           }
+}
+

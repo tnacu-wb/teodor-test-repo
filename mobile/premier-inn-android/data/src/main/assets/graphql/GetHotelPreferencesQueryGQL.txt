@@ -1,0 +1,13 @@
+query getHotelPreferences($hotelId: String!, $preferenceGroupsCodes: String!, $language: String) {
+    getHotelPreferences(hotelId: $hotelId, preferenceGroupsCodes: $preferenceGroupsCodes, language: $language) {
+        hotelPreferences {
+            description
+            code
+            preferenceGroup
+            housekeeping
+            orderSequence
+            hotelId
+            label
+        }
+    }
+}

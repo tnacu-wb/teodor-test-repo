@@ -1,0 +1,10 @@
+@startuml
+entity "Reservation Entity Service" as A
+entity "OHIP Adapter Service" as OHIP
+entity "OHIP Adapter Service" as OHIP
+
+A -> OHIP: GET adp/v1/reservations?basketReference=123&hotelId=HOTELTEST
+OHIP -> OHIP: GET ohip/v1/hotels/{hotelId}/reservations?externalReferenceIds=123&hotelId=HOTELTEST
+OHIP <- OHIP: Reservations
+A <- OHIP: Reservations
+@enduml

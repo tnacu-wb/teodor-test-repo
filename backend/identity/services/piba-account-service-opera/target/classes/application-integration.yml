@@ -1,0 +1,91 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration
+      - org.springframework.boot.data.redis.autoconfigure.DataRedisReactiveAutoConfiguration
+      - org.springframework.boot.data.redis.autoconfigure.health.DataRedisHealthContributorAutoConfiguration
+      - org.springframework.boot.data.redis.autoconfigure.health.DataRedisReactiveHealthContributorAutoConfiguration
+  cloud:
+    config:
+      enabled: false
+    openfeign:
+      circuitbreaker:
+        enabled: true
+server:
+  port: 9064
+
+swagger:
+  api:
+    version: 2.3
+
+feign:
+  pibaguid:
+    name: pibaguid
+    url: http://localhost:${wiremock.server.port:0}
+  pibamultiguid:
+    name: pibamultiguid
+    url: http://localhost:${wiremock.server.port:0}
+
+worldline:
+  clientMessageId: '{a6173aca-ea66-48e6-8ce2-4e04f1d4b628}'
+  cultureCode: en-GB
+  host: http://localhost:${wiremock.server.port:0}
+  piba:
+    username: test
+    password: test
+    service:
+      url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+      urlmock: ${worldline.host}/b2b.pi.v1.1/b2bpiapimock.svc
+  gb:
+    clientMessageId: '{gb-client-message-id}}'
+    cultureCode: en-GB
+    username: gbtest
+    password: gbtest
+    url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+  de:
+    clientMessageId: '{de-client-message-id}'
+    cultureCode: de-DE
+    username: detest
+    password: detest
+    url: ${worldline.host}/b2b.pi.v1.1/b2bpiapi.svc
+
+  tetheringPlus:
+    enabled: false
+
+auth:
+  tenants:
+    - name: auth0
+      audience: http://localhost/api/v2/
+      namespace: http://localhost
+      issuer: http://localhost/
+      jwkUri: http://localhost/.well-known/jwks.json
+
+
+cdh:
+  enableBbDataFetch: false
+  oauth-client:
+    host: http://localhost:${wiremock.server.port:0}
+    token-url: /oauth2/v2.0/token
+    client-id: clientId
+    client-secret: clientSecret
+    scope: https://localhost.azurewebsites.net/.default
+    grant-type: client_credentials
+    enabled: true
+  api:
+    host: http://localhost:${wiremock.server.port:1}
+    is-oauth: true
+    oauth:
+      subscription-key-header-name: Ocp-Apim-Subscription-Key
+      subscription-key: 88134dec7f304a
+
+default:
+  remote:
+    ipAddress: 127.0.0.1
+
+threadpool:
+  worldline:
+    coreSize: ${WL_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${WL_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${WL_EXECUTOR_QUEUE_SIZE:50}
+

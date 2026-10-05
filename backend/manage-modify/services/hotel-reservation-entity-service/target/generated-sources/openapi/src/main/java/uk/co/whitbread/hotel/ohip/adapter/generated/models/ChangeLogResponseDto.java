@@ -1,0 +1,85 @@
+package uk.co.whitbread.hotel.ohip.adapter.generated.models;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import org.springframework.lang.Nullable;
+import uk.co.whitbread.hotel.ohip.adapter.generated.models.ChangeLogListTypeDto;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
+
+/**
+ * ChangeLogResponseDto
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-08-27T18:51:15.274731+03:00[Europe/Bucharest]", comments = "Generator version: 7.12.0")
+public class ChangeLogResponseDto {
+
+  private @Nullable ChangeLogListTypeDto activityLog;
+
+  public ChangeLogResponseDto activityLog(ChangeLogListTypeDto activityLog) {
+    this.activityLog = activityLog;
+    return this;
+  }
+
+  /**
+   * Get activityLog
+   * @return activityLog
+   */
+  @Valid 
+  @Schema(name = "activityLog", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("activityLog")
+  public ChangeLogListTypeDto getActivityLog() {
+    return activityLog;
+  }
+
+  public void setActivityLog(ChangeLogListTypeDto activityLog) {
+    this.activityLog = activityLog;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ChangeLogResponseDto changeLogResponseDto = (ChangeLogResponseDto) o;
+    return Objects.equals(this.activityLog, changeLogResponseDto.activityLog);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(activityLog);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class ChangeLogResponseDto {\n");
+    sb.append("    activityLog: ").append(toIndentedString(activityLog)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+

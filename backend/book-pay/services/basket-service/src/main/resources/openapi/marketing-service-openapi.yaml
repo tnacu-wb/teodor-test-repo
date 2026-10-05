@@ -1,0 +1,997 @@
+swagger: '2.0'
+info:
+  description: API Documentation
+  version: 2.0.3-5
+  title: Marketing Microservice API Documentation
+host: api.uat.eks.whitbread.digital
+basePath: /hotelmarketing
+tags:
+  - name: Marketing API Controller
+    description: Marketing Customer Hub Newsletter Controller
+  - name: Permission Management API Controller
+    description: Marketing Permission Management Controller
+paths:
+  /marketing/hotels/newsletter:
+    post:
+      tags:
+        - Marketing API Controller
+      summary: subscribe
+      description: sign up to marketing newsletters
+      operationId: subscribeUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/MarketingSubscriptionRequest'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/MarketingSubscriptionResponse'
+        '400':
+          description: 'Error Occurred '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /marketing/hotels/newsletter/edit:
+    put:
+      tags:
+        - Marketing API Controller
+      summary: Newsletter Preferences Edit Service
+      description: Newsletter Subscription - editNewsletterPreferences method
+      operationId: editNewsletterPreferencesUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/NewsletterPreferencesEditRequest'
+      responses:
+        '204':
+          description: Success. No content
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: true
+  /marketing/hotels/newsletter/get:
+    post:
+      tags:
+        - Marketing API Controller
+      summary: Get Newsletter Preferences
+      description: Newsletter Subscription - getNewsletterPreferences method
+      operationId: getNewsletterPreferencesUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/NewsletterPreferencesGetRequest'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/NewsletterPreferencesGetResponse'
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: true
+  /marketing/hotels/newsletter/{customerId}:
+    get:
+      tags:
+        - Marketing API Controller
+      summary: Newsletter Subscription Info Service
+      description: Newsletter Subscription - user info method
+      operationId: subscriptionInfoUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: customerId
+          in: path
+          description: customerId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: All good
+          schema:
+            $ref: '#/definitions/MarketingSubscriptionInfoResponse'
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+    put:
+      tags:
+        - Marketing API Controller
+      summary: Newsletter Preferences Update Service
+      description: Newsletter Subscription - updateNewsletterPreferences method
+      operationId: updateNewsletterPreferencesUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: customerId
+          in: path
+          description: customerId
+          required: true
+          type: string
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/NewsletterPreferencesUpdateRequest'
+      responses:
+        '204':
+          description: Success. No content
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: true
+  /marketing/hotels/newsletter/{customerId}/status:
+    get:
+      tags:
+        - Marketing API Controller
+      summary: Newsletter Status Service
+      description: Newsletter Subscription - subscriptionInfo method
+      operationId: statusUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: customerId
+          in: path
+          description: customerId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: All good
+          schema:
+            $ref: '#/definitions/MarketingSubscriptionInfoResponse'
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /marketing/hotels/regions:
+    get:
+      tags:
+        - Marketing API Controller
+      summary: Gets all regions
+      description: Returns all regions hotels are active in.
+      operationId: getRegionsUsingGET
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: All good
+          schema:
+            $ref: '#/definitions/RegionsResponse'
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /marketing/newsletter/channel/{contactChannelId}/confirm:
+    post:
+      tags:
+        - Permission Management API Controller
+      summary: Newsletter Preferences Confirm Double Opt In Service
+      description: 'Customer will receive an email to confirm they are opting into newsletters. This email will contain a link to the permission centre which will call this endpoint. '
+      operationId: confirmDoubleOptInUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: contactChannelId
+          in: path
+          description: Value of contactChannelId
+          required: true
+          type: string
+          x-example: CHNL39288_28a5d984-7782-4e93-99a5-b2e9f8a746f3
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/ConfirmDoubleOptInRequest'
+      responses:
+        '204':
+          description: Success. No content
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /marketing/newsletter/channel/{contactChannelId}/unsubscribe:
+    delete:
+      tags:
+        - Permission Management API Controller
+      summary: Newsletter Preferences Unsubscribe Service
+      description: 'Customer will receive marketing emails that they have signed up to. This email will contain a link to the permission centre for unsubscribing which will call this endpoint. '
+      operationId: unsubscribeUsingDELETE
+      produces:
+        - application/json
+      parameters:
+        - name: contactChannelId
+          in: path
+          description: Value of contactChannelId
+          required: true
+          type: string
+          x-example: CHNL39288_28a5d984-7782-4e93-99a5-b2e9f8a746f3
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/UnsubscribeRequest'
+      responses:
+        '204':
+          description: Success. No content
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /marketing/newsletter/{contactType}/channel/{contactChannelId}:
+    get:
+      tags:
+        - Permission Management API Controller
+      summary: Get Newsletter Preferences using channel id
+      description: Newsletter Subscription - Used to retrieve newsletter preferences using the contact channel id.
+      operationId: getPermissionsUsingContactChannelIdUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: brandCodes
+          in: query
+          description: Array of brand codes.
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+              - BARB
+              - BEEF
+              - BREW
+              - COOK
+              - PGER
+              - PHUB
+              - PINN
+              - PZIP
+              - TABL
+              - TAYB
+              - WINN
+          collectionFormat: multi
+          enum:
+            - BARB
+            - BEEF
+            - BREW
+            - COOK
+            - PGER
+            - PHUB
+            - PINN
+            - PZIP
+            - TABL
+            - TAYB
+            - WINN
+        - name: business
+          in: query
+          required: false
+          type: boolean
+        - name: contactChannelId
+          in: path
+          description: CHNL1880_ed84b98a-59c5-40e0-be5a-10544c289ea5
+          required: true
+          type: string
+          default: CHNL1880_ed84b98a-59c5-40e0-be5a-10544c289ea5
+        - name: contactType
+          in: path
+          description: email
+          required: true
+          type: string
+          default: email
+          enum:
+            - email
+            - phone
+        - name: contactValue
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/PreferencesGetResponse'
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /marketing/newsletter/{contactType}/{contactValue}:
+    get:
+      tags:
+        - Permission Management API Controller
+      summary: Get Newsletter Preferences Authenticated
+      description: Newsletter Subscription - Used to retrieve newsletter preferences using the contact channel value.This endpoint is authenticated to prevent access of another customers newsletter persmissions using their email or phone.
+      operationId: getPermissionsUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: Authentication
+          in: header
+          description: Bearer sdfghjdfgh
+          required: true
+          type: string
+          default: Bearer sdfghjdfgh
+        - name: bookingChannel
+          in: header
+          description: bookingChannel
+          required: false
+          type: string
+          default: WEB
+          enum:
+            - MOBILE
+            - WEB
+            - WEB_DE
+            - CBT
+        - name: brandCodes
+          in: query
+          description: Array of brand codes.
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+              - BARB
+              - BEEF
+              - BREW
+              - COOK
+              - PGER
+              - PHUB
+              - PINN
+              - PZIP
+              - TABL
+              - TAYB
+              - WINN
+          collectionFormat: multi
+          enum:
+            - BARB
+            - BEEF
+            - BREW
+            - COOK
+            - PGER
+            - PHUB
+            - PINN
+            - PZIP
+            - TABL
+            - TAYB
+            - WINN
+        - name: business
+          in: query
+          required: false
+          type: boolean
+        - name: contactChannelId
+          in: query
+          required: false
+          type: string
+        - name: contactType
+          in: path
+          description: email
+          required: true
+          type: string
+          default: email
+          enum:
+            - email
+            - phone
+        - name: contactValue
+          in: path
+          description: test@validemail.com
+          required: true
+          type: string
+          default: test@validemail.com
+        - name: hotel-brand
+          in: header
+          description: hotel-brand
+          required: false
+          type: string
+          default: PI
+          enum:
+            - HUB
+            - PI
+            - PID
+            - CBT
+            - ZIP
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/PreferencesGetResponse'
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+    put:
+      tags:
+        - Permission Management API Controller
+      summary: Newsletter Preferences Create/Update Service
+      description: Newsletter Subscription - updates newsletter preferences or creates new preferences for a customer. If contactType = phone then contactSubType is mandatory.
+      operationId: updatePermissionsUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: contactType
+          in: path
+          description: Choose between email or phone
+          required: true
+          type: string
+          default: email
+          enum:
+            - email
+            - phone
+        - name: contactValue
+          in: path
+          description: Value of contactType
+          required: true
+          type: string
+          default: test@validemail.com
+          x-example: test@validemail.com|07777777777
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/UpdatePreferencesRequest'
+      responses:
+        '204':
+          description: Success. No content
+        '400':
+          description: 'Error Occurred: You did something wrong check your input'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: 'Server Error: Our bad something went wrong on our side'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+definitions:
+  BrandPermission:
+    type: object
+    properties:
+      2ndOptIn:
+        type: boolean
+      2ndOptInReq:
+        type: boolean
+      brand:
+        type: string
+      brandCode:
+        type: string
+      contentPermission:
+        $ref: '#/definitions/ContentPermissionData'
+      lastModifiedBy:
+        type: string
+      lastOptInDate:
+        type: string
+      lastOptOutDate:
+        type: string
+      lastSourceBusinessKey:
+        type: string
+      lastSourceCustomerId:
+        type: string
+      optIn:
+        type: boolean
+      sharedBy:
+        type: array
+        items:
+          type: string
+    title: BrandPermission
+  ConfirmDoubleOptInRequest:
+    type: object
+    required:
+      - brandCodes
+      - contactType
+    properties:
+      brandCodes:
+        type: array
+        items:
+          type: string
+      contactSubType:
+        type: string
+        enum:
+          - mobile
+          - landline
+      contactType:
+        type: string
+        enum:
+          - email
+          - phone
+      customerId:
+        type: string
+    title: ConfirmDoubleOptInRequest
+  ContactChannel:
+    type: object
+    required:
+      - contactChannelType
+    properties:
+      contactChannelId:
+        type: string
+      contactChannelType:
+        type: string
+        enum:
+          - Email
+          - Telephone
+      contactChannelValue:
+        type: string
+    title: ContactChannel
+  ContentPermission:
+    type: object
+    properties:
+      secondParty:
+        type: boolean
+      thirdParty:
+        type: boolean
+    title: ContentPermission
+  ContentPermissionData:
+    type: object
+    properties:
+      2ndParty:
+        type: boolean
+      3rdParty:
+        type: boolean
+    title: ContentPermissionData
+  Customer:
+    type: object
+    required:
+      - countryOfResidence
+      - language
+    properties:
+      countryOfResidence:
+        type: string
+      customerId:
+        type: string
+      firstName:
+        type: string
+      language:
+        type: string
+        example: en
+        description: ISO code for language which the customer would like to receive marketing.
+      lastName:
+        type: string
+      nationality:
+        type: string
+      title:
+        type: string
+      userId:
+        type: string
+    title: Customer
+  EditSubscription:
+    type: object
+    required:
+      - brandCodes
+      - contactChannelPermission
+      - contactChannelType
+    properties:
+      brandCodes:
+        type: array
+        items:
+          type: string
+      contactChannelId:
+        type: string
+      contactChannelPermission:
+        type: boolean
+      contactChannelSubType:
+        type: string
+      contactChannelType:
+        type: string
+        enum:
+          - Email
+          - Telephone
+      contactChannelValue:
+        type: string
+      contentPermission:
+        $ref: '#/definitions/ContentPermission'
+    title: EditSubscription
+  ErrorResponse:
+    type: object
+    required:
+      - code
+      - details
+    properties:
+      code:
+        type: string
+        example: '001'
+        minLength: 1
+        maxLength: 2147483647
+      details:
+        type: array
+        example:
+          - Error message
+        items:
+          type: string
+    title: ErrorResponse
+  LoyaltyAccount:
+    type: object
+    properties:
+      loyaltyBrand:
+        type: string
+      loyaltySystemId:
+        type: string
+    title: LoyaltyAccount
+  MarketingSubscriptionInfoResponse:
+    type: object
+    properties:
+      businessClient:
+        type: boolean
+      countryCode:
+        type: string
+      emailAddress:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      regionSubscriptions:
+        type: array
+        items:
+          $ref: '#/definitions/RegionSubscription'
+      regions:
+        type: array
+        items:
+          type: string
+      restaurantNewsletter:
+        type: boolean
+      sessionId:
+        type: string
+      subscribedStatus:
+        type: boolean
+    title: MarketingSubscriptionInfoResponse
+  MarketingSubscriptionRequest:
+    type: object
+    required:
+      - firstName
+      - lastName
+    properties:
+      businessClient:
+        type: boolean
+      countryCode:
+        type: string
+      customerId:
+        type: string
+      emailAddress:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      regionSubscriptions:
+        type: array
+        items:
+          $ref: '#/definitions/RegionSubscription'
+      regions:
+        type: array
+        items:
+          type: string
+      restaurantNewsletter:
+        type: boolean
+      sessionId:
+        type: string
+    title: MarketingSubscriptionRequest
+  MarketingSubscriptionResponse:
+    type: object
+    properties:
+      customerId:
+        type: string
+      emailAddress:
+        type: string
+      success:
+        type: boolean
+    title: MarketingSubscriptionResponse
+  NewsletterPreferencesEditRequest:
+    type: object
+    properties:
+      customerId:
+        type: string
+      subscriptionData:
+        type: array
+        items:
+          $ref: '#/definitions/EditSubscription'
+      userId:
+        type: string
+    title: NewsletterPreferencesEditRequest
+  NewsletterPreferencesGetRequest:
+    type: object
+    required:
+      - requestId
+    properties:
+      brandCodes:
+        type: array
+        items:
+          type: string
+      contactChannel:
+        $ref: '#/definitions/ContactChannel'
+      requestId:
+        type: string
+    title: NewsletterPreferencesGetRequest
+  NewsletterPreferencesGetResponse:
+    type: object
+    properties:
+      brandPermissions:
+        type: array
+        items:
+          $ref: '#/definitions/BrandPermission'
+      contactChannelId:
+        type: string
+      contactChannelValue:
+        type: string
+      deleted:
+        type: boolean
+      doNotContact:
+        type: string
+      doNotContactAppliedDate:
+        type: string
+      isValid:
+        type: boolean
+      lastQuarantineDate:
+        type: string
+      loyaltyAccounts:
+        type: array
+        items:
+          $ref: '#/definitions/LoyaltyAccount'
+      modified:
+        type: string
+      shared:
+        type: boolean
+      sharedBy:
+        type: array
+        items:
+          type: string
+      valid:
+        type: boolean
+    title: NewsletterPreferencesGetResponse
+  NewsletterPreferencesUpdateRequest:
+    type: object
+    required:
+      - correlationId
+      - subscriptions
+    properties:
+      correlationId:
+        type: string
+      subscriptions:
+        type: array
+        items:
+          $ref: '#/definitions/Subscription'
+    title: NewsletterPreferencesUpdateRequest
+  Permission:
+    type: object
+    properties:
+      2ndOptIn:
+        type: boolean
+      2ndOptInReq:
+        type: boolean
+      brand:
+        type: string
+      brandCode:
+        type: string
+      optIn:
+        type: boolean
+      secondPartyOptIn:
+        type: boolean
+      thirdPartyVendorsOptIn:
+        type: boolean
+    title: Permission
+  PreferencesGetResponse:
+    type: object
+    properties:
+      contactChannelId:
+        type: string
+      contactChannelValue:
+        type: string
+      deleted:
+        type: boolean
+      loyaltyAccounts:
+        type: array
+        items:
+          $ref: '#/definitions/LoyaltyAccount'
+      permissions:
+        type: array
+        items:
+          $ref: '#/definitions/Permission'
+      valid:
+        type: boolean
+    title: PreferencesGetResponse
+  Region:
+    type: object
+    properties:
+      active:
+        type: boolean
+      description:
+        type: string
+      id:
+        type: string
+    title: Region
+  RegionSubscription:
+    type: object
+    required:
+      - regionId
+      - subscribed
+    properties:
+      regionId:
+        type: string
+      subscribed:
+        type: boolean
+    title: RegionSubscription
+  RegionsResponse:
+    type: object
+    properties:
+      regions:
+        type: array
+        items:
+          $ref: '#/definitions/Region'
+    title: RegionsResponse
+  SourceDetails:
+    type: object
+    properties:
+      channel:
+        type: string
+        example: WEB/BB/APPS_IOS/APPS_ANDROID
+        description: Channel is the source from where Opt-In/Opt-Out requested
+      journey:
+        type: string
+        example: PERMISSIONCENTRE/SIGNUP/NEWSLETTERSIGNUP/NEWSLETTERSIGNUP
+        description: Journey is User flow from where Opt-In/Opt-Out requested
+      locale:
+        type: string
+        example: UK/DE
+        description: Locale is the logical location from Opt-In/Opt-Out requested
+    title: SourceDetails
+  Subscription:
+    type: object
+    required:
+      - brandCode
+      - contactType
+      - contactValue
+      - subscribe
+    properties:
+      brandCode:
+        type: string
+        enum:
+          - BARB
+          - BEEF
+          - BREW
+          - COOK
+          - PGER
+          - PHUB
+          - PINN
+          - PZIP
+          - TABL
+          - TAYB
+          - WINN
+      contactType:
+        type: string
+        enum:
+          - Email
+          - Telephone
+      contactValue:
+        type: string
+      subscribe:
+        type: boolean
+    title: Subscription
+  UnsubscribeRequest:
+    type: object
+    required:
+      - brandCodes
+      - contactType
+    properties:
+      brandCodes:
+        type: array
+        items:
+          type: string
+      contactSubType:
+        type: string
+        enum:
+          - mobile
+          - landline
+      contactType:
+        type: string
+        enum:
+          - email
+          - phone
+      customerId:
+        type: string
+    title: UnsubscribeRequest
+  UpdatePreferencesRequest:
+    type: object
+    required:
+      - brandCodes
+      - customer
+    properties:
+      brandCodes:
+        type: array
+        items:
+          type: string
+      contactSubType:
+        type: string
+        enum:
+          - mobile
+          - landline
+      customer:
+        $ref: '#/definitions/Customer'
+      doubleOptIn:
+        type: boolean
+      optIn:
+        type: boolean
+      secondPartyOptIn:
+        type: boolean
+      sourceDetails:
+        $ref: '#/definitions/SourceDetails'
+      thirdPartyVendorsOptIn:
+        type: boolean
+    title: UpdatePreferencesRequest

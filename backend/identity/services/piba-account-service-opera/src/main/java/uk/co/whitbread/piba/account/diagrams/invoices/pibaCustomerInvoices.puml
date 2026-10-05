@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+header piba-account-service
+title /piba/account/invoices
+autonumber
+participant "UI" as Client
+participant "PibaAccountController" as PAC
+participant "PibaAccountService" as PAS
+participant "TokenService" as TS
+participant "PibaGuidServiceClient" as PGSC
+participant "WorldlineTransformer" as WLT
+participant "worldlineWebServiceTemplate" as WWST
+participant "WorldLineAccountResponseValidator" as WLARV
+
+Client -> PAC : Fetches Invoices for the linked account \n (/piba/account/transactions) \n For Account Payload request
+PAC -> PAS : Calls viewInvoices for customerAccountInvoiceRequest
+PAS -> WLT : Calls toCustomerAccountInvoiceRequest
+WLT -> PAS : Returns CustomerAccountInvoiceListResponse
+PAS -> WWST : Dispatch Worldline Request : marshalSendAndReceive
+PAS -> PAS : Converts to CustomerAccountInvoiceListResponse
+PAS -> WLARV : Validate the Response
+PAS -> WLT : Calls toCustomerAccountInvoiceResponse
+WLT -> PAS : Return CustomerAccountInvoiceResponse
+PAS -> PAC : Return CustomerAccountInvoiceResponse
+PAC -> Client : Return CustomerAccountInvoiceResponse
+@enduml

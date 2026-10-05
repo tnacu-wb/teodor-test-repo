@@ -1,0 +1,231 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:9028
+  description: Generated server url
+paths:
+  /auth/session:
+    post:
+      tags:
+      - Hotel Authentication operations
+      summary: Initiates a session for a customer using its guest history number
+      description: Customer session creation by encrypted guest history number
+      operationId: initiateSession
+      parameters:
+      - name: business
+        in: query
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionRequest"
+        required: true
+      responses:
+        "500":
+          description: "Server Error: Our bad something went wrong on our side"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: "Error Occurred: You did something wrong check your input"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: All Good!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
+        "401":
+          description: "Invalid Credentials: Wrong guest history number"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /auth/hotels/logout:
+    post:
+      tags:
+      - Hotel Authentication operations
+      summary: Logout
+      description: Sign out from an open session
+      operationId: logout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LogoutRequest"
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      deprecated: true
+  /auth/hotels/login:
+    post:
+      tags:
+      - Hotel Authentication operations
+      summary: Sign in to an existing customer
+      description: Customer Login
+      operationId: login
+      parameters:
+      - name: business
+        in: query
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "500":
+          description: "Server Error: Our bad something went wrong on our side"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: "Error Occurred: You did something wrong check your input"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: All Good!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: "Invalid Credentials: Wrong username or password"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      deprecated: true
+  /auth/hotels/token/{length}:
+    get:
+      tags:
+      - Hotel Authentication operations
+      summary: SecureTokenGenerator
+      description: Returns a new random token
+      operationId: getToken
+      parameters:
+      - name: length
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "001"
+          minLength: 1
+        details:
+          type: array
+          example:
+          - Error message
+          items:
+            type: string
+      required:
+      - code
+      - details
+    SessionRequest:
+      type: object
+      properties:
+        guestHistoryNumber:
+          type: string
+          minLength: 1
+      required:
+      - guestHistoryNumber
+    SessionResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        companyId:
+          type: string
+        employeeId:
+          type: string
+        accessLevel:
+          type: string
+    LogoutRequest:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          example: qpQzrHMfVsJcOhSM
+          minLength: 1
+      required:
+      - sessionId
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          format: email
+          example: user@google.com
+          minLength: 1
+        password:
+          type: string
+          example: Str0ngPa$$w0rd
+          minLength: 1
+      required:
+      - password
+      - username
+    LoginResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        loginSuccessful:
+          type: boolean

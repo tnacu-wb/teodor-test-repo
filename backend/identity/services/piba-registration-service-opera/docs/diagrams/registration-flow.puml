@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant "UI/IoS/Android" as Client
+participant "PIBA REGISTRATION SERVICE" as PibaRegistrationService
+participant "PIBA GUID SERVICE" as PIBAGUID
+participant "WORLDLINE" as worldline
+database "DynamoDB" as DB
+
+
+Client -> PibaRegistrationService : GET - /piba/registration/info/{registration-code}
+PibaRegistrationService -> worldline : getInfo(registration-code)
+worldline -> PibaRegistrationService : RegistrationInfoResponse
+PibaRegistrationService -> Client :  Return registrationInfoResponse response
+Client -> PibaRegistrationService : Post -/piba/registration/authenticate
+PibaRegistrationService -> worldline : RegistrationAuthenticate(with schema/details set based on configs)
+worldline -> PibaRegistrationService : RegistrationAuthenticationResponse
+PibaRegistrationService -> Client : Return registrationAuthenticationResponse response
+Client -> PibaRegistrationService : Post -/piba/registration/submit
+PibaRegistrationService -> worldline : RegistrationSubmit(with schema/details set based on configs)
+worldline -> PibaRegistrationService : RegistrationSubmitResponse
+PibaRegistrationService -> PIBAGUID : POST - /piba/guid - savePibaGuid(PibaTetheredGuidRequest)
+PIBAGUID -> DB : updateGuid/SaveGuid
+PIBAGUID -> PibaRegistrationService : PibaTetheredGuidResponse
+PibaRegistrationService -> Client : RegistrationSubmitResp
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+start
+
+if (feature toggle enabled) then (yes)
+    :contactType;
+    if (is ECOM) then (yes)
+        if (piba) then (yes)
+            :Fraud info not sent;
+            stop
+        else (no)
+            :Fraud info sent;
+            stop
+        endif
+    endif
+    if (is MOTO) then (yes)
+        if (piba) then (yes)
+            :Fraud info not sent;
+            stop
+        else (no)
+            :Fraud info sent;
+            stop
+        endif
+    endif
+else (no)
+  :Fraud info not sent;
+  stop
+endif
+
+
+stop
+@enduml

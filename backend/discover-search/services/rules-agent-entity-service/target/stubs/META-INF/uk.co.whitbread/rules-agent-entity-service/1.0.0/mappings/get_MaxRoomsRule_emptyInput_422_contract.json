@@ -1,0 +1,22 @@
+{
+  "id" : "1fdbc826-e485-4cc0-872c-ffbe40ce49e7",
+  "request" : {
+    "urlPath" : "/v1/rules/max-rooms",
+    "method" : "GET",
+    "queryParameters" : {
+      "channelId" : {
+        "equalTo" : ""
+      }
+    }
+  },
+  "response" : {
+    "status" : 422,
+    "body" : "{\"errCode\":401,\"globalErrTextTemplate\":\"validation.error.form\",\"details\":[{\"elementId\":\"channelId\",\"errTextTemplate\":\"must not be blank\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "1fdbc826-e485-4cc0-872c-ffbe40ce49e7",
+  "priority" : 1
+}

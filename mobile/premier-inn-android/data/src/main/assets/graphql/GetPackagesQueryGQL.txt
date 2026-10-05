@@ -1,0 +1,89 @@
+query packages($packagesCriteria: PackagesCriteria!) {
+        packages(packagesCriteria: $packagesCriteria) {
+        packages {
+            meals {
+                name
+                order
+                id
+                bartId
+                price
+                currency
+                allergyInfoLabel
+                allergyInfoSrc
+                description
+                shortDescription
+                imageSrc
+                freeBreakfastOption
+                freeBreakfastCode
+                freeBreakfastMaxPerMeal
+                menu {
+                    name
+                    description
+                    disclaimer
+                    menuSrc
+                }
+            }
+            mealsKids {
+                name
+                order
+                id
+                price
+                currency
+                allergyInfoLabel
+                allergyInfoSrc
+                description
+                imageSrc
+                menu {
+                    name
+                    description
+                    disclaimer
+                    menuSrc
+                }
+            }
+            roomSelection {
+                packagesSelection {
+                    id
+                    noOfSelections
+                }
+            }
+            extrasItems {
+                name
+	            id
+                price
+                imageSrc
+                description
+                currency
+                order
+                available
+            }
+        }
+        restaurant {
+            logoSrc
+            menus {
+                description
+                disclaimer
+                imageSrc
+                menuSrc
+                menuLabel
+                name
+            }
+            messageDescription
+            messageHeader
+            noMealsFound
+            restaurantNotFound
+        }
+        privacyPolicy {
+            description
+            linkLabel
+            linkSrc
+            moreInfoLabel
+            moreInfo {
+                description
+                image
+            }
+            name
+        }
+        hotelHasCityTaxForBusiness
+        hotelHasCityTaxForLeisure
+    }
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="PremierInnSans-Regular.ttf">
+            <string>PremierInnSans</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="KGk-i7-Jjw" customClass="RecentSearchCell" customModule="PremierInn" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search" translatesAutoresizingMaskIntoConstraints="NO" id="WUY-sU-xos">
+                        <rect key="frame" x="10" y="12" width="16" height="16"/>
+                        <color key="tintColor" name="TintD2"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="WUY-sU-xos" secondAttribute="height" multiplier="1:1" id="UnY-Ux-bja"/>
+                            <constraint firstAttribute="width" constant="16" id="hCq-eZ-7lm"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edinburgh" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AI7-qN-GN8">
+                        <rect key="frame" x="30" y="8" width="278" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="XHt-6F-yHm"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans-Bold" family="Premier Inn Sans" pointSize="17"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="14 Jun &gt; 16 Jun - 2 guests" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Yd-1r-dG8">
+                        <rect key="frame" x="10" y="36" width="298" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="VmE-pS-48N"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="17"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessChevron" translatesAutoresizingMaskIntoConstraints="NO" id="Fvl-yG-hBh">
+                        <rect key="frame" x="280" y="18" width="24" height="24"/>
+                        <color key="tintColor" name="TintD2"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="24" id="5fq-jJ-3wO"/>
+                            <constraint firstAttribute="width" secondItem="Fvl-yG-hBh" secondAttribute="height" multiplier="1:1" id="pVh-2g-Jb2"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="3Yd-1r-dG8" firstAttribute="top" secondItem="AI7-qN-GN8" secondAttribute="bottom" constant="4" id="MAC-d3-16w"/>
+                    <constraint firstItem="Fvl-yG-hBh" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="a2T-ih-1rj"/>
+                    <constraint firstItem="AI7-qN-GN8" firstAttribute="leading" secondItem="WUY-sU-xos" secondAttribute="trailing" constant="4" id="aXB-Ix-heU"/>
+                    <constraint firstAttribute="trailing" secondItem="Fvl-yG-hBh" secondAttribute="trailing" constant="16" id="blF-qT-rXf"/>
+                    <constraint firstItem="WUY-sU-xos" firstAttribute="centerY" secondItem="AI7-qN-GN8" secondAttribute="centerY" id="eZ0-24-fcL"/>
+                    <constraint firstItem="3Yd-1r-dG8" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="fPw-ED-VBF"/>
+                    <constraint firstAttribute="bottom" secondItem="3Yd-1r-dG8" secondAttribute="bottom" constant="4" id="jdC-nw-cnn"/>
+                    <constraint firstItem="AI7-qN-GN8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="l0U-as-Xid"/>
+                    <constraint firstAttribute="trailing" secondItem="AI7-qN-GN8" secondAttribute="trailing" constant="12" id="qPc-qx-qHL"/>
+                    <constraint firstAttribute="trailing" secondItem="3Yd-1r-dG8" secondAttribute="trailing" constant="12" id="sV8-gX-jou"/>
+                    <constraint firstItem="WUY-sU-xos" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="xgT-uw-Vw0"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="criteriaSummary" destination="3Yd-1r-dG8" id="XuR-1e-VlG"/>
+                <outlet property="icon" destination="WUY-sU-xos" id="AFO-w4-eyL"/>
+                <outlet property="suggestionTitle" destination="AI7-qN-GN8" id="Uh5-8M-MLe"/>
+            </connections>
+            <point key="canvasLocation" x="132" y="154"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="accessChevron" width="24" height="24"/>
+        <image name="search" width="22" height="22"/>
+        <namedColor name="TintD2">
+            <color red="0.34509803921568627" green="0.34901960784313724" blue="0.35686274509803922" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

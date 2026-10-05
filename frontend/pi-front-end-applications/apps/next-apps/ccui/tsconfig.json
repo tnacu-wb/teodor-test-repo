@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "baseUrl": "./src",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "paths": {
+      "~public/*": ["../public/*"],
+      "~pages/*": ["./pages/*"],
+      "~components/*": ["./components/*"],
+      "~components": ["./components/index.ts"],
+      "~types/*": ["./types/*"],
+      "~store/*": ["./store/*"],
+      "~store": ["./store/index.ts"],
+      "~hooks/*": ["./hooks/*"],
+      "~utils/*": ["./utils/*"],
+      "~lib/*": ["./lib/*"],
+      "~page-helper/*": ["./page-helper/*"],
+      "~services/*": ["./services/*"],
+      "~services": ["./services/index.ts"],
+      "~styles/*": ["./styles/*"],
+      "~queries/*": ["./queries/*"],
+      "~queries": ["./queries/index.ts"],
+      "~mocks/*": ["./mocks/*"]
+    },
+    "incremental": false
+  },
+  "exclude": ["node_modules", ".yarn", ".next", "**/*.test.ts", "**/*.test.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"]
+}

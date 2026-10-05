@@ -1,0 +1,66 @@
+spring:
+  profiles:
+    active: test
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - test
+  cache:
+    type: none
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1 # Fix for M1 macs as described here https://stackoverflow.com/questions/60074168/java-lang-illegalstateexception-no-server-alpnprocessors-wiremock
+
+
+server:
+  port: 9134
+  servlet:
+    contextPath: "/ocd/"
+  shutdown: graceful
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+logging:
+  configuration:
+    logger: default
+
+config:
+  httpClient:
+    connectionTimeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+    responseTimeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  service:
+    ocd:
+      isClientCredentialsEnabled: false
+      wireTapAccessToken: ${WIRE_TAP_ACCESS_TOKEN:false}
+      host: http://localhost:${wiremock.server.port:0}
+      authEndpoint: /hdpba/oauth2/v1/token
+      appKey: 3dfc1595-cd41-4dbc-b461-5a26241eb542
+      channelCode: WB_BE
+
+      enterpriseId: WHBPI
+      clientId: ebbfaec45dc1420a9044b1160b2dc779
+      clientSecret: 0abf602c-1d24-4720-b9fe-1269434f962b
+
+      username: WB_BE.RWGWEQGE8944.UAT1
+      password: T3v!x7pQ9z@L2yB6r#W4gM8s
+
+      propertyOfferEndpoint: "/shop/v1/hotels/{hotelId}/offer"

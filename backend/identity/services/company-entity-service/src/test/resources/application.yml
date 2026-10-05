@@ -1,0 +1,18 @@
+server:
+  port: 9018
+
+logging:
+  configuration:
+    logger: default
+
+swagger:
+  api:
+    version: 1.0.0
+
+config:
+  service:
+    ohip:
+      host: http://localhost:${wiremock.server.port:8081}/ohip
+      companiesProfile: "/v1/profile/companies"
+      companyProfile: "/v1/profile/company/{corporateId}"
+      negotiatedRatesByCompanyProfileId: "/{profileId}/negotiatedRates"

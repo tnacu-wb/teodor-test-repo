@@ -1,0 +1,10 @@
+query ratesInformation($country: String!, $language: String!, $brand: String!, $hotelId: String!) {
+  ratesInformation(brand: $brand, country: $country, language: $language, hotelId: $hotelId) {
+    rateClassifications {
+      rateClassification
+      rateName
+      rateDescription
+      rateOrder
+    }
+  }
+}

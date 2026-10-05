@@ -1,0 +1,28 @@
+package contracts
+
+import org.springframework.cloud.contract.spec.Contract
+
+Contract.make {
+    description("Link amend reservations")
+    request {
+        method 'POST'
+        urlPath('/v1/baskets/LON-7b97e3f6-dce9-4572-b3e1-a5aa91ebc4b7/linkAmendReservations')
+        body('''
+            {
+                "channel": "PI",
+                "linkAmendReservations" : {"Key1":"Value1","Key2":"Value2","Key3":"Value3"}
+            }
+            ''')
+        headers {
+            header('Content-Type', 'application/json')
+            header('If-Match', "1684426938941")
+        }
+    }
+
+    response {
+        status 200
+        headers {
+            header('Content-Type', 'application/json')
+        }
+    }
+}

@@ -1,0 +1,66 @@
+@startuml
+entity "Reservation Entity Service" as A
+participant HotelReservationController as Controller
+participant AmendLogicInPort
+participant BasketServiceOutPort as BasketOutPort
+participant RulesServiceOutPort as RulesOutPort
+participant BasketWebClient as BasketWebClient
+participant OhipOutPort as OhipOutPort
+participant HotelReservationInPort
+participant HotelReservationWebClient as Webclient
+participant ContentServiceOutPort
+entity "Authentication Service" as Auth
+entity "Basket Service" as BasketService
+entity "Rules Service" as RulesService
+entity "OHIPAdapter Service" as OHIPAdapterService
+entity "Content Service" as ContentService
+
+A -> Controller: GET /reservations/amend/summary
+Controller -> AmendLogicInPort: getAmendSummaryDetails
+AmendLogicInPort -> BasketOutPort: getBasketById (tempBasket)
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+AmendLogicInPort <- BasketOutPort: BasketResponse
+
+AmendLogicInPort -> Auth: validateToken for not logged ind user
+AmendLogicInPort <- Auth
+
+AmendLogicInPort -> BasketOutPort: getBasketById (originalBasket)
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+AmendLogicInPort <- BasketOutPort: BasketResponse
+
+AmendLogicInPort -> OhipOutPort: getAmendSummaryDetails (originalBasket)
+OhipOutPort -> OHIPAdapterService: GET /v1/amend/getDetailsForAmend
+OhipOutPort <- OHIPAdapterService: AmendSummaryAmountResponse
+AmendLogicInPort <- OhipOutPort: AmendSummaryAmountResponse
+
+AmendLogicInPort -> OhipOutPort: getAmendSummaryDetails (temporaryBasket)
+OhipOutPort -> OHIPAdapterService: GET /v1/amend/getDetailsForAmend
+OhipOutPort <- OHIPAdapterService: AmendSummaryAmountResponse
+AmendLogicInPort <- OhipOutPort: AmendSummaryAmountResponse
+
+AmendLogicInPort -> HotelReservationInPort: getReservationsByBasketReservationIds
+HotelReservationInPort -> BasketOutPort: getAllReservationsJustByBasketReference
+BasketOutPort -> BasketWebClient: sendGetBasket
+BasketWebClient -> BasketService: GET /v1/baskets/{basket-reference}
+BasketWebClient <- BasketService: BasketDto
+BasketOutPort <- BasketWebClient: BasketResponse
+AmendLogicInPort <- BasketOutPort: BasketResponse
+AmendLogicInPort -> OhipOutPort: getReservationsByIds
+OhipOutPort -> OHIPAdapterService: GET /v1/reservations/basket?hotelId={{HotelId}}&reservationIds={{reservationId1}}
+OhipOutPort <- OHIPAdapterService: ReservationByBasketRefResponseDto
+AmendLogicInPort <- OhipOutPort: ReservationByBasketRefResponse
+
+AmendLogicInPort -> ContentServiceOutPort: getHotelPaymentInformation
+ContentServiceOutPort -> ContentService: (getHotelPaymentInformation) GET /v1/content/hotels/{hotelId}/payment-information
+ContentService -> ContentServiceOutPort: HotelPaymentInformation
+ContentServiceOutPort -> AmendLogicInPort: HotelPaymentInformation
+
+Controller <- AmendLogicInPort: AmendSummaryDetails
+A <- Controller: Amend Summary Details Response
+@enduml

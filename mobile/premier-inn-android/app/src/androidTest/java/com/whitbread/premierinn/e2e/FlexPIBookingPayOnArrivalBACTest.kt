@@ -1,0 +1,358 @@
+package com.whitbread.premierinn.e2e
+
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
+import com.whitbread.premierinn.addextras.AddExtrasRobot
+//import com.whitbread.premierinn.common.dagger.ComponentsManager
+import com.whitbread.premierinn.data.common.persistence.SimplePersistenceManagerImpl
+import com.whitbread.premierinn.guestdetails.GuestDetailsRobot
+import com.whitbread.premierinn.hoteldetails.HotelDetailsActivity
+import com.whitbread.premierinn.hoteldetails.HotelDetailsInput
+import com.whitbread.premierinn.hoteldetails.HotelDetailsRobot
+import com.whitbread.premierinn.reviewbooking.ReviewBookingRobot
+import com.whitbread.premierinn.searchresults.SearchResultsInput
+import com.whitbread.premierinn.utils.replaceJSONTemplate
+import io.appflate.restmock.RESTMockServer
+import io.appflate.restmock.utils.RequestMatchers
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.threeten.bp.LocalDate
+
+@RunWith(AndroidJUnit4::class)
+class FlexPIBookingPayOnArrivalBACTest {
+
+    @Rule
+    @JvmField
+    val activityRule = ActivityTestRule(HotelDetailsActivity::class.java, true, false)
+
+    private lateinit var intentInput: HotelDetailsInput
+    private lateinit var context: Context
+    private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
+    private val reservationId: String = "IoH2LAeGP50LJwfg"
+    private val hotelName: String = "London Euston"
+    private val hotelCode: String = "LONEUS"
+    private val availabilityJson: String = "availability-1room-standard.json"
+    private val threeDSNotRequiredJson: String = "three_d_s_not_required.json"
+    private val customerResponseJson = "customer_test_with_BACS_918.json"
+    private val londonEustonHoldOkJson = "loneus_hold_ok.json"
+    private val auth0LoginJson = "auth0_login_OK.json"
+    private val bookingPayNowJson = "booking-OK-PN.json"
+
+
+    /** Prerequisite:
+     * User logged in
+     * Saved BAC (3089 5001 0004 5005 918)
+     *
+     * Scenario: Flex PI booking (PayOnArrival- Pay with BAC )
+     *
+     * GIVEN I am on the hotel details page
+     * AND 3 rates are available
+     * WHEN I view the rates
+     * THEN I should be able to see the rate name
+     * Flex and associated cancellation policy with the description
+     * 'Pay now or on arrival. Cancel up to 1pm on arrival day.'
+     *
+     * GIVEN I am on the hotel details page
+     * AND Flex rate is available
+     * WHEN I select the rate type Flex
+     * AND click on Book Now
+     * THEN I should be redirected to the 'Customise your stay' page
+     * AND I should be able to see the rate name Flex
+     *
+     * GIVEN I am on the 'Customise your stay' page
+     * WHEN I click on continue button
+     * THEN I should be redirected to the Personal details page
+     *
+     * GIVEN I am on the Personal details page
+     * AND I have filled in all valid inputs in to the fields
+     * WHEN I click on 'Continue to final step' button
+     * THEN I should be redirected to the Additional Information page
+     *
+     * GIVEN I am on Additional Information page
+     * AND I have filled in all valid inputs in to the fields
+     * WHEN I click on 'Continue to final step' button
+     * THEN I should be redirected to the Review & Book page
+     *
+     * GIVEN I am on the Review & Book page
+     * THEN I should be able to see the rate name Flex and associated cancellation policy with the description
+     * AND the correct Total Cost
+     * AND saved BAC (3089 5001 0004 5005 918) details
+     * WHEN I click on 'Confirm booking' button
+     * THEN I should see the Confirmation page
+     *
+    */
+
+    @Before
+    fun setUp() {
+        context = InstrumentationRegistry.getInstrumentation().targetContext
+
+//        sharedPrefs = ComponentsManager.getInstance().appComponent.preferences()
+//        editor = sharedPrefs.edit()
+        setLoggedIn()
+
+        launchHotelDetailsActivity()
+    }
+
+    @Test
+    fun flex_pi_booking_pay_on_arrival_with_business_account_card() {
+        //FIRST GIVEN
+        i_am_on_the_hotel_details_page(hotelName)
+        three_rates_are_available()
+        i_view_the_rates(1)
+        i_should_be_able_to_see_the_rate_name_and_associated_cancellation_policy_with_the_description()
+
+        //SECOND GIVEN
+        i_am_still_on_the_hotel_details_page(hotelName)
+        flex_rate_is_available()
+        i_select_the_rate_type_flex(flexRatePosition)
+        click_on_book_now()
+        i_should_be_redirected_to_the_customise_your_stay_page("Add extras")
+
+        //THIRD GIVEN
+        i_am_on_the_customise_your_stay_page("Add extras")
+        when_i_click_on_continue_button()
+        i_should_be_redirected_to_the_personal_details_page("Your details")
+
+        //FOURTH GIVEN
+        i_am_on_the_personal_details_page("Your details")
+        i_click_on_continue_to_final_step_button()
+        i_should_be_redirected_to_the_review_and_book_page("Review and book")
+
+        //FIFTH GIVEN
+        i_am_on_the_review_and_book_page("Review and book")
+        i_should_be_able_to_see_the_rate_name()
+        the_correct_total_cost()
+        i_click_on_confirm_booking_button()
+        i_should_see_the_confirmation_page("Booking details")
+    }
+
+    //Prerequisite:
+    //User logged in
+    private fun setLoggedIn() {
+        editor.putString(SimplePersistenceManagerImpl.Constants.KEY_USERNAME, username).apply()
+        editor.putString(SimplePersistenceManagerImpl.Constants.KEY_PASSWORD, password).apply()
+    }
+
+    private fun launchHotelDetailsActivity() {
+        intentInput = createInputIntent(listOf("DB"))
+        stubCalls()
+        launchScreen(intentInput)
+    }
+
+
+    //GIVEN I am on the hotel details page (Checks hotel name)
+    private fun i_am_on_the_hotel_details_page(hotelName: String) {
+        HotelDetailsRobot().verifyHotelDetailPage(hotelName)
+    }
+
+    //GIVEN I am on the hotel details page (Checks hotel name in toolbar)
+    private fun i_am_still_on_the_hotel_details_page(hotelName: String) {
+        HotelDetailsRobot().verifyHotelDetailToolbar(hotelName)
+    }
+
+    private fun stubCalls() {
+        stubApiCallsAvailability()
+        stubHotelApi()
+        stubHoldApi()
+        stubLoginApi()
+        stubCustomerApi()
+        stubPaymentApi()
+        stubBookingApi()
+    }
+
+    private fun launchScreen(input: HotelDetailsInput) {
+        activityRule.launchActivity(HotelDetailsActivity.createIntent(InstrumentationRegistry.getInstrumentation().targetContext, input))
+    }
+
+    //AND 3 rates are available
+    private fun three_rates_are_available() {
+        HotelDetailsRobot().view_rates(1)
+        HotelDetailsRobot().containsFirstRateBoxWithName(rateName = advanceRate)
+        HotelDetailsRobot().containsSecondRateBoxWithName(rateName = flexRate)
+        HotelDetailsRobot().containsThirdRateBoxWithName(rateName = nonFlexRate)
+    }
+
+    //WHEN I view the rates
+    private fun i_view_the_rates(position: Int) {
+        HotelDetailsRobot().view_rates(position)
+    }
+
+    //THEN I should be able to see the rate name
+    //Flex and associated cancellation policy with the description
+    //Pay now or on arrival. Cancel up to 1pm on arrival day.
+    private fun i_should_be_able_to_see_the_rate_name_and_associated_cancellation_policy_with_the_description() {
+        HotelDetailsRobot().containsFirstRateBoxWithName(rateName = advanceRate)
+        HotelDetailsRobot().containsSecondRateBoxWithName(rateName = flexRate)
+        HotelDetailsRobot().containsThirdRateBoxWithName(rateName = nonFlexRate)
+
+        HotelDetailsRobot().containsFirstRateBoxWithDescription(description = advanceDescription)
+        HotelDetailsRobot().containsSecondRateBoxWithDescription(description = flexDescription)
+        HotelDetailsRobot().containsThirdRateBoxWithDescription(description = nonFlexDescription)
+    }
+
+    //AND Flex rate is available
+    private fun flex_rate_is_available() {
+        HotelDetailsRobot().containsSecondRateBoxWithName(rateName = flexRate)
+        HotelDetailsRobot().containsSecondRateBoxWithDescription(description = flexDescription)
+        HotelDetailsRobot().verifyFlexAvailability(position = flexRatePosition)
+    }
+
+    //WHEN I select the rate type Flex
+    private fun i_select_the_rate_type_flex(position: Int) {
+        HotelDetailsRobot().view_rates(position)
+    }
+
+    //AND click on Book Now
+    private fun click_on_book_now() {
+        HotelDetailsRobot().chooseRate(flexRatePosition)
+    }
+
+    //THEN I should be redirected to the 'Customise your stay' page
+    private fun i_should_be_redirected_to_the_customise_your_stay_page(toolbarTitle: String) {
+        AddExtrasRobot().verifyPage(toolbarTitle)
+    }
+
+    //GIVEN I am on the 'Customise your stay' page
+    private fun i_am_on_the_customise_your_stay_page(toolbarTitle: String) {
+        AddExtrasRobot().verifyPage(toolbarTitle)
+    }
+
+    //WHEN I click on continue button
+    private fun when_i_click_on_continue_button() {
+        AddExtrasRobot().continueWithDefaults()
+    }
+
+    //THEN I should be redirected to the Personal details page
+    private fun i_should_be_redirected_to_the_personal_details_page(toolbarTitle: String) {
+        AddExtrasRobot().verifyPage(toolbarTitle)
+    }
+
+    //GIVEN I am on the Personal details page
+    private fun i_am_on_the_personal_details_page(toolbarTitle: String) {
+        AddExtrasRobot().verifyPage(toolbarTitle)
+    }
+
+    //WHEN I click on 'Continue to final step' button
+    private fun i_click_on_continue_to_final_step_button() {
+        GuestDetailsRobot().continueWithDetails()
+    }
+
+    //THEN I should be redirected to the Review & Book page
+    private fun i_should_be_redirected_to_the_review_and_book_page(toolbarTitle: String) {
+        ReviewBookingRobot(context).verifyPage(toolbarTitle)
+    }
+
+    //GIVEN I am on the Review & Book page
+    private fun i_am_on_the_review_and_book_page(toolbarTitle: String) {
+        ReviewBookingRobot(context).verifyPage(toolbarTitle)
+    }
+
+    //AND I should be able to see the rate name Flex and associated cancellation policy with the description
+    private fun i_should_be_able_to_see_the_rate_name() {
+        ReviewBookingRobot(context).verifyRateName(flexRate)
+    }
+
+    //AND the correct Total Cost
+    private fun the_correct_total_cost() {
+        ReviewBookingRobot(context).successTotalPriceDisplayed(totalPrice)
+    }
+
+    //AND saved BAC (3089 5001 0004 5005 918) details
+    private fun saved_bac_details() {
+        ReviewBookingRobot(context).successPaymentCardNumberDisplayed("918")
+    }
+
+    //WHEN I click on 'Confirm booking' button
+    private fun i_click_on_confirm_booking_button() {
+        ReviewBookingRobot(context).clickMakeBooking()
+    }
+
+    //THEN I should see the Confirmation page
+    private fun i_should_see_the_confirmation_page(toolbarTitle: String) {
+        AddExtrasRobot().verifyPage(toolbarTitle)
+    }
+
+    private fun createInputIntent(roomTypes: List<String>): HotelDetailsInput {
+        return HotelDetailsInput.builder()
+                .cameFromMapView(false)
+                .distanceFromSearchedLocation(0.0f)
+                .hotelCode(hotelCode)
+                .hotelImageUrl(null)
+                .hotelName(hotelName)
+                .searchResultsInput(SearchResultsInput.builder()
+                        .adults(listOf(1))
+                        .children(listOf(1))
+                        .infants(listOf(1))
+                        .roomTypeCodes(roomTypes)
+                        .cots(listOf(false))
+                        .placeName(hotelName)
+                        .numRooms(1)
+                        .arrivalDate(LocalDate.now())
+                        .departureDate(LocalDate.now().plusDays(1))
+                        .latitude(51.527736f)
+                        .longitude(-0.129068f)
+                        .build()
+                ).build()
+    }
+
+    private fun stubApiCallsAvailability() {
+        RESTMockServer.whenGET(RequestMatchers.pathContains("/booking/hotels/${hotelCode}/availability"))
+                .thenReturnFile(successResponseCode, "apiTest/booking/hotels/${hotelCode}/$availabilityJson")
+    }
+
+    private fun stubHotelApi() {
+        RESTMockServer.whenGET(RequestMatchers.pathEndsWith("/hotels/${hotelCode}"))
+                .thenReturnFile(successResponseCode, "apiTest/hotels/${hotelCode}.json")
+    }
+
+    private fun stubHoldApi() {
+        RESTMockServer.whenPUT(RequestMatchers.pathEndsWith("/booking/hotels/${reservationId}/hold?hotelBrand=PI"))
+                .thenReturnFile(successResponseCode, "apiTest/booking/hotels/hold/$londonEustonHoldOkJson")
+    }
+
+    private fun stubLoginApi() {
+        RESTMockServer.whenPOST(RequestMatchers.pathEndsWith("/oauth/token"))
+                .thenReturnFile(successResponseCode, "apiTest/auth/hotels/login/$auth0LoginJson")
+    }
+
+    private fun stubCustomerApi() {
+        RESTMockServer.whenGET(RequestMatchers.pathEndsWith("/customers/hotels/test@gmail.com"))
+                .thenReturnString(successResponseCode,
+                        replaceJSONTemplate(this::class.java, "/apiTest/customers/hotels/$customerResponseJson", 3))
+    }
+
+    private fun stubPaymentApi() {
+        RESTMockServer.whenPOST(RequestMatchers.pathEndsWith("/payment/hotels"))
+                .thenReturnFile(successResponseCode, "apiTest/payment/hotels/$threeDSNotRequiredJson")
+    }
+
+    private fun stubBookingApi() {
+        RESTMockServer.whenPOST(RequestMatchers.pathEndsWith("/booking/hotels/$reservationId"))
+                .thenReturnFile(successResponseCode, "apiTest/booking/hotels/booking-complete/$bookingPayNowJson")
+    }
+
+    companion object {
+        const val successResponseCode = 200
+        const val username: String = "test@gmail.com"
+        const val password: String = "Password2"
+
+        const val advanceRate: String = "Advance"
+        const val flexRate: String = "Flex"
+        const val nonFlexRate: String = "Non-Flex"
+
+        const val advanceDescription: String = "Pay now. Change arrival date. Fully refundable up to 28 days before arrival."
+        const val flexDescription: String = "Pay now or later. Cancel up to 1 pm on arrival day. "
+        const val nonFlexDescription: String = "Pay now. No amends.No Cancellation beyond 24hrs of booking."
+
+        const val totalPrice: String = "£109.00"
+
+        const val flexRatePosition: Int = 2
+    }
+}

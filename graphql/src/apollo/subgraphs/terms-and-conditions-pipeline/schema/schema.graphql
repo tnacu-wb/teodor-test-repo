@@ -1,0 +1,19 @@
+schema {
+    query: Query
+}
+
+type Query {
+    termsAndConditions(bookingFlowCriteria: BookingFlowCriteria!): TermsAndConditions
+}
+
+input BookingFlowCriteria {
+    bookingChannel:String
+    hotelId: String!
+    language: String!
+    country: String!
+    rateCode: String!
+}
+
+type TermsAndConditions {
+    text: String
+}

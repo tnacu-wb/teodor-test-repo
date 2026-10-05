@@ -1,0 +1,75 @@
+GET /tethereduserdetail/{tetheredUserGuid} with TetheredUserGuid:{} for {}", tetheredUserGuid, scheme);
+
+Message Structure
+----------------------
+
+<xs:element name="tetheredUserDetailsGet">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Request" type="data:TetheredUserDetailsGetRequestType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="tetheredUserDetailsGetResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Response" type="data:TetheredUserDetailsGetResponseType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	Data Structure
+    ----------------------
+
+
+	<xs:complexType name="TetheredUserDetailsGetRequestType">
+    		<xs:sequence>
+    			<xs:element name="Header" type="tns:HeaderType"/>
+    			<xs:element name="TrustedPartnerCredentials" type="tns:TrustedPartnerCredentialsType"/>
+    			<xs:element name="TetheredUserGuid" type="tns:GuidType"/>
+    			<xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+    		</xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TetheredUserDetailsGetResponseType">
+        <xs:complexContent>
+            <xs:extension base="tns:ResponseType">
+                <xs:sequence>
+                    <xs:element name="TetheredUserDetails" type="tns:TetheredUserDetailsType" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="TetheredUserDetailsType">
+        <xs:sequence>
+            <xs:element name="TetheredUserOverview" type="tns:TetheredUserOverviewType"/>
+            <xs:element name="CustomerAccountOverview" type="tns:CustomerAccountOverviewType"/>
+            <xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TetheredUserOverviewType">
+        <xs:sequence>
+            <xs:element name="TetheredUserGuid" type="tns:GuidType">
+                <xs:annotation>
+                    <xs:documentation>Only applies to tethered users</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="APIUserGuid" type="tns:GuidType">
+                <xs:annotation>
+                    <xs:documentation>This is an unique identifier for a user and uniquely identifies a user whether the user is tethered ot not. This value may be used for example in a mycard situation when adding or updating a card rather than selecting the user from a list of APIUserGuid</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="UserRole" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>AccountHolder
+AccountCardHolder
+AccountCardHolderWithReportsAndInvoices ReportsAndInvoices</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CountMyCards" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>This will be a count of the users “current” cards [note ‘current’ cards can be active (activated) or inactive (not yet activated)]</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CustomAttributes" type="tns:CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>

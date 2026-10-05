@@ -1,0 +1,35 @@
+{
+  "id" : "91900d75-a52f-44e5-86d6-343717240d09",
+  "request" : {
+    "urlPath" : "/v1/pay-app/application/submit",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['applicationGuid'] == 'invalid-guid')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hostedPageGuid'] == 'hosted-page-guid')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hotelBookingRole'] == 'hotel-booking-role')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['isDirectDebit'] == false)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['termsAndConditionAccepted'] == 'Y')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['registrationQuestion'] == 'registration-question')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['registrationAnswer'] == 'registration-answer')]"
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "91900d75-a52f-44e5-86d6-343717240d09"
+}

@@ -1,0 +1,239 @@
+server:
+  port: 9107
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "payment-methods-entity-service"
+    description: "Whitbread Payment Methods Entity Microservice"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+ribbon:
+  eureka:
+    enabled: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  security:
+    enabled: false
+  endpoints:
+    web:
+      base-path: /v1/payment-methods/actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+piba:
+  euro:
+    flag: ${PIBA_EURO_FLAG:false}
+
+datatrans:
+  not-supported-card-options: ${DATATRANS_NOT_SUPPORTED_CARD_OPTIONS:NEW_CARD,SAVED_CARD,NEW_PIBA,AP,GP,RESERVE_WITHOUT_CARD,ACCOUNT_COMPANY,PAYPAL}
+
+logging:
+  level:
+    uk:
+      co:
+        whitbread: INFO
+    brave: WARN
+    io:
+      getunleash: TRACE
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+    mask:
+      enabled: true
+      fields:
+        - clientToken
+        - clientId
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      key-prefix: "Payment-Methods-Entity-Service"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+      timeout: 10000
+      connect-timeout: 10000
+
+config:
+  service:
+    hotel-account:
+      host: http://${HOTEL_ACCOUNT_HOST:localhost:9020}
+      hotelAccountEndpoint: "/customers/hotels/{customerId}"
+    company-service:
+      host: http://${COMPANY_SERVICE_HOST:localhost:9022}
+      companyEndpoint: "/company/{companyId}"
+    hotel-card:
+      host: http://${HOTEL_CARD_HOST:localhost:9030}
+      companyCardsEndpoint: "/companies/{companyId}/cards"
+    reservation:
+      host: http://${RESERVATION_HOST:localhost:9103}
+      reservationEndpoint: "/v1/reservations/basket/{basketReference}"
+      reservationDeposits: "/v1/reservations/deposits"
+    token:
+      host: ${CONFIG_MAP_THREEC_URL:localhost:9001}
+      paypalTokenEndPoint: "/tokens/paypal-cltoken"
+    rule:
+      host: http://${RULES_AGENT_HOST:localhost:9108}
+      paypalRuleEndPoint: "/v1/rules/paypal"
+    content:
+      host: http://${CONTENT_HOST:localhost:9106}
+      paymentInformationEndpoint: "/v1/content/hotels/{hotelId}/payment-information"
+    basket:
+      host: http://${BASKET_SERVICE_HOST:localhost:9104}
+      basketEndpoint: "/v1/baskets/{basketReference}"
+    hotel-entity:
+      host: http://${HOTEL_ENTITY_HOST:localhost:9102}
+      hotelInfoEndpoint: "/v1/hotels/{hotelId}/info"
+
+auth:
+  tenants:
+    - name: "CCUI Tenant"
+      audience: ${CCUI_TENANT_AUDIENCE}
+      namespace: ${CCUI_TENANT_NAMESPACE}
+      issuer:  ${CCUI_TENANT_ISSUER}
+      jwkUri:  ${CCUI_TENANT_JWK_URI}
+    - name: "PI BB Tenant"
+      audience:  ${PI_BB_TENANT_AUDIENCE}
+      namespace:  ${PI_BB_TENANT_NAMESPACE}
+      issuer:  ${PI_BB_TENANT_ISSUER}
+      jwkUri:  ${PI_BB_TENANT_JWK_URI}
+
+feature-flags:
+  disable-payments:
+    key: "kill_switch_pi_bb_ccui_disable_payments"
+    fallback: false
+  ccui-de-enable-payments-within-72h:
+    key: "kill_switch_ccui_de_enable_payments_within_72h"
+    fallback: false
+  ccui-uk-enable-payments-within-72h:
+    key: "kill_switch_ccui_uk_enable_payments_within_72h"
+    fallback: false
+  enable-hub-hotels-poa:
+    key: "release_pi_pib_ccui_enable_hub_hotels_poa"
+    fallback: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+  data:
+    redis:
+      ssl:
+        enabled: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+auth:
+  tenants:
+    - name: "CCUI Tenant"
+      audience: dummy
+      namespace: dummy
+      issuer: dummy
+      jwkUri: https://dummy/.well-known/jwks.json
+    - name: "PI BB Tenant"
+      audience: dummy
+      namespace: dummy
+      issuer: dummy
+      jwkUri: https://dummy/.well-known/jwks.json

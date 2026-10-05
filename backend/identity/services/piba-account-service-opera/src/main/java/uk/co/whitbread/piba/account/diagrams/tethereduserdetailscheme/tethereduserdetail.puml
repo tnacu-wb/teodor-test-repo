@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+header piba-account-service
+title /piba/account/tethereduserdetail/{tetheredUserGuid} and scheme
+autonumber
+participant "UI" as Client
+participant "PibaAccountController" as PAC
+participant "PibaAccountService" as PAS
+participant "PibaGuidServiceClient" as PGSC
+participant "WorldlineTransformer" as WLT
+participant "worldlineWebServiceTemplate" as WWST
+participant "WorldLineAccountResponseValidator" as WLARV
+
+Client -> PAC : GET /tethereduserdetail/{tetheredUserGuid} with TetheredUserGuid:{} and scheme {}
+PAC -> PAS : Calls getUserDetails with tetheredUserGuid and scheme
+PAS -> WLT : Dispatches Request  TetheredUserDetailsGet created from toTetheredUserDetailsRequest via method marshalSendAndReceive
+WLT -> PAS : Returns TetheredUserDetailsGetResponse
+PAS -> WLARV : Validate the Response
+PAS -> PAS : Creates TetheredUserDetailsResponse from the worldline response
+PAS -> PAC : Return TetheredUserDetailsResponse
+PAC -> Client : Return TetheredUserDetailsResponse
+@enduml

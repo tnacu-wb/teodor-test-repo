@@ -1,0 +1,4 @@
+enum QuestionLocation {
+  B,
+  R
+}

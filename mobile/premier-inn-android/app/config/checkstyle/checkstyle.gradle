@@ -1,0 +1,24 @@
+apply plugin: 'checkstyle'
+
+task checkstyle(type: Checkstyle) {
+
+    configFile = new File("${project.rootDir}/app/config/checkstyle/checks.xml")
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/vuforia/**'
+    exclude '**/com/squareup/spoon/**'
+    exclude '**/androidadvance/topsnackbar/**'
+
+    // empty classpath
+    classpath = files()
+
+    reports {
+        include ( '**/*.java')
+        xml {
+            destination file("${project.rootDir}/app/build/reports/checkstyle/checkstyle.xml")
+        }
+    }
+}
+preBuild.dependsOn('checkstyle')

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="utf-8"/>
+    <title>Premier Inn Invoice</title>
+    <style type="text/css">
+      body {
+        margin: 0;
+        padding: 0;
+        word-wrap: normal;
+        word-spacing: normal;
+        background: #ffffff;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      a {
+        text-decoration: none;
+      }
+      img {
+        line-height: 100%;
+        text-decoration: none;
+      }
+      table {
+        border-spacing: 0;
+        border-collapse: collapse;
+      }
+    </style>
+  </head>
+  <body style="margin:0; padding:0; word-wrap:normal; word-spacing:normal; background:#ffffff;">
+    <div style="width:100%; background:#ffffff; background-color:#ffffff;">
+      <div style="margin:0 auto; max-width:673px; background-color:#ffffff; font-size:16px;">
+        <table width="100%" align="center" cellspacing="0" cellpadding="0" border="0" style="background-color:#ffffff; font-size:16px;">
+          <!-- Logo -->
+          <tr>
+            <td>
+              <table width="673" bgcolor="#ffffff" align="left" cellspacing="0" cellpadding="0" border="0" style="width:673px; background-color:#ffffff;">
+                <tr>
+                  <td style="padding:12px 24px 12px 16px;">
+                    <table width="100%" align="left" cellspacing="0" cellpadding="0" border="0">
+                      <tr>
+                        <td width="50%" align="left" valign="middle">
+                          <a href="https://www.premierinn.com/" target="_blank">
+                            <img th:src="${logoImage}" src="" width="188" alt="Premier Inn - Rest easy" style="display:block; width:188px; height:auto; border:none; font-family:Arial,sans-serif; font-size:0.875em; color:#511e62; font-weight:400; line-height:1.5em;"/>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Hotel address -->
+          <tr>
+            <td>
+              <table width="673" bgcolor="#ffffff" align="left" cellspacing="0" cellpadding="0" border="0" style="display:block;width:673px; background-color:#ffffff;">
+                <tr>
+                  <td style="">
+                    <table width="673" bgcolor="#ffffff" align="left" cellspacing="0" cellpadding="0" border="0">
+                      <tr>
+                        <td style="padding:12px 24px 12px 24px; text-align:left;">
+                          <div style="display:inline-block; width:100%; vertical-align:top; text-align:left;">
+                            <p style="margin:0 0 0.25em 0; font-family:Arial,sans-serif; font-size:1em; font-weight:normal; color:#333333; line-height:1.5em;" th:text="${'Premier Inn ' + hotel.name}">Premier Inn Hotel</p>
+                            <p th:if="${hotel.addressLine1 != null and !#strings.isEmpty(hotel.addressLine1)}" th:text="${hotel.addressLine1}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px">Address Line 1</p>
+                            <p th:if="${hotel.addressLine2 != null and !#strings.isEmpty(hotel.addressLine2)}" th:text="${hotel.addressLine2}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px">Address Line 2</p>
+                            <p th:if="${hotel.addressLine3 != null and !#strings.isEmpty(hotel.addressLine3)}" th:text="${hotel.addressLine3}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px">Address Line 3</p>
+                            <p th:if="${hotel.addressLine4 != null and !#strings.isEmpty(hotel.addressLine4)}" th:text="${hotel.addressLine4}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px">Address Line 4</p>
+                            <p th:if="${hotel.postalCode != null and !#strings.isEmpty(hotel.postalCode)}" th:text="${hotel.postalCode}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:400;">Postal Code</p>
+                            <p th:if="${hotel.city != null and !#strings.isEmpty(hotel.city)}" th:text="${hotel.city}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:400;">City</p>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Invoice type + billing + details -->
+          <tr>
+            <td>
+              <table width="673" bgcolor="#ffffff" align="left" cellspacing="0" cellpadding="0" border="0" style="background-color:#ffffff;">
+                <tr>
+                  <td style="padding:12px 24px 0 24px; text-align:left;">
+                    <p style="margin:0; font-family:Arial,sans-serif; font-size:1.25em; font-weight:700; color:#511e62; line-height:1.25em;" th:text="${invoice.folioType}">Deposit Invoice</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 24px 32px 24px">
+                    <table width="100%" bgcolor="#ffffff" align="left" cellspacing="0" cellpadding="0" border="0">
+                      <tr>
+                        <th style="text-align:left; max-width:300px;" width="300" valign="top">
+                          <div style="display:inline-block; width:90%; vertical-align:top; text-align:left;">
+                            <p style="margin:0 0 0.25em 0; font-family:Arial,sans-serif; font-size:1em; font-weight:normal; color:#333333; line-height:1.5em;">
+                              <span th:if="${billing.companyName != null and !#strings.isEmpty(billing.companyName)}" th:text="${billing.companyName}">Company</span>
+                              <span th:if="${billing.companyName == null or #strings.isEmpty(billing.companyName)}" th:text="${billing.fullName}">Full Name</span>
+                            </p>
+                            <p th:if="${billing.addressLine1 != null and !#strings.isEmpty(billing.addressLine1)}" th:text="${billing.addressLine1}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Address Line 1</p>
+                            <p th:if="${billing.addressLine2 != null and !#strings.isEmpty(billing.addressLine2)}" th:text="${billing.addressLine2}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Address Line 2</p>
+                            <p th:if="${billing.addressLine3 != null and !#strings.isEmpty(billing.addressLine3)}" th:text="${billing.addressLine3}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Address Line 3</p>
+                            <p th:if="${billing.addressLine4 != null and !#strings.isEmpty(billing.addressLine4)}" th:text="${billing.addressLine4}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Address Line 4</p>
+                            <p th:if="${billing.cityPostalLine != null and !#strings.isEmpty(billing.cityPostalLine)}" th:text="${billing.cityPostalLine}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">City / Postal</p>
+                          </div>
+                        </th>
+                        <th align="left" valign="top">
+                          <table align="right" width="350" border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                              <tr th:if="${invoice.issuedDate != null and !#strings.isEmpty(invoice.issuedDate)}">
+                                <td width="160">
+                                  <p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Invoice Date:</p>
+                                </td>
+                                <td>
+                                  <p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${invoice.issuedDate}">04.09.2025</p>
+                                </td>
+                              </tr>
+                              <tr th:if="${booking.guestName != null and !#strings.isEmpty(booking.guestName)}">
+                                <td width="160"><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Guest Name:</p></td>
+                                <td><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${booking.guestName}">Guest Name</p></td>
+                              </tr>
+                              <tr th:if="${booking.arrivalDate != null and !#strings.isEmpty(booking.arrivalDate)}">
+                                <td width="160"><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Arrival Date:</p></td>
+                                <td><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${booking.arrivalDate}">22.01.2026</p></td>
+                              </tr>
+                              <tr th:if="${booking.departureDate != null and !#strings.isEmpty(booking.departureDate)}">
+                                <td width="160"><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Departure Date:</p></td>
+                                <td><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${booking.departureDate}">23.01.2026</p></td>
+                              </tr>
+                              <tr th:if="${invoice.invoiceNumber != null and !#strings.isEmpty(invoice.invoiceNumber)}">
+                                <td width="160"><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Invoice No:</p></td>
+                                <td><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${invoice.invoiceNumber}">GANI159177</p></td>
+                              </tr>
+                              <tr th:if="${invoice.customersReference != null and !#strings.isEmpty(invoice.customersReference)}">
+                                <td width="160"><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Customer Reference:</p></td>
+                                <td><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${invoice.customersReference}">Ref</p></td>
+                              </tr>
+                              <tr>
+                                <td width="160"><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Confirmation No:</p></td>
+                                <td>
+                                  <p th:if="${booking.bookingReference != null and !#strings.isEmpty(booking.bookingReference)}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${booking.bookingReference}">Booking Ref</p>
+                                  <p th:if="${booking.bookingReference == null or #strings.isEmpty(booking.bookingReference)}" style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${booking.confirmationReference}">Confirmation No</p>
+                                </td>
+                              </tr>
+                              <tr th:if="${invoice.customersPurchaseOrder != null and !#strings.isEmpty(invoice.customersPurchaseOrder)}">
+                                <td width="160"><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">PO No:</p></td>
+                                <td><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${invoice.customersPurchaseOrder}">PO</p></td>
+                              </tr>
+                              <tr th:if="${invoice.issuedDate != null and !#strings.isEmpty(invoice.issuedDate)}">
+                                <td width="160"><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">Date issued:</p></td>
+                                <td><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${invoice.issuedDate}">04.09.2025</p></td>
+                              </tr>
+                              <tr th:if="${invoice.arNumber != null and !#strings.isEmpty(invoice.arNumber)}">
+                                <td width="160"><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;">A/R Number:</p></td>
+                                <td><p style="margin:0; font-family:Arial,sans-serif; font-size:1em; color:#333333; line-height:1.5em;padding-bottom:2px;font-weight:normal;" th:text="${invoice.arNumber}">AR</p></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Charges table -->
+          <tr>
+            <td>
+              <table width="673" border="0" cellpadding="0" cellspacing="0" style="width:673px; margin:0 auto;">
+                <tr>
+                  <td style="padding-bottom:20px;">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <th valign="top" width="98" align="left" bgcolor="#F8F8F8" style="padding:20px 0 20px 16px; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong>Date</strong>
+                          </p>
+                        </th>
+                        <th valign="top" width="100" align="left" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong>Description</strong>
+                          </p>
+                        </th>
+                        <th valign="top" width="60" align="right" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong>VAT (%)</strong>
+                          </p>
+                        </th>
+                        <th valign="top" width="90" align="right" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong th:text="${'Net (' + invoice.currencySymbol + ')'}">Net</strong>
+                          </p>
+                        </th>
+                        <th valign="top" width="92" align="right" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong th:text="${'VAT (' + invoice.currencySymbol + ')'}">VAT</strong>
+                          </p>
+                        </th>
+                        <th valign="top" width="95" align="right" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong th:text="${'Gross (' + invoice.currencySymbol + ')'}">Gross</strong>
+                          </p>
+                        </th>
+                        <th valign="top" align="right" width="125" bgcolor="#F8F8F8" style="padding:20px 17px 20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong th:text="${'Received (' + invoice.currencySymbol + ')'}">Received</strong>
+                          </p>
+                        </th>
+                      </tr>
+                      <!-- Transaction rows -->
+                      <tr th:each="transaction : ${transactions}">
+                        <td width="98" valign="top" style="padding:10px 0 10px 16px;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${transaction.dateTime}">04.09.2025</p>
+                        </td>
+                        <td width="100" valign="top" style="padding:10px 0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${transaction.type}">Digital Visa</p>
+                        </td>
+                        <td width="60" valign="top" style="font-family:Arial,sans-serif; font-size:14px; line-height:18px; font-weight:normal; color:#333333; padding:10px 0;" align="right">
+                        </td>
+                        <td width="90" valign="top" style="font-family:Arial,sans-serif; font-size:14px; line-height:18px; font-weight:normal; color:#333333; padding:10px 0;" align="right">
+                        </td>
+                        <td width="92" valign="top" style="font-family:Arial,sans-serif; font-size:14px; line-height:18px; font-weight:normal; color:#333333; padding:10px 0;" align="right">
+                        </td>
+                        <td width="95" valign="top" style="font-family:Arial,sans-serif; font-size:14px; line-height:18px; font-weight:normal; color:#333333; padding:10px 0;" align="right">
+                        </td>
+                        <td width="125" style="padding:10px 17px 10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${transaction.amount}">138.60</p>
+                        </td>
+                      </tr>
+                      <!-- Charge rows -->
+                      <tr th:each="charge : ${charges}">
+                        <td width="98" valign="top" style="padding:10px 0 10px 16px;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${charge.dateTime}">04.09.2025</p>
+                        </td>
+                        <td width="100" valign="top" style="padding:10px 0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${charge.itemDescription}">Prepayment Accommodation</p>
+                        </td>
+                        <td width="60" valign="top" style="padding:10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${charge.vatRate}">7</p>
+                        </td>
+                        <td width="90" valign="top" style="padding:10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${charge.netAmount}">123.36</p>
+                        </td>
+                        <td width="92" valign="top" style="padding:10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${charge.vatAmount}">8.64</p>
+                        </td>
+                        <td width="95" valign="top" style="padding:10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${charge.grossAmount}">132</p>
+                        </td>
+                        <td width="125" style="font-family:Arial,sans-serif; font-size:14px; line-height:18px; font-weight:normal; color:#333333; padding:10px 17px 10px 0;" align="right">&#160;
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Totals -->
+          <tr>
+            <td>
+              <table width="673" border="0" cellpadding="0" cellspacing="0" style="width:673px; margin:0 auto;">
+                <tr>
+                  <td style="padding-bottom:20px;">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <th valign="top" width="348" bgcolor="#F8F8F8" style="font-family:Arial,sans-serif; font-size:14px; line-height:18px; font-weight:normal; color:#333333; padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">&#160;</th>
+                        <th valign="top" width="92" align="right" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;"><strong>Total</strong></p>
+                        </th>
+                        <th valign="top" width="96" align="right" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;"><strong th:text="${invoice.debitAmount}">138.6</strong></p>
+                        </th>
+                        <th valign="top" width="120" align="right" bgcolor="#F8F8F8" style="padding:20px 17px 20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;"><strong th:text="${invoice.creditAmount}">138.6</strong></p>
+                        </th>
+                      </tr>
+                      <tr>
+                        <td width="358">&#160;</td>
+                        <td valign="top" width="92" align="right" style="padding:20px 0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">Balance</p>
+                        </td>
+                        <td valign="top" width="96" align="right" style="font-family:Arial,sans-serif; font-size:14px; line-height:18px; font-weight:normal; color:#333333; padding:20px 0;">&#160;
+                        </td>
+                        <td valign="top" width="120" align="right" style="padding:20px 17px 20px 0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${invoice.balanceAmount}">0</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- VAT Breakdown -->
+          <tr>
+            <td>
+              <table width="673" border="0" cellpadding="0" cellspacing="0" style="width:673px; margin:0 auto;">
+                <tr>
+                  <td style="padding-bottom:30px;">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <th valign="top" width="348" align="left" bgcolor="#F8F8F8" style="padding:20px 0 20px 16px; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong>Rate of VAT</strong>
+                          </p>
+                        </th>
+                        <th valign="top" width="92" align="right" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong th:text="${'Net (' + invoice.currencySymbol + ')'}">Net</strong>
+                          </p>
+                        </th>
+                        <th valign="top" width="96" align="right" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong th:text="${'VAT (' + invoice.currencySymbol + ')'}">VAT</strong>
+                          </p>
+                        </th>
+                        <th valign="top" width="120" align="right" bgcolor="#F8F8F8" style="padding:20px 17px 20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">
+                            <strong th:text="${'Gross (' + invoice.currencySymbol + ')'}">Gross</strong>
+                          </p>
+                        </th>
+                      </tr>
+                      <tr th:each="vat : ${vatBreakdown}">
+                        <td width="348" valign="top" style="padding:10px 0 10px 16px;" align="left">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${vat.rateDesc}">Prepayment VAT SPCL</p>
+                        </td>
+                        <td width="92" valign="top" style="padding:10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${vat.totalExclVat}">129.53</p>
+                        </td>
+                        <td width="96" valign="top" style="padding:10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${vat.totalVat}">9.07</p>
+                        </td>
+                        <td width="120" valign="top" style="padding:10px 17px 10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${vat.totalIncVat}">138.6</p>
+                        </td>
+                      </tr>
+                      <tr th:if="${vatSummary != null}">
+                        <td width="348" valign="top" style="padding:10px 0 10px 16px;" align="left">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;">Total</p>
+                        </td>
+                        <td width="92" valign="top" style="padding:10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${vatSummary.totalNet}">129.53</p>
+                        </td>
+                        <td width="96" valign="top" style="padding:10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${vatSummary.totalAmount}">9.07</p>
+                        </td>
+                        <td width="120" valign="top" style="padding:10px 17px 10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${vatSummary.totalGross}">138.6</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Deposits -->
+          <tr th:if="${deposits != null and !#lists.isEmpty(deposits)}">
+            <td>
+              <table width="673" border="0" cellpadding="0" cellspacing="0" style="width:673px; margin:0 auto;">
+                <tr>
+                  <td style="padding-bottom:20px;">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <th valign="top" width="348" align="left" bgcolor="#F8F8F8" style="padding:20px 0 20px 16px; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;"><strong>Date</strong></p>
+                        </th>
+                        <th valign="top" width="92" align="right" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;"><strong>Deposit<br/>(<span th:text="${invoice.currencySymbol}">&#8364;</span>)</strong></p>
+                        </th>
+                        <th valign="top" width="96" align="right" bgcolor="#F8F8F8" style="padding:20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;"><strong>Deposit <br/>Invoice No.</strong></p>
+                        </th>
+                        <th valign="top" width="120" align="right" bgcolor="#F8F8F8" style="padding:20px 17px 20px 0; border-top:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;"><strong>Deposit Tax<br/>(<span th:text="${invoice.currencySymbol}">&#8364;</span>)</strong></p>
+                        </th>
+                      </tr>
+                      <tr th:each="deposit : ${deposits}">
+                        <td valign="top" width="348" style="padding:10px 0 10px 16px;" align="left">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${deposit.dateTime}">Date</p>
+                        </td>
+                        <td valign="top" width="92" style="padding:10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${deposit.totalIncVat}">0</p>
+                        </td>
+                        <td valign="top" width="96" style="padding:10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${deposit.invoiceNumber}">Inv No</p>
+                        </td>
+                        <td valign="top" width="120" style="padding:10px 17px 10px 0;" align="right">
+                          <p style="font-family:Arial,sans-serif; font-size:14px; line-height:18px;margin:0; font-weight:normal;color:#333333;" th:text="${deposit.vatAmount}">0</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- TSE Data -->
+          <tr th:if="${tse != null and tse.present}">
+            <td>
+              <table width="673" bgcolor="#ffffff" align="left" cellspacing="0" cellpadding="0" border="0" style="width:673px;max-width:673px; margin:0 auto; background-color:#ffffff;">
+                <tr>
+                  <td style="padding:8px 17px 8px 16px">
+                    <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" style="width:673px;max-width:673px;">
+                      <tbody>
+                        <tr>
+                          <td colspan="2">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;">TSE Details:</p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="123" valign="top" style="padding-right:10px">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;">FN</p>
+                          </td>
+                          <td width="550" valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;" th:text="${tse.fn}">FN</p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-right:10px" valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;">FinishD</p>
+                          </td>
+                          <td valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;" th:text="${tse.endDateTime}">FinishD</p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-right:10px" valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;">Serial</p>
+                          </td>
+                          <td valign="top" style="word-break:break-all;">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; word-break:break-all;margin:0;line-height:18px; color:#333333;" th:text="${tse.serial}">Serial</p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-right:10px" valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;">Sign</p>
+                          </td>
+                          <td valign="top" style="word-break:break-all;">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; word-break:break-all;margin:0;line-height:18px; color:#333333;" th:text="${tse.sign}">Sign</p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-right:10px" valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;">SignCnt</p>
+                          </td>
+                          <td valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;" th:text="${tse.signCnt}">SignCnt</p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-right:10px" valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;">Code</p>
+                          </td>
+                          <td valign="top" style="word-break:break-all;">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; word-break:break-all;margin:0;line-height:18px; color:#333333;" th:text="${tse.code}">Code</p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-right:10px" valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;">SQ</p>
+                          </td>
+                          <td valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;" th:text="${tse.sq}">SQ</p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-right:10px" valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;">TN</p>
+                          </td>
+                          <td valign="top">
+                            <p style="font-family:Arial,sans-serif; font-size:12px; margin:0;line-height:18px; color:#333333;" th:text="${tse.tn}">TN</p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Legal owner text -->
+          <tr>
+            <td>
+              <table width="673" bgcolor="#ffffff" align="left" cellspacing="0" cellpadding="0" border="0" style="background-color:#ffffff;">
+                <tr>
+                  <td style="padding:8px 0px">
+                    <table align="left" width="673" border="0" cellpadding="0" cellspacing="0" style="width:673px; margin:0 auto;">
+                      <tbody>
+                        <tr>
+                          <td align="left" style="padding-left:16px; padding-right:17px;padding-bottom:10px;">
+                            <p th:if="${legalOwnerText != null and !#strings.isEmpty(legalOwnerText)}" style="font-family:Arial,sans-serif;margin:0;font-size:0.875em; color:#333333; line-height:1.5em;" th:text="${legalOwnerText}">Legal owner text</p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
+

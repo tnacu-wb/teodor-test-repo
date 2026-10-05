@@ -1,0 +1,645 @@
+spring:
+  profiles:
+    active: test
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - test
+  cache:
+    type: none
+
+server:
+  port: 9020
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1 # Fix for M1 macs as described here https://stackoverflow.com/questions/60074168/java-lang-illegalstateexception-no-server-alpnprocessors-wiremock
+
+config:
+  httpClient:
+    connectionTimeout: 10000
+    responseTimeout: 30
+  service:
+    ohip:
+      host: http://localhost:${wiremock.server.port:0}
+      appKey: dummy-key
+      clientId: client
+      clientSecret: secret
+      username: usr
+      password: pass1234
+      hubId: testHubId
+      defaultHotelId: MANOLD
+      grant_type: password
+      defaultProfileId: 19750
+      contextId: WB_DIGITAL
+      amadeusDistributionContextId: "Amadeus_GDS"
+      travelPortDistributionContextId: "Travelport_GDS"
+      guaranteeCode: O9ONHOLD
+      maxConcurrency: 1
+      nonDigitalThreadSleep: 10000
+      updateCcAgentIdThreadSleep: 1000
+      fetchReservationThreadSleep: 1000
+      maxAvailabilityConcurrency: 4
+      maxRequestedDays: 3
+      maxRequestedDaysRateInfo: 3
+      confirmationGuaranteeCode: CC
+      depositReceivedGuaranteeCode: DRV
+      nonGuaranteeCode: NON
+      companyGuaranteeCode: CO
+      defaultPaymentMethod: CA
+      defaultPaymentMethodDs: DS
+      folio: 1
+      depositCashierId: 463
+      cotSpecialRequest: COTR
+      defaultMarketCode: OTH
+      tokenRefreshClockSkew: 15
+      nonDigitalPaymentHotels: ${NON_DIGITAL_PAYMENT_HOTELS:}
+      availabilityEndpoint: "/par/v1/hotels/{hotelId}/availability"
+      rateInfoEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/rateInfo"
+      reservationEndpoint: "/rsv/v1/hotels/{hotelId}/reservations"
+      reservationIdEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}"
+      cancellationPoliciesEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}/cancellationPolicies"
+      cancellationEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}/cancellations"
+      activityLogEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/activityLog"
+      packagesEndpoint: "/rtp/v1/packages"
+      enterpriseEndpoint: "/ent/config/v1/hotels/{hotelId}"
+      reservationGuestEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}"
+      reservationPackagesEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}"
+      depositFoliosEndpoint: "/csh/v1/hotels/{hotelId}/reservations/{reservationId}/depositFolios"
+      packageGroupsEndpoint: "rtp/v1/hotels/{hotelId}/packageGroups"
+      ratePlansEndpoint: "/rtp/v1/ratePlans"
+      ratePlanPromoEndpoint: "/rtp/v1/hotels/{hotelId}/ratePlans/{ratePlanCode}"
+      promotionCodeEndpoint: "/rtp/v1/promotionCodes"
+      itemsInventoryEndpoint: "/inv/v1/hotels/{hotelId}/itemInventory"
+      itemInventoryHoldEndpoint: "/inv/v1/hotels/{hotelId}/itemInventoryHold"
+      hotelInventoryEndpoint: "/inv/v1/hotels/{hotelId}/hotelInventory"
+      hotelInventoryStatisticsEndpoint: "/inv/v1/hotels/{hotelId}/inventoryStatistics"
+      roomTypesEndpoint: "/rm/config/v1/hotels/{hotelId}/roomTypes"
+      hotelConfigEndpoint: "/ent/config/v1/hotels/{hotelId}"
+      hotelDetailsEndpoint: "/ent/config/v1/hotels/{hotelId}/hotelDetails"
+      profilesEndpoint: "/crm/v1/profiles"
+      companiesEndpoint: "/crm/v1/companies/{corporateId}"
+      companiesByCompanyIdEndpoint: "/crm/v1/profiles/{companyId}"
+      externalReservationEndpoint: "/rsv/v1/reservations"
+      multiHotelAvaEndpoint: "/par/v1/availability"
+      cancellationReasonsEndpoint: "/lov/v1/listOfValues/{name}"
+      depositsEndpoint: "/csh/v1/hotels/{hotelId}/depositFolio"
+      creditCardInfoEndpoint: "/fof/config/v1/creditCardInfo"
+      cancelPoliciesEndpoint: "/rsv/config/v1/cancelpolicies"
+      policySchedulesEndpoint: "/rsv/config/v1/hotels/{hotelId}/policyschedules"
+      deleteReservationEndpoint: "/rsv/v1/hotels/{HotelId}/reservations/{reservationId}"
+      vacantRoomsEndpoint: "/fof/v1/hotels/{HotelId}/rooms"
+      roomsAssignmentEndpoint: "/fof/v1/hotels/{HotelId}/reservations/{ReservationId}/roomAssignments"
+      addProfileEndpoint: "/rsv/v1/hotels/{HotelId}/reservations/{ReservationId}"
+      checkInEndpoint: "/fof/v1/hotels/{HotelId}/reservations/{ReservationId}/checkIns"
+      routingInstructions: "/csh/v1/hotels/{HotelId}/reservations/{ReservationId}/routingInstructions"
+      minimumRateAvaEndpoint: "/parext/v1/hotels/minimumRateAvailability"
+      multiRoomRateAvaEndpoint: "/parext/v1/hotels/multiRoomRateAvailability"
+      getHousekeeping: "/hsk/v1/hotels/{HotelId}/housekeepingOverview"
+      negotiatedRatesByProfileIdEndpoint: "/rtp/v1/profiles/{profileId}/negotiatedRates"
+      foliosEndPoint: "/csh/v1/hotels/{hotelId}/reservations/{reservationId}/folios"
+      fileAttachmentEndpoint: "/med/config/v1/fileAttachments"
+      preCheckInStatusEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}/preCheckIn"
+      deleteFileAttachmentEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}/attachments/{attachmentId}"
+      restrictionsByDateRangeEndpoint: "/par/v1/hotels/{hotelId}/restrictions"
+      isUdf08Enabled: true
+      languages:
+        "en": E
+        "de": DE
+      preferencesEndpoint: "/crm/config/v1/hotels/{HotelId}/preferences"
+      restrictions:
+        parallelThreads: 5
+    rules-agent:
+      host: http://localhost:${wiremock.server.port:0}
+      roomSubstitutionEndpoint: "/v1/rules/room-substitutions"
+      bookingChannelInfo: "/v1/rules/channel-info"
+      vatCodesEndpoint: "/v1/rules/vat-codes"
+      channelSourceInfoEndpoint: "/v1/rules/source-info"
+      wbRoomTypes:
+        - "DB"
+        - "SB"
+        - "FAM"
+        - "DIS"
+        - "TWIN"
+      businessAllowanceEndpoint: "/v1/rules/allowances"
+
+packages:
+  fetch-instructions:
+    - Header
+    - CalculatedPrice
+    - Items
+    - PostingRules
+  free-kids-breakfast:
+    - PIBTEST
+  donation-fetch-instructions:
+    - Header
+    - CalculatedPrice
+    - Items
+    - PostingRules
+    - Details
+enterprise:
+  fetch-instructions:
+    - Dining
+
+logging:
+  configuration:
+    logger: default
+
+meals:
+  config:
+    "BDB":
+      breakfast: true
+      dinner: false
+      meal-name: Premier Inn Breakfast
+    "BMD":
+      breakfast: true
+      dinner: true
+      meal-name: Meal Deal
+
+availability:
+  minimumAvailability: 10
+
+hotels:
+  noOfAllowedHotels: 200
+
+feature-flags:
+  deposit-folio-post-after-disable-on-hold:
+    key: "release_deposit_folio_post_after_disable_on_hold"
+    fallback: false
+  piba-booking:
+    key: "release_pi_bb_ccui_distr_piba_booking"
+    fallback: false
+  fixed-Rate:
+    key: "release_pi_bb_ccui_distr_fixed_rate"
+    fallback: false
+  availability-from-different-room-classes:
+    key: "release_availability_from_different_room_classes"
+    fallback: false
+  summer-sale-promotion:
+    key: "release_pi_ccui_summer_sale_promotion"
+    fallback: false
+  create-reservation-with-soft-bundles:
+    key: "release_create_reservation_with_soft_bundles"
+    fallback: false
+  use-token-refresh-skew:
+    key: "release_ohip_use_token_refresh_skew"
+    fallback: false
+  set-defaultPaymentMethod-DS:
+    key: "release_set_default_payment_method_DS"
+    fallback: false
+  set-cnpBooking-alerts:
+    key: "release_set_cnp_booking_alerts"
+    fallback: false
+  deposit-folio-creation-verification:
+    key: "release_deposit_folio_creation_verification"
+    fallback: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    api-url: 'http://localhost:4242/api'
+    api-token: 'dummy-value'
+    environment: unit-test
+
+promotion:
+  promotionalRate: PROMO
+  promotionalPackage: PROMO_PACKAGE
+
+threadpool:
+  availability:
+    coreSize: ${AVAILABILITY_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${AVAILABILITY_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${AVAILABILITY_EXECUTOR_QUEUE_SIZE:50}
+  apiLimits:
+    coreSize: ${API_LIMITS_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${API_LIMITS_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${API_LIMITS_EXECUTOR_QUEUE_SIZE:50}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - cachePrefixConfigured
+  cache:
+    type: redis
+    redis:
+      key-prefix: "Ohip-Adapter-Service"
+      use-key-prefix: true
+
+server:
+  port: 9020
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1 # Fix for M1 macs as described here https://stackoverflow.com/questions/60074168/java-lang-illegalstateexception-no-server-alpnprocessors-wiremock
+
+config:
+  httpClient:
+    connectionTimeout: 10000
+    responseTimeout: 30
+  service:
+    ohip:
+      host: http://localhost:${wiremock.server.port:0}
+      appKey: dummy-key
+      clientId: client
+      clientSecret: secret
+      username: usr
+      password: pass1234
+      hubId: testHubId
+      defaultHotelId: MANOLD
+      grant_type: password
+      defaultProfileId: 19750
+      contextId: WB_DIGITAL
+      amadeusDistributionContextId: "Amadeus_GDS"
+      travelPortDistributionContextId: "Travelport_GDS"
+      guaranteeCode: O9ONHOLD
+      maxConcurrency: 1
+      nonDigitalThreadSleep: 10000
+      updateCcAgentIdThreadSleep: 1000
+      fetchReservationThreadSleep: 1000
+      maxAvailabilityConcurrency: 4
+      maxRequestedDays: 3
+      maxRequestedDaysRateInfo: 3
+      confirmationGuaranteeCode: CC
+      depositReceivedGuaranteeCode: DRV
+      nonGuaranteeCode: NON
+      companyGuaranteeCode: CO
+      defaultPaymentMethod: CA
+      defaultPaymentMethodDs: DS
+      folio: 1
+      depositCashierId: 463
+      cotSpecialRequest: COTR
+      defaultMarketCode: OTH
+      tokenRefreshClockSkew: 15
+      nonDigitalPaymentHotels: ${NON_DIGITAL_PAYMENT_HOTELS:}
+      availabilityEndpoint: "/par/v1/hotels/{hotelId}/availability"
+      rateInfoEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/rateInfo"
+      reservationEndpoint: "/rsv/v1/hotels/{hotelId}/reservations"
+      reservationIdEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}"
+      cancellationPoliciesEndpoint: "/rsv/v0/hotels/{hotelId}/reservations/{reservationId}/cancellationPolicies"
+      cancellationEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}/cancellations"
+      activityLogEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/activityLog"
+      packagesEndpoint: "/rtp/v1/packages"
+      enterpriseEndpoint: "/ent/config/v1/hotels/{hotelId}"
+      reservationGuestEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}"
+      reservationPackagesEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}"
+      depositFoliosEndpoint: "/csh/v0/hotels/{hotelId}/reservations/{reservationId}/depositFolios"
+      packageGroupsEndpoint: "rtp/v0/hotels/{hotelId}/packageGroups"
+      ratePlansEndpoint: "/rtp/v0/ratePlans"
+      itemsInventoryEndpoint: "/inv/v1/hotels/{hotelId}/itemInventory"
+      itemInventoryHoldEndpoint: "/inv/v0/hotels/{hotelId}/itemInventoryHold"
+      hotelInventoryEndpoint: "/inv/v1/hotels/{hotelId}/hotelInventory"
+      hotelInventoryStatisticsEndpoint: "/inv/v1/hotels/{hotelId}/inventoryStatistics"
+      roomTypesEndpoint: "/rm/config/v1/hotels/{hotelId}/roomTypes"
+      hotelConfigEndpoint: "/ent/config/v1/hotels/{hotelId}"
+      hotelDetailsEndpoint: "/ent/config/v1/hotels/{hotelId}/hotelDetails"
+      profilesEndpoint: "/crm/v1/profiles"
+      companiesEndpoint: "/crm/v1/companies/{corporateId}"
+      companiesByCompanyIdEndpoint: "/crm/v1/profiles/{companyId}"
+      externalReservationEndpoint: "/rsv/v1/reservations"
+      multiHotelAvaEndpoint: "/par/v0/availability"
+      cancellationReasonsEndpoint: "/lov/v1/listOfValues/{name}"
+      depositsEndpoint: "/csh/v1/hotels/{hotelId}/depositFolio"
+      creditCardInfoEndpoint: "/fof/config/v1/creditCardInfo"
+      cancelPoliciesEndpoint: "/rsv/config/v0/cancelpolicies"
+      policySchedulesEndpoint: "/rsv/config/v0/hotels/{hotelId}/policyschedules"
+      deleteReservationEndpoint: "/rsv/v0/reservations/{reservationId}"
+      vacantRoomsEndpoint: "/fof/v0/hotels/{HotelId}/rooms"
+      roomsAssignmentEndpoint: "/fof/v0/hotels/{HotelId}/reservations/{ReservationId}/roomAssignments"
+      addProfileEndpoint: "/rsv/v0/hotels/{HotelId}/reservations/{ReservationId}"
+      checkInEndpoint: "/fof/v1/hotels/{HotelId}/reservations/{ReservationId}/checkIns"
+      routingInstructions: "/csh/v1/hotels/{HotelId}/reservations/{ReservationId}/routingInstructions"
+      minimumRateAvaEndpoint: "/parext/v1/hotels/minimumRateAvailability"
+      multiRoomRateAvaEndpoint: "/parext/v1/hotels/multiRoomRateAvailability"
+      getHousekeeping: "/hsk/v1/hotels/{HotelId}/housekeepingOverview"
+      negotiatedRatesByProfileIdEndpoint: "/rtp/v1/profiles/{profileId}/negotiatedRates"
+      foliosEndPoint: "/csh/v1/hotels/{hotelId}/reservations/{reservationId}/folios"
+      fileAttachmentEndpoint: "/med/config/v1/fileAttachments"
+      preCheckInStatusEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}/preCheckIn"
+      deleteFileAttachmentEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}/attachments/{attachmentId}"
+      restrictionsByDateRangeEndpoint: "/par/v1/hotels/{hotelId}/restrictions"
+      isUdf08Enabled: true
+      languages:
+        "en": E
+        "de": DE
+      preferencesEndpoint: "/crm/config/v1/hotels/{HotelId}/preferences"
+    rules-agent:
+      host: http://localhost:${wiremock.server.port:0}
+      roomSubstitutionEndpoint: "/v1/rules/room-substitutions"
+      bookingChannelInfo: "/v1/rules/channel-info"
+      vatCodesEndpoint: "/v1/rules/vat-codes"
+      channelSourceInfoEndpoint: "/v1/rules/source-info"
+      wbRoomTypes:
+        - "DB"
+        - "SB"
+        - "FAM"
+        - "DIS"
+        - "TWIN"
+      businessAllowanceEndpoint: "/v1/rules/allowances"
+
+packages:
+  fetch-instructions:
+    - Header
+    - CalculatedPrice
+    - Items
+    - PostingRules
+  free-kids-breakfast:
+    - PIBTEST
+  donation-fetch-instructions:
+    - Header
+    - CalculatedPrice
+    - Items
+    - PostingRules
+    - Details
+enterprise:
+  fetch-instructions:
+    - Dining
+
+logging:
+  configuration:
+    logger: default
+
+meals:
+  config:
+    "BDB":
+      breakfast: true
+      dinner: false
+      meal-name: Premier Inn Breakfast
+    "BMD":
+      breakfast: true
+      dinner: true
+      meal-name: Meal Deal
+
+availability:
+  minimumAvailability: 10
+
+feature-flags:
+  deposit-folio-post-after-disable-on-hold:
+    key: "release_deposit_folio_post_after_disable_on_hold"
+    fallback: false
+  piba-booking:
+    key: "release_pi_bb_ccui_distr_piba_booking"
+    fallback: false
+  fixed-Rate:
+    key: "release_pi_bb_ccui_distr_fixed_rate"
+    fallback: false
+  use-token-refresh-skew:
+    key: "release_ohip_use_token_refresh_skew"
+    fallback: false
+  set-defaultPaymentMethod-DS:
+    key: "release_set_default_payment_method_DS"
+    fallback: false
+  set-cnpBooking-alerts:
+    key: "release_set_cnp_booking_alerts"
+    fallback: false
+  deposit-folio-creation-verification:
+    key: "release_deposit_folio_creation_verification"
+    fallback: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    api-url: 'http://localhost:4242/api'
+    api-token: 'dummy-value'
+    environment: unit-test
+
+promotion:
+  promotionalRate: PROMO
+  promotionalPackage: PROMO_PACKAGE
+
+threadpool:
+  availability:
+    coreSize: ${AVAILABILITY_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${AVAILABILITY_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${AVAILABILITY_EXECUTOR_QUEUE_SIZE:50}
+  apiLimits:
+    coreSize: ${API_LIMITS_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${API_LIMITS_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${API_LIMITS_EXECUTOR_QUEUE_SIZE:50}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - noCachePrefix
+  cache:
+    type: redis
+    redis:
+      key-prefix: "Ohip-Adapter-Service"
+      use-key-prefix: false
+
+server:
+  port: 9020
+
+swagger:
+  api:
+    version: 1.0.0
+
+wiremock:
+  server:
+    httpsPort: -1 # Fix for M1 macs as described here https://stackoverflow.com/questions/60074168/java-lang-illegalstateexception-no-server-alpnprocessors-wiremock
+
+config:
+  httpClient:
+    connectionTimeout: 10000
+    responseTimeout: 30
+  service:
+    ohip:
+      host: http://localhost:${wiremock.server.port:0}
+      appKey: dummy-key
+      clientId: client
+      clientSecret: secret
+      username: usr
+      password: pass1234
+      hubId: testHubId
+      defaultHotelId: MANOLD
+      grant_type: password
+      defaultProfileId: 19750
+      contextId: WB_DIGITAL
+      amadeusDistributionContextId: "Amadeus_GDS"
+      travelPortDistributionContextId: "Travelport_GDS"
+      guaranteeCode: O9ONHOLD
+      maxConcurrency: 1
+      nonDigitalThreadSleep: 10000
+      updateCcAgentIdThreadSleep: 1000
+      fetchReservationThreadSleep: 1000
+      maxAvailabilityConcurrency: 4
+      maxRequestedDays: 3
+      maxRequestedDaysRateInfo: 3
+      confirmationGuaranteeCode: CC
+      depositReceivedGuaranteeCode: DRV
+      nonGuaranteeCode: NON
+      companyGuaranteeCode: CO
+      defaultPaymentMethod: CA
+      defaultPaymentMethodDs: DS
+      folio: 1
+      depositCashierId: 463
+      cotSpecialRequest: COTR
+      defaultMarketCode: OTH
+      tokenRefreshClockSkew: 15
+      nonDigitalPaymentHotels: ${NON_DIGITAL_PAYMENT_HOTELS:}
+      availabilityEndpoint: "/par/v1/hotels/{hotelId}/availability"
+      rateInfoEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/rateInfo"
+      reservationEndpoint: "/rsv/v1/hotels/{hotelId}/reservations"
+      reservationIdEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}"
+      cancellationPoliciesEndpoint: "/rsv/v0/hotels/{hotelId}/reservations/{reservationId}/cancellationPolicies"
+      cancellationEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}/cancellations"
+      activityLogEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/activityLog"
+      packagesEndpoint: "/rtp/v1/packages"
+      enterpriseEndpoint: "/ent/config/v1/hotels/{hotelId}"
+      reservationGuestEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}"
+      reservationPackagesEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}"
+      depositFoliosEndpoint: "/csh/v0/hotels/{hotelId}/reservations/{reservationId}/depositFolios"
+      packageGroupsEndpoint: "rtp/v0/hotels/{hotelId}/packageGroups"
+      ratePlansEndpoint: "/rtp/v0/ratePlans"
+      itemsInventoryEndpoint: "/inv/v1/hotels/{hotelId}/itemInventory"
+      itemInventoryHoldEndpoint: "/inv/v0/hotels/{hotelId}/itemInventoryHold"
+      hotelInventoryEndpoint: "/inv/v1/hotels/{hotelId}/hotelInventory"
+      hotelInventoryStatisticsEndpoint: "/inv/v1/hotels/{hotelId}/inventoryStatistics"
+      roomTypesEndpoint: "/rm/config/v1/hotels/{hotelId}/roomTypes"
+      hotelConfigEndpoint: "/ent/config/v1/hotels/{hotelId}"
+      hotelDetailsEndpoint: "/ent/config/v1/hotels/{hotelId}/hotelDetails"
+      profilesEndpoint: "/crm/v1/profiles"
+      companiesEndpoint: "/crm/v1/companies/{corporateId}"
+      companiesByCompanyIdEndpoint: "/crm/v1/profiles/{companyId}"
+      externalReservationEndpoint: "/rsv/v1/reservations"
+      multiHotelAvaEndpoint: "/par/v0/availability"
+      cancellationReasonsEndpoint: "/lov/v1/listOfValues/{name}"
+      depositsEndpoint: "/csh/v1/hotels/{hotelId}/depositFolio"
+      creditCardInfoEndpoint: "/fof/config/v1/creditCardInfo"
+      cancelPoliciesEndpoint: "/rsv/config/v0/cancelpolicies"
+      policySchedulesEndpoint: "/rsv/config/v0/hotels/{hotelId}/policyschedules"
+      deleteReservationEndpoint: "/rsv/v0/reservations/{reservationId}"
+      vacantRoomsEndpoint: "/fof/v0/hotels/{HotelId}/rooms"
+      roomsAssignmentEndpoint: "/fof/v0/hotels/{HotelId}/reservations/{ReservationId}/roomAssignments"
+      addProfileEndpoint: "/rsv/v0/hotels/{HotelId}/reservations/{ReservationId}"
+      checkInEndpoint: "/fof/v1/hotels/{HotelId}/reservations/{ReservationId}/checkIns"
+      routingInstructions: "/csh/v1/hotels/{HotelId}/reservations/{ReservationId}/routingInstructions"
+      minimumRateAvaEndpoint: "/parext/v1/hotels/minimumRateAvailability"
+      multiRoomRateAvaEndpoint: "/parext/v1/hotels/multiRoomRateAvailability"
+      getHousekeeping: "/hsk/v1/hotels/{HotelId}/housekeepingOverview"
+      negotiatedRatesByProfileIdEndpoint: "/rtp/v1/profiles/{profileId}/negotiatedRates"
+      foliosEndPoint: "/csh/v1/hotels/{hotelId}/reservations/{reservationId}/folios"
+      fileAttachmentEndpoint: "/med/config/v1/fileAttachments"
+      preCheckInStatusEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}/preCheckIn"
+      deleteFileAttachmentEndpoint: "/rsv/v1/hotels/{hotelId}/reservations/{reservationId}/attachments/{attachmentId}"
+      restrictionsByDateRangeEndpoint: "/par/v1/hotels/{hotelId}/restrictions"
+      isUdf08Enabled: true
+      languages:
+        "en": E
+        "de": DE
+      preferencesEndpoint: "/crm/config/v1/hotels/{HotelId}/preferences"
+    rules-agent:
+      host: http://localhost:${wiremock.server.port:0}
+      roomSubstitutionEndpoint: "/v1/rules/room-substitutions"
+      bookingChannelInfo: "/v1/rules/channel-info"
+      vatCodesEndpoint: "/v1/rules/vat-codes"
+      channelSourceInfoEndpoint: "/v1/rules/source-info"
+      wbRoomTypes:
+        - "DB"
+        - "SB"
+        - "FAM"
+        - "DIS"
+        - "TWIN"
+      businessAllowanceEndpoint: "/v1/rules/allowances"
+
+packages:
+  fetch-instructions:
+    - Header
+    - CalculatedPrice
+    - Items
+    - PostingRules
+  free-kids-breakfast:
+    - PIBTEST
+  donation-fetch-instructions:
+    - Header
+    - CalculatedPrice
+    - Items
+    - PostingRules
+    - Details
+enterprise:
+  fetch-instructions:
+    - Dining
+
+logging:
+  configuration:
+    logger: default
+
+meals:
+  config:
+    "BDB":
+      breakfast: true
+      dinner: false
+      meal-name: Premier Inn Breakfast
+    "BMD":
+      breakfast: true
+      dinner: true
+      meal-name: Meal Deal
+
+availability:
+  minimumAvailability: 10
+
+feature-flags:
+  deposit-folio-post-after-disable-on-hold:
+    key: "release_deposit_folio_post_after_disable_on_hold"
+    fallback: false
+  piba-booking:
+    key: "release_pi_bb_ccui_distr_piba_booking"
+    fallback: false
+  fixed-Rate:
+    key: "release_pi_bb_ccui_distr_fixed_rate"
+    fallback: false
+  mobile_accepts_ota_booking:
+    key: "mobile_accepts_ota_booking"
+    fallback: false
+  use-token-refresh-skew:
+    key: "release_ohip_use_token_refresh_skew"
+    fallback: false
+  set-defaultPaymentMethod-DS:
+    key: "release_set_default_payment_method_DS"
+    fallback: false
+  set-cnpBooking-alerts:
+    key: "release_set_cnp_booking_alerts"
+    fallback: false
+  consumption-details-default-quantity:
+    key: "consumption_details_default_quantity"
+    fallback: false
+  deposit-folio-creation-verification:
+    key: "release_deposit_folio_creation_verification"
+    fallback: false
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    api-url: 'http://localhost:4242/api'
+    api-token: 'dummy-value'
+    environment: unit-test
+
+promotion:
+  promotionalRate: PROMO
+  promotionalPackage: PROMO_PACKAGE
+
+threadpool:
+  availability:
+    coreSize: ${AVAILABILITY_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${AVAILABILITY_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${AVAILABILITY_EXECUTOR_QUEUE_SIZE:50}
+  apiLimits:
+    coreSize: ${API_LIMITS_EXECUTOR_CORE_SIZE:8}
+    maxSize: ${API_LIMITS_EXECUTOR_MAX_SIZE:16}
+    queueSize: ${API_LIMITS_EXECUTOR_QUEUE_SIZE:50}

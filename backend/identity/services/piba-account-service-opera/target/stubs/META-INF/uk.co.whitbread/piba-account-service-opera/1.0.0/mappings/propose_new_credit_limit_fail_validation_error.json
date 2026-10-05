@@ -1,0 +1,31 @@
+{
+  "id" : "3d3fb7c0-a2f8-4a85-997c-2c0906dcf5e9",
+  "request" : {
+    "url" : "/piba/account/proposecreditlimit",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      },
+      "Authorization" : {
+        "equalTo" : "Bearer dummy_value10"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['proposedCreditLimit'] == 800)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['schemeCustomerId'] == 783592333)]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['tetheredUserGuid'] == '97BBBCF7-C5CA-4F95-57ED-3BE3055E333F')]"
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "body" : "{\"code\":\"2604\",\"details\":[\"Existing credit limit is 500. Requested credit limit 800 must not be greater than 750\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "3d3fb7c0-a2f8-4a85-997c-2c0906dcf5e9"
+}

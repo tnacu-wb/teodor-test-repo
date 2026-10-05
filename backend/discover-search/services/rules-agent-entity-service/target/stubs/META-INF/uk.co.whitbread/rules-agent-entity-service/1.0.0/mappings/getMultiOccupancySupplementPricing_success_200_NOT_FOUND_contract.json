@@ -1,0 +1,25 @@
+{
+  "id" : "69862627-5e7d-4c75-9b75-77a2e887bd4a",
+  "request" : {
+    "urlPath" : "/v1/rules/multi-occupancy-supplement",
+    "method" : "POST",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$.['hotelIds'][*][?(@.['hotelId'] == 'MANOLD')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"dictionary\":{\"MANOLD\":0.0}}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "69862627-5e7d-4c75-9b75-77a2e887bd4a",
+  "priority" : 1
+}

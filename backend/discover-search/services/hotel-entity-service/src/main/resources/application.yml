@@ -1,0 +1,423 @@
+server:
+  port: @application.port@
+  shutdown: graceful
+
+swagger:
+  api:
+    version: "@project.version@"
+
+info:
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    description: "@project.description@"
+    version: "@project.version@"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+springdoc:
+  show-actuator: true
+  writer-with-order-by-keys: true
+
+management:
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+          - wb-session-id
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+        - wb-session-id
+  endpoints:
+    web:
+      base-path: /v1/hotels/actuator
+      exposure:
+        include: health, info, caches, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    redis:
+      enabled: false
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: [ 0.95, 0.99 ]
+      percentiles-histogram:
+        http.server.requests: true
+      maximum-expected-value:
+        http.server.requests: 2000ms
+
+logging:
+  configuration:
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  level:
+    io:
+      getunleash: TRACE
+    brave: WARN
+    org.springframework.cache: warn
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+spring:
+  jackson:
+    deserialization:
+      fail-on-null-for-primitives: false
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      key-prefix: "Hotel-Entity-Service"
+      content-entity-service-key-prefix: "Content-Entity-Service"
+      use-key-prefix: true
+  data:
+    redis:
+      ssl:
+        enabled: true
+      cluster:
+        max-redirects: 5
+        nodes: ${REDIS_ENDPOINT:localhost:6379}
+      client-type: lettuce
+      lettuce:
+        cluster:
+          refresh:
+            period: 5m
+            adaptive: true
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+
+availability:
+  recommendedSearch:
+    hubModifier: ${RC_HUB_MODIFIER:0.7}
+    dropOffModifier: ${RC_DROP_OFF_MODIFIER:0.3}
+    dropOffPoint: ${RC_DROP_OFF_POINT:5.0}
+    distanceModifier: ${RC_DISTANCE_MODIFIER:1.0}
+    priceModifier: ${RC_PRICE_MODIFIER:1.0}
+  ratePlanClasses:
+    - "A"
+    - "C"
+    - "S"
+    - "U"
+    - "W"
+    - "O"
+  employeeRatePlanClasses:
+    - "A"
+    - "B"
+    - "C"
+    - "S"
+    - "U"
+    - "W"
+    - "O"
+
+rate-suppression:
+  roomClasses:
+    - "ST"
+    - "SE"
+    - "SV"
+    - "BG"
+    - "BV"
+    - "PP"
+    - "PV"
+    - "SW"
+    - "BW"
+
+preference:
+  condition:
+    TWIN: "ST"
+    TWINCOTR: "TC"
+    TW2S: "ST"
+    TW2SCOTR: "TC"
+    TWDS: "ST"
+    TWDSCOTR: "TC"
+    SING: "SS"
+    SINGCOTR: "SC"
+    DBLE: "SD"
+    DBLECOTR: "DC"
+    TRIP: "SE"
+    TRIPCOTR: "EC"
+    QUAD: "SF"
+    QUADCOTR: "FC"
+
+config:
+  httpClient:
+    connectionTimeout: ${HTTP_CONNECTION_TIMEOUT:10000}
+    responseTimeout: ${HTTP_RESPONSE_TIMEOUT:30}
+  service:
+    redis:
+      availabilityCacheTTLms: 300000 # 5 minutes
+      onSaleFlagCacheTTLHours: 1 # 1 hour
+    snowdrop:
+      host: ${SNOWDROP_URL}
+      hotelSearchEndpoint: "/v1/search/hotels"
+    ohip:
+      host: ${OHIP_HOST}/ohip
+      availabilitiesEndpoint: "/hotels/{hotelId}/availabilities"
+      availabilityByIdsEndpoint: "/hotels/availabilities/distr"
+      availabilityByIdsEndpointV2: "/v2/hotels/availabilities/distr"
+      availabilityByIdsEndpointV3: "/v3/hotels/availabilities/distr"
+      multiHotelAvailabilitiesEndpoint: "/hotels/availabilities"
+      multiHotelAvailabilitiesEndpoint2: "/v2/hotels/availabilities"
+      packagesEndpoint: "/hotels/{hotelId}/packages"
+      donationPackagesEndpoint: "/hotels/{hotelId}/packages/donations"
+      rateCodePricingEndpoint: "/hotels/{hotelId}/rate-code-pricing"
+      roomPriceBreakdownEndpoint: "/hotels/{hotelId}/price-breakdown"
+      hotelInventoryEndpoint: "/hotels/{hotelId}/hotelInventory"
+      itemInventoryEndpoint: "/hotels/{hotelId}/itemInventory"
+      hotelInfoEndpoint: "/hotels/{hotelId}/info"
+      roomTypesInfoEndpoint: "/hotels/{hotelId}/roomTypes"
+      cancellationReasonsEndpoint: "/hotels/{hotelId}/cancellationReasons"
+      ratePlansEndpoint: "/ratePlans"
+      ratePlanInfoEndpoint: "/ratePlanInfo"
+      preferencesEndpoint: "/v1/preference/hotels/{hotelId}"
+      restrictionsByDateRangeEndpoint: "/hotels/{hotelId}/restrictions"
+      multiHotelRestrictionsByDateRangeEndpoint: "/hotels/restrictions"
+      lightweightReservationsEndpoint: "/v1/reservations/ids"
+      onSaleFlagEndpoint: "/hotels/status"
+      getVacantRoomsEndpoint: "/v1/rooms/getVacant"
+      reservationPreferences: "/v1/rooms/fetchReservationWithPreferences"
+      reservationInfo: "/v1/reservations/basket"
+
+    availability-cache:
+      host: ${AV_CACHE_SERVICE_HOST}
+      availabilityCacheEndpoint: "/search/hotels/availabilities/v1"
+      distrAvailabilityCacheEndpoint: "/dist/search/hotels/availabilities"
+    rules-agent:
+      host: ${RULES_AGENT_ENTITY_HOST}
+      roomSubstitutionEndpoint: "/v1/rules/room-substitutions"
+      maxNightsEndpoint: "/v1/rules/max-nights"
+      maxRoomsEndpoint: "/v1/rules/max-rooms"
+      maxRoomOccupancyEndpoint: "/v1/rules/max-room-occupancy"
+      rateSuppressionEndpoint: "/v1/rules/rate-suppressions"
+      multiOccupancySupplementEndpoint: "/v1/rules/multi-occupancy-supplement"
+    migration-status:
+      host: ${MIGRATION_SERVICE_HOST}
+      migrationStatusEndpoint: "/hms/hotels/status"
+    content-service:
+      host: ${CONTENT_SERVICE_HOST}
+      hotelFacilitiesFilterUpdateEndpoint: "/v1/content/hotels/facilities/updater/trigger"
+      hotelsOpeningSoonCacheUpdateEndpoint: "/v1/content/hotels/opening-soon/updater/trigger"
+      hotelInformationEndpoint: "/v1/content/hotels/{hotelId}/information"
+      extrasLabels: "/v1/content/labels/extras"
+      upsellItemsEndpoint: "/v1/content/meals"
+      searchRulesEndpoint: "/v1/content/searchrules"
+      categoryLabelsEndpoint: "/v1/content/labels/{category}"
+      globalConfigEndpoint: "/v1/content/global-config"
+    accounts:
+      host: https://${COMPANY_SERVICE_HOST}
+      companyEndpoint: "/company/{companyId}"
+    basket-service:
+      host: http://${BASKET_SERVICE_HOST:localhost:9104}
+      basketEndpoint: "/v1/baskets/{basket-reference}"
+    company-service:
+        host:  http://${COMPANY_ENTITY_SERVICE_HOST:localhost:9118}
+        companyEndpoint: "/v1/companies/opera-id/{id}"
+    oauth-client:
+      host: https://login.microsoftonline.com
+      token-url: ${OAUTH2_TENANT}/oauth2/token
+      client-id: ${OAUTH2_CLIENTID}
+      client-secret: ${OAUTH2_CLIENTSECRET}
+      grant-type: client_credentials
+    dynamics365:
+      host: ${DYNAMICS_HOST}
+      createBookingEndpoint: "/api/data/v9.2/incidents"
+      getTicketEndpoint: "/api/data/v9.2/incidents({incidentId})"
+    promotion:
+      host: http://${PROMO_SERVICE_HOST:localhost:9137}
+      promoKindEndpoint: "/v1/promo/batches/promo-kind"
+    cdh:
+      host: http://${CDH_ADAPTER_SERVICE_HOST:localhost:9119}
+      getCompanySuppressRatesEndpoint: "/v1/cdh/account/company/{companyAccountId}/suppress-rates"
+      companiesSearchEndpoint: "/v1/cdh/account/companies"
+  whitbread-privilege:
+    companyId: ${COMPANY_ID}
+
+auth:
+  tenants:
+    - name: "CCUI Tenant"
+      audience: ${CCUI_TENANT_AUDIENCE}
+      namespace: ${CCUI_TENANT_NAMESPACE}
+      issuer: ${CCUI_TENANT_ISSUER}
+      jwkUri: ${CCUI_TENANT_JWK_URI}
+    - name: "PI BB Tenant"
+      audience: ${PI_BB_TENANT_AUDIENCE}
+      namespace: ${PI_BB_TENANT_NAMESPACE}
+      issuer: ${PI_BB_TENANT_ISSUER}
+      jwkUri: ${PI_BB_TENANT_JWK_URI}
+
+feature-flags:
+  occupancy-supplement:
+    key: "release_pi_ccui_distr_web3_occupancy_supplement"
+    fallback: false
+  extras-items-eci-lco-pi:
+    key: "release_pi_web4_extras_items_eci_lco"
+    fallback: true
+  extras-items-eci-lco-bb:
+    key: "release_bb_web4_extras_items_eci_lco"
+    fallback: true
+  extras-items-eci-lco-ccui:
+    key: "release_ccui_web4_extras_items_eci_lco"
+    fallback: true
+  extras-items-uwf-pi:
+    key: "release_pi_accelerator_extras_items_uwf"
+    fallback: true
+  extras-items-uwf-bb:
+    key: "release_bb_accelerator_extras_items_uwf"
+    fallback: true
+  extras-items-uwf-ccui:
+    key: "release_ccui_accelerator_extras_items_uwf"
+    fallback: true
+  filter-twin-on-priority:
+    key: "release_distr_filter_twin_on_priority"
+    fallback: false
+  aem-search-rules:
+    key: "release_pi_bb_ccui_aem_search_rules"
+    fallback: false
+  show-mlos-ccui:
+    key: "release_ccui_show_mlos_label"
+    fallback: false
+  extras-items-bottle-of-prosecco:
+    key: "release_pi_bb_ccui_distr_emp_tir_extras_items_bop"
+    fallback: true
+  release-pi-ccui-city-tax-uk:
+    key: "release_pi_ccui_city_tax_uk"
+    fallback: true
+  release-bb-city-tax-uk:
+    key: "release_bb_city_tax_uk"
+    fallback: false
+  extras-items-pi:
+    key: "release_pi_accelerator_extras_items"
+    fallback: false
+  extras-items-bb:
+    key: "release_bb_accelerator_extras_items"
+    fallback: false
+  extras-items-ccui:
+    key: "release_ccui_accelerator_extras_items"
+    fallback: false
+  free-fnb-extras-pi:
+    key: "release_pi_free_fnb_and_extras"
+    fallback: false
+  free-fnb-extras-bb:
+    key: "release_bb_free_fnb_and_extras"
+    fallback: false
+  free-fnb-extras-ccui:
+    key: "release_ccui_free_fnb_and_extras"
+    fallback: false
+  srp-dynamic-filters:
+    key: "release_srp_dynamic_filters"
+    fallback: false
+  company-rate-suppression:
+    key: "release_bb_ccui_company_rate_suppression"
+    fallback: false
+ccui:
+  srp:
+    negotiatedrate:
+      enabled: ${CCUI_SRP_NEGOTIATED_RATE_ENABLED:false}
+    mlos:
+      parallel-threads: ${CCUI_SRP_MLOS_THREADS:5}
+
+promotion:
+  promotionalRate: ${PROMOTIONAL_RATE:}
+  excludedRates: PARKNFLY
+
+packages:
+  cutOffTime: ${CUT_OFF_TIME:2}
+  extras-package-codes:
+    - DBPROS
+
+distribution-availability:
+  accAvailabilityRoomTypes: ${ACC_AVAILABILITY_ROOM_TYPES:SINGLE,TWINRM,DOUBLE}
+  accAvailabilityRates: ${ACC_AVAILABILITY_RATES:FLEXRATE,BUSIFLEX,NONFLEXD,FITRATE1}
+
+softbundles:
+  nonMealPackageIds: ${NON_MEAL_PACKAGE_IDS:HSCKIN,HSCOU2,FI24HR}
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+        - opera-qa
+
+logging:
+  level:
+    uk:
+      co:
+        whitbread: DEBUG;
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "@project.version@"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+---
+spring.config.activate.on-profile: local
+
+auth:
+  tenants:
+    - name: "CCUI Tenant"
+      audience: https://wbodetest.eu.auth0.com/api/v2/
+      namespace: https://premierinn.com
+      issuer: https://auth0.premierinn.digital/
+      jwkUri: https://auth0.premierinn.digital/.well-known/jwks.json
+    - name: "PI BB Tenant"
+      audience: https://wbodetest.eu.auth0.com/api/v2/
+      namespace: https://premierinn.com
+      issuer: https://auth0.premierinn.digital/
+      jwkUri: https://auth0.premierinn.digital/.well-known/jwks.json
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/amend_payment_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/generic_margin_16"
+        android:animateLayoutChanges="true"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/review_amend_confirm_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/amend_payment_options_toggle_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_amend_title"
+                style="@style/Header3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/review_booking_pay_choice_title"
+                android:textColor="?attr/colorPrimary" />
+
+            <com.whitbread.premierinn.common.view.ToggleButtonView
+                android:id="@+id/amend_pay_on_arival_pay_now_toggle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/generic_margin_8"
+                app:tbv_start_selected="true"
+                app:tbv_text_left="@string/review_booking_button_label_pay_arrival"
+                app:tbv_text_right="@string/review_booking_button_label_pay_now" />
+        </LinearLayout>
+
+        <com.whitbread.premierinn.common.view.InfoMessageBoxView
+            android:id="@+id/amend_payment_timing_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/generic_margin_16"
+            android:layout_marginTop="@dimen/generic_margin_8"
+            android:layout_marginEnd="@dimen/generic_margin_16"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/information_notification_background"
+            android:paddingStart="@dimen/generic_padding_16"
+            android:paddingTop="@dimen/generic_padding_12"
+            android:paddingEnd="@dimen/generic_padding_16"
+            android:paddingBottom="@dimen/generic_padding_12"
+            android:src="@drawable/ic_info"
+            app:iconTintColor="@color/information_blue" />
+    </LinearLayout>
+
+    <com.whitbread.premierinn.common.view.CallToActionButtonLayout
+        android:id="@+id/review_amend_confirm_button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/cta_button_height"
+        android:layout_marginTop="@dimen/default_medium_margin"
+        android:paddingEnd="@dimen/generic_padding_12"
+        android:paddingStart="@dimen/generic_padding_12"
+        android:text="@string/review_amends_confirm_changes"
+        app:cab_padlock="true"
+        android:visibility="visible"
+        app:cab_padlock_color="@color/white"
+        app:cab_spinner_color="@color/white"
+        app:cab_text_color="@color/white"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/amend_payment_options" />
+
+    <TextView
+        android:id="@+id/review_booking_discard_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@id/review_amend_confirm_button"
+        style="@style/ReviewAmendDiscardButtonStyle" />
+
+    <TextView
+        android:id="@+id/terms_and_condition_text"
+        style="@style/ReviewAmendTermsAndConditionStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@id/review_booking_discard_button"
+        tools:text="By confirming your booking you are agreeing to our terms and conditions" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

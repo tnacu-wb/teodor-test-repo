@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Visual guide to the OpenSpec workflow in the Digital Monorepo: which commands to run, in what order, and what each one does.">
+  <title>OpenSpec Line Map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;800;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f3efe6;
+      --paper: #fbf9f4;
+      --card: #ffffff;
+      --ink: #16181d;
+      --ink-2: #4b5160;
+      --ink-3: #7a8091;
+      --rule: #ddd6c8;
+      --grid: rgba(22, 24, 29, 0.045);
+
+      --plan: #0b5fd6;
+      --plan-soft: #e3edfc;
+      --build: #ee7a12;
+      --build-soft: #fdeedd;
+      --finish: #0f9a61;
+      --finish-soft: #dff4ea;
+      --express: #d7263d;
+      --express-soft: #fbe3e6;
+      --explore: #8b8f9c;
+      --explore-soft: #eceef2;
+
+      --station: #ffffff;
+      --shadow: 0 1px 0 rgba(22,24,29,.06), 0 12px 30px -12px rgba(22,24,29,.18);
+      --radius: 14px;
+      --max: 1200px;
+      --display: "Overpass", "Helvetica Neue", Helvetica, sans-serif;
+      --body: "Overpass", "Helvetica Neue", Helvetica, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #111318; --paper: #171a21; --card: #1c2029; --ink: #eef0f4; --ink-2: #b4bac8;
+        --ink-3: #868d9c; --rule: #2c313d; --grid: rgba(255,255,255,.035);
+        --plan: #4d8ff0; --plan-soft: #1a2a45; --build: #f59a45; --build-soft: #3a2816;
+        --finish: #34c083; --finish-soft: #15352a; --express: #f0566a; --express-soft: #3d1b21;
+        --explore: #9aa0ae; --explore-soft: #262a33; --station: #171a21;
+        --shadow: 0 1px 0 rgba(0,0,0,.4), 0 14px 30px -14px rgba(0,0,0,.7);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #111318; --paper: #171a21; --card: #1c2029; --ink: #eef0f4; --ink-2: #b4bac8;
+      --ink-3: #868d9c; --rule: #2c313d; --grid: rgba(255,255,255,.035);
+      --plan: #4d8ff0; --plan-soft: #1a2a45; --build: #f59a45; --build-soft: #3a2816;
+      --finish: #34c083; --finish-soft: #15352a; --express: #f0566a; --express-soft: #3d1b21;
+      --explore: #9aa0ae; --explore-soft: #262a33; --station: #171a21;
+      --shadow: 0 1px 0 rgba(0,0,0,.4), 0 14px 30px -14px rgba(0,0,0,.7);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 28px 28px,
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 28px 28px,
+        var(--bg);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4, p { margin: 0; }
+    a { color: inherit; }
+    code, .mono { font-family: var(--mono); font-size: .86em; }
+    code {
+      padding: .08em .38em;
+      border-radius: 5px;
+      background: var(--explore-soft);
+      border: 1px solid var(--rule);
+      white-space: nowrap;
+    }
+    .shell { width: min(100% - 32px, var(--max)); margin-inline: auto; }
+
+    /* ---------- top bar ---------- */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 3px solid var(--ink);
+    }
+    .topbar .shell { display: flex; align-items: center; gap: 18px; min-height: 60px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 900; letter-spacing: -.01em; white-space: nowrap; }
+    .brand-mark {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: conic-gradient(var(--plan) 0 33%, var(--build) 0 66%, var(--finish) 0);
+      display: grid; place-items: center;
+    }
+    .brand-mark::after { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); }
+    .tabs { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      flex: 0 0 auto;
+      padding: 8px 14px; border-radius: 999px;
+      font-weight: 800; font-size: .9rem; text-decoration: none; color: var(--ink-2);
+      border: 2px solid transparent;
+    }
+    .tab:hover { color: var(--ink); background: var(--card); }
+    .tab[aria-current="page"] { color: var(--bg); background: var(--ink); }
+    .theme-btn {
+      flex: 0 0 auto; width: 36px; height: 36px; border-radius: 50%;
+      border: 2px solid var(--rule); background: var(--card); color: var(--ink);
+      cursor: pointer; font-size: 1rem; line-height: 1;
+    }
+
+    /* ---------- views ---------- */
+    .view { padding: 48px 0 96px; }
+    .js .view { display: none; }
+    .js .view.active { display: block; animation: rise .45s ease both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .js .view.active, .station-card { animation: none !important; } html { scroll-behavior: auto; } }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-weight: 800; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2);
+    }
+    .eyebrow i { display: inline-block; width: 28px; height: 6px; border-radius: 3px; background: var(--plan); }
+    h1 {
+      font-family: var(--display); font-weight: 900;
+      font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: .98; letter-spacing: -.035em;
+      margin: 14px 0 16px; max-width: 16ch;
+    }
+    h2 {
+      font-family: var(--display); font-weight: 900;
+      font-size: clamp(1.7rem, 3.4vw, 2.6rem); line-height: 1.05; letter-spacing: -.03em;
+    }
+    .lede { max-width: 62ch; color: var(--ink-2); font-size: 1.1rem; }
+    .section { margin-top: 72px; }
+    .section-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 32px; align-items: end; margin-bottom: 26px; }
+    .section-head p { color: var(--ink-2); }
+
+    /* ---------- legend ---------- */
+    .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 26px; }
+    .legend span { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: .85rem; color: var(--ink-2); }
+    .legend b { width: 26px; height: 6px; border-radius: 3px; display: inline-block; }
+    .legend b.dash { background: repeating-linear-gradient(90deg, var(--explore) 0 6px, transparent 6px 10px); }
+
+    /* ---------- map ---------- */
+    .map-card {
+      margin-top: 30px; padding: 18px 10px 8px;
+      background: var(--paper); border: 2px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow);
+    }
+    .map-scroll { overflow-x: auto; }
+    .map-scroll svg { display: block; min-width: 980px; width: 100%; height: auto; }
+    .map-hint { display: none; text-align: center; color: var(--ink-3); font-size: .8rem; padding: 6px 0 4px; }
+    svg .lbl { font-family: var(--display); font-weight: 800; font-size: 15px; fill: var(--ink); }
+    svg .cmd { font-family: var(--mono); font-size: 11.5px; fill: var(--ink-2); }
+    svg .note { font-family: var(--body); font-size: 12px; fill: var(--ink-3); font-style: italic; }
+    svg .zone { font-family: var(--display); font-weight: 900; font-size: 11px; letter-spacing: .16em; }
+    svg .st { fill: var(--station); stroke-width: 5; }
+    svg a { cursor: pointer; }
+    svg a:hover .st, svg a:focus .st { fill: var(--ink); }
+    svg a:focus { outline: none; }
+
+    /* ---------- route chooser ---------- */
+    .routes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .route {
+      position: relative; padding: 20px 18px 18px; border-radius: var(--radius);
+      background: var(--card); border: 1px solid var(--rule); box-shadow: var(--shadow);
+      border-top: 6px solid var(--c);
+    }
+    .route .q { font-weight: 800; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--c); }
+    .route h3 { font-family: var(--display); font-weight: 900; font-size: 1.2rem; margin: 6px 0 8px; letter-spacing: -.01em; }
+    .route p { color: var(--ink-2); font-size: .93rem; }
+    .route .path { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .route .path code { font-size: .74rem; }
+    .route .path span { color: var(--ink-3); font-weight: 900; }
+
+    /* ---------- stations timeline ---------- */
+    .line { position: relative; padding-left: 64px; }
+    .line::before {
+      content: ""; position: absolute; left: 22px; top: 12px; bottom: 12px; width: 10px; border-radius: 5px;
+      background: linear-gradient(to bottom,
+        var(--explore) 0 7%, var(--plan) 7% 56%, var(--build) 56% 78%, var(--finish) 78% 100%);
+    }
+    .station-card {
+      position: relative; margin-bottom: 18px;
+      display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 22px;
+      padding: 22px 24px; border-radius: var(--radius);
+      background: var(--card); border: 1px solid var(--rule); box-shadow: var(--shadow);
+      scroll-margin-top: 80px;
+    }
+    .station-card::before {
+      content: ""; position: absolute; left: -53px; top: 24px;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--station); border: 6px solid var(--c);
+    }
+    .station-card.optional { border-style: dashed; }
+    .station-card.optional::before { border-style: dashed; }
+    .station-card:target { outline: 3px solid var(--c); outline-offset: 3px; }
+    .stop { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+    .stop .num {
+      font-family: var(--display); font-weight: 900; font-size: .8rem;
+      color: #fff; background: var(--c); border-radius: 6px; padding: 3px 8px;
+    }
+    .pill {
+      font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 999px; color: var(--c); background: var(--cs);
+    }
+    .station-card h3 { font-family: var(--display); font-weight: 900; font-size: 1.45rem; letter-spacing: -.02em; line-height: 1.1; }
+    .station-card .why { color: var(--ink-2); margin-top: 6px; }
+    .runbox {
+      margin-top: 14px; display: flex; align-items: stretch; border-radius: 10px; overflow: hidden;
+      border: 2px solid var(--ink); background: var(--ink); color: var(--bg);
+    }
+    .runbox .prompt { padding: 10px 12px; font-family: var(--mono); font-weight: 600; color: var(--c); background: color-mix(in srgb, var(--ink) 92%, var(--c)); }
+    .runbox code { flex: 1; min-width: 0; padding: 10px 12px; border: 0; background: transparent; color: inherit; font-size: .88rem; white-space: normal; overflow-wrap: anywhere; }
+    .copy {
+      border: 0; border-left: 1px solid color-mix(in srgb, var(--bg) 25%, transparent);
+      background: transparent; color: var(--bg); font-weight: 800; font-size: .75rem; letter-spacing: .06em;
+      padding: 0 14px; cursor: pointer; text-transform: uppercase; font-family: var(--body);
+    }
+    .copy:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
+    .alt { margin-top: 8px; font-size: .85rem; color: var(--ink-3); }
+    .facts { display: grid; gap: 12px; align-content: start; }
+    .fact h4 { font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 5px; }
+    .fact ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: .93rem; }
+    .fact li + li { margin-top: 3px; }
+    .files { display: flex; flex-wrap: wrap; gap: 6px; }
+    .file {
+      display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: .78rem;
+      padding: 4px 9px; border-radius: 6px; background: var(--cs); color: var(--ink); border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
+    }
+    .file::before { content: ""; width: 9px; height: 11px; border-radius: 2px; background: var(--c); clip-path: polygon(0 0, 65% 0, 100% 30%, 100% 100%, 0 100%); }
+    .gate {
+      margin-top: 4px; padding: 10px 12px; border-radius: 8px; font-size: .88rem;
+      background: var(--express-soft); color: var(--ink); border-left: 4px solid var(--express);
+    }
+    .gate b { color: var(--express); }
+    .substeps { counter-reset: s; list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+    .substeps li { counter-increment: s; position: relative; padding-left: 34px; min-height: 22px; font-size: .92rem; color: var(--ink-2); }
+    .substeps li::before {
+      content: counter(s); position: absolute; left: 0; top: 1px;
+      width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--c); color: #fff; font-weight: 900; font-size: .72rem;
+    }
+
+    .express {
+      margin: 8px 0 26px; padding: 22px 24px; border-radius: var(--radius);
+      background: var(--card); border: 2px solid var(--express); box-shadow: var(--shadow);
+      display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr); gap: 22px; align-items: center;
+    }
+    .express .badge {
+      width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--express); color: #fff; font-family: var(--display); font-weight: 900; font-size: 1.5rem;
+    }
+    .express h3 { font-family: var(--display); font-weight: 900; font-size: 1.3rem; }
+    .express p { color: var(--ink-2); font-size: .93rem; }
+
+    /* ---------- two homes ---------- */
+    .homes { display: grid; grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr); gap: 0; align-items: stretch; }
+    .home { padding: 22px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--rule); box-shadow: var(--shadow); border-top: 6px solid var(--c); }
+    .home h3 { font-family: var(--display); font-weight: 900; font-size: 1.25rem; }
+    .home .path { font-family: var(--mono); font-size: .8rem; color: var(--ink-3); margin: 4px 0 14px; overflow-wrap: anywhere; }
+    .tree { font-family: var(--mono); font-size: .84rem; line-height: 1.9; color: var(--ink-2); }
+    .tree b { color: var(--ink); font-weight: 600; }
+    .tree em { color: var(--ink-3); font-style: normal; font-family: var(--body); font-size: .85rem; }
+    .bridge { display: grid; place-items: center; text-align: center; padding: 10px; }
+    .bridge .arrow { font-family: var(--display); font-weight: 900; font-size: 2.6rem; color: var(--finish); line-height: 1; }
+    .bridge small { font-weight: 800; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
+
+    /* ---------- commands view ---------- */
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 26px; }
+    .chip {
+      padding: 7px 14px; border-radius: 999px; border: 2px solid var(--rule); background: var(--card);
+      font-weight: 800; font-size: .85rem; color: var(--ink-2); cursor: pointer; font-family: var(--body);
+    }
+    .chip[aria-pressed="true"] { border-color: var(--ink); color: var(--bg); background: var(--ink); }
+    .cmd-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .cmd-card {
+      padding: 22px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--rule);
+      box-shadow: var(--shadow); border-left: 8px solid var(--c); display: grid; gap: 12px; align-content: start;
+    }
+    .cmd-card[hidden] { display: none; }
+    .cmd-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .cmd-name { font-family: var(--mono); font-weight: 600; font-size: 1.02rem; overflow-wrap: anywhere; }
+    .cmd-card .tagline { font-family: var(--display); font-weight: 800; font-size: 1.12rem; line-height: 1.25; }
+    .kv { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 6px 12px; font-size: .9rem; }
+    .kv dt { font-weight: 800; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); padding-top: 3px; }
+    .kv dd { margin: 0; color: var(--ink-2); }
+    .say { font-size: .85rem; color: var(--ink-2); padding: 9px 12px; border-radius: 8px; background: var(--cs); }
+    .say b { color: var(--ink); }
+
+    table.cli { width: 100%; border-collapse: collapse; background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--rule); }
+    .cli th, .cli td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; font-size: .92rem; }
+    .cli th { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); background: var(--paper); }
+    .cli td:first-child { white-space: nowrap; }
+    .cli tr:last-child td { border-bottom: 0; }
+    .table-wrap { overflow-x: auto; }
+
+    /* ---------- rules view ---------- */
+    .rules-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .rule-card { padding: 22px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--rule); box-shadow: var(--shadow); }
+    .rule-card .ico {
+      width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 14px;
+      background: var(--cs); color: var(--c); font-family: var(--display); font-weight: 900; font-size: 1.15rem;
+    }
+    .rule-card h3 { font-family: var(--display); font-weight: 900; font-size: 1.15rem; margin-bottom: 6px; }
+    .rule-card p, .rule-card li { color: var(--ink-2); font-size: .92rem; }
+    .rule-card ul { margin: 8px 0 0; padding-left: 18px; }
+    .span-2 { grid-column: span 2; }
+    .domains { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .domains code { font-size: .8rem; }
+    .pathviz { margin-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-family: var(--mono); font-size: .85rem; }
+    .pathviz span { padding: 5px 9px; border-radius: 6px; background: var(--c); color: #fff; }
+    .pathviz span:nth-child(3) { background: color-mix(in srgb, var(--c) 70%, var(--ink)); }
+    .pathviz span:nth-child(5) { background: color-mix(in srgb, var(--c) 45%, var(--ink)); }
+    .pathviz i { color: var(--ink-3); font-style: normal; font-weight: 900; }
+
+    .where { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .where div { padding: 14px; border-radius: 10px; background: var(--cs); }
+    .where b { display: block; font-family: var(--display); font-weight: 900; margin-bottom: 4px; }
+    .where span { font-size: .86rem; color: var(--ink-2); }
+
+    .conflicts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .conflicts div { padding: 14px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); }
+    .conflicts b { display: block; font-weight: 900; margin-bottom: 4px; }
+    .conflicts span { font-size: .86rem; color: var(--ink-2); }
+
+    /* ---------- overview ---------- */
+    .ov-hero { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 36px; align-items: center; }
+    .quote {
+      padding: 26px; border-radius: 18px; background: var(--ink); color: var(--bg);
+      font-family: var(--display); font-weight: 900; font-size: clamp(1.3rem, 2.4vw, 1.75rem); line-height: 1.2; letter-spacing: -.02em;
+      box-shadow: var(--shadow); position: relative;
+    }
+    .quote em { font-style: normal; color: var(--plan); }
+    .quote em + em { color: var(--finish); }
+    .quote small { display: block; margin-top: 14px; font-family: var(--body); font-weight: 600; font-size: .85rem; letter-spacing: 0; opacity: .7; }
+    .concepts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .concept { padding: 22px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--rule); box-shadow: var(--shadow); border-top: 6px solid var(--c); }
+    .concept .big { font-family: var(--display); font-weight: 900; font-size: 2.4rem; line-height: 1; color: var(--c); }
+    .concept h3 { font-family: var(--display); font-weight: 900; font-size: 1.2rem; margin: 10px 0 6px; }
+    .concept p { color: var(--ink-2); font-size: .93rem; }
+    .why-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+    .why-list div { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 14px 16px; border-radius: 12px; background: var(--card); border: 1px solid var(--rule); }
+    .why-list b { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--finish); color: #fff; font-size: .8rem; }
+    .why-list span { color: var(--ink-2); font-size: .93rem; }
+    .install { counter-reset: i; display: grid; gap: 14px; }
+    .inst {
+      counter-increment: i; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 18px; align-items: start;
+      padding: 20px 22px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--rule); box-shadow: var(--shadow);
+    }
+    .inst::before {
+      content: counter(i); width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center;
+      background: var(--c); color: #fff; font-family: var(--display); font-weight: 900; font-size: 1.4rem;
+    }
+    .inst h3 { font-family: var(--display); font-weight: 900; font-size: 1.15rem; }
+    .inst p { color: var(--ink-2); font-size: .93rem; margin-top: 4px; }
+    .inst .runbox { margin-top: 10px; }
+    .note-box { margin-top: 10px; padding: 10px 12px; border-radius: 8px; font-size: .88rem; background: var(--cs); color: var(--ink); }
+    .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 999px;
+      font-weight: 800; text-decoration: none; border: 2px solid var(--ink); color: var(--ink); background: var(--card);
+    }
+    .btn.primary { background: var(--ink); color: var(--bg); }
+    .btn:hover { transform: translateY(-1px); }
+
+    footer { border-top: 3px solid var(--ink); padding: 26px 0 40px; color: var(--ink-2); font-size: .88rem; }
+    footer .shell { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+    /* colour scopes */
+    .c-plan { --c: var(--plan); --cs: var(--plan-soft); }
+    .c-build { --c: var(--build); --cs: var(--build-soft); }
+    .c-finish { --c: var(--finish); --cs: var(--finish-soft); }
+    .c-express { --c: var(--express); --cs: var(--express-soft); }
+    .c-explore { --c: var(--explore); --cs: var(--explore-soft); }
+
+    @media (max-width: 960px) {
+      .routes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .station-card { grid-template-columns: minmax(0, 1fr); }
+      .express { grid-template-columns: auto minmax(0, 1fr); }
+      .express > :last-child { grid-column: 1 / -1; }
+      .rules-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ov-hero { grid-template-columns: minmax(0, 1fr); }
+      .concepts { grid-template-columns: minmax(0, 1fr); }
+      .where, .conflicts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .section-head { grid-template-columns: 1fr; gap: 12px; }
+      .map-hint { display: block; }
+    }
+    @media (max-width: 680px) {
+      .brand span { display: none; }
+      .routes, .cmd-grid, .rules-grid, .why-list { grid-template-columns: minmax(0, 1fr); }
+      .inst { grid-template-columns: minmax(0, 1fr); }
+      code, .file { white-space: normal; overflow-wrap: anywhere; }
+      .span-2 { grid-column: auto; }
+      .homes { grid-template-columns: minmax(0, 1fr); }
+      .bridge .arrow { transform: rotate(90deg); }
+      .line { padding-left: 44px; }
+      .line::before { left: 12px; width: 8px; }
+      .station-card { padding: 18px; }
+      .station-card::before { left: -41px; width: 20px; height: 20px; border-width: 5px; }
+      .express { grid-template-columns: 1fr; }
+      .where, .conflicts { grid-template-columns: 1fr; }
+      .kv { grid-template-columns: 1fr; gap: 2px; }
+      .kv dd { margin-bottom: 8px; }
+    }
+    @media print {
+      .topbar, .copy, .theme-btn, .filters { display: none !important; }
+      .js .view { display: block !important; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <script>document.documentElement.classList.add('js');</script>
+
+  <header class="topbar">
+    <div class="shell">
+      <div class="brand"><div class="brand-mark" aria-hidden="true"></div><span>OpenSpec Line Map</span></div>
+      <nav class="tabs" aria-label="Sections">
+        <a class="tab" href="#overview" data-view="overview">Overview</a>
+        <a class="tab" href="#workflow" data-view="workflow">Workflow</a>
+        <a class="tab" href="#commands" data-view="commands">Commands</a>
+        <a class="tab" href="#rules" data-view="rules">House rules</a>
+      </nav>
+      <button class="theme-btn" type="button" id="themeBtn" aria-label="Toggle light or dark theme">◐</button>
+    </div>
+  </header>
+
+  <main>
+  <!-- =========================== OVERVIEW =========================== -->
+  <section class="view shell" id="overview" aria-labelledby="ov-title">
+    <div class="ov-hero">
+      <div>
+        <p class="eyebrow"><i aria-hidden="true"></i>Overview</p>
+        <h1 id="ov-title">What is OpenSpec?</h1>
+        <p class="lede">OpenSpec is a lightweight, configurable framework for writing and managing software specifications. You and your coding agent agree on <strong>what</strong> to build before any code is written, then the agent builds it, checks it against the spec, and records the result as the new source of truth.</p>
+        <div class="links">
+          <a class="btn primary" href="#workflow">See the workflow →</a>
+          <a class="btn" href="https://openspec.dev/" target="_blank" rel="noopener">openspec.dev ↗</a>
+          <a class="btn" href="https://openspec.dev/docs" target="_blank" rel="noopener">Docs ↗</a>
+          <a class="btn" href="https://github.com/Fission-AI/OpenSpec" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+      </div>
+      <blockquote class="quote">
+        The spec framework for <em>building the right thing</em> and <em>building it right.</em>
+        <small>openspec.dev</small>
+      </blockquote>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <h2>Three ideas to hold on to.</h2>
+        <p>Everything else in this guide builds on these.</p>
+      </div>
+      <div class="concepts">
+        <article class="concept c-finish">
+          <div class="big">spec</div>
+          <h3>Living specs are the truth</h3>
+          <p>Each capability has a <code>spec.md</code> (what must happen) and a <code>design.md</code> (how it actually works) under <code>openspec/specs/</code>. Agents read them before touching code.</p>
+        </article>
+        <article class="concept c-plan">
+          <div class="big">change</div>
+          <h3>Work happens in changes</h3>
+          <p>Every piece of work gets a folder in <code>openspec/changes/</code> with a proposal, delta specs, a design and tasks. It is reviewed before code, and merged into the living specs when done.</p>
+        </article>
+        <article class="concept c-build">
+          <div class="big">skill</div>
+          <h3>Skills drive the agent</h3>
+          <p>You move a change forward by running a skill such as <code>/openspec-propose</code> or <code>/openspec-apply-change</code>. Our <code>config.yaml</code> adds house rules to every one.</p>
+        </article>
+      </div>
+      <div class="why-list">
+        <div><b>1</b><span>Agents stop guessing: requirements, edge cases and scenarios are written down before implementation.</span></div>
+        <div><b>2</b><span>One contract per capability covers backend, web, iOS, Android and GraphQL.</span></div>
+        <div><b>3</b><span>You review a short plan instead of a large diff, and catch wrong assumptions early.</span></div>
+        <div><b>4</b><span>Archive keeps the living specs in step with the code, so the next change starts from the truth.</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <h2>Install and set up.</h2>
+        <p>OpenSpec is already configured in this repository. You only need the CLI on your machine and the skills generated for your AI tool.</p>
+      </div>
+      <div class="install">
+        <article class="inst c-explore">
+          <div>
+            <h3>Check Node.js</h3>
+            <p>OpenSpec needs Node.js 20.19.0 or newer.</p>
+            <div class="runbox"><span class="prompt">$</span><code>node --version</code><button class="copy" type="button">Copy</button></div>
+          </div>
+        </article>
+        <article class="inst c-plan">
+          <div>
+            <h3>Install the CLI</h3>
+            <p>Install globally with npm. On macOS, Homebrew also works and brings Node with it.</p>
+            <div class="runbox"><span class="prompt">$</span><code>npm install -g @fission-ai/openspec@latest</code><button class="copy" type="button">Copy</button></div>
+            <div class="runbox"><span class="prompt">$</span><code>brew install openspec</code><button class="copy" type="button">Copy</button></div>
+          </div>
+        </article>
+        <article class="inst c-plan">
+          <div>
+            <h3>Verify</h3>
+            <p>Confirms the CLI is on your PATH. This repository's skills were generated with 1.12.0.</p>
+            <div class="runbox"><span class="prompt">$</span><code>openspec --version</code><button class="copy" type="button">Copy</button></div>
+          </div>
+        </article>
+        <article class="inst c-build">
+          <div>
+            <h3>Generate the skills for your tools</h3>
+            <p>From the repository root, generate the 12 OpenSpec skills for Claude Code and Kiro. The existing <code>openspec/config.yaml</code> and specs are left untouched.</p>
+            <div class="runbox"><span class="prompt">$</span><code>openspec init --tools claude,kiro</code><button class="copy" type="button">Copy</button></div>
+            <div class="note-box c-build">Creates <code>.claude/skills/openspec-*</code> and <code>.kiro/skills/openspec-*</code>. Restart your IDE or agent session so it picks them up.</div>
+          </div>
+        </article>
+        <article class="inst c-finish">
+          <div>
+            <h3>Check it resolves this repository</h3>
+            <p><code>root.path</code> should be the repository root, not a nested folder. You're ready: open the Workflow tab.</p>
+            <div class="runbox"><span class="prompt">$</span><code>openspec list --json</code><button class="copy" type="button">Copy</button></div>
+          </div>
+        </article>
+      </div>
+      <div class="note-box c-explore" style="margin-top:16px"><strong>Upgrading later?</strong> Update the CLI with the same install command (or <code>brew upgrade openspec</code>), then run <code>openspec update</code> from the repository root to refresh the generated skills.</div>
+    </div>
+  </section>
+
+  <!-- =========================== WORKFLOW =========================== -->
+  <section class="view shell" id="workflow" aria-labelledby="wf-title">
+    <p class="eyebrow"><i aria-hidden="true"></i>Digital Monorepo · OpenSpec 1.12</p>
+    <h1 id="wf-title">From idea to living spec, one stop at a time.</h1>
+    <p class="lede">Every change rides the same line. Plan it, build it, finish it. Each stop is one skill you run. Click a station to jump to what it does, what you type, and what it leaves behind.</p>
+
+    <div class="legend" aria-label="Map legend">
+      <span><b style="background:var(--plan)"></b>Plan</span>
+      <span><b style="background:var(--build)"></b>Build</span>
+      <span><b style="background:var(--finish)"></b>Finish</span>
+      <span><b style="background:var(--express)"></b>Express (all planning in one run)</span>
+      <span><b class="dash"></b>Optional</span>
+    </div>
+
+    <div class="map-card">
+      <div class="map-scroll">
+        <svg viewBox="0 0 1120 335" role="img" aria-labelledby="mapTitle mapDesc">
+          <title id="mapTitle">OpenSpec workflow line map</title>
+          <desc id="mapDesc">Optional explore, then new change, four continue-change stops for proposal, specs, design and tasks, then apply, optional update and verify, then archive into the living library. An express line using propose or ff-change skips the individual planning stops and joins at apply.</desc>
+
+          <!-- zone labels -->
+          <text class="zone" x="170" y="34" style="fill:var(--plan)">PLAN</text>
+          <text class="zone" x="700" y="34" style="fill:var(--build)">BUILD</text>
+          <text class="zone" x="878" y="34" style="fill:var(--finish)">FINISH</text>
+
+          <!-- explore branch (dashed) -->
+          <path d="M70 70 C 70 140, 110 170, 170 170" fill="none" style="stroke:var(--explore)" stroke-width="10" stroke-linecap="round" stroke-dasharray="3 14"/>
+
+          <!-- main line segments -->
+          <path d="M170 170 H 620" style="stroke:var(--plan)" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <path d="M620 170 H 800" style="stroke:var(--build)" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <path d="M800 170 H 1040" style="stroke:var(--finish)" stroke-width="12" stroke-linecap="round" fill="none"/>
+
+          <!-- update loop (dashed, back to planning) -->
+          <path d="M720 170 C 720 95, 520 95, 520 170" fill="none" style="stroke:var(--build)" stroke-width="5" stroke-dasharray="2 9" stroke-linecap="round"/>
+          <polygon points="520,158 513,146 527,146" style="fill:var(--build)"/>
+          <text class="cmd" x="620" y="92" text-anchor="middle">update-change · only if the plan changes</text>
+
+          <!-- express line -->
+          <path d="M110 270 H 600 C 655 270, 668 196, 690 172" fill="none" style="stroke:var(--express)" stroke-width="10" stroke-linecap="round"/>
+          <circle cx="110" cy="270" r="11" class="st" style="stroke:var(--express)"/>
+          <text class="lbl" x="130" y="253">Express</text>
+          <text class="cmd" x="130" y="298">propose  ·  ff-change</text>
+          <text class="note" x="380" y="318" text-anchor="middle">writes proposal, specs, design and tasks in one run, no stops</text>
+
+          <!-- stations -->
+          <a href="#st-explore" aria-label="Explore station">
+            <circle cx="70" cy="70" r="12" class="st" style="stroke:var(--explore)" stroke-dasharray="4 4"/>
+            <text class="lbl" x="92" y="66">Explore</text>
+            <text class="cmd" x="92" y="83">openspec-explore</text>
+          </a>
+          <a href="#st-new" aria-label="New change station">
+            <circle cx="170" cy="170" r="14" class="st" style="stroke:var(--plan)"/>
+            <text class="lbl" x="170" y="212" text-anchor="middle">Start</text>
+            <text class="cmd" x="170" y="229" text-anchor="middle">new-change</text>
+          </a>
+          <a href="#st-proposal" aria-label="Proposal station">
+            <circle cx="280" cy="170" r="12" class="st" style="stroke:var(--plan)"/>
+            <text class="lbl" x="280" y="140" text-anchor="middle">Proposal</text>
+            <text class="cmd" x="280" y="212" text-anchor="middle">continue ①</text>
+          </a>
+          <a href="#st-specs" aria-label="Specs station">
+            <circle cx="390" cy="170" r="12" class="st" style="stroke:var(--plan)"/>
+            <text class="lbl" x="390" y="140" text-anchor="middle">Specs</text>
+            <text class="cmd" x="390" y="212" text-anchor="middle">continue ②</text>
+          </a>
+          <a href="#st-design" aria-label="Design station">
+            <circle cx="500" cy="170" r="12" class="st" style="stroke:var(--plan)"/>
+            <text class="lbl" x="470" y="140" text-anchor="middle">Design</text>
+            <text class="cmd" x="500" y="212" text-anchor="middle">continue ③</text>
+          </a>
+          <a href="#st-tasks" aria-label="Tasks station">
+            <circle cx="610" cy="170" r="12" class="st" style="stroke:var(--plan)"/>
+            <text class="lbl" x="610" y="140" text-anchor="middle">Tasks</text>
+            <text class="cmd" x="610" y="212" text-anchor="middle">continue ④</text>
+          </a>
+          <a href="#st-apply" aria-label="Apply station">
+            <circle cx="720" cy="170" r="16" class="st" style="stroke:var(--build)"/>
+            <text class="lbl" x="752" y="140" text-anchor="middle">Apply</text>
+            <text class="cmd" x="740" y="212" text-anchor="middle">apply-change</text>
+          </a>
+          <a href="#st-verify" aria-label="Verify station">
+            <circle cx="820" cy="170" r="11" class="st" style="stroke:var(--finish)" stroke-dasharray="4 4"/>
+            <text class="lbl" x="820" y="140" text-anchor="middle">Verify</text>
+            <text class="cmd" x="820" y="232" text-anchor="middle">verify-change</text>
+          </a>
+          <a href="#st-archive" aria-label="Archive station">
+            <circle cx="920" cy="170" r="16" class="st" style="stroke:var(--finish)"/>
+            <text class="lbl" x="920" y="140" text-anchor="middle">Archive</text>
+            <text class="cmd" x="920" y="212" text-anchor="middle">archive-change</text>
+          </a>
+          <!-- terminus -->
+          <rect x="1016" y="146" width="48" height="48" rx="12" style="fill:var(--finish)"/>
+          <text x="1040" y="178" text-anchor="middle" style="font-family:var(--display);font-weight:900;font-size:22px;fill:#fff">✓</text>
+          <text class="lbl" x="1040" y="222" text-anchor="middle">Living library</text>
+          <text class="cmd" x="1040" y="239" text-anchor="middle">spec.md + design.md</text>
+        </svg>
+      </div>
+      <p class="map-hint">Swipe the map sideways to see the whole line.</p>
+    </div>
+
+    <!-- route chooser -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Which way in?</h2>
+        <p>Pick the route that matches where you are. Every route ends at the same place: archive, which merges your change into the living library.</p>
+      </div>
+      <div class="routes">
+        <article class="route c-explore">
+          <p class="q">Not sure yet?</p>
+          <h3>Think it through</h3>
+          <p>The problem is fuzzy, or you want to trace code and compare options before committing to a plan.</p>
+          <div class="path"><code>explore</code><span>→</span><code>new-change</code></div>
+        </article>
+        <article class="route c-plan">
+          <p class="q">Want to review each step?</p>
+          <h3>Guided route</h3>
+          <p>Create the change, then write one artifact per run so you can read and correct each before the next.</p>
+          <div class="path"><code>new-change</code><span>→</span><code>continue ×4</code><span>→</span><code>apply</code><span>→</span><code>archive</code></div>
+        </article>
+        <article class="route c-express">
+          <p class="q">Scope already clear?</p>
+          <h3>Express route</h3>
+          <p>Generate proposal, specs, design and tasks in one run. You review the whole plan at the end.</p>
+          <div class="path"><code>propose</code><span>→</span><code>apply</code><span>→</span><code>archive</code></div>
+        </article>
+        <article class="route c-build">
+          <p class="q">Plan changed mid-build?</p>
+          <h3>Revise and carry on</h3>
+          <p>Discovery changed scope, behaviour, architecture or order. Fix the plan first, then keep building.</p>
+          <div class="path"><code>update-change</code><span>→</span><code>apply</code><span>→</span><code>archive</code></div>
+        </article>
+      </div>
+    </div>
+
+    <!-- stations -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Every stop, in order.</h2>
+        <p>What to type, what happens, and what you get. In Claude Code, type the skill as a slash command; in Kiro, name the skill or describe the action in plain words. The change name is optional once one change is active.</p>
+      </div>
+
+      <div class="line">
+        <article class="station-card optional c-explore" id="st-explore">
+          <div>
+            <div class="stop"><span class="num">00</span><span class="pill">Optional</span></div>
+            <h3>Explore the problem</h3>
+            <p class="why">A thinking partner. It reads code and existing specs, maps the problem, and helps you decide. It never writes product code.</p>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-explore how does card payment expiry work?</code><button class="copy" type="button">Copy</button></div>
+          </div>
+          <div class="facts">
+            <div class="fact"><h4>Use it when</h4><ul><li>The problem or desired behaviour is unclear</li><li>You need to trace an existing code path</li><li>Implementation discovery challenges the plan</li></ul></div>
+            <div class="fact"><h4>Produces</h4><p style="color:var(--ink-2);font-size:.93rem">A clearer picture. No files.</p></div>
+          </div>
+        </article>
+
+        <article class="station-card c-plan" id="st-new">
+          <div>
+            <div class="stop"><span class="num">01</span><span class="pill">Plan</span></div>
+            <h3>Start the change</h3>
+            <p class="why">Creates the change folder and shows the proposal instructions. It does <strong>not</strong> write any artifact yet.</p>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-new-change add-payment-refund-reason</code><button class="copy" type="button">Copy</button></div>
+            <p class="alt">Name it in kebab-case, verb first: <code>add-…</code>, <code>fix-…</code>, <code>update-…</code>.</p>
+          </div>
+          <div class="facts">
+            <div class="fact"><h4>Creates</h4><div class="files"><span class="file">changes/&lt;name&gt;/</span><span class="file">.openspec.yaml</span></div></div>
+            <div class="fact"><h4>Next</h4><p style="color:var(--ink-2);font-size:.93rem">Run <code>continue-change</code> to write the proposal.</p></div>
+          </div>
+        </article>
+
+        <article class="station-card c-plan" id="st-proposal">
+          <div>
+            <div class="stop"><span class="num">02</span><span class="pill">Plan · continue ①</span></div>
+            <h3>Write the proposal</h3>
+            <p class="why">The why and the scope. The agent asks <strong>once</strong> for Jira, Figma, Confluence and design docs, reads what it can reach, and finds the affected capabilities.</p>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-continue-change</code><button class="copy" type="button">Copy</button></div>
+          </div>
+          <div class="facts">
+            <div class="fact"><h4>Produces</h4><div class="files"><span class="file">proposal.md</span></div></div>
+            <div class="fact"><h4>Inside it</h4><ul><li>Requesting squad, references, capability impact table</li><li><code>## Cross-squad work</code> if another squad's backend code must change</li><li><code>## Conflicts and decisions</code> when sources disagree</li></ul></div>
+          </div>
+        </article>
+
+        <article class="station-card c-plan" id="st-specs">
+          <div>
+            <div class="stop"><span class="num">03</span><span class="pill">Plan · continue ②</span></div>
+            <h3>Write the delta specs</h3>
+            <p class="why">What the system must do, as requirements and WHEN/THEN scenarios. Observable behaviour only, no classes or frameworks. Behaviour-changing blocking decisions get settled here.</p>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-continue-change</code><button class="copy" type="button">Copy</button></div>
+            <p class="alt">Skipped automatically when the proposal sets <code>skip_specs: true</code> (refactors, logging, tooling).</p>
+          </div>
+          <div class="facts">
+            <div class="fact"><h4>Produces</h4><div class="files"><span class="file">specs/&lt;domain&gt;/&lt;subdomain&gt;/&lt;capability&gt;/spec.md</span></div></div>
+            <div class="fact"><h4>Uses</h4><ul><li><code>ADDED</code> / <code>MODIFIED</code> / <code>REMOVED</code> / <code>RENAMED</code> requirement blocks</li><li><code>## Purpose</code> only for a new capability</li></ul></div>
+          </div>
+        </article>
+
+        <article class="station-card c-plan" id="st-design">
+          <div>
+            <div class="stop"><span class="num">04</span><span class="pill">Plan · continue ③</span></div>
+            <h3>Write the change design</h3>
+            <p class="why">How it will be built. Remaining blocking decisions are resolved here, asking you when needed. Short is fine when nothing architectural changes.</p>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-continue-change</code><button class="copy" type="button">Copy</button></div>
+          </div>
+          <div class="facts">
+            <div class="fact"><h4>Produces</h4><div class="files"><span class="file">design.md</span></div></div>
+            <div class="fact"><h4>Ends with</h4><ul><li><code>## Living design reconciliation</code>: what archive must carry into the living design</li></ul></div>
+          </div>
+        </article>
+
+        <article class="station-card c-plan" id="st-tasks">
+          <div>
+            <div class="stop"><span class="num">05</span><span class="pill">Plan · continue ④</span></div>
+            <h3>Write the tasks</h3>
+            <p class="why">A checklist of small, verifiable tasks in dependency order. Each one names the area, the outcome, and how to check it.</p>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-continue-change</code><button class="copy" type="button">Copy</button></div>
+            <div class="gate" style="margin-top:12px"><b>Stops</b> and sends you back to design if any blocking decision is still open.</div>
+          </div>
+          <div class="facts">
+            <div class="fact"><h4>Produces</h4><div class="files"><span class="file">tasks.md</span></div></div>
+            <div class="fact"><h4>Watch for</h4><ul><li>Another squad's backend work sits in its own group, labelled as a handoff</li><li>Investigations become spike tasks with a decision outcome</li></ul></div>
+          </div>
+        </article>
+
+        <div class="express c-express" id="st-express">
+          <div class="badge" aria-hidden="true">⚡</div>
+          <div>
+            <h3>Express: stops 02–05 in one run</h3>
+            <p>Same rules, same four files, no pause between them. Use <code>propose</code> to create a change and plan it in one go, or <code>ff-change</code> to fast-forward a change you already started.</p>
+          </div>
+          <div>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-propose add-payment-refund-reason</code><button class="copy" type="button">Copy</button></div>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-ff-change</code><button class="copy" type="button">Copy</button></div>
+          </div>
+        </div>
+
+        <article class="station-card c-build" id="st-apply">
+          <div>
+            <div class="stop"><span class="num">06</span><span class="pill">Build</span></div>
+            <h3>Implement the tasks</h3>
+            <p class="why">Works through <code>tasks.md</code> in order and ticks a task only after its stated check passes. Pauses on blockers.</p>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-apply-change</code><button class="copy" type="button">Copy</button></div>
+            <div class="gate" style="margin-top:12px"><b>Never</b> edits the living <code>spec.md</code> or <code>design.md</code>. Those change only at archive.</div>
+          </div>
+          <div class="facts">
+            <div class="fact"><h4>Changes</h4><div class="files"><span class="file">your code</span><span class="file">tasks.md ✓</span></div></div>
+            <div class="fact"><h4>Before writing</h4><ul><li>Confirms <code>openspec list --json</code> reports the repository root</li></ul></div>
+          </div>
+        </article>
+
+        <article class="station-card optional c-build" id="st-update">
+          <div>
+            <div class="stop"><span class="num">06b</span><span class="pill">Only if needed</span></div>
+            <h3>Revise the plan</h3>
+            <p class="why">Building revealed something that materially changes scope, behaviour, architecture, compatibility or order. Update the plan so it stays true, then keep applying.</p>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-update-change the refund reason is optional, not required</code><button class="copy" type="button">Copy</button></div>
+          </div>
+          <div class="facts">
+            <div class="fact"><h4>Changes</h4><div class="files"><span class="file">proposal.md</span><span class="file">specs</span><span class="file">design.md</span><span class="file">tasks.md</span></div></div>
+            <div class="fact"><h4>Never</h4><ul><li>Touches code</li><li>Churns the plan for ordinary implementation detail</li></ul></div>
+          </div>
+        </article>
+
+        <article class="station-card optional c-finish" id="st-verify">
+          <div>
+            <div class="stop"><span class="num">07</span><span class="pill">Optional early check</span></div>
+            <h3>Verify code against the plan</h3>
+            <p class="why">Compares the implementation with the change's tasks, specs and design. Archive runs this for you, so running it yourself just finds problems sooner.</p>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-verify-change</code><button class="copy" type="button">Copy</button></div>
+          </div>
+          <div class="facts">
+            <div class="fact"><h4>Reports</h4><ul><li><strong>CRITICAL</strong>: must fix before archive</li><li><strong>WARNING</strong>: should fix</li><li><strong>SUGGESTION</strong>: nice to fix</li></ul></div>
+          </div>
+        </article>
+
+        <article class="station-card c-finish" id="st-archive">
+          <div>
+            <div class="stop"><span class="num">08</span><span class="pill">Finish</span></div>
+            <h3>Archive into the living library</h3>
+            <p class="why">Promotes delivered reality. Your change becomes the new truth for its capability.</p>
+            <div class="runbox"><span class="prompt">&gt;</span><code>/openspec-archive-change add-payment-refund-reason</code><button class="copy" type="button">Copy</button></div>
+            <ol class="substeps">
+              <li>Runs <code>verify-change</code>. Stops on CRITICAL, asks you about WARNINGs.</li>
+              <li>Runs strict validation on the change.</li>
+              <li>Syncs delta specs into the living <code>spec.md</code>.</li>
+              <li>Writes or updates the living <code>design.md</code> from the reconciliation section.</li>
+              <li>Only then moves the change to <code>changes/archive/</code>.</li>
+            </ol>
+          </div>
+          <div class="facts">
+            <div class="fact"><h4>Updates</h4><div class="files"><span class="file">specs/…/spec.md</span><span class="file">specs/…/design.md</span><span class="file">changes/archive/&lt;date&gt;-&lt;name&gt;/</span></div></div>
+            <div class="fact"><h4>Code differs from the spec?</h4><ul><li>Needs a decision: owned open question in the living design</li><li>Plain bug: issue tracker</li><li>Code is deliberate: fix the spec through a new change</li></ul></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- two homes -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Your files live in two places.</h2>
+        <p>The change folder is the plan for one piece of work. The living library is what is true right now. Only archive moves anything from one to the other.</p>
+      </div>
+      <div class="homes">
+        <article class="home c-plan">
+          <h3>Change workspace</h3>
+          <p class="path">openspec/changes/&lt;change-name&gt;/</p>
+          <div class="tree">
+            <div><b>proposal.md</b> <em>why and scope</em></div>
+            <div><b>specs/…/spec.md</b> <em>behaviour delta</em></div>
+            <div><b>design.md</b> <em>how this change is built</em></div>
+            <div><b>tasks.md</b> <em>implementation checklist</em></div>
+          </div>
+        </article>
+        <div class="bridge"><div><div class="arrow" aria-hidden="true">→</div><small>archive</small></div></div>
+        <article class="home c-finish">
+          <h3>Living library</h3>
+          <p class="path">openspec/specs/&lt;domain&gt;/&lt;subdomain&gt;/&lt;capability&gt;/</p>
+          <div class="tree">
+            <div><b>spec.md</b> <em>what must happen (the contract)</em></div>
+            <div><b>design.md</b> <em>what does happen (architecture, defaults, open questions)</em></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== COMMANDS =========================== -->
+  <section class="view shell" id="commands" aria-labelledby="cmd-title">
+    <p class="eyebrow"><i aria-hidden="true" style="background:var(--build)"></i>Command reference</p>
+    <h1 id="cmd-title">Every skill, explained.</h1>
+    <p class="lede">What each skill is for, when to reach for it, what it changes, and a sentence you can say instead of the command.</p>
+
+    <div class="filters" role="group" aria-label="Filter commands by phase">
+      <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-filter="plan" aria-pressed="false">Plan</button>
+      <button class="chip" type="button" data-filter="build" aria-pressed="false">Build</button>
+      <button class="chip" type="button" data-filter="finish" aria-pressed="false">Finish</button>
+      <button class="chip" type="button" data-filter="utility" aria-pressed="false">Utility</button>
+    </div>
+
+    <div class="cmd-grid">
+      <article class="cmd-card c-explore" data-phase="plan">
+        <div class="cmd-top"><span class="cmd-name">openspec-explore</span><span class="pill">Plan · optional</span></div>
+        <p class="tagline">Think before you plan.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>The problem is unclear, you need to trace code, or discovery mid-build challenges the plan.</dd>
+          <dt>Does</dt><dd>Reads code, specs and the active change; maps the problem; helps you decide.</dd>
+          <dt>Changes</dt><dd>Nothing. No product code, no artifacts.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Let's explore how payment expiry works before we plan anything.”</p>
+      </article>
+
+      <article class="cmd-card c-plan" data-phase="plan">
+        <div class="cmd-top"><span class="cmd-name">openspec-new-change</span><span class="pill">Plan</span></div>
+        <p class="tagline">Open a new change folder.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>You want the guided route and to review each artifact in turn.</dd>
+          <dt>Does</dt><dd>Creates <code>changes/&lt;name&gt;/</code> and shows the proposal instructions, then stops.</dd>
+          <dt>Changes</dt><dd>Only the empty change scaffold. No proposal yet.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Start a new OpenSpec change called add-payment-refund-reason.”</p>
+      </article>
+
+      <article class="cmd-card c-plan" data-phase="plan">
+        <div class="cmd-top"><span class="cmd-name">openspec-continue-change</span><span class="pill">Plan</span></div>
+        <p class="tagline">Write the next artifact. Just one.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>After <code>new-change</code>, four times: proposal, specs, design, tasks.</dd>
+          <dt>Does</dt><dd>Picks the first ready artifact, reads what came before, applies <code>config.yaml</code> rules, writes the file, stops.</dd>
+          <dt>Changes</dt><dd>One of <code>proposal.md</code>, delta specs, <code>design.md</code>, <code>tasks.md</code>.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Continue the change and write the next artifact.”</p>
+      </article>
+
+      <article class="cmd-card c-express" data-phase="plan">
+        <div class="cmd-top"><span class="cmd-name">openspec-propose</span><span class="pill">Plan · express</span></div>
+        <p class="tagline">Create and fully plan a change in one run.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>Scope and expected behaviour are already clear.</dd>
+          <dt>Does</dt><dd>Creates the change, then writes proposal, specs, design and tasks back to back. Stops before any code.</dd>
+          <dt>Changes</dt><dd>The whole change folder.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Propose a change to add a refund reason to the refund status API.”</p>
+      </article>
+
+      <article class="cmd-card c-express" data-phase="plan">
+        <div class="cmd-top"><span class="cmd-name">openspec-ff-change</span><span class="pill">Plan · express</span></div>
+        <p class="tagline">Fast-forward a change you already started.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>You created the change (or wrote the proposal) and want the rest of the plan at once.</dd>
+          <dt>Does</dt><dd>Writes every remaining planning artifact without pausing.</dd>
+          <dt>Changes</dt><dd>The missing artifacts in the change folder.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Fast-forward this change to tasks.”</p>
+      </article>
+
+      <article class="cmd-card c-build" data-phase="build">
+        <div class="cmd-top"><span class="cmd-name">openspec-apply-change</span><span class="pill">Build</span></div>
+        <p class="tagline">Build it, task by task.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>Planning is complete, or to resume implementation.</dd>
+          <dt>Does</dt><dd>Implements tasks in order and ticks each only after its check passes. Pauses on blockers.</dd>
+          <dt>Changes</dt><dd>Product code and checkboxes in <code>tasks.md</code>. Never the living files.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Apply the change” or “Continue implementing.”</p>
+      </article>
+
+      <article class="cmd-card c-build" data-phase="build">
+        <div class="cmd-top"><span class="cmd-name">openspec-update-change</span><span class="pill">Build · if needed</span></div>
+        <p class="tagline">Change the plan, keep it coherent.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>A decision or discovery materially changes scope, behaviour, architecture or order.</dd>
+          <dt>Does</dt><dd>Revises the affected planning artifacts and keeps them consistent with each other.</dd>
+          <dt>Changes</dt><dd>Proposal, specs, design or tasks. Never code.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Update the change: the refund reason is now optional.”</p>
+      </article>
+
+      <article class="cmd-card c-finish" data-phase="finish">
+        <div class="cmd-top"><span class="cmd-name">openspec-verify-change</span><span class="pill">Finish</span></div>
+        <p class="tagline">Does the code match the plan?</p>
+        <dl class="kv">
+          <dt>When</dt><dd>Any time after apply. Archive runs it automatically.</dd>
+          <dt>Does</dt><dd>Checks completeness, correctness against specs and scenarios, and coherence with the design.</dd>
+          <dt>Changes</dt><dd>Nothing. Reports CRITICAL, WARNING and SUGGESTION findings.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Verify the change against the implementation.”</p>
+      </article>
+
+      <article class="cmd-card c-finish" data-phase="finish">
+        <div class="cmd-top"><span class="cmd-name">openspec-archive-change</span><span class="pill">Finish</span></div>
+        <p class="tagline">Make the change the new truth.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>Tasks are done and the code is merged or ready.</dd>
+          <dt>Does</dt><dd>Verify → strict validation → sync specs → write living design → move to archive.</dd>
+          <dt>Changes</dt><dd>Living <code>spec.md</code> and <code>design.md</code>; moves the change to <code>changes/archive/</code>.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Archive the change.”</p>
+      </article>
+
+      <article class="cmd-card c-finish" data-phase="finish">
+        <div class="cmd-top"><span class="cmd-name">openspec-bulk-archive-change</span><span class="pill">Finish</span></div>
+        <p class="tagline">Archive several finished changes at once.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>Multiple parallel changes are complete.</dd>
+          <dt>Does</dt><dd>Runs the archive flow for each selected change.</dd>
+          <dt>Changes</dt><dd>Living files for every affected capability.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Archive all completed changes.”</p>
+      </article>
+
+      <article class="cmd-card c-explore" data-phase="utility">
+        <div class="cmd-top"><span class="cmd-name">openspec-sync-specs</span><span class="pill">Utility</span></div>
+        <p class="tagline">Merge delta specs without archiving.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>Rarely. Archive already syncs, and also writes the living design.</dd>
+          <dt>Does</dt><dd>Merges the change's delta specs into the living <code>spec.md</code> files.</dd>
+          <dt>Changes</dt><dd>Living <code>spec.md</code> only. The living design is not reconciled.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Sync this change's specs into the main specs.”</p>
+      </article>
+
+      <article class="cmd-card c-explore" data-phase="utility">
+        <div class="cmd-top"><span class="cmd-name">openspec-onboard</span><span class="pill">Utility</span></div>
+        <p class="tagline">Learn by doing, with narration.</p>
+        <dl class="kv">
+          <dt>When</dt><dd>You are new to OpenSpec.</dd>
+          <dt>Does</dt><dd>Walks a full workflow cycle on real code, explaining each step.</dd>
+          <dt>Changes</dt><dd>Whatever the practice change touches.</dd>
+        </dl>
+        <p class="say"><b>Or say:</b> “Onboard me to OpenSpec.”</p>
+      </article>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <h2>Handy CLI commands.</h2>
+        <p>The skills call these for you. Run them yourself to look around or check your work.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="cli">
+          <thead><tr><th>Command</th><th>What it tells you</th></tr></thead>
+          <tbody>
+            <tr><td><code>openspec list</code></td><td>Active changes. Add <code>--specs</code> for living specs, <code>--json</code> to see which root it resolved.</td></tr>
+            <tr><td><code>openspec status --change &lt;name&gt;</code></td><td>Which artifacts are done, ready or blocked.</td></tr>
+            <tr><td><code>openspec show &lt;name&gt;</code></td><td>A change or spec, rendered.</td></tr>
+            <tr><td><code>openspec validate &lt;name&gt; --strict</code></td><td>Structural errors in a change or spec. Archive requires a clean run.</td></tr>
+            <tr><td><code>openspec instructions &lt;artifact&gt; --change &lt;name&gt;</code></td><td>The exact instructions, template and house rules the agent receives for an artifact.</td></tr>
+            <tr><td><code>openspec view</code></td><td>Interactive dashboard of specs and changes.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== RULES =========================== -->
+  <section class="view shell" id="rules" aria-labelledby="rules-title">
+    <p class="eyebrow"><i aria-hidden="true" style="background:var(--finish)"></i>From openspec/config.yaml</p>
+    <h1 id="rules-title">House rules the agent follows.</h1>
+    <p class="lede">OpenSpec skills drive the workflow. Our <code>config.yaml</code> adds these rules to every stop, so you don't have to repeat them in prompts.</p>
+
+    <div class="section" style="margin-top:36px">
+      <div class="rules-grid">
+        <article class="rule-card span-2 c-plan">
+          <div class="ico">⌂</div>
+          <h3>Capabilities live under product domains</h3>
+          <p>Specs are organised by product domain, not by app or folder. A subdomain groups related capabilities. Reuse an existing one; propose a new one only with a reason.</p>
+          <div class="pathviz" aria-label="Example capability path"><span>book-pay</span><i>/</i><span>payment</span><i>/</i><span>new-card-payment</span></div>
+          <div class="domains"><code>book-pay</code><code>manage-modify</code><code>discover-search</code><code>arrive-stay-leave</code><code>identity</code></div>
+        </article>
+
+        <article class="rule-card c-express">
+          <div class="ico">=</div>
+          <h3>One contract, every surface</h3>
+          <p>Never write separate specs for backend, web, Android, iOS or GraphQL. One capability describes shared behaviour; platform detail goes in only when it is observable.</p>
+        </article>
+
+        <article class="rule-card c-build">
+          <div class="ico">⇄</div>
+          <h3>Cross-squad work is called out</h3>
+          <p><code>backend/&lt;squad&gt;/</code> belongs to that squad. If your change needs another squad's backend code, it must be explicit:</p>
+          <ul><li>Proposal: <code>## Cross-squad work</code></li><li>Design: owning squad per service</li><li>Tasks: its own labelled handoff group</li></ul>
+        </article>
+
+        <article class="rule-card c-plan">
+          <div class="ico">?</div>
+          <h3>References: asked once</h3>
+          <p>Before the proposal, the agent asks once for Jira, Figma, Confluence and design docs. “Not provided” is fine. It never invents links or guesses at content it can't read.</p>
+        </article>
+
+        <article class="rule-card c-finish">
+          <div class="ico">⚖</div>
+          <h3>Proportionate, not ceremonial</h3>
+          <p>Sections that don't apply are left out. A design can be two lines when nothing architectural changes. No invented migration plans, diagrams or rollout work.</p>
+        </article>
+
+        <article class="rule-card span-2 c-express" style="grid-column:1 / -1">
+          <div class="ico">!</div>
+          <h3>Conflicts are classified, never silently resolved</h3>
+          <p>When sources disagree, the proposal records it under <code>## Conflicts and decisions</code> with an owner. Each type is handled at a fixed stop:</p>
+          <div class="conflicts">
+            <div><b>Blocking decision</b><span>Resolved at specs (if it changes behaviour) or design. Tasks stop if any remain.</span></div>
+            <div><b>Implementation investigation</b><span>Becomes a spike task with a decision outcome.</span></div>
+            <div><b>Bounded accepted unknown</b><span>May remain, with an owner and a reason it's safe to ship.</span></div>
+            <div><b>Unrelated future question</b><span>Left out of the tasks.</span></div>
+          </div>
+        </article>
+
+        <article class="rule-card c-finish" style="grid-column:1 / -1">
+          <div class="ico">◎</div>
+          <h3>Where does each kind of truth go?</h3>
+          <p>The living library keeps intent and reality apart, so neither hides the other.</p>
+          <div class="where">
+            <div class="c-plan"><b>spec.md</b><span>What <em>should</em> happen. The contract. Changes only through a change.</span></div>
+            <div class="c-finish"><b>design.md</b><span>What <em>does</em> happen. Architecture, flags, defaults, failure paths.</span></div>
+            <div class="c-build"><b>Open questions</b><span>Where code and contract differ and someone must decide. Always owned.</span></div>
+            <div class="c-express"><b>Issue tracker</b><span>Plain defects with an obvious fix. Not recorded in the design.</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <p><strong>OpenSpec Line Map</strong> · Digital Monorepo</p>
+      <p>Rules: <a href="config.yaml"><code>openspec/config.yaml</code></a> · Living design template: <a href="living-design-template.md"><code>living-design-template.md</code></a></p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var views = ['overview', 'workflow', 'commands', 'rules'];
+      var stationToView = function (id) { return id.indexOf('st-') === 0 ? 'workflow' : null; };
+
+      function show(hash) {
+        var id = (hash || '').replace('#', '');
+        var view = views.indexOf(id) >= 0 ? id : (stationToView(id) || 'overview');
+        views.forEach(function (v) {
+          var el = document.getElementById(v);
+          if (el) el.classList.toggle('active', v === view);
+        });
+        document.querySelectorAll('.tab').forEach(function (t) {
+          if (t.dataset.view === view) t.setAttribute('aria-current', 'page');
+          else t.removeAttribute('aria-current');
+        });
+        if (views.indexOf(id) >= 0) window.scrollTo(0, 0);
+        else if (id) {
+          var target = document.getElementById(id);
+          if (target) requestAnimationFrame(function () { target.scrollIntoView({ block: 'start' }); });
+        }
+      }
+      window.addEventListener('hashchange', function () { show(location.hash); });
+      show(location.hash);
+
+      // copy buttons
+      document.querySelectorAll('.copy').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var text = btn.parentElement.querySelector('code').textContent;
+          var done = function () {
+            btn.textContent = 'Copied';
+            setTimeout(function () { btn.textContent = 'Copy'; }, 1400);
+          };
+          try {
+            navigator.clipboard.writeText(text).then(done, function () {});
+          } catch (e) { /* clipboard unavailable */ }
+        });
+      });
+
+      // command filters
+      var chips = document.querySelectorAll('.chip');
+      chips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          var f = chip.dataset.filter;
+          chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c === chip)); });
+          document.querySelectorAll('.cmd-card').forEach(function (card) {
+            card.hidden = !(f === 'all' || card.dataset.phase === f);
+          });
+        });
+      });
+
+      // theme toggle
+      var root = document.documentElement;
+      try {
+        var saved = localStorage.getItem('openspec-theme');
+        if (saved) root.setAttribute('data-theme', saved);
+      } catch (e) {}
+      document.getElementById('themeBtn').addEventListener('click', function () {
+        var dark = root.getAttribute('data-theme') === 'dark' ||
+          (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var next = dark ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('openspec-theme', next); } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>

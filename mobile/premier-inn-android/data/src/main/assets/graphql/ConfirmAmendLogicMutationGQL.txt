@@ -1,0 +1,11 @@
+mutation confirmAmendLogic ($confirmAmendLogicCriteria: ConfirmAmendLogicCriteria!) {
+    confirmAmendLogic (confirmAmendLogicCriteria: $confirmAmendLogicCriteria) {
+        payment {
+            status
+            paymentRequiredDetails {
+              paymentRedirect
+              sessionId
+            }
+        }
+    }
+}

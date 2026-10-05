@@ -1,0 +1,66 @@
+openapi: 3.0.1
+info:
+  title: Rules Agent Entity Service API Documentation
+  description: "<p>Retrieve the preferences configured for a hotel.</p>"
+  version: 1.0.0-SNAPSHOT
+servers:
+  - url: http://localhost:9108
+    description: Generated server url
+paths:
+  /crm/config/v1/hotels/{hotelId}/preferences:
+    get:
+      summary: Get hotel preferences
+      parameters:
+        - name: hotelId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: preferenceGroupsCodes
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelPreferencesOhipResponseDto'
+
+components:
+  schemas:
+    HotelPreferencesOhipResponseDto:
+      type: object
+      properties:
+        hotelPreferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/HotelPreferenceOhip'
+        links:
+          type: array
+          items:
+            type: object
+
+    HotelPreferenceOhip:
+      type: object
+      properties:
+        description:
+          type: string
+          example: "Chocolate Box"
+        code:
+          type: string
+          example: "DIETARY"
+        preferenceGroup:
+          type: string
+          example: "EVENTS"
+        housekeeping:
+          type: boolean
+          example: false
+        orderSequence:
+          type: integer
+          example: 2
+        hotelId:
+          type: string
+          example: "FRAMTI"

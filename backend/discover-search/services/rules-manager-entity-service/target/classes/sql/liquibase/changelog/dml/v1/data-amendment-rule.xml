@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet author="marina.baban" id="init_data_amendment_rule_flex_noflex" runOnChange="true">
+    <preConditions onFail="MARK_RAN">
+      <and>
+        <tableExists tableName="amendment_rule"/>
+
+        <sqlCheck expectedResult="0">select count(*) from rules_engine.amendment_rule</sqlCheck>
+      </and>
+    </preConditions>
+
+    <loadData tableName="amendment_rule" file="sql/liquibase/data/amendment_rule_flex_noflex_data.csv"/>
+  </changeSet>
+
+  <changeSet author="marina.baban" id="drop_columns_channelId_userCategory_originalBookingTimeLimit" runOnChange="true">
+    <dropColumn
+      schemaName="rules_engine"
+      tableName="amendment_rule">
+      <column name="channel_id"/>
+    </dropColumn>
+
+    <dropColumn
+      schemaName="rules_engine"
+      tableName="amendment_rule">
+      <column name="user_category"/>
+    </dropColumn>
+
+    <dropColumn
+      schemaName="rules_engine"
+      tableName="amendment_rule">
+      <column name="original_booking_time_limit"/>
+    </dropColumn>
+  </changeSet>
+
+  <changeSet author="marina.baban" id="add_column_country_code">
+    <addColumn schemaName="rules_engine"
+      tableName="amendment_rule">
+      <column name="country_code" type="VARCHAR(50)" defaultValue="">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="marina.baban" id="update_amendment_rule_rate_type_flex_country_code_GB">
+    <update schemaName="rules_engine"
+      tableName="amendment_rule">
+      <column name="country_code" value="GB"/>
+      <column name="rate_type" value="Flex"/>
+      <where>rate_type='FLEX'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="marina.baban" id="update_amendment_rule_rate_type_nonflex_country_code_GB">
+    <update schemaName="rules_engine"
+      tableName="amendment_rule">
+      <column name="country_code" value="GB"/>
+      <column name="rate_type" value="Non-Flex"/>
+      <where>rate_type='NOFLEX'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="Lingeswaran" id="load_new_amendment_rules_with_country_code" runOnChange="true">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amendment_rule_country_code.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="Naveen" id="load_new_amendment_rules_travel_industry_rate_code" runOnChange="true">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amendment_rule_travel_industry_rate_code.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="marina.baban" id="load_amendment_rule_bb_negociated_rates">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amendment_rule_bb_negociated_rates.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="constantin.lungu" id="load_amendment_rule_free_breakfast_promotional_rates">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amendment_rule_free_breakfast_promotional_rates.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="constantin.lungu" id="update_promotional_rate">
+    <update schemaName="rules_engine"
+      tableName="amendment_rule">
+      <column name="rate_type" value="PROBRKST"/>
+      <where>rate_type='PROBF'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="Mugur.Rus" id="load_amendment_rule_booking_promotional_rates">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amendment_rule_booking_promotional_rates.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="Pooja" id="update_rewards_rates">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amendment_rule_reward_rates.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="Rajesh" id="load_amendment_rules_for_new_country_codes" runOnChange="true">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amendment_rule_new_country_codes.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="Rajesh" id="load_amendment_rule_bb_negociated_rates_for_new_country_codes">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amendment_rule_bb_negociated_rates_new_countrys.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="Rajesh" id="load_amendment_rule_booking_promotional_rates_new_country_codes">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amendment_rule_booking_promotional_rates_new_countrys.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="Rajesh" id="rewards_rates_for_new_countrys">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amendment_rule_reward_rates_new_countrys.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="Rajesh" id="load_amend_rule_free_breakfast_promotional_rates_new_countries">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amend_rule_free_breakfast_promotional_rates_new_countries.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="update_free_breakfast_promotional_rate">
+    <update schemaName="rules_engine"
+            tableName="amendment_rule">
+      <column name="rate_type" value="PROBRKST"/>
+      <where>rate_type='PROBF'</where>
+    </update>
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" value="39600"/>
+      <where>rate_type = 'PROBRKST' AND country_code IN ('JE','GB','IE','GG','IM')</where>
+    </update>
+
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" value="21600"/>
+      <where>rate_type = 'PROBRKST' AND country_code = 'DE'</where>
+    </update>
+
+    <rollback>
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" valueComputed="NULL"/>
+        <where>rate_type = 'PROBRKST' AND country_code IN ('JE','GB','IE','GG','IM','DE')</where>
+      </update>
+      <update schemaName="rules_engine"
+              tableName="amendment_rule">
+        <column name="rate_type" value="PROBF"/>
+        <where>rate_type = 'PROBRKST'</where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="Rajesh" id="load_new_amend_rules_travel_industry_rate_code" runOnChange="true">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amend_rule_travel_industry_rate_code_new_countries.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="Mugur.Rus" id="load_amendment_rule_booking_promotional_rates_summer_2025">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amendment_rule_booking_promotional_rates_summer_2025.csv"
+      primaryKey="rule_id"/>
+    <rollback>
+      <delete schemaName="rules_engine" tableName="amendment_rule">
+        <where>rate_type = 'STDDIS20'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="Naveen" id="update_arrival_date_limit_stddis10_by_country">
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" value="39600"/>
+      <where>rate_type = 'STDDIS10' AND country_code IN ('JE','GB','IE','GG','IM')</where>
+    </update>
+
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" value="21600"/>
+      <where>rate_type = 'STDDIS10' AND country_code = 'DE'</where>
+    </update>
+
+    <rollback>
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" valueComputed="NULL"/>
+        <where>rate_type = 'STDDIS10' AND country_code IN ('JE','GB','IE','GG','IM','DE')</where>
+      </update>
+    </rollback>
+  </changeSet>
+
+
+  <changeSet author="Amruta" id="update_arrival_date_limit_stddis20_by_country">
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" value="39600"/>
+      <where>rate_type = 'STDDIS20' AND country_code IN ('JE','GB','IE','GG','IM')</where>
+    </update>
+
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" value="21600"/>
+      <where>rate_type = 'STDDIS20' AND country_code = 'DE'</where>
+    </update>
+
+    <rollback>
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" valueComputed="NULL"/>
+        <where>rate_type = 'STDDIS20' AND country_code IN ('JE','GB','IE','GG','IM','DE')</where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="cmanitiu-wb" id="load_amend_rule_black_friday_promo_2025">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amendment_rule_black_friday_promo_2025.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="Amruta-CTECH-3677" id="update_arrival_date_limit_black_friday_promo_2025">
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" value="39600"/>
+      <where>rate_type = 'FLXDIS30' AND country_code IN ('JE','GB','IE','GG','IM') AND
+        arrival_date_limit IS NULL
+      </where>
+    </update>
+
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" value="21600"/>
+      <where>rate_type = 'FLXDIS30' AND country_code = 'DE' AND arrival_date_limit IS NULL</where>
+    </update>
+
+    <rollback>
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" valueComputed="NULL"/>
+        <where>rate_type = 'FLXDIS30' AND country_code IN ('JE','GB','IE','GG','IM','DE')</where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="tcirdei-wb" id="load_amend_rule_app_incentive_standard">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amend_rule_app_incentive_standard.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="cdodu-wb" id="load_amend_rule_winter_sale_rate">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/load_amend_rule_winter_sale_rate.csv"
+      primaryKey="rule_id"/>
+    <rollback>
+      <delete schemaName="rules_engine" tableName="amendment_rule">
+        <where>rate_type = 'STDDIS15'</where>
+      </delete>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="Amruta" id="revert_arrival_limit_stddis10_to_null">
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" valueComputed="NULL"/>
+      <where>
+        rate_type = 'STDDIS10' AND country_code IN ('GB','IE','DE','JE','GG','IM')
+      </where>
+    </update>
+
+    <rollback>
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" value="39600"/>
+        <where>
+          rate_type = 'STDDIS10' AND country_code IN ('JE','GB','IE','GG','IM')
+        </where>
+      </update>
+
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" value="21600"/>
+        <where>
+          rate_type = 'STDDIS10' AND country_code = 'DE'
+        </where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="load_amend_rule_for_STD1DS15">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amend_rule_promotional_ratetype.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="load_amend_rule_for_STD1DS20">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amend_rule_add_promotion_rate_code_STD1DS20.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="revert_arrival_limit_std1ds15_to_null">
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" valueComputed="NULL"/>
+      <where>
+        rate_type = 'STD1DS15' AND country_code IN ('GB','IE','DE','JE','GG','IM')
+      </where>
+    </update>
+
+    <rollback>
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" value="39600"/>
+        <where>
+          rate_type = 'STD1DS15' AND country_code IN ('JE','GB','IE','GG','IM')
+        </where>
+      </update>
+
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" value="21600"/>
+        <where>
+          rate_type = 'STD1DS15' AND country_code = 'DE'
+        </where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="revert_arrival_limit_std1ds20_to_null">
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" valueComputed="NULL"/>
+      <where>
+        rate_type = 'STD1DS20' AND country_code IN ('GB','IE','DE','JE','GG','IM')
+      </where>
+    </update>
+
+    <rollback>
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" value="39600"/>
+        <where>
+          rate_type = 'STD1DS20' AND country_code IN ('JE','GB','IE','GG','IM')
+        </where>
+      </update>
+
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" value="21600"/>
+        <where>
+          rate_type = 'STD1DS20' AND country_code = 'DE'
+        </where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="revert_arrival_limit_stddis20_to_null">
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" valueComputed="NULL"/>
+      <where>
+        rate_type = 'STDDIS20' AND country_code IN ('GB','IE','DE','JE','GG','IM')
+      </where>
+    </update>
+
+    <rollback>
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" value="39600"/>
+        <where>
+          rate_type = 'STDDIS20' AND country_code IN ('JE','GB','IE','GG','IM')
+        </where>
+      </update>
+
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" value="21600"/>
+        <where>
+          rate_type = 'STDDIS20' AND country_code = 'DE'
+        </where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="load_amend_rule_for_free_extras">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amend_rule_free_extras.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="load_amend_rule_for_STDBFCW_STDBFFC">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amend_rule_for_STDBFCW_STDBFFC.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="revert_arrival_limit_probrkst_to_null">
+    <update schemaName="rules_engine" tableName="amendment_rule">
+      <column name="arrival_date_limit" valueComputed="NULL"/>
+      <where>
+        rate_type = 'PROBRKST' AND country_code IN ('GB','IE','DE','JE','GG','IM')
+      </where>
+    </update>
+
+    <rollback>
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" value="39600"/>
+        <where>
+          rate_type = 'PROBRKST' AND country_code IN ('JE','GB','IE','GG','IM')
+        </where>
+      </update>
+
+      <update schemaName="rules_engine" tableName="amendment_rule">
+        <column name="arrival_date_limit" value="21600"/>
+        <where>
+          rate_type = 'PROBRKST' AND country_code = 'DE'
+        </where>
+      </update>
+    </rollback>
+  </changeSet>
+
+  <changeSet author="lingeswaran" id="load_new_amendment_rules_distressed_inventory_rate_code">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amendment_rule_distressed_inventory_rate_code.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="ippili-wb" id="load_amend_rule_for_STDDIF05">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amend_rule_for_STDDIF05.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="nikhithaG-wb" id="load_amend_rule_for_STD1DS30">
+    <loadData tableName="amendment_rule"
+              file="sql/liquibase/data/amend_rule_add_promotion_rate_code_STD1DS30.csv"
+              primaryKey="rule_id"/>
+  </changeSet>
+
+  <changeSet author="dragos.popa" id="amendment_rule_country_code_AT">
+    <loadData tableName="amendment_rule"
+      file="sql/liquibase/data/amendment_rule_country_code_AT.csv"
+      primaryKey="rule_id"/>
+  </changeSet>
+
+</databaseChangeLog>

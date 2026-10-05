@@ -1,0 +1,19 @@
+@startuml
+actor Client
+box "Retrieve permissions"
+    boundary "newsletter/get" as GET
+end box
+entity Oauth
+entity Redis
+entity CDH
+Client -> GET: FE sends email/phone
+GET <-> Redis: retrieve bearer token from cache
+
+alt if token not in cache
+    GET <-> Oauth: generate new bearer token
+    GET -> Redis: Cache bearer token for 1 hour
+end
+
+GET <-> CDH: retrieve permissions with token
+GET -> Client: Returns newsletter permissions
+@enduml

@@ -1,0 +1,113 @@
+import { gql } from 'graphql-request';
+
+export const getPayApplicationDetailsQuery = () => gql`
+  query ApplicationDetails($applicationId: String!, $scheme: Scheme!, $applicationGuid: String!) {
+    getApplicationDetails(
+      applicationId: $applicationId
+      scheme: $scheme
+      applicationGuid: $applicationGuid
+    ) {
+      hostedPageGuid
+      directDebitOption
+      applicationId
+      applicationNumber
+      applicationGuid
+      companyId
+      startedDate
+      scheme
+      updateDate
+      accountName
+      status
+      resumeUrl
+      submittedDate
+      activatedDate
+      campaignCode
+      incentiveId
+      incentiveCode
+      termsAndConditionsAccepted
+      registrationQuestion
+      registrationAnswer
+      participants {
+        initiator
+        participantId
+        delegated
+        terms
+        directDebit
+        email
+        shared
+        name
+      }
+      cardHolders {
+        employeeId
+        userGuid
+      }
+      created
+      modified
+      contactDetails {
+        title
+        foreName
+        lastName
+        position
+        telephone
+        mobile
+        email
+      }
+      companyDetails {
+        vatRegistrationNumber
+        estMonthlySpend
+        companyType
+        charityNumber
+        companyRegNum
+        partnerDetails {
+          title
+          foreName
+          lastName
+          dateOfBirth
+          numberOfPartners
+        }
+        timeTradingId
+        registrationAddress {
+          addressLine1
+          addressLine2
+          addressLine3
+          addressLine4
+          postcode
+          countryCode
+        }
+        correspondenceAddress {
+          addressLine1
+          addressLine2
+          addressLine3
+          addressLine4
+          postcode
+          countryCode
+        }
+        correspondenceContactInfo {
+          title
+          foreName
+          lastName
+          position
+          telephone
+          mobile
+          email
+        }
+        hotelBrandPolicy
+        parentCompanyName
+        industrySector
+        numberOfEmployees
+        companyNameOnCard
+      }
+      cardDetails {
+        cardName
+        myCard
+        cardOwnerName
+        creditLimit {
+          value
+          currencyCode
+        }
+        emailAddress
+        cardGuid
+      }
+    }
+  }
+`;

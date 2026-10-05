@@ -1,0 +1,1 @@
+export { DatatransPayPalButton } from './DatatransPayPalButton';

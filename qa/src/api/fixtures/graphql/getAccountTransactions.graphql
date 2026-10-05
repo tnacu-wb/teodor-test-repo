@@ -1,0 +1,30 @@
+mutation ViewAccountTransactions($payload: CustomerAccountTransactionsRequest!) {
+  viewAccountTransactions(payload: $payload) {
+    response {
+      transactions {
+        transactionDate
+        grossAmount {
+          amount
+          currencyCode
+          currencySymbol
+        }
+        location
+        pan
+        cardName
+        purchaseOrderReference
+        customerOwnRef
+        lineItems {
+          grossAmount {
+            amount
+            currencyCode
+            currencySymbol
+          }
+          description
+          guestName
+          invoiceLineItem
+          quantity
+        }
+      }
+    }
+  }
+}

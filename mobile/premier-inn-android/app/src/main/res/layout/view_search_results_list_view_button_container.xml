@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/generic_margin_16"
+    android:layout_marginEnd="@dimen/generic_margin_16"
+    android:paddingTop="@dimen/generic_padding_16"
+    android:paddingBottom="@dimen/generic_padding_8">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/resetBtn"
+            style="@style/Button2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:text="@string/search_results_list_view_button_reset"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@id/listBtn"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="@dimen/search_results_map_button_width"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/listBtn"
+            style="@style/Button2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:backgroundTint="@color/white"
+            android:drawableStart="@drawable/ic_list_view"
+            android:text="@string/search_results_list_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/resetBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="@dimen/search_results_map_button_width" />
+
+        <Button
+            android:id="@+id/searchBtn"
+            style="@style/BodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/generic_margin_16"
+            android:layout_marginBottom="@dimen/generic_margin_2"
+            android:background="@drawable/map_search_this_area_button"
+            android:paddingStart="@dimen/generic_padding_16"
+            android:paddingEnd="@dimen/generic_padding_16"
+            android:text="@string/search_results_list_view_button_search"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/listBtn"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

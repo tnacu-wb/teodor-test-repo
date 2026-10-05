@@ -1,0 +1,223 @@
+server:
+  port: ${SPRING_APPLICATION_PORT}
+  shutdown: graceful
+  compression.enabled: ${SERVER_COMPRESSION_ENABLED}
+  compression.mime-types: application/json
+
+swagger:
+  api:
+    version: "1.0.0"
+
+info:
+  build:
+    groupId: "uk.co.whitbread"
+    artifact: "availability-business-events-service-opera"
+    description: "Availability business events Microservice"
+    version: "1.0.0"
+    git:
+      originUrl: "@git.remote.origin.url@"
+      branch: "@git.branch@"
+      commit:
+        id: "@git.commit.id@"
+        time: "@git.commit.time@"
+        message: "@git.commit.message.short@"
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: ${SPRING_JPA_SHOW_SQL}
+    generate-ddl: ${SPRING_JPA_GENERATE_DDl}
+    hibernate:
+      ddl-auto: ${HIBERNATE_DDL_AUTO}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    writer:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://${AVAILABILITY_CACHE_POSTGRES_DB_HOST_WRITER}:${AVAILABILITY_CACHE_POSTGRES_DB_PORT}/${AVAILABILITY_CACHE_POSTGRES_DB_NAME}
+      username: ${AVAILABILITY_CACHE_POSTGRES_DB_USERNAME}
+      password: ${AVAILABILITY_CACHE_POSTGRES_DB_PASSWORD}
+
+hibernate:
+  dialect: org.hibernate.dialect.PostgreSQLDialect
+
+springdoc:
+  show-actuator: true
+
+encrypt:
+  failOnError: false
+
+management:
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  tracing:
+    propagation:
+      type: w3c
+    baggage:
+      correlation:
+        fields:
+          - x-amzn-trace-id
+          - flow-code
+        enabled: true
+      enabled: true
+      remote-fields:
+        - x-amzn-trace-id
+        - flow-code
+  endpoints:
+    web:
+      base-path: /availability-business-events-service/actuator
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  level:
+    brave: WARN
+    io:
+      getunleash: TRACE
+  configuration:
+    logger: default
+    debug:
+      enabled: true
+      exclusions:
+        - .*/actuator.*
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+config:
+  service:
+    content:
+      host: ${CONTENT_SERVICE_HOST:http://localhost:9106}
+      globalConfigEndpoint: "/v1/content/global-config"
+    ocd-adapter:
+      host: ${OCD_ADAPTER_SERVICE_HOST:http://localhost:9134}
+      offerEndpoint: "/ocd/v1/hotels/{hotelCode}/offer"
+
+opera:
+  isClientCredentialsEnabled: ${ENABLE_CLIENT_CREDENTIALS}
+  url: ${OPERA_HOST}
+  username: ${OPERA_USERNAME}
+  password: ${OPERA_PASSWORD}
+  appkey: ${OPERA_APP_KEY}
+  grantType: ${OPERA_GRANT_TYPE}
+  ocimGrantType: ${OPERA_OCIM_GRANT_TYPE}
+  scope: ${OPERA_SCOPE}
+  clientId: ${OPERA_CLIENT_ID}
+  clientSecret: ${OPERA_CLIENT_SECRET}
+  enterpriseId: ${ENTERPRISE_ID}
+  enabled: ${OPERA_ENABLED}
+  interval: 60
+  serviceUrl:
+    oauth: https://${opera.url}/oauth/v1/tokens
+    subscriptionUrl: wss://${opera.url}
+    subscriptionConnDelay: 120000
+  tokenExpiryTimeout: 5
+  tokenRefreshClockSkew: ${OPERA_TOKEN_REFRESH_SKEW:15}
+
+mockservice:
+  enabled: ${MOCKSERVICE_ENABLED}
+  host: ${MOCKSERVICE_HOST}
+  url: ws://${mockservice.host}/ohipgraphqlmockserver/subscriptions
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: "${UNLEASH_ENVIRONMENT}"
+    api-url: "${UNLEASH_URL}"
+    api-token: "${UNLEASH_TOKEN}"
+    send-metrics-connect-timeout: "${UNLEASH_SEND_METRICS_CONNECT_TIMEOUT:5s}"
+    send-metrics-read-timeout: "${UNLEASH_SEND_METRICS_READ_TIMEOUT:5s}"
+    send-metrics-interval: "${UNLEASH_SEND_METRICS_INTERVAL:60s}"
+
+feature-flags:
+  city-tax-uk:
+    key: "release_pi_ccui_city_tax_uk"
+    fallback: false
+  city-tax-uk-fallback:
+    key: "release_pi_ccui_city_tax_uk_fallback"
+    fallback: false
+  use-token-refresh-skew:
+    key: "release_opera_use_token_refresh_skew"
+    fallback: false
+
+request:
+  timeout: 10000
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - opera-perf
+        - opera-dev
+        - opera-qa
+        - local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+  datasource:
+    writer:
+      platform: postgres
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: postgres
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+io:
+  getunleash:
+    app-name: "${spring.application.name}"
+    instance-id: "1.0.0"
+    environment: local
+    api-url: 'http://localhost:3063/api'
+    api-token: 'dummy-value'
+
+logging:
+  configuration:
+    logger: default
+  level:
+    uk:
+      co:
+        whitbread:
+          rules:
+            agent: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql: TRACE
+  pattern:
+    # Logging pattern containing traceId and spanId; no longer provided through Sleuth by default
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"

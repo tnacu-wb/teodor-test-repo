@@ -1,0 +1,84 @@
+query hotelAvailabilitiesV2(
+  $place: Place
+  $startDate: String!
+  $endDate: String!
+  $rooms: [Room!]!
+  $country: String!
+  $language: String!
+  $oldWorldChannel: String!
+  $channel: String!
+  $subChannel: String!
+  $sortOption: SortOption
+  $sort: String
+  $page: Int
+  $initialPageSize: Int
+  $lazyLoadPageSize: Int
+  $filters: [String!]
+  $ratePlanCodes: [String]
+  ) {
+    hotelAvailabilitiesV2(
+      availabilitiesSearchCriteria: {
+        startDate: $startDate
+        endDate: $endDate
+        rooms: $rooms
+        place: $place
+        oldWorldChannel: $oldWorldChannel
+        page: $page
+        initialPageSize: $initialPageSize
+        lazyLoadPageSize: $lazyLoadPageSize
+        country: $country
+        language: $language
+        sort: $sort
+        filters: $filters
+        channel: $channel
+        subChannel: $subChannel
+        ratePlanCodes: $ratePlanCodes
+        sortOption: $sortOption
+      }
+    ) {
+    multiHotelAvailabilities {
+      hotelId
+      name
+      hotelAvailability {
+        available
+        distance
+        limitedAvailability
+        lowestRoomRate {
+          currencyCode
+          netTotal
+        }
+        unit
+        pmsSource
+      }
+       hotelInformation {
+          hotelOpeningDate
+          brand
+          coordinates {
+            latitude
+            longitude
+          }
+          thumbnailImages {
+            imageSrc
+            tags
+          }
+          hotelFacilities {
+            code
+            description
+            icon
+            isVisible
+            name
+            weight
+          }
+          links {
+            detailsPage
+          }
+          messagingFlag {
+            text
+          }
+        }
+      }
+      page
+      pageSize
+      total
+    }
+  }

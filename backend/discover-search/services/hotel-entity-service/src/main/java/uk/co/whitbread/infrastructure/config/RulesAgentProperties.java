@@ -1,0 +1,19 @@
+package uk.co.whitbread.infrastructure.config;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+@Data
+@Configuration
+@ConfigurationProperties(prefix = "config.service.rules-agent")
+public class RulesAgentProperties {
+
+  private String host;
+  private String roomSubstitutionEndpoint;
+  private String maxNightsEndpoint;
+  private String maxRoomsEndpoint;
+  private String maxRoomOccupancyEndpoint;
+  private String rateSuppressionEndpoint;
+  private String multiOccupancySupplementEndpoint;
+}

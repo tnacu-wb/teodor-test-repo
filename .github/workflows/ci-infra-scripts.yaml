@@ -1,0 +1,53 @@
+# CI for the infra deploy shell scripts (infra/scripts/*.sh).
+#
+# These scripts back the Helm Deploy workflow and carry safety-critical release
+# recovery logic, so they are linted (shellcheck) and unit-tested (bats) on every
+# change. The bats suite stubs helm/kubectl/git, so this needs no cluster access
+# and runs on a GitHub-hosted runner.
+
+name: CI Infra Scripts
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'infra/scripts/**'
+      - '.github/workflows/ci-infra-scripts.yaml'
+  push:
+    branches: [main]
+    paths:
+      - 'infra/scripts/**'
+      - '.github/workflows/ci-infra-scripts.yaml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Cancel superseded PR runs; never cancel a push-to-main run.
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
+jobs:
+  shellcheck-and-bats:
+    name: Shellcheck + bats
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Install shellcheck and bats
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y shellcheck bats
+
+      - name: Shellcheck
+        run: |
+          set -euo pipefail
+          shellcheck infra/scripts/*.sh
+
+      - name: Bats
+        run: |
+          set -euo pipefail
+          bats infra/scripts/test/

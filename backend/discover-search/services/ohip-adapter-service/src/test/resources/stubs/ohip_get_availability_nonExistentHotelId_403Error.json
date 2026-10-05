@@ -1,0 +1,27 @@
+{
+  "request": {
+    "urlPathPattern": "/par/v1/hotels/NONE/availability",
+    "method": "GET",
+    "queryParameters": {
+      "roomStayStartDate": {
+        "equalTo": "2022-03-01"
+      },
+      "roomStayEndDate": {
+        "equalTo": "2022-03-03"
+      },
+      "roomStayQuantity": {
+        "equalTo": "1"
+      },
+      "limit": {
+        "equalTo": "20"
+      }
+    }
+  },
+  "response": {
+    "status": 403,
+    "bodyFileName": "ohip_get_availability_nonExistentHotelId_403Error_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id" : "3533f534-4685-4f9e-9619-1f644d4fcf37",
+  "request" : {
+    "urlPath" : "/v1/reservations/overrideReasons",
+    "method" : "PUT",
+    "headers" : {
+      "Content-Type" : {
+        "equalTo" : "application/json"
+      }
+    },
+    "bodyPatterns" : [ {
+      "matchesJsonPath" : "$[?(@.['basketReference'] == 'TestId1234567')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['hotelId'] == 'HOTELTEST')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['reasonCode'] == 'ILL')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['reasonName'] == 'Illness')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['callerName'] == 'John Doe')]"
+    }, {
+      "matchesJsonPath" : "$[?(@.['managerName'] == 'James Bond')]"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"basketReference\":\"TestId1234567\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "3533f534-4685-4f9e-9619-1f644d4fcf37"
+}

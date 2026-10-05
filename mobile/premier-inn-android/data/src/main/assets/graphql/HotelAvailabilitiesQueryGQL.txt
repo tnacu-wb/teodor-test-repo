@@ -1,0 +1,37 @@
+query hotelAvailabilities ($availabilitiesSearchCriteria: AvailabilitiesSearchCriteria!) {
+    hotelAvailabilities (availabilitiesSearchCriteria: $availabilitiesSearchCriteria) {
+        multiHotelAvailabilities {
+              hotelId
+              name
+              hotelAvailability {
+                available
+                distance
+                limitedAvailability
+                lowestRoomRate {
+                  currencyCode
+                  netTotal
+                }
+                pmsSource
+                cellCode
+              }
+              hotelInformation {
+                brand
+                coordinates {
+                  latitude
+                  longitude
+                }
+                hotelFacilities {
+                  code
+                  description
+                }
+                messagingFlag {
+                  color
+                  text
+                }
+                thumbnailImages {
+                  imageSrc
+                }
+              }
+            }
+    }
+}

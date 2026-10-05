@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Regular.ttf">
+            <string>ProximaNova-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SuggestionsViewController" customModule="PremierInn" customModuleProvider="target">
+            <connections>
+                <outlet property="cancelButton" destination="2LI-1F-w2k" id="7xg-mm-xMq"/>
+                <outlet property="searchFieldContainer" destination="r6Q-WR-lPl" id="R39-KA-swO"/>
+                <outlet property="searchTextField" destination="HIo-xP-JVQ" id="mlV-1T-wjC"/>
+                <outlet property="suggestionsActivityIndicator" destination="2LT-pp-3Hm" id="As5-Jb-P9F"/>
+                <outlet property="suggestionsErrorLabel" destination="fxf-s7-le1" id="M5U-xW-tv2"/>
+                <outlet property="suggestionsTableView" destination="opW-kZ-JGV" id="EqN-Nf-CyH"/>
+                <outlet property="view" destination="iN0-l3-epB" id="5hY-hw-cN9"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r6Q-WR-lPl">
+                    <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                    <subviews>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="  Stonehenge, N10 2BN" textAlignment="natural" minimumFontSize="18" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="HIo-xP-JVQ" customClass="PITextField" customModule="PremierInn" customModuleProvider="target">
+                            <rect key="frame" x="15" y="7" width="200" height="30"/>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <accessibility key="accessibilityConfiguration" identifier="searchFieldSearchPageAcc"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="V5q-NW-1x5"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="18"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search" textContentType="location"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="originX">
+                                    <real key="value" value="15"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <outlet property="delegate" destination="-1" id="uve-Px-H5b"/>
+                            </connections>
+                        </textField>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2LI-1F-w2k">
+                            <rect key="frame" x="225" y="6.5" width="80" height="31"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="80" id="snt-7o-FzE"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="16"/>
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="Cancel"/>
+                            <connections>
+                                <action selector="cancelButtonDidTap:" destination="-1" eventType="touchUpInside" id="OsQ-iD-fdb"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="JR2-5g-Q0a"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="5y7-18-cDc"/>
+                        <constraint firstItem="2LI-1F-w2k" firstAttribute="leading" secondItem="HIo-xP-JVQ" secondAttribute="trailing" constant="10" id="6rg-FN-3Vc"/>
+                        <constraint firstAttribute="trailing" secondItem="2LI-1F-w2k" secondAttribute="trailing" constant="15" id="T2h-vZ-0Qh"/>
+                        <constraint firstItem="HIo-xP-JVQ" firstAttribute="centerY" secondItem="r6Q-WR-lPl" secondAttribute="centerY" id="WGb-3y-5Yi"/>
+                        <constraint firstItem="HIo-xP-JVQ" firstAttribute="leading" secondItem="r6Q-WR-lPl" secondAttribute="leading" constant="15" id="bPy-zT-yJ8"/>
+                        <constraint firstItem="2LI-1F-w2k" firstAttribute="centerY" secondItem="HIo-xP-JVQ" secondAttribute="centerY" id="wzR-1Y-EP9"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" keyboardDismissMode="onDrag" style="grouped" separatorStyle="none" rowHeight="52" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="opW-kZ-JGV">
+                    <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                    <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                    <inset key="separatorInset" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                </tableView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found text" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxf-s7-le1">
+                    <rect key="frame" x="80.5" y="274" width="159" height="20"/>
+                    <fontDescription key="fontDescription" name="PremierInnSans" family="Premier Inn Sans" pointSize="17"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="2LT-pp-3Hm">
+                    <rect key="frame" x="150" y="306" width="20" height="20"/>
+                </activityIndicatorView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="opW-kZ-JGV" secondAttribute="bottom" id="8az-A6-lzo"/>
+                <constraint firstItem="r6Q-WR-lPl" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" priority="750" id="Bjx-Eo-AT5"/>
+                <constraint firstItem="opW-kZ-JGV" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="JRP-43-q62"/>
+                <constraint firstItem="fxf-s7-le1" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="MzC-NR-pJH"/>
+                <constraint firstItem="2LT-pp-3Hm" firstAttribute="centerY" secondItem="opW-kZ-JGV" secondAttribute="centerY" id="NJy-4P-x6k"/>
+                <constraint firstItem="opW-kZ-JGV" firstAttribute="top" secondItem="r6Q-WR-lPl" secondAttribute="bottom" id="XMu-Hh-RYK"/>
+                <constraint firstItem="2LT-pp-3Hm" firstAttribute="centerX" secondItem="opW-kZ-JGV" secondAttribute="centerX" id="b4e-7Y-FTe"/>
+                <constraint firstItem="r6Q-WR-lPl" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="cTP-Ph-3Lc"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fxf-s7-le1" secondAttribute="trailing" constant="20" id="dux-o7-edd"/>
+                <constraint firstAttribute="trailing" secondItem="r6Q-WR-lPl" secondAttribute="trailing" id="f83-8O-EBf"/>
+                <constraint firstItem="r6Q-WR-lPl" firstAttribute="top" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="rGc-Me-x0f"/>
+                <constraint firstAttribute="trailing" secondItem="opW-kZ-JGV" secondAttribute="trailing" id="xAC-Vn-Bdg"/>
+                <constraint firstItem="fxf-s7-le1" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="yOH-rO-umS"/>
+            </constraints>
+            <point key="canvasLocation" x="139" y="154"/>
+        </view>
+    </objects>
+    <designables>
+        <designable name="HIo-xP-JVQ">
+            <size key="intrinsicContentSize" width="218.5" height="34"/>
+        </designable>
+    </designables>
+    <resources>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

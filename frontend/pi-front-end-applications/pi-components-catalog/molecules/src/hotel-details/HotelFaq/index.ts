@@ -1,0 +1,1 @@
+export { HotelFaq } from './HotelFaq';
