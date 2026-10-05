@@ -1,0 +1,191 @@
+Starting test worker 0
+https://whitbread.yourzephyr.com/flex/html5/tcr/467;testcaseId=1282640;viewType=list;pageSize=50;pageView=search;offset=0;searchText=testcaseId%20%3D%20380779;searchType=zql;inRelease=true;currentIndex=1;usageHistoryGridSize=50
+-> Given I want to book a room as a PI guest user
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_web_push_notifications=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_pi_bb_booking_history_redesign=false,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_datatrans_integration=false,release_ib_user_pilot=false
+Navigating to localized path: home.html
+Pre-setting consent cookies
+Dismissing notification popup if present
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_pi_bb_booking_history_redesign=false,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_datatrans_integration=false,release_ib_user_pilot=false,release_pi_web_push_notifications=true
+Get reservations for hotel id "HEAPTI", surname "Testersons", arrivalStartDate "Mon Oct 05 2026 14:46:53 GMT+0000 (Coordinated Universal Time)", limit "1000", offset "0".
+Switch to default content from IFrame
+Room found for the period: 2026-10-17 - 2026-10-18
+-> When I navigate to Destination landing page (DLP)
+Navigating to DLP: hotels/england/west-midlands/birmingham.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+Validating DLP page loaded
+-> Then I should see that the DLP page is displayed with its elements
+Dismissing notification popup if present
+Getting DLP path from URL
+Validate Dlp Content Service against API
+Validate Hotel title, description and picture
+Validate Seo section
+Validating DLP page elements
+-> When I check the custom notification prompt
+                        And I click “Allow”
+-> Then the custom prompt closes, the close count is increased by one and the last closed time is updated
+-> When I check Trip Advisor on Grid view
+-> Then I can click on reviews link & a new tab will open with HDP focused on reviews section.
+Validating TripAdvisor section with 12 reviews
+Validating TripAdvisor review link opens to: /gb/en/hotels/england/west-midlands/birmingham/birmingham-city-centre-exchange-square.html
+Clicking TripAdvisor review link
+Navigating to DLP: hotels/england/west-midlands/birmingham.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+-> When I click on "Map View"
+-> Then the page should change from a list view to a map view
+Switching to map view
+-> When I check hotel card pins from the Map view
+-> Then each hotel will display:   
+                        - hotel image
+                        - hotel name
+                        - distance from the location
+                        - facilities
+                        - TripAdvisor rating
+                        - option to go to the hotel detail page
+Validating map view cards for 14 hotels
+-> When I click on a map pin
+                        And I click on the hotel card details
+-> Then I am redirected to the Hotel detail page for that hotel
+                        And "Back" action from HDP brings me back on DLP - Map view
+Clicking map marker at hotel index 0
+Clicking view hotel button on map card
+Validating hotel details page loaded
+Validating DLP page loaded
+Verifying map view is active
+Switching to grid view
+-> When I check the search results in map view, after loading more hotels
+-> Then I should see that the extended list of hotels from "Show more" - Grid view, are visible on the Map view also
+Validating hotel list elements in grid view
+Validating hotel distance is displayed
+Validating all hotel cards show distance
+-> When I check the hotels list from Grid view, after loading more hotels
+-> Then I should see all hotels displayed in the list
+Clicking show more until all hotels loaded
+Clicking show more button
+Get hotels list for Destination landing page from Dictionary
+Validating hotel list elements in grid view
+Getting hotel card count
+Validating map pins match grid cards
+Getting hotel card count
+Switching to map view
+Validating map pins count: 14
+Switching to grid view
+-> When I go to another Destination landing page where Distance from search is not available (restricted from AEM)
+-> Then I should see that the Distance from search is not displayed on hotel cards, on both Grid and Map view
+Navigating to DLP: hotels/england/bedfordshire/luton.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+Validating DLP page loaded
+Dismissing notification popup if present
+Getting DLP path from URL
+Validating all hotel cards hide distance
+Switching to map view
+Validating map view hides hotel distance
+-> When I search for a specific PI brand Hotel for 1 room for 2 adults for 1 night and click on the Search button.
+Opening hotel details page: /hotels/england/greater-london/london/london-heathrow-airport-m4j4.html
+Navigating to localized path: /hotels/england/greater-london/london/london-heathrow-airport-m4j4.html?ARRdd=05&ARRmm=10&ARRyyyy=2026&NIGHTS=2&ROOMS=1&ADULT1=1&CHILD1=0&COT1=0&INTTYP1=DB
+Pre-setting consent cookies
+Dismissing notification popup if present
+Perform search hotelName=London Heathrow Airport (M4/J4) checkIn=2026-10-17 checkOut=2026-10-18
+Clear location input
+Expand search console if collapsed
+Search for hotel=London Heathrow Airport (M4/J4)
+Set dates checkIn=2026-10-17 checkOut=2026-10-18
+Select date=2026-10-17
+Select date=2026-10-17
+Go to date=2026-10-17 from current=2026-10-01
+Select date=2026-10-18
+Select date=2026-10-18
+Go to date=2026-10-18 from current=2026-10-01
+Set rooms=[{"adults":2,"children":0}]
+Select 2 adults for room index=0
+Select 0 children for room index=0
+Click search submit button
+Validating hotel details page loaded
+Validating navigated to hotel with slug: /hotels/england/greater-london/london/london-heathrow-airport-m4j4.html
+-> Then I should be directed to Hotel details page of my selected hotel.
+Validating hotel title: London Heathrow Airport (M4/J4) hotel
+-> When I select FLEX rate available and check the Booking summary panel
+Selecting rate Flex for room Standard room
+Getting selected room name
+-> Then it should be populated with the selected rate and room class information
+Getting selected rate name
+Validating booking summary rate plan: Flex
+Validating total price rate
+Clicking see breakdown link
+Extracting prices and dates per night
+Getting total room price from HDP breakdown
+Extracting prices and dates per night
+-> When I click on Book now button.
+Clicking book now button
+Closing Premier Plus upgrade modal if present
+Continue if Choose Your Bathroom page is displayed
+-> Then I'll be directed to the Ancillaries page to continue the flow
+Validating ancillaries page loaded
+Extracting basket reference ID from URL
+Created reservation with "AQN-afaec165-5106-42ff-97c7-91155da726cb" basket reference for "HEAPTI" hotel id.
+Extracting basket reference ID from URL
+Validate basket status OPEN equals expected status OPEN
+Expanding booking summary section on mobile if needed
+-> When I select "Breakfast" for both adults and check the Booking summary panel.
+-> Then I should see the meals cost added to my reservation per night for each adult 
+            for which was selected from each room
+Getting booking summary total
+Expanding booking summary section on mobile if needed
+Adding breakfast for 2 adults
+Getting booking summary total
+Expanding booking summary section on mobile if needed
+Validating adult meals for room 0: Unlimited Premier Inn Breakfast
+Expanding booking summary section on mobile if needed
+-> When I click on the continue button from the Ancillaries page panel
+Clicking continue button
+Scroll to continue button
+-> Then I should be directed to Guest details
+Validating guest details page loaded
+Expanding booking summary on mobile if needed
+Select reason for stay=leisure
+Click leisure Radio Button
+Filling booker information: John Smith
+Selecting manual address entry
+Filling address: 10 Gatwick Road, RH6 0PH
+Select address from postcode lookup
+Reading normalised guest details from form
+-> When I choose the booking purpose as 'Leisure'
+                     ->  And click on the Continue button
+Clicking continue to payment
+-> Then I should be directed to the Payments page
+Validating payment page loaded
+Getting total cost from payment page
+-> When I check the booking summary from the Payments page with £3 donation
+-> Then  I should see that the donation is included in the total price.
+Selecting donation amount: Donate £3.00
+Validating total cost is updated
+Getting total cost from payment page
+Getting total cost from payment page
+Validating total cost: £108 (GBP)
+Getting total cost from payment page
+-> When I select the pay on arrival option 
+                    -> And guarantee the reservation with a New Credit/ Debit card
+                    -> And click on Continue button
+-> Then I should be directed to the Payment Details page to enter my Card details
+Selecting pay on arrival payment option
+Selecting PIBA card payment type
+Click on Continue to next step button in order to reach Payment details page
+-> When I fill in the details for my New BAC card and click the Confirm button.
+Switching to payment details iframe
+Entering card details for: Test PIBA Cardholder
+Switching to payment details iframe
+Set card number for: Test PIBA Cardholder
+Set cardholder name for: Test PIBA Cardholder
+Set card expiry date for: Test PIBA Cardholder
+Submitting payment
+Confirming payment via 3D Secure challenge
+Waiting for booking confirmation page after 3D Secure
+Failed page URL: https://www.uat.premierinn.digital/gb/en/booking-a1/payment?reservationId=AQN-afaec165-5106-42ff-97c7-91155da726cb
+The current page feature toggles: [{"name":"release_dynatrace_rum_cookie_consent","value":true},{"name":"release_one_trust_cookie_consent","value":false},{"name":"release_pi_analytics_debounce","value":false},{"name":"release_pi_redis_rq_cache","value":true},{"name":"release_semantic_typography_tokenization","value":false},{"name":"release_pi_bb_ccui_company_name_special_characters","value":true},{"name":"release_pi_discount_rate","value":true},{"name":"kill_switch_pi_enable-paypal","value":true},{"name":"release_pi_payment_redesign","value":false},{"name":"kill_switch_pi_bb_ccui_disable_payments","value":false},{"name":"release_pi_bb_non_guaranteed_reminder","value":true},{"name":"kill_switch_hide_chat_bot_pi","value":true},{"name":"release_show_chat_bot_all_pages_pi","value":false},{"name":"release_pi_signup_in_header","value":true},{"name":"release_pi_ccui_booking_steps_with_title","value":true},{"name":"release_pi_promo_code_landing_page","value":true},{"name":"release_pi_promo_code_site_wide","value":false},{"name":"release_pi_pib_swap_payment_options","value":false},{"name":"release_pi_pib_ccui_city_tax_breakdown","value":true},{"name":"release_pi_pib_ccui_city_tax_breakdown_ancillaries_gdp_payment","value":false},{"name":"release_pi_pib_payment_back_to_options_link","value":true},{"name":"release_pi_auth0_login","value":false},{"name":"release_pi_pib_ccui_enable_hub_hotels_poa","value":true},{"name":"release_pi_free_fnb_and_extras","value":true},{"name":"release_pi_remove_pii_data_from_local_storage","value":true},{"name":"release_datatrans_integration","value":false}]
+Cancelled reservation with id "5220998" and basket reference "AQN-afaec165-5106-42ff-97c7-91155da726cb" for "HEAPTI" hotel id.
+Stopping test worker 0
