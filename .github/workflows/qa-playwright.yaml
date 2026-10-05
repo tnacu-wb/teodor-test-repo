@@ -43,7 +43,7 @@ jobs:
       EXECUTION_ENV: local
       BROWSER: chrome
       HEADED: 'true'
-      THREAD_COUNT: '1'
+      THREAD_COUNT: '5'
       TEST_RETRIES: '0'
       RUN_NUMBER: ${{ github.run_number }}
       HTTP_AUTH_USERNAME: 'betatester'
@@ -62,6 +62,15 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Checkout published report history
+        id: checkout-report-history
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          ref: gh-pages
+          path: .qa-pages-history
+          persist-credentials: false
+        continue-on-error: true
+
       - name: Setup Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
@@ -78,7 +87,110 @@ jobs:
       - name: Run Playwright tests
         run: xvfb-run --auto-servernum npx playwright test "tests/features/${APP}/" "tests/regressions/${APP}/" "tests/smoke/${APP}/"
 
+      - name: Restore Allure trend history
+        if: ${{ always() && steps.checkout-report-history.outcome == 'success' }}
+        env:
+          APP: ${{ inputs.app }}
+          REPORT_ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          history_root="$GITHUB_WORKSPACE/.qa-pages-history/qa-reports/$APP/$REPORT_ENVIRONMENT"
+          previous_histories=()
+          if [[ -d "$history_root" ]]; then
+            while IFS= read -r history_directory; do
+              previous_histories+=("$history_directory")
+            done < <(find "$history_root" -mindepth 3 -maxdepth 3 -type d -path '*/allure/history' -print | sort -V)
+          fi
+          if [[ ${#previous_histories[@]} -gt 0 ]]; then
+            results_history="reports/$APP/allure-results/history"
+            latest_history="${previous_histories[${#previous_histories[@]}-1]}"
+            mkdir -p "$results_history"
+            for trend_file in categories-trend.json duration-trend.json history-trend.json retry-trend.json; do
+              if [[ -f "$latest_history/$trend_file" ]]; then
+                cp "$latest_history/$trend_file" "$results_history/$trend_file"
+              fi
+            done
+
+            node - "$history_root" "$results_history/history.json" <<'NODE'
+            const fs = require('node:fs');
+            const path = require('node:path');
+
+            const historyRoot = process.argv[2];
+            const outputPath = process.argv[3];
+            const reportDirectories = fs.readdirSync(historyRoot, { withFileTypes: true })
+              .filter((entry) => entry.isDirectory() && entry.name.startsWith('run-'))
+              .map((entry) => entry.name)
+              .sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
+            const merged = new Map();
+
+            for (const reportDirectory of reportDirectories) {
+              const historyPath = path.join(historyRoot, reportDirectory, 'allure', 'history', 'history.json');
+              if (!fs.existsSync(historyPath)) continue;
+
+              const reportHistory = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+              for (const [historyId, history] of Object.entries(reportHistory)) {
+                const items = merged.get(historyId) ?? new Map();
+                for (const item of history.items ?? []) {
+                  if (item.uid) items.set(item.uid, item);
+                }
+                merged.set(historyId, items);
+              }
+            }
+
+            const result = {};
+            for (const [historyId, itemMap] of merged) {
+              const items = [...itemMap.values()]
+                .sort((left, right) => (right.time?.start ?? 0) - (left.time?.start ?? 0))
+                .slice(0, 20);
+              const statistic = { failed: 0, broken: 0, skipped: 0, passed: 0, unknown: 0, total: items.length };
+              for (const item of items) {
+                statistic[item.status in statistic && item.status !== 'total' ? item.status : 'unknown']++;
+              }
+              result[historyId] = { statistic, items };
+            }
+
+            fs.writeFileSync(outputPath, `${JSON.stringify(result, null, 2)}\n`);
+            console.log(`Merged ${Object.keys(result).length} Allure test histories from ${reportDirectories.length} archived reports`);
+          NODE
+
+            printf 'Restored Allure trend history from %s and merged per-test history across %s reports\n' "$latest_history" "${#previous_histories[@]}"
+          else
+            printf 'No prior Allure trend history found at %s\n' "$history_root"
+          fi
+
+      - name: Write Allure executor metadata
+        if: always()
+        env:
+          ALLURE_BUILD_ORDER: ${{ github.run_id }}
+          ALLURE_BUILD_NAME: QA ${{ inputs.app }} ${{ inputs.environment }} run ${{ github.run_number }}
+          ALLURE_BUILD_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          ALLURE_REPORT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/qa-reports/${{ inputs.app }}/${{ inputs.environment }}/run-${{ github.run_id }}-${{ github.run_attempt }}/allure/
+        run: |
+          mkdir -p "reports/$APP/allure-results"
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const executor = {
+            name: 'GitHub Actions',
+            type: 'github',
+            buildOrder: Number(process.env.ALLURE_BUILD_ORDER),
+            buildName: process.env.ALLURE_BUILD_NAME,
+            buildUrl: process.env.ALLURE_BUILD_URL,
+            reportName: process.env.ALLURE_BUILD_NAME,
+            reportUrl: process.env.ALLURE_REPORT_URL,
+          };
+
+          fs.writeFileSync(
+            `reports/${process.env.APP}/allure-results/executor.json`,
+            `${JSON.stringify(executor, null, 2)}\n`,
+          );
+          NODE
+
+      - name: Generate Allure HTML report
+        if: always()
+        run: bash ./scripts/allure-report.sh --no-open
+
       - name: Upload Playwright reports and failure artifacts
+        id: upload-reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
@@ -88,3 +200,120 @@ jobs:
             qa/test-results/
           retention-days: 7
           if-no-files-found: warn
+
+      - name: Add Playwright results and report link to run summary
+        if: always()
+        env:
+          REPORT_ARTIFACT_URL: ${{ steps.upload-reports.outputs.artifact-url }}
+        run: |
+          node scripts/write-github-summary.cjs
+          if [[ -n "$REPORT_ARTIFACT_URL" ]]; then
+            printf '\n[Download the Playwright HTML report and failure artifacts](%s)\n' "$REPORT_ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  publish-report:
+    name: Publish public Playwright report
+    needs: playwright
+    if: ${{ always() && needs.playwright.result != 'cancelled' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: qa-pages-report-publish
+      cancel-in-progress: false
+    env:
+      APP: ${{ inputs.app }}
+      REPORT_ENVIRONMENT: ${{ inputs.environment }}
+      RUN_DIRECTORY: run-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - name: Checkout existing report history
+        id: checkout-pages
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          ref: gh-pages
+          path: .qa-pages-existing
+          persist-credentials: false
+        continue-on-error: true
+
+      - name: Download Playwright report artifact
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: qa-playwright-${{ inputs.app }}-${{ inputs.environment }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/qa-playwright-artifacts
+        continue-on-error: true
+
+      - name: Prepare HTML reports
+        id: prepare-report
+        shell: bash
+        run: |
+          report_root="$RUNNER_TEMP/qa-playwright-artifacts/reports/$APP"
+          playwright_source="$report_root/html"
+          allure_source="$report_root/allure-report"
+          report_site="$RUNNER_TEMP/qa-playwright-site"
+          current_run_site="$report_site/$RUN_DIRECTORY"
+          has_playwright=false
+          has_allure=false
+          if [[ -f "$playwright_source/index.html" ]]; then
+            mkdir -p "$current_run_site/playwright"
+            cp -R "$playwright_source/." "$current_run_site/playwright/"
+            has_playwright=true
+          fi
+          if [[ -f "$allure_source/index.html" ]]; then
+            mkdir -p "$current_run_site/allure"
+            cp -R "$allure_source/." "$current_run_site/allure/"
+            has_allure=true
+          fi
+          if [[ "$has_playwright" != true && "$has_allure" != true ]]; then
+            echo 'available=false' >> "$GITHUB_OUTPUT"
+            printf 'No Playwright or Allure HTML report was available to publish.\n' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          mkdir -p "$current_run_site"
+          {
+            printf '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>QA reports</title><body><main><h1>QA reports</h1><ul>\n'
+            if [[ "$has_playwright" == true ]]; then
+              printf '<li><a href="playwright/">Playwright HTML report</a></li>\n'
+            fi
+            if [[ "$has_allure" == true ]]; then
+              printf '<li><a href="allure/">Allure report</a></li>\n'
+            fi
+            printf '</ul></main></body></html>\n'
+          } > "$current_run_site/index.html"
+
+          history_root=".qa-pages-existing/qa-reports/$APP/$REPORT_ENVIRONMENT"
+          {
+            printf '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>QA report history</title><body><main><h1>QA report history</h1><p>Application: %s | Environment: %s</p><ul>\n' "$APP" "$REPORT_ENVIRONMENT"
+            if [[ -d "$history_root" ]]; then
+              while IFS= read -r run_directory; do
+                [[ -d "$history_root/$run_directory" ]] || continue
+                printf '<li><a href="%s/">%s</a></li>\n' "$run_directory" "$run_directory"
+              done < <(find "$history_root" -mindepth 1 -maxdepth 1 -type d -name 'run-*' -printf '%f\n' | sort -Vr)
+            fi
+            printf '<li><a href="%s/">%s</a> (current)</li>\n' "$RUN_DIRECTORY" "$RUN_DIRECTORY"
+            printf '</ul></main></body></html>\n'
+          } > "$report_site/index.html"
+          echo 'available=true' >> "$GITHUB_OUTPUT"
+
+      - name: Publish report to GitHub Pages
+        if: steps.prepare-report.outputs.available == 'true'
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ github.token }}
+          publish_branch: gh-pages
+          publish_dir: ${{ runner.temp }}/qa-playwright-site
+          destination_dir: qa-reports/${{ inputs.app }}/${{ inputs.environment }}
+          keep_files: true
+
+      - name: Add public report URLs to run summary
+        if: steps.prepare-report.outputs.available == 'true'
+        env:
+          REPORT_BASE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/qa-reports/${{ inputs.app }}/${{ inputs.environment }}/
+          RUN_DIRECTORY: run-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          printf '[Browse public report history](%s)\n' "$REPORT_BASE_URL" >> "$GITHUB_STEP_SUMMARY"
+          if [[ -f "$RUNNER_TEMP/qa-playwright-site/$RUN_DIRECTORY/playwright/index.html" ]]; then
+            printf '\n[Playwright report](%s%s/playwright/)\n' "$REPORT_BASE_URL" "$RUN_DIRECTORY" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [[ -f "$RUNNER_TEMP/qa-playwright-site/$RUN_DIRECTORY/allure/index.html" ]]; then
+            printf '\n[Allure report](%s%s/allure/)\n' "$REPORT_BASE_URL" "$RUN_DIRECTORY" >> "$GITHUB_STEP_SUMMARY"
+          fi

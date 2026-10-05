@@ -123,6 +123,7 @@ export default defineConfig<BaseOptions>({
   reporter: [
     ['list'],
     ['html', { outputFolder: `./reports/${options.app}/html`, open: 'never' }],
+    ['json', { outputFile: `./reports/${options.app}/playwright-results.json` }],
     ['allure-playwright', {
       resultsDir: `./reports/${options.app}/allure-results`,
       suiteTitle: true,
