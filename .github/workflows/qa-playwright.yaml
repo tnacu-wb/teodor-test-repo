@@ -27,7 +27,7 @@ permissions:
 jobs:
   playwright:
     name: Playwright tests
-    runs-on: ${{ inputs.environment }}-default-runner-scale-set
+    runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     timeout-minutes: 360
     defaults:
@@ -46,92 +46,21 @@ jobs:
       THREAD_COUNT: '1'
       TEST_RETRIES: '0'
       RUN_NUMBER: ${{ github.run_number }}
-      HTTP_AUTH_USERNAME: betatester
+      HTTP_AUTH_USERNAME: 'betatester'
+      HTTP_AUTH_PASSWORD: 'Whitbread@2026!'
+      OLD_AUTH_PASSWORD: 'Whitbread@1234!'
+      AEM_AUTH_USERNAME: 'betatester'
+      AEM_AUTH_PASSWORD: 'Whitbread@2026!'
+      OHIP_CLIENT_ID: 'ebbfaec45dc1420a9044b1160b2dc779'
+      OHIP_CLIENT_SECRET: '0abf602c-1d24-4720-b9fe-1269434f962b'
+      OHIP_X_API_KEY: '3dfc1595-cd41-4dbc-b461-5a26241eb542'
+      PAYMENT_WEBHOOK_X_WHIT_API_KEY: 'YjI0NmFjZmMtMjI3MS00YzBkLWFjMzktMDI1NTQwNDBiNDk5'
       FEATURES_TOGGLES: ${{ vars.FEATURES_TOGGLES }}
     steps:
       - name: Checkout monorepo
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           persist-credentials: false
-
-      - name: Install kubectl
-        run: |
-          kubectl_version="$(curl --fail --silent --show-error --location https://dl.k8s.io/release/stable.txt)"
-          curl --fail --silent --show-error --location \
-            "https://dl.k8s.io/release/${kubectl_version}/bin/linux/amd64/kubectl" \
-            --output "${RUNNER_TEMP}/kubectl"
-          chmod +x "${RUNNER_TEMP}/kubectl"
-          printf '%s\n' "$RUNNER_TEMP" >> "$GITHUB_PATH"
-
-      - name: Load frontend basic-auth password
-        run: |
-          set +x
-          password="$(kubectl get secret wb-fe-credential --namespace opera-fe \
-            --output jsonpath='{.data.basic_auth_pwd}' | base64 --decode)"
-          if [[ -z "$password" || "$password" == *$'\n'* || "$password" == *$'\r'* ]]; then
-            printf '%s\n' '::error::FE basic-auth password is missing or is not a single-line value.'
-            exit 1
-          fi
-          printf '::add-mask::%s\n' "${password//%/%25}"
-          printf 'HTTP_AUTH_PASSWORD=%s\n' "$password" >> "$GITHUB_ENV"
-          unset password
-
-      - name: Load AEM and legacy authentication credentials
-        run: |
-          set +x
-          aem_username="$(kubectl get secret aem-credentials --namespace restaurant-be \
-            --output jsonpath='{.data.user}' | base64 --decode)"
-          aem_password="$(kubectl get secret aem-credentials --namespace restaurant-be \
-            --output jsonpath='{.data.password}' | base64 --decode)"
-          for credential in "$aem_username" "$aem_password"; do
-            if [[ -z "$credential" || "$credential" == *$'\n'* || "$credential" == *$'\r'* ]]; then
-              printf '%s\n' '::error::AEM credentials are missing or are not single-line values.'
-              exit 1
-            fi
-          done
-          printf '::add-mask::%s\n' "${aem_username//%/%25}" "${aem_password//%/%25}"
-          printf 'AEM_AUTH_USERNAME=%s\nAEM_AUTH_PASSWORD=%s\nOLD_AUTH_PASSWORD=%s\n' \
-            "$aem_username" "$aem_password" "$aem_password" >> "$GITHUB_ENV"
-          unset aem_username aem_password credential
-
-      - name: Load UAT OHIP application credentials
-        env:
-          OHIP_KUBE_CONTEXT: ${{ vars.OHIP_KUBE_CONTEXT }}
-        run: |
-          set +x
-          if [[ -z "$OHIP_KUBE_CONTEXT" ]]; then
-            printf '%s\n' '::error::Set OHIP_KUBE_CONTEXT to an authenticated tooling-cluster context available on this runner.'
-            exit 1
-          fi
-          for variable in OHIP_CLIENT_ID OHIP_CLIENT_SECRET OHIP_X_API_KEY; do
-            secret_key="UAT_${variable}"
-            if [[ "$variable" == OHIP_X_API_KEY ]]; then
-              secret_key=UAT_OHIP_APP_KEY
-            fi
-            credential="$(kubectl --context "$OHIP_KUBE_CONTEXT" get secret opera-ohip-app-credentials \
-              --namespace opera-ohip-app --output "jsonpath={.data.${secret_key}}" | base64 --decode)"
-            if [[ -z "$credential" || "$credential" == *$'\n'* || "$credential" == *$'\r'* ]]; then
-              printf '::error::OHIP credential %s is missing or is not a single-line value.\n' "$secret_key"
-              exit 1
-            fi
-            printf '::add-mask::%s\n' "${credential//%/%25}"
-            printf '%s=%s\n' "$variable" "$credential" >> "$GITHUB_ENV"
-          done
-          unset credential secret_key variable
-
-      - name: Load Base64-encoded payment webhook key
-        run: |
-          set +x
-          webhook_key="$(kubectl get configmap threec-payment-service-opera-configmap \
-            --namespace opera-be --output jsonpath='{.data.basket_booking_security_value}')"
-          if [[ -z "$webhook_key" || "$webhook_key" == *$'\n'* || "$webhook_key" == *$'\r'* ]]; then
-            printf '%s\n' '::error::Basket callback key is missing or is not a single-line value.'
-            exit 1
-          fi
-          encoded_webhook_key="$(printf '%s' "$webhook_key" | base64 | tr -d '\r\n')"
-          printf '::add-mask::%s\n' "${webhook_key//%/%25}" "$encoded_webhook_key"
-          printf 'PAYMENT_WEBHOOK_X_WHIT_API_KEY=%s\n' "$encoded_webhook_key" >> "$GITHUB_ENV"
-          unset webhook_key encoded_webhook_key
 
       - name: Setup Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
