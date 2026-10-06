@@ -1,0 +1,35 @@
+[GraphQLClient] [2026-10-06T08:16:09.537Z] Request failed: {
+  url: 'https://api.uat.premierinn.digital/graphql',
+  operation: 'hotelAvailability',
+  variables: {
+    arrival: '2026-10-21',
+    departure: '2026-10-25',
+    rooms: [ [Object] ],
+    bookingChannel: BookingChannel { channel: 'PI', language: 'EN', subchannel: 'WEB' },
+    companyId: undefined,
+    promotionCode: null,
+    hotelId: 'GATGAT',
+    brand: 'pi',
+    channel: 'PI',
+    country: 'gb',
+    language: 'en'
+  },
+  status: 200,
+  responseBody: {
+    data: {
+      hotelAvailability: null,
+      ratesInformation: [Object],
+      hotelInventory: [Object]
+    },
+    errors: [ [Object] ]
+  },
+  errors: [
+    {
+      message: '{"errCode":913,"debugMessage":"Error while trying to get hotel availability searches for hotelId=GATGAT","errorType":500}',
+      locations: [Array],
+      path: [Array],
+      extensions: [Object]
+    }
+  ],
+  message: 'GraphQL error (non-retryable) for query "hotelAvailability": {"errCode":913,"debugMessage":"Error while trying to get hotel availability searches for hotelId=GATGAT","errorType":500}'
+}
