@@ -1,0 +1,129 @@
+Starting test worker 15
+https://whitbread.yourzephyr.com/flex/html5/tcr/467;testcaseId=1079889;viewType=list;pageSize=50;pageView=search;offset=0;searchText=testcaseId%20in%20%28266200%29;searchType=zql;inRelease=true;currentIndex=1;usageHistoryGridSize=50
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_web_push_notifications=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_pi_bb_booking_history_redesign=false,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_datatrans_integration=false,release_ib_user_pilot=false
+Navigating to localized path: home.html
+Pre-setting consent cookies
+Dismissing notification popup if present
+Opening hotel by slug: /hotels/england/west-sussex/crawley/london-gatwick-airport-south-london-road.html
+Opening hotel details page: /hotels/england/west-sussex/crawley/london-gatwick-airport-south-london-road.html
+Navigating to localized path: /hotels/england/west-sussex/crawley/london-gatwick-airport-south-london-road.html?ARRdd=06&ARRmm=10&ARRyyyy=2026&NIGHTS=2&ROOMS=1&ADULT1=1&CHILD1=0&COT1=0&INTTYP1=DB
+Pre-setting consent cookies
+Dismissing notification popup if present
+Log in as leisure customer
+Open Login modal
+Validating hotel details page loaded
+-> Given I want to amend a Pay Now reservation as a PI logged in user that has Pay Now, Semi-Flex rate, within a UK hotel
+Get reservations for hotel id "GATGAT", surname "Testersons", arrivalStartDate "Tue Oct 06 2026 10:39:13 GMT+0000 (Coordinated Universal Time)", limit "1000", offset "0".
+Switch to default content from IFrame
+Room found for the period: 2026-10-16 - 2026-10-20
+Get reservations for hotel id "GATGAT", surname "Testersons", arrivalStartDate "Tue Oct 06 2026 10:39:19 GMT+0000 (Coordinated Universal Time)", limit "1000", offset "0".
+Switch to default content from IFrame
+Room found for the period: 2026-10-16 - 2026-10-20
+Created reservation with "AJK-7ac4e199-553a-47b9-9eb5-53ed7e32a17b" basket reference for "GATGAT" hotel id.
+-> Given the initial reservation has breakfast and children meal packages
+Confirm reservation AJK-7ac4e199-553a-47b9-9eb5-53ed7e32a17b from api using Payment option: PAY_NOW
+Validate basket status PAY_PENDING equals expected status PAY_PENDING
+Call Planet payment webhook for payment id: 57151318775D
+Confirmation not completed, basket status remains PROCESSING
+Retrying call: [ 1/10 retry ]
+Confirmation not completed, basket status remains PROCESSING
+Retrying call: [ 2/10 retry ]
+Opening hotel by slug: /hotels/england/west-sussex/crawley/london-gatwick-airport-south-london-road.html
+Opening hotel details page: /hotels/england/west-sussex/crawley/london-gatwick-airport-south-london-road.html
+Navigating to localized path: /hotels/england/west-sussex/crawley/london-gatwick-airport-south-london-road.html?ARRdd=06&ARRmm=10&ARRyyyy=2026&NIGHTS=2&ROOMS=1&ADULT1=1&CHILD1=0&COT1=0&INTTYP1=DB
+Pre-setting consent cookies
+Dismissing notification popup if present
+Open Manage Booking modal
+Validate Manage Booking modal is visible
+Validate Manage Booking modal is visible
+Search Manage Booking reference=AJK1872226 arrivalDate=2026-10-16
+Search booking with information: bookingReference = AJK1872226, bookingSurname = Testersons, arrivalDate = 2026-10-16
+Select arrival date=2026-10-16
+Close date picker by clicking outside of it
+Validate Manage booking page was reached
+Validate booking information card is visible
+Validate Amend and Cancel Policies text for cancel policies=<b>Semi-Flex</b>: Amend or cancel up to three full days before arrival date. Your arrival date can be amended up to 1pm on the day you’re due to arrive. <a href="/gb/en/faq/room-rates.html">Find out more</a>.
+Validate booking information card is visible
+Click Amend Booking button
+Clicking Amend Booking button
+Validate amendment page loaded
+-> When I want to shorten the stay period so that the new period is within the initial stay interval
+Validate and read amendment booking summary total
+Click Stay Dates section
+Select nights value=2
+[AmendStayDates] Opening dropdown to select 2 nights
+[AmendStayDates] Looking for option with testid: DropdownComp-amend-stay-dates-nights-1
+[AmendStayDates] Selecting nights option 2
+-> Then the check in/out dates will be successfully saved and the total price updated in the booking summary side of the screen
+Validate check out date update
+Read selected arrival date
+[AmendStayDates] Polling checkout date text: "Sun 18 Oct 2026" (expecting to contain "Sun 18 Oct 2026")
+Validate amendment total changed from £306.80
+Validate and read amendment booking summary total
+Current amendment total while polling: £154.40
+Validate and read amendment booking summary total
+Current amendment total while polling: £154.40
+Validate and read amendment booking summary total
+Current amendment total while polling: £154.40
+-> When I want to add a room to the reservation
+Click Room and Guests section
+Click add room card
+Add room for guest Mr NewGuest Tester
+Set mandatory room guest fields for Mr NewGuest Tester
+Select title=Mr
+Set first name=NewGuest
+Set last name=Tester
+Click check availability button
+Check room availability
+Click check availability button
+Click update room button
+Click add/edit room button
+Validate room 1 info card contains: NewGuest Tester
+-> When I want to add a guest to an existing room
+Edit room at index 1
+Select 2 adults for room
+Select 2 adult(s) for room
+Click check availability button
+Check room availability
+Click check availability button
+Click update room button
+Click add/edit room button
+Validate room 1 successfully updated
+Validate adults/children for rooms: 1 (2 adults, 0 children)
+-> When I want to add a kid to an existing room
+Edit room at index 1
+Select 1 children for room
+Select 1 child(ren) for room
+Click check availability button
+Check room availability
+Click check availability button
+Click update room button
+Click add/edit room button
+Validate room 1 successfully updated
+Validate adults/children for rooms: 1 (2 adults, 1 children)
+-> When I want to add a meal for an adult to the reservation
+Click Your Meals section
+Open Room 1 tab
+Find adult meal container with title=Unlimited Premier Inn Breakfast
+Click add adult meal button
+Validate meal selection notification isDisplayed=true
+-> When I want to remove breakfast for a kid from the reservation
+Find child breakfast meal container
+Click remove child meal button
+Validate meal selection notification isDisplayed=true
+Validate and read amendment booking summary total
+Click confirm changes button
+-> Then I am being redirected to the booking confirmation page and the amended reservation is displayed
+Validate Booking confirmation page was reached
+Validate amend success notification that is displayed=true
+Validate adults and children number
+Validate amended new total cost amount and currency
+New total cost - Validate that the correct amount and currency symbol are displayed
+Validate hotel
+Validate staying dates
+Validate rooms occupancy
+Validate room types
+Failed page URL: https://www.uat.premierinn.digital/gb/en/amend/booking-confirmation?bookingReference=AJK1872226&status=success&basketReference=AJK-7ac4e199-553a-47b9-9eb5-53ed7e32a17b&tempBookingReference=AJK-1b082261-e223-4baf-ad2f-4d7267b88173
+The current page feature toggles: [{"name":"release_dynatrace_rum_cookie_consent","value":true},{"name":"release_one_trust_cookie_consent","value":false},{"name":"release_pi_analytics_debounce","value":false},{"name":"release_pi_redis_rq_cache","value":true},{"name":"release_semantic_typography_tokenization","value":false},{"name":"release_pi_amend_guest_address","value":false},{"name":"release_pi_amend_delete_reg_card","value":true},{"name":"release_pi_discount_rate","value":true},{"name":"release_pi_bb_ccui_maxrooms_amend","value":true},{"name":"release_pi_bb_non_guaranteed_reminder","value":true},{"name":"kill_switch_hide_chat_bot_pi","value":true},{"name":"release_show_chat_bot_all_pages_pi","value":false},{"name":"release_pi_bb_ccui_show_meals_package","value":true},{"name":"release_pi_signup_in_header","value":true},{"name":"release_pi_promo_code_landing_page","value":true},{"name":"release_pi_promo_code_site_wide","value":false},{"name":"release_pi_auth0_login","value":false},{"name":"release_pi_free_fnb_and_extras","value":true},{"name":"release_promotions_in_hotelavailability","value":true},{"name":"mobile_preRegistered_repurpose","value":false},{"name":"release_pi_pib_ccui_city_tax_amend","value":false}]
+Cancelled reservation with id "5226828" and basket reference "AJK-7ac4e199-553a-47b9-9eb5-53ed7e32a17b" for "GATGAT" hotel id.
+Stopping test worker 15
