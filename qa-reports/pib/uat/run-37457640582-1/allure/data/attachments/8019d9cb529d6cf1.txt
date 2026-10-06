@@ -1,0 +1,123 @@
+Starting test worker 0
+https://whitbread.yourzephyr.com/flex/html5/tcr/651;testcaseId=1390860;explore=false;viewType=list;pageSize=50;pageView=search;offset=0;searchText=testcaseId%20in%20%28343521%29;searchType=zql;inRelease=true;currentIndex=1;usageHistoryGridSize=50
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_web_push_notifications=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_pi_bb_booking_history_redesign=false,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_datatrans_integration=false,release_ib_user_pilot=false
+Open Login IB page
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_web_push_notifications=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_pi_bb_booking_history_redesign=false,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_datatrans_integration=false,release_ib_user_pilot=false
+Open PIB path: account/login
+Validate Login IB page
+-> Given the application state, sign-in cookies and consent cookies are reset
+-> Given I'm logged into Business Booker with a Travel Manager
+Perform InnBusiness login for ditmireportuser3@mailinator.com
+Open Login IB page
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_web_push_notifications=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_pi_bb_booking_history_redesign=false,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_datatrans_integration=false,release_ib_user_pilot=false
+Open PIB path: account/login
+Click Accept one trust cookies button
+Validate Login IB page
+Click Accept All Cookies button
+Sign in with InnBusiness email ditmireportuser3@mailinator.com
+Sign In email address = ditmireportuser3@mailinator.com
+Set Sign In password
+Click Login button
+Click Accept All Cookies button
+Validate IB homepage
+-> When I search for a UK hotel
+Get reservations for hotel id "GATGAT", surname "Testersons", arrivalStartDate "Tue Oct 06 2026 11:40:13 GMT+0000 (Coordinated Universal Time)", limit "1000", offset "0".
+Switch to default content from IFrame
+Room found for the period: 2026-10-17 - 2026-10-18
+-> Then I should be directed to hotel details page of my selected hotel with availability for my search criteria.
+Search IB hotel=London Gatwick Airport South (London Road)
+Set IB search location=London Gatwick Airport South (London Road)
+Select IB suggested hotel index=0
+Select IB dates arrival=2026-10-17T00:00:00.000Z departure=2026-10-18T00:00:00.000Z
+Click IB dates picker field
+Select date=2026-10-17
+Go to date=2026-10-17 from current=2026-10-01
+Select date=2026-10-18
+Go to date=2026-10-18 from current=2026-10-01
+Click calendar Done button
+Click IB rooms picker
+Select IB rooms count=1
+Select IB room adults=1 children=0
+Select IB room adults=1
+Select IB room children=0
+Select IB room type=Double
+Set IB room cot enabled=false
+Click IB search button
+Validating hotel details page loaded
+Validating navigated to hotel with slug: /hotels/england/west-sussex/crawley/london-gatwick-airport-south-london-road.html
+Validating hotel title: London Gatwick Airport South (London Road) hotel
+-> When I select BusinessFlex rate and click the Book now button
+Selecting rate Business Flex for room Standard room
+Clicking see breakdown link
+Extracting prices and dates per night
+Getting total room price from HDP breakdown
+Extracting prices and dates per night
+Clicking book now button
+Closing Premier Plus upgrade modal if present
+Continue if Choose Your Bathroom page is displayed
+-> Then a hold reservation call will be made to Opera for my booking and I'll be directed to the Ancillaries page to continue the flow
+Validating ancillaries page loaded
+Extracting basket reference ID from URL
+Created reservation with "AJK-cdc0d690-8cb6-4cc8-b728-59f6a097b752" basket reference for "GATGAT" hotel id.
+Extracting reservation ID from URL
+Extracting basket reference ID from URL
+Validate that basket status is OPEN
+Validate basket status OPEN equals expected status OPEN
+-> When I click on the "Enter details manually" button link and enter valid details in the displayed fields.
+	Click on "Enter details manually" link
+Get user profile details for: ditmireportuser3@mailinator.com and business: true; bearer token present: true
+Profile request headers: bearer=true
+-> Then I should see every field with a green confirmation check mark at the end.
+	Fill "Guest details" Section for Room 0
+	Click on "Title" button
+	Select "Mr" element from the "Title" field
+	First Name Input = DIT
+	Last Name Input = MI Reporting
+	Email Address Input = ditmireportuser3@mailinator.com 
+Validate that Mr is selected
+Validate first name input
+Validate last name input
+Validate email address input
+-> When I reach the GDP / Ancillaries page
+-> Then I should not see PremierInn Breakfast auto selected.
+Validate preselected meal notification displayed=false
+-> When I click the Continue button
+Clicking continue button
+Scroll to continue button
+-> Then I should be directed to the Payments page
+Validate Payment page was reached
+-> When I choose Pay on arrival option
+-> And guarantee the reservation with a New BAC card And click on Continue button (right side)
+Click on New Business Account Card
+Select payment option: Pay on arrival
+Click on Pay on arrival option
+Select first value to first dropdown employee question input
+Set value to first employee questions input
+Checking Payment Authorization checkbox
+Set value to Payment Authorization Password input
+-> Then I should be directed to the Payment details page to enter my Card details
+Confirm current booking
+Select payment option: Pay on arrival
+Click on Pay on arrival option
+Click on New Business Account Card
+Switch to Payment Details Opera iFrame
+Validate Payment details page was reached
+Validate basket status PAY_PENDING equals expected status PAY_PENDING
+Validate payment status is null
+Set all payment details data for Test PIBA Cardholder
+Switch to Payment Details Opera iFrame
+Click on Confirm booking button in order to confirm the booking
+Confirm payment through 3D Secure host
+3D Secure page was not displayed
+-> When I fill in the details for my New BAC card and click the Confirm button
+-> Then I should be directed to the Booking Confirmation page having the booking confirmation details displayed and confirmed as follows:
+   - the confirmation message - Thank you booking
+   - the confirmation email message
+   - the Booking reference
+   - the Hotel name & address
+   - the Hotel phone number
+Validate Booking confirmation page was reached
+Failed page URL: https://business.uat.premierinn.digital/gb/en/business-booker/booking-business/payment?reservationId=AJK-cdc0d690-8cb6-4cc8-b728-59f6a097b752
+The current page feature toggles: [{"name":"release_dynatrace_rum_cookie_consent","value":true},{"name":"release_semantic_typography_tokenization","value":false},{"name":"kill_switch_bb_enable-paypal","value":true},{"name":"release_bb_payment_redesign","value":false},{"name":"release_pi_bb_ccui_company_name_special_characters","value":true},{"name":"kill_switch_pi_bb_ccui_disable_payments","value":false},{"name":"release_pi_bb_non_guaranteed_reminder","value":true},{"name":"release_ib_user_pilot","value":false},{"name":"release_bb_promo_code_landing_page","value":true},{"name":"release_bb_promo_code_site_wide","value":true},{"name":"release_pi_pib_swap_payment_options","value":false},{"name":"release_pi_pib_ccui_city_tax_breakdown","value":true},{"name":"release_pi_pib_payment_back_to_options_link","value":true},{"name":"release_pi_pib_ccui_city_tax_breakdown_ancillaries_gdp_payment","value":false},{"name":"release_pi_pib_ccui_enable_hub_hotels_poa","value":true},{"name":"release_pi_redis_rq_cache","value":true},{"name":"release_one_trust_cookie_consent","value":false},{"name":"release_datatrans_integration","value":false}]
+Cancelled reservation with id "5227029" and basket reference "AJK-cdc0d690-8cb6-4cc8-b728-59f6a097b752" for "GATGAT" hotel id.
+Stopping test worker 0
