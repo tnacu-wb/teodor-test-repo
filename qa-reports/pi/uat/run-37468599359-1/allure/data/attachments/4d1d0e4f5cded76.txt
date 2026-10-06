@@ -1,0 +1,51 @@
+Starting test worker 0
+https://whitbread.yourzephyr.com/flex/html5/tcr/467;testcaseId=1282640;viewType=list;pageSize=50;pageView=search;offset=0;searchText=testcaseId%20%3D%20380779;searchType=zql;inRelease=true;currentIndex=1;usageHistoryGridSize=50
+-> Given I want to book a room as a PI guest user
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_web_push_notifications=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_pi_bb_booking_history_redesign=false,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_datatrans_integration=false,release_ib_user_pilot=false
+Navigating to localized path: home.html
+Pre-setting consent cookies
+Dismissing notification popup if present
+Override feature toggles using ftOverride cookie: release_bb_payment_redesign=false,release_pi_payment_redesign=false,release_bb_accompanying_guest_details=false,release_pi_bb_ccui_barrier_free_label=false,release_pi_room_upgrade_popup=false,release_ib_pay_piba_euro=true,release_pi_ccui_consolidate_mobile_landline=false,release_pi_promo_code_site_wide=false,release_pi_pib_swap_payment_options=false,release_ccui_indigo_gdp-single-booking=true,release_pi_pib_ccui_enable_hub_hotels_poa=true,release_pi_bb_booking_history_redesign=false,release_srp_dynamic_filters=false,release_pi_srp_split_map_view=false,release_pi_auth0_login=false,release_one_trust_cookie_consent=false,release_datatrans_integration=false,release_ib_user_pilot=false,release_pi_web_push_notifications=true
+Get reservations for hotel id "HEAPTI", surname "Testersons", arrivalStartDate "Tue Oct 06 2026 13:11:43 GMT+0000 (Coordinated Universal Time)", limit "1000", offset "0".
+Switch to default content from IFrame
+Room found for the period: 2026-10-19 - 2026-10-20
+-> When I navigate to Destination landing page (DLP)
+Navigating to DLP: hotels/england/west-midlands/birmingham.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+Validating DLP page loaded
+-> Then I should see that the DLP page is displayed with its elements
+Dismissing notification popup if present
+Getting DLP path from URL
+Validate Dlp Content Service against API
+Validate Hotel title, description and picture
+Validate Seo section
+Validating DLP page elements
+-> When I check the custom notification prompt
+                        And I click “Allow”
+-> Then the custom prompt closes, the close count is increased by one and the last closed time is updated
+-> When I check Trip Advisor on Grid view
+-> Then I can click on reviews link & a new tab will open with HDP focused on reviews section.
+Validating TripAdvisor section with 12 reviews
+Validating TripAdvisor review link opens to: /de/de/hotels/england/west-midlands/birmingham/birmingham-city-centre-exchange-square.html
+Clicking TripAdvisor review link
+Navigating to DLP: hotels/england/west-midlands/birmingham.html
+Pre-setting consent cookies
+Dismissing cookie consent banner if present
+Dismissing notification popup if present
+-> When I click on "Map View"
+-> Then the page should change from a list view to a map view
+Switching to map view
+-> When I check hotel card pins from the Map view
+-> Then each hotel will display:   
+                        - hotel image
+                        - hotel name
+                        - distance from the location
+                        - facilities
+                        - TripAdvisor rating
+                        - option to go to the hotel detail page
+Validating map view cards for 14 hotels
+Failed page URL: https://www.uat.premierinn.digital/de/de/hotels/england/west-midlands/birmingham.html?VIEW=1
+The current page feature toggles: [{"name":"release_dynatrace_rum_cookie_consent","value":true},{"name":"release_one_trust_cookie_consent","value":false},{"name":"release_pi_analytics_debounce","value":false},{"name":"release_pi_redis_rq_cache","value":true},{"name":"release_semantic_typography_tokenization","value":false},{"name":"release_pi_bb_ccui_white_trip_advisor_review","value":true},{"name":"release_pi_group_booking_form","value":true},{"name":"release_pi_web_push_notifications","value":true},{"name":"release_pi_hreflang_attribute","value":false},{"name":"release_pi_breakfast_promo_code","value":true},{"name":"kill_switch_pi_meta_search","value":true},{"name":"release_pi_discount_rate","value":true},{"name":"release_pi_new_dlp_filters","value":true},{"name":"release_pi_bb_ccui_nonsilent_substitution_per_roomclass","value":true},{"name":"release_pi_bb_ccui_premier_plus_accessible_room","value":true},{"name":"release_pi_promo_code_landing_page","value":true},{"name":"release_pi_promo_code_site_wide","value":false},{"name":"release_pi_bb_ccui_rooms_disclaimer","value":true},{"name":"release_pi_sort_order_dropdown","value":true},{"name":"release_pi_bb_ccui_choose_room_type","value":true},{"name":"release_pi_bb_ccui_barrier_free_label","value":false},{"name":"release_pi_price_per_night","value":true},{"name":"release_pi_room_upgrade_popup","value":false},{"name":"kill_switch_hide_chat_bot_pi","value":false},{"name":"release_show_chat_bot_all_pages_pi","value":false},{"name":"release_pi_summer_sale_promotion_banner","value":false},{"name":"release_pi_signup_in_header","value":true},{"name":"release_pi_bb_ccui_hdp_image_gallery_redesign","value":false},{"name":"release_pi_ccui_bb_promotion_box_code_cookie","value":true},{"name":"release_pi_no_room_type_search","value":false},{"name":"release_pi_two_month_search","value":true},{"name":"release_pi_display_soft_bundles","value":true},{"name":"release_pi_pib_ccui_city_tax_breakdown","value":true},{"name":"release_pi_auth0_login","value":false},{"name":"release_pib_login_redirect","value":true},{"name":"release_promotions_in_hotelavailability","value":true},{"name":"release_pi_bb_show_google_static_map","value":true},{"name":"release_pi_room_details_drawer","value":true},{"name":"release_pi_free_fnb_and_extras","value":true},{"name":"kill_switch_enable_urgency_banner","value":true},{"name":"release_pi_show_promotion_box","value":false}]
+Stopping test worker 0
