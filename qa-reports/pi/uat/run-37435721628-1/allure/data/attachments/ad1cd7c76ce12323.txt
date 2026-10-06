@@ -1,0 +1,24 @@
+[GraphQLClient] [2026-10-06T08:30:15.956Z] Request failed: {
+  url: 'https://api.uat.premierinn.digital/graphql',
+  operation: 'MyQuery',
+  variables: {
+    country: 'gb',
+    language: 'en',
+    dlpPath: 'england/bedfordshire/luton'
+  },
+  status: 200,
+  responseBody: { data: null, errors: [ [Object], [Object] ] },
+  errors: [
+    {
+      message: "HTTP fetch failed from 'content-entity-service': 503: Service Unavailable",
+      path: [],
+      extensions: [Object]
+    },
+    {
+      message: "HTTP fetch failed from 'content-entity-service': subgraph response contains unsupported content-type: text/plain; expected content-type: application/json or content-type: application/graphql-response+json",
+      path: [],
+      extensions: [Object]
+    }
+  ],
+  message: `GraphQL error (non-retryable) for query "MyQuery": HTTP fetch failed from 'content-entity-service': 503: Service Unavailable; HTTP fetch failed from 'content-entity-service': subgraph response contains unsupported content-type: text/plain; expected content-type: application/json or content-type: application/graphql-response+json`
+}
