@@ -2,7 +2,7 @@
 
 # Use official Python Alpine image for better CPU compatibility across different x86_64 processors
 # Python 3.14 is required by pyproject.toml
-FROM python:3.14.7-alpine
+FROM python:3.14.8-alpine
 
 # Accept build timestamp as a build argument (optional - auto-generates if not provided)
 ARG BUILD_TIMESTAMP
