@@ -1,0 +1,22 @@
+[GraphQLClient] [2026-11-12T10:48:46.734Z] Retryable error on attempt 1/4 for "basket": GraphQL error (retryable) for query "basket": Expected Iterable, but did not find one for field "BasketItem.details".
+[GraphQLClient] [2026-11-12T10:48:46.734Z] Retry attempt 1/3 for "basket" — waiting 1000ms before next request.
+[GraphQLClient] [2026-11-12T10:48:47.911Z] Retryable error on attempt 2/4 for "basket": GraphQL error (retryable) for query "basket": Expected Iterable, but did not find one for field "BasketItem.details".
+[GraphQLClient] [2026-11-12T10:48:47.911Z] Retry attempt 2/3 for "basket" — waiting 2000ms before next request.
+[GraphQLClient] [2026-11-12T10:48:50.127Z] Retryable error on attempt 3/4 for "basket": GraphQL error (retryable) for query "basket": Expected Iterable, but did not find one for field "BasketItem.details".
+[GraphQLClient] [2026-11-12T10:48:50.127Z] Retry attempt 3/3 for "basket" — waiting 4000ms before next request.
+[GraphQLClient] [2026-11-12T10:48:54.372Z] Request failed: {
+  url: 'https://api.uat.premierinn.digital/graphql',
+  operation: 'basket',
+  variables: { basketReference: 'AJK-0141d6a7-15f7-44f4-8b81-7a4bfddf6530' },
+  status: 200,
+  responseBody: { data: { basket: [Object] }, errors: [ [Object] ] },
+  errors: [
+    {
+      message: 'Expected Iterable, but did not find one for field "BasketItem.details".',
+      locations: [Array],
+      path: [Array],
+      extensions: [Object]
+    }
+  ],
+  message: 'GraphQL error (retryable) for query "basket": Expected Iterable, but did not find one for field "BasketItem.details".'
+}
