@@ -1,0 +1,25 @@
+query MyQuery($country: String!, $site: String!, $language: String!) {
+  footer(site: $site, country: $country, language: $language) {
+    copyrightInfo
+    socialMediaIcons {
+      linkSrc
+      iconSrc
+      label
+    }
+    tabs {
+      intro {
+        name
+        description
+      }
+      columns {
+        name
+        linkItems {
+          linkSrc
+          openInNewTab
+          name
+        }
+      }
+      name
+    }
+  }
+}

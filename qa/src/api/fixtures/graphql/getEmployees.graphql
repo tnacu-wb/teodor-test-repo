@@ -1,0 +1,29 @@
+query getEmployees(
+    $companyId: String!,
+    $searchCriteria: String,
+    $bookingChannel: String,
+    $awaitingApproval: Boolean,
+    $size: Int!,
+    $page: Int,
+    $pageToken: String
+) {
+  getEmployeesV2(
+    companyId: $companyId,
+    searchCriteria: $searchCriteria,
+    bookingChannel: $bookingChannel,
+    awaitingApproval: $awaitingApproval,
+    size: $size,
+    page: $page,
+    pageToken: $pageToken
+    ) {
+    employees{
+        id
+        title
+        firstName
+        lastName
+        emailAddress
+        accessLevel
+        employeeStatus
+    }
+  }
+}

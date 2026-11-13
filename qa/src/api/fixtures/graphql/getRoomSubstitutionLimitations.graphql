@@ -1,0 +1,19 @@
+query getRoomSubstitutionLimitations($channel: Channel!, $adults: Int!, $children: Int!, $pms: String!, $roomType: String!) {
+  roomSubstitutionLimitations(
+    roomSubstitutionCriteria: {
+      adults: $adults
+      channel: $channel
+      children: $children
+      pms: $pms
+      roomType: $roomType
+    }
+  ) {
+    substitutionList {
+      type
+      specialRequest
+      silent
+      accessibleSpecialRequest
+      codePackage
+    }
+  }
+}

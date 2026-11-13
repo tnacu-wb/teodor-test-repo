@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Infrastructure",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": "(?s).*(browserContext|cdp|WebSocket|Executable doesn't exist).*"
+  },
+  {
+    "name": "Network Errors",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": "(?s).*(ECONNREFUSED|ENOTFOUND|fetch failed|net::|ERR_).*"
+  },
+  {
+    "name": "Timeout Errors",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": "(?s).*[Tt]imeout.*"
+  },
+  {
+    "name": "Element Not Found",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": "(?s).*waiting for (locator|element).*"
+  },
+  {
+    "name": "Assertion Failures",
+    "matchedStatuses": ["failed"],
+    "messageRegex": "(?s).*expect\\(.*\\).*"
+  }
+]

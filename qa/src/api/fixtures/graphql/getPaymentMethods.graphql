@@ -1,0 +1,38 @@
+query getPaymentMethods($basketReference: String!, $language: String!, $country: String!) {
+paymentMethods(
+  paymentMethodsCriteria: {
+	basketReference: $basketReference
+	language: $language
+	country: $country
+  }
+) {
+  name
+  type
+  order
+  enabled
+  cnpPreSelected
+  cnpOptionAvailable
+
+  acceptedCardTypes {
+	type
+	name
+	logoSrc
+  }
+  card {
+	token
+	expiryMonth
+	expiryYear
+	type
+	logoSrc
+	cardHolderName
+	cardType
+	cnpRequired
+  }
+  paymentOptions {
+	type
+	order
+	enabled
+  }
+  reasons
+}
+}

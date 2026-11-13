@@ -1,0 +1,17 @@
+mutation CreateReservationGuest(
+	$basketReference: String!
+	$hotelId: String!
+	$reasonForStay: String!
+	$booker: Booker!
+	$stayingGuests: [StayingGuest!]!
+) {
+  createReservationGuest(
+      createReservationGuestCriteria: {
+          basketReference: $basketReference, 
+          hotelId: $hotelId, 
+          reasonForStay:$reasonForStay, 
+          booker: $booker,
+          stayingGuests: $stayingGuests}) {
+    basketReference
+  }
+}

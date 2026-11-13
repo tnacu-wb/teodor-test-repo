@@ -1,0 +1,30 @@
+  query hotelRoomConfiguration($hotelId: String!, $language: String!, $country: String!) {
+    hotelInformation(hotelId: $hotelId, language: $language, country: $country) {
+      roomConfiguration {
+        tabGroups {
+          groupId
+          groupName
+        }
+        tabItems {
+          roomDescription
+          roomName
+          roomType
+          images {
+            alt
+            caption
+            iconSrc
+            imageSrc
+            thumbnailSrc
+          }
+          facilities {
+            weight
+            name
+            isVisible
+            icon
+            description
+            code
+          }
+        }
+      }
+    }
+  }

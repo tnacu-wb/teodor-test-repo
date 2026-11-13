@@ -1,0 +1,39 @@
+{
+  "name": "digital-monorepo-qa",
+  "version": "1.0.0",
+  "description": "Playwright + TypeScript end-to-end test automation suite for Premier Inn digital",
+  "private": true,
+  "scripts": {
+    "test": "npx playwright test; bash ./scripts/allure-report.sh --no-open; npx tsx ./scripts/notify-teams.ts; npx allure open ./reports/${APP:-pi}/allure-report",
+    "test:local": "EXECUTION_ENV=local npx playwright test; bash ./scripts/allure-report.sh --no-open; npx tsx ./scripts/notify-teams.ts; npx allure open ./reports/${APP:-pi}/allure-report",
+    "test:smoke": "GREP=@smoke npx playwright test; bash ./scripts/allure-report.sh --no-open; npx tsx ./scripts/notify-teams.ts; npx allure open ./reports/${APP:-pi}/allure-report",
+    "test:regression": "GREP=@regression npx playwright test; bash ./scripts/allure-report.sh --no-open; npx tsx ./scripts/notify-teams.ts; npx allure open ./reports/${APP:-pi}/allure-report",
+    "test:debug": "EXECUTION_ENV=local npx playwright test --headed --workers=1 --retries=0",
+    "test:ui": "EXECUTION_ENV=local npx playwright test --ui",
+    "test:pi:uat": "APP=pi ENV=uat npx playwright test; bash ./scripts/allure-report.sh",
+    "test:pi:dit": "APP=pi ENV=dit npx playwright test; bash ./scripts/allure-report.sh",
+    "test:pib:uat": "APP=pib ENV=uat npx playwright test; bash ./scripts/allure-report.sh",
+    "test:pib:dit": "APP=pib ENV=dit npx playwright test; bash ./scripts/allure-report.sh",
+    "test:ccui:uat": "APP=ccui ENV=uat npx playwright test; bash ./scripts/allure-report.sh",
+    "test:ccui:dit": "APP=ccui ENV=dit npx playwright test; bash ./scripts/allure-report.sh",
+    "report:html": "bash ./scripts/show-playwright-report.sh",
+    "report:allure": "bash ./scripts/allure-report.sh",
+    "report:allure:generate": "bash ./scripts/allure-report.sh --no-open",
+    "compare-test-cases": "npx tsx ./scripts/compare-test-cases.ts",
+    "clean": "rm -rf ./reports ./test-results"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.53.0",
+    "@types/node": "^25.9.3",
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.10.2",
+    "dotenv": "^17.4.2",
+    "read-excel-file": "^9.3.10",
+    "tsx": "^4.23.12",
+    "typescript": "5.8.3"
+  },
+  "dependencies": {
+    "lodash": "^4.18.1",
+    "moment": "^2.30.1"
+  }
+}

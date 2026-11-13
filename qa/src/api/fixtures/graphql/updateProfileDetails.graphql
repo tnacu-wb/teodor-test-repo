@@ -1,0 +1,11 @@
+mutation updateProfileDetails($customerId: String!, $business: Boolean, $innBusiness: Boolean, $payload: CustomerRequest!) {
+  updateProfileDetails(
+    customerId: $customerId
+    business: $business
+    innBusiness: $innBusiness
+    payload: $payload
+  ) {
+    success
+    customerId
+  }
+}

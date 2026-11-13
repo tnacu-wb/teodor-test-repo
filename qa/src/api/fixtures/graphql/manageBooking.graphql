@@ -1,0 +1,7 @@
+query manageBooking($basketReference: String!, $hotelId: String!, $userDateTime: String!, $token: String!, $bookingChannel: BookingChannelCriteria!) {
+    manageBooking(cancelInformationCriteria: {basketReference: $basketReference, hotelId: $hotelId, userDateTime: $userDateTime, token: $token, bookingChannel: $bookingChannel}) {
+      isCancellable
+      isAmendable
+      isRuleCompliant
+    }
+}

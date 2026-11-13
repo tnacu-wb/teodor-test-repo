@@ -1,0 +1,122 @@
+query GetAncillariesPackages(
+  $hotelId: String!
+  $startDate: String!
+  $endDate: String!
+  $language: String!
+  $country: String!
+  $adultsNumber: Int!
+  $childrenNumber: Int!
+  $nightsNumber: Int!
+  $bookingFlowId: String!
+  $basketReferenceId: String
+  $channel: Channel
+  $isManageBookingPage: Boolean
+) {
+  packages(
+    packagesCriteria: {
+      hotelId: $hotelId
+      startDate: $startDate
+      endDate: $endDate
+      adultsNumber: $adultsNumber
+      childrenNumber: $childrenNumber
+      nightsNumber: $nightsNumber
+      language: $language
+      country: $country
+      bookingFlowId: $bookingFlowId
+      basketReferenceId: $basketReferenceId
+      channel: $channel
+      isManageBookingPage: $isManageBookingPage
+    }
+  ) {
+    packages {
+      meals {
+        name
+        order
+        id
+        price
+        currency
+        allergyInfoLabel
+        allergyInfoSrc
+        description
+        imageSrc
+        freeBreakfastOption
+        freeBreakfastCode
+        freeBreakfastMaxPerMeal
+        menu {
+          name
+          menuSrc
+          menuLabel
+          imageSrc
+          disclaimer
+          description
+        }
+        bartId
+      }
+      mealsKids {
+        name
+        order
+        id
+        price
+        currency
+        allergyInfoLabel
+        allergyInfoSrc
+        description
+        imageSrc
+        totalPrice
+        menu {
+          name
+          menuSrc
+          menuLabel
+          imageSrc
+          disclaimer
+          description
+        }
+      }
+      extrasItems {
+        name
+        id
+        price
+        imageSrc
+        description
+        currency
+        order
+        available
+      }
+      roomSelection {
+        packagesSelection {
+          id
+          noOfSelections
+        }
+        reservationId
+      }
+    }
+    restaurant {
+      logoSrc
+      menus {
+        description
+        disclaimer
+        imageSrc
+        menuSrc
+        menuLabel
+        name
+      }
+      messageDescription
+      messageHeader
+      noMealsFound
+      restaurantNotFound
+    }
+    privacyPolicy {
+      description
+      linkLabel
+      linkSrc
+      moreInfoLabel
+      moreInfo {
+        description
+        image
+      }
+      name
+    }
+    hotelHasCityTaxForBusiness
+    hotelHasCityTaxForLeisure
+  }
+}

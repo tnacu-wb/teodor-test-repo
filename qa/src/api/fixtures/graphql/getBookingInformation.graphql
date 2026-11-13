@@ -1,0 +1,44 @@
+query GetBookingInformation($basketReference: String!, $country: String!, $language: String!, $bookingChannelCriteria: BookingChannelCriteria!) {
+    bookingInformation(basketReference: $basketReference, country: $country, language: $language, bookingChannelCriteria: $bookingChannelCriteria) {
+        upgradeToFlex {
+            flexRateCode
+            amount
+            currency
+        }
+        balanceOutstanding
+        hotelId
+        totalCostWoDiscount
+        discount
+        newTotal
+        policyCode
+        previousTotal
+        totalCost
+        infoMessages
+        currencyCode
+        reservationByIdList {
+            roomStay {
+                roomType
+                adultsNumber
+                childrenNumber
+                arrivalDate
+                departureDate
+                ratePlanCode
+                accessibleRoom {
+                    isAccessible
+                    phoneNumber
+                }
+                rateExtraInfo {
+                    rateName
+                    rateDescription
+                    rateClassification
+                    rateNotes
+                }
+                roomExtraInfo {
+                    roomType
+                    roomName
+                }
+            }
+        }
+        bookingFlowId
+    }
+}

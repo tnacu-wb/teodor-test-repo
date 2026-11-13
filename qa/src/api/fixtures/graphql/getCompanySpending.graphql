@@ -1,0 +1,22 @@
+query getCompanySpending($fromMonthYear: String!, $toMonthYear: String!) {
+  getCompanySpending(
+    searchCompanySpending: {
+      fromMonthYear: $fromMonthYear
+      toMonthYear: $toMonthYear
+    }
+  ) {
+    companySpendingDtoList {
+      noOfBookings
+
+      companyAccountId
+
+      year
+
+      month
+
+      bookingValue
+
+      bookingCurrency
+    }
+  }
+}

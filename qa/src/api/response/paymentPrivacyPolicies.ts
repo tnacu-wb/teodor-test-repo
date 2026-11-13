@@ -1,0 +1,59 @@
+/**
+ The privacy policy information for a hotel from API response
+ response example: 
+{
+  "data": {
+    "packages": {
+      "privacyPolicy": {
+        "description": "<p>We need to collect and keep some mandatory information in order to process your booking. Full details about how we use your data are set out in our Privacy notice. Premier Inn Hotels Limited (company no. 5137608) is a member of the Whitbread Group, the parent of which is Whitbread Group PLC (company no. 29423). Registered office: Whitbread Court, Houghton Hall Business Park, Porz Avenue, Dunstable LU5 5XE.</p>\n",
+        "linkLabel": "View our Privacy Notice",
+        "linkSrc": "/gb/en/terms/privacy-policy.html",
+        "moreInfoLabel": "Find out more",
+        "moreInfo": [
+          {
+            "description": "<p><b>VeriSign</b><br>\n<br>\n</p>\n<p>Premier Inn takes the security of any information we hold very seriously, and will always implement security measures that are in line with, or exceed current best practices and recommendations. Where necessary, and in common with other websites, we use SSL (Secure Sockets Layer) encryption to ensure that information provided to us is not visible to anybody else when in transit between your computer and our servers. You can tell when SSL is in use by the presence of a small &quot;padlock&quot; symbol in the status bar or next to the address bar of your web browser. In addition, our web servers are housed behind a secure firewall that prevents access to our databases from unauthorised users. All of our servers are housed in a secure environment with high levels of physical security, and access is only permitted to a handful of security screened staff.</p>\n",
+            "image": "/content/dam/global/booking/verisign.png"
+          },
+          {
+            "description": "<p><b>MasterCard</b><br>\n<br>\n</p>\n<p>MasterCard SecureCode is a service to enhance your existing MasterCard account. A private code means added protection against unauthorized use of your card when you shop at participating online retailers. Once youve registered and created your own private SecureCode, you will be automatically prompted by your financial institution at checkout to provide your SecureCode each time you make a purchase with a participating online merchant. Your SecureCode is quickly confirmed by your financial institution and then your purchase is completed. Your SecureCode will never be shared with the merchant. Its just like entering your PIN at an ATM. When you correctly enter your SecureCode during a purchase at a participating online merchant, you confirm that you are the authorized cardholder and your purchase is then completed. If an incorrect SecureCode is entered, the purchase will not be completed. Even if someone knows your credit or debit card number, the purchase cannot be completed without your SecureCode at a participating merchant. How do I sign up for MasterCard?<br>\n<br>\n</p>\n<p>Choosing your own private SecureCode is quick and easy. When shopping online at a participating merchant, you will be prompted to create your own SecureCode prior to checkout. When this happens, a pop up window will appear and you will be guided through the simple enrolment process before your purchase is completed. Once you have created your private SecureCode, you will use it for future purchases at participating online merchants.</p>\n",
+            "image": "/content/dam/hub/app/MasterCard.jpg"
+          },
+          {
+            "description": "<p><b>Verified by Visa</b><br>\n<br>\n</p>\n<p>Verified by Visa is a new security service that tells on-line retailers and banks that you are a genuine cardholder when you shop on-line. It allows you to use a personal password to confirm your identity and protect your Visa card when you use your card on the Internet, providing greater reassurance and security. Through a simple checkout process, Verified by Visa confirms your identity when you make purchases in participating online stores. Its convenient and it works with your existing Visa Card. Verified by Visa is easy to use. You register your card just once and create your own password. Then, when you make purchases at participating online stores, a Verified by Visa window will appear. Simply enter your password and click submit. Your identity is verified and your purchase is secure.<br>\n<br>\n</p>\n<p><b>How do I sign up for Verified by Visa?</b><br>\n<br>\n</p>\n<p>Visit the Verified by Visa website to register your Visa Card online, alternatively contact your bank who can register your card for Verified by Visa for you. Once your bank has activated your card, Verified by Visa protects you at every participating on-line store. When you shop at a participating on-line store, your card will be automatically recognized as protected by Verified by Visa. When you are completing your purchase, your issuing bank will verify your password.</p>\n",
+            "image": "/content/dam/global/booking/privacy_icon_visa_verified.png"
+          }
+        ],
+        "name": "We keep your personal data safe and secure."
+      }
+    }
+  }
+}
+ */
+export class PaymentPrivacyPolicies {
+  [key: string]: unknown;
+  description?: string;
+  linkLabel?: string;
+  linkSrc?: string;
+  moreInfo?: Array<{ description?: string; image?: string }>;
+  moreInfoLabel?: string;
+  name?: string;
+
+  /**
+   * PaymentPrivacyPolicies constructor
+   * @param data object data
+   * @param data.policy policy object
+   */
+  constructor(data: { policy?: Record<string, unknown> } = {}) {
+    const policy = data.policy ?? {};
+    this.name = policy.name as string | undefined;
+    this.description = policy.description as string | undefined;
+    this.linkLabel = policy.linkLabel as string | undefined;
+    this.linkSrc = policy.linkSrc as string | undefined;
+    this.moreInfoLabel = policy.moreInfoLabel as string | undefined;
+    this.moreInfo = policy.moreInfo as PaymentPrivacyPolicies['moreInfo'];
+  }
+
+  static fromResponse(data: { policy?: Record<string, unknown> }): PaymentPrivacyPolicies {
+    return new PaymentPrivacyPolicies(data);
+  }
+}

@@ -1,0 +1,18 @@
+query EmployeeSpendQuery($fromMonthYear: String!, $toMonthYear: String!) {
+  getEmployeeSpend(
+    employeeSpendCriteria: {
+      fromMonthYear: $fromMonthYear
+      toMonthYear: $toMonthYear
+    }
+    ) {
+    employeeSpendDtoList {
+      companyAccountId
+      employeeAccountId
+      year
+      month
+      noOfBookings
+      bookingValue
+      bookingCurrency
+    }
+  }
+}

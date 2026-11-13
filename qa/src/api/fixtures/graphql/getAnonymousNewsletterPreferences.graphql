@@ -1,0 +1,20 @@
+query getAnonymousNewsletterPreferences(
+  $brandCode: String!
+  $email: String!
+  $countryOfResidence: String
+  $language: String
+) {
+  anonymousNewsletterPreferences(
+    brandCode: $brandCode
+    email: $email
+    countryOfResidence: $countryOfResidence
+    language: $language
+  ) {
+    optIn
+    secondOptIn
+    secondOptInReq
+    secondPartyOptIn
+    thirdPartyVendorsOptIn
+    suppressMarketingCheckbox
+  }
+}

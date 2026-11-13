@@ -1,0 +1,81 @@
+query MyQuery($language: String!, $country: String!, $dlpPath: String!) {
+  dlpInformation(language: $language, country: $country, dlpPath: $dlpPath) {  
+	seo {
+        pageTitle
+        pageDescription
+        hreflangs 
+            {
+                hreflang
+                href
+            }
+        
+    }
+    breadcrumbs
+        {
+            title
+            link
+        }
+    title
+    description
+    picture
+    hotels
+        {
+            code
+            order
+        }
+    why {
+        title
+        description
+        picture
+        whyItems
+            {
+                itemIcon
+                itemTitle
+                itemDescription
+            }
+    }
+    faq
+        {
+            title
+            faqItems
+                {
+                    question
+                    answer
+                }
+        }
+    dlps {
+        title
+        dlpItems
+            {
+                picture
+                title
+                link
+                order
+            }
+    }
+    thingsToDo {
+        title
+        items
+            {
+                picture
+                title
+                link
+                order
+            }
+    }
+    promos {
+        picture
+        title
+        description
+        linkText
+        linkUrl
+        linkTarget
+        order
+    }
+    coordinates {
+        latitude
+	    longitude
+      hideHotelDistance
+    }
+    }
+}

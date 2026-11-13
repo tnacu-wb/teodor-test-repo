@@ -1,0 +1,13 @@
+query GetHotelInformationImportantInformation($hotelId: String!, $country: String!, $language: String!) {
+  hotelInformation(country: $country, hotelId: $hotelId, language: $language) {
+    importantInfo {
+      title
+      infoItems {
+        text
+        priority
+        startDate
+        endDate
+      }
+    }  
+  } 
+}

@@ -1,0 +1,11 @@
+export { HomePage } from './homePage.page';
+export { LoginPage } from './loginPage.page';
+export { ManageBookingPage } from './manageBooking.page';
+export { SearchResultsCcuiPage } from './searchResultsCcui.page';
+export { AncillariesCcuiPage } from './ancillariesCcui.page';
+export { ConfirmBookingPageCcui } from './confirmBooking.page';
+export { ConfirmationErrorPage } from './confirmationErrorPage.page';
+export { PaymentAmendPage } from './paymentAmend.page';
+export { PaymentErrorPage } from './paymentErrorPage.page';
+export { PaymentPageCcui } from './paymentCcui.page';
+export { RepeatBookingCcuiPage } from './repeatBookingCcuiPage.page';

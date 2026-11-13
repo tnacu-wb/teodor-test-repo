@@ -1,0 +1,129 @@
+query bookingConfirmation($basketReference: String!, $country: String!, $language: String!, $bookingChannel: String) {
+  bookingConfirmation(
+    basketReference: $basketReference
+    country: $country
+    language: $language
+    bookingChannel: $bookingChannel
+  ) {
+    reservationByIdList {
+      reservationGuestList {
+        givenName
+        surName
+        nameTitle
+        address {
+            addressLine1
+            addressLine2
+            addressLine3
+            addressLine4
+            addressType
+            cityName
+            countryCode
+            postalCode
+        }
+        email
+      }
+      roomStay {
+        adultsNumber
+        childrenNumber
+        cot
+        roomType
+        ratePlanCode
+        arrivalDate
+        departureDate
+        checkInTime
+        checkOutTime
+        rateExtraInfo {
+          rateClassification
+          rateDescription
+          rateLongDescription
+          rateName
+          rateNotes
+          rateOrder
+        }
+        roomExtraInfo {
+          roomDescription
+          roomName
+          roomType
+        }
+        accessibleRoom {
+          phoneNumber
+          isAccessible
+        }
+        ratesPerNight {
+          pricePerNight
+          cityTaxPerNight
+          startDate
+        }
+        roomPrice
+      }
+      additionalGuestInfo {
+        purposeOfStay
+      }
+      depositPolicies {
+        amountDue {
+          amount
+          currencyCode
+        }
+        amountPaid {
+          amount
+          currencyCode
+        }
+        policyCode
+      }
+      billing {
+        address {
+          addressLine1
+          addressLine3
+          addressLine2
+          country
+          addressLine4
+          postalCode
+        }
+        title
+        telephone
+        landline
+        lastName
+        firstName
+        email
+      }
+      paymentCard {
+        cardNumberMasked
+      }
+      reservationPackageList {
+        computedPrice
+        description
+        totalQuantity
+        unitPrice
+        packageCode
+      }
+      reservationOverrideReasons {
+          reasonName
+          callerName
+          managerName
+      }
+      reservationOverridden
+    }
+    previousTotal
+    balanceOutstanding
+    totalCostWoDiscount
+    newTotal
+    totalCost
+    policyCode
+    hotelId
+    hotelName
+    currencyCode
+    bookingFlowId
+    infoMessages
+    bookingSpinnerConfig {
+      order
+      seconds
+      text
+    }
+    upgradeToFlex {
+      amount
+      currency
+      flexRateCode
+    }
+    rateMessage
+  }
+}

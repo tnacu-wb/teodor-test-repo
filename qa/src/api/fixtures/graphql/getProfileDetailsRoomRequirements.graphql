@@ -1,0 +1,14 @@
+query getProfileDetails($customerId: String!, $business: Boolean) {
+  getProfileDetailsV3(customerId: $customerId, business: $business) {
+    bookingPreference {
+      roomRequirements {
+        type
+        lettingType
+        adults
+        children
+        cotRequired
+        hotelBrand
+      }
+    }
+  }
+}

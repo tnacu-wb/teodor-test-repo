@@ -1,0 +1,60 @@
+import { type Locator } from '@playwright/test';
+import { CcuiComponent } from '../baseCcui.component';
+
+/**
+ * Adult meal container in the CCUI individual meals section.
+ * Mirrors qa/reference/test/pages/components/ccui/ancillaries/individualSectionAdultMealContainer.js.
+ */
+export class IndividualSectionAdultMealContainerComponent extends CcuiComponent {
+  /**
+   * Create an adult-meal container scoped to the supplied meal item.
+   * @param container Meal-item locator used as the component root.
+   */
+  constructor(private readonly container: Locator = global.page.locator('div[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-Wrapper"]').first()) { super(); }
+
+  // ######## UI elements/properties ########
+
+  /** Return the root container for this meal item. */
+  get sectionContainer(): Locator { return this.container; }
+  /** Return the meal title locator. */
+  get mealTitleLabel(): Locator { return this.container.locator('h4[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-Title"]'); }
+  /** Return the meal image wrapper locator. */
+  get mealThumbnailImage(): Locator { return this.container.locator('div[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-Image-Wrapper"]'); }
+  /** Return the meal price locator. */
+  get mealPriceLabel(): Locator { return this.container.locator('p[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-Price"]'); }
+  /** Return the meal description locator. */
+  get mealDescriptionLabel(): Locator { return this.container.locator('div[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-Description"] p'); }
+  /** Return the meal allergy-information label locator. */
+  get mealAllergyLabel(): Locator { return this.container.locator('p[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-Allergy"]'); }
+  /** Return the meal allergy-information link locator. */
+  get mealAllergyLink(): Locator { return this.mealAllergyLabel.locator('..'); }
+  /** Return the free-meal-for-children label locator. */
+  get freeMealForKidsLabel(): Locator { return this.container.locator('p[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-FreeFoodKids"]'); }
+  /** Return the add-meal button locator. */
+  get addMealButton(): Locator { return this.container.locator('button[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-AddSubtractControls-AddButton"]'); }
+  /** Return the remove-meal button locator. */
+  get removeMealButton(): Locator { return this.container.locator('button[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-AddSubtractControls-SubtractButton"]'); }
+  /** Return the meal quantity/value locator. */
+  get mealValueLabel(): Locator { return this.container.locator('p[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-AddSubtractControls-Value"]'); }
+  /** Return the list of adult-meal title locators. */
+  get mealsTitlesLabelsList(): Locator { return this.page.locator('h4[data-testid="AncillariesPage-IndividualSelection-Meals-Adults-MealItem-Title"]'); }
+  /** Read the displayed adult meal title. @returns The trimmed meal title. */
+  async getAdultMealTitle(): Promise<string> { console.log('Get adult meal title'); return (await this.mealTitleLabel.textContent())?.trim() ?? ''; }
+  /** Read the displayed adult meal quantity. */
+  async getAdultMealValue(): Promise<number> { console.log('Get adult meal value'); return Number.parseInt((await this.mealValueLabel.textContent())?.trim() ?? '0', 10); }
+  /** Read the displayed adult meal price. */
+  async getAdultMealPrice(): Promise<string> { console.log('Get adult meal price'); return (await this.mealPriceLabel.textContent())?.trim() ?? ''; }
+
+  // ######## UI actions/navigation ########
+
+  /** Click the add-meal button. */
+  async clickAddMealButton(): Promise<void> { console.log('Click add adult meal button'); await this.addMealButton.click(); }
+  /** Click the remove-meal button. */
+  async clickRemoveMealButton(): Promise<void> { console.log('Click remove adult meal button'); await this.removeMealButton.click(); }
+  /** Click the allergy and nutrition link. */
+  async clickAllergyAndNutritionLink(): Promise<void> { console.log('Click allergy and nutrition link'); await this.mealAllergyLabel.click(); }
+
+  // ######## UI validations ########
+  /** Validate the displayed adult meal quantity. */
+  async validateMealValue(mealNumber: number): Promise<void> { console.log('Validate adult meal value'); await expect(this.mealValueLabel, 'Adult meal value').toHaveText(String(mealNumber)); }
+}

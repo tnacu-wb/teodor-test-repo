@@ -1,0 +1,24 @@
+query getHotelsInformation(
+  $hotelIds: [String!]!
+  $country: String!
+  $language: String!
+  $latitudeRef: Float
+  $longitudeRef: Float
+) {
+  getHotelsInformation(
+    hotelIds: $hotelIds
+    country: $country
+    language: $language
+    latitudeRef: $latitudeRef
+    longitudeRef: $longitudeRef
+  ) {
+    hotelFacilities {
+      code
+      description
+      icon
+      isVisible
+      name
+      weight
+    }
+  }
+}

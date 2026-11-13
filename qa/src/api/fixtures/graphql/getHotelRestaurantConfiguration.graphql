@@ -1,0 +1,17 @@
+query getHotelRestaurantConfiguration($hotelId: String!, $language: String!, $country: String!) {
+    hotelInformation(hotelId: $hotelId, language: $language, country: $country) {
+      restaurant {
+        name
+        description
+        logoSrc
+        menus {
+          name
+          description
+          imageSrc
+          menuSrc
+          menuLabel
+          disclaimer
+        }
+      }
+    }
+  }

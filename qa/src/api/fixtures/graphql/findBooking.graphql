@@ -1,0 +1,10 @@
+query findBooking($resNo: String!, $lastName: String!, $arrivalDate: String!, $country: String!, $language: String!) {
+    findBooking(findBookingCriteria: {resNo: $resNo, lastName: $lastName, arrivalDate: $arrivalDate, country: $country, language: $language}) {
+      cookieName
+      redirectBase
+      ref
+      sourcePms
+      token
+      minutesTillExpiry
+    }
+}
